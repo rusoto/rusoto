@@ -870,21 +870,17 @@ impl AssociateDomainError {
 }
 impl fmt::Display for AssociateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateDomainError::InternalServerError(ref cause) => cause,
-            AssociateDomainError::InvalidRequest(ref cause) => cause,
-            AssociateDomainError::ResourceAlreadyExists(ref cause) => cause,
-            AssociateDomainError::ResourceNotFound(ref cause) => cause,
-            AssociateDomainError::TooManyRequests(ref cause) => cause,
-            AssociateDomainError::Unauthorized(ref cause) => cause,
+            AssociateDomainError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AssociateDomainError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AssociateDomainError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            AssociateDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateDomainError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AssociateDomainError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateDomainError {}
 /// Errors returned by AssociateWebsiteAuthorizationProvider
 #[derive(Debug, PartialEq)]
 pub enum AssociateWebsiteAuthorizationProviderError {
@@ -947,21 +943,29 @@ impl AssociateWebsiteAuthorizationProviderError {
 }
 impl fmt::Display for AssociateWebsiteAuthorizationProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateWebsiteAuthorizationProviderError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateWebsiteAuthorizationProviderError::InternalServerError(ref cause) => cause,
-            AssociateWebsiteAuthorizationProviderError::InvalidRequest(ref cause) => cause,
-            AssociateWebsiteAuthorizationProviderError::ResourceAlreadyExists(ref cause) => cause,
-            AssociateWebsiteAuthorizationProviderError::ResourceNotFound(ref cause) => cause,
-            AssociateWebsiteAuthorizationProviderError::TooManyRequests(ref cause) => cause,
-            AssociateWebsiteAuthorizationProviderError::Unauthorized(ref cause) => cause,
+            AssociateWebsiteAuthorizationProviderError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateWebsiteAuthorizationProviderError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateWebsiteAuthorizationProviderError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateWebsiteAuthorizationProviderError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateWebsiteAuthorizationProviderError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateWebsiteAuthorizationProviderError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateWebsiteAuthorizationProviderError {}
 /// Errors returned by AssociateWebsiteCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum AssociateWebsiteCertificateAuthorityError {
@@ -1024,21 +1028,29 @@ impl AssociateWebsiteCertificateAuthorityError {
 }
 impl fmt::Display for AssociateWebsiteCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateWebsiteCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateWebsiteCertificateAuthorityError::InternalServerError(ref cause) => cause,
-            AssociateWebsiteCertificateAuthorityError::InvalidRequest(ref cause) => cause,
-            AssociateWebsiteCertificateAuthorityError::ResourceAlreadyExists(ref cause) => cause,
-            AssociateWebsiteCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
-            AssociateWebsiteCertificateAuthorityError::TooManyRequests(ref cause) => cause,
-            AssociateWebsiteCertificateAuthorityError::Unauthorized(ref cause) => cause,
+            AssociateWebsiteCertificateAuthorityError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateWebsiteCertificateAuthorityError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateWebsiteCertificateAuthorityError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateWebsiteCertificateAuthorityError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateWebsiteCertificateAuthorityError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateWebsiteCertificateAuthorityError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateWebsiteCertificateAuthorityError {}
 /// Errors returned by CreateFleet
 #[derive(Debug, PartialEq)]
 pub enum CreateFleetError {
@@ -1087,21 +1099,17 @@ impl CreateFleetError {
 }
 impl fmt::Display for CreateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFleetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFleetError::InternalServerError(ref cause) => cause,
-            CreateFleetError::InvalidRequest(ref cause) => cause,
-            CreateFleetError::ResourceAlreadyExists(ref cause) => cause,
-            CreateFleetError::ResourceNotFound(ref cause) => cause,
-            CreateFleetError::TooManyRequests(ref cause) => cause,
-            CreateFleetError::Unauthorized(ref cause) => cause,
+            CreateFleetError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFleetError {}
 /// Errors returned by DeleteFleet
 #[derive(Debug, PartialEq)]
 pub enum DeleteFleetError {
@@ -1145,20 +1153,16 @@ impl DeleteFleetError {
 }
 impl fmt::Display for DeleteFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFleetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFleetError::InternalServerError(ref cause) => cause,
-            DeleteFleetError::InvalidRequest(ref cause) => cause,
-            DeleteFleetError::ResourceNotFound(ref cause) => cause,
-            DeleteFleetError::TooManyRequests(ref cause) => cause,
-            DeleteFleetError::Unauthorized(ref cause) => cause,
+            DeleteFleetError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteFleetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFleetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteFleetError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFleetError {}
 /// Errors returned by DescribeAuditStreamConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeAuditStreamConfigurationError {
@@ -1214,20 +1218,26 @@ impl DescribeAuditStreamConfigurationError {
 }
 impl fmt::Display for DescribeAuditStreamConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAuditStreamConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAuditStreamConfigurationError::InternalServerError(ref cause) => cause,
-            DescribeAuditStreamConfigurationError::InvalidRequest(ref cause) => cause,
-            DescribeAuditStreamConfigurationError::ResourceNotFound(ref cause) => cause,
-            DescribeAuditStreamConfigurationError::TooManyRequests(ref cause) => cause,
-            DescribeAuditStreamConfigurationError::Unauthorized(ref cause) => cause,
+            DescribeAuditStreamConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAuditStreamConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAuditStreamConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAuditStreamConfigurationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAuditStreamConfigurationError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAuditStreamConfigurationError {}
 /// Errors returned by DescribeCompanyNetworkConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeCompanyNetworkConfigurationError {
@@ -1283,20 +1293,26 @@ impl DescribeCompanyNetworkConfigurationError {
 }
 impl fmt::Display for DescribeCompanyNetworkConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCompanyNetworkConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCompanyNetworkConfigurationError::InternalServerError(ref cause) => cause,
-            DescribeCompanyNetworkConfigurationError::InvalidRequest(ref cause) => cause,
-            DescribeCompanyNetworkConfigurationError::ResourceNotFound(ref cause) => cause,
-            DescribeCompanyNetworkConfigurationError::TooManyRequests(ref cause) => cause,
-            DescribeCompanyNetworkConfigurationError::Unauthorized(ref cause) => cause,
+            DescribeCompanyNetworkConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCompanyNetworkConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCompanyNetworkConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCompanyNetworkConfigurationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCompanyNetworkConfigurationError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCompanyNetworkConfigurationError {}
 /// Errors returned by DescribeDevice
 #[derive(Debug, PartialEq)]
 pub enum DescribeDeviceError {
@@ -1340,20 +1356,16 @@ impl DescribeDeviceError {
 }
 impl fmt::Display for DescribeDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDeviceError::InternalServerError(ref cause) => cause,
-            DescribeDeviceError::InvalidRequest(ref cause) => cause,
-            DescribeDeviceError::ResourceNotFound(ref cause) => cause,
-            DescribeDeviceError::TooManyRequests(ref cause) => cause,
-            DescribeDeviceError::Unauthorized(ref cause) => cause,
+            DescribeDeviceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeDeviceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeDeviceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeDeviceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeDeviceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDeviceError {}
 /// Errors returned by DescribeDevicePolicyConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeDevicePolicyConfigurationError {
@@ -1409,20 +1421,26 @@ impl DescribeDevicePolicyConfigurationError {
 }
 impl fmt::Display for DescribeDevicePolicyConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDevicePolicyConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDevicePolicyConfigurationError::InternalServerError(ref cause) => cause,
-            DescribeDevicePolicyConfigurationError::InvalidRequest(ref cause) => cause,
-            DescribeDevicePolicyConfigurationError::ResourceNotFound(ref cause) => cause,
-            DescribeDevicePolicyConfigurationError::TooManyRequests(ref cause) => cause,
-            DescribeDevicePolicyConfigurationError::Unauthorized(ref cause) => cause,
+            DescribeDevicePolicyConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDevicePolicyConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDevicePolicyConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDevicePolicyConfigurationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDevicePolicyConfigurationError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDevicePolicyConfigurationError {}
 /// Errors returned by DescribeDomain
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainError {
@@ -1466,20 +1484,16 @@ impl DescribeDomainError {
 }
 impl fmt::Display for DescribeDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDomainError::InternalServerError(ref cause) => cause,
-            DescribeDomainError::InvalidRequest(ref cause) => cause,
-            DescribeDomainError::ResourceNotFound(ref cause) => cause,
-            DescribeDomainError::TooManyRequests(ref cause) => cause,
-            DescribeDomainError::Unauthorized(ref cause) => cause,
+            DescribeDomainError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeDomainError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeDomainError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeDomainError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDomainError {}
 /// Errors returned by DescribeFleetMetadata
 #[derive(Debug, PartialEq)]
 pub enum DescribeFleetMetadataError {
@@ -1531,20 +1545,16 @@ impl DescribeFleetMetadataError {
 }
 impl fmt::Display for DescribeFleetMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFleetMetadataError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFleetMetadataError::InternalServerError(ref cause) => cause,
-            DescribeFleetMetadataError::InvalidRequest(ref cause) => cause,
-            DescribeFleetMetadataError::ResourceNotFound(ref cause) => cause,
-            DescribeFleetMetadataError::TooManyRequests(ref cause) => cause,
-            DescribeFleetMetadataError::Unauthorized(ref cause) => cause,
+            DescribeFleetMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeFleetMetadataError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFleetMetadataError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFleetMetadataError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeFleetMetadataError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFleetMetadataError {}
 /// Errors returned by DescribeIdentityProviderConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityProviderConfigurationError {
@@ -1600,20 +1610,26 @@ impl DescribeIdentityProviderConfigurationError {
 }
 impl fmt::Display for DescribeIdentityProviderConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeIdentityProviderConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeIdentityProviderConfigurationError::InternalServerError(ref cause) => cause,
-            DescribeIdentityProviderConfigurationError::InvalidRequest(ref cause) => cause,
-            DescribeIdentityProviderConfigurationError::ResourceNotFound(ref cause) => cause,
-            DescribeIdentityProviderConfigurationError::TooManyRequests(ref cause) => cause,
-            DescribeIdentityProviderConfigurationError::Unauthorized(ref cause) => cause,
+            DescribeIdentityProviderConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeIdentityProviderConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeIdentityProviderConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeIdentityProviderConfigurationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeIdentityProviderConfigurationError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeIdentityProviderConfigurationError {}
 /// Errors returned by DescribeWebsiteCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum DescribeWebsiteCertificateAuthorityError {
@@ -1669,20 +1685,26 @@ impl DescribeWebsiteCertificateAuthorityError {
 }
 impl fmt::Display for DescribeWebsiteCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWebsiteCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWebsiteCertificateAuthorityError::InternalServerError(ref cause) => cause,
-            DescribeWebsiteCertificateAuthorityError::InvalidRequest(ref cause) => cause,
-            DescribeWebsiteCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
-            DescribeWebsiteCertificateAuthorityError::TooManyRequests(ref cause) => cause,
-            DescribeWebsiteCertificateAuthorityError::Unauthorized(ref cause) => cause,
+            DescribeWebsiteCertificateAuthorityError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeWebsiteCertificateAuthorityError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeWebsiteCertificateAuthorityError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeWebsiteCertificateAuthorityError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeWebsiteCertificateAuthorityError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeWebsiteCertificateAuthorityError {}
 /// Errors returned by DisassociateDomain
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDomainError {
@@ -1728,20 +1750,16 @@ impl DisassociateDomainError {
 }
 impl fmt::Display for DisassociateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateDomainError::InternalServerError(ref cause) => cause,
-            DisassociateDomainError::InvalidRequest(ref cause) => cause,
-            DisassociateDomainError::ResourceNotFound(ref cause) => cause,
-            DisassociateDomainError::TooManyRequests(ref cause) => cause,
-            DisassociateDomainError::Unauthorized(ref cause) => cause,
+            DisassociateDomainError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DisassociateDomainError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DisassociateDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DisassociateDomainError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DisassociateDomainError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateDomainError {}
 /// Errors returned by DisassociateWebsiteAuthorizationProvider
 #[derive(Debug, PartialEq)]
 pub enum DisassociateWebsiteAuthorizationProviderError {
@@ -1806,23 +1824,29 @@ impl DisassociateWebsiteAuthorizationProviderError {
 }
 impl fmt::Display for DisassociateWebsiteAuthorizationProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateWebsiteAuthorizationProviderError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateWebsiteAuthorizationProviderError::InternalServerError(ref cause) => cause,
-            DisassociateWebsiteAuthorizationProviderError::InvalidRequest(ref cause) => cause,
-            DisassociateWebsiteAuthorizationProviderError::ResourceAlreadyExists(ref cause) => {
-                cause
+            DisassociateWebsiteAuthorizationProviderError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
             }
-            DisassociateWebsiteAuthorizationProviderError::ResourceNotFound(ref cause) => cause,
-            DisassociateWebsiteAuthorizationProviderError::TooManyRequests(ref cause) => cause,
-            DisassociateWebsiteAuthorizationProviderError::Unauthorized(ref cause) => cause,
+            DisassociateWebsiteAuthorizationProviderError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateWebsiteAuthorizationProviderError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateWebsiteAuthorizationProviderError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateWebsiteAuthorizationProviderError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateWebsiteAuthorizationProviderError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateWebsiteAuthorizationProviderError {}
 /// Errors returned by DisassociateWebsiteCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum DisassociateWebsiteCertificateAuthorityError {
@@ -1878,20 +1902,26 @@ impl DisassociateWebsiteCertificateAuthorityError {
 }
 impl fmt::Display for DisassociateWebsiteCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateWebsiteCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateWebsiteCertificateAuthorityError::InternalServerError(ref cause) => cause,
-            DisassociateWebsiteCertificateAuthorityError::InvalidRequest(ref cause) => cause,
-            DisassociateWebsiteCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
-            DisassociateWebsiteCertificateAuthorityError::TooManyRequests(ref cause) => cause,
-            DisassociateWebsiteCertificateAuthorityError::Unauthorized(ref cause) => cause,
+            DisassociateWebsiteCertificateAuthorityError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateWebsiteCertificateAuthorityError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateWebsiteCertificateAuthorityError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateWebsiteCertificateAuthorityError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateWebsiteCertificateAuthorityError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateWebsiteCertificateAuthorityError {}
 /// Errors returned by ListDevices
 #[derive(Debug, PartialEq)]
 pub enum ListDevicesError {
@@ -1935,20 +1965,16 @@ impl ListDevicesError {
 }
 impl fmt::Display for ListDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDevicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDevicesError::InternalServerError(ref cause) => cause,
-            ListDevicesError::InvalidRequest(ref cause) => cause,
-            ListDevicesError::ResourceNotFound(ref cause) => cause,
-            ListDevicesError::TooManyRequests(ref cause) => cause,
-            ListDevicesError::Unauthorized(ref cause) => cause,
+            ListDevicesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDevicesError {}
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {
@@ -1987,19 +2013,15 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDomainsError::InternalServerError(ref cause) => cause,
-            ListDomainsError::InvalidRequest(ref cause) => cause,
-            ListDomainsError::TooManyRequests(ref cause) => cause,
-            ListDomainsError::Unauthorized(ref cause) => cause,
+            ListDomainsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListDomainsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDomainsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListDomainsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDomainsError {}
 /// Errors returned by ListFleets
 #[derive(Debug, PartialEq)]
 pub enum ListFleetsError {
@@ -2038,19 +2060,15 @@ impl ListFleetsError {
 }
 impl fmt::Display for ListFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFleetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFleetsError::InternalServerError(ref cause) => cause,
-            ListFleetsError::InvalidRequest(ref cause) => cause,
-            ListFleetsError::TooManyRequests(ref cause) => cause,
-            ListFleetsError::Unauthorized(ref cause) => cause,
+            ListFleetsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListFleetsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListFleetsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListFleetsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFleetsError {}
 /// Errors returned by ListWebsiteAuthorizationProviders
 #[derive(Debug, PartialEq)]
 pub enum ListWebsiteAuthorizationProvidersError {
@@ -2106,20 +2124,26 @@ impl ListWebsiteAuthorizationProvidersError {
 }
 impl fmt::Display for ListWebsiteAuthorizationProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWebsiteAuthorizationProvidersError {
-    fn description(&self) -> &str {
         match *self {
-            ListWebsiteAuthorizationProvidersError::InternalServerError(ref cause) => cause,
-            ListWebsiteAuthorizationProvidersError::InvalidRequest(ref cause) => cause,
-            ListWebsiteAuthorizationProvidersError::ResourceNotFound(ref cause) => cause,
-            ListWebsiteAuthorizationProvidersError::TooManyRequests(ref cause) => cause,
-            ListWebsiteAuthorizationProvidersError::Unauthorized(ref cause) => cause,
+            ListWebsiteAuthorizationProvidersError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListWebsiteAuthorizationProvidersError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListWebsiteAuthorizationProvidersError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListWebsiteAuthorizationProvidersError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListWebsiteAuthorizationProvidersError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListWebsiteAuthorizationProvidersError {}
 /// Errors returned by ListWebsiteCertificateAuthorities
 #[derive(Debug, PartialEq)]
 pub enum ListWebsiteCertificateAuthoritiesError {
@@ -2168,19 +2192,23 @@ impl ListWebsiteCertificateAuthoritiesError {
 }
 impl fmt::Display for ListWebsiteCertificateAuthoritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWebsiteCertificateAuthoritiesError {
-    fn description(&self) -> &str {
         match *self {
-            ListWebsiteCertificateAuthoritiesError::InternalServerError(ref cause) => cause,
-            ListWebsiteCertificateAuthoritiesError::InvalidRequest(ref cause) => cause,
-            ListWebsiteCertificateAuthoritiesError::TooManyRequests(ref cause) => cause,
-            ListWebsiteCertificateAuthoritiesError::Unauthorized(ref cause) => cause,
+            ListWebsiteCertificateAuthoritiesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListWebsiteCertificateAuthoritiesError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListWebsiteCertificateAuthoritiesError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListWebsiteCertificateAuthoritiesError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListWebsiteCertificateAuthoritiesError {}
 /// Errors returned by RestoreDomainAccess
 #[derive(Debug, PartialEq)]
 pub enum RestoreDomainAccessError {
@@ -2228,20 +2256,16 @@ impl RestoreDomainAccessError {
 }
 impl fmt::Display for RestoreDomainAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreDomainAccessError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreDomainAccessError::InternalServerError(ref cause) => cause,
-            RestoreDomainAccessError::InvalidRequest(ref cause) => cause,
-            RestoreDomainAccessError::ResourceNotFound(ref cause) => cause,
-            RestoreDomainAccessError::TooManyRequests(ref cause) => cause,
-            RestoreDomainAccessError::Unauthorized(ref cause) => cause,
+            RestoreDomainAccessError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RestoreDomainAccessError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RestoreDomainAccessError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RestoreDomainAccessError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            RestoreDomainAccessError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RestoreDomainAccessError {}
 /// Errors returned by RevokeDomainAccess
 #[derive(Debug, PartialEq)]
 pub enum RevokeDomainAccessError {
@@ -2287,20 +2311,16 @@ impl RevokeDomainAccessError {
 }
 impl fmt::Display for RevokeDomainAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RevokeDomainAccessError {
-    fn description(&self) -> &str {
         match *self {
-            RevokeDomainAccessError::InternalServerError(ref cause) => cause,
-            RevokeDomainAccessError::InvalidRequest(ref cause) => cause,
-            RevokeDomainAccessError::ResourceNotFound(ref cause) => cause,
-            RevokeDomainAccessError::TooManyRequests(ref cause) => cause,
-            RevokeDomainAccessError::Unauthorized(ref cause) => cause,
+            RevokeDomainAccessError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RevokeDomainAccessError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RevokeDomainAccessError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RevokeDomainAccessError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            RevokeDomainAccessError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RevokeDomainAccessError {}
 /// Errors returned by SignOutUser
 #[derive(Debug, PartialEq)]
 pub enum SignOutUserError {
@@ -2344,20 +2364,16 @@ impl SignOutUserError {
 }
 impl fmt::Display for SignOutUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SignOutUserError {
-    fn description(&self) -> &str {
         match *self {
-            SignOutUserError::InternalServerError(ref cause) => cause,
-            SignOutUserError::InvalidRequest(ref cause) => cause,
-            SignOutUserError::ResourceNotFound(ref cause) => cause,
-            SignOutUserError::TooManyRequests(ref cause) => cause,
-            SignOutUserError::Unauthorized(ref cause) => cause,
+            SignOutUserError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            SignOutUserError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SignOutUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SignOutUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            SignOutUserError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SignOutUserError {}
 /// Errors returned by UpdateAuditStreamConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuditStreamConfigurationError {
@@ -2413,20 +2429,24 @@ impl UpdateAuditStreamConfigurationError {
 }
 impl fmt::Display for UpdateAuditStreamConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAuditStreamConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAuditStreamConfigurationError::InternalServerError(ref cause) => cause,
-            UpdateAuditStreamConfigurationError::InvalidRequest(ref cause) => cause,
-            UpdateAuditStreamConfigurationError::ResourceNotFound(ref cause) => cause,
-            UpdateAuditStreamConfigurationError::TooManyRequests(ref cause) => cause,
-            UpdateAuditStreamConfigurationError::Unauthorized(ref cause) => cause,
+            UpdateAuditStreamConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAuditStreamConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAuditStreamConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAuditStreamConfigurationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAuditStreamConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAuditStreamConfigurationError {}
 /// Errors returned by UpdateCompanyNetworkConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateCompanyNetworkConfigurationError {
@@ -2482,20 +2502,26 @@ impl UpdateCompanyNetworkConfigurationError {
 }
 impl fmt::Display for UpdateCompanyNetworkConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCompanyNetworkConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCompanyNetworkConfigurationError::InternalServerError(ref cause) => cause,
-            UpdateCompanyNetworkConfigurationError::InvalidRequest(ref cause) => cause,
-            UpdateCompanyNetworkConfigurationError::ResourceNotFound(ref cause) => cause,
-            UpdateCompanyNetworkConfigurationError::TooManyRequests(ref cause) => cause,
-            UpdateCompanyNetworkConfigurationError::Unauthorized(ref cause) => cause,
+            UpdateCompanyNetworkConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCompanyNetworkConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCompanyNetworkConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCompanyNetworkConfigurationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCompanyNetworkConfigurationError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateCompanyNetworkConfigurationError {}
 /// Errors returned by UpdateDevicePolicyConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateDevicePolicyConfigurationError {
@@ -2551,20 +2577,24 @@ impl UpdateDevicePolicyConfigurationError {
 }
 impl fmt::Display for UpdateDevicePolicyConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDevicePolicyConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDevicePolicyConfigurationError::InternalServerError(ref cause) => cause,
-            UpdateDevicePolicyConfigurationError::InvalidRequest(ref cause) => cause,
-            UpdateDevicePolicyConfigurationError::ResourceNotFound(ref cause) => cause,
-            UpdateDevicePolicyConfigurationError::TooManyRequests(ref cause) => cause,
-            UpdateDevicePolicyConfigurationError::Unauthorized(ref cause) => cause,
+            UpdateDevicePolicyConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDevicePolicyConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDevicePolicyConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDevicePolicyConfigurationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDevicePolicyConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDevicePolicyConfigurationError {}
 /// Errors returned by UpdateDomainMetadata
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainMetadataError {
@@ -2614,20 +2644,16 @@ impl UpdateDomainMetadataError {
 }
 impl fmt::Display for UpdateDomainMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainMetadataError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainMetadataError::InternalServerError(ref cause) => cause,
-            UpdateDomainMetadataError::InvalidRequest(ref cause) => cause,
-            UpdateDomainMetadataError::ResourceNotFound(ref cause) => cause,
-            UpdateDomainMetadataError::TooManyRequests(ref cause) => cause,
-            UpdateDomainMetadataError::Unauthorized(ref cause) => cause,
+            UpdateDomainMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateDomainMetadataError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDomainMetadataError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDomainMetadataError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateDomainMetadataError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainMetadataError {}
 /// Errors returned by UpdateFleetMetadata
 #[derive(Debug, PartialEq)]
 pub enum UpdateFleetMetadataError {
@@ -2675,20 +2701,16 @@ impl UpdateFleetMetadataError {
 }
 impl fmt::Display for UpdateFleetMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFleetMetadataError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFleetMetadataError::InternalServerError(ref cause) => cause,
-            UpdateFleetMetadataError::InvalidRequest(ref cause) => cause,
-            UpdateFleetMetadataError::ResourceNotFound(ref cause) => cause,
-            UpdateFleetMetadataError::TooManyRequests(ref cause) => cause,
-            UpdateFleetMetadataError::Unauthorized(ref cause) => cause,
+            UpdateFleetMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateFleetMetadataError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateFleetMetadataError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFleetMetadataError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateFleetMetadataError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFleetMetadataError {}
 /// Errors returned by UpdateIdentityProviderConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateIdentityProviderConfigurationError {
@@ -2744,20 +2766,26 @@ impl UpdateIdentityProviderConfigurationError {
 }
 impl fmt::Display for UpdateIdentityProviderConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateIdentityProviderConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateIdentityProviderConfigurationError::InternalServerError(ref cause) => cause,
-            UpdateIdentityProviderConfigurationError::InvalidRequest(ref cause) => cause,
-            UpdateIdentityProviderConfigurationError::ResourceNotFound(ref cause) => cause,
-            UpdateIdentityProviderConfigurationError::TooManyRequests(ref cause) => cause,
-            UpdateIdentityProviderConfigurationError::Unauthorized(ref cause) => cause,
+            UpdateIdentityProviderConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateIdentityProviderConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateIdentityProviderConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateIdentityProviderConfigurationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateIdentityProviderConfigurationError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateIdentityProviderConfigurationError {}
 /// Trait representing the capabilities of the WorkLink API. WorkLink clients implement this trait.
 pub trait Worklink {
     /// <p>Specifies a domain to be associated to Amazon WorkLink.</p>
@@ -3010,6 +3038,14 @@ impl WorklinkClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> WorklinkClient {
         WorklinkClient { client, region }
+    }
+}
+
+impl fmt::Debug for WorklinkClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("WorklinkClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

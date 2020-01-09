@@ -1607,17 +1607,13 @@ impl AcceptQualificationRequestError {
 }
 impl fmt::Display for AcceptQualificationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcceptQualificationRequestError {
-    fn description(&self) -> &str {
         match *self {
-            AcceptQualificationRequestError::RequestError(ref cause) => cause,
-            AcceptQualificationRequestError::ServiceFault(ref cause) => cause,
+            AcceptQualificationRequestError::RequestError(ref cause) => write!(f, "{}", cause),
+            AcceptQualificationRequestError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AcceptQualificationRequestError {}
 /// Errors returned by ApproveAssignment
 #[derive(Debug, PartialEq)]
 pub enum ApproveAssignmentError {
@@ -1646,17 +1642,13 @@ impl ApproveAssignmentError {
 }
 impl fmt::Display for ApproveAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApproveAssignmentError {
-    fn description(&self) -> &str {
         match *self {
-            ApproveAssignmentError::RequestError(ref cause) => cause,
-            ApproveAssignmentError::ServiceFault(ref cause) => cause,
+            ApproveAssignmentError::RequestError(ref cause) => write!(f, "{}", cause),
+            ApproveAssignmentError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ApproveAssignmentError {}
 /// Errors returned by AssociateQualificationWithWorker
 #[derive(Debug, PartialEq)]
 pub enum AssociateQualificationWithWorkerError {
@@ -1691,17 +1683,17 @@ impl AssociateQualificationWithWorkerError {
 }
 impl fmt::Display for AssociateQualificationWithWorkerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateQualificationWithWorkerError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateQualificationWithWorkerError::RequestError(ref cause) => cause,
-            AssociateQualificationWithWorkerError::ServiceFault(ref cause) => cause,
+            AssociateQualificationWithWorkerError::RequestError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateQualificationWithWorkerError::ServiceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateQualificationWithWorkerError {}
 /// Errors returned by CreateAdditionalAssignmentsForHIT
 #[derive(Debug, PartialEq)]
 pub enum CreateAdditionalAssignmentsForHITError {
@@ -1736,17 +1728,17 @@ impl CreateAdditionalAssignmentsForHITError {
 }
 impl fmt::Display for CreateAdditionalAssignmentsForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAdditionalAssignmentsForHITError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAdditionalAssignmentsForHITError::RequestError(ref cause) => cause,
-            CreateAdditionalAssignmentsForHITError::ServiceFault(ref cause) => cause,
+            CreateAdditionalAssignmentsForHITError::RequestError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAdditionalAssignmentsForHITError::ServiceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateAdditionalAssignmentsForHITError {}
 /// Errors returned by CreateHIT
 #[derive(Debug, PartialEq)]
 pub enum CreateHITError {
@@ -1775,17 +1767,13 @@ impl CreateHITError {
 }
 impl fmt::Display for CreateHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHITError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHITError::RequestError(ref cause) => cause,
-            CreateHITError::ServiceFault(ref cause) => cause,
+            CreateHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            CreateHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHITError {}
 /// Errors returned by CreateHITType
 #[derive(Debug, PartialEq)]
 pub enum CreateHITTypeError {
@@ -1814,17 +1802,13 @@ impl CreateHITTypeError {
 }
 impl fmt::Display for CreateHITTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHITTypeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHITTypeError::RequestError(ref cause) => cause,
-            CreateHITTypeError::ServiceFault(ref cause) => cause,
+            CreateHITTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            CreateHITTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHITTypeError {}
 /// Errors returned by CreateHITWithHITType
 #[derive(Debug, PartialEq)]
 pub enum CreateHITWithHITTypeError {
@@ -1853,17 +1837,13 @@ impl CreateHITWithHITTypeError {
 }
 impl fmt::Display for CreateHITWithHITTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHITWithHITTypeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHITWithHITTypeError::RequestError(ref cause) => cause,
-            CreateHITWithHITTypeError::ServiceFault(ref cause) => cause,
+            CreateHITWithHITTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            CreateHITWithHITTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHITWithHITTypeError {}
 /// Errors returned by CreateQualificationType
 #[derive(Debug, PartialEq)]
 pub enum CreateQualificationTypeError {
@@ -1896,17 +1876,13 @@ impl CreateQualificationTypeError {
 }
 impl fmt::Display for CreateQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateQualificationTypeError::RequestError(ref cause) => cause,
-            CreateQualificationTypeError::ServiceFault(ref cause) => cause,
+            CreateQualificationTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            CreateQualificationTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateQualificationTypeError {}
 /// Errors returned by CreateWorkerBlock
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkerBlockError {
@@ -1935,17 +1911,13 @@ impl CreateWorkerBlockError {
 }
 impl fmt::Display for CreateWorkerBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWorkerBlockError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWorkerBlockError::RequestError(ref cause) => cause,
-            CreateWorkerBlockError::ServiceFault(ref cause) => cause,
+            CreateWorkerBlockError::RequestError(ref cause) => write!(f, "{}", cause),
+            CreateWorkerBlockError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWorkerBlockError {}
 /// Errors returned by DeleteHIT
 #[derive(Debug, PartialEq)]
 pub enum DeleteHITError {
@@ -1974,17 +1946,13 @@ impl DeleteHITError {
 }
 impl fmt::Display for DeleteHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteHITError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteHITError::RequestError(ref cause) => cause,
-            DeleteHITError::ServiceFault(ref cause) => cause,
+            DeleteHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            DeleteHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteHITError {}
 /// Errors returned by DeleteQualificationType
 #[derive(Debug, PartialEq)]
 pub enum DeleteQualificationTypeError {
@@ -2017,17 +1985,13 @@ impl DeleteQualificationTypeError {
 }
 impl fmt::Display for DeleteQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteQualificationTypeError::RequestError(ref cause) => cause,
-            DeleteQualificationTypeError::ServiceFault(ref cause) => cause,
+            DeleteQualificationTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            DeleteQualificationTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteQualificationTypeError {}
 /// Errors returned by DeleteWorkerBlock
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkerBlockError {
@@ -2056,17 +2020,13 @@ impl DeleteWorkerBlockError {
 }
 impl fmt::Display for DeleteWorkerBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWorkerBlockError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWorkerBlockError::RequestError(ref cause) => cause,
-            DeleteWorkerBlockError::ServiceFault(ref cause) => cause,
+            DeleteWorkerBlockError::RequestError(ref cause) => write!(f, "{}", cause),
+            DeleteWorkerBlockError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWorkerBlockError {}
 /// Errors returned by DisassociateQualificationFromWorker
 #[derive(Debug, PartialEq)]
 pub enum DisassociateQualificationFromWorkerError {
@@ -2101,17 +2061,17 @@ impl DisassociateQualificationFromWorkerError {
 }
 impl fmt::Display for DisassociateQualificationFromWorkerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateQualificationFromWorkerError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateQualificationFromWorkerError::RequestError(ref cause) => cause,
-            DisassociateQualificationFromWorkerError::ServiceFault(ref cause) => cause,
+            DisassociateQualificationFromWorkerError::RequestError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateQualificationFromWorkerError::ServiceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateQualificationFromWorkerError {}
 /// Errors returned by GetAccountBalance
 #[derive(Debug, PartialEq)]
 pub enum GetAccountBalanceError {
@@ -2140,17 +2100,13 @@ impl GetAccountBalanceError {
 }
 impl fmt::Display for GetAccountBalanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountBalanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountBalanceError::RequestError(ref cause) => cause,
-            GetAccountBalanceError::ServiceFault(ref cause) => cause,
+            GetAccountBalanceError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetAccountBalanceError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountBalanceError {}
 /// Errors returned by GetAssignment
 #[derive(Debug, PartialEq)]
 pub enum GetAssignmentError {
@@ -2179,17 +2135,13 @@ impl GetAssignmentError {
 }
 impl fmt::Display for GetAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAssignmentError {
-    fn description(&self) -> &str {
         match *self {
-            GetAssignmentError::RequestError(ref cause) => cause,
-            GetAssignmentError::ServiceFault(ref cause) => cause,
+            GetAssignmentError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetAssignmentError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAssignmentError {}
 /// Errors returned by GetFileUploadURL
 #[derive(Debug, PartialEq)]
 pub enum GetFileUploadURLError {
@@ -2218,17 +2170,13 @@ impl GetFileUploadURLError {
 }
 impl fmt::Display for GetFileUploadURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFileUploadURLError {
-    fn description(&self) -> &str {
         match *self {
-            GetFileUploadURLError::RequestError(ref cause) => cause,
-            GetFileUploadURLError::ServiceFault(ref cause) => cause,
+            GetFileUploadURLError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetFileUploadURLError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFileUploadURLError {}
 /// Errors returned by GetHIT
 #[derive(Debug, PartialEq)]
 pub enum GetHITError {
@@ -2253,17 +2201,13 @@ impl GetHITError {
 }
 impl fmt::Display for GetHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHITError {
-    fn description(&self) -> &str {
         match *self {
-            GetHITError::RequestError(ref cause) => cause,
-            GetHITError::ServiceFault(ref cause) => cause,
+            GetHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetHITError {}
 /// Errors returned by GetQualificationScore
 #[derive(Debug, PartialEq)]
 pub enum GetQualificationScoreError {
@@ -2292,17 +2236,13 @@ impl GetQualificationScoreError {
 }
 impl fmt::Display for GetQualificationScoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQualificationScoreError {
-    fn description(&self) -> &str {
         match *self {
-            GetQualificationScoreError::RequestError(ref cause) => cause,
-            GetQualificationScoreError::ServiceFault(ref cause) => cause,
+            GetQualificationScoreError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetQualificationScoreError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQualificationScoreError {}
 /// Errors returned by GetQualificationType
 #[derive(Debug, PartialEq)]
 pub enum GetQualificationTypeError {
@@ -2331,17 +2271,13 @@ impl GetQualificationTypeError {
 }
 impl fmt::Display for GetQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            GetQualificationTypeError::RequestError(ref cause) => cause,
-            GetQualificationTypeError::ServiceFault(ref cause) => cause,
+            GetQualificationTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            GetQualificationTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQualificationTypeError {}
 /// Errors returned by ListAssignmentsForHIT
 #[derive(Debug, PartialEq)]
 pub enum ListAssignmentsForHITError {
@@ -2370,17 +2306,13 @@ impl ListAssignmentsForHITError {
 }
 impl fmt::Display for ListAssignmentsForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssignmentsForHITError {
-    fn description(&self) -> &str {
         match *self {
-            ListAssignmentsForHITError::RequestError(ref cause) => cause,
-            ListAssignmentsForHITError::ServiceFault(ref cause) => cause,
+            ListAssignmentsForHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListAssignmentsForHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAssignmentsForHITError {}
 /// Errors returned by ListBonusPayments
 #[derive(Debug, PartialEq)]
 pub enum ListBonusPaymentsError {
@@ -2409,17 +2341,13 @@ impl ListBonusPaymentsError {
 }
 impl fmt::Display for ListBonusPaymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBonusPaymentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBonusPaymentsError::RequestError(ref cause) => cause,
-            ListBonusPaymentsError::ServiceFault(ref cause) => cause,
+            ListBonusPaymentsError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListBonusPaymentsError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBonusPaymentsError {}
 /// Errors returned by ListHITs
 #[derive(Debug, PartialEq)]
 pub enum ListHITsError {
@@ -2448,17 +2376,13 @@ impl ListHITsError {
 }
 impl fmt::Display for ListHITsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHITsError {
-    fn description(&self) -> &str {
         match *self {
-            ListHITsError::RequestError(ref cause) => cause,
-            ListHITsError::ServiceFault(ref cause) => cause,
+            ListHITsError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListHITsError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHITsError {}
 /// Errors returned by ListHITsForQualificationType
 #[derive(Debug, PartialEq)]
 pub enum ListHITsForQualificationTypeError {
@@ -2493,17 +2417,13 @@ impl ListHITsForQualificationTypeError {
 }
 impl fmt::Display for ListHITsForQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHITsForQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            ListHITsForQualificationTypeError::RequestError(ref cause) => cause,
-            ListHITsForQualificationTypeError::ServiceFault(ref cause) => cause,
+            ListHITsForQualificationTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListHITsForQualificationTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHITsForQualificationTypeError {}
 /// Errors returned by ListQualificationRequests
 #[derive(Debug, PartialEq)]
 pub enum ListQualificationRequestsError {
@@ -2536,17 +2456,13 @@ impl ListQualificationRequestsError {
 }
 impl fmt::Display for ListQualificationRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQualificationRequestsError {
-    fn description(&self) -> &str {
         match *self {
-            ListQualificationRequestsError::RequestError(ref cause) => cause,
-            ListQualificationRequestsError::ServiceFault(ref cause) => cause,
+            ListQualificationRequestsError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListQualificationRequestsError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListQualificationRequestsError {}
 /// Errors returned by ListQualificationTypes
 #[derive(Debug, PartialEq)]
 pub enum ListQualificationTypesError {
@@ -2575,17 +2491,13 @@ impl ListQualificationTypesError {
 }
 impl fmt::Display for ListQualificationTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQualificationTypesError {
-    fn description(&self) -> &str {
         match *self {
-            ListQualificationTypesError::RequestError(ref cause) => cause,
-            ListQualificationTypesError::ServiceFault(ref cause) => cause,
+            ListQualificationTypesError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListQualificationTypesError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListQualificationTypesError {}
 /// Errors returned by ListReviewPolicyResultsForHIT
 #[derive(Debug, PartialEq)]
 pub enum ListReviewPolicyResultsForHITError {
@@ -2620,17 +2532,13 @@ impl ListReviewPolicyResultsForHITError {
 }
 impl fmt::Display for ListReviewPolicyResultsForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReviewPolicyResultsForHITError {
-    fn description(&self) -> &str {
         match *self {
-            ListReviewPolicyResultsForHITError::RequestError(ref cause) => cause,
-            ListReviewPolicyResultsForHITError::ServiceFault(ref cause) => cause,
+            ListReviewPolicyResultsForHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListReviewPolicyResultsForHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListReviewPolicyResultsForHITError {}
 /// Errors returned by ListReviewableHITs
 #[derive(Debug, PartialEq)]
 pub enum ListReviewableHITsError {
@@ -2659,17 +2567,13 @@ impl ListReviewableHITsError {
 }
 impl fmt::Display for ListReviewableHITsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReviewableHITsError {
-    fn description(&self) -> &str {
         match *self {
-            ListReviewableHITsError::RequestError(ref cause) => cause,
-            ListReviewableHITsError::ServiceFault(ref cause) => cause,
+            ListReviewableHITsError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListReviewableHITsError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListReviewableHITsError {}
 /// Errors returned by ListWorkerBlocks
 #[derive(Debug, PartialEq)]
 pub enum ListWorkerBlocksError {
@@ -2698,17 +2602,13 @@ impl ListWorkerBlocksError {
 }
 impl fmt::Display for ListWorkerBlocksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWorkerBlocksError {
-    fn description(&self) -> &str {
         match *self {
-            ListWorkerBlocksError::RequestError(ref cause) => cause,
-            ListWorkerBlocksError::ServiceFault(ref cause) => cause,
+            ListWorkerBlocksError::RequestError(ref cause) => write!(f, "{}", cause),
+            ListWorkerBlocksError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListWorkerBlocksError {}
 /// Errors returned by ListWorkersWithQualificationType
 #[derive(Debug, PartialEq)]
 pub enum ListWorkersWithQualificationTypeError {
@@ -2743,17 +2643,17 @@ impl ListWorkersWithQualificationTypeError {
 }
 impl fmt::Display for ListWorkersWithQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWorkersWithQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            ListWorkersWithQualificationTypeError::RequestError(ref cause) => cause,
-            ListWorkersWithQualificationTypeError::ServiceFault(ref cause) => cause,
+            ListWorkersWithQualificationTypeError::RequestError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListWorkersWithQualificationTypeError::ServiceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListWorkersWithQualificationTypeError {}
 /// Errors returned by NotifyWorkers
 #[derive(Debug, PartialEq)]
 pub enum NotifyWorkersError {
@@ -2782,17 +2682,13 @@ impl NotifyWorkersError {
 }
 impl fmt::Display for NotifyWorkersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for NotifyWorkersError {
-    fn description(&self) -> &str {
         match *self {
-            NotifyWorkersError::RequestError(ref cause) => cause,
-            NotifyWorkersError::ServiceFault(ref cause) => cause,
+            NotifyWorkersError::RequestError(ref cause) => write!(f, "{}", cause),
+            NotifyWorkersError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for NotifyWorkersError {}
 /// Errors returned by RejectAssignment
 #[derive(Debug, PartialEq)]
 pub enum RejectAssignmentError {
@@ -2821,17 +2717,13 @@ impl RejectAssignmentError {
 }
 impl fmt::Display for RejectAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RejectAssignmentError {
-    fn description(&self) -> &str {
         match *self {
-            RejectAssignmentError::RequestError(ref cause) => cause,
-            RejectAssignmentError::ServiceFault(ref cause) => cause,
+            RejectAssignmentError::RequestError(ref cause) => write!(f, "{}", cause),
+            RejectAssignmentError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RejectAssignmentError {}
 /// Errors returned by RejectQualificationRequest
 #[derive(Debug, PartialEq)]
 pub enum RejectQualificationRequestError {
@@ -2866,17 +2758,13 @@ impl RejectQualificationRequestError {
 }
 impl fmt::Display for RejectQualificationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RejectQualificationRequestError {
-    fn description(&self) -> &str {
         match *self {
-            RejectQualificationRequestError::RequestError(ref cause) => cause,
-            RejectQualificationRequestError::ServiceFault(ref cause) => cause,
+            RejectQualificationRequestError::RequestError(ref cause) => write!(f, "{}", cause),
+            RejectQualificationRequestError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RejectQualificationRequestError {}
 /// Errors returned by SendBonus
 #[derive(Debug, PartialEq)]
 pub enum SendBonusError {
@@ -2905,17 +2793,13 @@ impl SendBonusError {
 }
 impl fmt::Display for SendBonusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendBonusError {
-    fn description(&self) -> &str {
         match *self {
-            SendBonusError::RequestError(ref cause) => cause,
-            SendBonusError::ServiceFault(ref cause) => cause,
+            SendBonusError::RequestError(ref cause) => write!(f, "{}", cause),
+            SendBonusError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendBonusError {}
 /// Errors returned by SendTestEventNotification
 #[derive(Debug, PartialEq)]
 pub enum SendTestEventNotificationError {
@@ -2948,17 +2832,13 @@ impl SendTestEventNotificationError {
 }
 impl fmt::Display for SendTestEventNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendTestEventNotificationError {
-    fn description(&self) -> &str {
         match *self {
-            SendTestEventNotificationError::RequestError(ref cause) => cause,
-            SendTestEventNotificationError::ServiceFault(ref cause) => cause,
+            SendTestEventNotificationError::RequestError(ref cause) => write!(f, "{}", cause),
+            SendTestEventNotificationError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendTestEventNotificationError {}
 /// Errors returned by UpdateExpirationForHIT
 #[derive(Debug, PartialEq)]
 pub enum UpdateExpirationForHITError {
@@ -2987,17 +2867,13 @@ impl UpdateExpirationForHITError {
 }
 impl fmt::Display for UpdateExpirationForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateExpirationForHITError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateExpirationForHITError::RequestError(ref cause) => cause,
-            UpdateExpirationForHITError::ServiceFault(ref cause) => cause,
+            UpdateExpirationForHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            UpdateExpirationForHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateExpirationForHITError {}
 /// Errors returned by UpdateHITReviewStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdateHITReviewStatusError {
@@ -3026,17 +2902,13 @@ impl UpdateHITReviewStatusError {
 }
 impl fmt::Display for UpdateHITReviewStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateHITReviewStatusError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateHITReviewStatusError::RequestError(ref cause) => cause,
-            UpdateHITReviewStatusError::ServiceFault(ref cause) => cause,
+            UpdateHITReviewStatusError::RequestError(ref cause) => write!(f, "{}", cause),
+            UpdateHITReviewStatusError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateHITReviewStatusError {}
 /// Errors returned by UpdateHITTypeOfHIT
 #[derive(Debug, PartialEq)]
 pub enum UpdateHITTypeOfHITError {
@@ -3065,17 +2937,13 @@ impl UpdateHITTypeOfHITError {
 }
 impl fmt::Display for UpdateHITTypeOfHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateHITTypeOfHITError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateHITTypeOfHITError::RequestError(ref cause) => cause,
-            UpdateHITTypeOfHITError::ServiceFault(ref cause) => cause,
+            UpdateHITTypeOfHITError::RequestError(ref cause) => write!(f, "{}", cause),
+            UpdateHITTypeOfHITError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateHITTypeOfHITError {}
 /// Errors returned by UpdateNotificationSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotificationSettingsError {
@@ -3110,17 +2978,13 @@ impl UpdateNotificationSettingsError {
 }
 impl fmt::Display for UpdateNotificationSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNotificationSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNotificationSettingsError::RequestError(ref cause) => cause,
-            UpdateNotificationSettingsError::ServiceFault(ref cause) => cause,
+            UpdateNotificationSettingsError::RequestError(ref cause) => write!(f, "{}", cause),
+            UpdateNotificationSettingsError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNotificationSettingsError {}
 /// Errors returned by UpdateQualificationType
 #[derive(Debug, PartialEq)]
 pub enum UpdateQualificationTypeError {
@@ -3153,17 +3017,13 @@ impl UpdateQualificationTypeError {
 }
 impl fmt::Display for UpdateQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateQualificationTypeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateQualificationTypeError::RequestError(ref cause) => cause,
-            UpdateQualificationTypeError::ServiceFault(ref cause) => cause,
+            UpdateQualificationTypeError::RequestError(ref cause) => write!(f, "{}", cause),
+            UpdateQualificationTypeError::ServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateQualificationTypeError {}
 /// Trait representing the capabilities of the Amazon MTurk API. Amazon MTurk clients implement this trait.
 pub trait MechanicalTurk {
     /// <p> The <code>AcceptQualificationRequest</code> operation approves a Worker's request for a Qualification. </p> <p> Only the owner of the Qualification type can grant a Qualification request for that type. </p> <p> A successful request for the <code>AcceptQualificationRequest</code> operation returns with no errors and an empty body. </p>
@@ -3433,6 +3293,14 @@ impl MechanicalTurkClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> MechanicalTurkClient {
         MechanicalTurkClient { client, region }
+    }
+}
+
+impl fmt::Debug for MechanicalTurkClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MechanicalTurkClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

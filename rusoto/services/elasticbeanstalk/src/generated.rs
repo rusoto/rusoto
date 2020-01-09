@@ -7503,16 +7503,14 @@ impl AbortEnvironmentUpdateError {
 }
 impl fmt::Display for AbortEnvironmentUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AbortEnvironmentUpdateError {
-    fn description(&self) -> &str {
         match *self {
-            AbortEnvironmentUpdateError::InsufficientPrivileges(ref cause) => cause,
+            AbortEnvironmentUpdateError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AbortEnvironmentUpdateError {}
 /// Errors returned by ApplyEnvironmentManagedAction
 #[derive(Debug, PartialEq)]
 pub enum ApplyEnvironmentManagedActionError {
@@ -7563,17 +7561,17 @@ impl ApplyEnvironmentManagedActionError {
 }
 impl fmt::Display for ApplyEnvironmentManagedActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApplyEnvironmentManagedActionError {
-    fn description(&self) -> &str {
         match *self {
-            ApplyEnvironmentManagedActionError::ElasticBeanstalkService(ref cause) => cause,
-            ApplyEnvironmentManagedActionError::ManagedActionInvalidState(ref cause) => cause,
+            ApplyEnvironmentManagedActionError::ElasticBeanstalkService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ApplyEnvironmentManagedActionError::ManagedActionInvalidState(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ApplyEnvironmentManagedActionError {}
 /// Errors returned by CheckDNSAvailability
 #[derive(Debug, PartialEq)]
 pub enum CheckDNSAvailabilityError {}
@@ -7603,14 +7601,10 @@ impl CheckDNSAvailabilityError {
 }
 impl fmt::Display for CheckDNSAvailabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CheckDNSAvailabilityError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CheckDNSAvailabilityError {}
 /// Errors returned by ComposeEnvironments
 #[derive(Debug, PartialEq)]
 pub enum ComposeEnvironmentsError {
@@ -7655,17 +7649,13 @@ impl ComposeEnvironmentsError {
 }
 impl fmt::Display for ComposeEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ComposeEnvironmentsError {
-    fn description(&self) -> &str {
         match *self {
-            ComposeEnvironmentsError::InsufficientPrivileges(ref cause) => cause,
-            ComposeEnvironmentsError::TooManyEnvironments(ref cause) => cause,
+            ComposeEnvironmentsError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
+            ComposeEnvironmentsError::TooManyEnvironments(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ComposeEnvironmentsError {}
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
@@ -7703,16 +7693,12 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApplicationError::TooManyApplications(ref cause) => cause,
+            CreateApplicationError::TooManyApplications(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApplicationError {}
 /// Errors returned by CreateApplicationVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationVersionError {
@@ -7788,20 +7774,24 @@ impl CreateApplicationVersionError {
 }
 impl fmt::Display for CreateApplicationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApplicationVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApplicationVersionError::CodeBuildNotInServiceRegion(ref cause) => cause,
-            CreateApplicationVersionError::InsufficientPrivileges(ref cause) => cause,
-            CreateApplicationVersionError::S3LocationNotInServiceRegion(ref cause) => cause,
-            CreateApplicationVersionError::TooManyApplicationVersions(ref cause) => cause,
-            CreateApplicationVersionError::TooManyApplications(ref cause) => cause,
+            CreateApplicationVersionError::CodeBuildNotInServiceRegion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateApplicationVersionError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateApplicationVersionError::S3LocationNotInServiceRegion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateApplicationVersionError::TooManyApplicationVersions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateApplicationVersionError::TooManyApplications(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApplicationVersionError {}
 /// Errors returned by CreateConfigurationTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateConfigurationTemplateError {
@@ -7859,18 +7849,18 @@ impl CreateConfigurationTemplateError {
 }
 impl fmt::Display for CreateConfigurationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConfigurationTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            CreateConfigurationTemplateError::InsufficientPrivileges(ref cause) => cause,
-            CreateConfigurationTemplateError::TooManyBuckets(ref cause) => cause,
-            CreateConfigurationTemplateError::TooManyConfigurationTemplates(ref cause) => cause,
+            CreateConfigurationTemplateError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateConfigurationTemplateError::TooManyBuckets(ref cause) => write!(f, "{}", cause),
+            CreateConfigurationTemplateError::TooManyConfigurationTemplates(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateConfigurationTemplateError {}
 /// Errors returned by CreateEnvironment
 #[derive(Debug, PartialEq)]
 pub enum CreateEnvironmentError {
@@ -7915,17 +7905,13 @@ impl CreateEnvironmentError {
 }
 impl fmt::Display for CreateEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEnvironmentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEnvironmentError::InsufficientPrivileges(ref cause) => cause,
-            CreateEnvironmentError::TooManyEnvironments(ref cause) => cause,
+            CreateEnvironmentError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
+            CreateEnvironmentError::TooManyEnvironments(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEnvironmentError {}
 /// Errors returned by CreatePlatformVersion
 #[derive(Debug, PartialEq)]
 pub enum CreatePlatformVersionError {
@@ -7981,18 +7967,16 @@ impl CreatePlatformVersionError {
 }
 impl fmt::Display for CreatePlatformVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePlatformVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePlatformVersionError::ElasticBeanstalkService(ref cause) => cause,
-            CreatePlatformVersionError::InsufficientPrivileges(ref cause) => cause,
-            CreatePlatformVersionError::TooManyPlatforms(ref cause) => cause,
+            CreatePlatformVersionError::ElasticBeanstalkService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePlatformVersionError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
+            CreatePlatformVersionError::TooManyPlatforms(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePlatformVersionError {}
 /// Errors returned by CreateStorageLocation
 #[derive(Debug, PartialEq)]
 pub enum CreateStorageLocationError {
@@ -8048,18 +8032,14 @@ impl CreateStorageLocationError {
 }
 impl fmt::Display for CreateStorageLocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStorageLocationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStorageLocationError::InsufficientPrivileges(ref cause) => cause,
-            CreateStorageLocationError::S3SubscriptionRequired(ref cause) => cause,
-            CreateStorageLocationError::TooManyBuckets(ref cause) => cause,
+            CreateStorageLocationError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
+            CreateStorageLocationError::S3SubscriptionRequired(ref cause) => write!(f, "{}", cause),
+            CreateStorageLocationError::TooManyBuckets(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStorageLocationError {}
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
@@ -8097,16 +8077,12 @@ impl DeleteApplicationError {
 }
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationError::OperationInProgress(ref cause) => cause,
+            DeleteApplicationError::OperationInProgress(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApplicationError {}
 /// Errors returned by DeleteApplicationVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationVersionError {
@@ -8173,19 +8149,21 @@ impl DeleteApplicationVersionError {
 }
 impl fmt::Display for DeleteApplicationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationVersionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationVersionError::InsufficientPrivileges(ref cause) => cause,
-            DeleteApplicationVersionError::OperationInProgress(ref cause) => cause,
-            DeleteApplicationVersionError::S3LocationNotInServiceRegion(ref cause) => cause,
-            DeleteApplicationVersionError::SourceBundleDeletion(ref cause) => cause,
+            DeleteApplicationVersionError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationVersionError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationVersionError::S3LocationNotInServiceRegion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationVersionError::SourceBundleDeletion(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteApplicationVersionError {}
 /// Errors returned by DeleteConfigurationTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationTemplateError {
@@ -8227,16 +8205,14 @@ impl DeleteConfigurationTemplateError {
 }
 impl fmt::Display for DeleteConfigurationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConfigurationTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConfigurationTemplateError::OperationInProgress(ref cause) => cause,
+            DeleteConfigurationTemplateError::OperationInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteConfigurationTemplateError {}
 /// Errors returned by DeleteEnvironmentConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteEnvironmentConfigurationError {}
@@ -8268,14 +8244,10 @@ impl DeleteEnvironmentConfigurationError {
 }
 impl fmt::Display for DeleteEnvironmentConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEnvironmentConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteEnvironmentConfigurationError {}
 /// Errors returned by DeletePlatformVersion
 #[derive(Debug, PartialEq)]
 pub enum DeletePlatformVersionError {
@@ -8340,19 +8312,19 @@ impl DeletePlatformVersionError {
 }
 impl fmt::Display for DeletePlatformVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePlatformVersionError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePlatformVersionError::ElasticBeanstalkService(ref cause) => cause,
-            DeletePlatformVersionError::InsufficientPrivileges(ref cause) => cause,
-            DeletePlatformVersionError::OperationInProgress(ref cause) => cause,
-            DeletePlatformVersionError::PlatformVersionStillReferenced(ref cause) => cause,
+            DeletePlatformVersionError::ElasticBeanstalkService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeletePlatformVersionError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
+            DeletePlatformVersionError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            DeletePlatformVersionError::PlatformVersionStillReferenced(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeletePlatformVersionError {}
 /// Errors returned by DescribeAccountAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountAttributesError {
@@ -8392,16 +8364,14 @@ impl DescribeAccountAttributesError {
 }
 impl fmt::Display for DescribeAccountAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAccountAttributesError::InsufficientPrivileges(ref cause) => cause,
+            DescribeAccountAttributesError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAccountAttributesError {}
 /// Errors returned by DescribeApplicationVersions
 #[derive(Debug, PartialEq)]
 pub enum DescribeApplicationVersionsError {}
@@ -8433,14 +8403,10 @@ impl DescribeApplicationVersionsError {
 }
 impl fmt::Display for DescribeApplicationVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeApplicationVersionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeApplicationVersionsError {}
 /// Errors returned by DescribeApplications
 #[derive(Debug, PartialEq)]
 pub enum DescribeApplicationsError {}
@@ -8470,14 +8436,10 @@ impl DescribeApplicationsError {
 }
 impl fmt::Display for DescribeApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeApplicationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeApplicationsError {}
 /// Errors returned by DescribeConfigurationOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationOptionsError {
@@ -8517,16 +8479,12 @@ impl DescribeConfigurationOptionsError {
 }
 impl fmt::Display for DescribeConfigurationOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationOptionsError::TooManyBuckets(ref cause) => cause,
+            DescribeConfigurationOptionsError::TooManyBuckets(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigurationOptionsError {}
 /// Errors returned by DescribeConfigurationSettings
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationSettingsError {
@@ -8568,16 +8526,12 @@ impl DescribeConfigurationSettingsError {
 }
 impl fmt::Display for DescribeConfigurationSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationSettingsError::TooManyBuckets(ref cause) => cause,
+            DescribeConfigurationSettingsError::TooManyBuckets(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigurationSettingsError {}
 /// Errors returned by DescribeEnvironmentHealth
 #[derive(Debug, PartialEq)]
 pub enum DescribeEnvironmentHealthError {
@@ -8624,17 +8578,15 @@ impl DescribeEnvironmentHealthError {
 }
 impl fmt::Display for DescribeEnvironmentHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEnvironmentHealthError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEnvironmentHealthError::ElasticBeanstalkService(ref cause) => cause,
-            DescribeEnvironmentHealthError::InvalidRequest(ref cause) => cause,
+            DescribeEnvironmentHealthError::ElasticBeanstalkService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEnvironmentHealthError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEnvironmentHealthError {}
 /// Errors returned by DescribeEnvironmentManagedActionHistory
 #[derive(Debug, PartialEq)]
 pub enum DescribeEnvironmentManagedActionHistoryError {
@@ -8676,18 +8628,14 @@ impl DescribeEnvironmentManagedActionHistoryError {
 }
 impl fmt::Display for DescribeEnvironmentManagedActionHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEnvironmentManagedActionHistoryError {
-    fn description(&self) -> &str {
         match *self {
             DescribeEnvironmentManagedActionHistoryError::ElasticBeanstalkService(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeEnvironmentManagedActionHistoryError {}
 /// Errors returned by DescribeEnvironmentManagedActions
 #[derive(Debug, PartialEq)]
 pub enum DescribeEnvironmentManagedActionsError {
@@ -8729,16 +8677,14 @@ impl DescribeEnvironmentManagedActionsError {
 }
 impl fmt::Display for DescribeEnvironmentManagedActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEnvironmentManagedActionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(ref cause) => cause,
+            DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEnvironmentManagedActionsError {}
 /// Errors returned by DescribeEnvironmentResources
 #[derive(Debug, PartialEq)]
 pub enum DescribeEnvironmentResourcesError {
@@ -8780,16 +8726,14 @@ impl DescribeEnvironmentResourcesError {
 }
 impl fmt::Display for DescribeEnvironmentResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEnvironmentResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEnvironmentResourcesError::InsufficientPrivileges(ref cause) => cause,
+            DescribeEnvironmentResourcesError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEnvironmentResourcesError {}
 /// Errors returned by DescribeEnvironments
 #[derive(Debug, PartialEq)]
 pub enum DescribeEnvironmentsError {}
@@ -8819,14 +8763,10 @@ impl DescribeEnvironmentsError {
 }
 impl fmt::Display for DescribeEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEnvironmentsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEnvironmentsError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {}
@@ -8856,14 +8796,10 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventsError {}
 /// Errors returned by DescribeInstancesHealth
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstancesHealthError {
@@ -8910,17 +8846,15 @@ impl DescribeInstancesHealthError {
 }
 impl fmt::Display for DescribeInstancesHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInstancesHealthError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInstancesHealthError::ElasticBeanstalkService(ref cause) => cause,
-            DescribeInstancesHealthError::InvalidRequest(ref cause) => cause,
+            DescribeInstancesHealthError::ElasticBeanstalkService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInstancesHealthError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInstancesHealthError {}
 /// Errors returned by DescribePlatformVersion
 #[derive(Debug, PartialEq)]
 pub enum DescribePlatformVersionError {
@@ -8969,17 +8903,17 @@ impl DescribePlatformVersionError {
 }
 impl fmt::Display for DescribePlatformVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePlatformVersionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePlatformVersionError::ElasticBeanstalkService(ref cause) => cause,
-            DescribePlatformVersionError::InsufficientPrivileges(ref cause) => cause,
+            DescribePlatformVersionError::ElasticBeanstalkService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePlatformVersionError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribePlatformVersionError {}
 /// Errors returned by ListAvailableSolutionStacks
 #[derive(Debug, PartialEq)]
 pub enum ListAvailableSolutionStacksError {}
@@ -9011,14 +8945,10 @@ impl ListAvailableSolutionStacksError {
 }
 impl fmt::Display for ListAvailableSolutionStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAvailableSolutionStacksError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListAvailableSolutionStacksError {}
 /// Errors returned by ListPlatformVersions
 #[derive(Debug, PartialEq)]
 pub enum ListPlatformVersionsError {
@@ -9065,17 +8995,13 @@ impl ListPlatformVersionsError {
 }
 impl fmt::Display for ListPlatformVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPlatformVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPlatformVersionsError::ElasticBeanstalkService(ref cause) => cause,
-            ListPlatformVersionsError::InsufficientPrivileges(ref cause) => cause,
+            ListPlatformVersionsError::ElasticBeanstalkService(ref cause) => write!(f, "{}", cause),
+            ListPlatformVersionsError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPlatformVersionsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -9129,18 +9055,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InsufficientPrivileges(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::ResourceTypeNotSupported(ref cause) => cause,
+            ListTagsForResourceError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceTypeNotSupported(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by RebuildEnvironment
 #[derive(Debug, PartialEq)]
 pub enum RebuildEnvironmentError {
@@ -9178,16 +9100,12 @@ impl RebuildEnvironmentError {
 }
 impl fmt::Display for RebuildEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebuildEnvironmentError {
-    fn description(&self) -> &str {
         match *self {
-            RebuildEnvironmentError::InsufficientPrivileges(ref cause) => cause,
+            RebuildEnvironmentError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebuildEnvironmentError {}
 /// Errors returned by RequestEnvironmentInfo
 #[derive(Debug, PartialEq)]
 pub enum RequestEnvironmentInfoError {}
@@ -9217,14 +9135,10 @@ impl RequestEnvironmentInfoError {
 }
 impl fmt::Display for RequestEnvironmentInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RequestEnvironmentInfoError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RequestEnvironmentInfoError {}
 /// Errors returned by RestartAppServer
 #[derive(Debug, PartialEq)]
 pub enum RestartAppServerError {}
@@ -9254,14 +9168,10 @@ impl RestartAppServerError {
 }
 impl fmt::Display for RestartAppServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestartAppServerError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RestartAppServerError {}
 /// Errors returned by RetrieveEnvironmentInfo
 #[derive(Debug, PartialEq)]
 pub enum RetrieveEnvironmentInfoError {}
@@ -9291,14 +9201,10 @@ impl RetrieveEnvironmentInfoError {
 }
 impl fmt::Display for RetrieveEnvironmentInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RetrieveEnvironmentInfoError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RetrieveEnvironmentInfoError {}
 /// Errors returned by SwapEnvironmentCNAMEs
 #[derive(Debug, PartialEq)]
 pub enum SwapEnvironmentCNAMEsError {}
@@ -9328,14 +9234,10 @@ impl SwapEnvironmentCNAMEsError {
 }
 impl fmt::Display for SwapEnvironmentCNAMEsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SwapEnvironmentCNAMEsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SwapEnvironmentCNAMEsError {}
 /// Errors returned by TerminateEnvironment
 #[derive(Debug, PartialEq)]
 pub enum TerminateEnvironmentError {
@@ -9373,16 +9275,12 @@ impl TerminateEnvironmentError {
 }
 impl fmt::Display for TerminateEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TerminateEnvironmentError {
-    fn description(&self) -> &str {
         match *self {
-            TerminateEnvironmentError::InsufficientPrivileges(ref cause) => cause,
+            TerminateEnvironmentError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TerminateEnvironmentError {}
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {}
@@ -9412,14 +9310,10 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApplicationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UpdateApplicationError {}
 /// Errors returned by UpdateApplicationResourceLifecycle
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationResourceLifecycleError {
@@ -9461,16 +9355,14 @@ impl UpdateApplicationResourceLifecycleError {
 }
 impl fmt::Display for UpdateApplicationResourceLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApplicationResourceLifecycleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateApplicationResourceLifecycleError::InsufficientPrivileges(ref cause) => cause,
+            UpdateApplicationResourceLifecycleError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateApplicationResourceLifecycleError {}
 /// Errors returned by UpdateApplicationVersion
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationVersionError {}
@@ -9500,14 +9392,10 @@ impl UpdateApplicationVersionError {
 }
 impl fmt::Display for UpdateApplicationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApplicationVersionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UpdateApplicationVersionError {}
 /// Errors returned by UpdateConfigurationTemplate
 #[derive(Debug, PartialEq)]
 pub enum UpdateConfigurationTemplateError {
@@ -9556,17 +9444,15 @@ impl UpdateConfigurationTemplateError {
 }
 impl fmt::Display for UpdateConfigurationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateConfigurationTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateConfigurationTemplateError::InsufficientPrivileges(ref cause) => cause,
-            UpdateConfigurationTemplateError::TooManyBuckets(ref cause) => cause,
+            UpdateConfigurationTemplateError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateConfigurationTemplateError::TooManyBuckets(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateConfigurationTemplateError {}
 /// Errors returned by UpdateEnvironment
 #[derive(Debug, PartialEq)]
 pub enum UpdateEnvironmentError {
@@ -9611,17 +9497,13 @@ impl UpdateEnvironmentError {
 }
 impl fmt::Display for UpdateEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEnvironmentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEnvironmentError::InsufficientPrivileges(ref cause) => cause,
-            UpdateEnvironmentError::TooManyBuckets(ref cause) => cause,
+            UpdateEnvironmentError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
+            UpdateEnvironmentError::TooManyBuckets(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateEnvironmentError {}
 /// Errors returned by UpdateTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum UpdateTagsForResourceError {
@@ -9691,20 +9573,18 @@ impl UpdateTagsForResourceError {
 }
 impl fmt::Display for UpdateTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTagsForResourceError::InsufficientPrivileges(ref cause) => cause,
-            UpdateTagsForResourceError::OperationInProgress(ref cause) => cause,
-            UpdateTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            UpdateTagsForResourceError::ResourceTypeNotSupported(ref cause) => cause,
-            UpdateTagsForResourceError::TooManyTags(ref cause) => cause,
+            UpdateTagsForResourceError::InsufficientPrivileges(ref cause) => write!(f, "{}", cause),
+            UpdateTagsForResourceError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            UpdateTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTagsForResourceError::ResourceTypeNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateTagsForResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTagsForResourceError {}
 /// Errors returned by ValidateConfigurationSettings
 #[derive(Debug, PartialEq)]
 pub enum ValidateConfigurationSettingsError {
@@ -9755,17 +9635,15 @@ impl ValidateConfigurationSettingsError {
 }
 impl fmt::Display for ValidateConfigurationSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ValidateConfigurationSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            ValidateConfigurationSettingsError::InsufficientPrivileges(ref cause) => cause,
-            ValidateConfigurationSettingsError::TooManyBuckets(ref cause) => cause,
+            ValidateConfigurationSettingsError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ValidateConfigurationSettingsError::TooManyBuckets(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ValidateConfigurationSettingsError {}
 /// Trait representing the capabilities of the Elastic Beanstalk API. Elastic Beanstalk clients implement this trait.
 pub trait ElasticBeanstalk {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
@@ -10069,6 +9947,14 @@ impl ElasticBeanstalkClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> ElasticBeanstalkClient {
         ElasticBeanstalkClient { client, region }
+    }
+}
+
+impl fmt::Debug for ElasticBeanstalkClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ElasticBeanstalkClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

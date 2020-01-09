@@ -7158,18 +7158,14 @@ impl CloneReceiptRuleSetError {
 }
 impl fmt::Display for CloneReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CloneReceiptRuleSetError {
-    fn description(&self) -> &str {
         match *self {
-            CloneReceiptRuleSetError::AlreadyExists(ref cause) => cause,
-            CloneReceiptRuleSetError::LimitExceeded(ref cause) => cause,
-            CloneReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
+            CloneReceiptRuleSetError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CloneReceiptRuleSetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CloneReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CloneReceiptRuleSetError {}
 /// Errors returned by CreateConfigurationSet
 #[derive(Debug, PartialEq)]
 pub enum CreateConfigurationSetError {
@@ -7225,18 +7221,18 @@ impl CreateConfigurationSetError {
 }
 impl fmt::Display for CreateConfigurationSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConfigurationSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateConfigurationSetError::ConfigurationSetAlreadyExists(ref cause) => cause,
-            CreateConfigurationSetError::InvalidConfigurationSet(ref cause) => cause,
-            CreateConfigurationSetError::LimitExceeded(ref cause) => cause,
+            CreateConfigurationSetError::ConfigurationSetAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateConfigurationSetError::InvalidConfigurationSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateConfigurationSetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateConfigurationSetError {}
 /// Errors returned by CreateConfigurationSetEventDestination
 #[derive(Debug, PartialEq)]
 pub enum CreateConfigurationSetEventDestinationError {
@@ -7317,29 +7313,29 @@ impl CreateConfigurationSetEventDestinationError {
 }
 impl fmt::Display for CreateConfigurationSetEventDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConfigurationSetEventDestinationError {
-    fn description(&self) -> &str {
         match *self {
             CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateConfigurationSetEventDestinationError::InvalidSNSDestination(ref cause) => cause,
-            CreateConfigurationSetEventDestinationError::LimitExceeded(ref cause) => cause,
+            CreateConfigurationSetEventDestinationError::InvalidSNSDestination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateConfigurationSetEventDestinationError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateConfigurationSetEventDestinationError {}
 /// Errors returned by CreateConfigurationSetTrackingOptions
 #[derive(Debug, PartialEq)]
 pub enum CreateConfigurationSetTrackingOptionsError {
@@ -7395,22 +7391,20 @@ impl CreateConfigurationSetTrackingOptionsError {
 }
 impl fmt::Display for CreateConfigurationSetTrackingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConfigurationSetTrackingOptionsError {
-    fn description(&self) -> &str {
         match *self {
             CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(ref cause) => cause,
+            CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for CreateConfigurationSetTrackingOptionsError {}
 /// Errors returned by CreateCustomVerificationEmailTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateCustomVerificationEmailTemplateError {
@@ -7451,19 +7445,15 @@ impl CreateCustomVerificationEmailTemplateError {
 }
 impl fmt::Display for CreateCustomVerificationEmailTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCustomVerificationEmailTemplateError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(ref cause) => cause,
-CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(ref cause) => cause,
-CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(ref cause) => cause,
-CreateCustomVerificationEmailTemplateError::LimitExceeded(ref cause) => cause
+                            CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(ref cause) => write!(f, "{}", cause),
+CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(ref cause) => write!(f, "{}", cause),
+CreateCustomVerificationEmailTemplateError::LimitExceeded(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateCustomVerificationEmailTemplateError {}
 /// Errors returned by CreateReceiptFilter
 #[derive(Debug, PartialEq)]
 pub enum CreateReceiptFilterError {
@@ -7508,17 +7498,13 @@ impl CreateReceiptFilterError {
 }
 impl fmt::Display for CreateReceiptFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReceiptFilterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReceiptFilterError::AlreadyExists(ref cause) => cause,
-            CreateReceiptFilterError::LimitExceeded(ref cause) => cause,
+            CreateReceiptFilterError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateReceiptFilterError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateReceiptFilterError {}
 /// Errors returned by CreateReceiptRule
 #[derive(Debug, PartialEq)]
 pub enum CreateReceiptRuleError {
@@ -7598,22 +7584,18 @@ impl CreateReceiptRuleError {
 }
 impl fmt::Display for CreateReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReceiptRuleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReceiptRuleError::AlreadyExists(ref cause) => cause,
-            CreateReceiptRuleError::InvalidLambdaFunction(ref cause) => cause,
-            CreateReceiptRuleError::InvalidS3Configuration(ref cause) => cause,
-            CreateReceiptRuleError::InvalidSnsTopic(ref cause) => cause,
-            CreateReceiptRuleError::LimitExceeded(ref cause) => cause,
-            CreateReceiptRuleError::RuleDoesNotExist(ref cause) => cause,
-            CreateReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
+            CreateReceiptRuleError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateReceiptRuleError::InvalidLambdaFunction(ref cause) => write!(f, "{}", cause),
+            CreateReceiptRuleError::InvalidS3Configuration(ref cause) => write!(f, "{}", cause),
+            CreateReceiptRuleError::InvalidSnsTopic(ref cause) => write!(f, "{}", cause),
+            CreateReceiptRuleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateReceiptRuleError::RuleDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateReceiptRuleError::RuleSetDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateReceiptRuleError {}
 /// Errors returned by CreateReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum CreateReceiptRuleSetError {
@@ -7658,17 +7640,13 @@ impl CreateReceiptRuleSetError {
 }
 impl fmt::Display for CreateReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReceiptRuleSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReceiptRuleSetError::AlreadyExists(ref cause) => cause,
-            CreateReceiptRuleSetError::LimitExceeded(ref cause) => cause,
+            CreateReceiptRuleSetError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateReceiptRuleSetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateReceiptRuleSetError {}
 /// Errors returned by CreateTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateTemplateError {
@@ -7720,18 +7698,14 @@ impl CreateTemplateError {
 }
 impl fmt::Display for CreateTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTemplateError::AlreadyExists(ref cause) => cause,
-            CreateTemplateError::InvalidTemplate(ref cause) => cause,
-            CreateTemplateError::LimitExceeded(ref cause) => cause,
+            CreateTemplateError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateTemplateError::InvalidTemplate(ref cause) => write!(f, "{}", cause),
+            CreateTemplateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTemplateError {}
 /// Errors returned by DeleteConfigurationSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationSetError {
@@ -7771,16 +7745,14 @@ impl DeleteConfigurationSetError {
 }
 impl fmt::Display for DeleteConfigurationSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConfigurationSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConfigurationSetError::ConfigurationSetDoesNotExist(ref cause) => cause,
+            DeleteConfigurationSetError::ConfigurationSetDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteConfigurationSetError {}
 /// Errors returned by DeleteConfigurationSetEventDestination
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationSetEventDestinationError {
@@ -7827,21 +7799,17 @@ impl DeleteConfigurationSetEventDestinationError {
 }
 impl fmt::Display for DeleteConfigurationSetEventDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConfigurationSetEventDestinationError {
-    fn description(&self) -> &str {
         match *self {
             DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteConfigurationSetEventDestinationError {}
 /// Errors returned by DeleteConfigurationSetTrackingOptions
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationSetTrackingOptionsError {
@@ -7890,21 +7858,17 @@ impl DeleteConfigurationSetTrackingOptionsError {
 }
 impl fmt::Display for DeleteConfigurationSetTrackingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConfigurationSetTrackingOptionsError {
-    fn description(&self) -> &str {
         match *self {
             DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DeleteConfigurationSetTrackingOptionsError {}
 /// Errors returned by DeleteCustomVerificationEmailTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCustomVerificationEmailTemplateError {}
@@ -7936,14 +7900,10 @@ impl DeleteCustomVerificationEmailTemplateError {
 }
 impl fmt::Display for DeleteCustomVerificationEmailTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCustomVerificationEmailTemplateError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteCustomVerificationEmailTemplateError {}
 /// Errors returned by DeleteIdentity
 #[derive(Debug, PartialEq)]
 pub enum DeleteIdentityError {}
@@ -7973,14 +7933,10 @@ impl DeleteIdentityError {
 }
 impl fmt::Display for DeleteIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteIdentityError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteIdentityError {}
 /// Errors returned by DeleteIdentityPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteIdentityPolicyError {}
@@ -8010,14 +7966,10 @@ impl DeleteIdentityPolicyError {
 }
 impl fmt::Display for DeleteIdentityPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteIdentityPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteIdentityPolicyError {}
 /// Errors returned by DeleteReceiptFilter
 #[derive(Debug, PartialEq)]
 pub enum DeleteReceiptFilterError {}
@@ -8047,14 +7999,10 @@ impl DeleteReceiptFilterError {
 }
 impl fmt::Display for DeleteReceiptFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReceiptFilterError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteReceiptFilterError {}
 /// Errors returned by DeleteReceiptRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteReceiptRuleError {
@@ -8092,16 +8040,12 @@ impl DeleteReceiptRuleError {
 }
 impl fmt::Display for DeleteReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReceiptRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
+            DeleteReceiptRuleError::RuleSetDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteReceiptRuleError {}
 /// Errors returned by DeleteReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteReceiptRuleSetError {
@@ -8139,16 +8083,12 @@ impl DeleteReceiptRuleSetError {
 }
 impl fmt::Display for DeleteReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReceiptRuleSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReceiptRuleSetError::CannotDelete(ref cause) => cause,
+            DeleteReceiptRuleSetError::CannotDelete(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteReceiptRuleSetError {}
 /// Errors returned by DeleteTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteTemplateError {}
@@ -8178,14 +8118,10 @@ impl DeleteTemplateError {
 }
 impl fmt::Display for DeleteTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTemplateError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteTemplateError {}
 /// Errors returned by DeleteVerifiedEmailAddress
 #[derive(Debug, PartialEq)]
 pub enum DeleteVerifiedEmailAddressError {}
@@ -8217,14 +8153,10 @@ impl DeleteVerifiedEmailAddressError {
 }
 impl fmt::Display for DeleteVerifiedEmailAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVerifiedEmailAddressError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteVerifiedEmailAddressError {}
 /// Errors returned by DescribeActiveReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeActiveReceiptRuleSetError {}
@@ -8256,14 +8188,10 @@ impl DescribeActiveReceiptRuleSetError {
 }
 impl fmt::Display for DescribeActiveReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeActiveReceiptRuleSetError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeActiveReceiptRuleSetError {}
 /// Errors returned by DescribeConfigurationSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationSetError {
@@ -8303,16 +8231,14 @@ impl DescribeConfigurationSetError {
 }
 impl fmt::Display for DescribeConfigurationSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationSetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationSetError::ConfigurationSetDoesNotExist(ref cause) => cause,
+            DescribeConfigurationSetError::ConfigurationSetDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeConfigurationSetError {}
 /// Errors returned by DescribeReceiptRule
 #[derive(Debug, PartialEq)]
 pub enum DescribeReceiptRuleError {
@@ -8357,17 +8283,13 @@ impl DescribeReceiptRuleError {
 }
 impl fmt::Display for DescribeReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReceiptRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReceiptRuleError::RuleDoesNotExist(ref cause) => cause,
-            DescribeReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
+            DescribeReceiptRuleError::RuleDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DescribeReceiptRuleError::RuleSetDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeReceiptRuleError {}
 /// Errors returned by DescribeReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeReceiptRuleSetError {
@@ -8405,16 +8327,12 @@ impl DescribeReceiptRuleSetError {
 }
 impl fmt::Display for DescribeReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReceiptRuleSetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
+            DescribeReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeReceiptRuleSetError {}
 /// Errors returned by GetAccountSendingEnabled
 #[derive(Debug, PartialEq)]
 pub enum GetAccountSendingEnabledError {}
@@ -8444,14 +8362,10 @@ impl GetAccountSendingEnabledError {
 }
 impl fmt::Display for GetAccountSendingEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountSendingEnabledError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetAccountSendingEnabledError {}
 /// Errors returned by GetCustomVerificationEmailTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetCustomVerificationEmailTemplateError {
@@ -8486,16 +8400,12 @@ impl GetCustomVerificationEmailTemplateError {
 }
 impl fmt::Display for GetCustomVerificationEmailTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCustomVerificationEmailTemplateError {
-    fn description(&self) -> &str {
         match *self {
-                            GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(ref cause) => cause
+                            GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for GetCustomVerificationEmailTemplateError {}
 /// Errors returned by GetIdentityDkimAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityDkimAttributesError {}
@@ -8525,14 +8435,10 @@ impl GetIdentityDkimAttributesError {
 }
 impl fmt::Display for GetIdentityDkimAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIdentityDkimAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetIdentityDkimAttributesError {}
 /// Errors returned by GetIdentityMailFromDomainAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityMailFromDomainAttributesError {}
@@ -8564,14 +8470,10 @@ impl GetIdentityMailFromDomainAttributesError {
 }
 impl fmt::Display for GetIdentityMailFromDomainAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIdentityMailFromDomainAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetIdentityMailFromDomainAttributesError {}
 /// Errors returned by GetIdentityNotificationAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityNotificationAttributesError {}
@@ -8603,14 +8505,10 @@ impl GetIdentityNotificationAttributesError {
 }
 impl fmt::Display for GetIdentityNotificationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIdentityNotificationAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetIdentityNotificationAttributesError {}
 /// Errors returned by GetIdentityPolicies
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityPoliciesError {}
@@ -8640,14 +8538,10 @@ impl GetIdentityPoliciesError {
 }
 impl fmt::Display for GetIdentityPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIdentityPoliciesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetIdentityPoliciesError {}
 /// Errors returned by GetIdentityVerificationAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityVerificationAttributesError {}
@@ -8679,14 +8573,10 @@ impl GetIdentityVerificationAttributesError {
 }
 impl fmt::Display for GetIdentityVerificationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIdentityVerificationAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetIdentityVerificationAttributesError {}
 /// Errors returned by GetSendQuota
 #[derive(Debug, PartialEq)]
 pub enum GetSendQuotaError {}
@@ -8716,14 +8606,10 @@ impl GetSendQuotaError {
 }
 impl fmt::Display for GetSendQuotaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSendQuotaError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetSendQuotaError {}
 /// Errors returned by GetSendStatistics
 #[derive(Debug, PartialEq)]
 pub enum GetSendStatisticsError {}
@@ -8753,14 +8639,10 @@ impl GetSendStatisticsError {
 }
 impl fmt::Display for GetSendStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSendStatisticsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetSendStatisticsError {}
 /// Errors returned by GetTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetTemplateError {
@@ -8798,16 +8680,12 @@ impl GetTemplateError {
 }
 impl fmt::Display for GetTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            GetTemplateError::TemplateDoesNotExist(ref cause) => cause,
+            GetTemplateError::TemplateDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTemplateError {}
 /// Errors returned by ListConfigurationSets
 #[derive(Debug, PartialEq)]
 pub enum ListConfigurationSetsError {}
@@ -8837,14 +8715,10 @@ impl ListConfigurationSetsError {
 }
 impl fmt::Display for ListConfigurationSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListConfigurationSetsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListConfigurationSetsError {}
 /// Errors returned by ListCustomVerificationEmailTemplates
 #[derive(Debug, PartialEq)]
 pub enum ListCustomVerificationEmailTemplatesError {}
@@ -8876,14 +8750,10 @@ impl ListCustomVerificationEmailTemplatesError {
 }
 impl fmt::Display for ListCustomVerificationEmailTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCustomVerificationEmailTemplatesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListCustomVerificationEmailTemplatesError {}
 /// Errors returned by ListIdentities
 #[derive(Debug, PartialEq)]
 pub enum ListIdentitiesError {}
@@ -8913,14 +8783,10 @@ impl ListIdentitiesError {
 }
 impl fmt::Display for ListIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListIdentitiesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListIdentitiesError {}
 /// Errors returned by ListIdentityPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListIdentityPoliciesError {}
@@ -8950,14 +8816,10 @@ impl ListIdentityPoliciesError {
 }
 impl fmt::Display for ListIdentityPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListIdentityPoliciesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListIdentityPoliciesError {}
 /// Errors returned by ListReceiptFilters
 #[derive(Debug, PartialEq)]
 pub enum ListReceiptFiltersError {}
@@ -8987,14 +8849,10 @@ impl ListReceiptFiltersError {
 }
 impl fmt::Display for ListReceiptFiltersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReceiptFiltersError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListReceiptFiltersError {}
 /// Errors returned by ListReceiptRuleSets
 #[derive(Debug, PartialEq)]
 pub enum ListReceiptRuleSetsError {}
@@ -9024,14 +8882,10 @@ impl ListReceiptRuleSetsError {
 }
 impl fmt::Display for ListReceiptRuleSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReceiptRuleSetsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListReceiptRuleSetsError {}
 /// Errors returned by ListTemplates
 #[derive(Debug, PartialEq)]
 pub enum ListTemplatesError {}
@@ -9061,14 +8915,10 @@ impl ListTemplatesError {
 }
 impl fmt::Display for ListTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTemplatesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTemplatesError {}
 /// Errors returned by ListVerifiedEmailAddresses
 #[derive(Debug, PartialEq)]
 pub enum ListVerifiedEmailAddressesError {}
@@ -9100,14 +8950,10 @@ impl ListVerifiedEmailAddressesError {
 }
 impl fmt::Display for ListVerifiedEmailAddressesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVerifiedEmailAddressesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListVerifiedEmailAddressesError {}
 /// Errors returned by PutConfigurationSetDeliveryOptions
 #[derive(Debug, PartialEq)]
 pub enum PutConfigurationSetDeliveryOptionsError {
@@ -9158,19 +9004,17 @@ impl PutConfigurationSetDeliveryOptionsError {
 }
 impl fmt::Display for PutConfigurationSetDeliveryOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutConfigurationSetDeliveryOptionsError {
-    fn description(&self) -> &str {
         match *self {
             PutConfigurationSetDeliveryOptionsError::ConfigurationSetDoesNotExist(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            PutConfigurationSetDeliveryOptionsError::InvalidDeliveryOptions(ref cause) => cause,
+            PutConfigurationSetDeliveryOptionsError::InvalidDeliveryOptions(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutConfigurationSetDeliveryOptionsError {}
 /// Errors returned by PutIdentityPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutIdentityPolicyError {
@@ -9208,16 +9052,12 @@ impl PutIdentityPolicyError {
 }
 impl fmt::Display for PutIdentityPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutIdentityPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutIdentityPolicyError::InvalidPolicy(ref cause) => cause,
+            PutIdentityPolicyError::InvalidPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutIdentityPolicyError {}
 /// Errors returned by ReorderReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum ReorderReceiptRuleSetError {
@@ -9262,17 +9102,13 @@ impl ReorderReceiptRuleSetError {
 }
 impl fmt::Display for ReorderReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReorderReceiptRuleSetError {
-    fn description(&self) -> &str {
         match *self {
-            ReorderReceiptRuleSetError::RuleDoesNotExist(ref cause) => cause,
-            ReorderReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
+            ReorderReceiptRuleSetError::RuleDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ReorderReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReorderReceiptRuleSetError {}
 /// Errors returned by SendBounce
 #[derive(Debug, PartialEq)]
 pub enum SendBounceError {
@@ -9310,16 +9146,12 @@ impl SendBounceError {
 }
 impl fmt::Display for SendBounceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendBounceError {
-    fn description(&self) -> &str {
         match *self {
-            SendBounceError::MessageRejected(ref cause) => cause,
+            SendBounceError::MessageRejected(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendBounceError {}
 /// Errors returned by SendBulkTemplatedEmail
 #[derive(Debug, PartialEq)]
 pub enum SendBulkTemplatedEmailError {
@@ -9398,21 +9230,23 @@ impl SendBulkTemplatedEmailError {
 }
 impl fmt::Display for SendBulkTemplatedEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendBulkTemplatedEmailError {
-    fn description(&self) -> &str {
         match *self {
-            SendBulkTemplatedEmailError::AccountSendingPaused(ref cause) => cause,
-            SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
-            SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(ref cause) => cause,
-            SendBulkTemplatedEmailError::MailFromDomainNotVerified(ref cause) => cause,
-            SendBulkTemplatedEmailError::MessageRejected(ref cause) => cause,
-            SendBulkTemplatedEmailError::TemplateDoesNotExist(ref cause) => cause,
+            SendBulkTemplatedEmailError::AccountSendingPaused(ref cause) => write!(f, "{}", cause),
+            SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendBulkTemplatedEmailError::MailFromDomainNotVerified(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendBulkTemplatedEmailError::MessageRejected(ref cause) => write!(f, "{}", cause),
+            SendBulkTemplatedEmailError::TemplateDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendBulkTemplatedEmailError {}
 /// Errors returned by SendCustomVerificationEmail
 #[derive(Debug, PartialEq)]
 pub enum SendCustomVerificationEmailError {
@@ -9455,22 +9289,24 @@ impl SendCustomVerificationEmailError {
 }
 impl fmt::Display for SendCustomVerificationEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendCustomVerificationEmailError {
-    fn description(&self) -> &str {
         match *self {
-            SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
+            SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
             SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(
                 ref cause,
-            ) => cause,
-            SendCustomVerificationEmailError::FromEmailAddressNotVerified(ref cause) => cause,
-            SendCustomVerificationEmailError::MessageRejected(ref cause) => cause,
-            SendCustomVerificationEmailError::ProductionAccessNotGranted(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            SendCustomVerificationEmailError::FromEmailAddressNotVerified(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendCustomVerificationEmailError::MessageRejected(ref cause) => write!(f, "{}", cause),
+            SendCustomVerificationEmailError::ProductionAccessNotGranted(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SendCustomVerificationEmailError {}
 /// Errors returned by SendEmail
 #[derive(Debug, PartialEq)]
 pub enum SendEmailError {
@@ -9536,20 +9372,16 @@ impl SendEmailError {
 }
 impl fmt::Display for SendEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendEmailError {
-    fn description(&self) -> &str {
         match *self {
-            SendEmailError::AccountSendingPaused(ref cause) => cause,
-            SendEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
-            SendEmailError::ConfigurationSetSendingPaused(ref cause) => cause,
-            SendEmailError::MailFromDomainNotVerified(ref cause) => cause,
-            SendEmailError::MessageRejected(ref cause) => cause,
+            SendEmailError::AccountSendingPaused(ref cause) => write!(f, "{}", cause),
+            SendEmailError::ConfigurationSetDoesNotExist(ref cause) => write!(f, "{}", cause),
+            SendEmailError::ConfigurationSetSendingPaused(ref cause) => write!(f, "{}", cause),
+            SendEmailError::MailFromDomainNotVerified(ref cause) => write!(f, "{}", cause),
+            SendEmailError::MessageRejected(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendEmailError {}
 /// Errors returned by SendRawEmail
 #[derive(Debug, PartialEq)]
 pub enum SendRawEmailError {
@@ -9615,20 +9447,16 @@ impl SendRawEmailError {
 }
 impl fmt::Display for SendRawEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendRawEmailError {
-    fn description(&self) -> &str {
         match *self {
-            SendRawEmailError::AccountSendingPaused(ref cause) => cause,
-            SendRawEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
-            SendRawEmailError::ConfigurationSetSendingPaused(ref cause) => cause,
-            SendRawEmailError::MailFromDomainNotVerified(ref cause) => cause,
-            SendRawEmailError::MessageRejected(ref cause) => cause,
+            SendRawEmailError::AccountSendingPaused(ref cause) => write!(f, "{}", cause),
+            SendRawEmailError::ConfigurationSetDoesNotExist(ref cause) => write!(f, "{}", cause),
+            SendRawEmailError::ConfigurationSetSendingPaused(ref cause) => write!(f, "{}", cause),
+            SendRawEmailError::MailFromDomainNotVerified(ref cause) => write!(f, "{}", cause),
+            SendRawEmailError::MessageRejected(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendRawEmailError {}
 /// Errors returned by SendTemplatedEmail
 #[derive(Debug, PartialEq)]
 pub enum SendTemplatedEmailError {
@@ -9707,21 +9535,21 @@ impl SendTemplatedEmailError {
 }
 impl fmt::Display for SendTemplatedEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendTemplatedEmailError {
-    fn description(&self) -> &str {
         match *self {
-            SendTemplatedEmailError::AccountSendingPaused(ref cause) => cause,
-            SendTemplatedEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
-            SendTemplatedEmailError::ConfigurationSetSendingPaused(ref cause) => cause,
-            SendTemplatedEmailError::MailFromDomainNotVerified(ref cause) => cause,
-            SendTemplatedEmailError::MessageRejected(ref cause) => cause,
-            SendTemplatedEmailError::TemplateDoesNotExist(ref cause) => cause,
+            SendTemplatedEmailError::AccountSendingPaused(ref cause) => write!(f, "{}", cause),
+            SendTemplatedEmailError::ConfigurationSetDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendTemplatedEmailError::ConfigurationSetSendingPaused(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendTemplatedEmailError::MailFromDomainNotVerified(ref cause) => write!(f, "{}", cause),
+            SendTemplatedEmailError::MessageRejected(ref cause) => write!(f, "{}", cause),
+            SendTemplatedEmailError::TemplateDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendTemplatedEmailError {}
 /// Errors returned by SetActiveReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum SetActiveReceiptRuleSetError {
@@ -9759,16 +9587,12 @@ impl SetActiveReceiptRuleSetError {
 }
 impl fmt::Display for SetActiveReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetActiveReceiptRuleSetError {
-    fn description(&self) -> &str {
         match *self {
-            SetActiveReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
+            SetActiveReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetActiveReceiptRuleSetError {}
 /// Errors returned by SetIdentityDkimEnabled
 #[derive(Debug, PartialEq)]
 pub enum SetIdentityDkimEnabledError {}
@@ -9798,14 +9622,10 @@ impl SetIdentityDkimEnabledError {
 }
 impl fmt::Display for SetIdentityDkimEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetIdentityDkimEnabledError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SetIdentityDkimEnabledError {}
 /// Errors returned by SetIdentityFeedbackForwardingEnabled
 #[derive(Debug, PartialEq)]
 pub enum SetIdentityFeedbackForwardingEnabledError {}
@@ -9837,14 +9657,10 @@ impl SetIdentityFeedbackForwardingEnabledError {
 }
 impl fmt::Display for SetIdentityFeedbackForwardingEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetIdentityFeedbackForwardingEnabledError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SetIdentityFeedbackForwardingEnabledError {}
 /// Errors returned by SetIdentityHeadersInNotificationsEnabled
 #[derive(Debug, PartialEq)]
 pub enum SetIdentityHeadersInNotificationsEnabledError {}
@@ -9876,14 +9692,10 @@ impl SetIdentityHeadersInNotificationsEnabledError {
 }
 impl fmt::Display for SetIdentityHeadersInNotificationsEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetIdentityHeadersInNotificationsEnabledError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SetIdentityHeadersInNotificationsEnabledError {}
 /// Errors returned by SetIdentityMailFromDomain
 #[derive(Debug, PartialEq)]
 pub enum SetIdentityMailFromDomainError {}
@@ -9913,14 +9725,10 @@ impl SetIdentityMailFromDomainError {
 }
 impl fmt::Display for SetIdentityMailFromDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetIdentityMailFromDomainError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SetIdentityMailFromDomainError {}
 /// Errors returned by SetIdentityNotificationTopic
 #[derive(Debug, PartialEq)]
 pub enum SetIdentityNotificationTopicError {}
@@ -9952,14 +9760,10 @@ impl SetIdentityNotificationTopicError {
 }
 impl fmt::Display for SetIdentityNotificationTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetIdentityNotificationTopicError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SetIdentityNotificationTopicError {}
 /// Errors returned by SetReceiptRulePosition
 #[derive(Debug, PartialEq)]
 pub enum SetReceiptRulePositionError {
@@ -10004,17 +9808,13 @@ impl SetReceiptRulePositionError {
 }
 impl fmt::Display for SetReceiptRulePositionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetReceiptRulePositionError {
-    fn description(&self) -> &str {
         match *self {
-            SetReceiptRulePositionError::RuleDoesNotExist(ref cause) => cause,
-            SetReceiptRulePositionError::RuleSetDoesNotExist(ref cause) => cause,
+            SetReceiptRulePositionError::RuleDoesNotExist(ref cause) => write!(f, "{}", cause),
+            SetReceiptRulePositionError::RuleSetDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetReceiptRulePositionError {}
 /// Errors returned by TestRenderTemplate
 #[derive(Debug, PartialEq)]
 pub enum TestRenderTemplateError {
@@ -10070,18 +9870,14 @@ impl TestRenderTemplateError {
 }
 impl fmt::Display for TestRenderTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestRenderTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            TestRenderTemplateError::InvalidRenderingParameter(ref cause) => cause,
-            TestRenderTemplateError::MissingRenderingAttribute(ref cause) => cause,
-            TestRenderTemplateError::TemplateDoesNotExist(ref cause) => cause,
+            TestRenderTemplateError::InvalidRenderingParameter(ref cause) => write!(f, "{}", cause),
+            TestRenderTemplateError::MissingRenderingAttribute(ref cause) => write!(f, "{}", cause),
+            TestRenderTemplateError::TemplateDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestRenderTemplateError {}
 /// Errors returned by UpdateAccountSendingEnabled
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountSendingEnabledError {}
@@ -10113,14 +9909,10 @@ impl UpdateAccountSendingEnabledError {
 }
 impl fmt::Display for UpdateAccountSendingEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAccountSendingEnabledError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UpdateAccountSendingEnabledError {}
 /// Errors returned by UpdateConfigurationSetEventDestination
 #[derive(Debug, PartialEq)]
 pub enum UpdateConfigurationSetEventDestinationError {
@@ -10192,28 +9984,26 @@ impl UpdateConfigurationSetEventDestinationError {
 }
 impl fmt::Display for UpdateConfigurationSetEventDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateConfigurationSetEventDestinationError {
-    fn description(&self) -> &str {
         match *self {
             UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(ref cause) => cause,
+            UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateConfigurationSetEventDestinationError {}
 /// Errors returned by UpdateConfigurationSetReputationMetricsEnabled
 #[derive(Debug, PartialEq)]
 pub enum UpdateConfigurationSetReputationMetricsEnabledError {
@@ -10248,18 +10038,14 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
 }
 impl fmt::Display for UpdateConfigurationSetReputationMetricsEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateConfigurationSetReputationMetricsEnabledError {
-    fn description(&self) -> &str {
         match *self {
             UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateConfigurationSetReputationMetricsEnabledError {}
 /// Errors returned by UpdateConfigurationSetSendingEnabled
 #[derive(Debug, PartialEq)]
 pub enum UpdateConfigurationSetSendingEnabledError {
@@ -10301,18 +10087,14 @@ impl UpdateConfigurationSetSendingEnabledError {
 }
 impl fmt::Display for UpdateConfigurationSetSendingEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateConfigurationSetSendingEnabledError {
-    fn description(&self) -> &str {
         match *self {
             UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for UpdateConfigurationSetSendingEnabledError {}
 /// Errors returned by UpdateConfigurationSetTrackingOptions
 #[derive(Debug, PartialEq)]
 pub enum UpdateConfigurationSetTrackingOptionsError {
@@ -10370,22 +10152,20 @@ impl UpdateConfigurationSetTrackingOptionsError {
 }
 impl fmt::Display for UpdateConfigurationSetTrackingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateConfigurationSetTrackingOptionsError {
-    fn description(&self) -> &str {
         match *self {
             UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(ref cause) => cause,
+            UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for UpdateConfigurationSetTrackingOptionsError {}
 /// Errors returned by UpdateCustomVerificationEmailTemplate
 #[derive(Debug, PartialEq)]
 pub enum UpdateCustomVerificationEmailTemplateError {
@@ -10424,18 +10204,14 @@ impl UpdateCustomVerificationEmailTemplateError {
 }
 impl fmt::Display for UpdateCustomVerificationEmailTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCustomVerificationEmailTemplateError {
-    fn description(&self) -> &str {
         match *self {
-                            UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(ref cause) => cause,
-UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(ref cause) => cause,
-UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(ref cause) => cause
+                            UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(ref cause) => write!(f, "{}", cause),
+UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(ref cause) => write!(f, "{}", cause),
+UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for UpdateCustomVerificationEmailTemplateError {}
 /// Errors returned by UpdateReceiptRule
 #[derive(Debug, PartialEq)]
 pub enum UpdateReceiptRuleError {
@@ -10508,21 +10284,17 @@ impl UpdateReceiptRuleError {
 }
 impl fmt::Display for UpdateReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateReceiptRuleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateReceiptRuleError::InvalidLambdaFunction(ref cause) => cause,
-            UpdateReceiptRuleError::InvalidS3Configuration(ref cause) => cause,
-            UpdateReceiptRuleError::InvalidSnsTopic(ref cause) => cause,
-            UpdateReceiptRuleError::LimitExceeded(ref cause) => cause,
-            UpdateReceiptRuleError::RuleDoesNotExist(ref cause) => cause,
-            UpdateReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
+            UpdateReceiptRuleError::InvalidLambdaFunction(ref cause) => write!(f, "{}", cause),
+            UpdateReceiptRuleError::InvalidS3Configuration(ref cause) => write!(f, "{}", cause),
+            UpdateReceiptRuleError::InvalidSnsTopic(ref cause) => write!(f, "{}", cause),
+            UpdateReceiptRuleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateReceiptRuleError::RuleDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateReceiptRuleError::RuleSetDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateReceiptRuleError {}
 /// Errors returned by UpdateTemplate
 #[derive(Debug, PartialEq)]
 pub enum UpdateTemplateError {
@@ -10567,17 +10339,13 @@ impl UpdateTemplateError {
 }
 impl fmt::Display for UpdateTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTemplateError::InvalidTemplate(ref cause) => cause,
-            UpdateTemplateError::TemplateDoesNotExist(ref cause) => cause,
+            UpdateTemplateError::InvalidTemplate(ref cause) => write!(f, "{}", cause),
+            UpdateTemplateError::TemplateDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTemplateError {}
 /// Errors returned by VerifyDomainDkim
 #[derive(Debug, PartialEq)]
 pub enum VerifyDomainDkimError {}
@@ -10607,14 +10375,10 @@ impl VerifyDomainDkimError {
 }
 impl fmt::Display for VerifyDomainDkimError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for VerifyDomainDkimError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for VerifyDomainDkimError {}
 /// Errors returned by VerifyDomainIdentity
 #[derive(Debug, PartialEq)]
 pub enum VerifyDomainIdentityError {}
@@ -10644,14 +10408,10 @@ impl VerifyDomainIdentityError {
 }
 impl fmt::Display for VerifyDomainIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for VerifyDomainIdentityError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for VerifyDomainIdentityError {}
 /// Errors returned by VerifyEmailAddress
 #[derive(Debug, PartialEq)]
 pub enum VerifyEmailAddressError {}
@@ -10681,14 +10441,10 @@ impl VerifyEmailAddressError {
 }
 impl fmt::Display for VerifyEmailAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for VerifyEmailAddressError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for VerifyEmailAddressError {}
 /// Errors returned by VerifyEmailIdentity
 #[derive(Debug, PartialEq)]
 pub enum VerifyEmailIdentityError {}
@@ -10718,14 +10474,10 @@ impl VerifyEmailIdentityError {
 }
 impl fmt::Display for VerifyEmailIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for VerifyEmailIdentityError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for VerifyEmailIdentityError {}
 /// Trait representing the capabilities of the Amazon SES API. Amazon SES clients implement this trait.
 pub trait Ses {
     /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
@@ -11224,6 +10976,14 @@ impl SesClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> SesClient {
         SesClient { client, region }
+    }
+}
+
+impl fmt::Debug for SesClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SesClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

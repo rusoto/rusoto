@@ -107,6 +107,17 @@ impl AllowedNodeTypeModificationsMessageDeserializer {
         )
     }
 }
+struct AuthTokenUpdateStatusDeserializer;
+impl AuthTokenUpdateStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Represents the input of an AuthorizeCacheSecurityGroupIngress operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -244,8 +255,10 @@ impl AvailabilityZonesListSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchApplyUpdateActionMessage {
+    /// <p>The cache cluster IDs</p>
+    pub cache_cluster_ids: Option<Vec<String>>,
     /// <p>The replication group IDs</p>
-    pub replication_group_ids: Vec<String>,
+    pub replication_group_ids: Option<Vec<String>>,
     /// <p>The unique ID of the service update</p>
     pub service_update_name: String,
 }
@@ -259,11 +272,20 @@ impl BatchApplyUpdateActionMessageSerializer {
             prefix.push_str(".");
         }
 
-        ReplicationGroupIdListSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "ReplicationGroupIds"),
-            &obj.replication_group_ids,
-        );
+        if let Some(ref field_value) = obj.cache_cluster_ids {
+            CacheClusterIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "CacheClusterIds"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.replication_group_ids {
+            ReplicationGroupIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ReplicationGroupIds"),
+                field_value,
+            );
+        }
         params.put(
             &format!("{}{}", prefix, "ServiceUpdateName"),
             &obj.service_update_name,
@@ -274,8 +296,10 @@ impl BatchApplyUpdateActionMessageSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchStopUpdateActionMessage {
+    /// <p>The cache cluster IDs</p>
+    pub cache_cluster_ids: Option<Vec<String>>,
     /// <p>The replication group IDs</p>
-    pub replication_group_ids: Vec<String>,
+    pub replication_group_ids: Option<Vec<String>>,
     /// <p>The unique ID of the service update</p>
     pub service_update_name: String,
 }
@@ -289,11 +313,20 @@ impl BatchStopUpdateActionMessageSerializer {
             prefix.push_str(".");
         }
 
-        ReplicationGroupIdListSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "ReplicationGroupIds"),
-            &obj.replication_group_ids,
-        );
+        if let Some(ref field_value) = obj.cache_cluster_ids {
+            CacheClusterIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "CacheClusterIds"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.replication_group_ids {
+            ReplicationGroupIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ReplicationGroupIds"),
+                field_value,
+            );
+        }
         params.put(
             &format!("{}{}", prefix, "ServiceUpdateName"),
             &obj.service_update_name,
@@ -331,6 +364,8 @@ pub struct CacheCluster {
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p>A flag that enables using an <code>AuthToken</code> (password) when issuing Redis commands.</p> <p>Default: <code>false</code> </p>
     pub auth_token_enabled: Option<bool>,
+    /// <p>The date the auth token was last modified</p>
+    pub auth_token_last_modified_date: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>The date and time when the cluster was created.</p>
@@ -395,6 +430,12 @@ impl CacheClusterDeserializer {
                 "AuthTokenEnabled" => {
                     obj.auth_token_enabled = Some(BooleanOptionalDeserializer::deserialize(
                         "AuthTokenEnabled",
+                        stack,
+                    )?);
+                }
+                "AuthTokenLastModifiedDate" => {
+                    obj.auth_token_last_modified_date = Some(TStampDeserializer::deserialize(
+                        "AuthTokenLastModifiedDate",
                         stack,
                     )?);
                 }
@@ -538,6 +579,18 @@ impl CacheClusterDeserializer {
         })
     }
 }
+
+/// Serialize `CacheClusterIdList` contents to a `SignedRequest`.
+struct CacheClusterIdListSerializer;
+impl CacheClusterIdListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 struct CacheClusterListDeserializer;
 impl CacheClusterListDeserializer {
     #[allow(unused_variables)]
@@ -971,6 +1024,106 @@ impl CacheNodeTypeSpecificValueListDeserializer {
             if name == "CacheNodeTypeSpecificValue" {
                 obj.push(CacheNodeTypeSpecificValueDeserializer::deserialize(
                     "CacheNodeTypeSpecificValue",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The status of the service update on the cache node</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CacheNodeUpdateStatus {
+    /// <p>The node ID of the cache cluster</p>
+    pub cache_node_id: Option<String>,
+    /// <p>The deletion date of the node</p>
+    pub node_deletion_date: Option<String>,
+    /// <p>The end date of the update for a node</p>
+    pub node_update_end_date: Option<String>,
+    /// <p>Reflects whether the update was initiated by the customer or automatically applied</p>
+    pub node_update_initiated_by: Option<String>,
+    /// <p>The date when the update is triggered</p>
+    pub node_update_initiated_date: Option<String>,
+    /// <p>The start date of the update for a node</p>
+    pub node_update_start_date: Option<String>,
+    /// <p>The update status of the node</p>
+    pub node_update_status: Option<String>,
+    /// <p>The date when the NodeUpdateStatus was last modified&gt;</p>
+    pub node_update_status_modified_date: Option<String>,
+}
+
+struct CacheNodeUpdateStatusDeserializer;
+impl CacheNodeUpdateStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CacheNodeUpdateStatus, XmlParseError> {
+        deserialize_elements::<_, CacheNodeUpdateStatus, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CacheNodeId" => {
+                    obj.cache_node_id =
+                        Some(StringDeserializer::deserialize("CacheNodeId", stack)?);
+                }
+                "NodeDeletionDate" => {
+                    obj.node_deletion_date =
+                        Some(TStampDeserializer::deserialize("NodeDeletionDate", stack)?);
+                }
+                "NodeUpdateEndDate" => {
+                    obj.node_update_end_date =
+                        Some(TStampDeserializer::deserialize("NodeUpdateEndDate", stack)?);
+                }
+                "NodeUpdateInitiatedBy" => {
+                    obj.node_update_initiated_by =
+                        Some(NodeUpdateInitiatedByDeserializer::deserialize(
+                            "NodeUpdateInitiatedBy",
+                            stack,
+                        )?);
+                }
+                "NodeUpdateInitiatedDate" => {
+                    obj.node_update_initiated_date = Some(TStampDeserializer::deserialize(
+                        "NodeUpdateInitiatedDate",
+                        stack,
+                    )?);
+                }
+                "NodeUpdateStartDate" => {
+                    obj.node_update_start_date = Some(TStampDeserializer::deserialize(
+                        "NodeUpdateStartDate",
+                        stack,
+                    )?);
+                }
+                "NodeUpdateStatus" => {
+                    obj.node_update_status = Some(NodeUpdateStatusDeserializer::deserialize(
+                        "NodeUpdateStatus",
+                        stack,
+                    )?);
+                }
+                "NodeUpdateStatusModifiedDate" => {
+                    obj.node_update_status_modified_date = Some(TStampDeserializer::deserialize(
+                        "NodeUpdateStatusModifiedDate",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct CacheNodeUpdateStatusListDeserializer;
+impl CacheNodeUpdateStatusListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<CacheNodeUpdateStatus>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "CacheNodeUpdateStatus" {
+                obj.push(CacheNodeUpdateStatusDeserializer::deserialize(
+                    "CacheNodeUpdateStatus",
                     stack,
                 )?);
             } else {
@@ -1525,6 +1678,65 @@ impl ClusterIdListDeserializer {
         })
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CompleteMigrationMessage {
+    /// <p>Forces the migration to stop without ensuring that data is in sync. It is recommended to use this option only to abort the migration and not recommended when application wants to continue migration to ElastiCache.</p>
+    pub force: Option<bool>,
+    /// <p>The ID of the replication group to which data is being migrated.</p>
+    pub replication_group_id: String,
+}
+
+/// Serialize `CompleteMigrationMessage` contents to a `SignedRequest`.
+struct CompleteMigrationMessageSerializer;
+impl CompleteMigrationMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CompleteMigrationMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.force {
+            params.put(&format!("{}{}", prefix, "Force"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "ReplicationGroupId"),
+            &obj.replication_group_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CompleteMigrationResponse {
+    pub replication_group: Option<ReplicationGroup>,
+}
+
+struct CompleteMigrationResponseDeserializer;
+impl CompleteMigrationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CompleteMigrationResponse, XmlParseError> {
+        deserialize_elements::<_, CompleteMigrationResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ReplicationGroup" => {
+                        obj.replication_group = Some(ReplicationGroupDeserializer::deserialize(
+                            "ReplicationGroup",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Node group (shard) configuration options when adding or removing replicas. Each node group (shard) configuration has the following members: NodeGroupId, NewReplicaCount, and PreferredAvailabilityZones. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1631,7 +1843,7 @@ impl CopySnapshotResultDeserializer {
 pub struct CreateCacheClusterMessage {
     /// <p>Specifies whether the nodes in this Memcached cluster are created in a single Availability Zone or created across multiple Availability Zones in the cluster's region.</p> <p>This parameter is only supported for Memcached clusters.</p> <p>If the <code>AZMode</code> and <code>PreferredAvailabilityZones</code> are not specified, ElastiCache assumes <code>single-az</code> mode.</p>
     pub az_mode: Option<String>,
-    /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@'. </p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
+    /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>The only permitted printable special characters are !, &amp;, #, $, ^, &lt;, &gt;, and -. Other printable special characters cannot be used in the AUTH token.</p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
     pub auth_token: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
@@ -2025,7 +2237,7 @@ impl CreateCacheSubnetGroupResultDeserializer {
 pub struct CreateReplicationGroupMessage {
     /// <p>A flag that enables encryption at rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the replication group is created. To enable encryption at rest on a replication group you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create the replication group. </p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
     pub at_rest_encryption_enabled: Option<bool>,
-    /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p> <code>AuthToken</code> can be specified only on replication groups where <code>TransitEncryptionEnabled</code> is <code>true</code>.</p> <important> <p>For HIPAA compliance, you must specify <code>TransitEncryptionEnabled</code> as <code>true</code>, an <code>AuthToken</code>, and a <code>CacheSubnetGroup</code>.</p> </important> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@'. </p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
+    /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p> <code>AuthToken</code> can be specified only on replication groups where <code>TransitEncryptionEnabled</code> is <code>true</code>.</p> <important> <p>For HIPAA compliance, you must specify <code>TransitEncryptionEnabled</code> as <code>true</code>, an <code>AuthToken</code>, and a <code>CacheSubnetGroup</code>.</p> </important> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>The only permitted printable special characters are !, &amp;, #, $, ^, &lt;, &gt;, and -. Other printable special characters cannot be used in the AUTH token.</p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
     pub auth_token: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
@@ -2325,6 +2537,45 @@ impl CreateSnapshotResultDeserializer {
         })
     }
 }
+/// <p>The endpoint from which data should be migrated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CustomerNodeEndpoint {
+    /// <p>The address of the node endpoint</p>
+    pub address: Option<String>,
+    /// <p>The port of the node endpoint</p>
+    pub port: Option<i64>,
+}
+
+/// Serialize `CustomerNodeEndpoint` contents to a `SignedRequest`.
+struct CustomerNodeEndpointSerializer;
+impl CustomerNodeEndpointSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CustomerNodeEndpoint) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.address {
+            params.put(&format!("{}{}", prefix, "Address"), &field_value);
+        }
+        if let Some(ref field_value) = obj.port {
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
+        }
+    }
+}
+
+/// Serialize `CustomerNodeEndpointList` contents to a `SignedRequest`.
+struct CustomerNodeEndpointListSerializer;
+impl CustomerNodeEndpointListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<CustomerNodeEndpoint>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            CustomerNodeEndpointSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecreaseReplicaCountMessage {
@@ -3315,6 +3566,10 @@ impl DescribeSnapshotsMessageSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUpdateActionsMessage {
+    /// <p>The cache cluster IDs</p>
+    pub cache_cluster_ids: Option<Vec<String>>,
+    /// <p>The Elasticache engine to which the update applies. Either Redis or Memcached </p>
+    pub engine: Option<String>,
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response</p>
@@ -3342,6 +3597,16 @@ impl DescribeUpdateActionsMessageSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.cache_cluster_ids {
+            CacheClusterIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "CacheClusterIds"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.engine {
+            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
+        }
         if let Some(ref field_value) = obj.marker {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
@@ -3796,10 +4061,14 @@ impl ListTagsForResourceMessageSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyCacheClusterMessage {
-    /// <p><p>Specifies whether the new nodes in this Memcached cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. For instructions on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/CacheNodes.SupportedTypes.html">Cache Node Considerations for Memcached</a>.</p> </note></p>
+    /// <p><p>Specifies whether the new nodes in this Memcached cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. </p> </note></p>
     pub az_mode: Option<String>,
     /// <p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the cluster.</p> <p>If <code>false</code>, changes to the cluster are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <important> <p>If you perform a <code>ModifyCacheCluster</code> before a pending modification is applied, the pending modification is replaced by the newer modification.</p> </important> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
+    /// <p>Reserved parameter. The password used to access a password protected server. This parameter must be specified with the <code>auth-token-update</code> parameter. Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@', '%'</p> </li> </ul> <p> For more information, see AUTH password at <a href="http://redis.io/commands/AUTH">AUTH</a>.</p>
+    pub auth_token: Option<String>,
+    /// <p>Specifies the strategy to use to update the AUTH token. This parameter must be specified with the <code>auth-token</code> parameter. Possible values:</p> <ul> <li> <p>Rotate</p> </li> <li> <p>Set</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/auth.html">Authenticating Users with Redis AUTH</a> </p>
+    pub auth_token_update_strategy: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>The cluster identifier. This value is stored as a lowercase string.</p>
@@ -3846,6 +4115,15 @@ impl ModifyCacheClusterMessageSerializer {
         }
         if let Some(ref field_value) = obj.apply_immediately {
             params.put(&format!("{}{}", prefix, "ApplyImmediately"), &field_value);
+        }
+        if let Some(ref field_value) = obj.auth_token {
+            params.put(&format!("{}{}", prefix, "AuthToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.auth_token_update_strategy {
+            params.put(
+                &format!("{}{}", prefix, "AuthTokenUpdateStrategy"),
+                &field_value,
+            );
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
@@ -4070,6 +4348,10 @@ impl ModifyCacheSubnetGroupResultDeserializer {
 pub struct ModifyReplicationGroupMessage {
     /// <p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the replication group.</p> <p>If <code>false</code>, changes to the nodes in the replication group are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
+    /// <p>Reserved parameter. The password used to access a password protected server. This parameter must be specified with the <code>auth-token-update-strategy </code> parameter. Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@', '%'</p> </li> </ul> <p> For more information, see AUTH password at <a href="http://redis.io/commands/AUTH">AUTH</a>.</p>
+    pub auth_token: Option<String>,
+    /// <p>Specifies the strategy to use to update the AUTH token. This parameter must be specified with the <code>auth-token</code> parameter. Possible values:</p> <ul> <li> <p>Rotate</p> </li> <li> <p>Set</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/auth.html">Authenticating Users with Redis AUTH</a> </p>
+    pub auth_token_update_strategy: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p><p>Determines whether a read replica is automatically promoted to read/write primary if the existing primary encounters a failure.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
@@ -4115,6 +4397,15 @@ impl ModifyReplicationGroupMessageSerializer {
 
         if let Some(ref field_value) = obj.apply_immediately {
             params.put(&format!("{}{}", prefix, "ApplyImmediately"), &field_value);
+        }
+        if let Some(ref field_value) = obj.auth_token {
+            params.put(&format!("{}{}", prefix, "AuthToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.auth_token_update_strategy {
+            params.put(
+                &format!("{}{}", prefix, "AuthTokenUpdateStrategy"),
+                &field_value,
+            );
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
@@ -5083,6 +5374,8 @@ impl PendingAutomaticFailoverStatusDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingModifiedValues {
+    /// <p>The auth token status</p>
+    pub auth_token_status: Option<String>,
     /// <p>A list of cache node IDs that are being removed (or will be removed) from the cluster. A node ID is a 4-digit numeric identifier (0001, 0002, etc.).</p>
     pub cache_node_ids_to_remove: Option<Vec<String>>,
     /// <p>The cache node type that this cluster or replication group is scaled to.</p>
@@ -5102,6 +5395,12 @@ impl PendingModifiedValuesDeserializer {
     ) -> Result<PendingModifiedValues, XmlParseError> {
         deserialize_elements::<_, PendingModifiedValues, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "AuthTokenStatus" => {
+                    obj.auth_token_status = Some(AuthTokenUpdateStatusDeserializer::deserialize(
+                        "AuthTokenStatus",
+                        stack,
+                    )?);
+                }
                 "CacheNodeIdsToRemove" => {
                     obj.cache_node_ids_to_remove.get_or_insert(vec![]).extend(
                         CacheNodeIdsListDeserializer::deserialize("CacheNodeIdsToRemove", stack)?,
@@ -5143,6 +5442,8 @@ impl PreferredAvailabilityZoneListSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ProcessedUpdateAction {
+    /// <p>The ID of the cache cluster</p>
+    pub cache_cluster_id: Option<String>,
     /// <p>The ID of the replication group</p>
     pub replication_group_id: Option<String>,
     /// <p>The unique ID of the service update</p>
@@ -5160,6 +5461,10 @@ impl ProcessedUpdateActionDeserializer {
     ) -> Result<ProcessedUpdateAction, XmlParseError> {
         deserialize_elements::<_, ProcessedUpdateAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "CacheClusterId" => {
+                    obj.cache_cluster_id =
+                        Some(StringDeserializer::deserialize("CacheClusterId", stack)?);
+                }
                 "ReplicationGroupId" => {
                     obj.replication_group_id = Some(StringDeserializer::deserialize(
                         "ReplicationGroupId",
@@ -5444,6 +5749,8 @@ pub struct ReplicationGroup {
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p>A flag that enables using an <code>AuthToken</code> (password) when issuing Redis commands.</p> <p>Default: <code>false</code> </p>
     pub auth_token_enabled: Option<bool>,
+    /// <p>The date the auth token was last modified</p>
+    pub auth_token_last_modified_date: Option<String>,
     /// <p><p>Indicates the status of Multi-AZ with automatic failover for this Redis replication group.</p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
     pub automatic_failover: Option<String>,
     /// <p>The name of the compute and memory capacity node type for each node in the replication group.</p>
@@ -5493,6 +5800,12 @@ impl ReplicationGroupDeserializer {
                 "AuthTokenEnabled" => {
                     obj.auth_token_enabled = Some(BooleanOptionalDeserializer::deserialize(
                         "AuthTokenEnabled",
+                        stack,
+                    )?);
+                }
+                "AuthTokenLastModifiedDate" => {
+                    obj.auth_token_last_modified_date = Some(TStampDeserializer::deserialize(
+                        "AuthTokenLastModifiedDate",
                         stack,
                     )?);
                 }
@@ -5657,6 +5970,8 @@ impl ReplicationGroupMessageDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReplicationGroupPendingModifiedValues {
+    /// <p>The auth token status</p>
+    pub auth_token_status: Option<String>,
     /// <p><p>Indicates the status of Multi-AZ with automatic failover for this Redis replication group.</p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
     pub automatic_failover_status: Option<String>,
     /// <p>The primary cluster ID that is applied immediately (if <code>--apply-immediately</code> was specified), or during the next maintenance window.</p>
@@ -5677,6 +5992,13 @@ impl ReplicationGroupPendingModifiedValuesDeserializer {
             stack,
             |name, stack, obj| {
                 match name {
+                    "AuthTokenStatus" => {
+                        obj.auth_token_status =
+                            Some(AuthTokenUpdateStatusDeserializer::deserialize(
+                                "AuthTokenStatus",
+                                stack,
+                            )?);
+                    }
                     "AutomaticFailoverStatus" => {
                         obj.automatic_failover_status =
                             Some(PendingAutomaticFailoverStatusDeserializer::deserialize(
@@ -6252,9 +6574,9 @@ impl SecurityGroupMembershipListDeserializer {
 pub struct ServiceUpdate {
     /// <p>Indicates whether the service update will be automatically applied once the recommended apply-by date has expired. </p>
     pub auto_update_after_recommended_apply_by_date: Option<bool>,
-    /// <p>The Redis engine to which the service update applies</p>
+    /// <p>The Elasticache engine to which the update applies. Either Redis or Memcached</p>
     pub engine: Option<String>,
-    /// <p>The Redis engine version to which the service update applies</p>
+    /// <p>The Elasticache engine version to which the update applies. Either Redis or Memcached engine version</p>
     pub engine_version: Option<String>,
     /// <p>The estimated length of time the service update will take</p>
     pub estimated_update_time: Option<String>,
@@ -6728,6 +7050,63 @@ impl SourceTypeDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartMigrationMessage {
+    /// <p>List of endpoints from which data should be migrated. For Redis (cluster mode disabled), list should have only one element.</p>
+    pub customer_node_endpoint_list: Vec<CustomerNodeEndpoint>,
+    /// <p>The ID of the replication group to which data should be migrated.</p>
+    pub replication_group_id: String,
+}
+
+/// Serialize `StartMigrationMessage` contents to a `SignedRequest`.
+struct StartMigrationMessageSerializer;
+impl StartMigrationMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StartMigrationMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        CustomerNodeEndpointListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "CustomerNodeEndpointList"),
+            &obj.customer_node_endpoint_list,
+        );
+        params.put(
+            &format!("{}{}", prefix, "ReplicationGroupId"),
+            &obj.replication_group_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct StartMigrationResponse {
+    pub replication_group: Option<ReplicationGroup>,
+}
+
+struct StartMigrationResponseDeserializer;
+impl StartMigrationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StartMigrationResponse, XmlParseError> {
+        deserialize_elements::<_, StartMigrationResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ReplicationGroup" => {
+                    obj.replication_group = Some(ReplicationGroupDeserializer::deserialize(
+                        "ReplicationGroup",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
@@ -7001,6 +7380,8 @@ impl TimeRangeFilterSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UnprocessedUpdateAction {
+    /// <p>The ID of the cache cluster</p>
+    pub cache_cluster_id: Option<String>,
     /// <p>The error message that describes the reason the request was not processed</p>
     pub error_message: Option<String>,
     /// <p>The error type for requests that are not processed</p>
@@ -7023,6 +7404,10 @@ impl UnprocessedUpdateActionDeserializer {
             stack,
             |name, stack, obj| {
                 match name {
+                    "CacheClusterId" => {
+                        obj.cache_cluster_id =
+                            Some(StringDeserializer::deserialize("CacheClusterId", stack)?);
+                    }
                     "ErrorMessage" => {
                         obj.error_message =
                             Some(StringDeserializer::deserialize("ErrorMessage", stack)?);
@@ -7071,6 +7456,12 @@ impl UnprocessedUpdateActionListDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateAction {
+    /// <p>The ID of the cache cluster</p>
+    pub cache_cluster_id: Option<String>,
+    /// <p>The status of the service update on the cache node</p>
+    pub cache_node_update_status: Option<Vec<CacheNodeUpdateStatus>>,
+    /// <p>The Elasticache engine to which the update applies. Either Redis or Memcached</p>
+    pub engine: Option<String>,
     /// <p>The estimated length of time for the update to complete</p>
     pub estimated_update_time: Option<String>,
     /// <p>The status of the service update on the node group</p>
@@ -7110,6 +7501,21 @@ impl UpdateActionDeserializer {
     ) -> Result<UpdateAction, XmlParseError> {
         deserialize_elements::<_, UpdateAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "CacheClusterId" => {
+                    obj.cache_cluster_id =
+                        Some(StringDeserializer::deserialize("CacheClusterId", stack)?);
+                }
+                "CacheNodeUpdateStatus" => {
+                    obj.cache_node_update_status.get_or_insert(vec![]).extend(
+                        CacheNodeUpdateStatusListDeserializer::deserialize(
+                            "CacheNodeUpdateStatus",
+                            stack,
+                        )?,
+                    );
+                }
+                "Engine" => {
+                    obj.engine = Some(StringDeserializer::deserialize("Engine", stack)?);
+                }
                 "EstimatedUpdateTime" => {
                     obj.estimated_update_time = Some(StringDeserializer::deserialize(
                         "EstimatedUpdateTime",
@@ -7376,19 +7782,17 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToResourceError::CacheClusterNotFoundFault(ref cause) => cause,
-            AddTagsToResourceError::InvalidARNFault(ref cause) => cause,
-            AddTagsToResourceError::SnapshotNotFoundFault(ref cause) => cause,
-            AddTagsToResourceError::TagQuotaPerResourceExceeded(ref cause) => cause,
+            AddTagsToResourceError::CacheClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::InvalidARNFault(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::SnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::TagQuotaPerResourceExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AddTagsToResourceError {}
 /// Errors returned by AuthorizeCacheSecurityGroupIngress
 #[derive(Debug, PartialEq)]
 pub enum AuthorizeCacheSecurityGroupIngressError {
@@ -7431,28 +7835,26 @@ impl AuthorizeCacheSecurityGroupIngressError {
 }
 impl fmt::Display for AuthorizeCacheSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AuthorizeCacheSecurityGroupIngressError {
-    fn description(&self) -> &str {
         match *self {
             AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(ref cause) => cause,
+            AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AuthorizeCacheSecurityGroupIngressError {}
 /// Errors returned by BatchApplyUpdateAction
 #[derive(Debug, PartialEq)]
 pub enum BatchApplyUpdateActionError {
@@ -7501,17 +7903,15 @@ impl BatchApplyUpdateActionError {
 }
 impl fmt::Display for BatchApplyUpdateActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchApplyUpdateActionError {
-    fn description(&self) -> &str {
         match *self {
-            BatchApplyUpdateActionError::InvalidParameterValue(ref cause) => cause,
-            BatchApplyUpdateActionError::ServiceUpdateNotFoundFault(ref cause) => cause,
+            BatchApplyUpdateActionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            BatchApplyUpdateActionError::ServiceUpdateNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchApplyUpdateActionError {}
 /// Errors returned by BatchStopUpdateAction
 #[derive(Debug, PartialEq)]
 pub enum BatchStopUpdateActionError {
@@ -7558,17 +7958,86 @@ impl BatchStopUpdateActionError {
 }
 impl fmt::Display for BatchStopUpdateActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchStopUpdateActionError {
-    fn description(&self) -> &str {
         match *self {
-            BatchStopUpdateActionError::InvalidParameterValue(ref cause) => cause,
-            BatchStopUpdateActionError::ServiceUpdateNotFoundFault(ref cause) => cause,
+            BatchStopUpdateActionError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            BatchStopUpdateActionError::ServiceUpdateNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchStopUpdateActionError {}
+/// Errors returned by CompleteMigration
+#[derive(Debug, PartialEq)]
+pub enum CompleteMigrationError {
+    /// <p>The requested replication group is not in the <code>available</code> state.</p>
+    InvalidReplicationGroupStateFault(String),
+    /// <p>The specified replication group does not exist.</p>
+    ReplicationGroupNotFoundFault(String),
+    /// <p>The designated replication group is not available for data migration.</p>
+    ReplicationGroupNotUnderMigrationFault(String),
+}
+
+impl CompleteMigrationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteMigrationError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidReplicationGroupState" => {
+                        return RusotoError::Service(
+                            CompleteMigrationError::InvalidReplicationGroupStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ReplicationGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            CompleteMigrationError::ReplicationGroupNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ReplicationGroupNotUnderMigrationFault" => {
+                        return RusotoError::Service(
+                            CompleteMigrationError::ReplicationGroupNotUnderMigrationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CompleteMigrationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CompleteMigrationError::InvalidReplicationGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CompleteMigrationError::ReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CompleteMigrationError::ReplicationGroupNotUnderMigrationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CompleteMigrationError {}
 /// Errors returned by CopySnapshot
 #[derive(Debug, PartialEq)]
 pub enum CopySnapshotError {
@@ -7641,21 +8110,17 @@ impl CopySnapshotError {
 }
 impl fmt::Display for CopySnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopySnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CopySnapshotError::InvalidParameterCombination(ref cause) => cause,
-            CopySnapshotError::InvalidParameterValue(ref cause) => cause,
-            CopySnapshotError::InvalidSnapshotStateFault(ref cause) => cause,
-            CopySnapshotError::SnapshotAlreadyExistsFault(ref cause) => cause,
-            CopySnapshotError::SnapshotNotFoundFault(ref cause) => cause,
-            CopySnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+            CopySnapshotError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::InvalidSnapshotStateFault(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::SnapshotAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::SnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::SnapshotQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CopySnapshotError {}
 /// Errors returned by CreateCacheCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateCacheClusterError {
@@ -7810,29 +8275,51 @@ impl CreateCacheClusterError {
 }
 impl fmt::Display for CreateCacheClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCacheClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCacheClusterError::CacheClusterAlreadyExistsFault(ref cause) => cause,
-            CreateCacheClusterError::CacheParameterGroupNotFoundFault(ref cause) => cause,
-            CreateCacheClusterError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
-            CreateCacheClusterError::CacheSubnetGroupNotFoundFault(ref cause) => cause,
-            CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,
-            CreateCacheClusterError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
-            CreateCacheClusterError::InvalidParameterCombination(ref cause) => cause,
-            CreateCacheClusterError::InvalidParameterValue(ref cause) => cause,
-            CreateCacheClusterError::InvalidReplicationGroupStateFault(ref cause) => cause,
-            CreateCacheClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            CreateCacheClusterError::NodeQuotaForClusterExceededFault(ref cause) => cause,
-            CreateCacheClusterError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
-            CreateCacheClusterError::ReplicationGroupNotFoundFault(ref cause) => cause,
-            CreateCacheClusterError::TagQuotaPerResourceExceeded(ref cause) => cause,
+            CreateCacheClusterError::CacheClusterAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::CacheParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::CacheSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::CacheSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::InsufficientCacheClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateCacheClusterError::InvalidReplicationGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::NodeQuotaForClusterExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::NodeQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::ReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheClusterError::TagQuotaPerResourceExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateCacheClusterError {}
 /// Errors returned by CreateCacheParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateCacheParameterGroupError {
@@ -7908,26 +8395,26 @@ impl CreateCacheParameterGroupError {
 }
 impl fmt::Display for CreateCacheParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCacheParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
             CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,
-            CreateCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,
+            CreateCacheParameterGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheParameterGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateCacheParameterGroupError {}
 /// Errors returned by CreateCacheSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateCacheSecurityGroupError {
@@ -7994,19 +8481,23 @@ impl CreateCacheSecurityGroupError {
 }
 impl fmt::Display for CreateCacheSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCacheSecurityGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(ref cause) => cause,
-            CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(ref cause) => cause,
-            CreateCacheSecurityGroupError::InvalidParameterCombination(ref cause) => cause,
-            CreateCacheSecurityGroupError::InvalidParameterValue(ref cause) => cause,
+            CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheSecurityGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheSecurityGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateCacheSecurityGroupError {}
 /// Errors returned by CreateCacheSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateCacheSubnetGroupError {
@@ -8071,19 +8562,21 @@ impl CreateCacheSubnetGroupError {
 }
 impl fmt::Display for CreateCacheSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCacheSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(ref cause) => cause,
-            CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(ref cause) => cause,
-            CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(ref cause) => cause,
-            CreateCacheSubnetGroupError::InvalidSubnet(ref cause) => cause,
+            CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCacheSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCacheSubnetGroupError {}
 /// Errors returned by CreateReplicationGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationGroupError {
@@ -8144,32 +8637,54 @@ impl CreateReplicationGroupError {
 }
 impl fmt::Display for CreateReplicationGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReplicationGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReplicationGroupError::CacheClusterNotFoundFault(ref cause) => cause,
-            CreateReplicationGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,
-            CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
-            CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(ref cause) => cause,
-            CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,
-            CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
-            CreateReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => cause,
-            CreateReplicationGroupError::InvalidParameterCombination(ref cause) => cause,
-            CreateReplicationGroupError::InvalidParameterValue(ref cause) => cause,
-            CreateReplicationGroupError::InvalidVPCNetworkStateFault(ref cause) => cause,
+            CreateReplicationGroupError::CacheClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::CacheParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateReplicationGroupError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(
                 ref cause,
-            ) => cause,
-            CreateReplicationGroupError::NodeQuotaForClusterExceededFault(ref cause) => cause,
-            CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
-            CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(ref cause) => cause,
-            CreateReplicationGroupError::TagQuotaPerResourceExceeded(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            CreateReplicationGroupError::NodeQuotaForClusterExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::TagQuotaPerResourceExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateReplicationGroupError {}
 /// Errors returned by CreateSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotError {
@@ -8271,24 +8786,24 @@ impl CreateSnapshotError {
 }
 impl fmt::Display for CreateSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSnapshotError::CacheClusterNotFoundFault(ref cause) => cause,
-            CreateSnapshotError::InvalidCacheClusterStateFault(ref cause) => cause,
-            CreateSnapshotError::InvalidParameterCombination(ref cause) => cause,
-            CreateSnapshotError::InvalidParameterValue(ref cause) => cause,
-            CreateSnapshotError::InvalidReplicationGroupStateFault(ref cause) => cause,
-            CreateSnapshotError::ReplicationGroupNotFoundFault(ref cause) => cause,
-            CreateSnapshotError::SnapshotAlreadyExistsFault(ref cause) => cause,
-            CreateSnapshotError::SnapshotFeatureNotSupportedFault(ref cause) => cause,
-            CreateSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+            CreateSnapshotError::CacheClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotError::InvalidCacheClusterStateFault(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotError::InvalidReplicationGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotError::ReplicationGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotError::SnapshotAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotError::SnapshotFeatureNotSupportedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotError::SnapshotQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSnapshotError {}
 /// Errors returned by DecreaseReplicaCount
 #[derive(Debug, PartialEq)]
 pub enum DecreaseReplicaCountError {
@@ -8421,29 +8936,43 @@ impl DecreaseReplicaCountError {
 }
 impl fmt::Display for DecreaseReplicaCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DecreaseReplicaCountError {
-    fn description(&self) -> &str {
         match *self {
-            DecreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,
-            DecreaseReplicaCountError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
-            DecreaseReplicaCountError::InvalidCacheClusterStateFault(ref cause) => cause,
-            DecreaseReplicaCountError::InvalidParameterCombination(ref cause) => cause,
-            DecreaseReplicaCountError::InvalidParameterValue(ref cause) => cause,
-            DecreaseReplicaCountError::InvalidReplicationGroupStateFault(ref cause) => cause,
-            DecreaseReplicaCountError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            DecreaseReplicaCountError::NoOperationFault(ref cause) => cause,
+            DecreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicaCountError::InsufficientCacheClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicaCountError::InvalidCacheClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicaCountError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicaCountError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DecreaseReplicaCountError::InvalidReplicationGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicaCountError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicaCountError::NoOperationFault(ref cause) => write!(f, "{}", cause),
             DecreaseReplicaCountError::NodeGroupsPerReplicationGroupQuotaExceededFault(
                 ref cause,
-            ) => cause,
-            DecreaseReplicaCountError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
-            DecreaseReplicaCountError::ReplicationGroupNotFoundFault(ref cause) => cause,
-            DecreaseReplicaCountError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DecreaseReplicaCountError::NodeQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicaCountError::ReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicaCountError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DecreaseReplicaCountError {}
 /// Errors returned by DeleteCacheCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteCacheClusterError {
@@ -8535,22 +9064,28 @@ impl DeleteCacheClusterError {
 }
 impl fmt::Display for DeleteCacheClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCacheClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCacheClusterError::CacheClusterNotFoundFault(ref cause) => cause,
-            DeleteCacheClusterError::InvalidCacheClusterStateFault(ref cause) => cause,
-            DeleteCacheClusterError::InvalidParameterCombination(ref cause) => cause,
-            DeleteCacheClusterError::InvalidParameterValue(ref cause) => cause,
-            DeleteCacheClusterError::SnapshotAlreadyExistsFault(ref cause) => cause,
-            DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(ref cause) => cause,
-            DeleteCacheClusterError::SnapshotQuotaExceededFault(ref cause) => cause,
+            DeleteCacheClusterError::CacheClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeleteCacheClusterError::InvalidCacheClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCacheClusterError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCacheClusterError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteCacheClusterError::SnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCacheClusterError::SnapshotQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteCacheClusterError {}
 /// Errors returned by DeleteCacheParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteCacheParameterGroupError {
@@ -8617,21 +9152,23 @@ impl DeleteCacheParameterGroupError {
 }
 impl fmt::Display for DeleteCacheParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCacheParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,
-            DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => {
-                cause
+            DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
             }
-            DeleteCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,
-            DeleteCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,
+            DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCacheParameterGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCacheParameterGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteCacheParameterGroupError {}
 /// Errors returned by DeleteCacheSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteCacheSecurityGroupError {
@@ -8698,19 +9235,23 @@ impl DeleteCacheSecurityGroupError {
 }
 impl fmt::Display for DeleteCacheSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCacheSecurityGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
-            DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,
-            DeleteCacheSecurityGroupError::InvalidParameterCombination(ref cause) => cause,
-            DeleteCacheSecurityGroupError::InvalidParameterValue(ref cause) => cause,
+            DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCacheSecurityGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCacheSecurityGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteCacheSecurityGroupError {}
 /// Errors returned by DeleteCacheSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteCacheSubnetGroupError {
@@ -8759,17 +9300,15 @@ impl DeleteCacheSubnetGroupError {
 }
 impl fmt::Display for DeleteCacheSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCacheSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(ref cause) => cause,
-            DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(ref cause) => cause,
+            DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(ref cause) => write!(f, "{}", cause),
+            DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteCacheSubnetGroupError {}
 /// Errors returned by DeleteReplicationGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationGroupError {
@@ -8863,22 +9402,30 @@ impl DeleteReplicationGroupError {
 }
 impl fmt::Display for DeleteReplicationGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReplicationGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReplicationGroupError::InvalidParameterCombination(ref cause) => cause,
-            DeleteReplicationGroupError::InvalidParameterValue(ref cause) => cause,
-            DeleteReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => cause,
-            DeleteReplicationGroupError::ReplicationGroupNotFoundFault(ref cause) => cause,
-            DeleteReplicationGroupError::SnapshotAlreadyExistsFault(ref cause) => cause,
-            DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(ref cause) => cause,
-            DeleteReplicationGroupError::SnapshotQuotaExceededFault(ref cause) => cause,
+            DeleteReplicationGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationGroupError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationGroupError::ReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationGroupError::SnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationGroupError::SnapshotQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteReplicationGroupError {}
 /// Errors returned by DeleteSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteSnapshotError {
@@ -8937,19 +9484,15 @@ impl DeleteSnapshotError {
 }
 impl fmt::Display for DeleteSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSnapshotError::InvalidParameterCombination(ref cause) => cause,
-            DeleteSnapshotError::InvalidParameterValue(ref cause) => cause,
-            DeleteSnapshotError::InvalidSnapshotStateFault(ref cause) => cause,
-            DeleteSnapshotError::SnapshotNotFoundFault(ref cause) => cause,
+            DeleteSnapshotError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            DeleteSnapshotError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteSnapshotError::InvalidSnapshotStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteSnapshotError::SnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSnapshotError {}
 /// Errors returned by DescribeCacheClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheClustersError {
@@ -9005,18 +9548,18 @@ impl DescribeCacheClustersError {
 }
 impl fmt::Display for DescribeCacheClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCacheClustersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCacheClustersError::CacheClusterNotFoundFault(ref cause) => cause,
-            DescribeCacheClustersError::InvalidParameterCombination(ref cause) => cause,
-            DescribeCacheClustersError::InvalidParameterValue(ref cause) => cause,
+            DescribeCacheClustersError::CacheClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCacheClustersError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCacheClustersError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCacheClustersError {}
 /// Errors returned by DescribeCacheEngineVersions
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheEngineVersionsError {}
@@ -9048,14 +9591,10 @@ impl DescribeCacheEngineVersionsError {
 }
 impl fmt::Display for DescribeCacheEngineVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCacheEngineVersionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeCacheEngineVersionsError {}
 /// Errors returned by DescribeCacheParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheParameterGroupsError {
@@ -9115,18 +9654,20 @@ impl DescribeCacheParameterGroupsError {
 }
 impl fmt::Display for DescribeCacheParameterGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCacheParameterGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(ref cause) => cause,
-            DescribeCacheParameterGroupsError::InvalidParameterCombination(ref cause) => cause,
-            DescribeCacheParameterGroupsError::InvalidParameterValue(ref cause) => cause,
+            DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCacheParameterGroupsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCacheParameterGroupsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCacheParameterGroupsError {}
 /// Errors returned by DescribeCacheParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheParametersError {
@@ -9184,18 +9725,20 @@ impl DescribeCacheParametersError {
 }
 impl fmt::Display for DescribeCacheParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCacheParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCacheParametersError::CacheParameterGroupNotFoundFault(ref cause) => cause,
-            DescribeCacheParametersError::InvalidParameterCombination(ref cause) => cause,
-            DescribeCacheParametersError::InvalidParameterValue(ref cause) => cause,
+            DescribeCacheParametersError::CacheParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCacheParametersError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCacheParametersError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCacheParametersError {}
 /// Errors returned by DescribeCacheSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheSecurityGroupsError {
@@ -9255,18 +9798,20 @@ impl DescribeCacheSecurityGroupsError {
 }
 impl fmt::Display for DescribeCacheSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCacheSecurityGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
-            DescribeCacheSecurityGroupsError::InvalidParameterCombination(ref cause) => cause,
-            DescribeCacheSecurityGroupsError::InvalidParameterValue(ref cause) => cause,
+            DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCacheSecurityGroupsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCacheSecurityGroupsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCacheSecurityGroupsError {}
 /// Errors returned by DescribeCacheSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheSubnetGroupsError {
@@ -9306,16 +9851,14 @@ impl DescribeCacheSubnetGroupsError {
 }
 impl fmt::Display for DescribeCacheSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCacheSubnetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCacheSubnetGroupsError::CacheSubnetGroupNotFoundFault(ref cause) => cause,
+            DescribeCacheSubnetGroupsError::CacheSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCacheSubnetGroupsError {}
 /// Errors returned by DescribeEngineDefaultParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeEngineDefaultParametersError {
@@ -9366,17 +9909,17 @@ impl DescribeEngineDefaultParametersError {
 }
 impl fmt::Display for DescribeEngineDefaultParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEngineDefaultParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEngineDefaultParametersError::InvalidParameterCombination(ref cause) => cause,
-            DescribeEngineDefaultParametersError::InvalidParameterValue(ref cause) => cause,
+            DescribeEngineDefaultParametersError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEngineDefaultParametersError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEngineDefaultParametersError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {
@@ -9421,17 +9964,13 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventsError::InvalidParameterCombination(ref cause) => cause,
-            DescribeEventsError::InvalidParameterValue(ref cause) => cause,
+            DescribeEventsError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            DescribeEventsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEventsError {}
 /// Errors returned by DescribeReplicationGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationGroupsError {
@@ -9489,18 +10028,20 @@ impl DescribeReplicationGroupsError {
 }
 impl fmt::Display for DescribeReplicationGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReplicationGroupsError::InvalidParameterCombination(ref cause) => cause,
-            DescribeReplicationGroupsError::InvalidParameterValue(ref cause) => cause,
-            DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(ref cause) => cause,
+            DescribeReplicationGroupsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeReplicationGroupsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReplicationGroupsError {}
 /// Errors returned by DescribeReservedCacheNodes
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedCacheNodesError {
@@ -9560,18 +10101,20 @@ impl DescribeReservedCacheNodesError {
 }
 impl fmt::Display for DescribeReservedCacheNodesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReservedCacheNodesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReservedCacheNodesError::InvalidParameterCombination(ref cause) => cause,
-            DescribeReservedCacheNodesError::InvalidParameterValue(ref cause) => cause,
-            DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(ref cause) => cause,
+            DescribeReservedCacheNodesError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeReservedCacheNodesError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReservedCacheNodesError {}
 /// Errors returned by DescribeReservedCacheNodesOfferings
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedCacheNodesOfferingsError {
@@ -9610,22 +10153,20 @@ impl DescribeReservedCacheNodesOfferingsError {
 }
 impl fmt::Display for DescribeReservedCacheNodesOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReservedCacheNodesOfferingsError {
-    fn description(&self) -> &str {
         match *self {
             DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(ref cause) => cause,
+            DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeReservedCacheNodesOfferingsError {}
 /// Errors returned by DescribeServiceUpdates
 #[derive(Debug, PartialEq)]
 pub enum DescribeServiceUpdatesError {
@@ -9683,18 +10224,18 @@ impl DescribeServiceUpdatesError {
 }
 impl fmt::Display for DescribeServiceUpdatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeServiceUpdatesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeServiceUpdatesError::InvalidParameterCombination(ref cause) => cause,
-            DescribeServiceUpdatesError::InvalidParameterValue(ref cause) => cause,
-            DescribeServiceUpdatesError::ServiceUpdateNotFoundFault(ref cause) => cause,
+            DescribeServiceUpdatesError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeServiceUpdatesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeServiceUpdatesError::ServiceUpdateNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeServiceUpdatesError {}
 /// Errors returned by DescribeSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeSnapshotsError {
@@ -9755,19 +10296,17 @@ impl DescribeSnapshotsError {
 }
 impl fmt::Display for DescribeSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSnapshotsError::CacheClusterNotFoundFault(ref cause) => cause,
-            DescribeSnapshotsError::InvalidParameterCombination(ref cause) => cause,
-            DescribeSnapshotsError::InvalidParameterValue(ref cause) => cause,
-            DescribeSnapshotsError::SnapshotNotFoundFault(ref cause) => cause,
+            DescribeSnapshotsError::CacheClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DescribeSnapshotsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeSnapshotsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeSnapshotsError::SnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSnapshotsError {}
 /// Errors returned by DescribeUpdateActions
 #[derive(Debug, PartialEq)]
 pub enum DescribeUpdateActionsError {
@@ -9814,17 +10353,15 @@ impl DescribeUpdateActionsError {
 }
 impl fmt::Display for DescribeUpdateActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUpdateActionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUpdateActionsError::InvalidParameterCombination(ref cause) => cause,
-            DescribeUpdateActionsError::InvalidParameterValue(ref cause) => cause,
+            DescribeUpdateActionsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeUpdateActionsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUpdateActionsError {}
 /// Errors returned by IncreaseReplicaCount
 #[derive(Debug, PartialEq)]
 pub enum IncreaseReplicaCountError {
@@ -9955,29 +10492,41 @@ impl IncreaseReplicaCountError {
 }
 impl fmt::Display for IncreaseReplicaCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for IncreaseReplicaCountError {
-    fn description(&self) -> &str {
         match *self {
-            IncreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,
-            IncreaseReplicaCountError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
-            IncreaseReplicaCountError::InvalidCacheClusterStateFault(ref cause) => cause,
-            IncreaseReplicaCountError::InvalidKMSKeyFault(ref cause) => cause,
-            IncreaseReplicaCountError::InvalidParameterCombination(ref cause) => cause,
-            IncreaseReplicaCountError::InvalidParameterValue(ref cause) => cause,
-            IncreaseReplicaCountError::InvalidReplicationGroupStateFault(ref cause) => cause,
-            IncreaseReplicaCountError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            IncreaseReplicaCountError::NoOperationFault(ref cause) => cause,
+            IncreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicaCountError::InsufficientCacheClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicaCountError::InvalidCacheClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicaCountError::InvalidKMSKeyFault(ref cause) => write!(f, "{}", cause),
+            IncreaseReplicaCountError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicaCountError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            IncreaseReplicaCountError::InvalidReplicationGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicaCountError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicaCountError::NoOperationFault(ref cause) => write!(f, "{}", cause),
             IncreaseReplicaCountError::NodeGroupsPerReplicationGroupQuotaExceededFault(
                 ref cause,
-            ) => cause,
-            IncreaseReplicaCountError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
-            IncreaseReplicaCountError::ReplicationGroupNotFoundFault(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            IncreaseReplicaCountError::NodeQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicaCountError::ReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for IncreaseReplicaCountError {}
 /// Errors returned by ListAllowedNodeTypeModifications
 #[derive(Debug, PartialEq)]
 pub enum ListAllowedNodeTypeModificationsError {
@@ -10046,21 +10595,23 @@ impl ListAllowedNodeTypeModificationsError {
 }
 impl fmt::Display for ListAllowedNodeTypeModificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAllowedNodeTypeModificationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(ref cause) => cause,
-            ListAllowedNodeTypeModificationsError::InvalidParameterCombination(ref cause) => cause,
-            ListAllowedNodeTypeModificationsError::InvalidParameterValue(ref cause) => cause,
+            ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAllowedNodeTypeModificationsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAllowedNodeTypeModificationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ListAllowedNodeTypeModificationsError::ReplicationGroupNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ListAllowedNodeTypeModificationsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -10114,18 +10665,16 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::CacheClusterNotFoundFault(ref cause) => cause,
-            ListTagsForResourceError::InvalidARNFault(ref cause) => cause,
-            ListTagsForResourceError::SnapshotNotFoundFault(ref cause) => cause,
+            ListTagsForResourceError::CacheClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTagsForResourceError::InvalidARNFault(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::SnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ModifyCacheCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyCacheClusterError {
@@ -10253,26 +10802,40 @@ impl ModifyCacheClusterError {
 }
 impl fmt::Display for ModifyCacheClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyCacheClusterError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyCacheClusterError::CacheClusterNotFoundFault(ref cause) => cause,
-            ModifyCacheClusterError::CacheParameterGroupNotFoundFault(ref cause) => cause,
-            ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
-            ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
-            ModifyCacheClusterError::InvalidCacheClusterStateFault(ref cause) => cause,
-            ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,
-            ModifyCacheClusterError::InvalidParameterCombination(ref cause) => cause,
-            ModifyCacheClusterError::InvalidParameterValue(ref cause) => cause,
-            ModifyCacheClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            ModifyCacheClusterError::NodeQuotaForClusterExceededFault(ref cause) => cause,
-            ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
+            ModifyCacheClusterError::CacheClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyCacheClusterError::CacheParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheClusterError::InvalidCacheClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheClusterError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheClusterError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ModifyCacheClusterError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheClusterError::NodeQuotaForClusterExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyCacheClusterError {}
 /// Errors returned by ModifyCacheParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyCacheParameterGroupError {
@@ -10339,21 +10902,23 @@ impl ModifyCacheParameterGroupError {
 }
 impl fmt::Display for ModifyCacheParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyCacheParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,
-            ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => {
-                cause
+            ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
             }
-            ModifyCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,
-            ModifyCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,
+            ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheParameterGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheParameterGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyCacheParameterGroupError {}
 /// Errors returned by ModifyCacheSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyCacheSubnetGroupError {
@@ -10416,19 +10981,19 @@ impl ModifyCacheSubnetGroupError {
 }
 impl fmt::Display for ModifyCacheSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyCacheSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(ref cause) => cause,
-            ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(ref cause) => cause,
-            ModifyCacheSubnetGroupError::InvalidSubnet(ref cause) => cause,
-            ModifyCacheSubnetGroupError::SubnetInUse(ref cause) => cause,
+            ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            ModifyCacheSubnetGroupError::SubnetInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyCacheSubnetGroupError {}
 /// Errors returned by ModifyReplicationGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationGroupError {
@@ -10583,29 +11148,49 @@ impl ModifyReplicationGroupError {
 }
 impl fmt::Display for ModifyReplicationGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyReplicationGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyReplicationGroupError::CacheClusterNotFoundFault(ref cause) => cause,
-            ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,
-            ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
-            ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
-            ModifyReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => cause,
-            ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,
-            ModifyReplicationGroupError::InvalidKMSKeyFault(ref cause) => cause,
-            ModifyReplicationGroupError::InvalidParameterCombination(ref cause) => cause,
-            ModifyReplicationGroupError::InvalidParameterValue(ref cause) => cause,
-            ModifyReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => cause,
-            ModifyReplicationGroupError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(ref cause) => cause,
-            ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
-            ModifyReplicationGroupError::ReplicationGroupNotFoundFault(ref cause) => cause,
+            ModifyReplicationGroupError::CacheClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::InvalidKMSKeyFault(ref cause) => write!(f, "{}", cause),
+            ModifyReplicationGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ModifyReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationGroupError::ReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyReplicationGroupError {}
 /// Errors returned by ModifyReplicationGroupShardConfiguration
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationGroupShardConfigurationError {
@@ -10658,25 +11243,21 @@ impl ModifyReplicationGroupShardConfigurationError {
 }
 impl fmt::Display for ModifyReplicationGroupShardConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyReplicationGroupShardConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-                            ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
-ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(ref cause) => cause,
-ModifyReplicationGroupShardConfigurationError::InvalidKMSKeyFault(ref cause) => cause,
-ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(ref cause) => cause,
-ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(ref cause) => cause,
-ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(ref cause) => cause,
-ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(ref cause) => cause,
-ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(ref cause) => cause,
-ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
-ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(ref cause) => cause
+                            ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(ref cause) => write!(f, "{}", cause),
+ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(ref cause) => write!(f, "{}", cause),
+ModifyReplicationGroupShardConfigurationError::InvalidKMSKeyFault(ref cause) => write!(f, "{}", cause),
+ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(ref cause) => write!(f, "{}", cause),
+ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(ref cause) => write!(f, "{}", cause),
+ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for ModifyReplicationGroupShardConfigurationError {}
 /// Errors returned by PurchaseReservedCacheNodesOffering
 #[derive(Debug, PartialEq)]
 pub enum PurchaseReservedCacheNodesOfferingError {
@@ -10719,28 +11300,26 @@ impl PurchaseReservedCacheNodesOfferingError {
 }
 impl fmt::Display for PurchaseReservedCacheNodesOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PurchaseReservedCacheNodesOfferingError {
-    fn description(&self) -> &str {
         match *self {
             PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(ref cause) => cause,
+            PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PurchaseReservedCacheNodesOfferingError {}
 /// Errors returned by RebootCacheCluster
 #[derive(Debug, PartialEq)]
 pub enum RebootCacheClusterError {
@@ -10789,17 +11368,15 @@ impl RebootCacheClusterError {
 }
 impl fmt::Display for RebootCacheClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootCacheClusterError {
-    fn description(&self) -> &str {
         match *self {
-            RebootCacheClusterError::CacheClusterNotFoundFault(ref cause) => cause,
-            RebootCacheClusterError::InvalidCacheClusterStateFault(ref cause) => cause,
+            RebootCacheClusterError::CacheClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RebootCacheClusterError::InvalidCacheClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RebootCacheClusterError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -10862,19 +11439,17 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromResourceError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromResourceError::CacheClusterNotFoundFault(ref cause) => cause,
-            RemoveTagsFromResourceError::InvalidARNFault(ref cause) => cause,
-            RemoveTagsFromResourceError::SnapshotNotFoundFault(ref cause) => cause,
-            RemoveTagsFromResourceError::TagNotFoundFault(ref cause) => cause,
+            RemoveTagsFromResourceError::CacheClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveTagsFromResourceError::InvalidARNFault(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromResourceError::SnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromResourceError::TagNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsFromResourceError {}
 /// Errors returned by ResetCacheParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ResetCacheParameterGroupError {
@@ -10941,19 +11516,23 @@ impl ResetCacheParameterGroupError {
 }
 impl fmt::Display for ResetCacheParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetCacheParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,
-            ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => cause,
-            ResetCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,
-            ResetCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,
+            ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResetCacheParameterGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResetCacheParameterGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ResetCacheParameterGroupError {}
 /// Errors returned by RevokeCacheSecurityGroupIngress
 #[derive(Debug, PartialEq)]
 pub enum RevokeCacheSecurityGroupIngressError {
@@ -11029,24 +11608,103 @@ impl RevokeCacheSecurityGroupIngressError {
 }
 impl fmt::Display for RevokeCacheSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RevokeCacheSecurityGroupIngressError {
-    fn description(&self) -> &str {
         match *self {
-            RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(ref cause) => cause,
+            RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(
                 ref cause,
-            ) => cause,
-            RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(ref cause) => cause,
-            RevokeCacheSecurityGroupIngressError::InvalidParameterValue(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RevokeCacheSecurityGroupIngressError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RevokeCacheSecurityGroupIngressError {}
+/// Errors returned by StartMigration
+#[derive(Debug, PartialEq)]
+pub enum StartMigrationError {
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The requested replication group is not in the <code>available</code> state.</p>
+    InvalidReplicationGroupStateFault(String),
+    /// <p>The targeted replication group is not available. </p>
+    ReplicationGroupAlreadyUnderMigrationFault(String),
+    /// <p>The specified replication group does not exist.</p>
+    ReplicationGroupNotFoundFault(String),
+}
+
+impl StartMigrationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMigrationError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(StartMigrationError::InvalidParameterValue(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidReplicationGroupState" => {
+                        return RusotoError::Service(
+                            StartMigrationError::InvalidReplicationGroupStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ReplicationGroupAlreadyUnderMigrationFault" => {
+                        return RusotoError::Service(
+                            StartMigrationError::ReplicationGroupAlreadyUnderMigrationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ReplicationGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            StartMigrationError::ReplicationGroupNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StartMigrationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartMigrationError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StartMigrationError::InvalidReplicationGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartMigrationError::ReplicationGroupAlreadyUnderMigrationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartMigrationError::ReplicationGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartMigrationError {}
 /// Errors returned by TestFailover
 #[derive(Debug, PartialEq)]
 pub enum TestFailoverError {
@@ -11144,24 +11802,24 @@ impl TestFailoverError {
 }
 impl fmt::Display for TestFailoverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestFailoverError {
-    fn description(&self) -> &str {
         match *self {
-            TestFailoverError::APICallRateForCustomerExceededFault(ref cause) => cause,
-            TestFailoverError::InvalidCacheClusterStateFault(ref cause) => cause,
-            TestFailoverError::InvalidKMSKeyFault(ref cause) => cause,
-            TestFailoverError::InvalidParameterCombination(ref cause) => cause,
-            TestFailoverError::InvalidParameterValue(ref cause) => cause,
-            TestFailoverError::InvalidReplicationGroupStateFault(ref cause) => cause,
-            TestFailoverError::NodeGroupNotFoundFault(ref cause) => cause,
-            TestFailoverError::ReplicationGroupNotFoundFault(ref cause) => cause,
-            TestFailoverError::TestFailoverNotAvailableFault(ref cause) => cause,
+            TestFailoverError::APICallRateForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestFailoverError::InvalidCacheClusterStateFault(ref cause) => write!(f, "{}", cause),
+            TestFailoverError::InvalidKMSKeyFault(ref cause) => write!(f, "{}", cause),
+            TestFailoverError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            TestFailoverError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            TestFailoverError::InvalidReplicationGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TestFailoverError::NodeGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            TestFailoverError::ReplicationGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            TestFailoverError::TestFailoverNotAvailableFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestFailoverError {}
 /// Trait representing the capabilities of the Amazon ElastiCache API. Amazon ElastiCache clients implement this trait.
 pub trait ElastiCache {
     /// <p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>
@@ -11190,6 +11848,12 @@ pub trait ElastiCache {
         &self,
         input: BatchStopUpdateActionMessage,
     ) -> RusotoFuture<UpdateActionResultsMessage, BatchStopUpdateActionError>;
+
+    /// <p>Complete the migration of data.</p>
+    fn complete_migration(
+        &self,
+        input: CompleteMigrationMessage,
+    ) -> RusotoFuture<CompleteMigrationResponse, CompleteMigrationError>;
 
     /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html">Exporting Snapshots</a> and <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
     fn copy_snapshot(
@@ -11443,6 +12107,12 @@ pub trait ElastiCache {
         input: RevokeCacheSecurityGroupIngressMessage,
     ) -> RusotoFuture<RevokeCacheSecurityGroupIngressResult, RevokeCacheSecurityGroupIngressError>;
 
+    /// <p>Start the migration of data.</p>
+    fn start_migration(
+        &self,
+        input: StartMigrationMessage,
+    ) -> RusotoFuture<StartMigrationResponse, StartMigrationError>;
+
     /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html#auto-failover-test">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>
     fn test_failover(
         &self,
@@ -11483,6 +12153,14 @@ impl ElastiCacheClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> ElastiCacheClient {
         ElastiCacheClient { client, region }
+    }
+}
+
+impl fmt::Debug for ElastiCacheClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ElastiCacheClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -11676,6 +12354,57 @@ impl ElastiCache for ElastiCacheClient {
                     start_element(&actual_tag_name, &mut stack)?;
                     result = UpdateActionResultsMessageDeserializer::deserialize(
                         "BatchStopUpdateActionResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Complete the migration of data.</p>
+    fn complete_migration(
+        &self,
+        input: CompleteMigrationMessage,
+    ) -> RusotoFuture<CompleteMigrationResponse, CompleteMigrationError> {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CompleteMigration");
+        params.put("Version", "2015-02-02");
+        CompleteMigrationMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CompleteMigrationError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CompleteMigrationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CompleteMigrationResponseDeserializer::deserialize(
+                        "CompleteMigrationResult",
                         &mut stack,
                     )?;
                     skip_tree(&mut stack);
@@ -13631,6 +14360,57 @@ impl ElastiCache for ElastiCacheClient {
                     start_element(&actual_tag_name, &mut stack)?;
                     result = RevokeCacheSecurityGroupIngressResultDeserializer::deserialize(
                         "RevokeCacheSecurityGroupIngressResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Start the migration of data.</p>
+    fn start_migration(
+        &self,
+        input: StartMigrationMessage,
+    ) -> RusotoFuture<StartMigrationResponse, StartMigrationError> {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "StartMigration");
+        params.put("Version", "2015-02-02");
+        StartMigrationMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartMigrationError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = StartMigrationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = StartMigrationResponseDeserializer::deserialize(
+                        "StartMigrationResult",
                         &mut stack,
                     )?;
                     skip_tree(&mut stack);

@@ -417,7 +417,7 @@ pub struct DescribeContinuousExportsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportConfigurationsRequest {
-    /// <p>A list of continuous export ids to search for.</p>
+    /// <p>A list of continuous export IDs to search for.</p>
     #[serde(rename = "exportIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_ids: Option<Vec<String>>,
@@ -1031,6 +1031,8 @@ pub struct UpdateApplicationResponse {}
 pub enum AssociateConfigurationItemsToApplicationError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1048,6 +1050,11 @@ impl AssociateConfigurationItemsToApplicationError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
                         AssociateConfigurationItemsToApplicationError::AuthorizationError(err.msg),
+                    )
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(
+                        AssociateConfigurationItemsToApplicationError::HomeRegionNotSet(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
@@ -1076,26 +1083,35 @@ impl AssociateConfigurationItemsToApplicationError {
 }
 impl fmt::Display for AssociateConfigurationItemsToApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateConfigurationItemsToApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateConfigurationItemsToApplicationError::AuthorizationError(ref cause) => cause,
-            AssociateConfigurationItemsToApplicationError::InvalidParameter(ref cause) => cause,
-            AssociateConfigurationItemsToApplicationError::InvalidParameterValue(ref cause) => {
-                cause
+            AssociateConfigurationItemsToApplicationError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
             }
-            AssociateConfigurationItemsToApplicationError::ServerInternalError(ref cause) => cause,
+            AssociateConfigurationItemsToApplicationError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateConfigurationItemsToApplicationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateConfigurationItemsToApplicationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateConfigurationItemsToApplicationError::ServerInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateConfigurationItemsToApplicationError {}
 /// Errors returned by BatchDeleteImportData
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteImportDataError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
@@ -1108,6 +1124,16 @@ impl BatchDeleteImportDataError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(BatchDeleteImportDataError::AuthorizationError(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(BatchDeleteImportDataError::HomeRegionNotSet(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(BatchDeleteImportDataError::InvalidParameter(
                         err.msg,
                     ))
                 }
@@ -1130,23 +1156,23 @@ impl BatchDeleteImportDataError {
 }
 impl fmt::Display for BatchDeleteImportDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteImportDataError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDeleteImportDataError::AuthorizationError(ref cause) => cause,
-            BatchDeleteImportDataError::InvalidParameterValue(ref cause) => cause,
-            BatchDeleteImportDataError::ServerInternalError(ref cause) => cause,
+            BatchDeleteImportDataError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            BatchDeleteImportDataError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            BatchDeleteImportDataError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            BatchDeleteImportDataError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            BatchDeleteImportDataError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDeleteImportDataError {}
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1163,6 +1189,9 @@ impl CreateApplicationError {
                     return RusotoError::Service(CreateApplicationError::AuthorizationError(
                         err.msg,
                     ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(CreateApplicationError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateApplicationError::InvalidParameter(err.msg))
@@ -1186,24 +1215,23 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApplicationError::AuthorizationError(ref cause) => cause,
-            CreateApplicationError::InvalidParameter(ref cause) => cause,
-            CreateApplicationError::InvalidParameterValue(ref cause) => cause,
-            CreateApplicationError::ServerInternalError(ref cause) => cause,
+            CreateApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApplicationError {}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1220,6 +1248,9 @@ impl CreateTagsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(CreateTagsError::AuthorizationError(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(CreateTagsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateTagsError::InvalidParameter(err.msg))
@@ -1242,25 +1273,24 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTagsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTagsError::AuthorizationError(ref cause) => cause,
-            CreateTagsError::InvalidParameter(ref cause) => cause,
-            CreateTagsError::InvalidParameterValue(ref cause) => cause,
-            CreateTagsError::ResourceNotFound(ref cause) => cause,
-            CreateTagsError::ServerInternalError(ref cause) => cause,
+            CreateTagsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTagsError {}
 /// Errors returned by DeleteApplications
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1277,6 +1307,9 @@ impl DeleteApplicationsError {
                     return RusotoError::Service(DeleteApplicationsError::AuthorizationError(
                         err.msg,
                     ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DeleteApplicationsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteApplicationsError::InvalidParameter(err.msg))
@@ -1300,24 +1333,23 @@ impl DeleteApplicationsError {
 }
 impl fmt::Display for DeleteApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationsError::AuthorizationError(ref cause) => cause,
-            DeleteApplicationsError::InvalidParameter(ref cause) => cause,
-            DeleteApplicationsError::InvalidParameterValue(ref cause) => cause,
-            DeleteApplicationsError::ServerInternalError(ref cause) => cause,
+            DeleteApplicationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApplicationsError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1334,6 +1366,9 @@ impl DeleteTagsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DeleteTagsError::AuthorizationError(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DeleteTagsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteTagsError::InvalidParameter(err.msg))
@@ -1356,25 +1391,24 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsError::AuthorizationError(ref cause) => cause,
-            DeleteTagsError::InvalidParameter(ref cause) => cause,
-            DeleteTagsError::InvalidParameterValue(ref cause) => cause,
-            DeleteTagsError::ResourceNotFound(ref cause) => cause,
-            DeleteTagsError::ServerInternalError(ref cause) => cause,
+            DeleteTagsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DescribeAgents
 #[derive(Debug, PartialEq)]
 pub enum DescribeAgentsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1389,6 +1423,9 @@ impl DescribeAgentsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeAgentsError::AuthorizationError(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DescribeAgentsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeAgentsError::InvalidParameter(err.msg))
@@ -1410,24 +1447,23 @@ impl DescribeAgentsError {
 }
 impl fmt::Display for DescribeAgentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAgentsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAgentsError::AuthorizationError(ref cause) => cause,
-            DescribeAgentsError::InvalidParameter(ref cause) => cause,
-            DescribeAgentsError::InvalidParameterValue(ref cause) => cause,
-            DescribeAgentsError::ServerInternalError(ref cause) => cause,
+            DescribeAgentsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeAgentsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeAgentsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeAgentsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeAgentsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAgentsError {}
 /// Errors returned by DescribeConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1442,6 +1478,11 @@ impl DescribeConfigurationsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeConfigurationsError::AuthorizationError(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DescribeConfigurationsError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1469,24 +1510,23 @@ impl DescribeConfigurationsError {
 }
 impl fmt::Display for DescribeConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationsError::AuthorizationError(ref cause) => cause,
-            DescribeConfigurationsError::InvalidParameter(ref cause) => cause,
-            DescribeConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            DescribeConfigurationsError::ServerInternalError(ref cause) => cause,
+            DescribeConfigurationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigurationsError {}
 /// Errors returned by DescribeContinuousExports
 #[derive(Debug, PartialEq)]
 pub enum DescribeContinuousExportsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1507,6 +1547,11 @@ impl DescribeContinuousExportsError {
                     return RusotoError::Service(
                         DescribeContinuousExportsError::AuthorizationError(err.msg),
                     )
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DescribeContinuousExportsError::HomeRegionNotSet(
+                        err.msg,
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeContinuousExportsError::InvalidParameter(
@@ -1542,26 +1587,31 @@ impl DescribeContinuousExportsError {
 }
 impl fmt::Display for DescribeContinuousExportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeContinuousExportsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeContinuousExportsError::AuthorizationError(ref cause) => cause,
-            DescribeContinuousExportsError::InvalidParameter(ref cause) => cause,
-            DescribeContinuousExportsError::InvalidParameterValue(ref cause) => cause,
-            DescribeContinuousExportsError::OperationNotPermitted(ref cause) => cause,
-            DescribeContinuousExportsError::ResourceNotFound(ref cause) => cause,
-            DescribeContinuousExportsError::ServerInternalError(ref cause) => cause,
+            DescribeContinuousExportsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeContinuousExportsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeContinuousExportsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeContinuousExportsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeContinuousExportsError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeContinuousExportsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeContinuousExportsError::ServerInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeContinuousExportsError {}
 /// Errors returned by DescribeExportConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeExportConfigurationsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1581,6 +1631,11 @@ impl DescribeExportConfigurationsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
                         DescribeExportConfigurationsError::AuthorizationError(err.msg),
+                    )
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(
+                        DescribeExportConfigurationsError::HomeRegionNotSet(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
@@ -1612,25 +1667,36 @@ impl DescribeExportConfigurationsError {
 }
 impl fmt::Display for DescribeExportConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeExportConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeExportConfigurationsError::AuthorizationError(ref cause) => cause,
-            DescribeExportConfigurationsError::InvalidParameter(ref cause) => cause,
-            DescribeExportConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            DescribeExportConfigurationsError::ResourceNotFound(ref cause) => cause,
-            DescribeExportConfigurationsError::ServerInternalError(ref cause) => cause,
+            DescribeExportConfigurationsError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeExportConfigurationsError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeExportConfigurationsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeExportConfigurationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeExportConfigurationsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeExportConfigurationsError::ServerInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeExportConfigurationsError {}
 /// Errors returned by DescribeExportTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeExportTasksError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1645,6 +1711,11 @@ impl DescribeExportTasksError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeExportTasksError::AuthorizationError(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DescribeExportTasksError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1672,24 +1743,25 @@ impl DescribeExportTasksError {
 }
 impl fmt::Display for DescribeExportTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeExportTasksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeExportTasksError::AuthorizationError(ref cause) => cause,
-            DescribeExportTasksError::InvalidParameter(ref cause) => cause,
-            DescribeExportTasksError::InvalidParameterValue(ref cause) => cause,
-            DescribeExportTasksError::ServerInternalError(ref cause) => cause,
+            DescribeExportTasksError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeExportTasksError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeExportTasksError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeExportTasksError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeExportTasksError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeExportTasksError {}
 /// Errors returned by DescribeImportTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeImportTasksError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
@@ -1702,6 +1774,16 @@ impl DescribeImportTasksError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeImportTasksError::AuthorizationError(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DescribeImportTasksError::HomeRegionNotSet(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeImportTasksError::InvalidParameter(
                         err.msg,
                     ))
                 }
@@ -1724,23 +1806,23 @@ impl DescribeImportTasksError {
 }
 impl fmt::Display for DescribeImportTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeImportTasksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeImportTasksError::AuthorizationError(ref cause) => cause,
-            DescribeImportTasksError::InvalidParameterValue(ref cause) => cause,
-            DescribeImportTasksError::ServerInternalError(ref cause) => cause,
+            DescribeImportTasksError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeImportTasksError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeImportTasksError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeImportTasksError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeImportTasksError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeImportTasksError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1757,6 +1839,9 @@ impl DescribeTagsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeTagsError::AuthorizationError(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DescribeTagsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeTagsError::InvalidParameter(err.msg))
@@ -1779,25 +1864,24 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::AuthorizationError(ref cause) => cause,
-            DescribeTagsError::InvalidParameter(ref cause) => cause,
-            DescribeTagsError::InvalidParameterValue(ref cause) => cause,
-            DescribeTagsError::ResourceNotFound(ref cause) => cause,
-            DescribeTagsError::ServerInternalError(ref cause) => cause,
+            DescribeTagsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by DisassociateConfigurationItemsFromApplication
 #[derive(Debug, PartialEq)]
 pub enum DisassociateConfigurationItemsFromApplicationError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1815,6 +1899,13 @@ impl DisassociateConfigurationItemsFromApplicationError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
                         DisassociateConfigurationItemsFromApplicationError::AuthorizationError(
+                            err.msg,
+                        ),
+                    )
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(
+                        DisassociateConfigurationItemsFromApplicationError::HomeRegionNotSet(
                             err.msg,
                         ),
                     )
@@ -1849,32 +1940,33 @@ impl DisassociateConfigurationItemsFromApplicationError {
 }
 impl fmt::Display for DisassociateConfigurationItemsFromApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateConfigurationItemsFromApplicationError {
-    fn description(&self) -> &str {
         match *self {
             DisassociateConfigurationItemsFromApplicationError::AuthorizationError(ref cause) => {
-                cause
+                write!(f, "{}", cause)
+            }
+            DisassociateConfigurationItemsFromApplicationError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
             }
             DisassociateConfigurationItemsFromApplicationError::InvalidParameter(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             DisassociateConfigurationItemsFromApplicationError::ServerInternalError(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DisassociateConfigurationItemsFromApplicationError {}
 /// Errors returned by ExportConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ExportConfigurationsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1891,6 +1983,11 @@ impl ExportConfigurationsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(ExportConfigurationsError::AuthorizationError(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(ExportConfigurationsError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1923,25 +2020,24 @@ impl ExportConfigurationsError {
 }
 impl fmt::Display for ExportConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExportConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ExportConfigurationsError::AuthorizationError(ref cause) => cause,
-            ExportConfigurationsError::InvalidParameter(ref cause) => cause,
-            ExportConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            ExportConfigurationsError::OperationNotPermitted(ref cause) => cause,
-            ExportConfigurationsError::ServerInternalError(ref cause) => cause,
+            ExportConfigurationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ExportConfigurationsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ExportConfigurationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ExportConfigurationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ExportConfigurationsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ExportConfigurationsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExportConfigurationsError {}
 /// Errors returned by GetDiscoverySummary
 #[derive(Debug, PartialEq)]
 pub enum GetDiscoverySummaryError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1956,6 +2052,11 @@ impl GetDiscoverySummaryError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(GetDiscoverySummaryError::AuthorizationError(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(GetDiscoverySummaryError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1983,24 +2084,23 @@ impl GetDiscoverySummaryError {
 }
 impl fmt::Display for GetDiscoverySummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDiscoverySummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetDiscoverySummaryError::AuthorizationError(ref cause) => cause,
-            GetDiscoverySummaryError::InvalidParameter(ref cause) => cause,
-            GetDiscoverySummaryError::InvalidParameterValue(ref cause) => cause,
-            GetDiscoverySummaryError::ServerInternalError(ref cause) => cause,
+            GetDiscoverySummaryError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetDiscoverySummaryError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            GetDiscoverySummaryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetDiscoverySummaryError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetDiscoverySummaryError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDiscoverySummaryError {}
 /// Errors returned by ListConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListConfigurationsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2019,6 +2119,9 @@ impl ListConfigurationsError {
                     return RusotoError::Service(ListConfigurationsError::AuthorizationError(
                         err.msg,
                     ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(ListConfigurationsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListConfigurationsError::InvalidParameter(err.msg))
@@ -2045,25 +2148,24 @@ impl ListConfigurationsError {
 }
 impl fmt::Display for ListConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListConfigurationsError::AuthorizationError(ref cause) => cause,
-            ListConfigurationsError::InvalidParameter(ref cause) => cause,
-            ListConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            ListConfigurationsError::ResourceNotFound(ref cause) => cause,
-            ListConfigurationsError::ServerInternalError(ref cause) => cause,
+            ListConfigurationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListConfigurationsError {}
 /// Errors returned by ListServerNeighbors
 #[derive(Debug, PartialEq)]
 pub enum ListServerNeighborsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2078,6 +2180,11 @@ impl ListServerNeighborsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(ListServerNeighborsError::AuthorizationError(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(ListServerNeighborsError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -2105,19 +2212,16 @@ impl ListServerNeighborsError {
 }
 impl fmt::Display for ListServerNeighborsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListServerNeighborsError {
-    fn description(&self) -> &str {
         match *self {
-            ListServerNeighborsError::AuthorizationError(ref cause) => cause,
-            ListServerNeighborsError::InvalidParameter(ref cause) => cause,
-            ListServerNeighborsError::InvalidParameterValue(ref cause) => cause,
-            ListServerNeighborsError::ServerInternalError(ref cause) => cause,
+            ListServerNeighborsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListServerNeighborsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListServerNeighborsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListServerNeighborsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListServerNeighborsError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListServerNeighborsError {}
 /// Errors returned by StartContinuousExport
 #[derive(Debug, PartialEq)]
 pub enum StartContinuousExportError {
@@ -2125,6 +2229,8 @@ pub enum StartContinuousExportError {
     AuthorizationError(String),
     /// <p><p/></p>
     ConflictError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2148,6 +2254,11 @@ impl StartContinuousExportError {
                 }
                 "ConflictErrorException" => {
                     return RusotoError::Service(StartContinuousExportError::ConflictError(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(StartContinuousExportError::HomeRegionNotSet(
+                        err.msg,
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartContinuousExportError::InvalidParameter(
@@ -2181,27 +2292,26 @@ impl StartContinuousExportError {
 }
 impl fmt::Display for StartContinuousExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartContinuousExportError {
-    fn description(&self) -> &str {
         match *self {
-            StartContinuousExportError::AuthorizationError(ref cause) => cause,
-            StartContinuousExportError::ConflictError(ref cause) => cause,
-            StartContinuousExportError::InvalidParameter(ref cause) => cause,
-            StartContinuousExportError::InvalidParameterValue(ref cause) => cause,
-            StartContinuousExportError::OperationNotPermitted(ref cause) => cause,
-            StartContinuousExportError::ResourceInUse(ref cause) => cause,
-            StartContinuousExportError::ServerInternalError(ref cause) => cause,
+            StartContinuousExportError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::ConflictError(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StartContinuousExportError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartContinuousExportError {}
 /// Errors returned by StartDataCollectionByAgentIds
 #[derive(Debug, PartialEq)]
 pub enum StartDataCollectionByAgentIdsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2219,6 +2329,11 @@ impl StartDataCollectionByAgentIdsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
                         StartDataCollectionByAgentIdsError::AuthorizationError(err.msg),
+                    )
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(
+                        StartDataCollectionByAgentIdsError::HomeRegionNotSet(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
@@ -2245,24 +2360,33 @@ impl StartDataCollectionByAgentIdsError {
 }
 impl fmt::Display for StartDataCollectionByAgentIdsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDataCollectionByAgentIdsError {
-    fn description(&self) -> &str {
         match *self {
-            StartDataCollectionByAgentIdsError::AuthorizationError(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::InvalidParameter(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::ServerInternalError(ref cause) => cause,
+            StartDataCollectionByAgentIdsError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDataCollectionByAgentIdsError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDataCollectionByAgentIdsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDataCollectionByAgentIdsError::ServerInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartDataCollectionByAgentIdsError {}
 /// Errors returned by StartExportTask
 #[derive(Debug, PartialEq)]
 pub enum StartExportTaskError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2279,6 +2403,9 @@ impl StartExportTaskError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StartExportTaskError::AuthorizationError(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(StartExportTaskError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartExportTaskError::InvalidParameter(err.msg))
@@ -2305,25 +2432,26 @@ impl StartExportTaskError {
 }
 impl fmt::Display for StartExportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartExportTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StartExportTaskError::AuthorizationError(ref cause) => cause,
-            StartExportTaskError::InvalidParameter(ref cause) => cause,
-            StartExportTaskError::InvalidParameterValue(ref cause) => cause,
-            StartExportTaskError::OperationNotPermitted(ref cause) => cause,
-            StartExportTaskError::ServerInternalError(ref cause) => cause,
+            StartExportTaskError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            StartExportTaskError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            StartExportTaskError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartExportTaskError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StartExportTaskError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StartExportTaskError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartExportTaskError {}
 /// Errors returned by StartImportTask
 #[derive(Debug, PartialEq)]
 pub enum StartImportTaskError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
     /// <p>This issue occurs when the same <code>clientRequestToken</code> is used with the <code>StartImportTask</code> action, but with different parameters. For example, you use the same request token but have two different import URLs, you can encounter this issue. If the import tasks are meant to be different, use a different <code>clientRequestToken</code>, and try again.</p>
@@ -2338,6 +2466,12 @@ impl StartImportTaskError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StartImportTaskError::AuthorizationError(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(StartImportTaskError::HomeRegionNotSet(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StartImportTaskError::InvalidParameter(err.msg))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StartImportTaskError::InvalidParameterValue(
@@ -2359,24 +2493,24 @@ impl StartImportTaskError {
 }
 impl fmt::Display for StartImportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartImportTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StartImportTaskError::AuthorizationError(ref cause) => cause,
-            StartImportTaskError::InvalidParameterValue(ref cause) => cause,
-            StartImportTaskError::ResourceInUse(ref cause) => cause,
-            StartImportTaskError::ServerInternalError(ref cause) => cause,
+            StartImportTaskError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            StartImportTaskError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            StartImportTaskError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartImportTaskError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StartImportTaskError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StartImportTaskError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartImportTaskError {}
 /// Errors returned by StopContinuousExport
 #[derive(Debug, PartialEq)]
 pub enum StopContinuousExportError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2397,6 +2531,11 @@ impl StopContinuousExportError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StopContinuousExportError::AuthorizationError(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(StopContinuousExportError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -2437,27 +2576,26 @@ impl StopContinuousExportError {
 }
 impl fmt::Display for StopContinuousExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopContinuousExportError {
-    fn description(&self) -> &str {
         match *self {
-            StopContinuousExportError::AuthorizationError(ref cause) => cause,
-            StopContinuousExportError::InvalidParameter(ref cause) => cause,
-            StopContinuousExportError::InvalidParameterValue(ref cause) => cause,
-            StopContinuousExportError::OperationNotPermitted(ref cause) => cause,
-            StopContinuousExportError::ResourceInUse(ref cause) => cause,
-            StopContinuousExportError::ResourceNotFound(ref cause) => cause,
-            StopContinuousExportError::ServerInternalError(ref cause) => cause,
+            StopContinuousExportError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StopContinuousExportError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopContinuousExportError {}
 /// Errors returned by StopDataCollectionByAgentIds
 #[derive(Debug, PartialEq)]
 pub enum StopDataCollectionByAgentIdsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2475,6 +2613,11 @@ impl StopDataCollectionByAgentIdsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
                         StopDataCollectionByAgentIdsError::AuthorizationError(err.msg),
+                    )
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(
+                        StopDataCollectionByAgentIdsError::HomeRegionNotSet(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
@@ -2501,24 +2644,33 @@ impl StopDataCollectionByAgentIdsError {
 }
 impl fmt::Display for StopDataCollectionByAgentIdsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopDataCollectionByAgentIdsError {
-    fn description(&self) -> &str {
         match *self {
-            StopDataCollectionByAgentIdsError::AuthorizationError(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::InvalidParameter(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::ServerInternalError(ref cause) => cause,
+            StopDataCollectionByAgentIdsError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDataCollectionByAgentIdsError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDataCollectionByAgentIdsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDataCollectionByAgentIdsError::ServerInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StopDataCollectionByAgentIdsError {}
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2535,6 +2687,9 @@ impl UpdateApplicationError {
                     return RusotoError::Service(UpdateApplicationError::AuthorizationError(
                         err.msg,
                     ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(UpdateApplicationError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateApplicationError::InvalidParameter(err.msg))
@@ -2558,19 +2713,16 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateApplicationError::AuthorizationError(ref cause) => cause,
-            UpdateApplicationError::InvalidParameter(ref cause) => cause,
-            UpdateApplicationError::InvalidParameterValue(ref cause) => cause,
-            UpdateApplicationError::ServerInternalError(ref cause) => cause,
+            UpdateApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::ServerInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the AWS Application Discovery Service API. AWS Application Discovery Service clients implement this trait.
 pub trait Discovery {
     /// <p>Associates one or more configuration items with an application.</p>
@@ -2760,6 +2912,14 @@ impl DiscoveryClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> DiscoveryClient {
         DiscoveryClient { client, region }
+    }
+}
+
+impl fmt::Debug for DiscoveryClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DiscoveryClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

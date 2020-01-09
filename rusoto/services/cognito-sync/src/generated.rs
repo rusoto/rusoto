@@ -736,21 +736,17 @@ impl BulkPublishError {
 }
 impl fmt::Display for BulkPublishError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BulkPublishError {
-    fn description(&self) -> &str {
         match *self {
-            BulkPublishError::AlreadyStreamed(ref cause) => cause,
-            BulkPublishError::DuplicateRequest(ref cause) => cause,
-            BulkPublishError::InternalError(ref cause) => cause,
-            BulkPublishError::InvalidParameter(ref cause) => cause,
-            BulkPublishError::NotAuthorized(ref cause) => cause,
-            BulkPublishError::ResourceNotFound(ref cause) => cause,
+            BulkPublishError::AlreadyStreamed(ref cause) => write!(f, "{}", cause),
+            BulkPublishError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            BulkPublishError::InternalError(ref cause) => write!(f, "{}", cause),
+            BulkPublishError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            BulkPublishError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            BulkPublishError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BulkPublishError {}
 /// Errors returned by DeleteDataset
 #[derive(Debug, PartialEq)]
 pub enum DeleteDatasetError {
@@ -799,21 +795,17 @@ impl DeleteDatasetError {
 }
 impl fmt::Display for DeleteDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDatasetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDatasetError::InternalError(ref cause) => cause,
-            DeleteDatasetError::InvalidParameter(ref cause) => cause,
-            DeleteDatasetError::NotAuthorized(ref cause) => cause,
-            DeleteDatasetError::ResourceConflict(ref cause) => cause,
-            DeleteDatasetError::ResourceNotFound(ref cause) => cause,
-            DeleteDatasetError::TooManyRequests(ref cause) => cause,
+            DeleteDatasetError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDatasetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDatasetError {}
 /// Errors returned by DescribeDataset
 #[derive(Debug, PartialEq)]
 pub enum DescribeDatasetError {
@@ -857,20 +849,16 @@ impl DescribeDatasetError {
 }
 impl fmt::Display for DescribeDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDatasetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDatasetError::InternalError(ref cause) => cause,
-            DescribeDatasetError::InvalidParameter(ref cause) => cause,
-            DescribeDatasetError::NotAuthorized(ref cause) => cause,
-            DescribeDatasetError::ResourceNotFound(ref cause) => cause,
-            DescribeDatasetError::TooManyRequests(ref cause) => cause,
+            DescribeDatasetError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeDatasetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeDatasetError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeDatasetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeDatasetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDatasetError {}
 /// Errors returned by DescribeIdentityPoolUsage
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityPoolUsageError {
@@ -924,20 +912,16 @@ impl DescribeIdentityPoolUsageError {
 }
 impl fmt::Display for DescribeIdentityPoolUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeIdentityPoolUsageError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeIdentityPoolUsageError::InternalError(ref cause) => cause,
-            DescribeIdentityPoolUsageError::InvalidParameter(ref cause) => cause,
-            DescribeIdentityPoolUsageError::NotAuthorized(ref cause) => cause,
-            DescribeIdentityPoolUsageError::ResourceNotFound(ref cause) => cause,
-            DescribeIdentityPoolUsageError::TooManyRequests(ref cause) => cause,
+            DescribeIdentityPoolUsageError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityPoolUsageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityPoolUsageError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityPoolUsageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityPoolUsageError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeIdentityPoolUsageError {}
 /// Errors returned by DescribeIdentityUsage
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityUsageError {
@@ -987,20 +971,16 @@ impl DescribeIdentityUsageError {
 }
 impl fmt::Display for DescribeIdentityUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeIdentityUsageError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeIdentityUsageError::InternalError(ref cause) => cause,
-            DescribeIdentityUsageError::InvalidParameter(ref cause) => cause,
-            DescribeIdentityUsageError::NotAuthorized(ref cause) => cause,
-            DescribeIdentityUsageError::ResourceNotFound(ref cause) => cause,
-            DescribeIdentityUsageError::TooManyRequests(ref cause) => cause,
+            DescribeIdentityUsageError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityUsageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityUsageError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityUsageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityUsageError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeIdentityUsageError {}
 /// Errors returned by GetBulkPublishDetails
 #[derive(Debug, PartialEq)]
 pub enum GetBulkPublishDetailsError {
@@ -1043,19 +1023,15 @@ impl GetBulkPublishDetailsError {
 }
 impl fmt::Display for GetBulkPublishDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBulkPublishDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetBulkPublishDetailsError::InternalError(ref cause) => cause,
-            GetBulkPublishDetailsError::InvalidParameter(ref cause) => cause,
-            GetBulkPublishDetailsError::NotAuthorized(ref cause) => cause,
-            GetBulkPublishDetailsError::ResourceNotFound(ref cause) => cause,
+            GetBulkPublishDetailsError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetBulkPublishDetailsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetBulkPublishDetailsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetBulkPublishDetailsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBulkPublishDetailsError {}
 /// Errors returned by GetCognitoEvents
 #[derive(Debug, PartialEq)]
 pub enum GetCognitoEventsError {
@@ -1099,20 +1075,16 @@ impl GetCognitoEventsError {
 }
 impl fmt::Display for GetCognitoEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCognitoEventsError {
-    fn description(&self) -> &str {
         match *self {
-            GetCognitoEventsError::InternalError(ref cause) => cause,
-            GetCognitoEventsError::InvalidParameter(ref cause) => cause,
-            GetCognitoEventsError::NotAuthorized(ref cause) => cause,
-            GetCognitoEventsError::ResourceNotFound(ref cause) => cause,
-            GetCognitoEventsError::TooManyRequests(ref cause) => cause,
+            GetCognitoEventsError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetCognitoEventsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetCognitoEventsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetCognitoEventsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetCognitoEventsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCognitoEventsError {}
 /// Errors returned by GetIdentityPoolConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityPoolConfigurationError {
@@ -1168,20 +1140,20 @@ impl GetIdentityPoolConfigurationError {
 }
 impl fmt::Display for GetIdentityPoolConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIdentityPoolConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetIdentityPoolConfigurationError::InternalError(ref cause) => cause,
-            GetIdentityPoolConfigurationError::InvalidParameter(ref cause) => cause,
-            GetIdentityPoolConfigurationError::NotAuthorized(ref cause) => cause,
-            GetIdentityPoolConfigurationError::ResourceNotFound(ref cause) => cause,
-            GetIdentityPoolConfigurationError::TooManyRequests(ref cause) => cause,
+            GetIdentityPoolConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetIdentityPoolConfigurationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetIdentityPoolConfigurationError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetIdentityPoolConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetIdentityPoolConfigurationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetIdentityPoolConfigurationError {}
 /// Errors returned by ListDatasets
 #[derive(Debug, PartialEq)]
 pub enum ListDatasetsError {
@@ -1220,19 +1192,15 @@ impl ListDatasetsError {
 }
 impl fmt::Display for ListDatasetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDatasetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDatasetsError::InternalError(ref cause) => cause,
-            ListDatasetsError::InvalidParameter(ref cause) => cause,
-            ListDatasetsError::NotAuthorized(ref cause) => cause,
-            ListDatasetsError::TooManyRequests(ref cause) => cause,
+            ListDatasetsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListDatasetsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListDatasetsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListDatasetsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDatasetsError {}
 /// Errors returned by ListIdentityPoolUsage
 #[derive(Debug, PartialEq)]
 pub enum ListIdentityPoolUsageError {
@@ -1275,19 +1243,15 @@ impl ListIdentityPoolUsageError {
 }
 impl fmt::Display for ListIdentityPoolUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListIdentityPoolUsageError {
-    fn description(&self) -> &str {
         match *self {
-            ListIdentityPoolUsageError::InternalError(ref cause) => cause,
-            ListIdentityPoolUsageError::InvalidParameter(ref cause) => cause,
-            ListIdentityPoolUsageError::NotAuthorized(ref cause) => cause,
-            ListIdentityPoolUsageError::TooManyRequests(ref cause) => cause,
+            ListIdentityPoolUsageError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListIdentityPoolUsageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListIdentityPoolUsageError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListIdentityPoolUsageError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListIdentityPoolUsageError {}
 /// Errors returned by ListRecords
 #[derive(Debug, PartialEq)]
 pub enum ListRecordsError {
@@ -1326,19 +1290,15 @@ impl ListRecordsError {
 }
 impl fmt::Display for ListRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRecordsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRecordsError::InternalError(ref cause) => cause,
-            ListRecordsError::InvalidParameter(ref cause) => cause,
-            ListRecordsError::NotAuthorized(ref cause) => cause,
-            ListRecordsError::TooManyRequests(ref cause) => cause,
+            ListRecordsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListRecordsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListRecordsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListRecordsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRecordsError {}
 /// Errors returned by RegisterDevice
 #[derive(Debug, PartialEq)]
 pub enum RegisterDeviceError {
@@ -1387,21 +1347,17 @@ impl RegisterDeviceError {
 }
 impl fmt::Display for RegisterDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterDeviceError::InternalError(ref cause) => cause,
-            RegisterDeviceError::InvalidConfiguration(ref cause) => cause,
-            RegisterDeviceError::InvalidParameter(ref cause) => cause,
-            RegisterDeviceError::NotAuthorized(ref cause) => cause,
-            RegisterDeviceError::ResourceNotFound(ref cause) => cause,
-            RegisterDeviceError::TooManyRequests(ref cause) => cause,
+            RegisterDeviceError::InternalError(ref cause) => write!(f, "{}", cause),
+            RegisterDeviceError::InvalidConfiguration(ref cause) => write!(f, "{}", cause),
+            RegisterDeviceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RegisterDeviceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            RegisterDeviceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RegisterDeviceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterDeviceError {}
 /// Errors returned by SetCognitoEvents
 #[derive(Debug, PartialEq)]
 pub enum SetCognitoEventsError {
@@ -1445,20 +1401,16 @@ impl SetCognitoEventsError {
 }
 impl fmt::Display for SetCognitoEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetCognitoEventsError {
-    fn description(&self) -> &str {
         match *self {
-            SetCognitoEventsError::InternalError(ref cause) => cause,
-            SetCognitoEventsError::InvalidParameter(ref cause) => cause,
-            SetCognitoEventsError::NotAuthorized(ref cause) => cause,
-            SetCognitoEventsError::ResourceNotFound(ref cause) => cause,
-            SetCognitoEventsError::TooManyRequests(ref cause) => cause,
+            SetCognitoEventsError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetCognitoEventsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetCognitoEventsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SetCognitoEventsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetCognitoEventsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetCognitoEventsError {}
 /// Errors returned by SetIdentityPoolConfiguration
 #[derive(Debug, PartialEq)]
 pub enum SetIdentityPoolConfigurationError {
@@ -1521,21 +1473,23 @@ impl SetIdentityPoolConfigurationError {
 }
 impl fmt::Display for SetIdentityPoolConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetIdentityPoolConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            SetIdentityPoolConfigurationError::ConcurrentModification(ref cause) => cause,
-            SetIdentityPoolConfigurationError::InternalError(ref cause) => cause,
-            SetIdentityPoolConfigurationError::InvalidParameter(ref cause) => cause,
-            SetIdentityPoolConfigurationError::NotAuthorized(ref cause) => cause,
-            SetIdentityPoolConfigurationError::ResourceNotFound(ref cause) => cause,
-            SetIdentityPoolConfigurationError::TooManyRequests(ref cause) => cause,
+            SetIdentityPoolConfigurationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetIdentityPoolConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetIdentityPoolConfigurationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetIdentityPoolConfigurationError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SetIdentityPoolConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetIdentityPoolConfigurationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetIdentityPoolConfigurationError {}
 /// Errors returned by SubscribeToDataset
 #[derive(Debug, PartialEq)]
 pub enum SubscribeToDatasetError {
@@ -1586,21 +1540,17 @@ impl SubscribeToDatasetError {
 }
 impl fmt::Display for SubscribeToDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SubscribeToDatasetError {
-    fn description(&self) -> &str {
         match *self {
-            SubscribeToDatasetError::InternalError(ref cause) => cause,
-            SubscribeToDatasetError::InvalidConfiguration(ref cause) => cause,
-            SubscribeToDatasetError::InvalidParameter(ref cause) => cause,
-            SubscribeToDatasetError::NotAuthorized(ref cause) => cause,
-            SubscribeToDatasetError::ResourceNotFound(ref cause) => cause,
-            SubscribeToDatasetError::TooManyRequests(ref cause) => cause,
+            SubscribeToDatasetError::InternalError(ref cause) => write!(f, "{}", cause),
+            SubscribeToDatasetError::InvalidConfiguration(ref cause) => write!(f, "{}", cause),
+            SubscribeToDatasetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SubscribeToDatasetError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SubscribeToDatasetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SubscribeToDatasetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SubscribeToDatasetError {}
 /// Errors returned by UnsubscribeFromDataset
 #[derive(Debug, PartialEq)]
 pub enum UnsubscribeFromDatasetError {
@@ -1661,21 +1611,17 @@ impl UnsubscribeFromDatasetError {
 }
 impl fmt::Display for UnsubscribeFromDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnsubscribeFromDatasetError {
-    fn description(&self) -> &str {
         match *self {
-            UnsubscribeFromDatasetError::InternalError(ref cause) => cause,
-            UnsubscribeFromDatasetError::InvalidConfiguration(ref cause) => cause,
-            UnsubscribeFromDatasetError::InvalidParameter(ref cause) => cause,
-            UnsubscribeFromDatasetError::NotAuthorized(ref cause) => cause,
-            UnsubscribeFromDatasetError::ResourceNotFound(ref cause) => cause,
-            UnsubscribeFromDatasetError::TooManyRequests(ref cause) => cause,
+            UnsubscribeFromDatasetError::InternalError(ref cause) => write!(f, "{}", cause),
+            UnsubscribeFromDatasetError::InvalidConfiguration(ref cause) => write!(f, "{}", cause),
+            UnsubscribeFromDatasetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UnsubscribeFromDatasetError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UnsubscribeFromDatasetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UnsubscribeFromDatasetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UnsubscribeFromDatasetError {}
 /// Errors returned by UpdateRecords
 #[derive(Debug, PartialEq)]
 pub enum UpdateRecordsError {
@@ -1741,24 +1687,20 @@ impl UpdateRecordsError {
 }
 impl fmt::Display for UpdateRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRecordsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRecordsError::InternalError(ref cause) => cause,
-            UpdateRecordsError::InvalidLambdaFunctionOutput(ref cause) => cause,
-            UpdateRecordsError::InvalidParameter(ref cause) => cause,
-            UpdateRecordsError::LambdaThrottled(ref cause) => cause,
-            UpdateRecordsError::LimitExceeded(ref cause) => cause,
-            UpdateRecordsError::NotAuthorized(ref cause) => cause,
-            UpdateRecordsError::ResourceConflict(ref cause) => cause,
-            UpdateRecordsError::ResourceNotFound(ref cause) => cause,
-            UpdateRecordsError::TooManyRequests(ref cause) => cause,
+            UpdateRecordsError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateRecordsError::InvalidLambdaFunctionOutput(ref cause) => write!(f, "{}", cause),
+            UpdateRecordsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateRecordsError::LambdaThrottled(ref cause) => write!(f, "{}", cause),
+            UpdateRecordsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateRecordsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateRecordsError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            UpdateRecordsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRecordsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRecordsError {}
 /// Trait representing the capabilities of the Amazon Cognito Sync API. Amazon Cognito Sync clients implement this trait.
 pub trait CognitoSync {
     /// <p>Initiates a bulk publish of all existing datasets for an Identity Pool to the configured stream. Customers are limited to one successful bulk publish per 24 hours. Bulk publish is an asynchronous request, customers can see the status of the request via the GetBulkPublishDetails operation.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
@@ -1897,6 +1839,14 @@ impl CognitoSyncClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> CognitoSyncClient {
         CognitoSyncClient { client, region }
+    }
+}
+
+impl fmt::Debug for CognitoSyncClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CognitoSyncClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

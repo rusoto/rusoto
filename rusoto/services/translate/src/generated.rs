@@ -295,18 +295,14 @@ impl DeleteTerminologyError {
 }
 impl fmt::Display for DeleteTerminologyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTerminologyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTerminologyError::InternalServer(ref cause) => cause,
-            DeleteTerminologyError::ResourceNotFound(ref cause) => cause,
-            DeleteTerminologyError::TooManyRequests(ref cause) => cause,
+            DeleteTerminologyError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteTerminologyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTerminologyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTerminologyError {}
 /// Errors returned by GetTerminology
 #[derive(Debug, PartialEq)]
 pub enum GetTerminologyError {
@@ -347,19 +343,15 @@ impl GetTerminologyError {
 }
 impl fmt::Display for GetTerminologyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTerminologyError {
-    fn description(&self) -> &str {
         match *self {
-            GetTerminologyError::InternalServer(ref cause) => cause,
-            GetTerminologyError::InvalidParameterValue(ref cause) => cause,
-            GetTerminologyError::ResourceNotFound(ref cause) => cause,
-            GetTerminologyError::TooManyRequests(ref cause) => cause,
+            GetTerminologyError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetTerminologyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetTerminologyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetTerminologyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTerminologyError {}
 /// Errors returned by ImportTerminology
 #[derive(Debug, PartialEq)]
 pub enum ImportTerminologyError {
@@ -400,19 +392,15 @@ impl ImportTerminologyError {
 }
 impl fmt::Display for ImportTerminologyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportTerminologyError {
-    fn description(&self) -> &str {
         match *self {
-            ImportTerminologyError::InternalServer(ref cause) => cause,
-            ImportTerminologyError::InvalidParameterValue(ref cause) => cause,
-            ImportTerminologyError::LimitExceeded(ref cause) => cause,
-            ImportTerminologyError::TooManyRequests(ref cause) => cause,
+            ImportTerminologyError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ImportTerminologyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ImportTerminologyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ImportTerminologyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportTerminologyError {}
 /// Errors returned by ListTerminologies
 #[derive(Debug, PartialEq)]
 pub enum ListTerminologiesError {
@@ -448,18 +436,14 @@ impl ListTerminologiesError {
 }
 impl fmt::Display for ListTerminologiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTerminologiesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTerminologiesError::InternalServer(ref cause) => cause,
-            ListTerminologiesError::InvalidParameterValue(ref cause) => cause,
-            ListTerminologiesError::TooManyRequests(ref cause) => cause,
+            ListTerminologiesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListTerminologiesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListTerminologiesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTerminologiesError {}
 /// Errors returned by TranslateText
 #[derive(Debug, PartialEq)]
 pub enum TranslateTextError {
@@ -522,23 +506,19 @@ impl TranslateTextError {
 }
 impl fmt::Display for TranslateTextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TranslateTextError {
-    fn description(&self) -> &str {
         match *self {
-            TranslateTextError::DetectedLanguageLowConfidence(ref cause) => cause,
-            TranslateTextError::InternalServer(ref cause) => cause,
-            TranslateTextError::InvalidRequest(ref cause) => cause,
-            TranslateTextError::ResourceNotFound(ref cause) => cause,
-            TranslateTextError::ServiceUnavailable(ref cause) => cause,
-            TranslateTextError::TextSizeLimitExceeded(ref cause) => cause,
-            TranslateTextError::TooManyRequests(ref cause) => cause,
-            TranslateTextError::UnsupportedLanguagePair(ref cause) => cause,
+            TranslateTextError::DetectedLanguageLowConfidence(ref cause) => write!(f, "{}", cause),
+            TranslateTextError::InternalServer(ref cause) => write!(f, "{}", cause),
+            TranslateTextError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TranslateTextError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TranslateTextError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            TranslateTextError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TranslateTextError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            TranslateTextError::UnsupportedLanguagePair(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TranslateTextError {}
 /// Trait representing the capabilities of the Amazon Translate API. Amazon Translate clients implement this trait.
 pub trait Translate {
     /// <p>A synchronous action that deletes a custom terminology.</p>
@@ -605,6 +585,14 @@ impl TranslateClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> TranslateClient {
         TranslateClient { client, region }
+    }
+}
+
+impl fmt::Debug for TranslateClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("TranslateClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

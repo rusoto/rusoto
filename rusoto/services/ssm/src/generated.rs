@@ -23,6 +23,20 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
+/// <p>Information includes the AWS account ID where the current document is shared and the version shared with that account.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AccountSharingInfo {
+    /// <p>The AWS account ID where the current document is shared.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The version of the current document shared with the account.</p>
+    #[serde(rename = "SharedDocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_document_version: Option<String>,
+}
+
 /// <p>An activation registers one or more on-premises servers or virtual machines (VMs) with AWS so that you can configure those servers or VMs using Run Command. A server or VM that has been registered with AWS is called a managed instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -468,15 +482,19 @@ pub struct AttachmentInformation {
     pub name: Option<String>,
 }
 
-/// <p>A key and value pair that identifies the location of an attachment to a document.</p>
+/// <p>Identifying information about a document attachment, including the file name and a key-value pair that identifies the location of an attachment to a document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachmentsSource {
-    /// <p>The key of a key and value pair that identifies the location of an attachment to a document.</p>
+    /// <p>The key of a key-value pair that identifies the location of an attachment to a document.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The URL of the location of a document attachment, such as the URL of an Amazon S3 bucket.</p>
+    /// <p>The name of the document attachment file.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The value of a key-value pair that identifies the location of an attachment to a document. The format is the URL of the location of a document attachment, such as the URL of an Amazon S3 bucket.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -1303,6 +1321,10 @@ pub struct CreateDocumentRequest {
     /// <p><p>A name for the Systems Manager document.</p> <important> <p>Do not use the following to begin the names of documents you create. They are reserved by AWS for use as document prefixes:</p> <ul> <li> <p> <code>aws</code> </p> </li> <li> <p> <code>amazon</code> </p> </li> <li> <p> <code>amzn</code> </p> </li> </ul> </important></p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>A list of SSM documents required by a document. For example, an <code>ApplicationConfiguration</code> document requires an <code>ApplicationConfigurationSchema</code> document.</p>
+    #[serde(rename = "Requires")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requires: Option<Vec<DocumentRequires>>,
     /// <p><p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag an SSM document to identify the types of targets or the environment where it will run. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> </ul> <note> <p>To add tags to an existing SSM document, use the <a>AddTagsToResource</a> action.</p> </note></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1382,6 +1404,10 @@ pub struct CreateMaintenanceWindowResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOpsItemRequest {
+    /// <p>Specify a category to assign to an OpsItem. </p>
+    #[serde(rename = "Category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
     /// <p>Information about the OpsItem. </p>
     #[serde(rename = "Description")]
     pub description: String,
@@ -1401,6 +1427,10 @@ pub struct CreateOpsItemRequest {
     #[serde(rename = "RelatedOpsItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub related_ops_items: Option<Vec<RelatedOpsItem>>,
+    /// <p>Specify a severity to assign to an OpsItem.</p>
+    #[serde(rename = "Severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub severity: Option<String>,
     /// <p>The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager.</p>
     #[serde(rename = "Source")]
     pub source: String,
@@ -1492,10 +1522,19 @@ pub struct CreatePatchBaselineResult {
 pub struct CreateResourceDataSyncRequest {
     /// <p>Amazon S3 configuration details for the sync.</p>
     #[serde(rename = "S3Destination")]
-    pub s3_destination: ResourceDataSyncS3Destination,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_destination: Option<ResourceDataSyncS3Destination>,
     /// <p>A name for the configuration.</p>
     #[serde(rename = "SyncName")]
     pub sync_name: String,
+    /// <p>Specify information about the data sources to synchronize.</p>
+    #[serde(rename = "SyncSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_source: Option<ResourceDataSyncSource>,
+    /// <p>Specify <code>SyncToDestination</code> to create a resource data sync that synchronizes data from multiple AWS Regions to an Amazon S3 bucket. Specify <code>SyncFromSource</code> to synchronize data from multiple AWS accounts and Regions, as listed in AWS Organizations.</p>
+    #[serde(rename = "SyncType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1542,6 +1581,10 @@ pub struct DeleteDocumentRequest {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
+    /// <p>Some SSM document types require that you specify a <code>Force</code> flag before you can delete the document. For example, you must specify a <code>Force</code> flag to delete a document of type <code>ApplicationConfigurationSchema</code>. You can restrict access to the <code>Force</code> flag in an AWS Identity and Access Management (IAM) policy.</p>
+    #[serde(rename = "Force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
     /// <p>The name of the document.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -1665,6 +1708,10 @@ pub struct DeleteResourceDataSyncRequest {
     /// <p>The name of the configuration to delete.</p>
     #[serde(rename = "SyncName")]
     pub sync_name: String,
+    /// <p>Specify the type of resource data sync to delete.</p>
+    #[serde(rename = "SyncType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2017,6 +2064,10 @@ pub struct DescribeDocumentPermissionResponse {
     #[serde(rename = "AccountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
+    /// <p>A list of of AWS accounts where the current document is shared and the version shared with each account.</p>
+    #[serde(rename = "AccountSharingInfoList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_sharing_info_list: Option<Vec<AccountSharingInfo>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2596,7 +2647,7 @@ pub struct DescribeOpsItemsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeParametersRequest {
-    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    /// <p>This data type is deprecated. Instead, use <code>ParameterFilters</code>.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<ParametersFilter>>,
@@ -2684,6 +2735,10 @@ pub struct DescribePatchGroupStateResult {
     #[serde(rename = "InstancesWithInstalledPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_with_installed_patches: Option<i64>,
+    /// <p>The number of instances with patches installed that have not been rebooted after the patch installation. The status of these instances is NON_COMPLIANT.</p>
+    #[serde(rename = "InstancesWithInstalledPendingRebootPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instances_with_installed_pending_reboot_patches: Option<i64>,
     /// <p><p>The number of instances with patches installed that are specified in a RejectedPatches list. Patches with a status of <i>INSTALLED<em>REJECTED</i> were typically installed before they were added to a RejectedPatches list.</p> <note> <p>If ALLOW</em>AS_DEPENDENCY is the specified option for RejectedPatchesAction, the value of InstancesWithInstalledRejectedPatches will always be 0 (zero).</p> </note></p>
     #[serde(rename = "InstancesWithInstalledRejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2879,6 +2934,10 @@ pub struct DocumentDescription {
     #[serde(rename = "PlatformTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_types: Option<Vec<String>>,
+    /// <p>A list of SSM documents required by a document. For example, an <code>ApplicationConfiguration</code> document requires an <code>ApplicationConfigurationSchema</code> document.</p>
+    #[serde(rename = "Requires")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requires: Option<Vec<DocumentRequires>>,
     /// <p>The schema version.</p>
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2949,6 +3008,10 @@ pub struct DocumentIdentifier {
     #[serde(rename = "PlatformTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_types: Option<Vec<String>>,
+    /// <p>A list of SSM documents required by a document. For example, an <code>ApplicationConfiguration</code> document requires an <code>ApplicationConfigurationSchema</code> document.</p>
+    #[serde(rename = "Requires")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requires: Option<Vec<DocumentRequires>>,
     /// <p>The schema version.</p>
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3001,6 +3064,18 @@ pub struct DocumentParameter {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>An SSM document required by the current document.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DocumentRequires {
+    /// <p>The name of the required SSM document. The name can be an Amazon Resource Name (ARN).</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The document version required by the current document.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
 }
 
 /// <p>Version information about the document.</p>
@@ -3318,6 +3393,10 @@ pub struct GetDocumentResult {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>A list of SSM documents required by a document. For example, an <code>ApplicationConfiguration</code> document requires an <code>ApplicationConfigurationSchema</code> document.</p>
+    #[serde(rename = "Requires")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requires: Option<Vec<DocumentRequires>>,
     /// <p>The status of the Systems Manager document, such as <code>Creating</code>, <code>Active</code>, <code>Updating</code>, <code>Failed</code>, and <code>Deleting</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3746,7 +3825,8 @@ pub struct GetOpsItemResponse {
 pub struct GetOpsSummaryRequest {
     /// <p>Optional aggregators that return counts of OpsItems based on one or more expressions.</p>
     #[serde(rename = "Aggregators")]
-    pub aggregators: Vec<OpsAggregator>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregators: Option<Vec<OpsAggregator>>,
     /// <p>Optional filters used to scope down the returned OpsItems. </p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3759,6 +3839,14 @@ pub struct GetOpsSummaryRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The OpsItem data type to return.</p>
+    #[serde(rename = "ResultAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result_attributes: Option<Vec<OpsResultAttribute>>,
+    /// <p>Specify the name of a resource data sync to get.</p>
+    #[serde(rename = "SyncName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3839,7 +3927,7 @@ pub struct GetParametersByPathRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p><p>Filters to limit the request results.</p> <note> <p>You can&#39;t filter using the parameter name.</p> </note></p>
+    /// <p>Filters to limit the request results.</p>
     #[serde(rename = "ParameterFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_filters: Option<Vec<ParameterStringFilter>>,
@@ -4161,7 +4249,7 @@ pub struct InstanceInformation {
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    /// <p>Indicates whether latest version of SSM Agent is running on your instance. Some older versions of Windows Server use the EC2Config service to process SSM requests. For this reason, this field does not indicate whether or not the latest version is installed on Windows managed instances.</p>
+    /// <p>Indicates whether the latest version of SSM Agent is running on your Linux Managed Instance. This field does not indicate whether or not the latest version is installed on Windows managed instances, because some older versions of Windows Server use the EC2Config service to process SSM requests.</p>
     #[serde(rename = "IsLatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_latest_version: Option<bool>,
@@ -4254,6 +4342,10 @@ pub struct InstancePatchState {
     #[serde(rename = "InstalledOtherCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub installed_other_count: Option<i64>,
+    /// <p>The number of patches installed since the last time the instance was rebooted.</p>
+    #[serde(rename = "InstalledPendingRebootCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub installed_pending_reboot_count: Option<i64>,
     /// <p><p>The number of instances with patches installed that are specified in a RejectedPatches list. Patches with a status of <i>InstalledRejected</i> were typically installed before they were added to a RejectedPatches list.</p> <note> <p>If ALLOW<em>AS</em>DEPENDENCY is the specified option for RejectedPatchesAction, the value of InstalledRejectedCount will always be 0 (zero).</p> </note></p>
     #[serde(rename = "InstalledRejectedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4261,6 +4353,10 @@ pub struct InstancePatchState {
     /// <p>The ID of the managed instance the high-level patch compliance information was collected for.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
+    /// <p>The time of the last attempt to patch the instance with <code>NoReboot</code> specified as the reboot option.</p>
+    #[serde(rename = "LastNoRebootInstallOperationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_no_reboot_install_operation_time: Option<f64>,
     /// <p>The number of patches from the patch baseline that are applicable for the instance but aren't currently installed.</p>
     #[serde(rename = "MissingCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4285,6 +4381,10 @@ pub struct InstancePatchState {
     /// <p>The name of the patch group the managed instance belongs to.</p>
     #[serde(rename = "PatchGroup")]
     pub patch_group: String,
+    /// <p><p>Indicates the reboot option specified in the patch baseline.</p> <note> <p>Reboot options apply to <code>Install</code> operations only. Reboots are not attempted for Patch Manager <code>Scan</code> operations.</p> </note> <ul> <li> <p> <b>RebootIfNeeded</b>: Patch Manager tries to reboot the instance if it installed any patches, or if any patches are detected with a status of <code>InstalledPendingReboot</code>.</p> </li> <li> <p> <b>NoReboot</b>: Patch Manager attempts to install missing packages without trying to reboot the system. Patches installed with this option are assigned a status of <code>InstalledPendingReboot</code>. These patches might not be in effect until a reboot is performed.</p> </li> </ul></p>
+    #[serde(rename = "RebootOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reboot_option: Option<String>,
     /// <p>The ID of the patch baseline snapshot used during the patching operation when this compliance data was collected.</p>
     #[serde(rename = "SnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4531,7 +4631,7 @@ pub struct LabelParameterVersionRequest {
     /// <p>The parameter name on which you want to attach one or more labels.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The specific version of the parameter on which you want to attach one or more labels. If no version is specified, the system attaches the label to the latest version.)</p>
+    /// <p>The specific version of the parameter on which you want to attach one or more labels. If no version is specified, the system attaches the label to the latest version.</p>
     #[serde(rename = "ParameterVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_version: Option<i64>,
@@ -4544,6 +4644,10 @@ pub struct LabelParameterVersionResult {
     #[serde(rename = "InvalidLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invalid_labels: Option<Vec<String>>,
+    /// <p>The version of the parameter that has been labeled.</p>
+    #[serde(rename = "ParameterVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_version: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4616,7 +4720,7 @@ pub struct ListCommandInvocationsRequest {
     #[serde(rename = "Details")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub details: Option<bool>,
-    /// <p>(Optional) One or more filters. Use a filter to return a more specific list of results.</p>
+    /// <p>(Optional) One or more filters. Use a filter to return a more specific list of results. Note that the <code>DocumentName</code> filter is not supported for ListCommandInvocations.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<CommandFilter>>,
@@ -4760,7 +4864,7 @@ pub struct ListDocumentVersionsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The name of the document about which you want version information.</p>
+    /// <p>The name of the document. You can specify an Amazon Resource Name (ARN).</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
@@ -4909,6 +5013,10 @@ pub struct ListResourceDataSyncRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>View a list of resource data syncs according to the sync type. Specify <code>SyncToDestination</code> to view resource data syncs that synchronize data to an Amazon S3 buckets. Specify <code>SyncFromSource</code> to view resource data syncs from AWS Organizations or from multiple AWS Regions. </p>
+    #[serde(rename = "SyncType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -5388,6 +5496,10 @@ pub struct ModifyDocumentPermissionRequest {
     /// <p>The permission type for the document. The permission type can be <i>Share</i>.</p>
     #[serde(rename = "PermissionType")]
     pub permission_type: String,
+    /// <p>(Optional) The version of the document to share. If it's not specified, the system choose the <code>Default</code> version to share.</p>
+    #[serde(rename = "SharedDocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_document_version: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -5473,6 +5585,10 @@ pub struct OpsEntity {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpsEntityItem {
+    /// <p>The time OpsItem data was captured.</p>
+    #[serde(rename = "CaptureTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capture_time: Option<String>,
     /// <p>The detailed data content for an OpsItem summaries result item.</p>
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5499,6 +5615,10 @@ pub struct OpsFilter {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpsItem {
+    /// <p>An OpsItem category. Category options include: Availability, Cost, Performance, Recovery, Security.</p>
+    #[serde(rename = "Category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
     /// <p>The ARN of the AWS account that created the OpsItem.</p>
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5539,6 +5659,10 @@ pub struct OpsItem {
     #[serde(rename = "RelatedOpsItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub related_ops_items: Option<Vec<RelatedOpsItem>>,
+    /// <p>The severity of the OpsItem. Severity options range from 1 to 4.</p>
+    #[serde(rename = "Severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub severity: Option<String>,
     /// <p>The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager. The impacted resource is a subset of source.</p>
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5598,6 +5722,10 @@ pub struct OpsItemNotification {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpsItemSummary {
+    /// <p>A list of OpsItems by category.</p>
+    #[serde(rename = "Category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem.</p>
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5626,6 +5754,10 @@ pub struct OpsItemSummary {
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
+    /// <p>A list of OpsItems by severity.</p>
+    #[serde(rename = "Severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub severity: Option<String>,
     /// <p>The impacted AWS resource.</p>
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5638,6 +5770,15 @@ pub struct OpsItemSummary {
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
+}
+
+/// <p>The OpsItem data type to return.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OpsResultAttribute {
+    /// <p>Name of the data type. Valid value: AWS:OpsItem, AWS:EC2InstanceInformation, AWS:OpsItemTrendline, or AWS:ComplianceSummary.</p>
+    #[serde(rename = "TypeName")]
+    pub type_name: String,
 }
 
 /// <p>Information about the source where the association execution details are stored.</p>
@@ -5810,14 +5951,14 @@ pub struct ParameterMetadata {
     pub version: Option<i64>,
 }
 
-/// <p><p>One or more filters. Use a filter to return a more specific list of results.</p> <note> <p>The <code>Name</code> and <code>Tier</code> filter keys can&#39;t be used with the <a>GetParametersByPath</a> API action. Also, the <code>Label</code> filter key can&#39;t be used with the <a>DescribeParameters</a> API action.</p> </note></p>
+/// <p><p>One or more filters. Use a filter to return a more specific list of results.</p> <important> <p>The <code>ParameterStringFilter</code> object is used by the <a>DescribeParameters</a> and <a>GetParametersByPath</a> API actions. However, not all of the pattern values listed for <code>Key</code> can be used with both actions.</p> <p>For <code>DescribeActions</code>, all of the listed patterns are valid, with the exception of <code>Label</code>.</p> <p>For <code>GetParametersByPath</code>, the following patterns listed for <code>Key</code> are not valid: <code>Name</code>, <code>Path</code>, and <code>Tier</code>.</p> <p>For examples of CLI commands demonstrating valid parameter filter constructions, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-search.html">Searching for Systems Manager Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p> </important></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParameterStringFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
     pub key: String,
-    /// <p>Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>
+    /// <p>For all filters used with <a>DescribeParameters</a>, valid options include <code>Equals</code> and <code>BeginsWith</code>. The <code>Name</code> filter additionally supports the <code>Contains</code> option. (Exception: For filters using the key <code>Path</code>, valid options include <code>Recursive</code> and <code>OneLevel</code>.)</p> <p>For filters used with <a>GetParametersByPath</a>, valid options include <code>Equals</code> and <code>BeginsWith</code>. (Exception: For filters using the key <code>Label</code>, the only valid option is <code>Equals</code>.)</p>
     #[serde(rename = "Option")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub option: Option<String>,
@@ -6110,7 +6251,7 @@ pub struct PutComplianceItemsResult {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInventoryRequest {
-    /// <p>One or more instance IDs where you want to add or update inventory items.</p>
+    /// <p>An instance ID where you want to add or update inventory items.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The inventory items that you want to add or update on instances.</p>
@@ -6142,7 +6283,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    /// <p><p>The fully qualified name of the parameter that you want to add to the system. The fully qualified name includes the complete hierarchy of the parameter path and name. For example: <code>/Dev/DBServer/MySQL/db-string13</code> </p> <p>Naming Constraints:</p> <ul> <li> <p>Parameter names are case sensitive.</p> </li> <li> <p>A parameter name must be unique within an AWS Region</p> </li> <li> <p>A parameter name can&#39;t be prefixed with &quot;aws&quot; or &quot;ssm&quot; (case-insensitive).</p> </li> <li> <p>Parameter names can include only the following symbols and letters: <code>a-zA-Z0-9_.-/</code> </p> </li> <li> <p>A parameter name can&#39;t include spaces.</p> </li> <li> <p>Parameter hierarchies are limited to a maximum depth of fifteen levels.</p> </li> </ul> <p>For additional information about valid values for parameter names, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-parameter-name-constraints.html">Requirements and Constraints for Parameter Names</a> in the <i>AWS Systems Manager User Guide</i>.</p> <note> <p>The maximum length constraint listed below includes capacity for additional system attributes that are not part of the name. The maximum length for the fully qualified parameter name is 1011 characters. </p> </note></p>
+    /// <p><p>The fully qualified name of the parameter that you want to add to the system. The fully qualified name includes the complete hierarchy of the parameter path and name. For example: <code>/Dev/DBServer/MySQL/db-string13</code> </p> <p>Naming Constraints:</p> <ul> <li> <p>Parameter names are case sensitive.</p> </li> <li> <p>A parameter name must be unique within an AWS Region</p> </li> <li> <p>A parameter name can&#39;t be prefixed with &quot;aws&quot; or &quot;ssm&quot; (case-insensitive).</p> </li> <li> <p>Parameter names can include only the following symbols and letters: <code>a-zA-Z0-9_.-/</code> </p> </li> <li> <p>A parameter name can&#39;t include spaces.</p> </li> <li> <p>Parameter hierarchies are limited to a maximum depth of fifteen levels.</p> </li> </ul> <p>For additional information about valid values for parameter names, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-parameter-name-constraints.html">Requirements and Constraints for Parameter Names</a> in the <i>AWS Systems Manager User Guide</i>.</p> <note> <p>The maximum length constraint listed below includes capacity for additional system attributes that are not part of the name. The maximum length for the fully qualified parameter name is 1011 characters, including the full length of the parameter ARN. For example, the following fully qualified parameter name is 65 characters, not 20 characters:</p> <p> <code>arn:aws:ssm:us-east-2:111122223333:parameter/ExampleParameterName</code> </p> </note></p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Overwrite an existing parameter. If not specified, will default to "false".</p>
@@ -6157,7 +6298,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The parameter tier to assign to a parameter.</p> <p>Parameter Store offers a standard tier and an advanced tier for parameters. Standard parameters have a content size limit of 4 KB and can't be configured to use parameter policies. You can create a maximum of 10,000 standard parameters for each Region in an AWS account. Standard parameters are offered at no additional cost. </p> <p>Advanced parameters have a content size limit of 8 KB and can be configured to use parameter policies. You can create a maximum of 100,000 advanced parameters for each Region in an AWS account. Advanced parameters incur a charge. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html">About Advanced Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>You can change a standard parameter to an advanced parameter any time. But you can't revert an advanced parameter to a standard parameter. Reverting an advanced parameter to a standard parameter would result in data loss because the system would truncate the size of the parameter from 8 KB to 4 KB. Reverting would also remove any policies attached to the parameter. Lastly, advanced parameters use a different form of encryption than standard parameters. </p> <p>If you no longer need an advanced parameter, or if you no longer want to incur charges for an advanced parameter, you must delete it and recreate it as a new standard parameter. </p> <p> <b>Using the Default Tier Configuration</b> </p> <p>In <code>PutParameter</code> requests, you can specify the tier to create the parameter in. Whenever you specify a tier in the request, Parameter Store creates or updates the parameter according to that request. However, if you do not specify a tier in a request, Parameter Store assigns the tier based on the current Parameter Store default tier configuration.</p> <p>The default tier when you begin using Parameter Store is the standard-parameter tier. If you use the advanced-parameter tier, you can specify one of the following as the default:</p> <ul> <li> <p> <b>Advanced</b>: With this option, Parameter Store evaluates all requests as advanced parameters. </p> </li> <li> <p> <b>Intelligent-Tiering</b>: With this option, Parameter Store evaluates each request to determine if the parameter is standard or advanced. </p> <p>If the request doesn't include any options that require an advanced parameter, the parameter is created in the standard-parameter tier. If one or more options requiring an advanced parameter are included in the request, Parameter Store create a parameter in the advanced-parameter tier.</p> <p>This approach helps control your parameter-related costs by always creating standard parameters unless an advanced parameter is necessary. </p> </li> </ul> <p>Options that require an advanced parameter include the following:</p> <ul> <li> <p>The content size of the parameter is more than 4 KB.</p> </li> <li> <p>The parameter uses a parameter policy.</p> </li> <li> <p>More than 10,000 parameters already exist in your AWS account in the current Region.</p> </li> </ul> <p>For more information about configuring the default tier option, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/ps-default-tier.html">Specifying a Default Parameter Tier</a> in the AWS Systems Manager User Guide.</p>
+    /// <p>The parameter tier to assign to a parameter.</p> <p>Parameter Store offers a standard tier and an advanced tier for parameters. Standard parameters have a content size limit of 4 KB and can't be configured to use parameter policies. You can create a maximum of 10,000 standard parameters for each Region in an AWS account. Standard parameters are offered at no additional cost. </p> <p>Advanced parameters have a content size limit of 8 KB and can be configured to use parameter policies. You can create a maximum of 100,000 advanced parameters for each Region in an AWS account. Advanced parameters incur a charge. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html">About Advanced Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>You can change a standard parameter to an advanced parameter any time. But you can't revert an advanced parameter to a standard parameter. Reverting an advanced parameter to a standard parameter would result in data loss because the system would truncate the size of the parameter from 8 KB to 4 KB. Reverting would also remove any policies attached to the parameter. Lastly, advanced parameters use a different form of encryption than standard parameters. </p> <p>If you no longer need an advanced parameter, or if you no longer want to incur charges for an advanced parameter, you must delete it and recreate it as a new standard parameter. </p> <p> <b>Using the Default Tier Configuration</b> </p> <p>In <code>PutParameter</code> requests, you can specify the tier to create the parameter in. Whenever you specify a tier in the request, Parameter Store creates or updates the parameter according to that request. However, if you do not specify a tier in a request, Parameter Store assigns the tier based on the current Parameter Store default tier configuration.</p> <p>The default tier when you begin using Parameter Store is the standard-parameter tier. If you use the advanced-parameter tier, you can specify one of the following as the default:</p> <ul> <li> <p> <b>Advanced</b>: With this option, Parameter Store evaluates all requests as advanced parameters. </p> </li> <li> <p> <b>Intelligent-Tiering</b>: With this option, Parameter Store evaluates each request to determine if the parameter is standard or advanced. </p> <p>If the request doesn't include any options that require an advanced parameter, the parameter is created in the standard-parameter tier. If one or more options requiring an advanced parameter are included in the request, Parameter Store create a parameter in the advanced-parameter tier.</p> <p>This approach helps control your parameter-related costs by always creating standard parameters unless an advanced parameter is necessary. </p> </li> </ul> <p>Options that require an advanced parameter include the following:</p> <ul> <li> <p>The content size of the parameter is more than 4 KB.</p> </li> <li> <p>The parameter uses a parameter policy.</p> </li> <li> <p>More than 10,000 parameters already exist in your AWS account in the current Region.</p> </li> </ul> <p>For more information about configuring the default tier option, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/ps-default-tier.html">Specifying a Default Parameter Tier</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tier: Option<String>,
@@ -6172,6 +6313,10 @@ pub struct PutParameterRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutParameterResult {
+    /// <p>The tier assigned to the parameter.</p>
+    #[serde(rename = "Tier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tier: Option<String>,
     /// <p>The new version number of a parameter. If you edit a parameter value, Parameter Store automatically creates a new version and assigns this new version a unique ID. You can reference a parameter version ID in API actions or in Systems Manager documents (SSM documents). By default, if you don't specify a specific version, the system returns the latest parameter value when a parameter is called.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6420,6 +6565,18 @@ pub struct ResourceComplianceSummaryItem {
     pub status: Option<String>,
 }
 
+/// <p>Information about the AwsOrganizationsSource resource data sync source. A sync source of this type can synchronize data from AWS Organizations or, if an AWS Organization is not present, from multiple AWS Regions.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ResourceDataSyncAwsOrganizationsSource {
+    /// <p>If an AWS Organization is present, this is either <code>OrganizationalUnits</code> or <code>EntireOrganization</code>. For <code>OrganizationalUnits</code>, the data is aggregated from a set of organization units. For <code>EntireOrganization</code>, the data is aggregated from the entire AWS Organization. </p>
+    #[serde(rename = "OrganizationSourceType")]
+    pub organization_source_type: String,
+    /// <p>The AWS Organizations organization units included in the sync.</p>
+    #[serde(rename = "OrganizationalUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organizational_units: Option<Vec<ResourceDataSyncOrganizationalUnit>>,
+}
+
 /// <p>Information about a Resource Data Sync configuration, including its current status and last successful sync.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -6448,10 +6605,31 @@ pub struct ResourceDataSyncItem {
     #[serde(rename = "SyncCreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_created_time: Option<f64>,
+    /// <p>The date and time the resource data sync was changed. </p>
+    #[serde(rename = "SyncLastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_last_modified_time: Option<f64>,
     /// <p>The name of the Resource Data Sync.</p>
     #[serde(rename = "SyncName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_name: Option<String>,
+    /// <p>Information about the source where the data was synchronized. </p>
+    #[serde(rename = "SyncSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_source: Option<ResourceDataSyncSourceWithState>,
+    /// <p>The type of resource data sync. If <code>SyncType</code> is <code>SyncToDestination</code>, then the resource data sync synchronizes data to an Amazon S3 bucket. If the <code>SyncType</code> is <code>SyncFromSource</code> then the resource data sync synchronizes data from AWS Organizations or from multiple AWS Regions.</p>
+    #[serde(rename = "SyncType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_type: Option<String>,
+}
+
+/// <p>The AWS Organizations organizational unit data source for the sync.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ResourceDataSyncOrganizationalUnit {
+    /// <p>The AWS Organization unit ID data source for the sync.</p>
+    #[serde(rename = "OrganizationalUnitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organizational_unit_id: Option<String>,
 }
 
 /// <p>Information about the target Amazon S3 bucket for the Resource Data Sync.</p>
@@ -6474,6 +6652,52 @@ pub struct ResourceDataSyncS3Destination {
     /// <p>A supported sync format. The following format is currently supported: JsonSerDe</p>
     #[serde(rename = "SyncFormat")]
     pub sync_format: String,
+}
+
+/// <p>Information about the source of the data included in the resource data sync.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ResourceDataSyncSource {
+    /// <p>The field name in <code>SyncSource</code> for the <code>ResourceDataSyncAwsOrganizationsSource</code> type.</p>
+    #[serde(rename = "AwsOrganizationsSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_organizations_source: Option<ResourceDataSyncAwsOrganizationsSource>,
+    /// <p>Whether to automatically synchronize and aggregate data from new AWS Regions when those Regions come online.</p>
+    #[serde(rename = "IncludeFutureRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_future_regions: Option<bool>,
+    /// <p>The <code>SyncSource</code> AWS Regions included in the resource data sync.</p>
+    #[serde(rename = "SourceRegions")]
+    pub source_regions: Vec<String>,
+    /// <p>The type of data source for the resource data sync. <code>SourceType</code> is either <code>AwsOrganizations</code> (if an organization is present in AWS Organizations) or <code>singleAccountMultiRegions</code>.</p>
+    #[serde(rename = "SourceType")]
+    pub source_type: String,
+}
+
+/// <p>The data type name for including resource data sync state. There are four sync states:</p> <p> <code>OrganizationNotExists</code> (Your organization doesn't exist)</p> <p> <code>NoPermissions</code> (The system can't locate the service-linked role. This role is automatically created when a user creates a resource data sync in Explorer.)</p> <p> <code>InvalidOrganizationalUnit</code> (You specified or selected an invalid unit in the resource data sync configuration.)</p> <p> <code>TrustedAccessDisabled</code> (You disabled Systems Manager access in the organization in AWS Organizations.)</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResourceDataSyncSourceWithState {
+    /// <p>The field name in <code>SyncSource</code> for the <code>ResourceDataSyncAwsOrganizationsSource</code> type.</p>
+    #[serde(rename = "AwsOrganizationsSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_organizations_source: Option<ResourceDataSyncAwsOrganizationsSource>,
+    /// <p>Whether to automatically synchronize and aggregate data from new AWS Regions when those Regions come online.</p>
+    #[serde(rename = "IncludeFutureRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_future_regions: Option<bool>,
+    /// <p>The <code>SyncSource</code> AWS Regions included in the resource data sync.</p>
+    #[serde(rename = "SourceRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_regions: Option<Vec<String>>,
+    /// <p>The type of data source for the resource data sync. <code>SourceType</code> is either <code>AwsOrganizations</code> (if an organization is present in AWS Organizations) or <code>singleAccountMultiRegions</code>.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type: Option<String>,
+    /// <p>The data type name for including resource data sync state. There are four sync states:</p> <p> <code>OrganizationNotExists</code>: Your organization doesn't exist.</p> <p> <code>NoPermissions</code>: The system can't locate the service-linked role. This role is automatically created when a user creates a resource data sync in Explorer.</p> <p> <code>InvalidOrganizationalUnit</code>: You specified or selected an invalid unit in the resource data sync configuration.</p> <p> <code>TrustedAccessDisabled</code>: You disabled Systems Manager access in the organization in AWS Organizations.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
 }
 
 /// <p>The inventory item result attribute.</p>
@@ -7018,7 +7242,7 @@ pub struct Tag {
     pub value: String,
 }
 
-/// <p>An array of search criteria that targets instances using a Key,Value combination that you specify. </p> <p>Supported formats include the following.</p> <ul> <li> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> </li> <li> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> </li> <li> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> </li> </ul> <p>For example:</p> <ul> <li> <p> <code>Key=InstanceIds,Values=i-02573cafcfEXAMPLE,i-0471e04240EXAMPLE,i-07782c72faEXAMPLE</code> </p> </li> <li> <p> <code>Key=tag:CostCenter,Values=CostCenter1,CostCenter2,CostCenter3</code> </p> </li> <li> <p> <code>Key=tag-key,Values=Name,Instance-Type,CostCenter</code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:Name,Values=ProductionResourceGroup</code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> </li> </ul> <p>For information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Using Targets and Rate Controls to Send Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+/// <p>An array of search criteria that targets instances using a Key,Value combination that you specify. </p> <p>Supported formats include the following.</p> <ul> <li> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> </li> <li> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> </li> <li> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> </li> </ul> <p>For example:</p> <ul> <li> <p> <code>Key=InstanceIds,Values=i-02573cafcfEXAMPLE,i-0471e04240EXAMPLE,i-07782c72faEXAMPLE</code> </p> </li> <li> <p> <code>Key=tag:CostCenter,Values=CostCenter1,CostCenter2,CostCenter3</code> </p> </li> <li> <p> <code>Key=tag-key,Values=Name,Instance-Type,CostCenter</code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:Name,Values=ProductionResourceGroup</code> </p> <p>This example demonstrates how to target all resources in the resource group <b>ProductionResourceGroup</b> in your maintenance window.</p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> <p>This example demonstrates how to target only Amazon EC2 instances and VPCs in your maintenance window.</p> </li> <li> <p>(State Manager association targets only) <code>Key=InstanceIds,Values=<i>*</i> </code> </p> <p>This example demonstrates how to target all managed instances in the AWS Region where the association was created.</p> </li> </ul> <p>For information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Using Targets and Rate Controls to Send Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Target {
     /// <p>User-defined criteria for sending commands that target instances that meet the criteria.</p>
@@ -7518,6 +7742,10 @@ pub struct UpdateManagedInstanceRoleResult {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOpsItemRequest {
+    /// <p>Specify a new category for an OpsItem.</p>
+    #[serde(rename = "Category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
     /// <p>Update the information about the OpsItem. Provide enough information so that users reading this OpsItem for the first time understand the issue. </p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7545,6 +7773,10 @@ pub struct UpdateOpsItemRequest {
     #[serde(rename = "RelatedOpsItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub related_ops_items: Option<Vec<RelatedOpsItem>>,
+    /// <p>Specify a new severity for an OpsItem.</p>
+    #[serde(rename = "Severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub severity: Option<String>,
     /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7672,6 +7904,24 @@ pub struct UpdatePatchBaselineResult {
     pub sources: Option<Vec<PatchSource>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateResourceDataSyncRequest {
+    /// <p>The name of the resource data sync you want to update.</p>
+    #[serde(rename = "SyncName")]
+    pub sync_name: String,
+    /// <p>Specify information about the data sources to synchronize.</p>
+    #[serde(rename = "SyncSource")]
+    pub sync_source: ResourceDataSyncSource,
+    /// <p>The type of resource data sync. If <code>SyncType</code> is <code>SyncToDestination</code>, then the resource data sync synchronizes data to an Amazon S3 bucket. If the <code>SyncType</code> is <code>SyncFromSource</code> then the resource data sync synchronizes data from AWS Organizations or from multiple AWS Regions.</p>
+    #[serde(rename = "SyncType")]
+    pub sync_type: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateResourceDataSyncResult {}
+
 /// <p>The request body of the UpdateServiceSetting API action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -7736,20 +7986,16 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToResourceError::InternalServerError(ref cause) => cause,
-            AddTagsToResourceError::InvalidResourceId(ref cause) => cause,
-            AddTagsToResourceError::InvalidResourceType(ref cause) => cause,
-            AddTagsToResourceError::TooManyTagsError(ref cause) => cause,
-            AddTagsToResourceError::TooManyUpdates(ref cause) => cause,
+            AddTagsToResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::InvalidResourceId(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::InvalidResourceType(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::TooManyTagsError(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToResourceError {}
 /// Errors returned by CancelCommand
 #[derive(Debug, PartialEq)]
 pub enum CancelCommandError {
@@ -7788,19 +8034,15 @@ impl CancelCommandError {
 }
 impl fmt::Display for CancelCommandError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelCommandError {
-    fn description(&self) -> &str {
         match *self {
-            CancelCommandError::DuplicateInstanceId(ref cause) => cause,
-            CancelCommandError::InternalServerError(ref cause) => cause,
-            CancelCommandError::InvalidCommandId(ref cause) => cause,
-            CancelCommandError::InvalidInstanceId(ref cause) => cause,
+            CancelCommandError::DuplicateInstanceId(ref cause) => write!(f, "{}", cause),
+            CancelCommandError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CancelCommandError::InvalidCommandId(ref cause) => write!(f, "{}", cause),
+            CancelCommandError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelCommandError {}
 /// Errors returned by CancelMaintenanceWindowExecution
 #[derive(Debug, PartialEq)]
 pub enum CancelMaintenanceWindowExecutionError {
@@ -7835,17 +8077,17 @@ impl CancelMaintenanceWindowExecutionError {
 }
 impl fmt::Display for CancelMaintenanceWindowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelMaintenanceWindowExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            CancelMaintenanceWindowExecutionError::DoesNotExist(ref cause) => cause,
-            CancelMaintenanceWindowExecutionError::InternalServerError(ref cause) => cause,
+            CancelMaintenanceWindowExecutionError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CancelMaintenanceWindowExecutionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CancelMaintenanceWindowExecutionError {}
 /// Errors returned by CreateActivation
 #[derive(Debug, PartialEq)]
 pub enum CreateActivationError {
@@ -7871,16 +8113,12 @@ impl CreateActivationError {
 }
 impl fmt::Display for CreateActivationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateActivationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateActivationError::InternalServerError(ref cause) => cause,
+            CreateActivationError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateActivationError {}
 /// Errors returned by CreateAssociation
 #[derive(Debug, PartialEq)]
 pub enum CreateAssociationError {
@@ -7966,26 +8204,22 @@ impl CreateAssociationError {
 }
 impl fmt::Display for CreateAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAssociationError::AssociationAlreadyExists(ref cause) => cause,
-            CreateAssociationError::AssociationLimitExceeded(ref cause) => cause,
-            CreateAssociationError::InternalServerError(ref cause) => cause,
-            CreateAssociationError::InvalidDocument(ref cause) => cause,
-            CreateAssociationError::InvalidDocumentVersion(ref cause) => cause,
-            CreateAssociationError::InvalidInstanceId(ref cause) => cause,
-            CreateAssociationError::InvalidOutputLocation(ref cause) => cause,
-            CreateAssociationError::InvalidParameters(ref cause) => cause,
-            CreateAssociationError::InvalidSchedule(ref cause) => cause,
-            CreateAssociationError::InvalidTarget(ref cause) => cause,
-            CreateAssociationError::UnsupportedPlatformType(ref cause) => cause,
+            CreateAssociationError::AssociationAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateAssociationError::AssociationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAssociationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateAssociationError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            CreateAssociationError::InvalidDocumentVersion(ref cause) => write!(f, "{}", cause),
+            CreateAssociationError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            CreateAssociationError::InvalidOutputLocation(ref cause) => write!(f, "{}", cause),
+            CreateAssociationError::InvalidParameters(ref cause) => write!(f, "{}", cause),
+            CreateAssociationError::InvalidSchedule(ref cause) => write!(f, "{}", cause),
+            CreateAssociationError::InvalidTarget(ref cause) => write!(f, "{}", cause),
+            CreateAssociationError::UnsupportedPlatformType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAssociationError {}
 /// Errors returned by CreateAssociationBatch
 #[derive(Debug, PartialEq)]
 pub enum CreateAssociationBatchError {
@@ -8081,26 +8315,28 @@ impl CreateAssociationBatchError {
 }
 impl fmt::Display for CreateAssociationBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAssociationBatchError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAssociationBatchError::AssociationLimitExceeded(ref cause) => cause,
-            CreateAssociationBatchError::DuplicateInstanceId(ref cause) => cause,
-            CreateAssociationBatchError::InternalServerError(ref cause) => cause,
-            CreateAssociationBatchError::InvalidDocument(ref cause) => cause,
-            CreateAssociationBatchError::InvalidDocumentVersion(ref cause) => cause,
-            CreateAssociationBatchError::InvalidInstanceId(ref cause) => cause,
-            CreateAssociationBatchError::InvalidOutputLocation(ref cause) => cause,
-            CreateAssociationBatchError::InvalidParameters(ref cause) => cause,
-            CreateAssociationBatchError::InvalidSchedule(ref cause) => cause,
-            CreateAssociationBatchError::InvalidTarget(ref cause) => cause,
-            CreateAssociationBatchError::UnsupportedPlatformType(ref cause) => cause,
+            CreateAssociationBatchError::AssociationLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAssociationBatchError::DuplicateInstanceId(ref cause) => write!(f, "{}", cause),
+            CreateAssociationBatchError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateAssociationBatchError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            CreateAssociationBatchError::InvalidDocumentVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAssociationBatchError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            CreateAssociationBatchError::InvalidOutputLocation(ref cause) => write!(f, "{}", cause),
+            CreateAssociationBatchError::InvalidParameters(ref cause) => write!(f, "{}", cause),
+            CreateAssociationBatchError::InvalidSchedule(ref cause) => write!(f, "{}", cause),
+            CreateAssociationBatchError::InvalidTarget(ref cause) => write!(f, "{}", cause),
+            CreateAssociationBatchError::UnsupportedPlatformType(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateAssociationBatchError {}
 /// Errors returned by CreateDocument
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentError {
@@ -8159,21 +8395,17 @@ impl CreateDocumentError {
 }
 impl fmt::Display for CreateDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDocumentError::DocumentAlreadyExists(ref cause) => cause,
-            CreateDocumentError::DocumentLimitExceeded(ref cause) => cause,
-            CreateDocumentError::InternalServerError(ref cause) => cause,
-            CreateDocumentError::InvalidDocumentContent(ref cause) => cause,
-            CreateDocumentError::InvalidDocumentSchemaVersion(ref cause) => cause,
-            CreateDocumentError::MaxDocumentSizeExceeded(ref cause) => cause,
+            CreateDocumentError::DocumentAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateDocumentError::DocumentLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDocumentError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateDocumentError::InvalidDocumentContent(ref cause) => write!(f, "{}", cause),
+            CreateDocumentError::InvalidDocumentSchemaVersion(ref cause) => write!(f, "{}", cause),
+            CreateDocumentError::MaxDocumentSizeExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDocumentError {}
 /// Errors returned by CreateMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum CreateMaintenanceWindowError {
@@ -8213,18 +8445,18 @@ impl CreateMaintenanceWindowError {
 }
 impl fmt::Display for CreateMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMaintenanceWindowError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMaintenanceWindowError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateMaintenanceWindowError::InternalServerError(ref cause) => cause,
-            CreateMaintenanceWindowError::ResourceLimitExceeded(ref cause) => cause,
+            CreateMaintenanceWindowError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMaintenanceWindowError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateMaintenanceWindowError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateMaintenanceWindowError {}
 /// Errors returned by CreateOpsItem
 #[derive(Debug, PartialEq)]
 pub enum CreateOpsItemError {
@@ -8265,19 +8497,15 @@ impl CreateOpsItemError {
 }
 impl fmt::Display for CreateOpsItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateOpsItemError {
-    fn description(&self) -> &str {
         match *self {
-            CreateOpsItemError::InternalServerError(ref cause) => cause,
-            CreateOpsItemError::OpsItemAlreadyExists(ref cause) => cause,
-            CreateOpsItemError::OpsItemInvalidParameter(ref cause) => cause,
-            CreateOpsItemError::OpsItemLimitExceeded(ref cause) => cause,
+            CreateOpsItemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateOpsItemError::OpsItemAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateOpsItemError::OpsItemInvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateOpsItemError::OpsItemLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateOpsItemError {}
 /// Errors returned by CreatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum CreatePatchBaselineError {
@@ -8317,18 +8545,16 @@ impl CreatePatchBaselineError {
 }
 impl fmt::Display for CreatePatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePatchBaselineError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePatchBaselineError::IdempotentParameterMismatch(ref cause) => cause,
-            CreatePatchBaselineError::InternalServerError(ref cause) => cause,
-            CreatePatchBaselineError::ResourceLimitExceeded(ref cause) => cause,
+            CreatePatchBaselineError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePatchBaselineError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreatePatchBaselineError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePatchBaselineError {}
 /// Errors returned by CreateResourceDataSync
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceDataSyncError {
@@ -8375,19 +8601,21 @@ impl CreateResourceDataSyncError {
 }
 impl fmt::Display for CreateResourceDataSyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateResourceDataSyncError {
-    fn description(&self) -> &str {
         match *self {
-            CreateResourceDataSyncError::InternalServerError(ref cause) => cause,
-            CreateResourceDataSyncError::ResourceDataSyncAlreadyExists(ref cause) => cause,
-            CreateResourceDataSyncError::ResourceDataSyncCountExceeded(ref cause) => cause,
-            CreateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(ref cause) => cause,
+            CreateResourceDataSyncError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateResourceDataSyncError::ResourceDataSyncAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateResourceDataSyncError::ResourceDataSyncCountExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateResourceDataSyncError {}
 /// Errors returned by DeleteActivation
 #[derive(Debug, PartialEq)]
 pub enum DeleteActivationError {
@@ -8430,19 +8658,15 @@ impl DeleteActivationError {
 }
 impl fmt::Display for DeleteActivationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteActivationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteActivationError::InternalServerError(ref cause) => cause,
-            DeleteActivationError::InvalidActivation(ref cause) => cause,
-            DeleteActivationError::InvalidActivationId(ref cause) => cause,
-            DeleteActivationError::TooManyUpdates(ref cause) => cause,
+            DeleteActivationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteActivationError::InvalidActivation(ref cause) => write!(f, "{}", cause),
+            DeleteActivationError::InvalidActivationId(ref cause) => write!(f, "{}", cause),
+            DeleteActivationError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteActivationError {}
 /// Errors returned by DeleteAssociation
 #[derive(Debug, PartialEq)]
 pub enum DeleteAssociationError {
@@ -8490,20 +8714,16 @@ impl DeleteAssociationError {
 }
 impl fmt::Display for DeleteAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAssociationError::AssociationDoesNotExist(ref cause) => cause,
-            DeleteAssociationError::InternalServerError(ref cause) => cause,
-            DeleteAssociationError::InvalidDocument(ref cause) => cause,
-            DeleteAssociationError::InvalidInstanceId(ref cause) => cause,
-            DeleteAssociationError::TooManyUpdates(ref cause) => cause,
+            DeleteAssociationError::AssociationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DeleteAssociationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteAssociationError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            DeleteAssociationError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            DeleteAssociationError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAssociationError {}
 /// Errors returned by DeleteDocument
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentError {
@@ -8544,19 +8764,15 @@ impl DeleteDocumentError {
 }
 impl fmt::Display for DeleteDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDocumentError::AssociatedInstances(ref cause) => cause,
-            DeleteDocumentError::InternalServerError(ref cause) => cause,
-            DeleteDocumentError::InvalidDocument(ref cause) => cause,
-            DeleteDocumentError::InvalidDocumentOperation(ref cause) => cause,
+            DeleteDocumentError::AssociatedInstances(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentError::InvalidDocumentOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDocumentError {}
 /// Errors returned by DeleteInventory
 #[derive(Debug, PartialEq)]
 pub enum DeleteInventoryError {
@@ -8604,20 +8820,18 @@ impl DeleteInventoryError {
 }
 impl fmt::Display for DeleteInventoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInventoryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInventoryError::InternalServerError(ref cause) => cause,
-            DeleteInventoryError::InvalidDeleteInventoryParameters(ref cause) => cause,
-            DeleteInventoryError::InvalidInventoryRequest(ref cause) => cause,
-            DeleteInventoryError::InvalidOption(ref cause) => cause,
-            DeleteInventoryError::InvalidTypeName(ref cause) => cause,
+            DeleteInventoryError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteInventoryError::InvalidDeleteInventoryParameters(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteInventoryError::InvalidInventoryRequest(ref cause) => write!(f, "{}", cause),
+            DeleteInventoryError::InvalidOption(ref cause) => write!(f, "{}", cause),
+            DeleteInventoryError::InvalidTypeName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInventoryError {}
 /// Errors returned by DeleteMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeleteMaintenanceWindowError {
@@ -8643,16 +8857,12 @@ impl DeleteMaintenanceWindowError {
 }
 impl fmt::Display for DeleteMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMaintenanceWindowError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMaintenanceWindowError::InternalServerError(ref cause) => cause,
+            DeleteMaintenanceWindowError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMaintenanceWindowError {}
 /// Errors returned by DeleteParameter
 #[derive(Debug, PartialEq)]
 pub enum DeleteParameterError {
@@ -8681,17 +8891,13 @@ impl DeleteParameterError {
 }
 impl fmt::Display for DeleteParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteParameterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteParameterError::InternalServerError(ref cause) => cause,
-            DeleteParameterError::ParameterNotFound(ref cause) => cause,
+            DeleteParameterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteParameterError::ParameterNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteParameterError {}
 /// Errors returned by DeleteParameters
 #[derive(Debug, PartialEq)]
 pub enum DeleteParametersError {
@@ -8717,16 +8923,12 @@ impl DeleteParametersError {
 }
 impl fmt::Display for DeleteParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteParametersError::InternalServerError(ref cause) => cause,
+            DeleteParametersError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteParametersError {}
 /// Errors returned by DeletePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum DeletePatchBaselineError {
@@ -8757,22 +8959,20 @@ impl DeletePatchBaselineError {
 }
 impl fmt::Display for DeletePatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePatchBaselineError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePatchBaselineError::InternalServerError(ref cause) => cause,
-            DeletePatchBaselineError::ResourceInUse(ref cause) => cause,
+            DeletePatchBaselineError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeletePatchBaselineError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePatchBaselineError {}
 /// Errors returned by DeleteResourceDataSync
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceDataSyncError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
+    /// <p>The specified sync configuration is invalid.</p>
+    ResourceDataSyncInvalidConfiguration(String),
     /// <p>The specified sync name was not found.</p>
     ResourceDataSyncNotFound(String),
 }
@@ -8785,6 +8985,11 @@ impl DeleteResourceDataSyncError {
                     return RusotoError::Service(DeleteResourceDataSyncError::InternalServerError(
                         err.msg,
                     ))
+                }
+                "ResourceDataSyncInvalidConfigurationException" => {
+                    return RusotoError::Service(
+                        DeleteResourceDataSyncError::ResourceDataSyncInvalidConfiguration(err.msg),
+                    )
                 }
                 "ResourceDataSyncNotFoundException" => {
                     return RusotoError::Service(
@@ -8800,17 +9005,18 @@ impl DeleteResourceDataSyncError {
 }
 impl fmt::Display for DeleteResourceDataSyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteResourceDataSyncError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteResourceDataSyncError::InternalServerError(ref cause) => cause,
-            DeleteResourceDataSyncError::ResourceDataSyncNotFound(ref cause) => cause,
+            DeleteResourceDataSyncError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteResourceDataSyncError::ResourceDataSyncInvalidConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteResourceDataSyncError::ResourceDataSyncNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteResourceDataSyncError {}
 /// Errors returned by DeregisterManagedInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterManagedInstanceError {
@@ -8843,17 +9049,15 @@ impl DeregisterManagedInstanceError {
 }
 impl fmt::Display for DeregisterManagedInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterManagedInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterManagedInstanceError::InternalServerError(ref cause) => cause,
-            DeregisterManagedInstanceError::InvalidInstanceId(ref cause) => cause,
+            DeregisterManagedInstanceError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterManagedInstanceError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterManagedInstanceError {}
 /// Errors returned by DeregisterPatchBaselineForPatchGroup
 #[derive(Debug, PartialEq)]
 pub enum DeregisterPatchBaselineForPatchGroupError {
@@ -8888,17 +9092,17 @@ impl DeregisterPatchBaselineForPatchGroupError {
 }
 impl fmt::Display for DeregisterPatchBaselineForPatchGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterPatchBaselineForPatchGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterPatchBaselineForPatchGroupError::InternalServerError(ref cause) => cause,
-            DeregisterPatchBaselineForPatchGroupError::InvalidResourceId(ref cause) => cause,
+            DeregisterPatchBaselineForPatchGroupError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterPatchBaselineForPatchGroupError::InvalidResourceId(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeregisterPatchBaselineForPatchGroupError {}
 /// Errors returned by DeregisterTargetFromMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTargetFromMaintenanceWindowError {
@@ -8940,18 +9144,20 @@ impl DeregisterTargetFromMaintenanceWindowError {
 }
 impl fmt::Display for DeregisterTargetFromMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterTargetFromMaintenanceWindowError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterTargetFromMaintenanceWindowError::DoesNotExist(ref cause) => cause,
-            DeregisterTargetFromMaintenanceWindowError::InternalServerError(ref cause) => cause,
-            DeregisterTargetFromMaintenanceWindowError::TargetInUse(ref cause) => cause,
+            DeregisterTargetFromMaintenanceWindowError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterTargetFromMaintenanceWindowError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterTargetFromMaintenanceWindowError::TargetInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeregisterTargetFromMaintenanceWindowError {}
 /// Errors returned by DeregisterTaskFromMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTaskFromMaintenanceWindowError {
@@ -8986,17 +9192,17 @@ impl DeregisterTaskFromMaintenanceWindowError {
 }
 impl fmt::Display for DeregisterTaskFromMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterTaskFromMaintenanceWindowError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterTaskFromMaintenanceWindowError::DoesNotExist(ref cause) => cause,
-            DeregisterTaskFromMaintenanceWindowError::InternalServerError(ref cause) => cause,
+            DeregisterTaskFromMaintenanceWindowError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterTaskFromMaintenanceWindowError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeregisterTaskFromMaintenanceWindowError {}
 /// Errors returned by DescribeActivations
 #[derive(Debug, PartialEq)]
 pub enum DescribeActivationsError {
@@ -9034,18 +9240,14 @@ impl DescribeActivationsError {
 }
 impl fmt::Display for DescribeActivationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeActivationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeActivationsError::InternalServerError(ref cause) => cause,
-            DescribeActivationsError::InvalidFilter(ref cause) => cause,
-            DescribeActivationsError::InvalidNextToken(ref cause) => cause,
+            DescribeActivationsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeActivationsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            DescribeActivationsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeActivationsError {}
 /// Errors returned by DescribeAssociation
 #[derive(Debug, PartialEq)]
 pub enum DescribeAssociationError {
@@ -9097,20 +9299,18 @@ impl DescribeAssociationError {
 }
 impl fmt::Display for DescribeAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAssociationError::AssociationDoesNotExist(ref cause) => cause,
-            DescribeAssociationError::InternalServerError(ref cause) => cause,
-            DescribeAssociationError::InvalidAssociationVersion(ref cause) => cause,
-            DescribeAssociationError::InvalidDocument(ref cause) => cause,
-            DescribeAssociationError::InvalidInstanceId(ref cause) => cause,
+            DescribeAssociationError::AssociationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DescribeAssociationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeAssociationError::InvalidAssociationVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAssociationError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            DescribeAssociationError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAssociationError {}
 /// Errors returned by DescribeAssociationExecutionTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeAssociationExecutionTargetsError {
@@ -9161,21 +9361,23 @@ impl DescribeAssociationExecutionTargetsError {
 }
 impl fmt::Display for DescribeAssociationExecutionTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAssociationExecutionTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAssociationExecutionTargetsError::AssociationDoesNotExist(ref cause) => cause,
+            DescribeAssociationExecutionTargetsError::AssociationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeAssociationExecutionTargetsError::AssociationExecutionDoesNotExist(
                 ref cause,
-            ) => cause,
-            DescribeAssociationExecutionTargetsError::InternalServerError(ref cause) => cause,
-            DescribeAssociationExecutionTargetsError::InvalidNextToken(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DescribeAssociationExecutionTargetsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAssociationExecutionTargetsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAssociationExecutionTargetsError {}
 /// Errors returned by DescribeAssociationExecutions
 #[derive(Debug, PartialEq)]
 pub enum DescribeAssociationExecutionsError {
@@ -9217,18 +9419,20 @@ impl DescribeAssociationExecutionsError {
 }
 impl fmt::Display for DescribeAssociationExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAssociationExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAssociationExecutionsError::AssociationDoesNotExist(ref cause) => cause,
-            DescribeAssociationExecutionsError::InternalServerError(ref cause) => cause,
-            DescribeAssociationExecutionsError::InvalidNextToken(ref cause) => cause,
+            DescribeAssociationExecutionsError::AssociationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAssociationExecutionsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAssociationExecutionsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAssociationExecutionsError {}
 /// Errors returned by DescribeAutomationExecutions
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutomationExecutionsError {
@@ -9277,19 +9481,23 @@ impl DescribeAutomationExecutionsError {
 }
 impl fmt::Display for DescribeAutomationExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAutomationExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAutomationExecutionsError::InternalServerError(ref cause) => cause,
-            DescribeAutomationExecutionsError::InvalidFilterKey(ref cause) => cause,
-            DescribeAutomationExecutionsError::InvalidFilterValue(ref cause) => cause,
-            DescribeAutomationExecutionsError::InvalidNextToken(ref cause) => cause,
+            DescribeAutomationExecutionsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAutomationExecutionsError::InvalidFilterKey(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAutomationExecutionsError::InvalidFilterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAutomationExecutionsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAutomationExecutionsError {}
 /// Errors returned by DescribeAutomationStepExecutions
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutomationStepExecutionsError {
@@ -9345,20 +9553,26 @@ impl DescribeAutomationStepExecutionsError {
 }
 impl fmt::Display for DescribeAutomationStepExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAutomationStepExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAutomationStepExecutionsError::AutomationExecutionNotFound(ref cause) => cause,
-            DescribeAutomationStepExecutionsError::InternalServerError(ref cause) => cause,
-            DescribeAutomationStepExecutionsError::InvalidFilterKey(ref cause) => cause,
-            DescribeAutomationStepExecutionsError::InvalidFilterValue(ref cause) => cause,
-            DescribeAutomationStepExecutionsError::InvalidNextToken(ref cause) => cause,
+            DescribeAutomationStepExecutionsError::AutomationExecutionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAutomationStepExecutionsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAutomationStepExecutionsError::InvalidFilterKey(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAutomationStepExecutionsError::InvalidFilterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAutomationStepExecutionsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAutomationStepExecutionsError {}
 /// Errors returned by DescribeAvailablePatches
 #[derive(Debug, PartialEq)]
 pub enum DescribeAvailablePatchesError {
@@ -9384,16 +9598,12 @@ impl DescribeAvailablePatchesError {
 }
 impl fmt::Display for DescribeAvailablePatchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAvailablePatchesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAvailablePatchesError::InternalServerError(ref cause) => cause,
+            DescribeAvailablePatchesError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAvailablePatchesError {}
 /// Errors returned by DescribeDocument
 #[derive(Debug, PartialEq)]
 pub enum DescribeDocumentError {
@@ -9431,18 +9641,14 @@ impl DescribeDocumentError {
 }
 impl fmt::Display for DescribeDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDocumentError::InternalServerError(ref cause) => cause,
-            DescribeDocumentError::InvalidDocument(ref cause) => cause,
-            DescribeDocumentError::InvalidDocumentVersion(ref cause) => cause,
+            DescribeDocumentError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentError::InvalidDocumentVersion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDocumentError {}
 /// Errors returned by DescribeDocumentPermission
 #[derive(Debug, PartialEq)]
 pub enum DescribeDocumentPermissionError {
@@ -9484,18 +9690,18 @@ impl DescribeDocumentPermissionError {
 }
 impl fmt::Display for DescribeDocumentPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDocumentPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDocumentPermissionError::InternalServerError(ref cause) => cause,
-            DescribeDocumentPermissionError::InvalidDocument(ref cause) => cause,
-            DescribeDocumentPermissionError::InvalidPermissionType(ref cause) => cause,
+            DescribeDocumentPermissionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDocumentPermissionError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentPermissionError::InvalidPermissionType(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDocumentPermissionError {}
 /// Errors returned by DescribeEffectiveInstanceAssociations
 #[derive(Debug, PartialEq)]
 pub enum DescribeEffectiveInstanceAssociationsError {
@@ -9537,18 +9743,20 @@ impl DescribeEffectiveInstanceAssociationsError {
 }
 impl fmt::Display for DescribeEffectiveInstanceAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEffectiveInstanceAssociationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEffectiveInstanceAssociationsError::InternalServerError(ref cause) => cause,
-            DescribeEffectiveInstanceAssociationsError::InvalidInstanceId(ref cause) => cause,
-            DescribeEffectiveInstanceAssociationsError::InvalidNextToken(ref cause) => cause,
+            DescribeEffectiveInstanceAssociationsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEffectiveInstanceAssociationsError::InvalidInstanceId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEffectiveInstanceAssociationsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEffectiveInstanceAssociationsError {}
 /// Errors returned by DescribeEffectivePatchesForPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum DescribeEffectivePatchesForPatchBaselineError {
@@ -9599,21 +9807,23 @@ impl DescribeEffectivePatchesForPatchBaselineError {
 }
 impl fmt::Display for DescribeEffectivePatchesForPatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEffectivePatchesForPatchBaselineError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(ref cause) => cause,
-            DescribeEffectivePatchesForPatchBaselineError::InternalServerError(ref cause) => cause,
-            DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(ref cause) => cause,
+            DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEffectivePatchesForPatchBaselineError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeEffectivePatchesForPatchBaselineError::UnsupportedOperatingSystem(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEffectivePatchesForPatchBaselineError {}
 /// Errors returned by DescribeInstanceAssociationsStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceAssociationsStatusError {
@@ -9655,18 +9865,20 @@ impl DescribeInstanceAssociationsStatusError {
 }
 impl fmt::Display for DescribeInstanceAssociationsStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInstanceAssociationsStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInstanceAssociationsStatusError::InternalServerError(ref cause) => cause,
-            DescribeInstanceAssociationsStatusError::InvalidInstanceId(ref cause) => cause,
-            DescribeInstanceAssociationsStatusError::InvalidNextToken(ref cause) => cause,
+            DescribeInstanceAssociationsStatusError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInstanceAssociationsStatusError::InvalidInstanceId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInstanceAssociationsStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeInstanceAssociationsStatusError {}
 /// Errors returned by DescribeInstanceInformation
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceInformationError {
@@ -9724,22 +9936,22 @@ impl DescribeInstanceInformationError {
 }
 impl fmt::Display for DescribeInstanceInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInstanceInformationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInstanceInformationError::InternalServerError(ref cause) => cause,
-            DescribeInstanceInformationError::InvalidFilterKey(ref cause) => cause,
-            DescribeInstanceInformationError::InvalidInstanceId(ref cause) => cause,
-            DescribeInstanceInformationError::InvalidInstanceInformationFilterValue(ref cause) => {
-                cause
+            DescribeInstanceInformationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
             }
-            DescribeInstanceInformationError::InvalidNextToken(ref cause) => cause,
+            DescribeInstanceInformationError::InvalidFilterKey(ref cause) => write!(f, "{}", cause),
+            DescribeInstanceInformationError::InvalidInstanceId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInstanceInformationError::InvalidInstanceInformationFilterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInstanceInformationError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInstanceInformationError {}
 /// Errors returned by DescribeInstancePatchStates
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstancePatchStatesError {
@@ -9774,17 +9986,15 @@ impl DescribeInstancePatchStatesError {
 }
 impl fmt::Display for DescribeInstancePatchStatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInstancePatchStatesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInstancePatchStatesError::InternalServerError(ref cause) => cause,
-            DescribeInstancePatchStatesError::InvalidNextToken(ref cause) => cause,
+            DescribeInstancePatchStatesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInstancePatchStatesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInstancePatchStatesError {}
 /// Errors returned by DescribeInstancePatchStatesForPatchGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstancePatchStatesForPatchGroupError {
@@ -9826,18 +10036,20 @@ impl DescribeInstancePatchStatesForPatchGroupError {
 }
 impl fmt::Display for DescribeInstancePatchStatesForPatchGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInstancePatchStatesForPatchGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInstancePatchStatesForPatchGroupError::InternalServerError(ref cause) => cause,
-            DescribeInstancePatchStatesForPatchGroupError::InvalidFilter(ref cause) => cause,
-            DescribeInstancePatchStatesForPatchGroupError::InvalidNextToken(ref cause) => cause,
+            DescribeInstancePatchStatesForPatchGroupError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInstancePatchStatesForPatchGroupError::InvalidFilter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInstancePatchStatesForPatchGroupError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeInstancePatchStatesForPatchGroupError {}
 /// Errors returned by DescribeInstancePatches
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstancePatchesError {
@@ -9884,19 +10096,15 @@ impl DescribeInstancePatchesError {
 }
 impl fmt::Display for DescribeInstancePatchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInstancePatchesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInstancePatchesError::InternalServerError(ref cause) => cause,
-            DescribeInstancePatchesError::InvalidFilter(ref cause) => cause,
-            DescribeInstancePatchesError::InvalidInstanceId(ref cause) => cause,
-            DescribeInstancePatchesError::InvalidNextToken(ref cause) => cause,
+            DescribeInstancePatchesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeInstancePatchesError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            DescribeInstancePatchesError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            DescribeInstancePatchesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInstancePatchesError {}
 /// Errors returned by DescribeInventoryDeletions
 #[derive(Debug, PartialEq)]
 pub enum DescribeInventoryDeletionsError {
@@ -9938,18 +10146,16 @@ impl DescribeInventoryDeletionsError {
 }
 impl fmt::Display for DescribeInventoryDeletionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInventoryDeletionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInventoryDeletionsError::InternalServerError(ref cause) => cause,
-            DescribeInventoryDeletionsError::InvalidDeletionId(ref cause) => cause,
-            DescribeInventoryDeletionsError::InvalidNextToken(ref cause) => cause,
+            DescribeInventoryDeletionsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInventoryDeletionsError::InvalidDeletionId(ref cause) => write!(f, "{}", cause),
+            DescribeInventoryDeletionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInventoryDeletionsError {}
 /// Errors returned by DescribeMaintenanceWindowExecutionTaskInvocations
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionTaskInvocationsError {
@@ -9988,21 +10194,17 @@ impl DescribeMaintenanceWindowExecutionTaskInvocationsError {
 }
 impl fmt::Display for DescribeMaintenanceWindowExecutionTaskInvocationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMaintenanceWindowExecutionTaskInvocationsError {
-    fn description(&self) -> &str {
         match *self {
             DescribeMaintenanceWindowExecutionTaskInvocationsError::DoesNotExist(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DescribeMaintenanceWindowExecutionTaskInvocationsError::InternalServerError(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMaintenanceWindowExecutionTaskInvocationsError {}
 /// Errors returned by DescribeMaintenanceWindowExecutionTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionTasksError {
@@ -10037,17 +10239,17 @@ impl DescribeMaintenanceWindowExecutionTasksError {
 }
 impl fmt::Display for DescribeMaintenanceWindowExecutionTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMaintenanceWindowExecutionTasksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMaintenanceWindowExecutionTasksError::DoesNotExist(ref cause) => cause,
-            DescribeMaintenanceWindowExecutionTasksError::InternalServerError(ref cause) => cause,
+            DescribeMaintenanceWindowExecutionTasksError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMaintenanceWindowExecutionTasksError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMaintenanceWindowExecutionTasksError {}
 /// Errors returned by DescribeMaintenanceWindowExecutions
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionsError {
@@ -10075,16 +10277,14 @@ impl DescribeMaintenanceWindowExecutionsError {
 }
 impl fmt::Display for DescribeMaintenanceWindowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMaintenanceWindowExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMaintenanceWindowExecutionsError::InternalServerError(ref cause) => cause,
+            DescribeMaintenanceWindowExecutionsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMaintenanceWindowExecutionsError {}
 /// Errors returned by DescribeMaintenanceWindowSchedule
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowScheduleError {
@@ -10119,17 +10319,17 @@ impl DescribeMaintenanceWindowScheduleError {
 }
 impl fmt::Display for DescribeMaintenanceWindowScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMaintenanceWindowScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMaintenanceWindowScheduleError::DoesNotExist(ref cause) => cause,
-            DescribeMaintenanceWindowScheduleError::InternalServerError(ref cause) => cause,
+            DescribeMaintenanceWindowScheduleError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMaintenanceWindowScheduleError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMaintenanceWindowScheduleError {}
 /// Errors returned by DescribeMaintenanceWindowTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTargetsError {
@@ -10164,17 +10364,17 @@ impl DescribeMaintenanceWindowTargetsError {
 }
 impl fmt::Display for DescribeMaintenanceWindowTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMaintenanceWindowTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMaintenanceWindowTargetsError::DoesNotExist(ref cause) => cause,
-            DescribeMaintenanceWindowTargetsError::InternalServerError(ref cause) => cause,
+            DescribeMaintenanceWindowTargetsError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMaintenanceWindowTargetsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMaintenanceWindowTargetsError {}
 /// Errors returned by DescribeMaintenanceWindowTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTasksError {
@@ -10209,17 +10409,15 @@ impl DescribeMaintenanceWindowTasksError {
 }
 impl fmt::Display for DescribeMaintenanceWindowTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMaintenanceWindowTasksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMaintenanceWindowTasksError::DoesNotExist(ref cause) => cause,
-            DescribeMaintenanceWindowTasksError::InternalServerError(ref cause) => cause,
+            DescribeMaintenanceWindowTasksError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            DescribeMaintenanceWindowTasksError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMaintenanceWindowTasksError {}
 /// Errors returned by DescribeMaintenanceWindows
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowsError {
@@ -10247,16 +10445,14 @@ impl DescribeMaintenanceWindowsError {
 }
 impl fmt::Display for DescribeMaintenanceWindowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMaintenanceWindowsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMaintenanceWindowsError::InternalServerError(ref cause) => cause,
+            DescribeMaintenanceWindowsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMaintenanceWindowsError {}
 /// Errors returned by DescribeMaintenanceWindowsForTarget
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowsForTargetError {
@@ -10284,16 +10480,14 @@ impl DescribeMaintenanceWindowsForTargetError {
 }
 impl fmt::Display for DescribeMaintenanceWindowsForTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMaintenanceWindowsForTargetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMaintenanceWindowsForTargetError::InternalServerError(ref cause) => cause,
+            DescribeMaintenanceWindowsForTargetError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMaintenanceWindowsForTargetError {}
 /// Errors returned by DescribeOpsItems
 #[derive(Debug, PartialEq)]
 pub enum DescribeOpsItemsError {
@@ -10319,16 +10513,12 @@ impl DescribeOpsItemsError {
 }
 impl fmt::Display for DescribeOpsItemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOpsItemsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOpsItemsError::InternalServerError(ref cause) => cause,
+            DescribeOpsItemsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeOpsItemsError {}
 /// Errors returned by DescribeParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeParametersError {
@@ -10378,20 +10568,16 @@ impl DescribeParametersError {
 }
 impl fmt::Display for DescribeParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeParametersError::InternalServerError(ref cause) => cause,
-            DescribeParametersError::InvalidFilterKey(ref cause) => cause,
-            DescribeParametersError::InvalidFilterOption(ref cause) => cause,
-            DescribeParametersError::InvalidFilterValue(ref cause) => cause,
-            DescribeParametersError::InvalidNextToken(ref cause) => cause,
+            DescribeParametersError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeParametersError::InvalidFilterKey(ref cause) => write!(f, "{}", cause),
+            DescribeParametersError::InvalidFilterOption(ref cause) => write!(f, "{}", cause),
+            DescribeParametersError::InvalidFilterValue(ref cause) => write!(f, "{}", cause),
+            DescribeParametersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeParametersError {}
 /// Errors returned by DescribePatchBaselines
 #[derive(Debug, PartialEq)]
 pub enum DescribePatchBaselinesError {
@@ -10417,16 +10603,12 @@ impl DescribePatchBaselinesError {
 }
 impl fmt::Display for DescribePatchBaselinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePatchBaselinesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePatchBaselinesError::InternalServerError(ref cause) => cause,
+            DescribePatchBaselinesError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePatchBaselinesError {}
 /// Errors returned by DescribePatchGroupState
 #[derive(Debug, PartialEq)]
 pub enum DescribePatchGroupStateError {
@@ -10459,17 +10641,13 @@ impl DescribePatchGroupStateError {
 }
 impl fmt::Display for DescribePatchGroupStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePatchGroupStateError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePatchGroupStateError::InternalServerError(ref cause) => cause,
-            DescribePatchGroupStateError::InvalidNextToken(ref cause) => cause,
+            DescribePatchGroupStateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribePatchGroupStateError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePatchGroupStateError {}
 /// Errors returned by DescribePatchGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribePatchGroupsError {
@@ -10495,16 +10673,12 @@ impl DescribePatchGroupsError {
 }
 impl fmt::Display for DescribePatchGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePatchGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePatchGroupsError::InternalServerError(ref cause) => cause,
+            DescribePatchGroupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePatchGroupsError {}
 /// Errors returned by DescribePatchProperties
 #[derive(Debug, PartialEq)]
 pub enum DescribePatchPropertiesError {
@@ -10530,16 +10704,12 @@ impl DescribePatchPropertiesError {
 }
 impl fmt::Display for DescribePatchPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePatchPropertiesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePatchPropertiesError::InternalServerError(ref cause) => cause,
+            DescribePatchPropertiesError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePatchPropertiesError {}
 /// Errors returned by DescribeSessions
 #[derive(Debug, PartialEq)]
 pub enum DescribeSessionsError {
@@ -10575,18 +10745,14 @@ impl DescribeSessionsError {
 }
 impl fmt::Display for DescribeSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSessionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSessionsError::InternalServerError(ref cause) => cause,
-            DescribeSessionsError::InvalidFilterKey(ref cause) => cause,
-            DescribeSessionsError::InvalidNextToken(ref cause) => cause,
+            DescribeSessionsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeSessionsError::InvalidFilterKey(ref cause) => write!(f, "{}", cause),
+            DescribeSessionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSessionsError {}
 /// Errors returned by GetAutomationExecution
 #[derive(Debug, PartialEq)]
 pub enum GetAutomationExecutionError {
@@ -10619,17 +10785,15 @@ impl GetAutomationExecutionError {
 }
 impl fmt::Display for GetAutomationExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAutomationExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            GetAutomationExecutionError::AutomationExecutionNotFound(ref cause) => cause,
-            GetAutomationExecutionError::InternalServerError(ref cause) => cause,
+            GetAutomationExecutionError::AutomationExecutionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAutomationExecutionError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAutomationExecutionError {}
 /// Errors returned by GetCommandInvocation
 #[derive(Debug, PartialEq)]
 pub enum GetCommandInvocationError {
@@ -10683,20 +10847,16 @@ impl GetCommandInvocationError {
 }
 impl fmt::Display for GetCommandInvocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCommandInvocationError {
-    fn description(&self) -> &str {
         match *self {
-            GetCommandInvocationError::InternalServerError(ref cause) => cause,
-            GetCommandInvocationError::InvalidCommandId(ref cause) => cause,
-            GetCommandInvocationError::InvalidInstanceId(ref cause) => cause,
-            GetCommandInvocationError::InvalidPluginName(ref cause) => cause,
-            GetCommandInvocationError::InvocationDoesNotExist(ref cause) => cause,
+            GetCommandInvocationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetCommandInvocationError::InvalidCommandId(ref cause) => write!(f, "{}", cause),
+            GetCommandInvocationError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            GetCommandInvocationError::InvalidPluginName(ref cause) => write!(f, "{}", cause),
+            GetCommandInvocationError::InvocationDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCommandInvocationError {}
 /// Errors returned by GetConnectionStatus
 #[derive(Debug, PartialEq)]
 pub enum GetConnectionStatusError {
@@ -10722,16 +10882,12 @@ impl GetConnectionStatusError {
 }
 impl fmt::Display for GetConnectionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConnectionStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetConnectionStatusError::InternalServerError(ref cause) => cause,
+            GetConnectionStatusError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConnectionStatusError {}
 /// Errors returned by GetDefaultPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum GetDefaultPatchBaselineError {
@@ -10757,16 +10913,12 @@ impl GetDefaultPatchBaselineError {
 }
 impl fmt::Display for GetDefaultPatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDefaultPatchBaselineError {
-    fn description(&self) -> &str {
         match *self {
-            GetDefaultPatchBaselineError::InternalServerError(ref cause) => cause,
+            GetDefaultPatchBaselineError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDefaultPatchBaselineError {}
 /// Errors returned by GetDeployablePatchSnapshotForInstance
 #[derive(Debug, PartialEq)]
 pub enum GetDeployablePatchSnapshotForInstanceError {
@@ -10812,22 +10964,20 @@ impl GetDeployablePatchSnapshotForInstanceError {
 }
 impl fmt::Display for GetDeployablePatchSnapshotForInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeployablePatchSnapshotForInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeployablePatchSnapshotForInstanceError::InternalServerError(ref cause) => cause,
+            GetDeployablePatchSnapshotForInstanceError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetDeployablePatchSnapshotForInstanceError::UnsupportedFeatureRequired(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             GetDeployablePatchSnapshotForInstanceError::UnsupportedOperatingSystem(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetDeployablePatchSnapshotForInstanceError {}
 /// Errors returned by GetDocument
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentError {
@@ -10861,18 +11011,14 @@ impl GetDocumentError {
 }
 impl fmt::Display for GetDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            GetDocumentError::InternalServerError(ref cause) => cause,
-            GetDocumentError::InvalidDocument(ref cause) => cause,
-            GetDocumentError::InvalidDocumentVersion(ref cause) => cause,
+            GetDocumentError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetDocumentError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            GetDocumentError::InvalidDocumentVersion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDocumentError {}
 /// Errors returned by GetInventory
 #[derive(Debug, PartialEq)]
 pub enum GetInventoryError {
@@ -10926,22 +11072,18 @@ impl GetInventoryError {
 }
 impl fmt::Display for GetInventoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInventoryError {
-    fn description(&self) -> &str {
         match *self {
-            GetInventoryError::InternalServerError(ref cause) => cause,
-            GetInventoryError::InvalidAggregator(ref cause) => cause,
-            GetInventoryError::InvalidFilter(ref cause) => cause,
-            GetInventoryError::InvalidInventoryGroup(ref cause) => cause,
-            GetInventoryError::InvalidNextToken(ref cause) => cause,
-            GetInventoryError::InvalidResultAttribute(ref cause) => cause,
-            GetInventoryError::InvalidTypeName(ref cause) => cause,
+            GetInventoryError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetInventoryError::InvalidAggregator(ref cause) => write!(f, "{}", cause),
+            GetInventoryError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            GetInventoryError::InvalidInventoryGroup(ref cause) => write!(f, "{}", cause),
+            GetInventoryError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetInventoryError::InvalidResultAttribute(ref cause) => write!(f, "{}", cause),
+            GetInventoryError::InvalidTypeName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInventoryError {}
 /// Errors returned by GetInventorySchema
 #[derive(Debug, PartialEq)]
 pub enum GetInventorySchemaError {
@@ -10977,18 +11119,14 @@ impl GetInventorySchemaError {
 }
 impl fmt::Display for GetInventorySchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInventorySchemaError {
-    fn description(&self) -> &str {
         match *self {
-            GetInventorySchemaError::InternalServerError(ref cause) => cause,
-            GetInventorySchemaError::InvalidNextToken(ref cause) => cause,
-            GetInventorySchemaError::InvalidTypeName(ref cause) => cause,
+            GetInventorySchemaError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetInventorySchemaError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetInventorySchemaError::InvalidTypeName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInventorySchemaError {}
 /// Errors returned by GetMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowError {
@@ -11019,17 +11157,13 @@ impl GetMaintenanceWindowError {
 }
 impl fmt::Display for GetMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMaintenanceWindowError {
-    fn description(&self) -> &str {
         match *self {
-            GetMaintenanceWindowError::DoesNotExist(ref cause) => cause,
-            GetMaintenanceWindowError::InternalServerError(ref cause) => cause,
+            GetMaintenanceWindowError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetMaintenanceWindowError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMaintenanceWindowError {}
 /// Errors returned by GetMaintenanceWindowExecution
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionError {
@@ -11064,17 +11198,15 @@ impl GetMaintenanceWindowExecutionError {
 }
 impl fmt::Display for GetMaintenanceWindowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMaintenanceWindowExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            GetMaintenanceWindowExecutionError::DoesNotExist(ref cause) => cause,
-            GetMaintenanceWindowExecutionError::InternalServerError(ref cause) => cause,
+            GetMaintenanceWindowExecutionError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetMaintenanceWindowExecutionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetMaintenanceWindowExecutionError {}
 /// Errors returned by GetMaintenanceWindowExecutionTask
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionTaskError {
@@ -11109,17 +11241,17 @@ impl GetMaintenanceWindowExecutionTaskError {
 }
 impl fmt::Display for GetMaintenanceWindowExecutionTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMaintenanceWindowExecutionTaskError {
-    fn description(&self) -> &str {
         match *self {
-            GetMaintenanceWindowExecutionTaskError::DoesNotExist(ref cause) => cause,
-            GetMaintenanceWindowExecutionTaskError::InternalServerError(ref cause) => cause,
+            GetMaintenanceWindowExecutionTaskError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMaintenanceWindowExecutionTaskError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetMaintenanceWindowExecutionTaskError {}
 /// Errors returned by GetMaintenanceWindowExecutionTaskInvocation
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionTaskInvocationError {
@@ -11156,19 +11288,17 @@ impl GetMaintenanceWindowExecutionTaskInvocationError {
 }
 impl fmt::Display for GetMaintenanceWindowExecutionTaskInvocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMaintenanceWindowExecutionTaskInvocationError {
-    fn description(&self) -> &str {
         match *self {
-            GetMaintenanceWindowExecutionTaskInvocationError::DoesNotExist(ref cause) => cause,
+            GetMaintenanceWindowExecutionTaskInvocationError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetMaintenanceWindowExecutionTaskInvocationError::InternalServerError(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetMaintenanceWindowExecutionTaskInvocationError {}
 /// Errors returned by GetMaintenanceWindowTask
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowTaskError {
@@ -11201,17 +11331,13 @@ impl GetMaintenanceWindowTaskError {
 }
 impl fmt::Display for GetMaintenanceWindowTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMaintenanceWindowTaskError {
-    fn description(&self) -> &str {
         match *self {
-            GetMaintenanceWindowTaskError::DoesNotExist(ref cause) => cause,
-            GetMaintenanceWindowTaskError::InternalServerError(ref cause) => cause,
+            GetMaintenanceWindowTaskError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetMaintenanceWindowTaskError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMaintenanceWindowTaskError {}
 /// Errors returned by GetOpsItem
 #[derive(Debug, PartialEq)]
 pub enum GetOpsItemError {
@@ -11240,17 +11366,13 @@ impl GetOpsItemError {
 }
 impl fmt::Display for GetOpsItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOpsItemError {
-    fn description(&self) -> &str {
         match *self {
-            GetOpsItemError::InternalServerError(ref cause) => cause,
-            GetOpsItemError::OpsItemNotFound(ref cause) => cause,
+            GetOpsItemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetOpsItemError::OpsItemNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOpsItemError {}
 /// Errors returned by GetOpsSummary
 #[derive(Debug, PartialEq)]
 pub enum GetOpsSummaryError {
@@ -11264,6 +11386,8 @@ pub enum GetOpsSummaryError {
     InvalidNextToken(String),
     /// <p>The parameter type name is not valid.</p>
     InvalidTypeName(String),
+    /// <p>The specified sync name was not found.</p>
+    ResourceDataSyncNotFound(String),
 }
 
 impl GetOpsSummaryError {
@@ -11285,6 +11409,11 @@ impl GetOpsSummaryError {
                 "InvalidTypeNameException" => {
                     return RusotoError::Service(GetOpsSummaryError::InvalidTypeName(err.msg))
                 }
+                "ResourceDataSyncNotFoundException" => {
+                    return RusotoError::Service(GetOpsSummaryError::ResourceDataSyncNotFound(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -11294,20 +11423,17 @@ impl GetOpsSummaryError {
 }
 impl fmt::Display for GetOpsSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOpsSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetOpsSummaryError::InternalServerError(ref cause) => cause,
-            GetOpsSummaryError::InvalidAggregator(ref cause) => cause,
-            GetOpsSummaryError::InvalidFilter(ref cause) => cause,
-            GetOpsSummaryError::InvalidNextToken(ref cause) => cause,
-            GetOpsSummaryError::InvalidTypeName(ref cause) => cause,
+            GetOpsSummaryError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetOpsSummaryError::InvalidAggregator(ref cause) => write!(f, "{}", cause),
+            GetOpsSummaryError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            GetOpsSummaryError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetOpsSummaryError::InvalidTypeName(ref cause) => write!(f, "{}", cause),
+            GetOpsSummaryError::ResourceDataSyncNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOpsSummaryError {}
 /// Errors returned by GetParameter
 #[derive(Debug, PartialEq)]
 pub enum GetParameterError {
@@ -11348,19 +11474,15 @@ impl GetParameterError {
 }
 impl fmt::Display for GetParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetParameterError {
-    fn description(&self) -> &str {
         match *self {
-            GetParameterError::InternalServerError(ref cause) => cause,
-            GetParameterError::InvalidKeyId(ref cause) => cause,
-            GetParameterError::ParameterNotFound(ref cause) => cause,
-            GetParameterError::ParameterVersionNotFound(ref cause) => cause,
+            GetParameterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetParameterError::InvalidKeyId(ref cause) => write!(f, "{}", cause),
+            GetParameterError::ParameterNotFound(ref cause) => write!(f, "{}", cause),
+            GetParameterError::ParameterVersionNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetParameterError {}
 /// Errors returned by GetParameterHistory
 #[derive(Debug, PartialEq)]
 pub enum GetParameterHistoryError {
@@ -11405,19 +11527,15 @@ impl GetParameterHistoryError {
 }
 impl fmt::Display for GetParameterHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetParameterHistoryError {
-    fn description(&self) -> &str {
         match *self {
-            GetParameterHistoryError::InternalServerError(ref cause) => cause,
-            GetParameterHistoryError::InvalidKeyId(ref cause) => cause,
-            GetParameterHistoryError::InvalidNextToken(ref cause) => cause,
-            GetParameterHistoryError::ParameterNotFound(ref cause) => cause,
+            GetParameterHistoryError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetParameterHistoryError::InvalidKeyId(ref cause) => write!(f, "{}", cause),
+            GetParameterHistoryError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetParameterHistoryError::ParameterNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetParameterHistoryError {}
 /// Errors returned by GetParameters
 #[derive(Debug, PartialEq)]
 pub enum GetParametersError {
@@ -11446,17 +11564,13 @@ impl GetParametersError {
 }
 impl fmt::Display for GetParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetParametersError {
-    fn description(&self) -> &str {
         match *self {
-            GetParametersError::InternalServerError(ref cause) => cause,
-            GetParametersError::InvalidKeyId(ref cause) => cause,
+            GetParametersError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetParametersError::InvalidKeyId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetParametersError {}
 /// Errors returned by GetParametersByPath
 #[derive(Debug, PartialEq)]
 pub enum GetParametersByPathError {
@@ -11515,21 +11629,17 @@ impl GetParametersByPathError {
 }
 impl fmt::Display for GetParametersByPathError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetParametersByPathError {
-    fn description(&self) -> &str {
         match *self {
-            GetParametersByPathError::InternalServerError(ref cause) => cause,
-            GetParametersByPathError::InvalidFilterKey(ref cause) => cause,
-            GetParametersByPathError::InvalidFilterOption(ref cause) => cause,
-            GetParametersByPathError::InvalidFilterValue(ref cause) => cause,
-            GetParametersByPathError::InvalidKeyId(ref cause) => cause,
-            GetParametersByPathError::InvalidNextToken(ref cause) => cause,
+            GetParametersByPathError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetParametersByPathError::InvalidFilterKey(ref cause) => write!(f, "{}", cause),
+            GetParametersByPathError::InvalidFilterOption(ref cause) => write!(f, "{}", cause),
+            GetParametersByPathError::InvalidFilterValue(ref cause) => write!(f, "{}", cause),
+            GetParametersByPathError::InvalidKeyId(ref cause) => write!(f, "{}", cause),
+            GetParametersByPathError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetParametersByPathError {}
 /// Errors returned by GetPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum GetPatchBaselineError {
@@ -11565,18 +11675,14 @@ impl GetPatchBaselineError {
 }
 impl fmt::Display for GetPatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPatchBaselineError {
-    fn description(&self) -> &str {
         match *self {
-            GetPatchBaselineError::DoesNotExist(ref cause) => cause,
-            GetPatchBaselineError::InternalServerError(ref cause) => cause,
-            GetPatchBaselineError::InvalidResourceId(ref cause) => cause,
+            GetPatchBaselineError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetPatchBaselineError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetPatchBaselineError::InvalidResourceId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPatchBaselineError {}
 /// Errors returned by GetPatchBaselineForPatchGroup
 #[derive(Debug, PartialEq)]
 pub enum GetPatchBaselineForPatchGroupError {
@@ -11604,16 +11710,14 @@ impl GetPatchBaselineForPatchGroupError {
 }
 impl fmt::Display for GetPatchBaselineForPatchGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPatchBaselineForPatchGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetPatchBaselineForPatchGroupError::InternalServerError(ref cause) => cause,
+            GetPatchBaselineForPatchGroupError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetPatchBaselineForPatchGroupError {}
 /// Errors returned by GetServiceSetting
 #[derive(Debug, PartialEq)]
 pub enum GetServiceSettingError {
@@ -11646,17 +11750,13 @@ impl GetServiceSettingError {
 }
 impl fmt::Display for GetServiceSettingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceSettingError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceSettingError::InternalServerError(ref cause) => cause,
-            GetServiceSettingError::ServiceSettingNotFound(ref cause) => cause,
+            GetServiceSettingError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetServiceSettingError::ServiceSettingNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServiceSettingError {}
 /// Errors returned by LabelParameterVersion
 #[derive(Debug, PartialEq)]
 pub enum LabelParameterVersionError {
@@ -11710,20 +11810,20 @@ impl LabelParameterVersionError {
 }
 impl fmt::Display for LabelParameterVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for LabelParameterVersionError {
-    fn description(&self) -> &str {
         match *self {
-            LabelParameterVersionError::InternalServerError(ref cause) => cause,
-            LabelParameterVersionError::ParameterNotFound(ref cause) => cause,
-            LabelParameterVersionError::ParameterVersionLabelLimitExceeded(ref cause) => cause,
-            LabelParameterVersionError::ParameterVersionNotFound(ref cause) => cause,
-            LabelParameterVersionError::TooManyUpdates(ref cause) => cause,
+            LabelParameterVersionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            LabelParameterVersionError::ParameterNotFound(ref cause) => write!(f, "{}", cause),
+            LabelParameterVersionError::ParameterVersionLabelLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            LabelParameterVersionError::ParameterVersionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            LabelParameterVersionError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for LabelParameterVersionError {}
 /// Errors returned by ListAssociationVersions
 #[derive(Debug, PartialEq)]
 pub enum ListAssociationVersionsError {
@@ -11763,18 +11863,16 @@ impl ListAssociationVersionsError {
 }
 impl fmt::Display for ListAssociationVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssociationVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAssociationVersionsError::AssociationDoesNotExist(ref cause) => cause,
-            ListAssociationVersionsError::InternalServerError(ref cause) => cause,
-            ListAssociationVersionsError::InvalidNextToken(ref cause) => cause,
+            ListAssociationVersionsError::AssociationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAssociationVersionsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListAssociationVersionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAssociationVersionsError {}
 /// Errors returned by ListAssociations
 #[derive(Debug, PartialEq)]
 pub enum ListAssociationsError {
@@ -11805,17 +11903,13 @@ impl ListAssociationsError {
 }
 impl fmt::Display for ListAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssociationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAssociationsError::InternalServerError(ref cause) => cause,
-            ListAssociationsError::InvalidNextToken(ref cause) => cause,
+            ListAssociationsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListAssociationsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAssociationsError {}
 /// Errors returned by ListCommandInvocations
 #[derive(Debug, PartialEq)]
 pub enum ListCommandInvocationsError {
@@ -11869,20 +11963,16 @@ impl ListCommandInvocationsError {
 }
 impl fmt::Display for ListCommandInvocationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCommandInvocationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListCommandInvocationsError::InternalServerError(ref cause) => cause,
-            ListCommandInvocationsError::InvalidCommandId(ref cause) => cause,
-            ListCommandInvocationsError::InvalidFilterKey(ref cause) => cause,
-            ListCommandInvocationsError::InvalidInstanceId(ref cause) => cause,
-            ListCommandInvocationsError::InvalidNextToken(ref cause) => cause,
+            ListCommandInvocationsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListCommandInvocationsError::InvalidCommandId(ref cause) => write!(f, "{}", cause),
+            ListCommandInvocationsError::InvalidFilterKey(ref cause) => write!(f, "{}", cause),
+            ListCommandInvocationsError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            ListCommandInvocationsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCommandInvocationsError {}
 /// Errors returned by ListCommands
 #[derive(Debug, PartialEq)]
 pub enum ListCommandsError {
@@ -11926,20 +12016,16 @@ impl ListCommandsError {
 }
 impl fmt::Display for ListCommandsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCommandsError {
-    fn description(&self) -> &str {
         match *self {
-            ListCommandsError::InternalServerError(ref cause) => cause,
-            ListCommandsError::InvalidCommandId(ref cause) => cause,
-            ListCommandsError::InvalidFilterKey(ref cause) => cause,
-            ListCommandsError::InvalidInstanceId(ref cause) => cause,
-            ListCommandsError::InvalidNextToken(ref cause) => cause,
+            ListCommandsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListCommandsError::InvalidCommandId(ref cause) => write!(f, "{}", cause),
+            ListCommandsError::InvalidFilterKey(ref cause) => write!(f, "{}", cause),
+            ListCommandsError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            ListCommandsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCommandsError {}
 /// Errors returned by ListComplianceItems
 #[derive(Debug, PartialEq)]
 pub enum ListComplianceItemsError {
@@ -11991,20 +12077,16 @@ impl ListComplianceItemsError {
 }
 impl fmt::Display for ListComplianceItemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListComplianceItemsError {
-    fn description(&self) -> &str {
         match *self {
-            ListComplianceItemsError::InternalServerError(ref cause) => cause,
-            ListComplianceItemsError::InvalidFilter(ref cause) => cause,
-            ListComplianceItemsError::InvalidNextToken(ref cause) => cause,
-            ListComplianceItemsError::InvalidResourceId(ref cause) => cause,
-            ListComplianceItemsError::InvalidResourceType(ref cause) => cause,
+            ListComplianceItemsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListComplianceItemsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListComplianceItemsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListComplianceItemsError::InvalidResourceId(ref cause) => write!(f, "{}", cause),
+            ListComplianceItemsError::InvalidResourceType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListComplianceItemsError {}
 /// Errors returned by ListComplianceSummaries
 #[derive(Debug, PartialEq)]
 pub enum ListComplianceSummariesError {
@@ -12044,18 +12126,14 @@ impl ListComplianceSummariesError {
 }
 impl fmt::Display for ListComplianceSummariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListComplianceSummariesError {
-    fn description(&self) -> &str {
         match *self {
-            ListComplianceSummariesError::InternalServerError(ref cause) => cause,
-            ListComplianceSummariesError::InvalidFilter(ref cause) => cause,
-            ListComplianceSummariesError::InvalidNextToken(ref cause) => cause,
+            ListComplianceSummariesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListComplianceSummariesError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListComplianceSummariesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListComplianceSummariesError {}
 /// Errors returned by ListDocumentVersions
 #[derive(Debug, PartialEq)]
 pub enum ListDocumentVersionsError {
@@ -12095,18 +12173,14 @@ impl ListDocumentVersionsError {
 }
 impl fmt::Display for ListDocumentVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDocumentVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDocumentVersionsError::InternalServerError(ref cause) => cause,
-            ListDocumentVersionsError::InvalidDocument(ref cause) => cause,
-            ListDocumentVersionsError::InvalidNextToken(ref cause) => cause,
+            ListDocumentVersionsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListDocumentVersionsError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            ListDocumentVersionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDocumentVersionsError {}
 /// Errors returned by ListDocuments
 #[derive(Debug, PartialEq)]
 pub enum ListDocumentsError {
@@ -12140,18 +12214,14 @@ impl ListDocumentsError {
 }
 impl fmt::Display for ListDocumentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDocumentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDocumentsError::InternalServerError(ref cause) => cause,
-            ListDocumentsError::InvalidFilterKey(ref cause) => cause,
-            ListDocumentsError::InvalidNextToken(ref cause) => cause,
+            ListDocumentsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListDocumentsError::InvalidFilterKey(ref cause) => write!(f, "{}", cause),
+            ListDocumentsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDocumentsError {}
 /// Errors returned by ListInventoryEntries
 #[derive(Debug, PartialEq)]
 pub enum ListInventoryEntriesError {
@@ -12203,20 +12273,16 @@ impl ListInventoryEntriesError {
 }
 impl fmt::Display for ListInventoryEntriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInventoryEntriesError {
-    fn description(&self) -> &str {
         match *self {
-            ListInventoryEntriesError::InternalServerError(ref cause) => cause,
-            ListInventoryEntriesError::InvalidFilter(ref cause) => cause,
-            ListInventoryEntriesError::InvalidInstanceId(ref cause) => cause,
-            ListInventoryEntriesError::InvalidNextToken(ref cause) => cause,
-            ListInventoryEntriesError::InvalidTypeName(ref cause) => cause,
+            ListInventoryEntriesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListInventoryEntriesError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListInventoryEntriesError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            ListInventoryEntriesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListInventoryEntriesError::InvalidTypeName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInventoryEntriesError {}
 /// Errors returned by ListResourceComplianceSummaries
 #[derive(Debug, PartialEq)]
 pub enum ListResourceComplianceSummariesError {
@@ -12258,18 +12324,20 @@ impl ListResourceComplianceSummariesError {
 }
 impl fmt::Display for ListResourceComplianceSummariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourceComplianceSummariesError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourceComplianceSummariesError::InternalServerError(ref cause) => cause,
-            ListResourceComplianceSummariesError::InvalidFilter(ref cause) => cause,
-            ListResourceComplianceSummariesError::InvalidNextToken(ref cause) => cause,
+            ListResourceComplianceSummariesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListResourceComplianceSummariesError::InvalidFilter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListResourceComplianceSummariesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListResourceComplianceSummariesError {}
 /// Errors returned by ListResourceDataSync
 #[derive(Debug, PartialEq)]
 pub enum ListResourceDataSyncError {
@@ -12277,6 +12345,8 @@ pub enum ListResourceDataSyncError {
     InternalServerError(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
+    /// <p>The specified sync configuration is invalid.</p>
+    ResourceDataSyncInvalidConfiguration(String),
 }
 
 impl ListResourceDataSyncError {
@@ -12293,6 +12363,11 @@ impl ListResourceDataSyncError {
                         err.msg,
                     ))
                 }
+                "ResourceDataSyncInvalidConfigurationException" => {
+                    return RusotoError::Service(
+                        ListResourceDataSyncError::ResourceDataSyncInvalidConfiguration(err.msg),
+                    )
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -12302,17 +12377,16 @@ impl ListResourceDataSyncError {
 }
 impl fmt::Display for ListResourceDataSyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourceDataSyncError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourceDataSyncError::InternalServerError(ref cause) => cause,
-            ListResourceDataSyncError::InvalidNextToken(ref cause) => cause,
+            ListResourceDataSyncError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListResourceDataSyncError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListResourceDataSyncError::ResourceDataSyncInvalidConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListResourceDataSyncError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -12352,18 +12426,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
-            ListTagsForResourceError::InvalidResourceId(ref cause) => cause,
-            ListTagsForResourceError::InvalidResourceType(ref cause) => cause,
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidResourceId(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidResourceType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ModifyDocumentPermission
 #[derive(Debug, PartialEq)]
 pub enum ModifyDocumentPermissionError {
@@ -12417,20 +12487,22 @@ impl ModifyDocumentPermissionError {
 }
 impl fmt::Display for ModifyDocumentPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDocumentPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyDocumentPermissionError::DocumentLimitExceeded(ref cause) => cause,
-            ModifyDocumentPermissionError::DocumentPermissionLimit(ref cause) => cause,
-            ModifyDocumentPermissionError::InternalServerError(ref cause) => cause,
-            ModifyDocumentPermissionError::InvalidDocument(ref cause) => cause,
-            ModifyDocumentPermissionError::InvalidPermissionType(ref cause) => cause,
+            ModifyDocumentPermissionError::DocumentLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDocumentPermissionError::DocumentPermissionLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDocumentPermissionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ModifyDocumentPermissionError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            ModifyDocumentPermissionError::InvalidPermissionType(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyDocumentPermissionError {}
 /// Errors returned by PutComplianceItems
 #[derive(Debug, PartialEq)]
 pub enum PutComplianceItemsError {
@@ -12498,22 +12570,20 @@ impl PutComplianceItemsError {
 }
 impl fmt::Display for PutComplianceItemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutComplianceItemsError {
-    fn description(&self) -> &str {
         match *self {
-            PutComplianceItemsError::ComplianceTypeCountLimitExceeded(ref cause) => cause,
-            PutComplianceItemsError::InternalServerError(ref cause) => cause,
-            PutComplianceItemsError::InvalidItemContent(ref cause) => cause,
-            PutComplianceItemsError::InvalidResourceId(ref cause) => cause,
-            PutComplianceItemsError::InvalidResourceType(ref cause) => cause,
-            PutComplianceItemsError::ItemSizeLimitExceeded(ref cause) => cause,
-            PutComplianceItemsError::TotalSizeLimitExceeded(ref cause) => cause,
+            PutComplianceItemsError::ComplianceTypeCountLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutComplianceItemsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PutComplianceItemsError::InvalidItemContent(ref cause) => write!(f, "{}", cause),
+            PutComplianceItemsError::InvalidResourceId(ref cause) => write!(f, "{}", cause),
+            PutComplianceItemsError::InvalidResourceType(ref cause) => write!(f, "{}", cause),
+            PutComplianceItemsError::ItemSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutComplianceItemsError::TotalSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutComplianceItemsError {}
 /// Errors returned by PutInventory
 #[derive(Debug, PartialEq)]
 pub enum PutInventoryError {
@@ -12602,27 +12672,25 @@ impl PutInventoryError {
 }
 impl fmt::Display for PutInventoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutInventoryError {
-    fn description(&self) -> &str {
         match *self {
-            PutInventoryError::CustomSchemaCountLimitExceeded(ref cause) => cause,
-            PutInventoryError::InternalServerError(ref cause) => cause,
-            PutInventoryError::InvalidInstanceId(ref cause) => cause,
-            PutInventoryError::InvalidInventoryItemContext(ref cause) => cause,
-            PutInventoryError::InvalidItemContent(ref cause) => cause,
-            PutInventoryError::InvalidTypeName(ref cause) => cause,
-            PutInventoryError::ItemContentMismatch(ref cause) => cause,
-            PutInventoryError::ItemSizeLimitExceeded(ref cause) => cause,
-            PutInventoryError::SubTypeCountLimitExceeded(ref cause) => cause,
-            PutInventoryError::TotalSizeLimitExceeded(ref cause) => cause,
-            PutInventoryError::UnsupportedInventoryItemContext(ref cause) => cause,
-            PutInventoryError::UnsupportedInventorySchemaVersion(ref cause) => cause,
+            PutInventoryError::CustomSchemaCountLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::InvalidInventoryItemContext(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::InvalidItemContent(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::InvalidTypeName(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::ItemContentMismatch(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::ItemSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::SubTypeCountLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::TotalSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::UnsupportedInventoryItemContext(ref cause) => write!(f, "{}", cause),
+            PutInventoryError::UnsupportedInventorySchemaVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutInventoryError {}
 /// Errors returned by PutParameter
 #[derive(Debug, PartialEq)]
 pub enum PutParameterError {
@@ -12724,30 +12792,28 @@ impl PutParameterError {
 }
 impl fmt::Display for PutParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutParameterError {
-    fn description(&self) -> &str {
         match *self {
-            PutParameterError::HierarchyLevelLimitExceeded(ref cause) => cause,
-            PutParameterError::HierarchyTypeMismatch(ref cause) => cause,
-            PutParameterError::IncompatiblePolicy(ref cause) => cause,
-            PutParameterError::InternalServerError(ref cause) => cause,
-            PutParameterError::InvalidAllowedPattern(ref cause) => cause,
-            PutParameterError::InvalidKeyId(ref cause) => cause,
-            PutParameterError::InvalidPolicyAttribute(ref cause) => cause,
-            PutParameterError::InvalidPolicyType(ref cause) => cause,
-            PutParameterError::ParameterAlreadyExists(ref cause) => cause,
-            PutParameterError::ParameterLimitExceeded(ref cause) => cause,
-            PutParameterError::ParameterMaxVersionLimitExceeded(ref cause) => cause,
-            PutParameterError::ParameterPatternMismatch(ref cause) => cause,
-            PutParameterError::PoliciesLimitExceeded(ref cause) => cause,
-            PutParameterError::TooManyUpdates(ref cause) => cause,
-            PutParameterError::UnsupportedParameterType(ref cause) => cause,
+            PutParameterError::HierarchyLevelLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutParameterError::HierarchyTypeMismatch(ref cause) => write!(f, "{}", cause),
+            PutParameterError::IncompatiblePolicy(ref cause) => write!(f, "{}", cause),
+            PutParameterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PutParameterError::InvalidAllowedPattern(ref cause) => write!(f, "{}", cause),
+            PutParameterError::InvalidKeyId(ref cause) => write!(f, "{}", cause),
+            PutParameterError::InvalidPolicyAttribute(ref cause) => write!(f, "{}", cause),
+            PutParameterError::InvalidPolicyType(ref cause) => write!(f, "{}", cause),
+            PutParameterError::ParameterAlreadyExists(ref cause) => write!(f, "{}", cause),
+            PutParameterError::ParameterLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutParameterError::ParameterMaxVersionLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutParameterError::ParameterPatternMismatch(ref cause) => write!(f, "{}", cause),
+            PutParameterError::PoliciesLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutParameterError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
+            PutParameterError::UnsupportedParameterType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutParameterError {}
 /// Errors returned by RegisterDefaultPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum RegisterDefaultPatchBaselineError {
@@ -12789,18 +12855,18 @@ impl RegisterDefaultPatchBaselineError {
 }
 impl fmt::Display for RegisterDefaultPatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterDefaultPatchBaselineError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterDefaultPatchBaselineError::DoesNotExist(ref cause) => cause,
-            RegisterDefaultPatchBaselineError::InternalServerError(ref cause) => cause,
-            RegisterDefaultPatchBaselineError::InvalidResourceId(ref cause) => cause,
+            RegisterDefaultPatchBaselineError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            RegisterDefaultPatchBaselineError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterDefaultPatchBaselineError::InvalidResourceId(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RegisterDefaultPatchBaselineError {}
 /// Errors returned by RegisterPatchBaselineForPatchGroup
 #[derive(Debug, PartialEq)]
 pub enum RegisterPatchBaselineForPatchGroupError {
@@ -12856,20 +12922,26 @@ impl RegisterPatchBaselineForPatchGroupError {
 }
 impl fmt::Display for RegisterPatchBaselineForPatchGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterPatchBaselineForPatchGroupError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterPatchBaselineForPatchGroupError::AlreadyExists(ref cause) => cause,
-            RegisterPatchBaselineForPatchGroupError::DoesNotExist(ref cause) => cause,
-            RegisterPatchBaselineForPatchGroupError::InternalServerError(ref cause) => cause,
-            RegisterPatchBaselineForPatchGroupError::InvalidResourceId(ref cause) => cause,
-            RegisterPatchBaselineForPatchGroupError::ResourceLimitExceeded(ref cause) => cause,
+            RegisterPatchBaselineForPatchGroupError::AlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterPatchBaselineForPatchGroupError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterPatchBaselineForPatchGroupError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterPatchBaselineForPatchGroupError::InvalidResourceId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterPatchBaselineForPatchGroupError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RegisterPatchBaselineForPatchGroupError {}
 /// Errors returned by RegisterTargetWithMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum RegisterTargetWithMaintenanceWindowError {
@@ -12920,21 +12992,23 @@ impl RegisterTargetWithMaintenanceWindowError {
 }
 impl fmt::Display for RegisterTargetWithMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterTargetWithMaintenanceWindowError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterTargetWithMaintenanceWindowError::DoesNotExist(ref cause) => cause,
-            RegisterTargetWithMaintenanceWindowError::IdempotentParameterMismatch(ref cause) => {
-                cause
+            RegisterTargetWithMaintenanceWindowError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
             }
-            RegisterTargetWithMaintenanceWindowError::InternalServerError(ref cause) => cause,
-            RegisterTargetWithMaintenanceWindowError::ResourceLimitExceeded(ref cause) => cause,
+            RegisterTargetWithMaintenanceWindowError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterTargetWithMaintenanceWindowError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterTargetWithMaintenanceWindowError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RegisterTargetWithMaintenanceWindowError {}
 /// Errors returned by RegisterTaskWithMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum RegisterTaskWithMaintenanceWindowError {
@@ -12992,20 +13066,26 @@ impl RegisterTaskWithMaintenanceWindowError {
 }
 impl fmt::Display for RegisterTaskWithMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterTaskWithMaintenanceWindowError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterTaskWithMaintenanceWindowError::DoesNotExist(ref cause) => cause,
-            RegisterTaskWithMaintenanceWindowError::FeatureNotAvailable(ref cause) => cause,
-            RegisterTaskWithMaintenanceWindowError::IdempotentParameterMismatch(ref cause) => cause,
-            RegisterTaskWithMaintenanceWindowError::InternalServerError(ref cause) => cause,
-            RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(ref cause) => cause,
+            RegisterTaskWithMaintenanceWindowError::DoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterTaskWithMaintenanceWindowError::FeatureNotAvailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterTaskWithMaintenanceWindowError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterTaskWithMaintenanceWindowError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RegisterTaskWithMaintenanceWindowError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -13052,19 +13132,15 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromResourceError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromResourceError::InternalServerError(ref cause) => cause,
-            RemoveTagsFromResourceError::InvalidResourceId(ref cause) => cause,
-            RemoveTagsFromResourceError::InvalidResourceType(ref cause) => cause,
-            RemoveTagsFromResourceError::TooManyUpdates(ref cause) => cause,
+            RemoveTagsFromResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromResourceError::InvalidResourceId(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromResourceError::InvalidResourceType(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromResourceError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsFromResourceError {}
 /// Errors returned by ResetServiceSetting
 #[derive(Debug, PartialEq)]
 pub enum ResetServiceSettingError {
@@ -13102,18 +13178,14 @@ impl ResetServiceSettingError {
 }
 impl fmt::Display for ResetServiceSettingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetServiceSettingError {
-    fn description(&self) -> &str {
         match *self {
-            ResetServiceSettingError::InternalServerError(ref cause) => cause,
-            ResetServiceSettingError::ServiceSettingNotFound(ref cause) => cause,
-            ResetServiceSettingError::TooManyUpdates(ref cause) => cause,
+            ResetServiceSettingError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ResetServiceSettingError::ServiceSettingNotFound(ref cause) => write!(f, "{}", cause),
+            ResetServiceSettingError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResetServiceSettingError {}
 /// Errors returned by ResumeSession
 #[derive(Debug, PartialEq)]
 pub enum ResumeSessionError {
@@ -13142,17 +13214,13 @@ impl ResumeSessionError {
 }
 impl fmt::Display for ResumeSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResumeSessionError {
-    fn description(&self) -> &str {
         match *self {
-            ResumeSessionError::DoesNotExist(ref cause) => cause,
-            ResumeSessionError::InternalServerError(ref cause) => cause,
+            ResumeSessionError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            ResumeSessionError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResumeSessionError {}
 /// Errors returned by SendAutomationSignal
 #[derive(Debug, PartialEq)]
 pub enum SendAutomationSignalError {
@@ -13199,19 +13267,17 @@ impl SendAutomationSignalError {
 }
 impl fmt::Display for SendAutomationSignalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendAutomationSignalError {
-    fn description(&self) -> &str {
         match *self {
-            SendAutomationSignalError::AutomationExecutionNotFound(ref cause) => cause,
-            SendAutomationSignalError::AutomationStepNotFound(ref cause) => cause,
-            SendAutomationSignalError::InternalServerError(ref cause) => cause,
-            SendAutomationSignalError::InvalidAutomationSignal(ref cause) => cause,
+            SendAutomationSignalError::AutomationExecutionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendAutomationSignalError::AutomationStepNotFound(ref cause) => write!(f, "{}", cause),
+            SendAutomationSignalError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            SendAutomationSignalError::InvalidAutomationSignal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendAutomationSignalError {}
 /// Errors returned by SendCommand
 #[derive(Debug, PartialEq)]
 pub enum SendCommandError {
@@ -13287,26 +13353,22 @@ impl SendCommandError {
 }
 impl fmt::Display for SendCommandError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendCommandError {
-    fn description(&self) -> &str {
         match *self {
-            SendCommandError::DuplicateInstanceId(ref cause) => cause,
-            SendCommandError::InternalServerError(ref cause) => cause,
-            SendCommandError::InvalidDocument(ref cause) => cause,
-            SendCommandError::InvalidDocumentVersion(ref cause) => cause,
-            SendCommandError::InvalidInstanceId(ref cause) => cause,
-            SendCommandError::InvalidNotificationConfig(ref cause) => cause,
-            SendCommandError::InvalidOutputFolder(ref cause) => cause,
-            SendCommandError::InvalidParameters(ref cause) => cause,
-            SendCommandError::InvalidRole(ref cause) => cause,
-            SendCommandError::MaxDocumentSizeExceeded(ref cause) => cause,
-            SendCommandError::UnsupportedPlatformType(ref cause) => cause,
+            SendCommandError::DuplicateInstanceId(ref cause) => write!(f, "{}", cause),
+            SendCommandError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            SendCommandError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            SendCommandError::InvalidDocumentVersion(ref cause) => write!(f, "{}", cause),
+            SendCommandError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            SendCommandError::InvalidNotificationConfig(ref cause) => write!(f, "{}", cause),
+            SendCommandError::InvalidOutputFolder(ref cause) => write!(f, "{}", cause),
+            SendCommandError::InvalidParameters(ref cause) => write!(f, "{}", cause),
+            SendCommandError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            SendCommandError::MaxDocumentSizeExceeded(ref cause) => write!(f, "{}", cause),
+            SendCommandError::UnsupportedPlatformType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendCommandError {}
 /// Errors returned by StartAssociationsOnce
 #[derive(Debug, PartialEq)]
 pub enum StartAssociationsOnceError {
@@ -13339,17 +13401,15 @@ impl StartAssociationsOnceError {
 }
 impl fmt::Display for StartAssociationsOnceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartAssociationsOnceError {
-    fn description(&self) -> &str {
         match *self {
-            StartAssociationsOnceError::AssociationDoesNotExist(ref cause) => cause,
-            StartAssociationsOnceError::InvalidAssociation(ref cause) => cause,
+            StartAssociationsOnceError::AssociationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAssociationsOnceError::InvalidAssociation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartAssociationsOnceError {}
 /// Errors returned by StartAutomationExecution
 #[derive(Debug, PartialEq)]
 pub enum StartAutomationExecutionError {
@@ -13419,22 +13479,28 @@ impl StartAutomationExecutionError {
 }
 impl fmt::Display for StartAutomationExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartAutomationExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StartAutomationExecutionError::AutomationDefinitionNotFound(ref cause) => cause,
-            StartAutomationExecutionError::AutomationDefinitionVersionNotFound(ref cause) => cause,
-            StartAutomationExecutionError::AutomationExecutionLimitExceeded(ref cause) => cause,
-            StartAutomationExecutionError::IdempotentParameterMismatch(ref cause) => cause,
-            StartAutomationExecutionError::InternalServerError(ref cause) => cause,
-            StartAutomationExecutionError::InvalidAutomationExecutionParameters(ref cause) => cause,
-            StartAutomationExecutionError::InvalidTarget(ref cause) => cause,
+            StartAutomationExecutionError::AutomationDefinitionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAutomationExecutionError::AutomationDefinitionVersionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAutomationExecutionError::AutomationExecutionLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAutomationExecutionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAutomationExecutionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartAutomationExecutionError::InvalidAutomationExecutionParameters(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAutomationExecutionError::InvalidTarget(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartAutomationExecutionError {}
 /// Errors returned by StartSession
 #[derive(Debug, PartialEq)]
 pub enum StartSessionError {
@@ -13468,18 +13534,14 @@ impl StartSessionError {
 }
 impl fmt::Display for StartSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartSessionError {
-    fn description(&self) -> &str {
         match *self {
-            StartSessionError::InternalServerError(ref cause) => cause,
-            StartSessionError::InvalidDocument(ref cause) => cause,
-            StartSessionError::TargetNotConnected(ref cause) => cause,
+            StartSessionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartSessionError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            StartSessionError::TargetNotConnected(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartSessionError {}
 /// Errors returned by StopAutomationExecution
 #[derive(Debug, PartialEq)]
 pub enum StopAutomationExecutionError {
@@ -13519,18 +13581,18 @@ impl StopAutomationExecutionError {
 }
 impl fmt::Display for StopAutomationExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopAutomationExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StopAutomationExecutionError::AutomationExecutionNotFound(ref cause) => cause,
-            StopAutomationExecutionError::InternalServerError(ref cause) => cause,
-            StopAutomationExecutionError::InvalidAutomationStatusUpdate(ref cause) => cause,
+            StopAutomationExecutionError::AutomationExecutionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopAutomationExecutionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StopAutomationExecutionError::InvalidAutomationStatusUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StopAutomationExecutionError {}
 /// Errors returned by TerminateSession
 #[derive(Debug, PartialEq)]
 pub enum TerminateSessionError {
@@ -13561,17 +13623,13 @@ impl TerminateSessionError {
 }
 impl fmt::Display for TerminateSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TerminateSessionError {
-    fn description(&self) -> &str {
         match *self {
-            TerminateSessionError::DoesNotExist(ref cause) => cause,
-            TerminateSessionError::InternalServerError(ref cause) => cause,
+            TerminateSessionError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            TerminateSessionError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TerminateSessionError {}
 /// Errors returned by UpdateAssociation
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssociationError {
@@ -13662,27 +13720,25 @@ impl UpdateAssociationError {
 }
 impl fmt::Display for UpdateAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAssociationError::AssociationDoesNotExist(ref cause) => cause,
-            UpdateAssociationError::AssociationVersionLimitExceeded(ref cause) => cause,
-            UpdateAssociationError::InternalServerError(ref cause) => cause,
-            UpdateAssociationError::InvalidAssociationVersion(ref cause) => cause,
-            UpdateAssociationError::InvalidDocument(ref cause) => cause,
-            UpdateAssociationError::InvalidDocumentVersion(ref cause) => cause,
-            UpdateAssociationError::InvalidOutputLocation(ref cause) => cause,
-            UpdateAssociationError::InvalidParameters(ref cause) => cause,
-            UpdateAssociationError::InvalidSchedule(ref cause) => cause,
-            UpdateAssociationError::InvalidTarget(ref cause) => cause,
-            UpdateAssociationError::InvalidUpdate(ref cause) => cause,
-            UpdateAssociationError::TooManyUpdates(ref cause) => cause,
+            UpdateAssociationError::AssociationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationError::AssociationVersionLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAssociationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationError::InvalidAssociationVersion(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationError::InvalidDocumentVersion(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationError::InvalidOutputLocation(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationError::InvalidParameters(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationError::InvalidSchedule(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationError::InvalidTarget(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationError::InvalidUpdate(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAssociationError {}
 /// Errors returned by UpdateAssociationStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssociationStatusError {
@@ -13743,21 +13799,19 @@ impl UpdateAssociationStatusError {
 }
 impl fmt::Display for UpdateAssociationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAssociationStatusError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAssociationStatusError::AssociationDoesNotExist(ref cause) => cause,
-            UpdateAssociationStatusError::InternalServerError(ref cause) => cause,
-            UpdateAssociationStatusError::InvalidDocument(ref cause) => cause,
-            UpdateAssociationStatusError::InvalidInstanceId(ref cause) => cause,
-            UpdateAssociationStatusError::StatusUnchanged(ref cause) => cause,
-            UpdateAssociationStatusError::TooManyUpdates(ref cause) => cause,
+            UpdateAssociationStatusError::AssociationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAssociationStatusError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationStatusError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationStatusError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationStatusError::StatusUnchanged(ref cause) => write!(f, "{}", cause),
+            UpdateAssociationStatusError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAssociationStatusError {}
 /// Errors returned by UpdateDocument
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentError {
@@ -13842,25 +13896,21 @@ impl UpdateDocumentError {
 }
 impl fmt::Display for UpdateDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDocumentError::DocumentVersionLimitExceeded(ref cause) => cause,
-            UpdateDocumentError::DuplicateDocumentContent(ref cause) => cause,
-            UpdateDocumentError::DuplicateDocumentVersionName(ref cause) => cause,
-            UpdateDocumentError::InternalServerError(ref cause) => cause,
-            UpdateDocumentError::InvalidDocument(ref cause) => cause,
-            UpdateDocumentError::InvalidDocumentContent(ref cause) => cause,
-            UpdateDocumentError::InvalidDocumentOperation(ref cause) => cause,
-            UpdateDocumentError::InvalidDocumentSchemaVersion(ref cause) => cause,
-            UpdateDocumentError::InvalidDocumentVersion(ref cause) => cause,
-            UpdateDocumentError::MaxDocumentSizeExceeded(ref cause) => cause,
+            UpdateDocumentError::DocumentVersionLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::DuplicateDocumentContent(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::DuplicateDocumentVersionName(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::InvalidDocumentContent(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::InvalidDocumentOperation(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::InvalidDocumentSchemaVersion(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::InvalidDocumentVersion(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentError::MaxDocumentSizeExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDocumentError {}
 /// Errors returned by UpdateDocumentDefaultVersion
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentDefaultVersionError {
@@ -13909,19 +13959,21 @@ impl UpdateDocumentDefaultVersionError {
 }
 impl fmt::Display for UpdateDocumentDefaultVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDocumentDefaultVersionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDocumentDefaultVersionError::InternalServerError(ref cause) => cause,
-            UpdateDocumentDefaultVersionError::InvalidDocument(ref cause) => cause,
-            UpdateDocumentDefaultVersionError::InvalidDocumentSchemaVersion(ref cause) => cause,
-            UpdateDocumentDefaultVersionError::InvalidDocumentVersion(ref cause) => cause,
+            UpdateDocumentDefaultVersionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDocumentDefaultVersionError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentDefaultVersionError::InvalidDocumentSchemaVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDocumentDefaultVersionError::InvalidDocumentVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateDocumentDefaultVersionError {}
 /// Errors returned by UpdateMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowError {
@@ -13954,17 +14006,13 @@ impl UpdateMaintenanceWindowError {
 }
 impl fmt::Display for UpdateMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMaintenanceWindowError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMaintenanceWindowError::DoesNotExist(ref cause) => cause,
-            UpdateMaintenanceWindowError::InternalServerError(ref cause) => cause,
+            UpdateMaintenanceWindowError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateMaintenanceWindowError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMaintenanceWindowError {}
 /// Errors returned by UpdateMaintenanceWindowTarget
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowTargetError {
@@ -13999,17 +14047,15 @@ impl UpdateMaintenanceWindowTargetError {
 }
 impl fmt::Display for UpdateMaintenanceWindowTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMaintenanceWindowTargetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMaintenanceWindowTargetError::DoesNotExist(ref cause) => cause,
-            UpdateMaintenanceWindowTargetError::InternalServerError(ref cause) => cause,
+            UpdateMaintenanceWindowTargetError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateMaintenanceWindowTargetError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateMaintenanceWindowTargetError {}
 /// Errors returned by UpdateMaintenanceWindowTask
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowTaskError {
@@ -14044,17 +14090,15 @@ impl UpdateMaintenanceWindowTaskError {
 }
 impl fmt::Display for UpdateMaintenanceWindowTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMaintenanceWindowTaskError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMaintenanceWindowTaskError::DoesNotExist(ref cause) => cause,
-            UpdateMaintenanceWindowTaskError::InternalServerError(ref cause) => cause,
+            UpdateMaintenanceWindowTaskError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateMaintenanceWindowTaskError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateMaintenanceWindowTaskError {}
 /// Errors returned by UpdateManagedInstanceRole
 #[derive(Debug, PartialEq)]
 pub enum UpdateManagedInstanceRoleError {
@@ -14087,17 +14131,15 @@ impl UpdateManagedInstanceRoleError {
 }
 impl fmt::Display for UpdateManagedInstanceRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateManagedInstanceRoleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateManagedInstanceRoleError::InternalServerError(ref cause) => cause,
-            UpdateManagedInstanceRoleError::InvalidInstanceId(ref cause) => cause,
+            UpdateManagedInstanceRoleError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateManagedInstanceRoleError::InvalidInstanceId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateManagedInstanceRoleError {}
 /// Errors returned by UpdateOpsItem
 #[derive(Debug, PartialEq)]
 pub enum UpdateOpsItemError {
@@ -14143,20 +14185,16 @@ impl UpdateOpsItemError {
 }
 impl fmt::Display for UpdateOpsItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateOpsItemError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateOpsItemError::InternalServerError(ref cause) => cause,
-            UpdateOpsItemError::OpsItemAlreadyExists(ref cause) => cause,
-            UpdateOpsItemError::OpsItemInvalidParameter(ref cause) => cause,
-            UpdateOpsItemError::OpsItemLimitExceeded(ref cause) => cause,
-            UpdateOpsItemError::OpsItemNotFound(ref cause) => cause,
+            UpdateOpsItemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateOpsItemError::OpsItemAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateOpsItemError::OpsItemInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateOpsItemError::OpsItemLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateOpsItemError::OpsItemNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateOpsItemError {}
 /// Errors returned by UpdatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePatchBaselineError {
@@ -14187,17 +14225,74 @@ impl UpdatePatchBaselineError {
 }
 impl fmt::Display for UpdatePatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePatchBaselineError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePatchBaselineError::DoesNotExist(ref cause) => cause,
-            UpdatePatchBaselineError::InternalServerError(ref cause) => cause,
+            UpdatePatchBaselineError::DoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdatePatchBaselineError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePatchBaselineError {}
+/// Errors returned by UpdateResourceDataSync
+#[derive(Debug, PartialEq)]
+pub enum UpdateResourceDataSyncError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>Another <code>UpdateResourceDataSync</code> request is being processed. Wait a few minutes and try again.</p>
+    ResourceDataSyncConflict(String),
+    /// <p>The specified sync configuration is invalid.</p>
+    ResourceDataSyncInvalidConfiguration(String),
+    /// <p>The specified sync name was not found.</p>
+    ResourceDataSyncNotFound(String),
+}
+
+impl UpdateResourceDataSyncError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceDataSyncError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(UpdateResourceDataSyncError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ResourceDataSyncConflictException" => {
+                    return RusotoError::Service(
+                        UpdateResourceDataSyncError::ResourceDataSyncConflict(err.msg),
+                    )
+                }
+                "ResourceDataSyncInvalidConfigurationException" => {
+                    return RusotoError::Service(
+                        UpdateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(err.msg),
+                    )
+                }
+                "ResourceDataSyncNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateResourceDataSyncError::ResourceDataSyncNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateResourceDataSyncError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateResourceDataSyncError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateResourceDataSyncError::ResourceDataSyncConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateResourceDataSyncError::ResourceDataSyncNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateResourceDataSyncError {}
 /// Errors returned by UpdateServiceSetting
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceSettingError {
@@ -14235,18 +14330,14 @@ impl UpdateServiceSettingError {
 }
 impl fmt::Display for UpdateServiceSettingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServiceSettingError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServiceSettingError::InternalServerError(ref cause) => cause,
-            UpdateServiceSettingError::ServiceSettingNotFound(ref cause) => cause,
-            UpdateServiceSettingError::TooManyUpdates(ref cause) => cause,
+            UpdateServiceSettingError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateServiceSettingError::ServiceSettingNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateServiceSettingError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServiceSettingError {}
 /// Trait representing the capabilities of the Amazon SSM API. Amazon SSM clients implement this trait.
 pub trait Ssm {
     /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
@@ -14291,7 +14382,7 @@ pub trait Ssm {
         input: CreateDocumentRequest,
     ) -> RusotoFuture<CreateDocumentResult, CreateDocumentError>;
 
-    /// <p>Creates a new maintenance window.</p>
+    /// <p><p>Creates a new maintenance window.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
     fn create_maintenance_window(
         &self,
         input: CreateMaintenanceWindowRequest,
@@ -14309,7 +14400,7 @@ pub trait Ssm {
         input: CreatePatchBaselineRequest,
     ) -> RusotoFuture<CreatePatchBaselineResult, CreatePatchBaselineError>;
 
-    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync.html">Configuring Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p><p>A resource data sync helps you view data from multiple sources in a single location. Systems Manager offers two types of resource data sync: <code>SyncToDestination</code> and <code>SyncFromSource</code>.</p> <p>You can configure Systems Manager Inventory to use the <code>SyncToDestination</code> type to synchronize Inventory data from multiple AWS Regions to a single Amazon S3 bucket. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync.html">Configuring Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>You can configure Systems Manager Explorer to use the <code>SyncToDestination</code> type to synchronize operational work items (OpsItems) and operational data (OpsData) from multiple AWS Regions to a single Amazon S3 bucket. You can also configure Explorer to use the <code>SyncFromSource</code> type. This type synchronizes OpsItems and OpsData from multiple AWS accounts and Regions by using AWS Organizations. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/Explorer-resource-data-sync.html">Setting Up Explorer to Display Data from Multiple Accounts and Regions</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>A resource data sync is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data. To check the status of a sync, use the <a>ListResourceDataSync</a>.</p> <note> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. </p> </note></p>
     fn create_resource_data_sync(
         &self,
         input: CreateResourceDataSyncRequest,
@@ -14363,7 +14454,7 @@ pub trait Ssm {
         input: DeletePatchBaselineRequest,
     ) -> RusotoFuture<DeletePatchBaselineResult, DeletePatchBaselineError>;
 
-    /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>
+    /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to data on managed instances are no longer synced to or from the target. Deleting a sync configuration does not delete data.</p>
     fn delete_resource_data_sync(
         &self,
         input: DeleteResourceDataSyncRequest,
@@ -14585,7 +14676,7 @@ pub trait Ssm {
         input: DescribeOpsItemsRequest,
     ) -> RusotoFuture<DescribeOpsItemsResponse, DescribeOpsItemsError>;
 
-    /// <p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
+    /// <p><p>Get information about a parameter.</p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
     fn describe_parameters(
         &self,
         input: DescribeParametersRequest,
@@ -14735,7 +14826,7 @@ pub trait Ssm {
         input: GetParametersRequest,
     ) -> RusotoFuture<GetParametersResult, GetParametersError>;
 
-    /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a> in the <i>AWS Systems Manager User Guide</i>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
+    /// <p><p>Retrieve information about one or more parameters in a specific hierarchy. </p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
     fn get_parameters_by_path(
         &self,
         input: GetParametersByPathRequest,
@@ -14933,7 +15024,7 @@ pub trait Ssm {
         input: StartAutomationExecutionRequest,
     ) -> RusotoFuture<StartAutomationExecutionResult, StartAutomationExecutionError>;
 
-    /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html"> Install the Session Manager Plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note></p>
+    /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html"> Install the Session Manager Plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>AWS Tools for PowerShell usage: Start-SSMSession is not currently supported by AWS Tools for PowerShell on Windows local machines.</p> </note></p>
     fn start_session(
         &self,
         input: StartSessionRequest,
@@ -14951,7 +15042,7 @@ pub trait Ssm {
         input: TerminateSessionRequest,
     ) -> RusotoFuture<TerminateSessionResponse, TerminateSessionError>;
 
-    /// <p><p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p> <important> <p>When you update an association, the association immediately runs against the specified targets.</p> </important></p>
+    /// <p><p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output. </p> <p>In order to call this API action, your IAM user account, group, or role must be configured with permission to call the <a>DescribeAssociation</a> API action. If you don&#39;t have permission to call DescribeAssociation, then you receive the following error: <code>An error occurred (AccessDeniedException) when calling the UpdateAssociation operation: User: &lt;user<em>arn&gt; is not authorized to perform: ssm:DescribeAssociation on resource: &lt;resource</em>arn&gt;</code> </p> <important> <p>When you update an association, the association immediately runs against the specified targets.</p> </important></p>
     fn update_association(
         &self,
         input: UpdateAssociationRequest,
@@ -14975,7 +15066,7 @@ pub trait Ssm {
         input: UpdateDocumentDefaultVersionRequest,
     ) -> RusotoFuture<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError>;
 
-    /// <p>Updates an existing maintenance window. Only specified parameters are modified.</p>
+    /// <p><p>Updates an existing maintenance window. Only specified parameters are modified.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
     fn update_maintenance_window(
         &self,
         input: UpdateMaintenanceWindowRequest,
@@ -15010,6 +15101,12 @@ pub trait Ssm {
         &self,
         input: UpdatePatchBaselineRequest,
     ) -> RusotoFuture<UpdatePatchBaselineResult, UpdatePatchBaselineError>;
+
+    /// <p>Update a resource data sync. After you create a resource data sync for a Region, you can't change the account options for that sync. For example, if you create a sync in the us-east-2 (Ohio) Region and you choose the Include only the current account option, you can't edit that sync later and choose the Include all accounts from my AWS Organizations configuration option. Instead, you must delete the first resource data sync, and create a new one.</p>
+    fn update_resource_data_sync(
+        &self,
+        input: UpdateResourceDataSyncRequest,
+    ) -> RusotoFuture<UpdateResourceDataSyncResult, UpdateResourceDataSyncError>;
 
     /// <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>GetServiceSetting</a> API action to view the current value. Or, use the <a>ResetServiceSetting</a> to change the value back to the original value defined by the AWS service team.</p> <p>Update the service setting for the account. </p>
     fn update_service_setting(
@@ -15051,6 +15148,14 @@ impl SsmClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> SsmClient {
         SsmClient { client, region }
+    }
+}
+
+impl fmt::Debug for SsmClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SsmClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -15257,7 +15362,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Creates a new maintenance window.</p>
+    /// <p><p>Creates a new maintenance window.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
     fn create_maintenance_window(
         &self,
         input: CreateMaintenanceWindowRequest,
@@ -15340,7 +15445,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync.html">Configuring Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p><p>A resource data sync helps you view data from multiple sources in a single location. Systems Manager offers two types of resource data sync: <code>SyncToDestination</code> and <code>SyncFromSource</code>.</p> <p>You can configure Systems Manager Inventory to use the <code>SyncToDestination</code> type to synchronize Inventory data from multiple AWS Regions to a single Amazon S3 bucket. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync.html">Configuring Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>You can configure Systems Manager Explorer to use the <code>SyncToDestination</code> type to synchronize operational work items (OpsItems) and operational data (OpsData) from multiple AWS Regions to a single Amazon S3 bucket. You can also configure Explorer to use the <code>SyncFromSource</code> type. This type synchronizes OpsItems and OpsData from multiple AWS accounts and Regions by using AWS Organizations. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/Explorer-resource-data-sync.html">Setting Up Explorer to Display Data from Multiple Accounts and Regions</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>A resource data sync is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data. To check the status of a sync, use the <a>ListResourceDataSync</a>.</p> <note> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. </p> </note></p>
     fn create_resource_data_sync(
         &self,
         input: CreateResourceDataSyncRequest,
@@ -15596,7 +15701,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>
+    /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to data on managed instances are no longer synced to or from the target. Deleting a sync configuration does not delete data.</p>
     fn delete_resource_data_sync(
         &self,
         input: DeleteResourceDataSyncRequest,
@@ -16516,7 +16621,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
+    /// <p><p>Get information about a parameter.</p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
     fn describe_parameters(
         &self,
         input: DescribeParametersRequest,
@@ -17201,7 +17306,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a> in the <i>AWS Systems Manager User Guide</i>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
+    /// <p><p>Retrieve information about one or more parameters in a specific hierarchy. </p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
     fn get_parameters_by_path(
         &self,
         input: GetParametersByPathRequest,
@@ -18112,7 +18217,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html"> Install the Session Manager Plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note></p>
+    /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html"> Install the Session Manager Plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>AWS Tools for PowerShell usage: Start-SSMSession is not currently supported by AWS Tools for PowerShell on Windows local machines.</p> </note></p>
     fn start_session(
         &self,
         input: StartSessionRequest,
@@ -18196,7 +18301,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p><p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p> <important> <p>When you update an association, the association immediately runs against the specified targets.</p> </important></p>
+    /// <p><p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output. </p> <p>In order to call this API action, your IAM user account, group, or role must be configured with permission to call the <a>DescribeAssociation</a> API action. If you don&#39;t have permission to call DescribeAssociation, then you receive the following error: <code>An error occurred (AccessDeniedException) when calling the UpdateAssociation operation: User: &lt;user<em>arn&gt; is not authorized to perform: ssm:DescribeAssociation on resource: &lt;resource</em>arn&gt;</code> </p> <important> <p>When you update an association, the association immediately runs against the specified targets.</p> </important></p>
     fn update_association(
         &self,
         input: UpdateAssociationRequest,
@@ -18306,7 +18411,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Updates an existing maintenance window. Only specified parameters are modified.</p>
+    /// <p><p>Updates an existing maintenance window. Only specified parameters are modified.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
     fn update_maintenance_window(
         &self,
         input: UpdateMaintenanceWindowRequest,
@@ -18461,6 +18566,34 @@ impl Ssm for SsmClient {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
                         Err(UpdatePatchBaselineError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Update a resource data sync. After you create a resource data sync for a Region, you can't change the account options for that sync. For example, if you create a sync in the us-east-2 (Ohio) Region and you choose the Include only the current account option, you can't edit that sync later and choose the Include all accounts from my AWS Organizations configuration option. Instead, you must delete the first resource data sync, and create a new one.</p>
+    fn update_resource_data_sync(
+        &self,
+        input: UpdateResourceDataSyncRequest,
+    ) -> RusotoFuture<UpdateResourceDataSyncResult, UpdateResourceDataSyncError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.UpdateResourceDataSync");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateResourceDataSyncResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateResourceDataSyncError::from_response(response))
                     }),
                 )
             }

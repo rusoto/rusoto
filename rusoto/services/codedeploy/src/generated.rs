@@ -2396,22 +2396,28 @@ impl AddTagsToOnPremisesInstancesError {
 }
 impl fmt::Display for AddTagsToOnPremisesInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToOnPremisesInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(ref cause) => cause,
-            AddTagsToOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,
-            AddTagsToOnPremisesInstancesError::InstanceNotRegistered(ref cause) => cause,
-            AddTagsToOnPremisesInstancesError::InvalidInstanceName(ref cause) => cause,
-            AddTagsToOnPremisesInstancesError::InvalidTag(ref cause) => cause,
-            AddTagsToOnPremisesInstancesError::TagLimitExceeded(ref cause) => cause,
-            AddTagsToOnPremisesInstancesError::TagRequired(ref cause) => cause,
+            AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddTagsToOnPremisesInstancesError::InstanceNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddTagsToOnPremisesInstancesError::InstanceNotRegistered(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddTagsToOnPremisesInstancesError::InvalidInstanceName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddTagsToOnPremisesInstancesError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            AddTagsToOnPremisesInstancesError::TagLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddTagsToOnPremisesInstancesError::TagRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToOnPremisesInstancesError {}
 /// Errors returned by BatchGetApplicationRevisions
 #[derive(Debug, PartialEq)]
 pub enum BatchGetApplicationRevisionsError {
@@ -2474,21 +2480,27 @@ impl BatchGetApplicationRevisionsError {
 }
 impl fmt::Display for BatchGetApplicationRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetApplicationRevisionsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetApplicationRevisionsError::ApplicationDoesNotExist(ref cause) => cause,
-            BatchGetApplicationRevisionsError::ApplicationNameRequired(ref cause) => cause,
-            BatchGetApplicationRevisionsError::BatchLimitExceeded(ref cause) => cause,
-            BatchGetApplicationRevisionsError::InvalidApplicationName(ref cause) => cause,
-            BatchGetApplicationRevisionsError::InvalidRevision(ref cause) => cause,
-            BatchGetApplicationRevisionsError::RevisionRequired(ref cause) => cause,
+            BatchGetApplicationRevisionsError::ApplicationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetApplicationRevisionsError::ApplicationNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetApplicationRevisionsError::BatchLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetApplicationRevisionsError::InvalidApplicationName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetApplicationRevisionsError::InvalidRevision(ref cause) => write!(f, "{}", cause),
+            BatchGetApplicationRevisionsError::RevisionRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchGetApplicationRevisionsError {}
 /// Errors returned by BatchGetApplications
 #[derive(Debug, PartialEq)]
 pub enum BatchGetApplicationsError {
@@ -2535,19 +2547,15 @@ impl BatchGetApplicationsError {
 }
 impl fmt::Display for BatchGetApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetApplicationsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetApplicationsError::ApplicationDoesNotExist(ref cause) => cause,
-            BatchGetApplicationsError::ApplicationNameRequired(ref cause) => cause,
-            BatchGetApplicationsError::BatchLimitExceeded(ref cause) => cause,
-            BatchGetApplicationsError::InvalidApplicationName(ref cause) => cause,
+            BatchGetApplicationsError::ApplicationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            BatchGetApplicationsError::ApplicationNameRequired(ref cause) => write!(f, "{}", cause),
+            BatchGetApplicationsError::BatchLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchGetApplicationsError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetApplicationsError {}
 /// Errors returned by BatchGetDeploymentGroups
 #[derive(Debug, PartialEq)]
 pub enum BatchGetDeploymentGroupsError {
@@ -2615,22 +2623,30 @@ impl BatchGetDeploymentGroupsError {
 }
 impl fmt::Display for BatchGetDeploymentGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetDeploymentGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetDeploymentGroupsError::ApplicationDoesNotExist(ref cause) => cause,
-            BatchGetDeploymentGroupsError::ApplicationNameRequired(ref cause) => cause,
-            BatchGetDeploymentGroupsError::BatchLimitExceeded(ref cause) => cause,
-            BatchGetDeploymentGroupsError::DeploymentConfigDoesNotExist(ref cause) => cause,
-            BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(ref cause) => cause,
-            BatchGetDeploymentGroupsError::InvalidApplicationName(ref cause) => cause,
-            BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(ref cause) => cause,
+            BatchGetDeploymentGroupsError::ApplicationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentGroupsError::ApplicationNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentGroupsError::BatchLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchGetDeploymentGroupsError::DeploymentConfigDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentGroupsError::InvalidApplicationName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchGetDeploymentGroupsError {}
 /// Errors returned by BatchGetDeploymentInstances
 #[derive(Debug, PartialEq)]
 pub enum BatchGetDeploymentInstancesError {
@@ -2700,22 +2716,32 @@ impl BatchGetDeploymentInstancesError {
 }
 impl fmt::Display for BatchGetDeploymentInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetDeploymentInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetDeploymentInstancesError::BatchLimitExceeded(ref cause) => cause,
-            BatchGetDeploymentInstancesError::DeploymentDoesNotExist(ref cause) => cause,
-            BatchGetDeploymentInstancesError::DeploymentIdRequired(ref cause) => cause,
-            BatchGetDeploymentInstancesError::InstanceIdRequired(ref cause) => cause,
-            BatchGetDeploymentInstancesError::InvalidComputePlatform(ref cause) => cause,
-            BatchGetDeploymentInstancesError::InvalidDeploymentId(ref cause) => cause,
-            BatchGetDeploymentInstancesError::InvalidInstanceName(ref cause) => cause,
+            BatchGetDeploymentInstancesError::BatchLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentInstancesError::DeploymentDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentInstancesError::DeploymentIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentInstancesError::InstanceIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentInstancesError::InvalidComputePlatform(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentInstancesError::InvalidDeploymentId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentInstancesError::InvalidInstanceName(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchGetDeploymentInstancesError {}
 /// Errors returned by BatchGetDeploymentTargets
 #[derive(Debug, PartialEq)]
 pub enum BatchGetDeploymentTargetsError {
@@ -2790,23 +2816,35 @@ impl BatchGetDeploymentTargetsError {
 }
 impl fmt::Display for BatchGetDeploymentTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetDeploymentTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetDeploymentTargetsError::DeploymentDoesNotExist(ref cause) => cause,
-            BatchGetDeploymentTargetsError::DeploymentIdRequired(ref cause) => cause,
-            BatchGetDeploymentTargetsError::DeploymentNotStarted(ref cause) => cause,
-            BatchGetDeploymentTargetsError::DeploymentTargetDoesNotExist(ref cause) => cause,
-            BatchGetDeploymentTargetsError::DeploymentTargetIdRequired(ref cause) => cause,
-            BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(ref cause) => cause,
-            BatchGetDeploymentTargetsError::InvalidDeploymentId(ref cause) => cause,
-            BatchGetDeploymentTargetsError::InvalidDeploymentTargetId(ref cause) => cause,
+            BatchGetDeploymentTargetsError::DeploymentDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentTargetsError::DeploymentIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentTargetsError::DeploymentNotStarted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentTargetsError::DeploymentTargetDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentTargetsError::DeploymentTargetIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentTargetsError::InvalidDeploymentId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentTargetsError::InvalidDeploymentTargetId(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchGetDeploymentTargetsError {}
 /// Errors returned by BatchGetDeployments
 #[derive(Debug, PartialEq)]
 pub enum BatchGetDeploymentsError {
@@ -2846,18 +2884,14 @@ impl BatchGetDeploymentsError {
 }
 impl fmt::Display for BatchGetDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetDeploymentsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetDeploymentsError::BatchLimitExceeded(ref cause) => cause,
-            BatchGetDeploymentsError::DeploymentIdRequired(ref cause) => cause,
-            BatchGetDeploymentsError::InvalidDeploymentId(ref cause) => cause,
+            BatchGetDeploymentsError::BatchLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchGetDeploymentsError::DeploymentIdRequired(ref cause) => write!(f, "{}", cause),
+            BatchGetDeploymentsError::InvalidDeploymentId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetDeploymentsError {}
 /// Errors returned by BatchGetOnPremisesInstances
 #[derive(Debug, PartialEq)]
 pub enum BatchGetOnPremisesInstancesError {
@@ -2899,18 +2933,20 @@ impl BatchGetOnPremisesInstancesError {
 }
 impl fmt::Display for BatchGetOnPremisesInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetOnPremisesInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetOnPremisesInstancesError::BatchLimitExceeded(ref cause) => cause,
-            BatchGetOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,
-            BatchGetOnPremisesInstancesError::InvalidInstanceName(ref cause) => cause,
+            BatchGetOnPremisesInstancesError::BatchLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetOnPremisesInstancesError::InstanceNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetOnPremisesInstancesError::InvalidInstanceName(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchGetOnPremisesInstancesError {}
 /// Errors returned by ContinueDeployment
 #[derive(Debug, PartialEq)]
 pub enum ContinueDeploymentError {
@@ -2985,23 +3021,25 @@ impl ContinueDeploymentError {
 }
 impl fmt::Display for ContinueDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ContinueDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            ContinueDeploymentError::DeploymentAlreadyCompleted(ref cause) => cause,
-            ContinueDeploymentError::DeploymentDoesNotExist(ref cause) => cause,
-            ContinueDeploymentError::DeploymentIdRequired(ref cause) => cause,
-            ContinueDeploymentError::DeploymentIsNotInReadyState(ref cause) => cause,
-            ContinueDeploymentError::InvalidDeploymentId(ref cause) => cause,
-            ContinueDeploymentError::InvalidDeploymentStatus(ref cause) => cause,
-            ContinueDeploymentError::InvalidDeploymentWaitType(ref cause) => cause,
-            ContinueDeploymentError::UnsupportedActionForDeploymentType(ref cause) => cause,
+            ContinueDeploymentError::DeploymentAlreadyCompleted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ContinueDeploymentError::DeploymentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ContinueDeploymentError::DeploymentIdRequired(ref cause) => write!(f, "{}", cause),
+            ContinueDeploymentError::DeploymentIsNotInReadyState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ContinueDeploymentError::InvalidDeploymentId(ref cause) => write!(f, "{}", cause),
+            ContinueDeploymentError::InvalidDeploymentStatus(ref cause) => write!(f, "{}", cause),
+            ContinueDeploymentError::InvalidDeploymentWaitType(ref cause) => write!(f, "{}", cause),
+            ContinueDeploymentError::UnsupportedActionForDeploymentType(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ContinueDeploymentError {}
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
@@ -3060,21 +3098,17 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApplicationError::ApplicationAlreadyExists(ref cause) => cause,
-            CreateApplicationError::ApplicationLimitExceeded(ref cause) => cause,
-            CreateApplicationError::ApplicationNameRequired(ref cause) => cause,
-            CreateApplicationError::InvalidApplicationName(ref cause) => cause,
-            CreateApplicationError::InvalidComputePlatform(ref cause) => cause,
-            CreateApplicationError::InvalidTagsToAdd(ref cause) => cause,
+            CreateApplicationError::ApplicationAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::ApplicationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::ApplicationNameRequired(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::InvalidComputePlatform(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::InvalidTagsToAdd(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApplicationError {}
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
@@ -3244,38 +3278,40 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDeploymentError::ApplicationDoesNotExist(ref cause) => cause,
-            CreateDeploymentError::ApplicationNameRequired(ref cause) => cause,
-            CreateDeploymentError::DeploymentConfigDoesNotExist(ref cause) => cause,
-            CreateDeploymentError::DeploymentGroupDoesNotExist(ref cause) => cause,
-            CreateDeploymentError::DeploymentGroupNameRequired(ref cause) => cause,
-            CreateDeploymentError::DeploymentLimitExceeded(ref cause) => cause,
-            CreateDeploymentError::DescriptionTooLong(ref cause) => cause,
-            CreateDeploymentError::InvalidApplicationName(ref cause) => cause,
-            CreateDeploymentError::InvalidAutoRollbackConfig(ref cause) => cause,
-            CreateDeploymentError::InvalidAutoScalingGroup(ref cause) => cause,
-            CreateDeploymentError::InvalidDeploymentConfigName(ref cause) => cause,
-            CreateDeploymentError::InvalidDeploymentGroupName(ref cause) => cause,
-            CreateDeploymentError::InvalidFileExistsBehavior(ref cause) => cause,
-            CreateDeploymentError::InvalidGitHubAccountToken(ref cause) => cause,
-            CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(ref cause) => cause,
-            CreateDeploymentError::InvalidLoadBalancerInfo(ref cause) => cause,
-            CreateDeploymentError::InvalidRevision(ref cause) => cause,
-            CreateDeploymentError::InvalidRole(ref cause) => cause,
-            CreateDeploymentError::InvalidTargetInstances(ref cause) => cause,
-            CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(ref cause) => cause,
-            CreateDeploymentError::RevisionDoesNotExist(ref cause) => cause,
-            CreateDeploymentError::RevisionRequired(ref cause) => cause,
-            CreateDeploymentError::Throttling(ref cause) => cause,
+            CreateDeploymentError::ApplicationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::ApplicationNameRequired(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::DeploymentConfigDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentError::DeploymentGroupDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::DeploymentGroupNameRequired(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::DeploymentLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::DescriptionTooLong(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidAutoRollbackConfig(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidAutoScalingGroup(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidDeploymentConfigName(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidDeploymentGroupName(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidFileExistsBehavior(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidGitHubAccountToken(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentError::InvalidLoadBalancerInfo(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidRevision(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidTargetInstances(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentError::RevisionDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::RevisionRequired(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDeploymentError {}
 /// Errors returned by CreateDeploymentConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentConfigError {
@@ -3343,22 +3379,32 @@ impl CreateDeploymentConfigError {
 }
 impl fmt::Display for CreateDeploymentConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDeploymentConfigError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDeploymentConfigError::DeploymentConfigAlreadyExists(ref cause) => cause,
-            CreateDeploymentConfigError::DeploymentConfigLimitExceeded(ref cause) => cause,
-            CreateDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,
-            CreateDeploymentConfigError::InvalidComputePlatform(ref cause) => cause,
-            CreateDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
-            CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(ref cause) => cause,
-            CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(ref cause) => cause,
+            CreateDeploymentConfigError::DeploymentConfigAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentConfigError::DeploymentConfigLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentConfigError::InvalidComputePlatform(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateDeploymentConfigError {}
 /// Errors returned by CreateDeploymentGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentGroupError {
@@ -3591,47 +3637,79 @@ impl CreateDeploymentGroupError {
 }
 impl fmt::Display for CreateDeploymentGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDeploymentGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDeploymentGroupError::AlarmsLimitExceeded(ref cause) => cause,
-            CreateDeploymentGroupError::ApplicationDoesNotExist(ref cause) => cause,
-            CreateDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,
-            CreateDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => cause,
-            CreateDeploymentGroupError::DeploymentGroupAlreadyExists(ref cause) => cause,
-            CreateDeploymentGroupError::DeploymentGroupLimitExceeded(ref cause) => cause,
-            CreateDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
-            CreateDeploymentGroupError::ECSServiceMappingLimitExceeded(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidAlarmConfig(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidAutoScalingGroup(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidEC2TagCombination(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidECSService(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidInput(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidRole(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidTag(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidTagsToAdd(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidTargetGroupPair(ref cause) => cause,
-            CreateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
-            CreateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,
-            CreateDeploymentGroupError::RoleRequired(ref cause) => cause,
-            CreateDeploymentGroupError::TagSetListLimitExceeded(ref cause) => cause,
-            CreateDeploymentGroupError::Throttling(ref cause) => cause,
-            CreateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,
+            CreateDeploymentGroupError::AlarmsLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::ApplicationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::ApplicationNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::DeploymentGroupAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::DeploymentGroupLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::ECSServiceMappingLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::InvalidAlarmConfig(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::InvalidAutoScalingGroup(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidEC2TagCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::InvalidEC2Tag(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidECSService(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidTagsToAdd(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidTargetGroupPair(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidTriggerConfig(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::RoleRequired(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::TagSetListLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDeploymentGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateDeploymentGroupError {}
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
@@ -3669,18 +3747,14 @@ impl DeleteApplicationError {
 }
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationError::ApplicationNameRequired(ref cause) => cause,
-            DeleteApplicationError::InvalidApplicationName(ref cause) => cause,
-            DeleteApplicationError::InvalidRole(ref cause) => cause,
+            DeleteApplicationError::ApplicationNameRequired(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::InvalidRole(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApplicationError {}
 /// Errors returned by DeleteDeploymentConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeploymentConfigError {
@@ -3727,19 +3801,19 @@ impl DeleteDeploymentConfigError {
 }
 impl fmt::Display for DeleteDeploymentConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDeploymentConfigError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDeploymentConfigError::DeploymentConfigInUse(ref cause) => cause,
-            DeleteDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,
-            DeleteDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
-            DeleteDeploymentConfigError::InvalidOperation(ref cause) => cause,
+            DeleteDeploymentConfigError::DeploymentConfigInUse(ref cause) => write!(f, "{}", cause),
+            DeleteDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDeploymentConfigError::InvalidOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDeploymentConfigError {}
 /// Errors returned by DeleteDeploymentGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeploymentGroupError {
@@ -3791,20 +3865,22 @@ impl DeleteDeploymentGroupError {
 }
 impl fmt::Display for DeleteDeploymentGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDeploymentGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,
-            DeleteDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
-            DeleteDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
-            DeleteDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
-            DeleteDeploymentGroupError::InvalidRole(ref cause) => cause,
+            DeleteDeploymentGroupError::ApplicationNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDeploymentGroupError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
+            DeleteDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDeploymentGroupError::InvalidRole(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDeploymentGroupError {}
 /// Errors returned by DeleteGitHubAccountToken
 #[derive(Debug, PartialEq)]
 pub enum DeleteGitHubAccountTokenError {
@@ -3858,20 +3934,24 @@ impl DeleteGitHubAccountTokenError {
 }
 impl fmt::Display for DeleteGitHubAccountTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGitHubAccountTokenError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(ref cause) => cause,
-            DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(ref cause) => cause,
-            DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(ref cause) => cause,
-            DeleteGitHubAccountTokenError::OperationNotSupported(ref cause) => cause,
-            DeleteGitHubAccountTokenError::ResourceValidation(ref cause) => cause,
+            DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteGitHubAccountTokenError::OperationNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteGitHubAccountTokenError::ResourceValidation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGitHubAccountTokenError {}
 /// Errors returned by DeregisterOnPremisesInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterOnPremisesInstanceError {
@@ -3906,17 +3986,17 @@ impl DeregisterOnPremisesInstanceError {
 }
 impl fmt::Display for DeregisterOnPremisesInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterOnPremisesInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,
-            DeregisterOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,
+            DeregisterOnPremisesInstanceError::InstanceNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterOnPremisesInstanceError::InvalidInstanceName(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeregisterOnPremisesInstanceError {}
 /// Errors returned by GetApplication
 #[derive(Debug, PartialEq)]
 pub enum GetApplicationError {
@@ -3956,18 +4036,14 @@ impl GetApplicationError {
 }
 impl fmt::Display for GetApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            GetApplicationError::ApplicationDoesNotExist(ref cause) => cause,
-            GetApplicationError::ApplicationNameRequired(ref cause) => cause,
-            GetApplicationError::InvalidApplicationName(ref cause) => cause,
+            GetApplicationError::ApplicationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetApplicationError::ApplicationNameRequired(ref cause) => write!(f, "{}", cause),
+            GetApplicationError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetApplicationError {}
 /// Errors returned by GetApplicationRevision
 #[derive(Debug, PartialEq)]
 pub enum GetApplicationRevisionError {
@@ -4028,21 +4104,23 @@ impl GetApplicationRevisionError {
 }
 impl fmt::Display for GetApplicationRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetApplicationRevisionError {
-    fn description(&self) -> &str {
         match *self {
-            GetApplicationRevisionError::ApplicationDoesNotExist(ref cause) => cause,
-            GetApplicationRevisionError::ApplicationNameRequired(ref cause) => cause,
-            GetApplicationRevisionError::InvalidApplicationName(ref cause) => cause,
-            GetApplicationRevisionError::InvalidRevision(ref cause) => cause,
-            GetApplicationRevisionError::RevisionDoesNotExist(ref cause) => cause,
-            GetApplicationRevisionError::RevisionRequired(ref cause) => cause,
+            GetApplicationRevisionError::ApplicationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetApplicationRevisionError::ApplicationNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetApplicationRevisionError::InvalidApplicationName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetApplicationRevisionError::InvalidRevision(ref cause) => write!(f, "{}", cause),
+            GetApplicationRevisionError::RevisionDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetApplicationRevisionError::RevisionRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetApplicationRevisionError {}
 /// Errors returned by GetDeployment
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentError {
@@ -4078,18 +4156,14 @@ impl GetDeploymentError {
 }
 impl fmt::Display for GetDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeploymentError::DeploymentDoesNotExist(ref cause) => cause,
-            GetDeploymentError::DeploymentIdRequired(ref cause) => cause,
-            GetDeploymentError::InvalidDeploymentId(ref cause) => cause,
+            GetDeploymentError::DeploymentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetDeploymentError::DeploymentIdRequired(ref cause) => write!(f, "{}", cause),
+            GetDeploymentError::InvalidDeploymentId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeploymentError {}
 /// Errors returned by GetDeploymentConfig
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentConfigError {
@@ -4136,19 +4210,21 @@ impl GetDeploymentConfigError {
 }
 impl fmt::Display for GetDeploymentConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeploymentConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeploymentConfigError::DeploymentConfigDoesNotExist(ref cause) => cause,
-            GetDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,
-            GetDeploymentConfigError::InvalidComputePlatform(ref cause) => cause,
-            GetDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
+            GetDeploymentConfigError::DeploymentConfigDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDeploymentConfigError::InvalidComputePlatform(ref cause) => write!(f, "{}", cause),
+            GetDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetDeploymentConfigError {}
 /// Errors returned by GetDeploymentGroup
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentGroupError {
@@ -4216,22 +4292,26 @@ impl GetDeploymentGroupError {
 }
 impl fmt::Display for GetDeploymentGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeploymentGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeploymentGroupError::ApplicationDoesNotExist(ref cause) => cause,
-            GetDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,
-            GetDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => cause,
-            GetDeploymentGroupError::DeploymentGroupDoesNotExist(ref cause) => cause,
-            GetDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
-            GetDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
-            GetDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
+            GetDeploymentGroupError::ApplicationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetDeploymentGroupError::ApplicationNameRequired(ref cause) => write!(f, "{}", cause),
+            GetDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDeploymentGroupError::DeploymentGroupDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDeploymentGroupError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
+            GetDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetDeploymentGroupError {}
 /// Errors returned by GetDeploymentInstance
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentInstanceError {
@@ -4299,22 +4379,18 @@ impl GetDeploymentInstanceError {
 }
 impl fmt::Display for GetDeploymentInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeploymentInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeploymentInstanceError::DeploymentDoesNotExist(ref cause) => cause,
-            GetDeploymentInstanceError::DeploymentIdRequired(ref cause) => cause,
-            GetDeploymentInstanceError::InstanceDoesNotExist(ref cause) => cause,
-            GetDeploymentInstanceError::InstanceIdRequired(ref cause) => cause,
-            GetDeploymentInstanceError::InvalidComputePlatform(ref cause) => cause,
-            GetDeploymentInstanceError::InvalidDeploymentId(ref cause) => cause,
-            GetDeploymentInstanceError::InvalidInstanceName(ref cause) => cause,
+            GetDeploymentInstanceError::DeploymentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetDeploymentInstanceError::DeploymentIdRequired(ref cause) => write!(f, "{}", cause),
+            GetDeploymentInstanceError::InstanceDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetDeploymentInstanceError::InstanceIdRequired(ref cause) => write!(f, "{}", cause),
+            GetDeploymentInstanceError::InvalidComputePlatform(ref cause) => write!(f, "{}", cause),
+            GetDeploymentInstanceError::InvalidDeploymentId(ref cause) => write!(f, "{}", cause),
+            GetDeploymentInstanceError::InvalidInstanceName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeploymentInstanceError {}
 /// Errors returned by GetDeploymentTarget
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentTargetError {
@@ -4389,23 +4465,25 @@ impl GetDeploymentTargetError {
 }
 impl fmt::Display for GetDeploymentTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeploymentTargetError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeploymentTargetError::DeploymentDoesNotExist(ref cause) => cause,
-            GetDeploymentTargetError::DeploymentIdRequired(ref cause) => cause,
-            GetDeploymentTargetError::DeploymentNotStarted(ref cause) => cause,
-            GetDeploymentTargetError::DeploymentTargetDoesNotExist(ref cause) => cause,
-            GetDeploymentTargetError::DeploymentTargetIdRequired(ref cause) => cause,
-            GetDeploymentTargetError::InvalidDeploymentId(ref cause) => cause,
-            GetDeploymentTargetError::InvalidDeploymentTargetId(ref cause) => cause,
-            GetDeploymentTargetError::InvalidInstanceName(ref cause) => cause,
+            GetDeploymentTargetError::DeploymentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetDeploymentTargetError::DeploymentIdRequired(ref cause) => write!(f, "{}", cause),
+            GetDeploymentTargetError::DeploymentNotStarted(ref cause) => write!(f, "{}", cause),
+            GetDeploymentTargetError::DeploymentTargetDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDeploymentTargetError::DeploymentTargetIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDeploymentTargetError::InvalidDeploymentId(ref cause) => write!(f, "{}", cause),
+            GetDeploymentTargetError::InvalidDeploymentTargetId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDeploymentTargetError::InvalidInstanceName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeploymentTargetError {}
 /// Errors returned by GetOnPremisesInstance
 #[derive(Debug, PartialEq)]
 pub enum GetOnPremisesInstanceError {
@@ -4445,18 +4523,14 @@ impl GetOnPremisesInstanceError {
 }
 impl fmt::Display for GetOnPremisesInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOnPremisesInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,
-            GetOnPremisesInstanceError::InstanceNotRegistered(ref cause) => cause,
-            GetOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,
+            GetOnPremisesInstanceError::InstanceNameRequired(ref cause) => write!(f, "{}", cause),
+            GetOnPremisesInstanceError::InstanceNotRegistered(ref cause) => write!(f, "{}", cause),
+            GetOnPremisesInstanceError::InvalidInstanceName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOnPremisesInstanceError {}
 /// Errors returned by ListApplicationRevisions
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationRevisionsError {
@@ -4545,25 +4619,35 @@ impl ListApplicationRevisionsError {
 }
 impl fmt::Display for ListApplicationRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListApplicationRevisionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListApplicationRevisionsError::ApplicationDoesNotExist(ref cause) => cause,
-            ListApplicationRevisionsError::ApplicationNameRequired(ref cause) => cause,
-            ListApplicationRevisionsError::BucketNameFilterRequired(ref cause) => cause,
-            ListApplicationRevisionsError::InvalidApplicationName(ref cause) => cause,
-            ListApplicationRevisionsError::InvalidBucketNameFilter(ref cause) => cause,
-            ListApplicationRevisionsError::InvalidDeployedStateFilter(ref cause) => cause,
-            ListApplicationRevisionsError::InvalidKeyPrefixFilter(ref cause) => cause,
-            ListApplicationRevisionsError::InvalidNextToken(ref cause) => cause,
-            ListApplicationRevisionsError::InvalidSortBy(ref cause) => cause,
-            ListApplicationRevisionsError::InvalidSortOrder(ref cause) => cause,
+            ListApplicationRevisionsError::ApplicationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListApplicationRevisionsError::ApplicationNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListApplicationRevisionsError::BucketNameFilterRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListApplicationRevisionsError::InvalidApplicationName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListApplicationRevisionsError::InvalidBucketNameFilter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListApplicationRevisionsError::InvalidDeployedStateFilter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListApplicationRevisionsError::InvalidKeyPrefixFilter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListApplicationRevisionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListApplicationRevisionsError::InvalidSortBy(ref cause) => write!(f, "{}", cause),
+            ListApplicationRevisionsError::InvalidSortOrder(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListApplicationRevisionsError {}
 /// Errors returned by ListApplications
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationsError {
@@ -4587,16 +4671,12 @@ impl ListApplicationsError {
 }
 impl fmt::Display for ListApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListApplicationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListApplicationsError::InvalidNextToken(ref cause) => cause,
+            ListApplicationsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListApplicationsError {}
 /// Errors returned by ListDeploymentConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentConfigsError {
@@ -4622,16 +4702,12 @@ impl ListDeploymentConfigsError {
 }
 impl fmt::Display for ListDeploymentConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeploymentConfigsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeploymentConfigsError::InvalidNextToken(ref cause) => cause,
+            ListDeploymentConfigsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDeploymentConfigsError {}
 /// Errors returned by ListDeploymentGroups
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentGroupsError {
@@ -4678,19 +4754,15 @@ impl ListDeploymentGroupsError {
 }
 impl fmt::Display for ListDeploymentGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeploymentGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeploymentGroupsError::ApplicationDoesNotExist(ref cause) => cause,
-            ListDeploymentGroupsError::ApplicationNameRequired(ref cause) => cause,
-            ListDeploymentGroupsError::InvalidApplicationName(ref cause) => cause,
-            ListDeploymentGroupsError::InvalidNextToken(ref cause) => cause,
+            ListDeploymentGroupsError::ApplicationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ListDeploymentGroupsError::ApplicationNameRequired(ref cause) => write!(f, "{}", cause),
+            ListDeploymentGroupsError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
+            ListDeploymentGroupsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDeploymentGroupsError {}
 /// Errors returned by ListDeploymentInstances
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentInstancesError {
@@ -4779,25 +4851,31 @@ impl ListDeploymentInstancesError {
 }
 impl fmt::Display for ListDeploymentInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeploymentInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeploymentInstancesError::DeploymentDoesNotExist(ref cause) => cause,
-            ListDeploymentInstancesError::DeploymentIdRequired(ref cause) => cause,
-            ListDeploymentInstancesError::DeploymentNotStarted(ref cause) => cause,
-            ListDeploymentInstancesError::InvalidComputePlatform(ref cause) => cause,
-            ListDeploymentInstancesError::InvalidDeploymentId(ref cause) => cause,
-            ListDeploymentInstancesError::InvalidDeploymentInstanceType(ref cause) => cause,
-            ListDeploymentInstancesError::InvalidInstanceStatus(ref cause) => cause,
-            ListDeploymentInstancesError::InvalidInstanceType(ref cause) => cause,
-            ListDeploymentInstancesError::InvalidNextToken(ref cause) => cause,
-            ListDeploymentInstancesError::InvalidTargetFilterName(ref cause) => cause,
+            ListDeploymentInstancesError::DeploymentDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDeploymentInstancesError::DeploymentIdRequired(ref cause) => write!(f, "{}", cause),
+            ListDeploymentInstancesError::DeploymentNotStarted(ref cause) => write!(f, "{}", cause),
+            ListDeploymentInstancesError::InvalidComputePlatform(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDeploymentInstancesError::InvalidDeploymentId(ref cause) => write!(f, "{}", cause),
+            ListDeploymentInstancesError::InvalidDeploymentInstanceType(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDeploymentInstancesError::InvalidInstanceStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDeploymentInstancesError::InvalidInstanceType(ref cause) => write!(f, "{}", cause),
+            ListDeploymentInstancesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListDeploymentInstancesError::InvalidTargetFilterName(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListDeploymentInstancesError {}
 /// Errors returned by ListDeploymentTargets
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentTargetsError {
@@ -4872,23 +4950,21 @@ impl ListDeploymentTargetsError {
 }
 impl fmt::Display for ListDeploymentTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeploymentTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeploymentTargetsError::DeploymentDoesNotExist(ref cause) => cause,
-            ListDeploymentTargetsError::DeploymentIdRequired(ref cause) => cause,
-            ListDeploymentTargetsError::DeploymentNotStarted(ref cause) => cause,
-            ListDeploymentTargetsError::InvalidDeploymentId(ref cause) => cause,
-            ListDeploymentTargetsError::InvalidDeploymentInstanceType(ref cause) => cause,
-            ListDeploymentTargetsError::InvalidInstanceStatus(ref cause) => cause,
-            ListDeploymentTargetsError::InvalidInstanceType(ref cause) => cause,
-            ListDeploymentTargetsError::InvalidNextToken(ref cause) => cause,
+            ListDeploymentTargetsError::DeploymentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ListDeploymentTargetsError::DeploymentIdRequired(ref cause) => write!(f, "{}", cause),
+            ListDeploymentTargetsError::DeploymentNotStarted(ref cause) => write!(f, "{}", cause),
+            ListDeploymentTargetsError::InvalidDeploymentId(ref cause) => write!(f, "{}", cause),
+            ListDeploymentTargetsError::InvalidDeploymentInstanceType(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDeploymentTargetsError::InvalidInstanceStatus(ref cause) => write!(f, "{}", cause),
+            ListDeploymentTargetsError::InvalidInstanceType(ref cause) => write!(f, "{}", cause),
+            ListDeploymentTargetsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDeploymentTargetsError {}
 /// Errors returned by ListDeployments
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentsError {
@@ -4966,24 +5042,20 @@ impl ListDeploymentsError {
 }
 impl fmt::Display for ListDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeploymentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeploymentsError::ApplicationDoesNotExist(ref cause) => cause,
-            ListDeploymentsError::ApplicationNameRequired(ref cause) => cause,
-            ListDeploymentsError::DeploymentGroupDoesNotExist(ref cause) => cause,
-            ListDeploymentsError::DeploymentGroupNameRequired(ref cause) => cause,
-            ListDeploymentsError::InvalidApplicationName(ref cause) => cause,
-            ListDeploymentsError::InvalidDeploymentGroupName(ref cause) => cause,
-            ListDeploymentsError::InvalidDeploymentStatus(ref cause) => cause,
-            ListDeploymentsError::InvalidNextToken(ref cause) => cause,
-            ListDeploymentsError::InvalidTimeRange(ref cause) => cause,
+            ListDeploymentsError::ApplicationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ListDeploymentsError::ApplicationNameRequired(ref cause) => write!(f, "{}", cause),
+            ListDeploymentsError::DeploymentGroupDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ListDeploymentsError::DeploymentGroupNameRequired(ref cause) => write!(f, "{}", cause),
+            ListDeploymentsError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
+            ListDeploymentsError::InvalidDeploymentGroupName(ref cause) => write!(f, "{}", cause),
+            ListDeploymentsError::InvalidDeploymentStatus(ref cause) => write!(f, "{}", cause),
+            ListDeploymentsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListDeploymentsError::InvalidTimeRange(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDeploymentsError {}
 /// Errors returned by ListGitHubAccountTokenNames
 #[derive(Debug, PartialEq)]
 pub enum ListGitHubAccountTokenNamesError {
@@ -5025,18 +5097,18 @@ impl ListGitHubAccountTokenNamesError {
 }
 impl fmt::Display for ListGitHubAccountTokenNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGitHubAccountTokenNamesError {
-    fn description(&self) -> &str {
         match *self {
-            ListGitHubAccountTokenNamesError::InvalidNextToken(ref cause) => cause,
-            ListGitHubAccountTokenNamesError::OperationNotSupported(ref cause) => cause,
-            ListGitHubAccountTokenNamesError::ResourceValidation(ref cause) => cause,
+            ListGitHubAccountTokenNamesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListGitHubAccountTokenNamesError::OperationNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListGitHubAccountTokenNamesError::ResourceValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListGitHubAccountTokenNamesError {}
 /// Errors returned by ListOnPremisesInstances
 #[derive(Debug, PartialEq)]
 pub enum ListOnPremisesInstancesError {
@@ -5076,18 +5148,16 @@ impl ListOnPremisesInstancesError {
 }
 impl fmt::Display for ListOnPremisesInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOnPremisesInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListOnPremisesInstancesError::InvalidNextToken(ref cause) => cause,
-            ListOnPremisesInstancesError::InvalidRegistrationStatus(ref cause) => cause,
-            ListOnPremisesInstancesError::InvalidTagFilter(ref cause) => cause,
+            ListOnPremisesInstancesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListOnPremisesInstancesError::InvalidRegistrationStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListOnPremisesInstancesError::InvalidTagFilter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOnPremisesInstancesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -5123,18 +5193,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::ArnNotSupported(ref cause) => cause,
-            ListTagsForResourceError::InvalidArn(ref cause) => cause,
-            ListTagsForResourceError::ResourceArnRequired(ref cause) => cause,
+            ListTagsForResourceError::ArnNotSupported(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceArnRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutLifecycleEventHookExecutionStatus
 #[derive(Debug, PartialEq)]
 pub enum PutLifecycleEventHookExecutionStatusError {
@@ -5176,30 +5242,32 @@ _ => {}
 }
 impl fmt::Display for PutLifecycleEventHookExecutionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutLifecycleEventHookExecutionStatusError {
-    fn description(&self) -> &str {
         match *self {
-            PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(ref cause) => cause,
-            PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(ref cause) => cause,
-            PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(ref cause) => cause,
+            PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(ref cause) => {
+                write!(f, "{}", cause)
+            }
             PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionId(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionStatus(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             PutLifecycleEventHookExecutionStatusError::LifecycleEventAlreadyCompleted(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutLifecycleEventHookExecutionStatusError {}
 /// Errors returned by RegisterApplicationRevision
 #[derive(Debug, PartialEq)]
 pub enum RegisterApplicationRevisionError {
@@ -5262,21 +5330,25 @@ impl RegisterApplicationRevisionError {
 }
 impl fmt::Display for RegisterApplicationRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterApplicationRevisionError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterApplicationRevisionError::ApplicationDoesNotExist(ref cause) => cause,
-            RegisterApplicationRevisionError::ApplicationNameRequired(ref cause) => cause,
-            RegisterApplicationRevisionError::DescriptionTooLong(ref cause) => cause,
-            RegisterApplicationRevisionError::InvalidApplicationName(ref cause) => cause,
-            RegisterApplicationRevisionError::InvalidRevision(ref cause) => cause,
-            RegisterApplicationRevisionError::RevisionRequired(ref cause) => cause,
+            RegisterApplicationRevisionError::ApplicationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterApplicationRevisionError::ApplicationNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterApplicationRevisionError::DescriptionTooLong(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterApplicationRevisionError::InvalidApplicationName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterApplicationRevisionError::InvalidRevision(ref cause) => write!(f, "{}", cause),
+            RegisterApplicationRevisionError::RevisionRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterApplicationRevisionError {}
 /// Errors returned by RegisterOnPremisesInstance
 #[derive(Debug, PartialEq)]
 pub enum RegisterOnPremisesInstanceError {
@@ -5367,25 +5439,37 @@ impl RegisterOnPremisesInstanceError {
 }
 impl fmt::Display for RegisterOnPremisesInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterOnPremisesInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterOnPremisesInstanceError::IamArnRequired(ref cause) => cause,
-            RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(ref cause) => cause,
-            RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(ref cause) => cause,
-            RegisterOnPremisesInstanceError::IamUserArnRequired(ref cause) => cause,
-            RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(ref cause) => cause,
-            RegisterOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,
-            RegisterOnPremisesInstanceError::InvalidIamSessionArn(ref cause) => cause,
-            RegisterOnPremisesInstanceError::InvalidIamUserArn(ref cause) => cause,
-            RegisterOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,
-            RegisterOnPremisesInstanceError::MultipleIamArnsProvided(ref cause) => cause,
+            RegisterOnPremisesInstanceError::IamArnRequired(ref cause) => write!(f, "{}", cause),
+            RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterOnPremisesInstanceError::IamUserArnRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterOnPremisesInstanceError::InstanceNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterOnPremisesInstanceError::InvalidIamSessionArn(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterOnPremisesInstanceError::InvalidIamUserArn(ref cause) => write!(f, "{}", cause),
+            RegisterOnPremisesInstanceError::InvalidInstanceName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterOnPremisesInstanceError::MultipleIamArnsProvided(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RegisterOnPremisesInstanceError {}
 /// Errors returned by RemoveTagsFromOnPremisesInstances
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromOnPremisesInstancesError {
@@ -5455,22 +5539,30 @@ impl RemoveTagsFromOnPremisesInstancesError {
 }
 impl fmt::Display for RemoveTagsFromOnPremisesInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromOnPremisesInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(ref cause) => cause,
-            RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,
-            RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(ref cause) => cause,
-            RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(ref cause) => cause,
-            RemoveTagsFromOnPremisesInstancesError::InvalidTag(ref cause) => cause,
-            RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(ref cause) => cause,
-            RemoveTagsFromOnPremisesInstancesError::TagRequired(ref cause) => cause,
+            RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveTagsFromOnPremisesInstancesError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveTagsFromOnPremisesInstancesError::TagRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveTagsFromOnPremisesInstancesError {}
 /// Errors returned by SkipWaitTimeForInstanceTermination
 #[derive(Debug, PartialEq)]
 pub enum SkipWaitTimeForInstanceTerminationError {
@@ -5537,23 +5629,29 @@ impl SkipWaitTimeForInstanceTerminationError {
 }
 impl fmt::Display for SkipWaitTimeForInstanceTerminationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SkipWaitTimeForInstanceTerminationError {
-    fn description(&self) -> &str {
         match *self {
-            SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(ref cause) => cause,
-            SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(ref cause) => cause,
-            SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(ref cause) => cause,
-            SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(ref cause) => cause,
-            SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(ref cause) => cause,
+            SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(ref cause) => {
+                write!(f, "{}", cause)
+            }
             SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SkipWaitTimeForInstanceTerminationError {}
 /// Errors returned by StopDeployment
 #[derive(Debug, PartialEq)]
 pub enum StopDeploymentError {
@@ -5603,20 +5701,16 @@ impl StopDeploymentError {
 }
 impl fmt::Display for StopDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            StopDeploymentError::DeploymentAlreadyCompleted(ref cause) => cause,
-            StopDeploymentError::DeploymentDoesNotExist(ref cause) => cause,
-            StopDeploymentError::DeploymentGroupDoesNotExist(ref cause) => cause,
-            StopDeploymentError::DeploymentIdRequired(ref cause) => cause,
-            StopDeploymentError::InvalidDeploymentId(ref cause) => cause,
+            StopDeploymentError::DeploymentAlreadyCompleted(ref cause) => write!(f, "{}", cause),
+            StopDeploymentError::DeploymentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            StopDeploymentError::DeploymentGroupDoesNotExist(ref cause) => write!(f, "{}", cause),
+            StopDeploymentError::DeploymentIdRequired(ref cause) => write!(f, "{}", cause),
+            StopDeploymentError::InvalidDeploymentId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopDeploymentError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -5679,23 +5773,19 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ApplicationDoesNotExist(ref cause) => cause,
-            TagResourceError::ArnNotSupported(ref cause) => cause,
-            TagResourceError::DeploymentConfigDoesNotExist(ref cause) => cause,
-            TagResourceError::DeploymentGroupDoesNotExist(ref cause) => cause,
-            TagResourceError::InvalidArn(ref cause) => cause,
-            TagResourceError::InvalidTagsToAdd(ref cause) => cause,
-            TagResourceError::ResourceArnRequired(ref cause) => cause,
-            TagResourceError::TagRequired(ref cause) => cause,
+            TagResourceError::ApplicationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ArnNotSupported(ref cause) => write!(f, "{}", cause),
+            TagResourceError::DeploymentConfigDoesNotExist(ref cause) => write!(f, "{}", cause),
+            TagResourceError::DeploymentGroupDoesNotExist(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidTagsToAdd(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceArnRequired(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -5760,23 +5850,19 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ApplicationDoesNotExist(ref cause) => cause,
-            UntagResourceError::ArnNotSupported(ref cause) => cause,
-            UntagResourceError::DeploymentConfigDoesNotExist(ref cause) => cause,
-            UntagResourceError::DeploymentGroupDoesNotExist(ref cause) => cause,
-            UntagResourceError::InvalidArn(ref cause) => cause,
-            UntagResourceError::InvalidTagsToAdd(ref cause) => cause,
-            UntagResourceError::ResourceArnRequired(ref cause) => cause,
-            UntagResourceError::TagRequired(ref cause) => cause,
+            UntagResourceError::ApplicationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ArnNotSupported(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::DeploymentConfigDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::DeploymentGroupDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidTagsToAdd(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceArnRequired(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagRequired(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
@@ -5823,19 +5909,15 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateApplicationError::ApplicationAlreadyExists(ref cause) => cause,
-            UpdateApplicationError::ApplicationDoesNotExist(ref cause) => cause,
-            UpdateApplicationError::ApplicationNameRequired(ref cause) => cause,
-            UpdateApplicationError::InvalidApplicationName(ref cause) => cause,
+            UpdateApplicationError::ApplicationAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::ApplicationDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::ApplicationNameRequired(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateApplicationError {}
 /// Errors returned by UpdateDeploymentGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeploymentGroupError {
@@ -6056,45 +6138,77 @@ impl UpdateDeploymentGroupError {
 }
 impl fmt::Display for UpdateDeploymentGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDeploymentGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDeploymentGroupError::AlarmsLimitExceeded(ref cause) => cause,
-            UpdateDeploymentGroupError::ApplicationDoesNotExist(ref cause) => cause,
-            UpdateDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,
-            UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => cause,
-            UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(ref cause) => cause,
-            UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(ref cause) => cause,
-            UpdateDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
-            UpdateDeploymentGroupError::ECSServiceMappingLimitExceeded(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidAlarmConfig(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidAutoScalingGroup(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidEC2TagCombination(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidECSService(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidInput(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidRole(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidTag(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidTargetGroupPair(ref cause) => cause,
-            UpdateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
-            UpdateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,
-            UpdateDeploymentGroupError::TagSetListLimitExceeded(ref cause) => cause,
-            UpdateDeploymentGroupError::Throttling(ref cause) => cause,
-            UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,
+            UpdateDeploymentGroupError::AlarmsLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::ApplicationDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::ApplicationNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::ECSServiceMappingLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::InvalidAlarmConfig(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::InvalidAutoScalingGroup(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::InvalidEC2TagCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::InvalidEC2Tag(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::InvalidECSService(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::InvalidTargetGroupPair(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::InvalidTriggerConfig(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::TagSetListLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeploymentGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateDeploymentGroupError {}
 /// Trait representing the capabilities of the CodeDeploy API. CodeDeploy clients implement this trait.
 pub trait CodeDeploy {
     /// <p>Adds tags to on-premises instances.</p>
@@ -6410,6 +6524,14 @@ impl CodeDeployClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> CodeDeployClient {
         CodeDeployClient { client, region }
+    }
+}
+
+impl fmt::Debug for CodeDeployClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CodeDeployClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

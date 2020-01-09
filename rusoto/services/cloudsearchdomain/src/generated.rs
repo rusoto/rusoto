@@ -376,16 +376,12 @@ impl SearchError {
 }
 impl fmt::Display for SearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchError {
-    fn description(&self) -> &str {
         match *self {
-            SearchError::Search(ref cause) => cause,
+            SearchError::Search(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SearchError {}
 /// Errors returned by Suggest
 #[derive(Debug, PartialEq)]
 pub enum SuggestError {
@@ -407,16 +403,12 @@ impl SuggestError {
 }
 impl fmt::Display for SuggestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SuggestError {
-    fn description(&self) -> &str {
         match *self {
-            SuggestError::Search(ref cause) => cause,
+            SuggestError::Search(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SuggestError {}
 /// Errors returned by UploadDocuments
 #[derive(Debug, PartialEq)]
 pub enum UploadDocumentsError {
@@ -440,16 +432,12 @@ impl UploadDocumentsError {
 }
 impl fmt::Display for UploadDocumentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadDocumentsError {
-    fn description(&self) -> &str {
         match *self {
-            UploadDocumentsError::DocumentService(ref cause) => cause,
+            UploadDocumentsError::DocumentService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UploadDocumentsError {}
 /// Trait representing the capabilities of the Amazon CloudSearch Domain API. Amazon CloudSearch Domain clients implement this trait.
 pub trait CloudSearchDomain {
     /// <p>Retrieves a list of documents that match the specified search criteria. How you specify the search criteria depends on which query parser you use. Amazon CloudSearch supports four query parsers:</p> <ul> <li><code>simple</code>: search all <code>text</code> and <code>text-array</code> fields for the specified string. Search for phrases, individual terms, and prefixes. </li> <li><code>structured</code>: search specific fields, construct compound queries using Boolean operators, and use advanced features such as term boosting and proximity searching.</li> <li><code>lucene</code>: specify search criteria using the Apache Lucene query parser syntax.</li> <li><code>dismax</code>: specify search criteria using the simplified subset of the Apache Lucene query parser syntax defined by the DisMax query parser.</li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching.html">Searching Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p> <p>The endpoint for submitting <code>Search</code> requests is domain-specific. You submit search requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
@@ -498,6 +486,14 @@ impl CloudSearchDomainClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> CloudSearchDomainClient {
         CloudSearchDomainClient { client, region }
+    }
+}
+
+impl fmt::Debug for CloudSearchDomainClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CloudSearchDomainClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

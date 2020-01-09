@@ -288,11 +288,11 @@ pub struct CreateConnectorDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -380,11 +380,11 @@ pub struct CreateCoreDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -507,11 +507,11 @@ pub struct CreateDeviceDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -603,11 +603,11 @@ pub struct CreateFunctionDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -739,11 +739,11 @@ pub struct CreateGroupVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -830,11 +830,11 @@ pub struct CreateLoggerDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -921,11 +921,11 @@ pub struct CreateResourceDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -964,6 +964,10 @@ pub struct CreateSoftwareUpdateJobResponse {
     #[serde(rename = "IotJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iot_job_id: Option<String>,
+    /// <p>The software version installed on the device or devices after the update.</p>
+    #[serde(rename = "PlatformSoftwareVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform_software_version: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1047,11 +1051,11 @@ pub struct CreateSubscriptionDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -2005,11 +2009,11 @@ pub struct GetGroupVersionResponse {
     #[serde(rename = "Definition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<GroupVersion>,
-    /// <p>The ID of the group version.</p>
+    /// <p>The ID of the group that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID for the version of the group.</p>
+    /// <p>The ID of the group version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -3089,6 +3093,17 @@ pub struct ResourceDefinitionVersion {
     pub resources: Option<Vec<Resource>>,
 }
 
+/// <p>The owner setting for downloaded machine learning resources.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ResourceDownloadOwnerSetting {
+    /// <p>The group owner of the resource. This is the name of an existing Linux OS group on the system or a GID. The group&#39;s permissions are added to the Lambda process.</p>
+    #[serde(rename = "GroupOwner")]
+    pub group_owner: String,
+    /// <p>The permissions that the group owner has to the resource. Valid values are &#39;&#39;rw&#39;&#39; (read/write) or &#39;&#39;ro&#39;&#39; (read-only).</p>
+    #[serde(rename = "GroupPermission")]
+    pub group_permission: String,
+}
+
 /// <p>Attributes that define an Amazon S3 machine learning resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3MachineLearningModelResourceData {
@@ -3096,6 +3111,9 @@ pub struct S3MachineLearningModelResourceData {
     #[serde(rename = "DestinationPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_path: Option<String>,
+    #[serde(rename = "OwnerSetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_setting: Option<ResourceDownloadOwnerSetting>,
     /// <p>The URI of the source model in an S3 bucket. The model package must be in tar.gz or .zip format.</p>
     #[serde(rename = "S3Uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3109,6 +3127,9 @@ pub struct SageMakerMachineLearningModelResourceData {
     #[serde(rename = "DestinationPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_path: Option<String>,
+    #[serde(rename = "OwnerSetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_setting: Option<ResourceDownloadOwnerSetting>,
     /// <p>The ARN of the Amazon SageMaker training job that represents the source model.</p>
     #[serde(rename = "SageMakerJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3416,11 +3437,11 @@ pub struct VersionInformation {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -3456,17 +3477,13 @@ impl AssociateRoleToGroupError {
 }
 impl fmt::Display for AssociateRoleToGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateRoleToGroupError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateRoleToGroupError::BadRequest(ref cause) => cause,
-            AssociateRoleToGroupError::InternalServerError(ref cause) => cause,
+            AssociateRoleToGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            AssociateRoleToGroupError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateRoleToGroupError {}
 /// Errors returned by AssociateServiceRoleToAccount
 #[derive(Debug, PartialEq)]
 pub enum AssociateServiceRoleToAccountError {
@@ -3501,17 +3518,15 @@ impl AssociateServiceRoleToAccountError {
 }
 impl fmt::Display for AssociateServiceRoleToAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateServiceRoleToAccountError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateServiceRoleToAccountError::BadRequest(ref cause) => cause,
-            AssociateServiceRoleToAccountError::InternalServerError(ref cause) => cause,
+            AssociateServiceRoleToAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
+            AssociateServiceRoleToAccountError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateServiceRoleToAccountError {}
 /// Errors returned by CreateConnectorDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateConnectorDefinitionError {
@@ -3537,16 +3552,12 @@ impl CreateConnectorDefinitionError {
 }
 impl fmt::Display for CreateConnectorDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConnectorDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateConnectorDefinitionError::BadRequest(ref cause) => cause,
+            CreateConnectorDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateConnectorDefinitionError {}
 /// Errors returned by CreateConnectorDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateConnectorDefinitionVersionError {
@@ -3574,16 +3585,12 @@ impl CreateConnectorDefinitionVersionError {
 }
 impl fmt::Display for CreateConnectorDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConnectorDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateConnectorDefinitionVersionError::BadRequest(ref cause) => cause,
+            CreateConnectorDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateConnectorDefinitionVersionError {}
 /// Errors returned by CreateCoreDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateCoreDefinitionError {
@@ -3607,16 +3614,12 @@ impl CreateCoreDefinitionError {
 }
 impl fmt::Display for CreateCoreDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCoreDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCoreDefinitionError::BadRequest(ref cause) => cause,
+            CreateCoreDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCoreDefinitionError {}
 /// Errors returned by CreateCoreDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateCoreDefinitionVersionError {
@@ -3644,16 +3647,12 @@ impl CreateCoreDefinitionVersionError {
 }
 impl fmt::Display for CreateCoreDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCoreDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCoreDefinitionVersionError::BadRequest(ref cause) => cause,
+            CreateCoreDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCoreDefinitionVersionError {}
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
@@ -3677,16 +3676,12 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDeploymentError::BadRequest(ref cause) => cause,
+            CreateDeploymentError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDeploymentError {}
 /// Errors returned by CreateDeviceDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateDeviceDefinitionError {
@@ -3710,16 +3705,12 @@ impl CreateDeviceDefinitionError {
 }
 impl fmt::Display for CreateDeviceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDeviceDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDeviceDefinitionError::BadRequest(ref cause) => cause,
+            CreateDeviceDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDeviceDefinitionError {}
 /// Errors returned by CreateDeviceDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateDeviceDefinitionVersionError {
@@ -3747,16 +3738,12 @@ impl CreateDeviceDefinitionVersionError {
 }
 impl fmt::Display for CreateDeviceDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDeviceDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDeviceDefinitionVersionError::BadRequest(ref cause) => cause,
+            CreateDeviceDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDeviceDefinitionVersionError {}
 /// Errors returned by CreateFunctionDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateFunctionDefinitionError {
@@ -3780,16 +3767,12 @@ impl CreateFunctionDefinitionError {
 }
 impl fmt::Display for CreateFunctionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFunctionDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFunctionDefinitionError::BadRequest(ref cause) => cause,
+            CreateFunctionDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFunctionDefinitionError {}
 /// Errors returned by CreateFunctionDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateFunctionDefinitionVersionError {
@@ -3817,16 +3800,12 @@ impl CreateFunctionDefinitionVersionError {
 }
 impl fmt::Display for CreateFunctionDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFunctionDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFunctionDefinitionVersionError::BadRequest(ref cause) => cause,
+            CreateFunctionDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFunctionDefinitionVersionError {}
 /// Errors returned by CreateGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupError {
@@ -3850,16 +3829,12 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGroupError::BadRequest(ref cause) => cause,
+            CreateGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGroupError {}
 /// Errors returned by CreateGroupCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupCertificateAuthorityError {
@@ -3894,17 +3869,15 @@ impl CreateGroupCertificateAuthorityError {
 }
 impl fmt::Display for CreateGroupCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGroupCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGroupCertificateAuthorityError::BadRequest(ref cause) => cause,
-            CreateGroupCertificateAuthorityError::InternalServerError(ref cause) => cause,
+            CreateGroupCertificateAuthorityError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateGroupCertificateAuthorityError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateGroupCertificateAuthorityError {}
 /// Errors returned by CreateGroupVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupVersionError {
@@ -3928,16 +3901,12 @@ impl CreateGroupVersionError {
 }
 impl fmt::Display for CreateGroupVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGroupVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGroupVersionError::BadRequest(ref cause) => cause,
+            CreateGroupVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGroupVersionError {}
 /// Errors returned by CreateLoggerDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateLoggerDefinitionError {
@@ -3961,16 +3930,12 @@ impl CreateLoggerDefinitionError {
 }
 impl fmt::Display for CreateLoggerDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoggerDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoggerDefinitionError::BadRequest(ref cause) => cause,
+            CreateLoggerDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoggerDefinitionError {}
 /// Errors returned by CreateLoggerDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateLoggerDefinitionVersionError {
@@ -3998,16 +3963,12 @@ impl CreateLoggerDefinitionVersionError {
 }
 impl fmt::Display for CreateLoggerDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoggerDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoggerDefinitionVersionError::BadRequest(ref cause) => cause,
+            CreateLoggerDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoggerDefinitionVersionError {}
 /// Errors returned by CreateResourceDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceDefinitionError {
@@ -4031,16 +3992,12 @@ impl CreateResourceDefinitionError {
 }
 impl fmt::Display for CreateResourceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateResourceDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateResourceDefinitionError::BadRequest(ref cause) => cause,
+            CreateResourceDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateResourceDefinitionError {}
 /// Errors returned by CreateResourceDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceDefinitionVersionError {
@@ -4068,16 +4025,12 @@ impl CreateResourceDefinitionVersionError {
 }
 impl fmt::Display for CreateResourceDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateResourceDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateResourceDefinitionVersionError::BadRequest(ref cause) => cause,
+            CreateResourceDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateResourceDefinitionVersionError {}
 /// Errors returned by CreateSoftwareUpdateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateSoftwareUpdateJobError {
@@ -4108,17 +4061,13 @@ impl CreateSoftwareUpdateJobError {
 }
 impl fmt::Display for CreateSoftwareUpdateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSoftwareUpdateJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSoftwareUpdateJobError::BadRequest(ref cause) => cause,
-            CreateSoftwareUpdateJobError::InternalServerError(ref cause) => cause,
+            CreateSoftwareUpdateJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateSoftwareUpdateJobError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSoftwareUpdateJobError {}
 /// Errors returned by CreateSubscriptionDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateSubscriptionDefinitionError {
@@ -4146,16 +4095,12 @@ impl CreateSubscriptionDefinitionError {
 }
 impl fmt::Display for CreateSubscriptionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSubscriptionDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSubscriptionDefinitionError::BadRequest(ref cause) => cause,
+            CreateSubscriptionDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSubscriptionDefinitionError {}
 /// Errors returned by CreateSubscriptionDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateSubscriptionDefinitionVersionError {
@@ -4183,16 +4128,14 @@ impl CreateSubscriptionDefinitionVersionError {
 }
 impl fmt::Display for CreateSubscriptionDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSubscriptionDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSubscriptionDefinitionVersionError::BadRequest(ref cause) => cause,
+            CreateSubscriptionDefinitionVersionError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateSubscriptionDefinitionVersionError {}
 /// Errors returned by DeleteConnectorDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteConnectorDefinitionError {
@@ -4218,16 +4161,12 @@ impl DeleteConnectorDefinitionError {
 }
 impl fmt::Display for DeleteConnectorDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConnectorDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConnectorDefinitionError::BadRequest(ref cause) => cause,
+            DeleteConnectorDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteConnectorDefinitionError {}
 /// Errors returned by DeleteCoreDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteCoreDefinitionError {
@@ -4251,16 +4190,12 @@ impl DeleteCoreDefinitionError {
 }
 impl fmt::Display for DeleteCoreDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCoreDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCoreDefinitionError::BadRequest(ref cause) => cause,
+            DeleteCoreDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCoreDefinitionError {}
 /// Errors returned by DeleteDeviceDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeviceDefinitionError {
@@ -4284,16 +4219,12 @@ impl DeleteDeviceDefinitionError {
 }
 impl fmt::Display for DeleteDeviceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDeviceDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDeviceDefinitionError::BadRequest(ref cause) => cause,
+            DeleteDeviceDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDeviceDefinitionError {}
 /// Errors returned by DeleteFunctionDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteFunctionDefinitionError {
@@ -4317,16 +4248,12 @@ impl DeleteFunctionDefinitionError {
 }
 impl fmt::Display for DeleteFunctionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFunctionDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFunctionDefinitionError::BadRequest(ref cause) => cause,
+            DeleteFunctionDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFunctionDefinitionError {}
 /// Errors returned by DeleteGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupError {
@@ -4350,16 +4277,12 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGroupError::BadRequest(ref cause) => cause,
+            DeleteGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGroupError {}
 /// Errors returned by DeleteLoggerDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoggerDefinitionError {
@@ -4383,16 +4306,12 @@ impl DeleteLoggerDefinitionError {
 }
 impl fmt::Display for DeleteLoggerDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoggerDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoggerDefinitionError::BadRequest(ref cause) => cause,
+            DeleteLoggerDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLoggerDefinitionError {}
 /// Errors returned by DeleteResourceDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceDefinitionError {
@@ -4416,16 +4335,12 @@ impl DeleteResourceDefinitionError {
 }
 impl fmt::Display for DeleteResourceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteResourceDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteResourceDefinitionError::BadRequest(ref cause) => cause,
+            DeleteResourceDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteResourceDefinitionError {}
 /// Errors returned by DeleteSubscriptionDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubscriptionDefinitionError {
@@ -4453,16 +4368,12 @@ impl DeleteSubscriptionDefinitionError {
 }
 impl fmt::Display for DeleteSubscriptionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSubscriptionDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSubscriptionDefinitionError::BadRequest(ref cause) => cause,
+            DeleteSubscriptionDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSubscriptionDefinitionError {}
 /// Errors returned by DisassociateRoleFromGroup
 #[derive(Debug, PartialEq)]
 pub enum DisassociateRoleFromGroupError {
@@ -4495,17 +4406,15 @@ impl DisassociateRoleFromGroupError {
 }
 impl fmt::Display for DisassociateRoleFromGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateRoleFromGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateRoleFromGroupError::BadRequest(ref cause) => cause,
-            DisassociateRoleFromGroupError::InternalServerError(ref cause) => cause,
+            DisassociateRoleFromGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DisassociateRoleFromGroupError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateRoleFromGroupError {}
 /// Errors returned by DisassociateServiceRoleFromAccount
 #[derive(Debug, PartialEq)]
 pub enum DisassociateServiceRoleFromAccountError {
@@ -4533,16 +4442,14 @@ impl DisassociateServiceRoleFromAccountError {
 }
 impl fmt::Display for DisassociateServiceRoleFromAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateServiceRoleFromAccountError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateServiceRoleFromAccountError::InternalServerError(ref cause) => cause,
+            DisassociateServiceRoleFromAccountError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateServiceRoleFromAccountError {}
 /// Errors returned by GetAssociatedRole
 #[derive(Debug, PartialEq)]
 pub enum GetAssociatedRoleError {
@@ -4573,17 +4480,13 @@ impl GetAssociatedRoleError {
 }
 impl fmt::Display for GetAssociatedRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAssociatedRoleError {
-    fn description(&self) -> &str {
         match *self {
-            GetAssociatedRoleError::BadRequest(ref cause) => cause,
-            GetAssociatedRoleError::InternalServerError(ref cause) => cause,
+            GetAssociatedRoleError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetAssociatedRoleError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAssociatedRoleError {}
 /// Errors returned by GetBulkDeploymentStatus
 #[derive(Debug, PartialEq)]
 pub enum GetBulkDeploymentStatusError {
@@ -4607,16 +4510,12 @@ impl GetBulkDeploymentStatusError {
 }
 impl fmt::Display for GetBulkDeploymentStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBulkDeploymentStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetBulkDeploymentStatusError::BadRequest(ref cause) => cause,
+            GetBulkDeploymentStatusError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBulkDeploymentStatusError {}
 /// Errors returned by GetConnectivityInfo
 #[derive(Debug, PartialEq)]
 pub enum GetConnectivityInfoError {
@@ -4647,17 +4546,13 @@ impl GetConnectivityInfoError {
 }
 impl fmt::Display for GetConnectivityInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConnectivityInfoError {
-    fn description(&self) -> &str {
         match *self {
-            GetConnectivityInfoError::BadRequest(ref cause) => cause,
-            GetConnectivityInfoError::InternalServerError(ref cause) => cause,
+            GetConnectivityInfoError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetConnectivityInfoError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConnectivityInfoError {}
 /// Errors returned by GetConnectorDefinition
 #[derive(Debug, PartialEq)]
 pub enum GetConnectorDefinitionError {
@@ -4681,16 +4576,12 @@ impl GetConnectorDefinitionError {
 }
 impl fmt::Display for GetConnectorDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConnectorDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            GetConnectorDefinitionError::BadRequest(ref cause) => cause,
+            GetConnectorDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConnectorDefinitionError {}
 /// Errors returned by GetConnectorDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum GetConnectorDefinitionVersionError {
@@ -4718,16 +4609,12 @@ impl GetConnectorDefinitionVersionError {
 }
 impl fmt::Display for GetConnectorDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConnectorDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetConnectorDefinitionVersionError::BadRequest(ref cause) => cause,
+            GetConnectorDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConnectorDefinitionVersionError {}
 /// Errors returned by GetCoreDefinition
 #[derive(Debug, PartialEq)]
 pub enum GetCoreDefinitionError {
@@ -4751,16 +4638,12 @@ impl GetCoreDefinitionError {
 }
 impl fmt::Display for GetCoreDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCoreDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            GetCoreDefinitionError::BadRequest(ref cause) => cause,
+            GetCoreDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCoreDefinitionError {}
 /// Errors returned by GetCoreDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum GetCoreDefinitionVersionError {
@@ -4784,16 +4667,12 @@ impl GetCoreDefinitionVersionError {
 }
 impl fmt::Display for GetCoreDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCoreDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetCoreDefinitionVersionError::BadRequest(ref cause) => cause,
+            GetCoreDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCoreDefinitionVersionError {}
 /// Errors returned by GetDeploymentStatus
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentStatusError {
@@ -4817,16 +4696,12 @@ impl GetDeploymentStatusError {
 }
 impl fmt::Display for GetDeploymentStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeploymentStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeploymentStatusError::BadRequest(ref cause) => cause,
+            GetDeploymentStatusError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeploymentStatusError {}
 /// Errors returned by GetDeviceDefinition
 #[derive(Debug, PartialEq)]
 pub enum GetDeviceDefinitionError {
@@ -4850,16 +4725,12 @@ impl GetDeviceDefinitionError {
 }
 impl fmt::Display for GetDeviceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeviceDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeviceDefinitionError::BadRequest(ref cause) => cause,
+            GetDeviceDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeviceDefinitionError {}
 /// Errors returned by GetDeviceDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum GetDeviceDefinitionVersionError {
@@ -4887,16 +4758,12 @@ impl GetDeviceDefinitionVersionError {
 }
 impl fmt::Display for GetDeviceDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeviceDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeviceDefinitionVersionError::BadRequest(ref cause) => cause,
+            GetDeviceDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeviceDefinitionVersionError {}
 /// Errors returned by GetFunctionDefinition
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionDefinitionError {
@@ -4920,16 +4787,12 @@ impl GetFunctionDefinitionError {
 }
 impl fmt::Display for GetFunctionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFunctionDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            GetFunctionDefinitionError::BadRequest(ref cause) => cause,
+            GetFunctionDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFunctionDefinitionError {}
 /// Errors returned by GetFunctionDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionDefinitionVersionError {
@@ -4957,16 +4820,12 @@ impl GetFunctionDefinitionVersionError {
 }
 impl fmt::Display for GetFunctionDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFunctionDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetFunctionDefinitionVersionError::BadRequest(ref cause) => cause,
+            GetFunctionDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFunctionDefinitionVersionError {}
 /// Errors returned by GetGroup
 #[derive(Debug, PartialEq)]
 pub enum GetGroupError {
@@ -4990,16 +4849,12 @@ impl GetGroupError {
 }
 impl fmt::Display for GetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupError::BadRequest(ref cause) => cause,
+            GetGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGroupError {}
 /// Errors returned by GetGroupCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum GetGroupCertificateAuthorityError {
@@ -5034,17 +4889,15 @@ impl GetGroupCertificateAuthorityError {
 }
 impl fmt::Display for GetGroupCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupCertificateAuthorityError::BadRequest(ref cause) => cause,
-            GetGroupCertificateAuthorityError::InternalServerError(ref cause) => cause,
+            GetGroupCertificateAuthorityError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetGroupCertificateAuthorityError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetGroupCertificateAuthorityError {}
 /// Errors returned by GetGroupCertificateConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetGroupCertificateConfigurationError {
@@ -5079,17 +4932,15 @@ impl GetGroupCertificateConfigurationError {
 }
 impl fmt::Display for GetGroupCertificateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupCertificateConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupCertificateConfigurationError::BadRequest(ref cause) => cause,
-            GetGroupCertificateConfigurationError::InternalServerError(ref cause) => cause,
+            GetGroupCertificateConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetGroupCertificateConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetGroupCertificateConfigurationError {}
 /// Errors returned by GetGroupVersion
 #[derive(Debug, PartialEq)]
 pub enum GetGroupVersionError {
@@ -5113,16 +4964,12 @@ impl GetGroupVersionError {
 }
 impl fmt::Display for GetGroupVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupVersionError::BadRequest(ref cause) => cause,
+            GetGroupVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGroupVersionError {}
 /// Errors returned by GetLoggerDefinition
 #[derive(Debug, PartialEq)]
 pub enum GetLoggerDefinitionError {
@@ -5146,16 +4993,12 @@ impl GetLoggerDefinitionError {
 }
 impl fmt::Display for GetLoggerDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoggerDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoggerDefinitionError::BadRequest(ref cause) => cause,
+            GetLoggerDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoggerDefinitionError {}
 /// Errors returned by GetLoggerDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum GetLoggerDefinitionVersionError {
@@ -5183,16 +5026,12 @@ impl GetLoggerDefinitionVersionError {
 }
 impl fmt::Display for GetLoggerDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoggerDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoggerDefinitionVersionError::BadRequest(ref cause) => cause,
+            GetLoggerDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoggerDefinitionVersionError {}
 /// Errors returned by GetResourceDefinition
 #[derive(Debug, PartialEq)]
 pub enum GetResourceDefinitionError {
@@ -5216,16 +5055,12 @@ impl GetResourceDefinitionError {
 }
 impl fmt::Display for GetResourceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourceDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourceDefinitionError::BadRequest(ref cause) => cause,
+            GetResourceDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourceDefinitionError {}
 /// Errors returned by GetResourceDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum GetResourceDefinitionVersionError {
@@ -5253,16 +5088,12 @@ impl GetResourceDefinitionVersionError {
 }
 impl fmt::Display for GetResourceDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourceDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourceDefinitionVersionError::BadRequest(ref cause) => cause,
+            GetResourceDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourceDefinitionVersionError {}
 /// Errors returned by GetServiceRoleForAccount
 #[derive(Debug, PartialEq)]
 pub enum GetServiceRoleForAccountError {
@@ -5288,16 +5119,12 @@ impl GetServiceRoleForAccountError {
 }
 impl fmt::Display for GetServiceRoleForAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceRoleForAccountError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceRoleForAccountError::InternalServerError(ref cause) => cause,
+            GetServiceRoleForAccountError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServiceRoleForAccountError {}
 /// Errors returned by GetSubscriptionDefinition
 #[derive(Debug, PartialEq)]
 pub enum GetSubscriptionDefinitionError {
@@ -5323,16 +5150,12 @@ impl GetSubscriptionDefinitionError {
 }
 impl fmt::Display for GetSubscriptionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSubscriptionDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            GetSubscriptionDefinitionError::BadRequest(ref cause) => cause,
+            GetSubscriptionDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSubscriptionDefinitionError {}
 /// Errors returned by GetSubscriptionDefinitionVersion
 #[derive(Debug, PartialEq)]
 pub enum GetSubscriptionDefinitionVersionError {
@@ -5360,16 +5183,12 @@ impl GetSubscriptionDefinitionVersionError {
 }
 impl fmt::Display for GetSubscriptionDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSubscriptionDefinitionVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetSubscriptionDefinitionVersionError::BadRequest(ref cause) => cause,
+            GetSubscriptionDefinitionVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSubscriptionDefinitionVersionError {}
 /// Errors returned by ListBulkDeploymentDetailedReports
 #[derive(Debug, PartialEq)]
 pub enum ListBulkDeploymentDetailedReportsError {
@@ -5397,16 +5216,12 @@ impl ListBulkDeploymentDetailedReportsError {
 }
 impl fmt::Display for ListBulkDeploymentDetailedReportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBulkDeploymentDetailedReportsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBulkDeploymentDetailedReportsError::BadRequest(ref cause) => cause,
+            ListBulkDeploymentDetailedReportsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBulkDeploymentDetailedReportsError {}
 /// Errors returned by ListBulkDeployments
 #[derive(Debug, PartialEq)]
 pub enum ListBulkDeploymentsError {
@@ -5430,16 +5245,12 @@ impl ListBulkDeploymentsError {
 }
 impl fmt::Display for ListBulkDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBulkDeploymentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBulkDeploymentsError::BadRequest(ref cause) => cause,
+            ListBulkDeploymentsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBulkDeploymentsError {}
 /// Errors returned by ListConnectorDefinitionVersions
 #[derive(Debug, PartialEq)]
 pub enum ListConnectorDefinitionVersionsError {
@@ -5467,16 +5278,12 @@ impl ListConnectorDefinitionVersionsError {
 }
 impl fmt::Display for ListConnectorDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListConnectorDefinitionVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListConnectorDefinitionVersionsError::BadRequest(ref cause) => cause,
+            ListConnectorDefinitionVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListConnectorDefinitionVersionsError {}
 /// Errors returned by ListConnectorDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListConnectorDefinitionsError {}
@@ -5494,14 +5301,10 @@ impl ListConnectorDefinitionsError {
 }
 impl fmt::Display for ListConnectorDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListConnectorDefinitionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListConnectorDefinitionsError {}
 /// Errors returned by ListCoreDefinitionVersions
 #[derive(Debug, PartialEq)]
 pub enum ListCoreDefinitionVersionsError {
@@ -5529,16 +5332,12 @@ impl ListCoreDefinitionVersionsError {
 }
 impl fmt::Display for ListCoreDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCoreDefinitionVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListCoreDefinitionVersionsError::BadRequest(ref cause) => cause,
+            ListCoreDefinitionVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCoreDefinitionVersionsError {}
 /// Errors returned by ListCoreDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListCoreDefinitionsError {}
@@ -5556,14 +5355,10 @@ impl ListCoreDefinitionsError {
 }
 impl fmt::Display for ListCoreDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCoreDefinitionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListCoreDefinitionsError {}
 /// Errors returned by ListDeployments
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentsError {
@@ -5587,16 +5382,12 @@ impl ListDeploymentsError {
 }
 impl fmt::Display for ListDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeploymentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeploymentsError::BadRequest(ref cause) => cause,
+            ListDeploymentsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDeploymentsError {}
 /// Errors returned by ListDeviceDefinitionVersions
 #[derive(Debug, PartialEq)]
 pub enum ListDeviceDefinitionVersionsError {
@@ -5624,16 +5415,12 @@ impl ListDeviceDefinitionVersionsError {
 }
 impl fmt::Display for ListDeviceDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeviceDefinitionVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeviceDefinitionVersionsError::BadRequest(ref cause) => cause,
+            ListDeviceDefinitionVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDeviceDefinitionVersionsError {}
 /// Errors returned by ListDeviceDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListDeviceDefinitionsError {}
@@ -5651,14 +5438,10 @@ impl ListDeviceDefinitionsError {
 }
 impl fmt::Display for ListDeviceDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeviceDefinitionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListDeviceDefinitionsError {}
 /// Errors returned by ListFunctionDefinitionVersions
 #[derive(Debug, PartialEq)]
 pub enum ListFunctionDefinitionVersionsError {
@@ -5686,16 +5469,12 @@ impl ListFunctionDefinitionVersionsError {
 }
 impl fmt::Display for ListFunctionDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFunctionDefinitionVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFunctionDefinitionVersionsError::BadRequest(ref cause) => cause,
+            ListFunctionDefinitionVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFunctionDefinitionVersionsError {}
 /// Errors returned by ListFunctionDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListFunctionDefinitionsError {}
@@ -5713,14 +5492,10 @@ impl ListFunctionDefinitionsError {
 }
 impl fmt::Display for ListFunctionDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFunctionDefinitionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListFunctionDefinitionsError {}
 /// Errors returned by ListGroupCertificateAuthorities
 #[derive(Debug, PartialEq)]
 pub enum ListGroupCertificateAuthoritiesError {
@@ -5755,17 +5530,15 @@ impl ListGroupCertificateAuthoritiesError {
 }
 impl fmt::Display for ListGroupCertificateAuthoritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupCertificateAuthoritiesError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupCertificateAuthoritiesError::BadRequest(ref cause) => cause,
-            ListGroupCertificateAuthoritiesError::InternalServerError(ref cause) => cause,
+            ListGroupCertificateAuthoritiesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListGroupCertificateAuthoritiesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListGroupCertificateAuthoritiesError {}
 /// Errors returned by ListGroupVersions
 #[derive(Debug, PartialEq)]
 pub enum ListGroupVersionsError {
@@ -5789,16 +5562,12 @@ impl ListGroupVersionsError {
 }
 impl fmt::Display for ListGroupVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupVersionsError::BadRequest(ref cause) => cause,
+            ListGroupVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGroupVersionsError {}
 /// Errors returned by ListGroups
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsError {}
@@ -5816,14 +5585,10 @@ impl ListGroupsError {
 }
 impl fmt::Display for ListGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListGroupsError {}
 /// Errors returned by ListLoggerDefinitionVersions
 #[derive(Debug, PartialEq)]
 pub enum ListLoggerDefinitionVersionsError {
@@ -5851,16 +5616,12 @@ impl ListLoggerDefinitionVersionsError {
 }
 impl fmt::Display for ListLoggerDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLoggerDefinitionVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListLoggerDefinitionVersionsError::BadRequest(ref cause) => cause,
+            ListLoggerDefinitionVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListLoggerDefinitionVersionsError {}
 /// Errors returned by ListLoggerDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListLoggerDefinitionsError {}
@@ -5878,14 +5639,10 @@ impl ListLoggerDefinitionsError {
 }
 impl fmt::Display for ListLoggerDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLoggerDefinitionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListLoggerDefinitionsError {}
 /// Errors returned by ListResourceDefinitionVersions
 #[derive(Debug, PartialEq)]
 pub enum ListResourceDefinitionVersionsError {
@@ -5913,16 +5670,12 @@ impl ListResourceDefinitionVersionsError {
 }
 impl fmt::Display for ListResourceDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourceDefinitionVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourceDefinitionVersionsError::BadRequest(ref cause) => cause,
+            ListResourceDefinitionVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourceDefinitionVersionsError {}
 /// Errors returned by ListResourceDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListResourceDefinitionsError {}
@@ -5940,14 +5693,10 @@ impl ListResourceDefinitionsError {
 }
 impl fmt::Display for ListResourceDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourceDefinitionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListResourceDefinitionsError {}
 /// Errors returned by ListSubscriptionDefinitionVersions
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionDefinitionVersionsError {
@@ -5975,16 +5724,14 @@ impl ListSubscriptionDefinitionVersionsError {
 }
 impl fmt::Display for ListSubscriptionDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscriptionDefinitionVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSubscriptionDefinitionVersionsError::BadRequest(ref cause) => cause,
+            ListSubscriptionDefinitionVersionsError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListSubscriptionDefinitionVersionsError {}
 /// Errors returned by ListSubscriptionDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionDefinitionsError {}
@@ -6004,14 +5751,10 @@ impl ListSubscriptionDefinitionsError {
 }
 impl fmt::Display for ListSubscriptionDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscriptionDefinitionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListSubscriptionDefinitionsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -6035,16 +5778,12 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ResetDeployments
 #[derive(Debug, PartialEq)]
 pub enum ResetDeploymentsError {
@@ -6068,16 +5807,12 @@ impl ResetDeploymentsError {
 }
 impl fmt::Display for ResetDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetDeploymentsError {
-    fn description(&self) -> &str {
         match *self {
-            ResetDeploymentsError::BadRequest(ref cause) => cause,
+            ResetDeploymentsError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResetDeploymentsError {}
 /// Errors returned by StartBulkDeployment
 #[derive(Debug, PartialEq)]
 pub enum StartBulkDeploymentError {
@@ -6101,16 +5836,12 @@ impl StartBulkDeploymentError {
 }
 impl fmt::Display for StartBulkDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartBulkDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            StartBulkDeploymentError::BadRequest(ref cause) => cause,
+            StartBulkDeploymentError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartBulkDeploymentError {}
 /// Errors returned by StopBulkDeployment
 #[derive(Debug, PartialEq)]
 pub enum StopBulkDeploymentError {
@@ -6134,16 +5865,12 @@ impl StopBulkDeploymentError {
 }
 impl fmt::Display for StopBulkDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopBulkDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            StopBulkDeploymentError::BadRequest(ref cause) => cause,
+            StopBulkDeploymentError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopBulkDeploymentError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -6167,16 +5894,12 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -6200,16 +5923,12 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateConnectivityInfo
 #[derive(Debug, PartialEq)]
 pub enum UpdateConnectivityInfoError {
@@ -6240,17 +5959,13 @@ impl UpdateConnectivityInfoError {
 }
 impl fmt::Display for UpdateConnectivityInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateConnectivityInfoError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateConnectivityInfoError::BadRequest(ref cause) => cause,
-            UpdateConnectivityInfoError::InternalServerError(ref cause) => cause,
+            UpdateConnectivityInfoError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateConnectivityInfoError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateConnectivityInfoError {}
 /// Errors returned by UpdateConnectorDefinition
 #[derive(Debug, PartialEq)]
 pub enum UpdateConnectorDefinitionError {
@@ -6276,16 +5991,12 @@ impl UpdateConnectorDefinitionError {
 }
 impl fmt::Display for UpdateConnectorDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateConnectorDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateConnectorDefinitionError::BadRequest(ref cause) => cause,
+            UpdateConnectorDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateConnectorDefinitionError {}
 /// Errors returned by UpdateCoreDefinition
 #[derive(Debug, PartialEq)]
 pub enum UpdateCoreDefinitionError {
@@ -6309,16 +6020,12 @@ impl UpdateCoreDefinitionError {
 }
 impl fmt::Display for UpdateCoreDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCoreDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCoreDefinitionError::BadRequest(ref cause) => cause,
+            UpdateCoreDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateCoreDefinitionError {}
 /// Errors returned by UpdateDeviceDefinition
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeviceDefinitionError {
@@ -6342,16 +6049,12 @@ impl UpdateDeviceDefinitionError {
 }
 impl fmt::Display for UpdateDeviceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDeviceDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDeviceDefinitionError::BadRequest(ref cause) => cause,
+            UpdateDeviceDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDeviceDefinitionError {}
 /// Errors returned by UpdateFunctionDefinition
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionDefinitionError {
@@ -6375,16 +6078,12 @@ impl UpdateFunctionDefinitionError {
 }
 impl fmt::Display for UpdateFunctionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFunctionDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFunctionDefinitionError::BadRequest(ref cause) => cause,
+            UpdateFunctionDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFunctionDefinitionError {}
 /// Errors returned by UpdateGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateGroupError {
@@ -6408,16 +6107,12 @@ impl UpdateGroupError {
 }
 impl fmt::Display for UpdateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGroupError::BadRequest(ref cause) => cause,
+            UpdateGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGroupError {}
 /// Errors returned by UpdateGroupCertificateConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateGroupCertificateConfigurationError {
@@ -6452,17 +6147,17 @@ impl UpdateGroupCertificateConfigurationError {
 }
 impl fmt::Display for UpdateGroupCertificateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGroupCertificateConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGroupCertificateConfigurationError::BadRequest(ref cause) => cause,
-            UpdateGroupCertificateConfigurationError::InternalServerError(ref cause) => cause,
+            UpdateGroupCertificateConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateGroupCertificateConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateGroupCertificateConfigurationError {}
 /// Errors returned by UpdateLoggerDefinition
 #[derive(Debug, PartialEq)]
 pub enum UpdateLoggerDefinitionError {
@@ -6486,16 +6181,12 @@ impl UpdateLoggerDefinitionError {
 }
 impl fmt::Display for UpdateLoggerDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLoggerDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLoggerDefinitionError::BadRequest(ref cause) => cause,
+            UpdateLoggerDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateLoggerDefinitionError {}
 /// Errors returned by UpdateResourceDefinition
 #[derive(Debug, PartialEq)]
 pub enum UpdateResourceDefinitionError {
@@ -6519,16 +6210,12 @@ impl UpdateResourceDefinitionError {
 }
 impl fmt::Display for UpdateResourceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateResourceDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateResourceDefinitionError::BadRequest(ref cause) => cause,
+            UpdateResourceDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateResourceDefinitionError {}
 /// Errors returned by UpdateSubscriptionDefinition
 #[derive(Debug, PartialEq)]
 pub enum UpdateSubscriptionDefinitionError {
@@ -6556,16 +6243,12 @@ impl UpdateSubscriptionDefinitionError {
 }
 impl fmt::Display for UpdateSubscriptionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSubscriptionDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSubscriptionDefinitionError::BadRequest(ref cause) => cause,
+            UpdateSubscriptionDefinitionError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSubscriptionDefinitionError {}
 /// Trait representing the capabilities of the AWS Greengrass API. AWS Greengrass clients implement this trait.
 pub trait GreenGrass {
     /// <p>Associates a role with a group. Your Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
@@ -7043,7 +6726,7 @@ pub trait GreenGrass {
         input: StopBulkDeploymentRequest,
     ) -> RusotoFuture<StopBulkDeploymentResponse, StopBulkDeploymentError>;
 
-    /// <p>Add resource tags to a Greengrass Resource. Valid resources are Group, Connector, Core, Device, Function, Logger, Subscription, and Resource Defintions, and also BulkDeploymentIds.</p>
+    /// <p>Adds tags to a Greengrass resource. Valid resources are &#39;Group&#39;, &#39;ConnectorDefinition&#39;, &#39;CoreDefinition&#39;, &#39;DeviceDefinition&#39;, &#39;FunctionDefinition&#39;, &#39;LoggerDefinition&#39;, &#39;SubscriptionDefinition&#39;, &#39;ResourceDefinition&#39;, and &#39;BulkDeployment&#39;.</p>
     fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
     /// <p>Remove resource tags from a Greengrass Resource.</p>
@@ -7146,6 +6829,14 @@ impl GreenGrassClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> GreenGrassClient {
         GreenGrassClient { client, region }
+    }
+}
+
+impl fmt::Debug for GreenGrassClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("GreenGrassClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -9794,7 +9485,7 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
-    /// <p>Add resource tags to a Greengrass Resource. Valid resources are Group, Connector, Core, Device, Function, Logger, Subscription, and Resource Defintions, and also BulkDeploymentIds.</p>
+    /// <p>Adds tags to a Greengrass resource. Valid resources are &#39;Group&#39;, &#39;ConnectorDefinition&#39;, &#39;CoreDefinition&#39;, &#39;DeviceDefinition&#39;, &#39;FunctionDefinition&#39;, &#39;LoggerDefinition&#39;, &#39;SubscriptionDefinition&#39;, &#39;ResourceDefinition&#39;, and &#39;BulkDeployment&#39;.</p>
     fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 

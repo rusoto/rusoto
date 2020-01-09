@@ -149,6 +149,72 @@ pub struct CreateChannelResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Configuration parameters used to create a new HarvestJob.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateHarvestJobRequest {
+    /// <p>The end of the time-window which will be harvested</p>
+    #[serde(rename = "EndTime")]
+    pub end_time: String,
+    /// <p>The ID of the HarvestJob. The ID must be unique within the region
+    /// and it cannot be changed after the HarvestJob is submitted</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The ID of the OriginEndpoint that the HarvestJob will harvest from.
+    /// This cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "OriginEndpointId")]
+    pub origin_endpoint_id: String,
+    #[serde(rename = "S3Destination")]
+    pub s3_destination: S3Destination,
+    /// <p>The start of the time-window which will be harvested</p>
+    #[serde(rename = "StartTime")]
+    pub start_time: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateHarvestJobResponse {
+    /// <p>The Amazon Resource Name (ARN) assigned to the HarvestJob.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID of the Channel that the HarvestJob will harvest from.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    /// <p>The time the HarvestJob was submitted</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    /// <p>The end of the time-window which will be harvested.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<String>,
+    /// <p>The ID of the HarvestJob. The ID must be unique within the region
+    /// and it cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The ID of the OriginEndpoint that the HarvestJob will harvest from.
+    /// This cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "OriginEndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin_endpoint_id: Option<String>,
+    #[serde(rename = "S3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_destination: Option<S3Destination>,
+    /// <p>The start of the time-window which will be harvested.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<String>,
+    /// <p>The current status of the HarvestJob. Consider setting up a CloudWatch Event to listen for
+    /// HarvestJobs as they succeed or fail. In the event of failure, the CloudWatch Event will
+    /// include an explanation of why the HarvestJob failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
 /// <p>Configuration parameters used to create a new OriginEndpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -181,6 +247,12 @@ pub struct CreateOriginEndpointRequest {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -235,6 +307,12 @@ pub struct CreateOriginEndpointResponse {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -383,6 +461,58 @@ pub struct DescribeChannelResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeHarvestJobRequest {
+    /// <p>The ID of the HarvestJob.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeHarvestJobResponse {
+    /// <p>The Amazon Resource Name (ARN) assigned to the HarvestJob.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID of the Channel that the HarvestJob will harvest from.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    /// <p>The time the HarvestJob was submitted</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    /// <p>The end of the time-window which will be harvested.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<String>,
+    /// <p>The ID of the HarvestJob. The ID must be unique within the region
+    /// and it cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The ID of the OriginEndpoint that the HarvestJob will harvest from.
+    /// This cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "OriginEndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin_endpoint_id: Option<String>,
+    #[serde(rename = "S3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_destination: Option<S3Destination>,
+    /// <p>The start of the time-window which will be harvested.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<String>,
+    /// <p>The current status of the HarvestJob. Consider setting up a CloudWatch Event to listen for
+    /// HarvestJobs as they succeed or fail. In the event of failure, the CloudWatch Event will
+    /// include an explanation of why the HarvestJob failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOriginEndpointRequest {
     /// <p>The ID of the OriginEndpoint.</p>
     #[serde(rename = "Id")]
@@ -424,6 +554,12 @@ pub struct DescribeOriginEndpointResponse {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -445,6 +581,51 @@ pub struct DescribeOriginEndpointResponse {
     #[serde(rename = "Whitelist")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub whitelist: Option<Vec<String>>,
+}
+
+/// <p>A HarvestJob resource configuration</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HarvestJob {
+    /// <p>The Amazon Resource Name (ARN) assigned to the HarvestJob.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID of the Channel that the HarvestJob will harvest from.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    /// <p>The time the HarvestJob was submitted</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    /// <p>The end of the time-window which will be harvested.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<String>,
+    /// <p>The ID of the HarvestJob. The ID must be unique within the region
+    /// and it cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The ID of the OriginEndpoint that the HarvestJob will harvest from.
+    /// This cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "OriginEndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin_endpoint_id: Option<String>,
+    #[serde(rename = "S3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_destination: Option<S3Destination>,
+    /// <p>The start of the time-window which will be harvested.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<String>,
+    /// <p>The current status of the HarvestJob. Consider setting up a CloudWatch Event to listen for
+    /// HarvestJobs as they succeed or fail. In the event of failure, the CloudWatch Event will
+    /// include an explanation of why the HarvestJob failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>An HTTP Live Streaming (HLS) encryption configuration.</p>
@@ -698,6 +879,40 @@ pub struct ListChannelsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListHarvestJobsRequest {
+    /// <p>When specified, the request will return only HarvestJobs associated with the given Channel ID.</p>
+    #[serde(rename = "IncludeChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_channel_id: Option<String>,
+    /// <p>When specified, the request will return only HarvestJobs in the given status.</p>
+    #[serde(rename = "IncludeStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_status: Option<String>,
+    /// <p>The upper bound on the number of records to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token used to resume pagination from the end of a previous request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListHarvestJobsResponse {
+    /// <p>A list of HarvestJob records.</p>
+    #[serde(rename = "HarvestJobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub harvest_jobs: Option<Vec<HarvestJob>>,
+    /// <p>A token that can be used to resume pagination from the end of the collection.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOriginEndpointsRequest {
     /// <p>When specified, the request will return only OriginEndpoints associated with the given Channel ID.</p>
     #[serde(rename = "ChannelId")]
@@ -803,6 +1018,12 @@ pub struct OriginEndpoint {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -889,6 +1110,20 @@ pub struct RotateIngestEndpointCredentialsResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Configuration parameters for where in an S3 bucket to place the harvested content</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct S3Destination {
+    /// <p>The name of an S3 bucket within which harvested content will be exported</p>
+    #[serde(rename = "BucketName")]
+    pub bucket_name: String,
+    /// <p>The key in the specified S3 bucket where the harvested top-level manifest will be placed.</p>
+    #[serde(rename = "ManifestKey")]
+    pub manifest_key: String,
+    /// <p>The IAM role used to write to the specified S3 bucket</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
 }
 
 /// <p>A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.</p>
@@ -1014,6 +1249,12 @@ pub struct UpdateOriginEndpointRequest {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (in seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -1065,6 +1306,12 @@ pub struct UpdateOriginEndpointResponse {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -1136,21 +1383,80 @@ impl CreateChannelError {
 }
 impl fmt::Display for CreateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateChannelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateChannelError::Forbidden(ref cause) => cause,
-            CreateChannelError::InternalServerError(ref cause) => cause,
-            CreateChannelError::NotFound(ref cause) => cause,
-            CreateChannelError::ServiceUnavailable(ref cause) => cause,
-            CreateChannelError::TooManyRequests(ref cause) => cause,
-            CreateChannelError::UnprocessableEntity(ref cause) => cause,
+            CreateChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateChannelError {}
+/// Errors returned by CreateHarvestJob
+#[derive(Debug, PartialEq)]
+pub enum CreateHarvestJobError {
+    /// <p>The client is not authorized to access the requested resource.</p>
+    Forbidden(String),
+    /// <p>An unexpected error occurred.</p>
+    InternalServerError(String),
+    /// <p>The requested resource does not exist.</p>
+    NotFound(String),
+    /// <p>An unexpected error occurred.</p>
+    ServiceUnavailable(String),
+    /// <p>The client has exceeded their resource or throttling limits.</p>
+    TooManyRequests(String),
+    /// <p>The parameters sent in the request are not valid.</p>
+    UnprocessableEntity(String),
+}
+
+impl CreateHarvestJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHarvestJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateHarvestJobError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(CreateHarvestJobError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateHarvestJobError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateHarvestJobError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateHarvestJobError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(CreateHarvestJobError::UnprocessableEntity(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateHarvestJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateHarvestJobError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateHarvestJobError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateHarvestJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateHarvestJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateHarvestJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateHarvestJobError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateHarvestJobError {}
 /// Errors returned by CreateOriginEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateOriginEndpointError {
@@ -1207,21 +1513,17 @@ impl CreateOriginEndpointError {
 }
 impl fmt::Display for CreateOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateOriginEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateOriginEndpointError::Forbidden(ref cause) => cause,
-            CreateOriginEndpointError::InternalServerError(ref cause) => cause,
-            CreateOriginEndpointError::NotFound(ref cause) => cause,
-            CreateOriginEndpointError::ServiceUnavailable(ref cause) => cause,
-            CreateOriginEndpointError::TooManyRequests(ref cause) => cause,
-            CreateOriginEndpointError::UnprocessableEntity(ref cause) => cause,
+            CreateOriginEndpointError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateOriginEndpointError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateOriginEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateOriginEndpointError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateOriginEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateOriginEndpointError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateOriginEndpointError {}
 /// Errors returned by DeleteChannel
 #[derive(Debug, PartialEq)]
 pub enum DeleteChannelError {
@@ -1270,21 +1572,17 @@ impl DeleteChannelError {
 }
 impl fmt::Display for DeleteChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteChannelError::Forbidden(ref cause) => cause,
-            DeleteChannelError::InternalServerError(ref cause) => cause,
-            DeleteChannelError::NotFound(ref cause) => cause,
-            DeleteChannelError::ServiceUnavailable(ref cause) => cause,
-            DeleteChannelError::TooManyRequests(ref cause) => cause,
-            DeleteChannelError::UnprocessableEntity(ref cause) => cause,
+            DeleteChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteChannelError {}
 /// Errors returned by DeleteOriginEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteOriginEndpointError {
@@ -1341,21 +1639,17 @@ impl DeleteOriginEndpointError {
 }
 impl fmt::Display for DeleteOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteOriginEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteOriginEndpointError::Forbidden(ref cause) => cause,
-            DeleteOriginEndpointError::InternalServerError(ref cause) => cause,
-            DeleteOriginEndpointError::NotFound(ref cause) => cause,
-            DeleteOriginEndpointError::ServiceUnavailable(ref cause) => cause,
-            DeleteOriginEndpointError::TooManyRequests(ref cause) => cause,
-            DeleteOriginEndpointError::UnprocessableEntity(ref cause) => cause,
+            DeleteOriginEndpointError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteOriginEndpointError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteOriginEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteOriginEndpointError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteOriginEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteOriginEndpointError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteOriginEndpointError {}
 /// Errors returned by DescribeChannel
 #[derive(Debug, PartialEq)]
 pub enum DescribeChannelError {
@@ -1404,21 +1698,82 @@ impl DescribeChannelError {
 }
 impl fmt::Display for DescribeChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeChannelError::Forbidden(ref cause) => cause,
-            DescribeChannelError::InternalServerError(ref cause) => cause,
-            DescribeChannelError::NotFound(ref cause) => cause,
-            DescribeChannelError::ServiceUnavailable(ref cause) => cause,
-            DescribeChannelError::TooManyRequests(ref cause) => cause,
-            DescribeChannelError::UnprocessableEntity(ref cause) => cause,
+            DescribeChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeChannelError {}
+/// Errors returned by DescribeHarvestJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeHarvestJobError {
+    /// <p>The client is not authorized to access the requested resource.</p>
+    Forbidden(String),
+    /// <p>An unexpected error occurred.</p>
+    InternalServerError(String),
+    /// <p>The requested resource does not exist.</p>
+    NotFound(String),
+    /// <p>An unexpected error occurred.</p>
+    ServiceUnavailable(String),
+    /// <p>The client has exceeded their resource or throttling limits.</p>
+    TooManyRequests(String),
+    /// <p>The parameters sent in the request are not valid.</p>
+    UnprocessableEntity(String),
+}
+
+impl DescribeHarvestJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHarvestJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::UnprocessableEntity(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeHarvestJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeHarvestJobError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeHarvestJobError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeHarvestJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeHarvestJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeHarvestJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeHarvestJobError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeHarvestJobError {}
 /// Errors returned by DescribeOriginEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeOriginEndpointError {
@@ -1475,21 +1830,17 @@ impl DescribeOriginEndpointError {
 }
 impl fmt::Display for DescribeOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOriginEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOriginEndpointError::Forbidden(ref cause) => cause,
-            DescribeOriginEndpointError::InternalServerError(ref cause) => cause,
-            DescribeOriginEndpointError::NotFound(ref cause) => cause,
-            DescribeOriginEndpointError::ServiceUnavailable(ref cause) => cause,
-            DescribeOriginEndpointError::TooManyRequests(ref cause) => cause,
-            DescribeOriginEndpointError::UnprocessableEntity(ref cause) => cause,
+            DescribeOriginEndpointError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeOriginEndpointError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeOriginEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeOriginEndpointError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeOriginEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeOriginEndpointError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeOriginEndpointError {}
 /// Errors returned by ListChannels
 #[derive(Debug, PartialEq)]
 pub enum ListChannelsError {
@@ -1538,21 +1889,76 @@ impl ListChannelsError {
 }
 impl fmt::Display for ListChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListChannelsError {
-    fn description(&self) -> &str {
         match *self {
-            ListChannelsError::Forbidden(ref cause) => cause,
-            ListChannelsError::InternalServerError(ref cause) => cause,
-            ListChannelsError::NotFound(ref cause) => cause,
-            ListChannelsError::ServiceUnavailable(ref cause) => cause,
-            ListChannelsError::TooManyRequests(ref cause) => cause,
-            ListChannelsError::UnprocessableEntity(ref cause) => cause,
+            ListChannelsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListChannelsError {}
+/// Errors returned by ListHarvestJobs
+#[derive(Debug, PartialEq)]
+pub enum ListHarvestJobsError {
+    /// <p>The client is not authorized to access the requested resource.</p>
+    Forbidden(String),
+    /// <p>An unexpected error occurred.</p>
+    InternalServerError(String),
+    /// <p>The requested resource does not exist.</p>
+    NotFound(String),
+    /// <p>An unexpected error occurred.</p>
+    ServiceUnavailable(String),
+    /// <p>The client has exceeded their resource or throttling limits.</p>
+    TooManyRequests(String),
+    /// <p>The parameters sent in the request are not valid.</p>
+    UnprocessableEntity(String),
+}
+
+impl ListHarvestJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHarvestJobsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListHarvestJobsError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListHarvestJobsError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListHarvestJobsError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListHarvestJobsError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListHarvestJobsError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(ListHarvestJobsError::UnprocessableEntity(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListHarvestJobsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListHarvestJobsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListHarvestJobsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListHarvestJobsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListHarvestJobsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListHarvestJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListHarvestJobsError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListHarvestJobsError {}
 /// Errors returned by ListOriginEndpoints
 #[derive(Debug, PartialEq)]
 pub enum ListOriginEndpointsError {
@@ -1607,21 +2013,17 @@ impl ListOriginEndpointsError {
 }
 impl fmt::Display for ListOriginEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOriginEndpointsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOriginEndpointsError::Forbidden(ref cause) => cause,
-            ListOriginEndpointsError::InternalServerError(ref cause) => cause,
-            ListOriginEndpointsError::NotFound(ref cause) => cause,
-            ListOriginEndpointsError::ServiceUnavailable(ref cause) => cause,
-            ListOriginEndpointsError::TooManyRequests(ref cause) => cause,
-            ListOriginEndpointsError::UnprocessableEntity(ref cause) => cause,
+            ListOriginEndpointsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListOriginEndpointsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListOriginEndpointsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListOriginEndpointsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListOriginEndpointsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListOriginEndpointsError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOriginEndpointsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {}
@@ -1639,14 +2041,10 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by RotateChannelCredentials
 #[derive(Debug, PartialEq)]
 pub enum RotateChannelCredentialsError {
@@ -1703,21 +2101,17 @@ impl RotateChannelCredentialsError {
 }
 impl fmt::Display for RotateChannelCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RotateChannelCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            RotateChannelCredentialsError::Forbidden(ref cause) => cause,
-            RotateChannelCredentialsError::InternalServerError(ref cause) => cause,
-            RotateChannelCredentialsError::NotFound(ref cause) => cause,
-            RotateChannelCredentialsError::ServiceUnavailable(ref cause) => cause,
-            RotateChannelCredentialsError::TooManyRequests(ref cause) => cause,
-            RotateChannelCredentialsError::UnprocessableEntity(ref cause) => cause,
+            RotateChannelCredentialsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RotateChannelCredentialsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RotateChannelCredentialsError::NotFound(ref cause) => write!(f, "{}", cause),
+            RotateChannelCredentialsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RotateChannelCredentialsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            RotateChannelCredentialsError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RotateChannelCredentialsError {}
 /// Errors returned by RotateIngestEndpointCredentials
 #[derive(Debug, PartialEq)]
 pub enum RotateIngestEndpointCredentialsError {
@@ -1780,21 +2174,25 @@ impl RotateIngestEndpointCredentialsError {
 }
 impl fmt::Display for RotateIngestEndpointCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RotateIngestEndpointCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            RotateIngestEndpointCredentialsError::Forbidden(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::InternalServerError(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::NotFound(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::ServiceUnavailable(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::TooManyRequests(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::UnprocessableEntity(ref cause) => cause,
+            RotateIngestEndpointCredentialsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RotateIngestEndpointCredentialsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RotateIngestEndpointCredentialsError::NotFound(ref cause) => write!(f, "{}", cause),
+            RotateIngestEndpointCredentialsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RotateIngestEndpointCredentialsError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RotateIngestEndpointCredentialsError::UnprocessableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RotateIngestEndpointCredentialsError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {}
@@ -1812,14 +2210,10 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {}
@@ -1837,14 +2231,10 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateChannel
 #[derive(Debug, PartialEq)]
 pub enum UpdateChannelError {
@@ -1893,21 +2283,17 @@ impl UpdateChannelError {
 }
 impl fmt::Display for UpdateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateChannelError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateChannelError::Forbidden(ref cause) => cause,
-            UpdateChannelError::InternalServerError(ref cause) => cause,
-            UpdateChannelError::NotFound(ref cause) => cause,
-            UpdateChannelError::ServiceUnavailable(ref cause) => cause,
-            UpdateChannelError::TooManyRequests(ref cause) => cause,
-            UpdateChannelError::UnprocessableEntity(ref cause) => cause,
+            UpdateChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateChannelError {}
 /// Errors returned by UpdateOriginEndpoint
 #[derive(Debug, PartialEq)]
 pub enum UpdateOriginEndpointError {
@@ -1964,21 +2350,17 @@ impl UpdateOriginEndpointError {
 }
 impl fmt::Display for UpdateOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateOriginEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateOriginEndpointError::Forbidden(ref cause) => cause,
-            UpdateOriginEndpointError::InternalServerError(ref cause) => cause,
-            UpdateOriginEndpointError::NotFound(ref cause) => cause,
-            UpdateOriginEndpointError::ServiceUnavailable(ref cause) => cause,
-            UpdateOriginEndpointError::TooManyRequests(ref cause) => cause,
-            UpdateOriginEndpointError::UnprocessableEntity(ref cause) => cause,
+            UpdateOriginEndpointError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateOriginEndpointError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateOriginEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateOriginEndpointError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateOriginEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateOriginEndpointError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateOriginEndpointError {}
 /// Trait representing the capabilities of the MediaPackage API. MediaPackage clients implement this trait.
 pub trait MediaPackage {
     /// <p>Creates a new Channel.</p>
@@ -1986,6 +2368,12 @@ pub trait MediaPackage {
         &self,
         input: CreateChannelRequest,
     ) -> RusotoFuture<CreateChannelResponse, CreateChannelError>;
+
+    /// <p>Creates a new HarvestJob record.</p>
+    fn create_harvest_job(
+        &self,
+        input: CreateHarvestJobRequest,
+    ) -> RusotoFuture<CreateHarvestJobResponse, CreateHarvestJobError>;
 
     /// <p>Creates a new OriginEndpoint record.</p>
     fn create_origin_endpoint(
@@ -2011,6 +2399,12 @@ pub trait MediaPackage {
         input: DescribeChannelRequest,
     ) -> RusotoFuture<DescribeChannelResponse, DescribeChannelError>;
 
+    /// <p>Gets details about an existing HarvestJob.</p>
+    fn describe_harvest_job(
+        &self,
+        input: DescribeHarvestJobRequest,
+    ) -> RusotoFuture<DescribeHarvestJobResponse, DescribeHarvestJobError>;
+
     /// <p>Gets details about an existing OriginEndpoint.</p>
     fn describe_origin_endpoint(
         &self,
@@ -2022,6 +2416,12 @@ pub trait MediaPackage {
         &self,
         input: ListChannelsRequest,
     ) -> RusotoFuture<ListChannelsResponse, ListChannelsError>;
+
+    /// <p>Returns a collection of HarvestJob records.</p>
+    fn list_harvest_jobs(
+        &self,
+        input: ListHarvestJobsRequest,
+    ) -> RusotoFuture<ListHarvestJobsResponse, ListHarvestJobsError>;
 
     /// <p>Returns a collection of OriginEndpoint records.</p>
     fn list_origin_endpoints(
@@ -2099,6 +2499,14 @@ impl MediaPackageClient {
     }
 }
 
+impl fmt::Debug for MediaPackageClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MediaPackageClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl MediaPackage for MediaPackageClient {
     /// <p>Creates a new Channel.</p>
     fn create_channel(
@@ -2127,6 +2535,38 @@ impl MediaPackage for MediaPackageClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(CreateChannelError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates a new HarvestJob record.</p>
+    fn create_harvest_job(
+        &self,
+        input: CreateHarvestJobRequest,
+    ) -> RusotoFuture<CreateHarvestJobResponse, CreateHarvestJobError> {
+        let request_uri = "/harvest_jobs";
+
+        let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateHarvestJobResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateHarvestJobError::from_response(response))),
                 )
             }
         })
@@ -2249,6 +2689,35 @@ impl MediaPackage for MediaPackageClient {
         })
     }
 
+    /// <p>Gets details about an existing HarvestJob.</p>
+    fn describe_harvest_job(
+        &self,
+        input: DescribeHarvestJobRequest,
+    ) -> RusotoFuture<DescribeHarvestJobResponse, DescribeHarvestJobError> {
+        let request_uri = format!("/harvest_jobs/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeHarvestJobResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeHarvestJobError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Gets details about an existing OriginEndpoint.</p>
     fn describe_origin_endpoint(
         &self,
@@ -2310,6 +2779,50 @@ impl MediaPackage for MediaPackageClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListChannelsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a collection of HarvestJob records.</p>
+    fn list_harvest_jobs(
+        &self,
+        input: ListHarvestJobsRequest,
+    ) -> RusotoFuture<ListHarvestJobsResponse, ListHarvestJobsError> {
+        let request_uri = "/harvest_jobs";
+
+        let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.include_channel_id {
+            params.put("includeChannelId", x);
+        }
+        if let Some(ref x) = input.include_status {
+            params.put("includeStatus", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListHarvestJobsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListHarvestJobsError::from_response(response))),
                 )
             }
         })

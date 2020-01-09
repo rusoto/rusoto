@@ -256,6 +256,111 @@ impl BooleanOptionalDeserializer {
         Ok(obj)
     }
 }
+/// <p>A certificate authority (CA) certificate for an AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct Certificate {
+    /// <p>The Amazon Resource Name (ARN) for the certificate.</p> <p>Example: <code>arn:aws:rds:us-east-1::cert:rds-ca-2019</code> </p>
+    pub certificate_arn: Option<String>,
+    /// <p>The unique key that identifies a certificate.</p> <p>Example: <code>rds-ca-2019</code> </p>
+    pub certificate_identifier: Option<String>,
+    /// <p>The type of the certificate.</p> <p>Example: <code>CA</code> </p>
+    pub certificate_type: Option<String>,
+    /// <p>The thumbprint of the certificate.</p>
+    pub thumbprint: Option<String>,
+    /// <p>The starting date-time from which the certificate is valid.</p> <p>Example: <code>2019-07-31T17:57:09Z</code> </p>
+    pub valid_from: Option<String>,
+    /// <p>The date-time after which the certificate is no longer valid.</p> <p>Example: <code>2024-07-31T17:57:09Z</code> </p>
+    pub valid_till: Option<String>,
+}
+
+struct CertificateDeserializer;
+impl CertificateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Certificate, XmlParseError> {
+        deserialize_elements::<_, Certificate, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CertificateArn" => {
+                    obj.certificate_arn =
+                        Some(StringDeserializer::deserialize("CertificateArn", stack)?);
+                }
+                "CertificateIdentifier" => {
+                    obj.certificate_identifier = Some(StringDeserializer::deserialize(
+                        "CertificateIdentifier",
+                        stack,
+                    )?);
+                }
+                "CertificateType" => {
+                    obj.certificate_type =
+                        Some(StringDeserializer::deserialize("CertificateType", stack)?);
+                }
+                "Thumbprint" => {
+                    obj.thumbprint = Some(StringDeserializer::deserialize("Thumbprint", stack)?);
+                }
+                "ValidFrom" => {
+                    obj.valid_from = Some(TStampDeserializer::deserialize("ValidFrom", stack)?);
+                }
+                "ValidTill" => {
+                    obj.valid_till = Some(TStampDeserializer::deserialize("ValidTill", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct CertificateListDeserializer;
+impl CertificateListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Certificate>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "Certificate" {
+                obj.push(CertificateDeserializer::deserialize("Certificate", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CertificateMessage {
+    /// <p>A list of certificates for this AWS account.</p>
+    pub certificates: Option<Vec<Certificate>>,
+    /// <p>An optional pagination token provided if the number of records retrieved is greater than <code>MaxRecords</code>. If this parameter is specified, the marker specifies the next record in the list. Including the value of <code>Marker</code> in the next call to <code>DescribeCertificates</code> results in the next page of certificates.</p>
+    pub marker: Option<String>,
+}
+
+struct CertificateMessageDeserializer;
+impl CertificateMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CertificateMessage, XmlParseError> {
+        deserialize_elements::<_, CertificateMessage, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Certificates" => {
+                    obj.certificates.get_or_insert(vec![]).extend(
+                        CertificateListDeserializer::deserialize("Certificates", stack)?,
+                    );
+                }
+                "Marker" => {
+                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>The configuration setting for the log types to be enabled for export to Amazon CloudWatch Logs for a specific DB instance or DB cluster.</p> <p>The <code>EnableLogTypes</code> and <code>DisableLogTypes</code> arrays determine which logs are exported (or not exported) to CloudWatch Logs. The values within these arrays depend on the DB engine that is being used.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -470,9 +575,9 @@ pub struct CreateDBClusterMessage {
     pub engine_version: Option<String>,
     /// <p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are creating a DB cluster using the same AWS account that owns the AWS KMS encryption key that is used to encrypt the new DB cluster, you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key.</p> <p>If an encryption key is not specified in <code>KmsKeyId</code>:</p> <ul> <li> <p>If <code>ReplicationSourceIdentifier</code> identifies an encrypted source, then Amazon DocumentDB uses the encryption key that is used to encrypt the source. Otherwise, Amazon DocumentDB uses your default encryption key. </p> </li> <li> <p>If the <code>StorageEncrypted</code> parameter is <code>true</code> and <code>ReplicationSourceIdentifier</code> is not specified, Amazon DocumentDB uses your default encryption key.</p> </li> </ul> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p> <p>If you create a replica of an encrypted DB cluster in another AWS Region, you must set <code>KmsKeyId</code> to a KMS key ID that is valid in the destination AWS Region. This key is used to encrypt the replica in that AWS Region.</p>
     pub kms_key_id: Option<String>,
-    /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
+    /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 100 characters.</p>
     pub master_user_password: String,
-    /// <p><p>The name of the master user for the DB cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 16 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul></p>
+    /// <p><p>The name of the master user for the DB cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 63 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul></p>
     pub master_username: String,
     /// <p>The port number on which the instances in the DB cluster accept connections.</p>
     pub port: Option<i64>,
@@ -759,7 +864,7 @@ pub struct CreateDBInstanceMessage {
     pub preferred_maintenance_window: Option<String>,
     /// <p>A value that specifies the order in which an Amazon DocumentDB replica is promoted to the primary instance after a failure of the existing primary instance.</p> <p>Default: 1</p> <p>Valid values: 0-15</p>
     pub promotion_tier: Option<i64>,
-    /// <p>The tags to be assigned to the DB instance.</p>
+    /// <p>The tags to be assigned to the DB instance. You can assign up to 10 tags to an instance.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -1915,6 +2020,8 @@ pub struct DBInstance {
     pub availability_zone: Option<String>,
     /// <p>Specifies the number of days for which automatic DB snapshots are retained.</p>
     pub backup_retention_period: Option<i64>,
+    /// <p>The identifier of the CA certificate for this DB instance.</p>
+    pub ca_certificate_identifier: Option<String>,
     /// <p>Contains the name of the DB cluster that the DB instance is a member of if the DB instance is a member of a DB cluster.</p>
     pub db_cluster_identifier: Option<String>,
     /// <p>The Amazon Resource Name (ARN) for the DB instance.</p>
@@ -1951,11 +2058,11 @@ pub struct DBInstance {
     pub preferred_maintenance_window: Option<String>,
     /// <p>A value that specifies the order in which an Amazon DocumentDB replica is promoted to the primary instance after a failure of the existing primary instance.</p>
     pub promotion_tier: Option<i64>,
-    /// <p>Specifies the availability options for the DB instance. A value of <code>true</code> specifies an internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. A value of <code>false</code> specifies an internal instance with a DNS name that resolves to a private IP address.</p>
+    /// <p>Not supported. Amazon DocumentDB does not currently support public endpoints. The value of <code>PubliclyAccessible</code> is always <code>false</code>.</p>
     pub publicly_accessible: Option<bool>,
     /// <p>The status of a read replica. If the instance is not a read replica, this is blank.</p>
     pub status_infos: Option<Vec<DBInstanceStatusInfo>>,
-    /// <p>Specifies whether the DB instance is encrypted.</p>
+    /// <p>Specifies whether or not the DB instance is encrypted.</p>
     pub storage_encrypted: Option<bool>,
     /// <p>Provides a list of VPC security group elements that the DB instance belongs to.</p>
     pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
@@ -1983,6 +2090,12 @@ impl DBInstanceDeserializer {
                 "BackupRetentionPeriod" => {
                     obj.backup_retention_period = Some(IntegerDeserializer::deserialize(
                         "BackupRetentionPeriod",
+                        stack,
+                    )?);
+                }
+                "CACertificateIdentifier" => {
+                    obj.ca_certificate_identifier = Some(StringDeserializer::deserialize(
+                        "CACertificateIdentifier",
                         stack,
                     )?);
                 }
@@ -2222,7 +2335,7 @@ impl DBInstanceStatusInfoListDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSubnetGroup {
-    /// <p>The Amazon Resource Identifier (ARN) for the DB subnet group.</p>
+    /// <p>The Amazon Resource Name (ARN) for the DB subnet group.</p>
     pub db_subnet_group_arn: Option<String>,
     /// <p>Provides the description of the DB subnet group.</p>
     pub db_subnet_group_description: Option<String>,
@@ -2540,6 +2653,50 @@ impl DeleteDBSubnetGroupMessageSerializer {
             &format!("{}{}", prefix, "DBSubnetGroupName"),
             &obj.db_subnet_group_name,
         );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeCertificatesMessage {
+    /// <p><p>The user-supplied certificate identifier. If this parameter is specified, information for only the specified certificate is returned. If this parameter is omitted, a list of up to <code>MaxRecords</code> certificates is returned. This parameter is not case sensitive.</p> <p>Constraints</p> <ul> <li> <p>Must match an existing <code>CertificateIdentifier</code>.</p> </li> </ul></p>
+    pub certificate_identifier: Option<String>,
+    /// <p>This parameter is not currently supported.</p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>An optional pagination token provided by a previous <code>DescribeCertificates</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+    /// <p><p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints:</p> <ul> <li> <p>Minimum: 20</p> </li> <li> <p>Maximum: 100</p> </li> </ul></p>
+    pub max_records: Option<i64>,
+}
+
+/// Serialize `DescribeCertificatesMessage` contents to a `SignedRequest`.
+struct DescribeCertificatesMessageSerializer;
+impl DescribeCertificatesMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeCertificatesMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.certificate_identifier {
+            params.put(
+                &format!("{}{}", prefix, "CertificateIdentifier"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
     }
 }
 
@@ -3772,7 +3929,7 @@ pub struct ModifyDBClusterMessage {
     pub deletion_protection: Option<bool>,
     /// <p>The version number of the database engine to which you want to upgrade. Changing this parameter results in an outage. The change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code>.</p>
     pub engine_version: Option<String>,
-    /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
+    /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 100 characters.</p>
     pub master_user_password: Option<String>,
     /// <p>The new DB cluster identifier for the DB cluster when renaming a DB cluster. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster2</code> </p>
     pub new_db_cluster_identifier: Option<String>,
@@ -4004,6 +4161,8 @@ pub struct ModifyDBInstanceMessage {
     pub apply_immediately: Option<bool>,
     /// <p>Indicates that minor version upgrades are applied automatically to the DB instance during the maintenance window. Changing this parameter doesn't result in an outage except in the following case, and the change is asynchronously applied as soon as possible. An outage results if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and Amazon DocumentDB has enabled automatic patching for that engine version. </p>
     pub auto_minor_version_upgrade: Option<bool>,
+    /// <p>Indicates the certificate that needs to be associated with the instance.</p>
+    pub ca_certificate_identifier: Option<String>,
     /// <p>The new compute and memory capacity of the DB instance; for example, <code>db.r5.large</code>. Not all DB instance classes are available in all AWS Regions. </p> <p>If you modify the DB instance class, an outage occurs during the change. The change is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request. </p> <p>Default: Uses existing setting.</p>
     pub db_instance_class: Option<String>,
     /// <p><p>The DB instance identifier. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBInstance</code>.</p> </li> </ul></p>
@@ -4031,6 +4190,12 @@ impl ModifyDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.ca_certificate_identifier {
+            params.put(
+                &format!("{}{}", prefix, "CACertificateIdentifier"),
                 &field_value,
             );
         }
@@ -5612,18 +5777,14 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToResourceError::DBClusterNotFoundFault(ref cause) => cause,
-            AddTagsToResourceError::DBInstanceNotFoundFault(ref cause) => cause,
-            AddTagsToResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
+            AddTagsToResourceError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::DBSnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToResourceError {}
 /// Errors returned by ApplyPendingMaintenanceAction
 #[derive(Debug, PartialEq)]
 pub enum ApplyPendingMaintenanceActionError {
@@ -5683,18 +5844,20 @@ impl ApplyPendingMaintenanceActionError {
 }
 impl fmt::Display for ApplyPendingMaintenanceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApplyPendingMaintenanceActionError {
-    fn description(&self) -> &str {
         match *self {
-            ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(ref cause) => cause,
-            ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(ref cause) => cause,
-            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => cause,
+            ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ApplyPendingMaintenanceActionError {}
 /// Errors returned by CopyDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CopyDBClusterParameterGroupError {
@@ -5754,22 +5917,20 @@ impl CopyDBClusterParameterGroupError {
 }
 impl fmt::Display for CopyDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopyDBClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
             CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+            CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for CopyDBClusterParameterGroupError {}
 /// Errors returned by CopyDBClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CopyDBClusterSnapshotError {
@@ -5854,21 +6015,29 @@ impl CopyDBClusterSnapshotError {
 }
 impl fmt::Display for CopyDBClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopyDBClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+            CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CopyDBClusterSnapshotError {}
 /// Errors returned by CreateDBCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateDBClusterError {
@@ -6012,30 +6181,34 @@ impl CreateDBClusterError {
 }
 impl fmt::Display for CreateDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDBClusterError::DBClusterAlreadyExistsFault(ref cause) => cause,
-            CreateDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            CreateDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => cause,
-            CreateDBClusterError::DBClusterQuotaExceededFault(ref cause) => cause,
-            CreateDBClusterError::DBInstanceNotFoundFault(ref cause) => cause,
-            CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
-            CreateDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            CreateDBClusterError::InsufficientStorageClusterCapacityFault(ref cause) => cause,
-            CreateDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            CreateDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
-            CreateDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => cause,
-            CreateDBClusterError::InvalidSubnet(ref cause) => cause,
-            CreateDBClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            CreateDBClusterError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CreateDBClusterError::StorageQuotaExceededFault(ref cause) => cause,
+            CreateDBClusterError::DBClusterAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterError::DBClusterQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::InsufficientStorageClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::StorageQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDBClusterError {}
 /// Errors returned by CreateDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateDBClusterParameterGroupError {
@@ -6086,21 +6259,17 @@ impl CreateDBClusterParameterGroupError {
 }
 impl fmt::Display for CreateDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDBClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
             CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for CreateDBClusterParameterGroupError {}
 /// Errors returned by CreateDBClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateDBClusterSnapshotError {
@@ -6176,20 +6345,26 @@ impl CreateDBClusterSnapshotError {
 }
 impl fmt::Display for CreateDBClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDBClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDBClusterSnapshotError::DBClusterNotFoundFault(ref cause) => cause,
-            CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,
-            CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
-            CreateDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => cause,
-            CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+            CreateDBClusterSnapshotError::DBClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateDBClusterSnapshotError {}
 /// Errors returned by CreateDBInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateDBInstanceError {
@@ -6339,30 +6514,38 @@ impl CreateDBInstanceError {
 }
 impl fmt::Display for CreateDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDBInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDBInstanceError::AuthorizationNotFoundFault(ref cause) => cause,
-            CreateDBInstanceError::DBClusterNotFoundFault(ref cause) => cause,
-            CreateDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => cause,
-            CreateDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => cause,
-            CreateDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => cause,
-            CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
-            CreateDBInstanceError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            CreateDBInstanceError::InstanceQuotaExceededFault(ref cause) => cause,
-            CreateDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => cause,
-            CreateDBInstanceError::InvalidDBClusterStateFault(ref cause) => cause,
-            CreateDBInstanceError::InvalidSubnet(ref cause) => cause,
-            CreateDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            CreateDBInstanceError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CreateDBInstanceError::StorageQuotaExceededFault(ref cause) => cause,
-            CreateDBInstanceError::StorageTypeNotSupportedFault(ref cause) => cause,
+            CreateDBInstanceError::AuthorizationNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBInstanceError::DBSubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::InstanceQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBInstanceError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::StorageQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateDBInstanceError::StorageTypeNotSupportedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateDBInstanceError {}
 /// Errors returned by CreateDBSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateDBSubnetGroupError {
@@ -6436,20 +6619,24 @@ impl CreateDBSubnetGroupError {
 }
 impl fmt::Display for CreateDBSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDBSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(ref cause) => cause,
-            CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
-            CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(ref cause) => cause,
-            CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => cause,
-            CreateDBSubnetGroupError::InvalidSubnet(ref cause) => cause,
+            CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDBSubnetGroupError {}
 /// Errors returned by DeleteDBCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterError {
@@ -6519,20 +6706,20 @@ impl DeleteDBClusterError {
 }
 impl fmt::Display for DeleteDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,
-            DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
-            DeleteDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            DeleteDBClusterError::SnapshotQuotaExceededFault(ref cause) => cause,
+            DeleteDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteDBClusterError::SnapshotQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDBClusterError {}
 /// Errors returned by DeleteDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterParameterGroupError {
@@ -6583,19 +6770,17 @@ impl DeleteDBClusterParameterGroupError {
 }
 impl fmt::Display for DeleteDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDBClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+            DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DeleteDBClusterParameterGroupError {}
 /// Errors returned by DeleteDBClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterSnapshotError {
@@ -6644,17 +6829,17 @@ impl DeleteDBClusterSnapshotError {
 }
 impl fmt::Display for DeleteDBClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDBClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
-            DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
+            DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteDBClusterSnapshotError {}
 /// Errors returned by DeleteDBInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBInstanceError {
@@ -6724,20 +6909,18 @@ impl DeleteDBInstanceError {
 }
 impl fmt::Display for DeleteDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDBInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
-            DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(ref cause) => cause,
-            DeleteDBInstanceError::InvalidDBClusterStateFault(ref cause) => cause,
-            DeleteDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
-            DeleteDBInstanceError::SnapshotQuotaExceededFault(ref cause) => cause,
+            DeleteDBInstanceError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBInstanceError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteDBInstanceError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteDBInstanceError::SnapshotQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDBInstanceError {}
 /// Errors returned by DeleteDBSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBSubnetGroupError {
@@ -6795,18 +6978,67 @@ impl DeleteDBSubnetGroupError {
 }
 impl fmt::Display for DeleteDBSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDBSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(ref cause) => cause,
-            DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(ref cause) => cause,
+            DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteDBSubnetGroupError {}
+/// Errors returned by DescribeCertificates
+#[derive(Debug, PartialEq)]
+pub enum DescribeCertificatesError {
+    /// <p> <code>CertificateIdentifier</code> doesn't refer to an existing certificate. </p>
+    CertificateNotFoundFault(String),
+}
+
+impl DescribeCertificatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificatesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CertificateNotFound" => {
+                        return RusotoError::Service(
+                            DescribeCertificatesError::CertificateNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeCertificatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeCertificatesError::CertificateNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeCertificatesError {}
 /// Errors returned by DescribeDBClusterParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterParameterGroupsError {
@@ -6848,18 +7080,14 @@ impl DescribeDBClusterParameterGroupsError {
 }
 impl fmt::Display for DescribeDBClusterParameterGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBClusterParameterGroupsError {
-    fn description(&self) -> &str {
         match *self {
             DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeDBClusterParameterGroupsError {}
 /// Errors returned by DescribeDBClusterParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterParametersError {
@@ -6901,16 +7129,14 @@ impl DescribeDBClusterParametersError {
 }
 impl fmt::Display for DescribeDBClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBClusterParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(ref cause) => cause,
+            DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDBClusterParametersError {}
 /// Errors returned by DescribeDBClusterSnapshotAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterSnapshotAttributesError {
@@ -6950,18 +7176,14 @@ impl DescribeDBClusterSnapshotAttributesError {
 }
 impl fmt::Display for DescribeDBClusterSnapshotAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBClusterSnapshotAttributesError {
-    fn description(&self) -> &str {
         match *self {
             DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeDBClusterSnapshotAttributesError {}
 /// Errors returned by DescribeDBClusterSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterSnapshotsError {
@@ -7003,16 +7225,14 @@ impl DescribeDBClusterSnapshotsError {
 }
 impl fmt::Display for DescribeDBClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBClusterSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
+            DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDBClusterSnapshotsError {}
 /// Errors returned by DescribeDBClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClustersError {
@@ -7050,16 +7270,12 @@ impl DescribeDBClustersError {
 }
 impl fmt::Display for DescribeDBClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBClustersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDBClustersError::DBClusterNotFoundFault(ref cause) => cause,
+            DescribeDBClustersError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDBClustersError {}
 /// Errors returned by DescribeDBEngineVersions
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBEngineVersionsError {}
@@ -7089,14 +7305,10 @@ impl DescribeDBEngineVersionsError {
 }
 impl fmt::Display for DescribeDBEngineVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBEngineVersionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeDBEngineVersionsError {}
 /// Errors returned by DescribeDBInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBInstancesError {
@@ -7134,16 +7346,12 @@ impl DescribeDBInstancesError {
 }
 impl fmt::Display for DescribeDBInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDBInstancesError::DBInstanceNotFoundFault(ref cause) => cause,
+            DescribeDBInstancesError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDBInstancesError {}
 /// Errors returned by DescribeDBSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBSubnetGroupsError {
@@ -7183,16 +7391,14 @@ impl DescribeDBSubnetGroupsError {
 }
 impl fmt::Display for DescribeDBSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDBSubnetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+            DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDBSubnetGroupsError {}
 /// Errors returned by DescribeEngineDefaultClusterParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeEngineDefaultClusterParametersError {}
@@ -7224,14 +7430,10 @@ impl DescribeEngineDefaultClusterParametersError {
 }
 impl fmt::Display for DescribeEngineDefaultClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEngineDefaultClusterParametersError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEngineDefaultClusterParametersError {}
 /// Errors returned by DescribeEventCategories
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventCategoriesError {}
@@ -7261,14 +7463,10 @@ impl DescribeEventCategoriesError {
 }
 impl fmt::Display for DescribeEventCategoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventCategoriesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventCategoriesError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {}
@@ -7298,14 +7496,10 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventsError {}
 /// Errors returned by DescribeOrderableDBInstanceOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrderableDBInstanceOptionsError {}
@@ -7337,14 +7531,10 @@ impl DescribeOrderableDBInstanceOptionsError {
 }
 impl fmt::Display for DescribeOrderableDBInstanceOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrderableDBInstanceOptionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeOrderableDBInstanceOptionsError {}
 /// Errors returned by DescribePendingMaintenanceActions
 #[derive(Debug, PartialEq)]
 pub enum DescribePendingMaintenanceActionsError {
@@ -7386,16 +7576,14 @@ impl DescribePendingMaintenanceActionsError {
 }
 impl fmt::Display for DescribePendingMaintenanceActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePendingMaintenanceActionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribePendingMaintenanceActionsError {}
 /// Errors returned by FailoverDBCluster
 #[derive(Debug, PartialEq)]
 pub enum FailoverDBClusterError {
@@ -7451,18 +7639,16 @@ impl FailoverDBClusterError {
 }
 impl fmt::Display for FailoverDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for FailoverDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            FailoverDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            FailoverDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            FailoverDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+            FailoverDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            FailoverDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            FailoverDBClusterError::InvalidDBInstanceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for FailoverDBClusterError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -7514,18 +7700,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::DBClusterNotFoundFault(ref cause) => cause,
-            ListTagsForResourceError::DBInstanceNotFoundFault(ref cause) => cause,
-            ListTagsForResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
+            ListTagsForResourceError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::DBSnapshotNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ModifyDBCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBClusterError {
@@ -7639,26 +7821,28 @@ impl ModifyDBClusterError {
 }
 impl fmt::Display for ModifyDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyDBClusterError::DBClusterAlreadyExistsFault(ref cause) => cause,
-            ModifyDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => cause,
-            ModifyDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            ModifyDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            ModifyDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
-            ModifyDBClusterError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
-            ModifyDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => cause,
-            ModifyDBClusterError::InvalidSubnet(ref cause) => cause,
-            ModifyDBClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            ModifyDBClusterError::StorageQuotaExceededFault(ref cause) => cause,
+            ModifyDBClusterError::DBClusterAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::InvalidDBSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBClusterError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBClusterError::StorageQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyDBClusterError {}
 /// Errors returned by ModifyDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBClusterParameterGroupError {
@@ -7709,19 +7893,17 @@ impl ModifyDBClusterParameterGroupError {
 }
 impl fmt::Display for ModifyDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDBClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+            ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ModifyDBClusterParameterGroupError {}
 /// Errors returned by ModifyDBClusterSnapshotAttribute
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBClusterSnapshotAttributeError {
@@ -7779,24 +7961,20 @@ impl ModifyDBClusterSnapshotAttributeError {
 }
 impl fmt::Display for ModifyDBClusterSnapshotAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDBClusterSnapshotAttributeError {
-    fn description(&self) -> &str {
         match *self {
             ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ModifyDBClusterSnapshotAttributeError {}
 /// Errors returned by ModifyDBInstance
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBInstanceError {
@@ -7936,28 +8114,38 @@ impl ModifyDBInstanceError {
 }
 impl fmt::Display for ModifyDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDBInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyDBInstanceError::AuthorizationNotFoundFault(ref cause) => cause,
-            ModifyDBInstanceError::CertificateNotFoundFault(ref cause) => cause,
-            ModifyDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => cause,
-            ModifyDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
-            ModifyDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => cause,
-            ModifyDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => cause,
-            ModifyDBInstanceError::DBUpgradeDependencyFailureFault(ref cause) => cause,
-            ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => cause,
-            ModifyDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
-            ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
-            ModifyDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            ModifyDBInstanceError::StorageQuotaExceededFault(ref cause) => cause,
-            ModifyDBInstanceError::StorageTypeNotSupportedFault(ref cause) => cause,
+            ModifyDBInstanceError::AuthorizationNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::CertificateNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::DBUpgradeDependencyFailureFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::StorageQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::StorageTypeNotSupportedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyDBInstanceError {}
 /// Errors returned by ModifyDBSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBSubnetGroupError {
@@ -8029,20 +8217,22 @@ impl ModifyDBSubnetGroupError {
 }
 impl fmt::Display for ModifyDBSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyDBSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
-            ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => cause,
-            ModifyDBSubnetGroupError::InvalidSubnet(ref cause) => cause,
-            ModifyDBSubnetGroupError::SubnetAlreadyInUse(ref cause) => cause,
+            ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            ModifyDBSubnetGroupError::SubnetAlreadyInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyDBSubnetGroupError {}
 /// Errors returned by RebootDBInstance
 #[derive(Debug, PartialEq)]
 pub enum RebootDBInstanceError {
@@ -8089,17 +8279,13 @@ impl RebootDBInstanceError {
 }
 impl fmt::Display for RebootDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootDBInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RebootDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
-            RebootDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
+            RebootDBInstanceError::DBInstanceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RebootDBInstanceError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebootDBInstanceError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -8157,18 +8343,20 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromResourceError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromResourceError::DBClusterNotFoundFault(ref cause) => cause,
-            RemoveTagsFromResourceError::DBInstanceNotFoundFault(ref cause) => cause,
-            RemoveTagsFromResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
+            RemoveTagsFromResourceError::DBClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveTagsFromResourceError::DBInstanceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveTagsFromResourceError::DBSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveTagsFromResourceError {}
 /// Errors returned by ResetDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ResetDBClusterParameterGroupError {
@@ -8219,19 +8407,17 @@ impl ResetDBClusterParameterGroupError {
 }
 impl fmt::Display for ResetDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetDBClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+            ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ResetDBClusterParameterGroupError {}
 /// Errors returned by RestoreDBClusterFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum RestoreDBClusterFromSnapshotError {
@@ -8386,35 +8572,51 @@ impl RestoreDBClusterFromSnapshotError {
 }
 impl fmt::Display for RestoreDBClusterFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreDBClusterFromSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+            RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::InvalidRestoreFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::InvalidSubnet(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(ref cause) => cause,
+            RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::InvalidRestoreFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RestoreDBClusterFromSnapshotError {}
 /// Errors returned by RestoreDBClusterToPointInTime
 #[derive(Debug, PartialEq)]
 pub enum RestoreDBClusterToPointInTimeError {
@@ -8578,36 +8780,54 @@ impl RestoreDBClusterToPointInTimeError {
 }
 impl fmt::Display for RestoreDBClusterToPointInTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreDBClusterToPointInTimeError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+            RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            RestoreDBClusterToPointInTimeError::InvalidDBClusterStateFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::InvalidRestoreFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::InvalidSubnet(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(ref cause) => cause,
+            RestoreDBClusterToPointInTimeError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::InvalidRestoreFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RestoreDBClusterToPointInTimeError {}
 /// Errors returned by StartDBCluster
 #[derive(Debug, PartialEq)]
 pub enum StartDBClusterError {
@@ -8659,18 +8879,14 @@ impl StartDBClusterError {
 }
 impl fmt::Display for StartDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            StartDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            StartDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            StartDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+            StartDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            StartDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            StartDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartDBClusterError {}
 /// Errors returned by StopDBCluster
 #[derive(Debug, PartialEq)]
 pub enum StopDBClusterError {
@@ -8722,18 +8938,14 @@ impl StopDBClusterError {
 }
 impl fmt::Display for StopDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopDBClusterError {
-    fn description(&self) -> &str {
         match *self {
-            StopDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
-            StopDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            StopDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+            StopDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            StopDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            StopDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopDBClusterError {}
 /// Trait representing the capabilities of the Amazon DocDB API. Amazon DocDB clients implement this trait.
 pub trait Docdb {
     /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
@@ -8819,6 +9031,12 @@ pub trait Docdb {
         &self,
         input: DeleteDBSubnetGroupMessage,
     ) -> RusotoFuture<(), DeleteDBSubnetGroupError>;
+
+    /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon RDS for this AWS account.</p>
+    fn describe_certificates(
+        &self,
+        input: DescribeCertificatesMessage,
+    ) -> RusotoFuture<CertificateMessage, DescribeCertificatesError>;
 
     /// <p>Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list contains only the description of the specified DB cluster parameter group. </p>
     fn describe_db_cluster_parameter_groups(
@@ -9022,6 +9240,14 @@ impl DocdbClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> DocdbClient {
         DocdbClient { client, region }
+    }
+}
+
+impl fmt::Debug for DocdbClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DocdbClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -9645,6 +9871,56 @@ impl Docdb for DocdbClient {
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon RDS for this AWS account.</p>
+    fn describe_certificates(
+        &self,
+        input: DescribeCertificatesMessage,
+    ) -> RusotoFuture<CertificateMessage, DescribeCertificatesError> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeCertificates");
+        params.put("Version", "2014-10-31");
+        DescribeCertificatesMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeCertificatesError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CertificateMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CertificateMessageDeserializer::deserialize(
+                        "DescribeCertificatesResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 

@@ -56,6 +56,8 @@ pub mod signature;
 #[doc(hidden)]
 pub use crate::client::Client;
 #[doc(hidden)]
+pub mod encoding;
+#[doc(hidden)]
 pub mod proto;
 #[doc(hidden)]
 pub mod serialization;

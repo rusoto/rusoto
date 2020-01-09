@@ -1471,20 +1471,16 @@ impl CancelJobError {
 }
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelJobError {
-    fn description(&self) -> &str {
         match *self {
-            CancelJobError::AccessDenied(ref cause) => cause,
-            CancelJobError::IncompatibleVersion(ref cause) => cause,
-            CancelJobError::InternalService(ref cause) => cause,
-            CancelJobError::ResourceInUse(ref cause) => cause,
-            CancelJobError::ResourceNotFound(ref cause) => cause,
+            CancelJobError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CancelJobError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            CancelJobError::InternalService(ref cause) => write!(f, "{}", cause),
+            CancelJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CancelJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelJobError {}
 /// Errors returned by CreateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateJobError {
@@ -1528,20 +1524,16 @@ impl CreateJobError {
 }
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateJobError::AccessDenied(ref cause) => cause,
-            CreateJobError::IncompatibleVersion(ref cause) => cause,
-            CreateJobError::InternalService(ref cause) => cause,
-            CreateJobError::LimitExceeded(ref cause) => cause,
-            CreateJobError::ResourceNotFound(ref cause) => cause,
+            CreateJobError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateJobError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateJobError {}
 /// Errors returned by CreatePipeline
 #[derive(Debug, PartialEq)]
 pub enum CreatePipelineError {
@@ -1585,20 +1577,16 @@ impl CreatePipelineError {
 }
 impl fmt::Display for CreatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePipelineError::AccessDenied(ref cause) => cause,
-            CreatePipelineError::IncompatibleVersion(ref cause) => cause,
-            CreatePipelineError::InternalService(ref cause) => cause,
-            CreatePipelineError::LimitExceeded(ref cause) => cause,
-            CreatePipelineError::ResourceNotFound(ref cause) => cause,
+            CreatePipelineError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePipelineError {}
 /// Errors returned by CreatePreset
 #[derive(Debug, PartialEq)]
 pub enum CreatePresetError {
@@ -1637,19 +1625,15 @@ impl CreatePresetError {
 }
 impl fmt::Display for CreatePresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePresetError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePresetError::AccessDenied(ref cause) => cause,
-            CreatePresetError::IncompatibleVersion(ref cause) => cause,
-            CreatePresetError::InternalService(ref cause) => cause,
-            CreatePresetError::LimitExceeded(ref cause) => cause,
+            CreatePresetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreatePresetError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            CreatePresetError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreatePresetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePresetError {}
 /// Errors returned by DeletePipeline
 #[derive(Debug, PartialEq)]
 pub enum DeletePipelineError {
@@ -1693,20 +1677,16 @@ impl DeletePipelineError {
 }
 impl fmt::Display for DeletePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePipelineError::AccessDenied(ref cause) => cause,
-            DeletePipelineError::IncompatibleVersion(ref cause) => cause,
-            DeletePipelineError::InternalService(ref cause) => cause,
-            DeletePipelineError::ResourceInUse(ref cause) => cause,
-            DeletePipelineError::ResourceNotFound(ref cause) => cause,
+            DeletePipelineError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeletePipelineError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            DeletePipelineError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeletePipelineError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeletePipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePipelineError {}
 /// Errors returned by DeletePreset
 #[derive(Debug, PartialEq)]
 pub enum DeletePresetError {
@@ -1745,19 +1725,15 @@ impl DeletePresetError {
 }
 impl fmt::Display for DeletePresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePresetError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePresetError::AccessDenied(ref cause) => cause,
-            DeletePresetError::IncompatibleVersion(ref cause) => cause,
-            DeletePresetError::InternalService(ref cause) => cause,
-            DeletePresetError::ResourceNotFound(ref cause) => cause,
+            DeletePresetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeletePresetError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            DeletePresetError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeletePresetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePresetError {}
 /// Errors returned by ListJobsByPipeline
 #[derive(Debug, PartialEq)]
 pub enum ListJobsByPipelineError {
@@ -1798,19 +1774,15 @@ impl ListJobsByPipelineError {
 }
 impl fmt::Display for ListJobsByPipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsByPipelineError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsByPipelineError::AccessDenied(ref cause) => cause,
-            ListJobsByPipelineError::IncompatibleVersion(ref cause) => cause,
-            ListJobsByPipelineError::InternalService(ref cause) => cause,
-            ListJobsByPipelineError::ResourceNotFound(ref cause) => cause,
+            ListJobsByPipelineError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListJobsByPipelineError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            ListJobsByPipelineError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListJobsByPipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsByPipelineError {}
 /// Errors returned by ListJobsByStatus
 #[derive(Debug, PartialEq)]
 pub enum ListJobsByStatusError {
@@ -1851,19 +1823,15 @@ impl ListJobsByStatusError {
 }
 impl fmt::Display for ListJobsByStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsByStatusError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsByStatusError::AccessDenied(ref cause) => cause,
-            ListJobsByStatusError::IncompatibleVersion(ref cause) => cause,
-            ListJobsByStatusError::InternalService(ref cause) => cause,
-            ListJobsByStatusError::ResourceNotFound(ref cause) => cause,
+            ListJobsByStatusError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListJobsByStatusError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            ListJobsByStatusError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListJobsByStatusError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsByStatusError {}
 /// Errors returned by ListPipelines
 #[derive(Debug, PartialEq)]
 pub enum ListPipelinesError {
@@ -1897,18 +1865,14 @@ impl ListPipelinesError {
 }
 impl fmt::Display for ListPipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPipelinesError {
-    fn description(&self) -> &str {
         match *self {
-            ListPipelinesError::AccessDenied(ref cause) => cause,
-            ListPipelinesError::IncompatibleVersion(ref cause) => cause,
-            ListPipelinesError::InternalService(ref cause) => cause,
+            ListPipelinesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListPipelinesError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            ListPipelinesError::InternalService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPipelinesError {}
 /// Errors returned by ListPresets
 #[derive(Debug, PartialEq)]
 pub enum ListPresetsError {
@@ -1942,18 +1906,14 @@ impl ListPresetsError {
 }
 impl fmt::Display for ListPresetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPresetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPresetsError::AccessDenied(ref cause) => cause,
-            ListPresetsError::IncompatibleVersion(ref cause) => cause,
-            ListPresetsError::InternalService(ref cause) => cause,
+            ListPresetsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListPresetsError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            ListPresetsError::InternalService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPresetsError {}
 /// Errors returned by ReadJob
 #[derive(Debug, PartialEq)]
 pub enum ReadJobError {
@@ -1992,19 +1952,15 @@ impl ReadJobError {
 }
 impl fmt::Display for ReadJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReadJobError {
-    fn description(&self) -> &str {
         match *self {
-            ReadJobError::AccessDenied(ref cause) => cause,
-            ReadJobError::IncompatibleVersion(ref cause) => cause,
-            ReadJobError::InternalService(ref cause) => cause,
-            ReadJobError::ResourceNotFound(ref cause) => cause,
+            ReadJobError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ReadJobError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            ReadJobError::InternalService(ref cause) => write!(f, "{}", cause),
+            ReadJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReadJobError {}
 /// Errors returned by ReadPipeline
 #[derive(Debug, PartialEq)]
 pub enum ReadPipelineError {
@@ -2043,19 +1999,15 @@ impl ReadPipelineError {
 }
 impl fmt::Display for ReadPipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReadPipelineError {
-    fn description(&self) -> &str {
         match *self {
-            ReadPipelineError::AccessDenied(ref cause) => cause,
-            ReadPipelineError::IncompatibleVersion(ref cause) => cause,
-            ReadPipelineError::InternalService(ref cause) => cause,
-            ReadPipelineError::ResourceNotFound(ref cause) => cause,
+            ReadPipelineError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ReadPipelineError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            ReadPipelineError::InternalService(ref cause) => write!(f, "{}", cause),
+            ReadPipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReadPipelineError {}
 /// Errors returned by ReadPreset
 #[derive(Debug, PartialEq)]
 pub enum ReadPresetError {
@@ -2094,19 +2046,15 @@ impl ReadPresetError {
 }
 impl fmt::Display for ReadPresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReadPresetError {
-    fn description(&self) -> &str {
         match *self {
-            ReadPresetError::AccessDenied(ref cause) => cause,
-            ReadPresetError::IncompatibleVersion(ref cause) => cause,
-            ReadPresetError::InternalService(ref cause) => cause,
-            ReadPresetError::ResourceNotFound(ref cause) => cause,
+            ReadPresetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ReadPresetError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            ReadPresetError::InternalService(ref cause) => write!(f, "{}", cause),
+            ReadPresetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReadPresetError {}
 /// Errors returned by TestRole
 #[derive(Debug, PartialEq)]
 pub enum TestRoleError {
@@ -2145,19 +2093,15 @@ impl TestRoleError {
 }
 impl fmt::Display for TestRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestRoleError {
-    fn description(&self) -> &str {
         match *self {
-            TestRoleError::AccessDenied(ref cause) => cause,
-            TestRoleError::IncompatibleVersion(ref cause) => cause,
-            TestRoleError::InternalService(ref cause) => cause,
-            TestRoleError::ResourceNotFound(ref cause) => cause,
+            TestRoleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TestRoleError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            TestRoleError::InternalService(ref cause) => write!(f, "{}", cause),
+            TestRoleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestRoleError {}
 /// Errors returned by UpdatePipeline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePipelineError {
@@ -2201,20 +2145,16 @@ impl UpdatePipelineError {
 }
 impl fmt::Display for UpdatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePipelineError::AccessDenied(ref cause) => cause,
-            UpdatePipelineError::IncompatibleVersion(ref cause) => cause,
-            UpdatePipelineError::InternalService(ref cause) => cause,
-            UpdatePipelineError::ResourceInUse(ref cause) => cause,
-            UpdatePipelineError::ResourceNotFound(ref cause) => cause,
+            UpdatePipelineError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePipelineError {}
 /// Errors returned by UpdatePipelineNotifications
 #[derive(Debug, PartialEq)]
 pub enum UpdatePipelineNotificationsError {
@@ -2270,20 +2210,18 @@ impl UpdatePipelineNotificationsError {
 }
 impl fmt::Display for UpdatePipelineNotificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePipelineNotificationsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePipelineNotificationsError::AccessDenied(ref cause) => cause,
-            UpdatePipelineNotificationsError::IncompatibleVersion(ref cause) => cause,
-            UpdatePipelineNotificationsError::InternalService(ref cause) => cause,
-            UpdatePipelineNotificationsError::ResourceInUse(ref cause) => cause,
-            UpdatePipelineNotificationsError::ResourceNotFound(ref cause) => cause,
+            UpdatePipelineNotificationsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineNotificationsError::IncompatibleVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePipelineNotificationsError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineNotificationsError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineNotificationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePipelineNotificationsError {}
 /// Errors returned by UpdatePipelineStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdatePipelineStatusError {
@@ -2333,20 +2271,16 @@ impl UpdatePipelineStatusError {
 }
 impl fmt::Display for UpdatePipelineStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePipelineStatusError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePipelineStatusError::AccessDenied(ref cause) => cause,
-            UpdatePipelineStatusError::IncompatibleVersion(ref cause) => cause,
-            UpdatePipelineStatusError::InternalService(ref cause) => cause,
-            UpdatePipelineStatusError::ResourceInUse(ref cause) => cause,
-            UpdatePipelineStatusError::ResourceNotFound(ref cause) => cause,
+            UpdatePipelineStatusError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineStatusError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineStatusError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineStatusError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineStatusError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePipelineStatusError {}
 /// Trait representing the capabilities of the Amazon Elastic Transcoder API. Amazon Elastic Transcoder clients implement this trait.
 pub trait Ets {
     /// <p><p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you&#39;re getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note></p>
@@ -2479,6 +2413,14 @@ impl EtsClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> EtsClient {
         EtsClient { client, region }
+    }
+}
+
+impl fmt::Debug for EtsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("EtsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

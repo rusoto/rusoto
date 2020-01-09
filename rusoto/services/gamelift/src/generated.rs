@@ -3267,19 +3267,15 @@ impl AcceptMatchError {
 }
 impl fmt::Display for AcceptMatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcceptMatchError {
-    fn description(&self) -> &str {
         match *self {
-            AcceptMatchError::InternalService(ref cause) => cause,
-            AcceptMatchError::InvalidRequest(ref cause) => cause,
-            AcceptMatchError::NotFound(ref cause) => cause,
-            AcceptMatchError::UnsupportedRegion(ref cause) => cause,
+            AcceptMatchError::InternalService(ref cause) => write!(f, "{}", cause),
+            AcceptMatchError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AcceptMatchError::NotFound(ref cause) => write!(f, "{}", cause),
+            AcceptMatchError::UnsupportedRegion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AcceptMatchError {}
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
@@ -3323,20 +3319,16 @@ impl CreateAliasError {
 }
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAliasError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAliasError::Conflict(ref cause) => cause,
-            CreateAliasError::InternalService(ref cause) => cause,
-            CreateAliasError::InvalidRequest(ref cause) => cause,
-            CreateAliasError::LimitExceeded(ref cause) => cause,
-            CreateAliasError::Unauthorized(ref cause) => cause,
+            CreateAliasError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAliasError {}
 /// Errors returned by CreateBuild
 #[derive(Debug, PartialEq)]
 pub enum CreateBuildError {
@@ -3375,19 +3367,15 @@ impl CreateBuildError {
 }
 impl fmt::Display for CreateBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBuildError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBuildError::Conflict(ref cause) => cause,
-            CreateBuildError::InternalService(ref cause) => cause,
-            CreateBuildError::InvalidRequest(ref cause) => cause,
-            CreateBuildError::Unauthorized(ref cause) => cause,
+            CreateBuildError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateBuildError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateBuildError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateBuildError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBuildError {}
 /// Errors returned by CreateFleet
 #[derive(Debug, PartialEq)]
 pub enum CreateFleetError {
@@ -3436,21 +3424,17 @@ impl CreateFleetError {
 }
 impl fmt::Display for CreateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFleetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFleetError::Conflict(ref cause) => cause,
-            CreateFleetError::InternalService(ref cause) => cause,
-            CreateFleetError::InvalidRequest(ref cause) => cause,
-            CreateFleetError::LimitExceeded(ref cause) => cause,
-            CreateFleetError::NotFound(ref cause) => cause,
-            CreateFleetError::Unauthorized(ref cause) => cause,
+            CreateFleetError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFleetError {}
 /// Errors returned by CreateGameSession
 #[derive(Debug, PartialEq)]
 pub enum CreateGameSessionError {
@@ -3527,25 +3511,23 @@ impl CreateGameSessionError {
 }
 impl fmt::Display for CreateGameSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGameSessionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGameSessionError::Conflict(ref cause) => cause,
-            CreateGameSessionError::FleetCapacityExceeded(ref cause) => cause,
-            CreateGameSessionError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateGameSessionError::InternalService(ref cause) => cause,
-            CreateGameSessionError::InvalidFleetStatus(ref cause) => cause,
-            CreateGameSessionError::InvalidRequest(ref cause) => cause,
-            CreateGameSessionError::LimitExceeded(ref cause) => cause,
-            CreateGameSessionError::NotFound(ref cause) => cause,
-            CreateGameSessionError::TerminalRoutingStrategy(ref cause) => cause,
-            CreateGameSessionError::Unauthorized(ref cause) => cause,
+            CreateGameSessionError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionError::FleetCapacityExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateGameSessionError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionError::InvalidFleetStatus(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionError::TerminalRoutingStrategy(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGameSessionError {}
 /// Errors returned by CreateGameSessionQueue
 #[derive(Debug, PartialEq)]
 pub enum CreateGameSessionQueueError {
@@ -3590,19 +3572,15 @@ impl CreateGameSessionQueueError {
 }
 impl fmt::Display for CreateGameSessionQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGameSessionQueueError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGameSessionQueueError::InternalService(ref cause) => cause,
-            CreateGameSessionQueueError::InvalidRequest(ref cause) => cause,
-            CreateGameSessionQueueError::LimitExceeded(ref cause) => cause,
-            CreateGameSessionQueueError::Unauthorized(ref cause) => cause,
+            CreateGameSessionQueueError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionQueueError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionQueueError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGameSessionQueueError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGameSessionQueueError {}
 /// Errors returned by CreateMatchmakingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateMatchmakingConfigurationError {
@@ -3658,20 +3636,22 @@ impl CreateMatchmakingConfigurationError {
 }
 impl fmt::Display for CreateMatchmakingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMatchmakingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMatchmakingConfigurationError::InternalService(ref cause) => cause,
-            CreateMatchmakingConfigurationError::InvalidRequest(ref cause) => cause,
-            CreateMatchmakingConfigurationError::LimitExceeded(ref cause) => cause,
-            CreateMatchmakingConfigurationError::NotFound(ref cause) => cause,
-            CreateMatchmakingConfigurationError::UnsupportedRegion(ref cause) => cause,
+            CreateMatchmakingConfigurationError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMatchmakingConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMatchmakingConfigurationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateMatchmakingConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateMatchmakingConfigurationError::UnsupportedRegion(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateMatchmakingConfigurationError {}
 /// Errors returned by CreateMatchmakingRuleSet
 #[derive(Debug, PartialEq)]
 pub enum CreateMatchmakingRuleSetError {
@@ -3711,18 +3691,14 @@ impl CreateMatchmakingRuleSetError {
 }
 impl fmt::Display for CreateMatchmakingRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMatchmakingRuleSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMatchmakingRuleSetError::InternalService(ref cause) => cause,
-            CreateMatchmakingRuleSetError::InvalidRequest(ref cause) => cause,
-            CreateMatchmakingRuleSetError::UnsupportedRegion(ref cause) => cause,
+            CreateMatchmakingRuleSetError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateMatchmakingRuleSetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateMatchmakingRuleSetError::UnsupportedRegion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateMatchmakingRuleSetError {}
 /// Errors returned by CreatePlayerSession
 #[derive(Debug, PartialEq)]
 pub enum CreatePlayerSessionError {
@@ -3780,22 +3756,18 @@ impl CreatePlayerSessionError {
 }
 impl fmt::Display for CreatePlayerSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePlayerSessionError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePlayerSessionError::GameSessionFull(ref cause) => cause,
-            CreatePlayerSessionError::InternalService(ref cause) => cause,
-            CreatePlayerSessionError::InvalidGameSessionStatus(ref cause) => cause,
-            CreatePlayerSessionError::InvalidRequest(ref cause) => cause,
-            CreatePlayerSessionError::NotFound(ref cause) => cause,
-            CreatePlayerSessionError::TerminalRoutingStrategy(ref cause) => cause,
-            CreatePlayerSessionError::Unauthorized(ref cause) => cause,
+            CreatePlayerSessionError::GameSessionFull(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionError::InvalidGameSessionStatus(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionError::TerminalRoutingStrategy(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePlayerSessionError {}
 /// Errors returned by CreatePlayerSessions
 #[derive(Debug, PartialEq)]
 pub enum CreatePlayerSessionsError {
@@ -3857,22 +3829,20 @@ impl CreatePlayerSessionsError {
 }
 impl fmt::Display for CreatePlayerSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePlayerSessionsError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePlayerSessionsError::GameSessionFull(ref cause) => cause,
-            CreatePlayerSessionsError::InternalService(ref cause) => cause,
-            CreatePlayerSessionsError::InvalidGameSessionStatus(ref cause) => cause,
-            CreatePlayerSessionsError::InvalidRequest(ref cause) => cause,
-            CreatePlayerSessionsError::NotFound(ref cause) => cause,
-            CreatePlayerSessionsError::TerminalRoutingStrategy(ref cause) => cause,
-            CreatePlayerSessionsError::Unauthorized(ref cause) => cause,
+            CreatePlayerSessionsError::GameSessionFull(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionsError::InvalidGameSessionStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePlayerSessionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionsError::TerminalRoutingStrategy(ref cause) => write!(f, "{}", cause),
+            CreatePlayerSessionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePlayerSessionsError {}
 /// Errors returned by CreateScript
 #[derive(Debug, PartialEq)]
 pub enum CreateScriptError {
@@ -3911,19 +3881,15 @@ impl CreateScriptError {
 }
 impl fmt::Display for CreateScriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateScriptError {
-    fn description(&self) -> &str {
         match *self {
-            CreateScriptError::Conflict(ref cause) => cause,
-            CreateScriptError::InternalService(ref cause) => cause,
-            CreateScriptError::InvalidRequest(ref cause) => cause,
-            CreateScriptError::Unauthorized(ref cause) => cause,
+            CreateScriptError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateScriptError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateScriptError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateScriptError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateScriptError {}
 /// Errors returned by CreateVpcPeeringAuthorization
 #[derive(Debug, PartialEq)]
 pub enum CreateVpcPeeringAuthorizationError {
@@ -3972,19 +3938,17 @@ impl CreateVpcPeeringAuthorizationError {
 }
 impl fmt::Display for CreateVpcPeeringAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVpcPeeringAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVpcPeeringAuthorizationError::InternalService(ref cause) => cause,
-            CreateVpcPeeringAuthorizationError::InvalidRequest(ref cause) => cause,
-            CreateVpcPeeringAuthorizationError::NotFound(ref cause) => cause,
-            CreateVpcPeeringAuthorizationError::Unauthorized(ref cause) => cause,
+            CreateVpcPeeringAuthorizationError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateVpcPeeringAuthorizationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateVpcPeeringAuthorizationError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateVpcPeeringAuthorizationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVpcPeeringAuthorizationError {}
 /// Errors returned by CreateVpcPeeringConnection
 #[derive(Debug, PartialEq)]
 pub enum CreateVpcPeeringConnectionError {
@@ -4031,19 +3995,15 @@ impl CreateVpcPeeringConnectionError {
 }
 impl fmt::Display for CreateVpcPeeringConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVpcPeeringConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVpcPeeringConnectionError::InternalService(ref cause) => cause,
-            CreateVpcPeeringConnectionError::InvalidRequest(ref cause) => cause,
-            CreateVpcPeeringConnectionError::NotFound(ref cause) => cause,
-            CreateVpcPeeringConnectionError::Unauthorized(ref cause) => cause,
+            CreateVpcPeeringConnectionError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateVpcPeeringConnectionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateVpcPeeringConnectionError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateVpcPeeringConnectionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVpcPeeringConnectionError {}
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
@@ -4082,19 +4042,15 @@ impl DeleteAliasError {
 }
 impl fmt::Display for DeleteAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAliasError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAliasError::InternalService(ref cause) => cause,
-            DeleteAliasError::InvalidRequest(ref cause) => cause,
-            DeleteAliasError::NotFound(ref cause) => cause,
-            DeleteAliasError::Unauthorized(ref cause) => cause,
+            DeleteAliasError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAliasError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAliasError {}
 /// Errors returned by DeleteBuild
 #[derive(Debug, PartialEq)]
 pub enum DeleteBuildError {
@@ -4133,19 +4089,15 @@ impl DeleteBuildError {
 }
 impl fmt::Display for DeleteBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBuildError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBuildError::InternalService(ref cause) => cause,
-            DeleteBuildError::InvalidRequest(ref cause) => cause,
-            DeleteBuildError::NotFound(ref cause) => cause,
-            DeleteBuildError::Unauthorized(ref cause) => cause,
+            DeleteBuildError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteBuildError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBuildError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBuildError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBuildError {}
 /// Errors returned by DeleteFleet
 #[derive(Debug, PartialEq)]
 pub enum DeleteFleetError {
@@ -4189,20 +4141,16 @@ impl DeleteFleetError {
 }
 impl fmt::Display for DeleteFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFleetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFleetError::InternalService(ref cause) => cause,
-            DeleteFleetError::InvalidFleetStatus(ref cause) => cause,
-            DeleteFleetError::InvalidRequest(ref cause) => cause,
-            DeleteFleetError::NotFound(ref cause) => cause,
-            DeleteFleetError::Unauthorized(ref cause) => cause,
+            DeleteFleetError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteFleetError::InvalidFleetStatus(ref cause) => write!(f, "{}", cause),
+            DeleteFleetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteFleetError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFleetError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFleetError {}
 /// Errors returned by DeleteGameSessionQueue
 #[derive(Debug, PartialEq)]
 pub enum DeleteGameSessionQueueError {
@@ -4245,19 +4193,15 @@ impl DeleteGameSessionQueueError {
 }
 impl fmt::Display for DeleteGameSessionQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGameSessionQueueError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGameSessionQueueError::InternalService(ref cause) => cause,
-            DeleteGameSessionQueueError::InvalidRequest(ref cause) => cause,
-            DeleteGameSessionQueueError::NotFound(ref cause) => cause,
-            DeleteGameSessionQueueError::Unauthorized(ref cause) => cause,
+            DeleteGameSessionQueueError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteGameSessionQueueError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteGameSessionQueueError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteGameSessionQueueError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGameSessionQueueError {}
 /// Errors returned by DeleteMatchmakingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteMatchmakingConfigurationError {
@@ -4306,19 +4250,21 @@ impl DeleteMatchmakingConfigurationError {
 }
 impl fmt::Display for DeleteMatchmakingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMatchmakingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMatchmakingConfigurationError::InternalService(ref cause) => cause,
-            DeleteMatchmakingConfigurationError::InvalidRequest(ref cause) => cause,
-            DeleteMatchmakingConfigurationError::NotFound(ref cause) => cause,
-            DeleteMatchmakingConfigurationError::UnsupportedRegion(ref cause) => cause,
+            DeleteMatchmakingConfigurationError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteMatchmakingConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteMatchmakingConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMatchmakingConfigurationError::UnsupportedRegion(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteMatchmakingConfigurationError {}
 /// Errors returned by DeleteMatchmakingRuleSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteMatchmakingRuleSetError {
@@ -4363,19 +4309,15 @@ impl DeleteMatchmakingRuleSetError {
 }
 impl fmt::Display for DeleteMatchmakingRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMatchmakingRuleSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMatchmakingRuleSetError::InternalService(ref cause) => cause,
-            DeleteMatchmakingRuleSetError::InvalidRequest(ref cause) => cause,
-            DeleteMatchmakingRuleSetError::NotFound(ref cause) => cause,
-            DeleteMatchmakingRuleSetError::UnsupportedRegion(ref cause) => cause,
+            DeleteMatchmakingRuleSetError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteMatchmakingRuleSetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteMatchmakingRuleSetError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMatchmakingRuleSetError::UnsupportedRegion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMatchmakingRuleSetError {}
 /// Errors returned by DeleteScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteScalingPolicyError {
@@ -4414,19 +4356,15 @@ impl DeleteScalingPolicyError {
 }
 impl fmt::Display for DeleteScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteScalingPolicyError::InternalService(ref cause) => cause,
-            DeleteScalingPolicyError::InvalidRequest(ref cause) => cause,
-            DeleteScalingPolicyError::NotFound(ref cause) => cause,
-            DeleteScalingPolicyError::Unauthorized(ref cause) => cause,
+            DeleteScalingPolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteScalingPolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteScalingPolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteScalingPolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteScalingPolicyError {}
 /// Errors returned by DeleteScript
 #[derive(Debug, PartialEq)]
 pub enum DeleteScriptError {
@@ -4465,19 +4403,15 @@ impl DeleteScriptError {
 }
 impl fmt::Display for DeleteScriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteScriptError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteScriptError::InternalService(ref cause) => cause,
-            DeleteScriptError::InvalidRequest(ref cause) => cause,
-            DeleteScriptError::NotFound(ref cause) => cause,
-            DeleteScriptError::Unauthorized(ref cause) => cause,
+            DeleteScriptError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteScriptError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteScriptError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteScriptError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteScriptError {}
 /// Errors returned by DeleteVpcPeeringAuthorization
 #[derive(Debug, PartialEq)]
 pub enum DeleteVpcPeeringAuthorizationError {
@@ -4526,19 +4460,17 @@ impl DeleteVpcPeeringAuthorizationError {
 }
 impl fmt::Display for DeleteVpcPeeringAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVpcPeeringAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVpcPeeringAuthorizationError::InternalService(ref cause) => cause,
-            DeleteVpcPeeringAuthorizationError::InvalidRequest(ref cause) => cause,
-            DeleteVpcPeeringAuthorizationError::NotFound(ref cause) => cause,
-            DeleteVpcPeeringAuthorizationError::Unauthorized(ref cause) => cause,
+            DeleteVpcPeeringAuthorizationError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVpcPeeringAuthorizationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVpcPeeringAuthorizationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVpcPeeringAuthorizationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVpcPeeringAuthorizationError {}
 /// Errors returned by DeleteVpcPeeringConnection
 #[derive(Debug, PartialEq)]
 pub enum DeleteVpcPeeringConnectionError {
@@ -4585,19 +4517,15 @@ impl DeleteVpcPeeringConnectionError {
 }
 impl fmt::Display for DeleteVpcPeeringConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVpcPeeringConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVpcPeeringConnectionError::InternalService(ref cause) => cause,
-            DeleteVpcPeeringConnectionError::InvalidRequest(ref cause) => cause,
-            DeleteVpcPeeringConnectionError::NotFound(ref cause) => cause,
-            DeleteVpcPeeringConnectionError::Unauthorized(ref cause) => cause,
+            DeleteVpcPeeringConnectionError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteVpcPeeringConnectionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVpcPeeringConnectionError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVpcPeeringConnectionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVpcPeeringConnectionError {}
 /// Errors returned by DescribeAlias
 #[derive(Debug, PartialEq)]
 pub enum DescribeAliasError {
@@ -4636,19 +4564,15 @@ impl DescribeAliasError {
 }
 impl fmt::Display for DescribeAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAliasError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAliasError::InternalService(ref cause) => cause,
-            DescribeAliasError::InvalidRequest(ref cause) => cause,
-            DescribeAliasError::NotFound(ref cause) => cause,
-            DescribeAliasError::Unauthorized(ref cause) => cause,
+            DescribeAliasError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeAliasError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAliasError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAliasError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAliasError {}
 /// Errors returned by DescribeBuild
 #[derive(Debug, PartialEq)]
 pub enum DescribeBuildError {
@@ -4687,19 +4611,15 @@ impl DescribeBuildError {
 }
 impl fmt::Display for DescribeBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBuildError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBuildError::InternalService(ref cause) => cause,
-            DescribeBuildError::InvalidRequest(ref cause) => cause,
-            DescribeBuildError::NotFound(ref cause) => cause,
-            DescribeBuildError::Unauthorized(ref cause) => cause,
+            DescribeBuildError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeBuildError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeBuildError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBuildError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBuildError {}
 /// Errors returned by DescribeEC2InstanceLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeEC2InstanceLimitsError {
@@ -4739,18 +4659,14 @@ impl DescribeEC2InstanceLimitsError {
 }
 impl fmt::Display for DescribeEC2InstanceLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEC2InstanceLimitsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEC2InstanceLimitsError::InternalService(ref cause) => cause,
-            DescribeEC2InstanceLimitsError::InvalidRequest(ref cause) => cause,
-            DescribeEC2InstanceLimitsError::Unauthorized(ref cause) => cause,
+            DescribeEC2InstanceLimitsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeEC2InstanceLimitsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeEC2InstanceLimitsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEC2InstanceLimitsError {}
 /// Errors returned by DescribeFleetAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeFleetAttributesError {
@@ -4795,19 +4711,15 @@ impl DescribeFleetAttributesError {
 }
 impl fmt::Display for DescribeFleetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFleetAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFleetAttributesError::InternalService(ref cause) => cause,
-            DescribeFleetAttributesError::InvalidRequest(ref cause) => cause,
-            DescribeFleetAttributesError::NotFound(ref cause) => cause,
-            DescribeFleetAttributesError::Unauthorized(ref cause) => cause,
+            DescribeFleetAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeFleetAttributesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFleetAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFleetAttributesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFleetAttributesError {}
 /// Errors returned by DescribeFleetCapacity
 #[derive(Debug, PartialEq)]
 pub enum DescribeFleetCapacityError {
@@ -4850,19 +4762,15 @@ impl DescribeFleetCapacityError {
 }
 impl fmt::Display for DescribeFleetCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFleetCapacityError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFleetCapacityError::InternalService(ref cause) => cause,
-            DescribeFleetCapacityError::InvalidRequest(ref cause) => cause,
-            DescribeFleetCapacityError::NotFound(ref cause) => cause,
-            DescribeFleetCapacityError::Unauthorized(ref cause) => cause,
+            DescribeFleetCapacityError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeFleetCapacityError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFleetCapacityError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFleetCapacityError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFleetCapacityError {}
 /// Errors returned by DescribeFleetEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeFleetEventsError {
@@ -4901,19 +4809,15 @@ impl DescribeFleetEventsError {
 }
 impl fmt::Display for DescribeFleetEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFleetEventsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFleetEventsError::InternalService(ref cause) => cause,
-            DescribeFleetEventsError::InvalidRequest(ref cause) => cause,
-            DescribeFleetEventsError::NotFound(ref cause) => cause,
-            DescribeFleetEventsError::Unauthorized(ref cause) => cause,
+            DescribeFleetEventsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeFleetEventsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFleetEventsError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFleetEventsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFleetEventsError {}
 /// Errors returned by DescribeFleetPortSettings
 #[derive(Debug, PartialEq)]
 pub enum DescribeFleetPortSettingsError {
@@ -4958,19 +4862,15 @@ impl DescribeFleetPortSettingsError {
 }
 impl fmt::Display for DescribeFleetPortSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFleetPortSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFleetPortSettingsError::InternalService(ref cause) => cause,
-            DescribeFleetPortSettingsError::InvalidRequest(ref cause) => cause,
-            DescribeFleetPortSettingsError::NotFound(ref cause) => cause,
-            DescribeFleetPortSettingsError::Unauthorized(ref cause) => cause,
+            DescribeFleetPortSettingsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeFleetPortSettingsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFleetPortSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFleetPortSettingsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFleetPortSettingsError {}
 /// Errors returned by DescribeFleetUtilization
 #[derive(Debug, PartialEq)]
 pub enum DescribeFleetUtilizationError {
@@ -5015,19 +4915,15 @@ impl DescribeFleetUtilizationError {
 }
 impl fmt::Display for DescribeFleetUtilizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFleetUtilizationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFleetUtilizationError::InternalService(ref cause) => cause,
-            DescribeFleetUtilizationError::InvalidRequest(ref cause) => cause,
-            DescribeFleetUtilizationError::NotFound(ref cause) => cause,
-            DescribeFleetUtilizationError::Unauthorized(ref cause) => cause,
+            DescribeFleetUtilizationError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeFleetUtilizationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFleetUtilizationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFleetUtilizationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFleetUtilizationError {}
 /// Errors returned by DescribeGameSessionDetails
 #[derive(Debug, PartialEq)]
 pub enum DescribeGameSessionDetailsError {
@@ -5081,20 +4977,18 @@ impl DescribeGameSessionDetailsError {
 }
 impl fmt::Display for DescribeGameSessionDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeGameSessionDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeGameSessionDetailsError::InternalService(ref cause) => cause,
-            DescribeGameSessionDetailsError::InvalidRequest(ref cause) => cause,
-            DescribeGameSessionDetailsError::NotFound(ref cause) => cause,
-            DescribeGameSessionDetailsError::TerminalRoutingStrategy(ref cause) => cause,
-            DescribeGameSessionDetailsError::Unauthorized(ref cause) => cause,
+            DescribeGameSessionDetailsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionDetailsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionDetailsError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionDetailsError::TerminalRoutingStrategy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeGameSessionDetailsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeGameSessionDetailsError {}
 /// Errors returned by DescribeGameSessionPlacement
 #[derive(Debug, PartialEq)]
 pub enum DescribeGameSessionPlacementError {
@@ -5143,19 +5037,15 @@ impl DescribeGameSessionPlacementError {
 }
 impl fmt::Display for DescribeGameSessionPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeGameSessionPlacementError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeGameSessionPlacementError::InternalService(ref cause) => cause,
-            DescribeGameSessionPlacementError::InvalidRequest(ref cause) => cause,
-            DescribeGameSessionPlacementError::NotFound(ref cause) => cause,
-            DescribeGameSessionPlacementError::Unauthorized(ref cause) => cause,
+            DescribeGameSessionPlacementError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionPlacementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionPlacementError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionPlacementError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeGameSessionPlacementError {}
 /// Errors returned by DescribeGameSessionQueues
 #[derive(Debug, PartialEq)]
 pub enum DescribeGameSessionQueuesError {
@@ -5200,19 +5090,15 @@ impl DescribeGameSessionQueuesError {
 }
 impl fmt::Display for DescribeGameSessionQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeGameSessionQueuesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeGameSessionQueuesError::InternalService(ref cause) => cause,
-            DescribeGameSessionQueuesError::InvalidRequest(ref cause) => cause,
-            DescribeGameSessionQueuesError::NotFound(ref cause) => cause,
-            DescribeGameSessionQueuesError::Unauthorized(ref cause) => cause,
+            DescribeGameSessionQueuesError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionQueuesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionQueuesError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionQueuesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeGameSessionQueuesError {}
 /// Errors returned by DescribeGameSessions
 #[derive(Debug, PartialEq)]
 pub enum DescribeGameSessionsError {
@@ -5260,20 +5146,16 @@ impl DescribeGameSessionsError {
 }
 impl fmt::Display for DescribeGameSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeGameSessionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeGameSessionsError::InternalService(ref cause) => cause,
-            DescribeGameSessionsError::InvalidRequest(ref cause) => cause,
-            DescribeGameSessionsError::NotFound(ref cause) => cause,
-            DescribeGameSessionsError::TerminalRoutingStrategy(ref cause) => cause,
-            DescribeGameSessionsError::Unauthorized(ref cause) => cause,
+            DescribeGameSessionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionsError::TerminalRoutingStrategy(ref cause) => write!(f, "{}", cause),
+            DescribeGameSessionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeGameSessionsError {}
 /// Errors returned by DescribeInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstancesError {
@@ -5312,19 +5194,15 @@ impl DescribeInstancesError {
 }
 impl fmt::Display for DescribeInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInstancesError::InternalService(ref cause) => cause,
-            DescribeInstancesError::InvalidRequest(ref cause) => cause,
-            DescribeInstancesError::NotFound(ref cause) => cause,
-            DescribeInstancesError::Unauthorized(ref cause) => cause,
+            DescribeInstancesError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeInstancesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeInstancesError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeInstancesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInstancesError {}
 /// Errors returned by DescribeMatchmaking
 #[derive(Debug, PartialEq)]
 pub enum DescribeMatchmakingError {
@@ -5360,18 +5238,14 @@ impl DescribeMatchmakingError {
 }
 impl fmt::Display for DescribeMatchmakingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMatchmakingError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMatchmakingError::InternalService(ref cause) => cause,
-            DescribeMatchmakingError::InvalidRequest(ref cause) => cause,
-            DescribeMatchmakingError::UnsupportedRegion(ref cause) => cause,
+            DescribeMatchmakingError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeMatchmakingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeMatchmakingError::UnsupportedRegion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMatchmakingError {}
 /// Errors returned by DescribeMatchmakingConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeMatchmakingConfigurationsError {
@@ -5413,18 +5287,20 @@ impl DescribeMatchmakingConfigurationsError {
 }
 impl fmt::Display for DescribeMatchmakingConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMatchmakingConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMatchmakingConfigurationsError::InternalService(ref cause) => cause,
-            DescribeMatchmakingConfigurationsError::InvalidRequest(ref cause) => cause,
-            DescribeMatchmakingConfigurationsError::UnsupportedRegion(ref cause) => cause,
+            DescribeMatchmakingConfigurationsError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMatchmakingConfigurationsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMatchmakingConfigurationsError::UnsupportedRegion(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMatchmakingConfigurationsError {}
 /// Errors returned by DescribeMatchmakingRuleSets
 #[derive(Debug, PartialEq)]
 pub enum DescribeMatchmakingRuleSetsError {
@@ -5473,19 +5349,17 @@ impl DescribeMatchmakingRuleSetsError {
 }
 impl fmt::Display for DescribeMatchmakingRuleSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMatchmakingRuleSetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMatchmakingRuleSetsError::InternalService(ref cause) => cause,
-            DescribeMatchmakingRuleSetsError::InvalidRequest(ref cause) => cause,
-            DescribeMatchmakingRuleSetsError::NotFound(ref cause) => cause,
-            DescribeMatchmakingRuleSetsError::UnsupportedRegion(ref cause) => cause,
+            DescribeMatchmakingRuleSetsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeMatchmakingRuleSetsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeMatchmakingRuleSetsError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMatchmakingRuleSetsError::UnsupportedRegion(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMatchmakingRuleSetsError {}
 /// Errors returned by DescribePlayerSessions
 #[derive(Debug, PartialEq)]
 pub enum DescribePlayerSessionsError {
@@ -5528,19 +5402,15 @@ impl DescribePlayerSessionsError {
 }
 impl fmt::Display for DescribePlayerSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePlayerSessionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePlayerSessionsError::InternalService(ref cause) => cause,
-            DescribePlayerSessionsError::InvalidRequest(ref cause) => cause,
-            DescribePlayerSessionsError::NotFound(ref cause) => cause,
-            DescribePlayerSessionsError::Unauthorized(ref cause) => cause,
+            DescribePlayerSessionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribePlayerSessionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribePlayerSessionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribePlayerSessionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePlayerSessionsError {}
 /// Errors returned by DescribeRuntimeConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeRuntimeConfigurationError {
@@ -5589,19 +5459,15 @@ impl DescribeRuntimeConfigurationError {
 }
 impl fmt::Display for DescribeRuntimeConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRuntimeConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRuntimeConfigurationError::InternalService(ref cause) => cause,
-            DescribeRuntimeConfigurationError::InvalidRequest(ref cause) => cause,
-            DescribeRuntimeConfigurationError::NotFound(ref cause) => cause,
-            DescribeRuntimeConfigurationError::Unauthorized(ref cause) => cause,
+            DescribeRuntimeConfigurationError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeRuntimeConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeRuntimeConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRuntimeConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeRuntimeConfigurationError {}
 /// Errors returned by DescribeScalingPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingPoliciesError {
@@ -5646,19 +5512,15 @@ impl DescribeScalingPoliciesError {
 }
 impl fmt::Display for DescribeScalingPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalingPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalingPoliciesError::InternalService(ref cause) => cause,
-            DescribeScalingPoliciesError::InvalidRequest(ref cause) => cause,
-            DescribeScalingPoliciesError::NotFound(ref cause) => cause,
-            DescribeScalingPoliciesError::Unauthorized(ref cause) => cause,
+            DescribeScalingPoliciesError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPoliciesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPoliciesError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPoliciesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScalingPoliciesError {}
 /// Errors returned by DescribeScript
 #[derive(Debug, PartialEq)]
 pub enum DescribeScriptError {
@@ -5697,19 +5559,15 @@ impl DescribeScriptError {
 }
 impl fmt::Display for DescribeScriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScriptError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScriptError::InternalService(ref cause) => cause,
-            DescribeScriptError::InvalidRequest(ref cause) => cause,
-            DescribeScriptError::NotFound(ref cause) => cause,
-            DescribeScriptError::Unauthorized(ref cause) => cause,
+            DescribeScriptError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScriptError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeScriptError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeScriptError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScriptError {}
 /// Errors returned by DescribeVpcPeeringAuthorizations
 #[derive(Debug, PartialEq)]
 pub enum DescribeVpcPeeringAuthorizationsError {
@@ -5751,18 +5609,20 @@ impl DescribeVpcPeeringAuthorizationsError {
 }
 impl fmt::Display for DescribeVpcPeeringAuthorizationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVpcPeeringAuthorizationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVpcPeeringAuthorizationsError::InternalService(ref cause) => cause,
-            DescribeVpcPeeringAuthorizationsError::InvalidRequest(ref cause) => cause,
-            DescribeVpcPeeringAuthorizationsError::Unauthorized(ref cause) => cause,
+            DescribeVpcPeeringAuthorizationsError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeVpcPeeringAuthorizationsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeVpcPeeringAuthorizationsError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeVpcPeeringAuthorizationsError {}
 /// Errors returned by DescribeVpcPeeringConnections
 #[derive(Debug, PartialEq)]
 pub enum DescribeVpcPeeringConnectionsError {
@@ -5811,19 +5671,17 @@ impl DescribeVpcPeeringConnectionsError {
 }
 impl fmt::Display for DescribeVpcPeeringConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVpcPeeringConnectionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVpcPeeringConnectionsError::InternalService(ref cause) => cause,
-            DescribeVpcPeeringConnectionsError::InvalidRequest(ref cause) => cause,
-            DescribeVpcPeeringConnectionsError::NotFound(ref cause) => cause,
-            DescribeVpcPeeringConnectionsError::Unauthorized(ref cause) => cause,
+            DescribeVpcPeeringConnectionsError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeVpcPeeringConnectionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeVpcPeeringConnectionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeVpcPeeringConnectionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeVpcPeeringConnectionsError {}
 /// Errors returned by GetGameSessionLogUrl
 #[derive(Debug, PartialEq)]
 pub enum GetGameSessionLogUrlError {
@@ -5864,19 +5722,15 @@ impl GetGameSessionLogUrlError {
 }
 impl fmt::Display for GetGameSessionLogUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGameSessionLogUrlError {
-    fn description(&self) -> &str {
         match *self {
-            GetGameSessionLogUrlError::InternalService(ref cause) => cause,
-            GetGameSessionLogUrlError::InvalidRequest(ref cause) => cause,
-            GetGameSessionLogUrlError::NotFound(ref cause) => cause,
-            GetGameSessionLogUrlError::Unauthorized(ref cause) => cause,
+            GetGameSessionLogUrlError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetGameSessionLogUrlError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetGameSessionLogUrlError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetGameSessionLogUrlError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGameSessionLogUrlError {}
 /// Errors returned by GetInstanceAccess
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceAccessError {
@@ -5915,19 +5769,15 @@ impl GetInstanceAccessError {
 }
 impl fmt::Display for GetInstanceAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceAccessError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceAccessError::InternalService(ref cause) => cause,
-            GetInstanceAccessError::InvalidRequest(ref cause) => cause,
-            GetInstanceAccessError::NotFound(ref cause) => cause,
-            GetInstanceAccessError::Unauthorized(ref cause) => cause,
+            GetInstanceAccessError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceAccessError {}
 /// Errors returned by ListAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAliasesError {
@@ -5961,18 +5811,14 @@ impl ListAliasesError {
 }
 impl fmt::Display for ListAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAliasesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAliasesError::InternalService(ref cause) => cause,
-            ListAliasesError::InvalidRequest(ref cause) => cause,
-            ListAliasesError::Unauthorized(ref cause) => cause,
+            ListAliasesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListAliasesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAliasesError {}
 /// Errors returned by ListBuilds
 #[derive(Debug, PartialEq)]
 pub enum ListBuildsError {
@@ -6006,18 +5852,14 @@ impl ListBuildsError {
 }
 impl fmt::Display for ListBuildsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBuildsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBuildsError::InternalService(ref cause) => cause,
-            ListBuildsError::InvalidRequest(ref cause) => cause,
-            ListBuildsError::Unauthorized(ref cause) => cause,
+            ListBuildsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListBuildsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListBuildsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBuildsError {}
 /// Errors returned by ListFleets
 #[derive(Debug, PartialEq)]
 pub enum ListFleetsError {
@@ -6056,19 +5898,15 @@ impl ListFleetsError {
 }
 impl fmt::Display for ListFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFleetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFleetsError::InternalService(ref cause) => cause,
-            ListFleetsError::InvalidRequest(ref cause) => cause,
-            ListFleetsError::NotFound(ref cause) => cause,
-            ListFleetsError::Unauthorized(ref cause) => cause,
+            ListFleetsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListFleetsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListFleetsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListFleetsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFleetsError {}
 /// Errors returned by ListScripts
 #[derive(Debug, PartialEq)]
 pub enum ListScriptsError {
@@ -6102,18 +5940,14 @@ impl ListScriptsError {
 }
 impl fmt::Display for ListScriptsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListScriptsError {
-    fn description(&self) -> &str {
         match *self {
-            ListScriptsError::InternalService(ref cause) => cause,
-            ListScriptsError::InvalidRequest(ref cause) => cause,
-            ListScriptsError::Unauthorized(ref cause) => cause,
+            ListScriptsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListScriptsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListScriptsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListScriptsError {}
 /// Errors returned by PutScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutScalingPolicyError {
@@ -6152,19 +5986,15 @@ impl PutScalingPolicyError {
 }
 impl fmt::Display for PutScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutScalingPolicyError::InternalService(ref cause) => cause,
-            PutScalingPolicyError::InvalidRequest(ref cause) => cause,
-            PutScalingPolicyError::NotFound(ref cause) => cause,
-            PutScalingPolicyError::Unauthorized(ref cause) => cause,
+            PutScalingPolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutScalingPolicyError {}
 /// Errors returned by RequestUploadCredentials
 #[derive(Debug, PartialEq)]
 pub enum RequestUploadCredentialsError {
@@ -6209,19 +6039,15 @@ impl RequestUploadCredentialsError {
 }
 impl fmt::Display for RequestUploadCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RequestUploadCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            RequestUploadCredentialsError::InternalService(ref cause) => cause,
-            RequestUploadCredentialsError::InvalidRequest(ref cause) => cause,
-            RequestUploadCredentialsError::NotFound(ref cause) => cause,
-            RequestUploadCredentialsError::Unauthorized(ref cause) => cause,
+            RequestUploadCredentialsError::InternalService(ref cause) => write!(f, "{}", cause),
+            RequestUploadCredentialsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RequestUploadCredentialsError::NotFound(ref cause) => write!(f, "{}", cause),
+            RequestUploadCredentialsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RequestUploadCredentialsError {}
 /// Errors returned by ResolveAlias
 #[derive(Debug, PartialEq)]
 pub enum ResolveAliasError {
@@ -6267,20 +6093,16 @@ impl ResolveAliasError {
 }
 impl fmt::Display for ResolveAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResolveAliasError {
-    fn description(&self) -> &str {
         match *self {
-            ResolveAliasError::InternalService(ref cause) => cause,
-            ResolveAliasError::InvalidRequest(ref cause) => cause,
-            ResolveAliasError::NotFound(ref cause) => cause,
-            ResolveAliasError::TerminalRoutingStrategy(ref cause) => cause,
-            ResolveAliasError::Unauthorized(ref cause) => cause,
+            ResolveAliasError::InternalService(ref cause) => write!(f, "{}", cause),
+            ResolveAliasError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ResolveAliasError::NotFound(ref cause) => write!(f, "{}", cause),
+            ResolveAliasError::TerminalRoutingStrategy(ref cause) => write!(f, "{}", cause),
+            ResolveAliasError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResolveAliasError {}
 /// Errors returned by SearchGameSessions
 #[derive(Debug, PartialEq)]
 pub enum SearchGameSessionsError {
@@ -6326,20 +6148,16 @@ impl SearchGameSessionsError {
 }
 impl fmt::Display for SearchGameSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchGameSessionsError {
-    fn description(&self) -> &str {
         match *self {
-            SearchGameSessionsError::InternalService(ref cause) => cause,
-            SearchGameSessionsError::InvalidRequest(ref cause) => cause,
-            SearchGameSessionsError::NotFound(ref cause) => cause,
-            SearchGameSessionsError::TerminalRoutingStrategy(ref cause) => cause,
-            SearchGameSessionsError::Unauthorized(ref cause) => cause,
+            SearchGameSessionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            SearchGameSessionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SearchGameSessionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            SearchGameSessionsError::TerminalRoutingStrategy(ref cause) => write!(f, "{}", cause),
+            SearchGameSessionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SearchGameSessionsError {}
 /// Errors returned by StartFleetActions
 #[derive(Debug, PartialEq)]
 pub enum StartFleetActionsError {
@@ -6378,19 +6196,15 @@ impl StartFleetActionsError {
 }
 impl fmt::Display for StartFleetActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartFleetActionsError {
-    fn description(&self) -> &str {
         match *self {
-            StartFleetActionsError::InternalService(ref cause) => cause,
-            StartFleetActionsError::InvalidRequest(ref cause) => cause,
-            StartFleetActionsError::NotFound(ref cause) => cause,
-            StartFleetActionsError::Unauthorized(ref cause) => cause,
+            StartFleetActionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartFleetActionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartFleetActionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartFleetActionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartFleetActionsError {}
 /// Errors returned by StartGameSessionPlacement
 #[derive(Debug, PartialEq)]
 pub enum StartGameSessionPlacementError {
@@ -6435,19 +6249,15 @@ impl StartGameSessionPlacementError {
 }
 impl fmt::Display for StartGameSessionPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartGameSessionPlacementError {
-    fn description(&self) -> &str {
         match *self {
-            StartGameSessionPlacementError::InternalService(ref cause) => cause,
-            StartGameSessionPlacementError::InvalidRequest(ref cause) => cause,
-            StartGameSessionPlacementError::NotFound(ref cause) => cause,
-            StartGameSessionPlacementError::Unauthorized(ref cause) => cause,
+            StartGameSessionPlacementError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartGameSessionPlacementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartGameSessionPlacementError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartGameSessionPlacementError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartGameSessionPlacementError {}
 /// Errors returned by StartMatchBackfill
 #[derive(Debug, PartialEq)]
 pub enum StartMatchBackfillError {
@@ -6488,19 +6298,15 @@ impl StartMatchBackfillError {
 }
 impl fmt::Display for StartMatchBackfillError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartMatchBackfillError {
-    fn description(&self) -> &str {
         match *self {
-            StartMatchBackfillError::InternalService(ref cause) => cause,
-            StartMatchBackfillError::InvalidRequest(ref cause) => cause,
-            StartMatchBackfillError::NotFound(ref cause) => cause,
-            StartMatchBackfillError::UnsupportedRegion(ref cause) => cause,
+            StartMatchBackfillError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartMatchBackfillError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartMatchBackfillError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartMatchBackfillError::UnsupportedRegion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartMatchBackfillError {}
 /// Errors returned by StartMatchmaking
 #[derive(Debug, PartialEq)]
 pub enum StartMatchmakingError {
@@ -6539,19 +6345,15 @@ impl StartMatchmakingError {
 }
 impl fmt::Display for StartMatchmakingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartMatchmakingError {
-    fn description(&self) -> &str {
         match *self {
-            StartMatchmakingError::InternalService(ref cause) => cause,
-            StartMatchmakingError::InvalidRequest(ref cause) => cause,
-            StartMatchmakingError::NotFound(ref cause) => cause,
-            StartMatchmakingError::UnsupportedRegion(ref cause) => cause,
+            StartMatchmakingError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartMatchmakingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartMatchmakingError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartMatchmakingError::UnsupportedRegion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartMatchmakingError {}
 /// Errors returned by StopFleetActions
 #[derive(Debug, PartialEq)]
 pub enum StopFleetActionsError {
@@ -6590,19 +6392,15 @@ impl StopFleetActionsError {
 }
 impl fmt::Display for StopFleetActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopFleetActionsError {
-    fn description(&self) -> &str {
         match *self {
-            StopFleetActionsError::InternalService(ref cause) => cause,
-            StopFleetActionsError::InvalidRequest(ref cause) => cause,
-            StopFleetActionsError::NotFound(ref cause) => cause,
-            StopFleetActionsError::Unauthorized(ref cause) => cause,
+            StopFleetActionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            StopFleetActionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopFleetActionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopFleetActionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopFleetActionsError {}
 /// Errors returned by StopGameSessionPlacement
 #[derive(Debug, PartialEq)]
 pub enum StopGameSessionPlacementError {
@@ -6647,19 +6445,15 @@ impl StopGameSessionPlacementError {
 }
 impl fmt::Display for StopGameSessionPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopGameSessionPlacementError {
-    fn description(&self) -> &str {
         match *self {
-            StopGameSessionPlacementError::InternalService(ref cause) => cause,
-            StopGameSessionPlacementError::InvalidRequest(ref cause) => cause,
-            StopGameSessionPlacementError::NotFound(ref cause) => cause,
-            StopGameSessionPlacementError::Unauthorized(ref cause) => cause,
+            StopGameSessionPlacementError::InternalService(ref cause) => write!(f, "{}", cause),
+            StopGameSessionPlacementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopGameSessionPlacementError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopGameSessionPlacementError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopGameSessionPlacementError {}
 /// Errors returned by StopMatchmaking
 #[derive(Debug, PartialEq)]
 pub enum StopMatchmakingError {
@@ -6698,19 +6492,15 @@ impl StopMatchmakingError {
 }
 impl fmt::Display for StopMatchmakingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopMatchmakingError {
-    fn description(&self) -> &str {
         match *self {
-            StopMatchmakingError::InternalService(ref cause) => cause,
-            StopMatchmakingError::InvalidRequest(ref cause) => cause,
-            StopMatchmakingError::NotFound(ref cause) => cause,
-            StopMatchmakingError::UnsupportedRegion(ref cause) => cause,
+            StopMatchmakingError::InternalService(ref cause) => write!(f, "{}", cause),
+            StopMatchmakingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopMatchmakingError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopMatchmakingError::UnsupportedRegion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopMatchmakingError {}
 /// Errors returned by UpdateAlias
 #[derive(Debug, PartialEq)]
 pub enum UpdateAliasError {
@@ -6749,19 +6539,15 @@ impl UpdateAliasError {
 }
 impl fmt::Display for UpdateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAliasError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAliasError::InternalService(ref cause) => cause,
-            UpdateAliasError::InvalidRequest(ref cause) => cause,
-            UpdateAliasError::NotFound(ref cause) => cause,
-            UpdateAliasError::Unauthorized(ref cause) => cause,
+            UpdateAliasError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAliasError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAliasError {}
 /// Errors returned by UpdateBuild
 #[derive(Debug, PartialEq)]
 pub enum UpdateBuildError {
@@ -6800,19 +6586,15 @@ impl UpdateBuildError {
 }
 impl fmt::Display for UpdateBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBuildError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBuildError::InternalService(ref cause) => cause,
-            UpdateBuildError::InvalidRequest(ref cause) => cause,
-            UpdateBuildError::NotFound(ref cause) => cause,
-            UpdateBuildError::Unauthorized(ref cause) => cause,
+            UpdateBuildError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateBuildError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateBuildError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateBuildError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBuildError {}
 /// Errors returned by UpdateFleetAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateFleetAttributesError {
@@ -6872,22 +6654,18 @@ impl UpdateFleetAttributesError {
 }
 impl fmt::Display for UpdateFleetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFleetAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFleetAttributesError::Conflict(ref cause) => cause,
-            UpdateFleetAttributesError::InternalService(ref cause) => cause,
-            UpdateFleetAttributesError::InvalidFleetStatus(ref cause) => cause,
-            UpdateFleetAttributesError::InvalidRequest(ref cause) => cause,
-            UpdateFleetAttributesError::LimitExceeded(ref cause) => cause,
-            UpdateFleetAttributesError::NotFound(ref cause) => cause,
-            UpdateFleetAttributesError::Unauthorized(ref cause) => cause,
+            UpdateFleetAttributesError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateFleetAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateFleetAttributesError::InvalidFleetStatus(ref cause) => write!(f, "{}", cause),
+            UpdateFleetAttributesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateFleetAttributesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFleetAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFleetAttributesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFleetAttributesError {}
 /// Errors returned by UpdateFleetCapacity
 #[derive(Debug, PartialEq)]
 pub enum UpdateFleetCapacityError {
@@ -6943,22 +6721,18 @@ impl UpdateFleetCapacityError {
 }
 impl fmt::Display for UpdateFleetCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFleetCapacityError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFleetCapacityError::Conflict(ref cause) => cause,
-            UpdateFleetCapacityError::InternalService(ref cause) => cause,
-            UpdateFleetCapacityError::InvalidFleetStatus(ref cause) => cause,
-            UpdateFleetCapacityError::InvalidRequest(ref cause) => cause,
-            UpdateFleetCapacityError::LimitExceeded(ref cause) => cause,
-            UpdateFleetCapacityError::NotFound(ref cause) => cause,
-            UpdateFleetCapacityError::Unauthorized(ref cause) => cause,
+            UpdateFleetCapacityError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateFleetCapacityError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateFleetCapacityError::InvalidFleetStatus(ref cause) => write!(f, "{}", cause),
+            UpdateFleetCapacityError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateFleetCapacityError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFleetCapacityError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFleetCapacityError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFleetCapacityError {}
 /// Errors returned by UpdateFleetPortSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateFleetPortSettingsError {
@@ -7022,22 +6796,18 @@ impl UpdateFleetPortSettingsError {
 }
 impl fmt::Display for UpdateFleetPortSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFleetPortSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFleetPortSettingsError::Conflict(ref cause) => cause,
-            UpdateFleetPortSettingsError::InternalService(ref cause) => cause,
-            UpdateFleetPortSettingsError::InvalidFleetStatus(ref cause) => cause,
-            UpdateFleetPortSettingsError::InvalidRequest(ref cause) => cause,
-            UpdateFleetPortSettingsError::LimitExceeded(ref cause) => cause,
-            UpdateFleetPortSettingsError::NotFound(ref cause) => cause,
-            UpdateFleetPortSettingsError::Unauthorized(ref cause) => cause,
+            UpdateFleetPortSettingsError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateFleetPortSettingsError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateFleetPortSettingsError::InvalidFleetStatus(ref cause) => write!(f, "{}", cause),
+            UpdateFleetPortSettingsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateFleetPortSettingsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFleetPortSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFleetPortSettingsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFleetPortSettingsError {}
 /// Errors returned by UpdateGameSession
 #[derive(Debug, PartialEq)]
 pub enum UpdateGameSessionError {
@@ -7088,21 +6858,17 @@ impl UpdateGameSessionError {
 }
 impl fmt::Display for UpdateGameSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGameSessionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGameSessionError::Conflict(ref cause) => cause,
-            UpdateGameSessionError::InternalService(ref cause) => cause,
-            UpdateGameSessionError::InvalidGameSessionStatus(ref cause) => cause,
-            UpdateGameSessionError::InvalidRequest(ref cause) => cause,
-            UpdateGameSessionError::NotFound(ref cause) => cause,
-            UpdateGameSessionError::Unauthorized(ref cause) => cause,
+            UpdateGameSessionError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateGameSessionError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateGameSessionError::InvalidGameSessionStatus(ref cause) => write!(f, "{}", cause),
+            UpdateGameSessionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateGameSessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateGameSessionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGameSessionError {}
 /// Errors returned by UpdateGameSessionQueue
 #[derive(Debug, PartialEq)]
 pub enum UpdateGameSessionQueueError {
@@ -7145,19 +6911,15 @@ impl UpdateGameSessionQueueError {
 }
 impl fmt::Display for UpdateGameSessionQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGameSessionQueueError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGameSessionQueueError::InternalService(ref cause) => cause,
-            UpdateGameSessionQueueError::InvalidRequest(ref cause) => cause,
-            UpdateGameSessionQueueError::NotFound(ref cause) => cause,
-            UpdateGameSessionQueueError::Unauthorized(ref cause) => cause,
+            UpdateGameSessionQueueError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateGameSessionQueueError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateGameSessionQueueError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateGameSessionQueueError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGameSessionQueueError {}
 /// Errors returned by UpdateMatchmakingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateMatchmakingConfigurationError {
@@ -7206,19 +6968,21 @@ impl UpdateMatchmakingConfigurationError {
 }
 impl fmt::Display for UpdateMatchmakingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMatchmakingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMatchmakingConfigurationError::InternalService(ref cause) => cause,
-            UpdateMatchmakingConfigurationError::InvalidRequest(ref cause) => cause,
-            UpdateMatchmakingConfigurationError::NotFound(ref cause) => cause,
-            UpdateMatchmakingConfigurationError::UnsupportedRegion(ref cause) => cause,
+            UpdateMatchmakingConfigurationError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateMatchmakingConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateMatchmakingConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMatchmakingConfigurationError::UnsupportedRegion(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateMatchmakingConfigurationError {}
 /// Errors returned by UpdateRuntimeConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateRuntimeConfigurationError {
@@ -7272,20 +7036,18 @@ impl UpdateRuntimeConfigurationError {
 }
 impl fmt::Display for UpdateRuntimeConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRuntimeConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRuntimeConfigurationError::InternalService(ref cause) => cause,
-            UpdateRuntimeConfigurationError::InvalidFleetStatus(ref cause) => cause,
-            UpdateRuntimeConfigurationError::InvalidRequest(ref cause) => cause,
-            UpdateRuntimeConfigurationError::NotFound(ref cause) => cause,
-            UpdateRuntimeConfigurationError::Unauthorized(ref cause) => cause,
+            UpdateRuntimeConfigurationError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateRuntimeConfigurationError::InvalidFleetStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRuntimeConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateRuntimeConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRuntimeConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRuntimeConfigurationError {}
 /// Errors returned by UpdateScript
 #[derive(Debug, PartialEq)]
 pub enum UpdateScriptError {
@@ -7324,19 +7086,15 @@ impl UpdateScriptError {
 }
 impl fmt::Display for UpdateScriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateScriptError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateScriptError::InternalService(ref cause) => cause,
-            UpdateScriptError::InvalidRequest(ref cause) => cause,
-            UpdateScriptError::NotFound(ref cause) => cause,
-            UpdateScriptError::Unauthorized(ref cause) => cause,
+            UpdateScriptError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateScriptError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateScriptError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateScriptError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateScriptError {}
 /// Errors returned by ValidateMatchmakingRuleSet
 #[derive(Debug, PartialEq)]
 pub enum ValidateMatchmakingRuleSetError {
@@ -7378,18 +7136,14 @@ impl ValidateMatchmakingRuleSetError {
 }
 impl fmt::Display for ValidateMatchmakingRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ValidateMatchmakingRuleSetError {
-    fn description(&self) -> &str {
         match *self {
-            ValidateMatchmakingRuleSetError::InternalService(ref cause) => cause,
-            ValidateMatchmakingRuleSetError::InvalidRequest(ref cause) => cause,
-            ValidateMatchmakingRuleSetError::UnsupportedRegion(ref cause) => cause,
+            ValidateMatchmakingRuleSetError::InternalService(ref cause) => write!(f, "{}", cause),
+            ValidateMatchmakingRuleSetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ValidateMatchmakingRuleSetError::UnsupportedRegion(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ValidateMatchmakingRuleSetError {}
 /// Trait representing the capabilities of the Amazon GameLift API. Amazon GameLift clients implement this trait.
 pub trait GameLift {
     /// <p><p>Registers a player&#39;s acceptance or rejection of a proposed FlexMatch match. A matchmaking configuration may require player acceptance; if so, then matches built with that configuration cannot be completed unless all players accept the proposed match within a specified time limit. </p> <p>When FlexMatch builds a match, all the matchmaking tickets involved in the proposed match are placed into status <code>REQUIRES_ACCEPTANCE</code>. This is a trigger for your game to get acceptance from all players in the ticket. Acceptances are only valid for tickets when they are in this status; all other acceptances result in an error.</p> <p>To register acceptance, specify the ticket ID, a response, and one or more players. Once all players have registered acceptance, the matchmaking tickets advance to status <code>PLACING</code>, where a new game session is created for the match. </p> <p>If any player rejects the match, or if acceptances are not received before a specified timeout, the proposed match is dropped. The matchmaking tickets are then handled in one of two ways: For tickets where one or more players rejected the match, the ticket status is returned to <code>SEARCHING</code> to find a new match. For tickets where one or more players failed to respond, the ticket status is set to <code>CANCELLED</code>, and processing is terminated. A new matchmaking request for these players can be submitted as needed. </p> <p> <b>Learn more</b> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/match-client.html"> Add FlexMatch to a Game Client</a> </p> <p> <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/match-events.html"> FlexMatch Events Reference</a> </p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> <li> <p> <a>StartMatchBackfill</a> </p> </li> </ul></p>
@@ -7851,6 +7605,14 @@ impl GameLiftClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> GameLiftClient {
         GameLiftClient { client, region }
+    }
+}
+
+impl fmt::Debug for GameLiftClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("GameLiftClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -498,17 +498,15 @@ impl DescribeAffectedEntitiesError {
 }
 impl fmt::Display for DescribeAffectedEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAffectedEntitiesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAffectedEntitiesError::InvalidPaginationToken(ref cause) => cause,
-            DescribeAffectedEntitiesError::UnsupportedLocale(ref cause) => cause,
+            DescribeAffectedEntitiesError::InvalidPaginationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAffectedEntitiesError::UnsupportedLocale(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAffectedEntitiesError {}
 /// Errors returned by DescribeEntityAggregates
 #[derive(Debug, PartialEq)]
 pub enum DescribeEntityAggregatesError {}
@@ -526,14 +524,10 @@ impl DescribeEntityAggregatesError {
 }
 impl fmt::Display for DescribeEntityAggregatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEntityAggregatesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEntityAggregatesError {}
 /// Errors returned by DescribeEventAggregates
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventAggregatesError {
@@ -559,16 +553,14 @@ impl DescribeEventAggregatesError {
 }
 impl fmt::Display for DescribeEventAggregatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventAggregatesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventAggregatesError::InvalidPaginationToken(ref cause) => cause,
+            DescribeEventAggregatesError::InvalidPaginationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEventAggregatesError {}
 /// Errors returned by DescribeEventDetails
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventDetailsError {
@@ -594,16 +586,12 @@ impl DescribeEventDetailsError {
 }
 impl fmt::Display for DescribeEventDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventDetailsError::UnsupportedLocale(ref cause) => cause,
+            DescribeEventDetailsError::UnsupportedLocale(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEventDetailsError {}
 /// Errors returned by DescribeEventTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventTypesError {
@@ -636,17 +624,13 @@ impl DescribeEventTypesError {
 }
 impl fmt::Display for DescribeEventTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventTypesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventTypesError::InvalidPaginationToken(ref cause) => cause,
-            DescribeEventTypesError::UnsupportedLocale(ref cause) => cause,
+            DescribeEventTypesError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            DescribeEventTypesError::UnsupportedLocale(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEventTypesError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {
@@ -677,17 +661,13 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventsError::InvalidPaginationToken(ref cause) => cause,
-            DescribeEventsError::UnsupportedLocale(ref cause) => cause,
+            DescribeEventsError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            DescribeEventsError::UnsupportedLocale(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEventsError {}
 /// Trait representing the capabilities of the AWSHealth API. AWSHealth clients implement this trait.
 pub trait AWSHealth {
     /// <p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>
@@ -760,6 +740,14 @@ impl AWSHealthClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> AWSHealthClient {
         AWSHealthClient { client, region }
+    }
+}
+
+impl fmt::Debug for AWSHealthClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AWSHealthClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

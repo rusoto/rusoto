@@ -73,7 +73,7 @@ pub struct BatchDetectEntitiesItemResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectEntitiesRequest {
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer than 5,000 bytes of UTF-8 encoded characters.</p>
@@ -109,7 +109,7 @@ pub struct BatchDetectKeyPhrasesItemResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectKeyPhrasesRequest {
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -149,7 +149,7 @@ pub struct BatchDetectSentimentItemResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectSentimentRequest {
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -185,7 +185,7 @@ pub struct BatchDetectSyntaxItemResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectSyntaxRequest {
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -268,6 +268,26 @@ pub struct ClassifierMetadata {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ClassifyDocumentRequest {
+    /// <p>The Amazon Resource Number (ARN) of the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
+    pub endpoint_arn: String,
+    /// <p>The document text to be analyzed.</p>
+    #[serde(rename = "Text")]
+    pub text: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ClassifyDocumentResponse {
+    /// <p>The classes used by the document being analyzed. These are used for multi-class trained models. Individual classes are mutually exclusive and each document is expected to have only a single class assigned to it. For example, an animal can be a dog or a cat, but not both at the same time. </p>
+    #[serde(rename = "Classes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub classes: Option<Vec<DocumentClass>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentClassifierRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -282,7 +302,7 @@ pub struct CreateDocumentClassifierRequest {
     /// <p>Specifies the format and location of the input data for the job.</p>
     #[serde(rename = "InputDataConfig")]
     pub input_data_config: DocumentClassifierInputDataConfig,
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Enables the addition of output results configuration parameters for custom classifier jobs.</p>
@@ -310,6 +330,37 @@ pub struct CreateDocumentClassifierResponse {
     #[serde(rename = "DocumentClassifierArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_classifier_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateEndpointRequest {
+    /// <p>An idempotency token provided by the customer. If this token matches a previous endpoint creation request, Amazon Comprehend will not return a <code>ResourceInUseException</code>. </p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p> The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
+    #[serde(rename = "DesiredInferenceUnits")]
+    pub desired_inference_units: i64,
+    /// <p>This is the descriptive suffix that becomes part of the <code>EndpointArn</code> used for all subsequent requests to this resource. </p>
+    #[serde(rename = "EndpointName")]
+    pub endpoint_name: String,
+    /// <p>The Amazon Resource Number (ARN) of the model to which the endpoint will be attached.</p>
+    #[serde(rename = "ModelArn")]
+    pub model_arn: String,
+    /// <p>Tags associated with the endpoint being created. A tag is a key-value pair that adds metadata to the endpoint. For example, a tag with "Sales" as the key might be added to an endpoint to indicate its use by the sales department. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateEndpointResponse {
+    /// <p>The Amazon Resource Number (ARN) of the endpoint being created.</p>
+    #[serde(rename = "EndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -365,6 +416,18 @@ pub struct DeleteDocumentClassifierRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDocumentClassifierResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteEndpointRequest {
+    /// <p>The Amazon Resource Number (ARN) of the endpoint being deleted.</p>
+    #[serde(rename = "EndpointArn")]
+    pub endpoint_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -427,6 +490,23 @@ pub struct DescribeDominantLanguageDetectionJobResponse {
     #[serde(rename = "DominantLanguageDetectionJobProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dominant_language_detection_job_properties: Option<DominantLanguageDetectionJobProperties>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeEndpointRequest {
+    /// <p>The Amazon Resource Number (ARN) of the endpoint being described.</p>
+    #[serde(rename = "EndpointArn")]
+    pub endpoint_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeEndpointResponse {
+    /// <p>Describes information associated with the specific endpoint.</p>
+    #[serde(rename = "EndpointProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_properties: Option<EndpointProperties>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -534,7 +614,7 @@ pub struct DetectDominantLanguageResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesRequest {
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -554,7 +634,7 @@ pub struct DetectEntitiesResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectKeyPhrasesRequest {
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -574,7 +654,7 @@ pub struct DetectKeyPhrasesResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectSentimentRequest {
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -598,7 +678,7 @@ pub struct DetectSentimentResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectSyntaxRequest {
-    /// <p>The language code of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt").</p>
+    /// <p>The language code of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt").</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 string. Each string must contain fewer that 5,000 bytes of UTF encoded characters.</p>
@@ -613,6 +693,20 @@ pub struct DetectSyntaxResponse {
     #[serde(rename = "SyntaxTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub syntax_tokens: Option<Vec<SyntaxToken>>,
+}
+
+/// <p>Specifies the class that categorizes the document being analyzed</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DocumentClass {
+    /// <p>The name of the class.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The confidence score that Amazon Comprehend has this class correctly attributed.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
 }
 
 /// <p>Provides information for filtering a list of document classification jobs. For more information, see the operation. You can provide only one filter parameter in each request.</p>
@@ -878,6 +972,66 @@ pub struct DominantLanguageDetectionJobProperties {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// <p>The filter used to determine which endpoints are are returned. You can filter jobs on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EndpointFilter {
+    /// <p>Specifies a date after which the returned endpoint or endpoints were created.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>Specifies a date before which the returned endpoint or endpoints were created.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>The Amazon Resource Number (ARN) of the model to which the endpoint is attached.</p>
+    #[serde(rename = "ModelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_arn: Option<String>,
+    /// <p>Specifies the status of the endpoint being returned. Possible values are: Creating, Ready, Updating, Deleting, Failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Specifies information about the specified endpoint.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EndpointProperties {
+    /// <p>The creation date and time of the endpoint.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The number of inference units currently used by the model using this endpoint.</p>
+    #[serde(rename = "CurrentInferenceUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_inference_units: Option<i64>,
+    /// <p>The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
+    #[serde(rename = "DesiredInferenceUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub desired_inference_units: Option<i64>,
+    /// <p>The Amazon Resource Number (ARN) of the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_arn: Option<String>,
+    /// <p>The date and time that the endpoint was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>Specifies a reason for failure in cases of <code>Failed</code> status.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The Amazon Resource Number (ARN) of the model to which the endpoint is attached.</p>
+    #[serde(rename = "ModelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_arn: Option<String>,
+    /// <p>Specifies the status of the endpoint. Because the endpoint updates and creation are asynchronous, so customers will need to wait for the endpoint to be <code>Ready</code> status before making inference requests.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1093,7 +1247,7 @@ pub struct EntityRecognizerMetadataEntityTypesListItem {
     #[serde(rename = "EvaluationMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_metrics: Option<EntityTypesEvaluationMetrics>,
-    /// <p>indicates the number of times the given entity name was seen in the training data. </p>
+    /// <p>Indicates the number of times the given entity type was seen in the training data. </p>
     #[serde(rename = "NumberOfTrainMentions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_train_mentions: Option<i64>,
@@ -1383,6 +1537,36 @@ pub struct ListDominantLanguageDetectionJobsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dominant_language_detection_job_properties_list:
         Option<Vec<DominantLanguageDetectionJobProperties>>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListEndpointsRequest {
+    /// <p>Filters the endpoints that are returned. You can filter endpoints on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<EndpointFilter>,
+    /// <p>The maximum number of results to return in each page. The default is 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListEndpointsResponse {
+    /// <p>Displays a list of endpoint properties being retrieved by the service in response to the request.</p>
+    #[serde(rename = "EndpointPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_properties_list: Option<Vec<EndpointProperties>>,
     /// <p>Identifies the next page of results to return.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1794,7 +1978,7 @@ pub struct StartEntitiesDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. All documents must be in the same language. You can specify any of the languages supported by Amazon Comprehend: English ("en"), Spanish ("es"), French ("fr"), German ("de"), Italian ("it"), or Portuguese ("pt"). If custom entities recognition is used, this parameter is ignored and the language used for training the model is used instead.</p>
+    /// <p>The language of the input documents. All documents must be in the same language. You can specify any of the languages supported by Amazon Comprehend. If custom entities recognition is used, this parameter is ignored and the language used for training the model is used instead.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files.</p>
@@ -1840,7 +2024,7 @@ pub struct StartKeyPhrasesDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files.</p>
@@ -1886,7 +2070,7 @@ pub struct StartSentimentDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files. </p>
@@ -2214,6 +2398,21 @@ pub struct UntagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateEndpointRequest {
+    /// <p> The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
+    #[serde(rename = "DesiredInferenceUnits")]
+    pub desired_inference_units: i64,
+    /// <p>The Amazon Resource Number (ARN) of the endpoint being updated.</p>
+    #[serde(rename = "EndpointArn")]
+    pub endpoint_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateEndpointResponse {}
+
 /// <p> Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job. For For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VpcConfig {
@@ -2273,19 +2472,19 @@ impl BatchDetectDominantLanguageError {
 }
 impl fmt::Display for BatchDetectDominantLanguageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDetectDominantLanguageError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDetectDominantLanguageError::BatchSizeLimitExceeded(ref cause) => cause,
-            BatchDetectDominantLanguageError::InternalServer(ref cause) => cause,
-            BatchDetectDominantLanguageError::InvalidRequest(ref cause) => cause,
-            BatchDetectDominantLanguageError::TextSizeLimitExceeded(ref cause) => cause,
+            BatchDetectDominantLanguageError::BatchSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDetectDominantLanguageError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDetectDominantLanguageError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchDetectDominantLanguageError::TextSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchDetectDominantLanguageError {}
 /// Errors returned by BatchDetectEntities
 #[derive(Debug, PartialEq)]
 pub enum BatchDetectEntitiesError {
@@ -2335,20 +2534,16 @@ impl BatchDetectEntitiesError {
 }
 impl fmt::Display for BatchDetectEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDetectEntitiesError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDetectEntitiesError::BatchSizeLimitExceeded(ref cause) => cause,
-            BatchDetectEntitiesError::InternalServer(ref cause) => cause,
-            BatchDetectEntitiesError::InvalidRequest(ref cause) => cause,
-            BatchDetectEntitiesError::TextSizeLimitExceeded(ref cause) => cause,
-            BatchDetectEntitiesError::UnsupportedLanguage(ref cause) => cause,
+            BatchDetectEntitiesError::BatchSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectEntitiesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDetectEntitiesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchDetectEntitiesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectEntitiesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDetectEntitiesError {}
 /// Errors returned by BatchDetectKeyPhrases
 #[derive(Debug, PartialEq)]
 pub enum BatchDetectKeyPhrasesError {
@@ -2402,20 +2597,16 @@ impl BatchDetectKeyPhrasesError {
 }
 impl fmt::Display for BatchDetectKeyPhrasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDetectKeyPhrasesError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(ref cause) => cause,
-            BatchDetectKeyPhrasesError::InternalServer(ref cause) => cause,
-            BatchDetectKeyPhrasesError::InvalidRequest(ref cause) => cause,
-            BatchDetectKeyPhrasesError::TextSizeLimitExceeded(ref cause) => cause,
-            BatchDetectKeyPhrasesError::UnsupportedLanguage(ref cause) => cause,
+            BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectKeyPhrasesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDetectKeyPhrasesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchDetectKeyPhrasesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectKeyPhrasesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDetectKeyPhrasesError {}
 /// Errors returned by BatchDetectSentiment
 #[derive(Debug, PartialEq)]
 pub enum BatchDetectSentimentError {
@@ -2465,20 +2656,16 @@ impl BatchDetectSentimentError {
 }
 impl fmt::Display for BatchDetectSentimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDetectSentimentError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDetectSentimentError::BatchSizeLimitExceeded(ref cause) => cause,
-            BatchDetectSentimentError::InternalServer(ref cause) => cause,
-            BatchDetectSentimentError::InvalidRequest(ref cause) => cause,
-            BatchDetectSentimentError::TextSizeLimitExceeded(ref cause) => cause,
-            BatchDetectSentimentError::UnsupportedLanguage(ref cause) => cause,
+            BatchDetectSentimentError::BatchSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectSentimentError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDetectSentimentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchDetectSentimentError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectSentimentError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDetectSentimentError {}
 /// Errors returned by BatchDetectSyntax
 #[derive(Debug, PartialEq)]
 pub enum BatchDetectSyntaxError {
@@ -2528,20 +2715,67 @@ impl BatchDetectSyntaxError {
 }
 impl fmt::Display for BatchDetectSyntaxError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDetectSyntaxError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDetectSyntaxError::BatchSizeLimitExceeded(ref cause) => cause,
-            BatchDetectSyntaxError::InternalServer(ref cause) => cause,
-            BatchDetectSyntaxError::InvalidRequest(ref cause) => cause,
-            BatchDetectSyntaxError::TextSizeLimitExceeded(ref cause) => cause,
-            BatchDetectSyntaxError::UnsupportedLanguage(ref cause) => cause,
+            BatchDetectSyntaxError::BatchSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectSyntaxError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDetectSyntaxError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            BatchDetectSyntaxError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchDetectSyntaxError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDetectSyntaxError {}
+/// Errors returned by ClassifyDocument
+#[derive(Debug, PartialEq)]
+pub enum ClassifyDocumentError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    ResourceUnavailable(String),
+    /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
+    TextSizeLimitExceeded(String),
+}
+
+impl ClassifyDocumentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ClassifyDocumentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ClassifyDocumentError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ClassifyDocumentError::InvalidRequest(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(ClassifyDocumentError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TextSizeLimitExceededException" => {
+                    return RusotoError::Service(ClassifyDocumentError::TextSizeLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ClassifyDocumentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ClassifyDocumentError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ClassifyDocumentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ClassifyDocumentError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            ClassifyDocumentError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ClassifyDocumentError {}
 /// Errors returned by CreateDocumentClassifier
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentClassifierError {
@@ -2616,23 +2850,94 @@ impl CreateDocumentClassifierError {
 }
 impl fmt::Display for CreateDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDocumentClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDocumentClassifierError::InternalServer(ref cause) => cause,
-            CreateDocumentClassifierError::InvalidRequest(ref cause) => cause,
-            CreateDocumentClassifierError::KmsKeyValidation(ref cause) => cause,
-            CreateDocumentClassifierError::ResourceInUse(ref cause) => cause,
-            CreateDocumentClassifierError::ResourceLimitExceeded(ref cause) => cause,
-            CreateDocumentClassifierError::TooManyRequests(ref cause) => cause,
-            CreateDocumentClassifierError::TooManyTags(ref cause) => cause,
-            CreateDocumentClassifierError::UnsupportedLanguage(ref cause) => cause,
+            CreateDocumentClassifierError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDocumentClassifierError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::TooManyTags(ref cause) => write!(f, "{}", cause),
+            CreateDocumentClassifierError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDocumentClassifierError {}
+/// Errors returned by CreateEndpoint
+#[derive(Debug, PartialEq)]
+pub enum CreateEndpointError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    ResourceInUse(String),
+    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    ResourceUnavailable(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
+    TooManyTags(String),
+}
+
+impl CreateEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEndpointError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(CreateEndpointError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateEndpointError::InvalidRequest(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(CreateEndpointError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateEndpointError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateEndpointError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(CreateEndpointError::ResourceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateEndpointError::TooManyRequests(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateEndpointError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::TooManyTags(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateEndpointError {}
 /// Errors returned by CreateEntityRecognizer
 #[derive(Debug, PartialEq)]
 pub enum CreateEntityRecognizerError {
@@ -2705,23 +3010,19 @@ impl CreateEntityRecognizerError {
 }
 impl fmt::Display for CreateEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEntityRecognizerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEntityRecognizerError::InternalServer(ref cause) => cause,
-            CreateEntityRecognizerError::InvalidRequest(ref cause) => cause,
-            CreateEntityRecognizerError::KmsKeyValidation(ref cause) => cause,
-            CreateEntityRecognizerError::ResourceInUse(ref cause) => cause,
-            CreateEntityRecognizerError::ResourceLimitExceeded(ref cause) => cause,
-            CreateEntityRecognizerError::TooManyRequests(ref cause) => cause,
-            CreateEntityRecognizerError::TooManyTags(ref cause) => cause,
-            CreateEntityRecognizerError::UnsupportedLanguage(ref cause) => cause,
+            CreateEntityRecognizerError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::TooManyTags(ref cause) => write!(f, "{}", cause),
+            CreateEntityRecognizerError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEntityRecognizerError {}
 /// Errors returned by DeleteDocumentClassifier
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentClassifierError {
@@ -2782,21 +3083,70 @@ impl DeleteDocumentClassifierError {
 }
 impl fmt::Display for DeleteDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDocumentClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDocumentClassifierError::InternalServer(ref cause) => cause,
-            DeleteDocumentClassifierError::InvalidRequest(ref cause) => cause,
-            DeleteDocumentClassifierError::ResourceInUse(ref cause) => cause,
-            DeleteDocumentClassifierError::ResourceNotFound(ref cause) => cause,
-            DeleteDocumentClassifierError::ResourceUnavailable(ref cause) => cause,
-            DeleteDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            DeleteDocumentClassifierError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentClassifierError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentClassifierError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentClassifierError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentClassifierError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentClassifierError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDocumentClassifierError {}
+/// Errors returned by DeleteEndpoint
+#[derive(Debug, PartialEq)]
+pub enum DeleteEndpointError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEndpointError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteEndpointError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteEndpointError::InvalidRequest(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteEndpointError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteEndpointError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteEndpointError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteEndpointError {}
 /// Errors returned by DeleteEntityRecognizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteEntityRecognizerError {
@@ -2857,21 +3207,17 @@ impl DeleteEntityRecognizerError {
 }
 impl fmt::Display for DeleteEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEntityRecognizerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEntityRecognizerError::InternalServer(ref cause) => cause,
-            DeleteEntityRecognizerError::InvalidRequest(ref cause) => cause,
-            DeleteEntityRecognizerError::ResourceInUse(ref cause) => cause,
-            DeleteEntityRecognizerError::ResourceNotFound(ref cause) => cause,
-            DeleteEntityRecognizerError::ResourceUnavailable(ref cause) => cause,
-            DeleteEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            DeleteEntityRecognizerError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteEntityRecognizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteEntityRecognizerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteEntityRecognizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteEntityRecognizerError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteEntityRecognizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEntityRecognizerError {}
 /// Errors returned by DescribeDocumentClassificationJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeDocumentClassificationJobError {
@@ -2920,19 +3266,23 @@ impl DescribeDocumentClassificationJobError {
 }
 impl fmt::Display for DescribeDocumentClassificationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDocumentClassificationJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDocumentClassificationJobError::InternalServer(ref cause) => cause,
-            DescribeDocumentClassificationJobError::InvalidRequest(ref cause) => cause,
-            DescribeDocumentClassificationJobError::JobNotFound(ref cause) => cause,
-            DescribeDocumentClassificationJobError::TooManyRequests(ref cause) => cause,
+            DescribeDocumentClassificationJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDocumentClassificationJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDocumentClassificationJobError::JobNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDocumentClassificationJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDocumentClassificationJobError {}
 /// Errors returned by DescribeDocumentClassifier
 #[derive(Debug, PartialEq)]
 pub enum DescribeDocumentClassifierError {
@@ -2981,19 +3331,15 @@ impl DescribeDocumentClassifierError {
 }
 impl fmt::Display for DescribeDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDocumentClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDocumentClassifierError::InternalServer(ref cause) => cause,
-            DescribeDocumentClassifierError::InvalidRequest(ref cause) => cause,
-            DescribeDocumentClassifierError::ResourceNotFound(ref cause) => cause,
-            DescribeDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            DescribeDocumentClassifierError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentClassifierError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentClassifierError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentClassifierError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDocumentClassifierError {}
 /// Errors returned by DescribeDominantLanguageDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeDominantLanguageDetectionJobError {
@@ -3042,19 +3388,70 @@ impl DescribeDominantLanguageDetectionJobError {
 }
 impl fmt::Display for DescribeDominantLanguageDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDominantLanguageDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDominantLanguageDetectionJobError::InternalServer(ref cause) => cause,
-            DescribeDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribeDominantLanguageDetectionJobError::JobNotFound(ref cause) => cause,
-            DescribeDominantLanguageDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribeDominantLanguageDetectionJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDominantLanguageDetectionJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDominantLanguageDetectionJobError::JobNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDominantLanguageDetectionJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDominantLanguageDetectionJobError {}
+/// Errors returned by DescribeEndpoint
+#[derive(Debug, PartialEq)]
+pub enum DescribeEndpointError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl DescribeEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeEndpointError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeEndpointError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeEndpointError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeEndpointError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeEndpointError {}
 /// Errors returned by DescribeEntitiesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeEntitiesDetectionJobError {
@@ -3103,19 +3500,15 @@ impl DescribeEntitiesDetectionJobError {
 }
 impl fmt::Display for DescribeEntitiesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEntitiesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEntitiesDetectionJobError::InternalServer(ref cause) => cause,
-            DescribeEntitiesDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribeEntitiesDetectionJobError::JobNotFound(ref cause) => cause,
-            DescribeEntitiesDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribeEntitiesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeEntitiesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeEntitiesDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeEntitiesDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEntitiesDetectionJobError {}
 /// Errors returned by DescribeEntityRecognizer
 #[derive(Debug, PartialEq)]
 pub enum DescribeEntityRecognizerError {
@@ -3162,19 +3555,15 @@ impl DescribeEntityRecognizerError {
 }
 impl fmt::Display for DescribeEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEntityRecognizerError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEntityRecognizerError::InternalServer(ref cause) => cause,
-            DescribeEntityRecognizerError::InvalidRequest(ref cause) => cause,
-            DescribeEntityRecognizerError::ResourceNotFound(ref cause) => cause,
-            DescribeEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            DescribeEntityRecognizerError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeEntityRecognizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeEntityRecognizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeEntityRecognizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEntityRecognizerError {}
 /// Errors returned by DescribeKeyPhrasesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeKeyPhrasesDetectionJobError {
@@ -3223,19 +3612,21 @@ impl DescribeKeyPhrasesDetectionJobError {
 }
 impl fmt::Display for DescribeKeyPhrasesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeKeyPhrasesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeKeyPhrasesDetectionJobError::InternalServer(ref cause) => cause,
-            DescribeKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribeKeyPhrasesDetectionJobError::JobNotFound(ref cause) => cause,
-            DescribeKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribeKeyPhrasesDetectionJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeKeyPhrasesDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeKeyPhrasesDetectionJobError {}
 /// Errors returned by DescribeSentimentDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeSentimentDetectionJobError {
@@ -3284,19 +3675,17 @@ impl DescribeSentimentDetectionJobError {
 }
 impl fmt::Display for DescribeSentimentDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSentimentDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSentimentDetectionJobError::InternalServer(ref cause) => cause,
-            DescribeSentimentDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribeSentimentDetectionJobError::JobNotFound(ref cause) => cause,
-            DescribeSentimentDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribeSentimentDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeSentimentDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeSentimentDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeSentimentDetectionJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeSentimentDetectionJobError {}
 /// Errors returned by DescribeTopicsDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeTopicsDetectionJobError {
@@ -3345,19 +3734,15 @@ impl DescribeTopicsDetectionJobError {
 }
 impl fmt::Display for DescribeTopicsDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTopicsDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTopicsDetectionJobError::InternalServer(ref cause) => cause,
-            DescribeTopicsDetectionJobError::InvalidRequest(ref cause) => cause,
-            DescribeTopicsDetectionJobError::JobNotFound(ref cause) => cause,
-            DescribeTopicsDetectionJobError::TooManyRequests(ref cause) => cause,
+            DescribeTopicsDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeTopicsDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeTopicsDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTopicsDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTopicsDetectionJobError {}
 /// Errors returned by DetectDominantLanguage
 #[derive(Debug, PartialEq)]
 pub enum DetectDominantLanguageError {
@@ -3397,18 +3782,14 @@ impl DetectDominantLanguageError {
 }
 impl fmt::Display for DetectDominantLanguageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectDominantLanguageError {
-    fn description(&self) -> &str {
         match *self {
-            DetectDominantLanguageError::InternalServer(ref cause) => cause,
-            DetectDominantLanguageError::InvalidRequest(ref cause) => cause,
-            DetectDominantLanguageError::TextSizeLimitExceeded(ref cause) => cause,
+            DetectDominantLanguageError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectDominantLanguageError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectDominantLanguageError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectDominantLanguageError {}
 /// Errors returned by DetectEntities
 #[derive(Debug, PartialEq)]
 pub enum DetectEntitiesError {
@@ -3449,19 +3830,15 @@ impl DetectEntitiesError {
 }
 impl fmt::Display for DetectEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectEntitiesError {
-    fn description(&self) -> &str {
         match *self {
-            DetectEntitiesError::InternalServer(ref cause) => cause,
-            DetectEntitiesError::InvalidRequest(ref cause) => cause,
-            DetectEntitiesError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectEntitiesError::UnsupportedLanguage(ref cause) => cause,
+            DetectEntitiesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectEntitiesError {}
 /// Errors returned by DetectKeyPhrases
 #[derive(Debug, PartialEq)]
 pub enum DetectKeyPhrasesError {
@@ -3504,19 +3881,15 @@ impl DetectKeyPhrasesError {
 }
 impl fmt::Display for DetectKeyPhrasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectKeyPhrasesError {
-    fn description(&self) -> &str {
         match *self {
-            DetectKeyPhrasesError::InternalServer(ref cause) => cause,
-            DetectKeyPhrasesError::InvalidRequest(ref cause) => cause,
-            DetectKeyPhrasesError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectKeyPhrasesError::UnsupportedLanguage(ref cause) => cause,
+            DetectKeyPhrasesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectKeyPhrasesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectKeyPhrasesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectKeyPhrasesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectKeyPhrasesError {}
 /// Errors returned by DetectSentiment
 #[derive(Debug, PartialEq)]
 pub enum DetectSentimentError {
@@ -3557,19 +3930,15 @@ impl DetectSentimentError {
 }
 impl fmt::Display for DetectSentimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectSentimentError {
-    fn description(&self) -> &str {
         match *self {
-            DetectSentimentError::InternalServer(ref cause) => cause,
-            DetectSentimentError::InvalidRequest(ref cause) => cause,
-            DetectSentimentError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectSentimentError::UnsupportedLanguage(ref cause) => cause,
+            DetectSentimentError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectSentimentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectSentimentError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectSentimentError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectSentimentError {}
 /// Errors returned by DetectSyntax
 #[derive(Debug, PartialEq)]
 pub enum DetectSyntaxError {
@@ -3608,19 +3977,15 @@ impl DetectSyntaxError {
 }
 impl fmt::Display for DetectSyntaxError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectSyntaxError {
-    fn description(&self) -> &str {
         match *self {
-            DetectSyntaxError::InternalServer(ref cause) => cause,
-            DetectSyntaxError::InvalidRequest(ref cause) => cause,
-            DetectSyntaxError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectSyntaxError::UnsupportedLanguage(ref cause) => cause,
+            DetectSyntaxError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DetectSyntaxError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectSyntaxError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectSyntaxError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectSyntaxError {}
 /// Errors returned by ListDocumentClassificationJobs
 #[derive(Debug, PartialEq)]
 pub enum ListDocumentClassificationJobsError {
@@ -3669,19 +4034,21 @@ impl ListDocumentClassificationJobsError {
 }
 impl fmt::Display for ListDocumentClassificationJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDocumentClassificationJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDocumentClassificationJobsError::InternalServer(ref cause) => cause,
-            ListDocumentClassificationJobsError::InvalidFilter(ref cause) => cause,
-            ListDocumentClassificationJobsError::InvalidRequest(ref cause) => cause,
-            ListDocumentClassificationJobsError::TooManyRequests(ref cause) => cause,
+            ListDocumentClassificationJobsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDocumentClassificationJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListDocumentClassificationJobsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDocumentClassificationJobsError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListDocumentClassificationJobsError {}
 /// Errors returned by ListDocumentClassifiers
 #[derive(Debug, PartialEq)]
 pub enum ListDocumentClassifiersError {
@@ -3728,19 +4095,15 @@ impl ListDocumentClassifiersError {
 }
 impl fmt::Display for ListDocumentClassifiersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDocumentClassifiersError {
-    fn description(&self) -> &str {
         match *self {
-            ListDocumentClassifiersError::InternalServer(ref cause) => cause,
-            ListDocumentClassifiersError::InvalidFilter(ref cause) => cause,
-            ListDocumentClassifiersError::InvalidRequest(ref cause) => cause,
-            ListDocumentClassifiersError::TooManyRequests(ref cause) => cause,
+            ListDocumentClassifiersError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListDocumentClassifiersError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListDocumentClassifiersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDocumentClassifiersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDocumentClassifiersError {}
 /// Errors returned by ListDominantLanguageDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListDominantLanguageDetectionJobsError {
@@ -3789,19 +4152,64 @@ impl ListDominantLanguageDetectionJobsError {
 }
 impl fmt::Display for ListDominantLanguageDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDominantLanguageDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDominantLanguageDetectionJobsError::InternalServer(ref cause) => cause,
-            ListDominantLanguageDetectionJobsError::InvalidFilter(ref cause) => cause,
-            ListDominantLanguageDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListDominantLanguageDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListDominantLanguageDetectionJobsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDominantLanguageDetectionJobsError::InvalidFilter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDominantLanguageDetectionJobsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDominantLanguageDetectionJobsError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListDominantLanguageDetectionJobsError {}
+/// Errors returned by ListEndpoints
+#[derive(Debug, PartialEq)]
+pub enum ListEndpointsError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl ListEndpointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEndpointsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListEndpointsError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListEndpointsError::InvalidRequest(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListEndpointsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListEndpointsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListEndpointsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListEndpointsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListEndpointsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListEndpointsError {}
 /// Errors returned by ListEntitiesDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListEntitiesDetectionJobsError {
@@ -3848,19 +4256,15 @@ impl ListEntitiesDetectionJobsError {
 }
 impl fmt::Display for ListEntitiesDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEntitiesDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListEntitiesDetectionJobsError::InternalServer(ref cause) => cause,
-            ListEntitiesDetectionJobsError::InvalidFilter(ref cause) => cause,
-            ListEntitiesDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListEntitiesDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListEntitiesDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListEntitiesDetectionJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListEntitiesDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListEntitiesDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEntitiesDetectionJobsError {}
 /// Errors returned by ListEntityRecognizers
 #[derive(Debug, PartialEq)]
 pub enum ListEntityRecognizersError {
@@ -3905,19 +4309,15 @@ impl ListEntityRecognizersError {
 }
 impl fmt::Display for ListEntityRecognizersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEntityRecognizersError {
-    fn description(&self) -> &str {
         match *self {
-            ListEntityRecognizersError::InternalServer(ref cause) => cause,
-            ListEntityRecognizersError::InvalidFilter(ref cause) => cause,
-            ListEntityRecognizersError::InvalidRequest(ref cause) => cause,
-            ListEntityRecognizersError::TooManyRequests(ref cause) => cause,
+            ListEntityRecognizersError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListEntityRecognizersError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListEntityRecognizersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListEntityRecognizersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEntityRecognizersError {}
 /// Errors returned by ListKeyPhrasesDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListKeyPhrasesDetectionJobsError {
@@ -3966,19 +4366,15 @@ impl ListKeyPhrasesDetectionJobsError {
 }
 impl fmt::Display for ListKeyPhrasesDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListKeyPhrasesDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListKeyPhrasesDetectionJobsError::InternalServer(ref cause) => cause,
-            ListKeyPhrasesDetectionJobsError::InvalidFilter(ref cause) => cause,
-            ListKeyPhrasesDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListKeyPhrasesDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListKeyPhrasesDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListKeyPhrasesDetectionJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListKeyPhrasesDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListKeyPhrasesDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListKeyPhrasesDetectionJobsError {}
 /// Errors returned by ListSentimentDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListSentimentDetectionJobsError {
@@ -4027,19 +4423,15 @@ impl ListSentimentDetectionJobsError {
 }
 impl fmt::Display for ListSentimentDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSentimentDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSentimentDetectionJobsError::InternalServer(ref cause) => cause,
-            ListSentimentDetectionJobsError::InvalidFilter(ref cause) => cause,
-            ListSentimentDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListSentimentDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListSentimentDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListSentimentDetectionJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListSentimentDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListSentimentDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSentimentDetectionJobsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -4075,18 +4467,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalServer(ref cause) => cause,
-            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTopicsDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTopicsDetectionJobsError {
@@ -4133,19 +4521,15 @@ impl ListTopicsDetectionJobsError {
 }
 impl fmt::Display for ListTopicsDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTopicsDetectionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTopicsDetectionJobsError::InternalServer(ref cause) => cause,
-            ListTopicsDetectionJobsError::InvalidFilter(ref cause) => cause,
-            ListTopicsDetectionJobsError::InvalidRequest(ref cause) => cause,
-            ListTopicsDetectionJobsError::TooManyRequests(ref cause) => cause,
+            ListTopicsDetectionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListTopicsDetectionJobsError::InvalidFilter(ref cause) => write!(f, "{}", cause),
+            ListTopicsDetectionJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTopicsDetectionJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTopicsDetectionJobsError {}
 /// Errors returned by StartDocumentClassificationJob
 #[derive(Debug, PartialEq)]
 pub enum StartDocumentClassificationJobError {
@@ -4208,21 +4592,29 @@ impl StartDocumentClassificationJobError {
 }
 impl fmt::Display for StartDocumentClassificationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDocumentClassificationJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartDocumentClassificationJobError::InternalServer(ref cause) => cause,
-            StartDocumentClassificationJobError::InvalidRequest(ref cause) => cause,
-            StartDocumentClassificationJobError::KmsKeyValidation(ref cause) => cause,
-            StartDocumentClassificationJobError::ResourceNotFound(ref cause) => cause,
-            StartDocumentClassificationJobError::ResourceUnavailable(ref cause) => cause,
-            StartDocumentClassificationJobError::TooManyRequests(ref cause) => cause,
+            StartDocumentClassificationJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentClassificationJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentClassificationJobError::KmsKeyValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentClassificationJobError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentClassificationJobError::ResourceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentClassificationJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartDocumentClassificationJobError {}
 /// Errors returned by StartDominantLanguageDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartDominantLanguageDetectionJobError {
@@ -4271,19 +4663,23 @@ impl StartDominantLanguageDetectionJobError {
 }
 impl fmt::Display for StartDominantLanguageDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDominantLanguageDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartDominantLanguageDetectionJobError::InternalServer(ref cause) => cause,
-            StartDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartDominantLanguageDetectionJobError::KmsKeyValidation(ref cause) => cause,
-            StartDominantLanguageDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartDominantLanguageDetectionJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDominantLanguageDetectionJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDominantLanguageDetectionJobError::KmsKeyValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDominantLanguageDetectionJobError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartDominantLanguageDetectionJobError {}
 /// Errors returned by StartEntitiesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartEntitiesDetectionJobError {
@@ -4344,21 +4740,19 @@ impl StartEntitiesDetectionJobError {
 }
 impl fmt::Display for StartEntitiesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartEntitiesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartEntitiesDetectionJobError::InternalServer(ref cause) => cause,
-            StartEntitiesDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartEntitiesDetectionJobError::KmsKeyValidation(ref cause) => cause,
-            StartEntitiesDetectionJobError::ResourceNotFound(ref cause) => cause,
-            StartEntitiesDetectionJobError::ResourceUnavailable(ref cause) => cause,
-            StartEntitiesDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartEntitiesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionJobError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartEntitiesDetectionJobError::ResourceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartEntitiesDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartEntitiesDetectionJobError {}
 /// Errors returned by StartKeyPhrasesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartKeyPhrasesDetectionJobError {
@@ -4407,19 +4801,15 @@ impl StartKeyPhrasesDetectionJobError {
 }
 impl fmt::Display for StartKeyPhrasesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartKeyPhrasesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartKeyPhrasesDetectionJobError::InternalServer(ref cause) => cause,
-            StartKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartKeyPhrasesDetectionJobError::KmsKeyValidation(ref cause) => cause,
-            StartKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartKeyPhrasesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartKeyPhrasesDetectionJobError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            StartKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartKeyPhrasesDetectionJobError {}
 /// Errors returned by StartSentimentDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartSentimentDetectionJobError {
@@ -4468,19 +4858,15 @@ impl StartSentimentDetectionJobError {
 }
 impl fmt::Display for StartSentimentDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartSentimentDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartSentimentDetectionJobError::InternalServer(ref cause) => cause,
-            StartSentimentDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartSentimentDetectionJobError::KmsKeyValidation(ref cause) => cause,
-            StartSentimentDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartSentimentDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartSentimentDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartSentimentDetectionJobError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            StartSentimentDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartSentimentDetectionJobError {}
 /// Errors returned by StartTopicsDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartTopicsDetectionJobError {
@@ -4527,19 +4913,15 @@ impl StartTopicsDetectionJobError {
 }
 impl fmt::Display for StartTopicsDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartTopicsDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartTopicsDetectionJobError::InternalServer(ref cause) => cause,
-            StartTopicsDetectionJobError::InvalidRequest(ref cause) => cause,
-            StartTopicsDetectionJobError::KmsKeyValidation(ref cause) => cause,
-            StartTopicsDetectionJobError::TooManyRequests(ref cause) => cause,
+            StartTopicsDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartTopicsDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartTopicsDetectionJobError::KmsKeyValidation(ref cause) => write!(f, "{}", cause),
+            StartTopicsDetectionJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartTopicsDetectionJobError {}
 /// Errors returned by StopDominantLanguageDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopDominantLanguageDetectionJobError {
@@ -4581,18 +4963,18 @@ impl StopDominantLanguageDetectionJobError {
 }
 impl fmt::Display for StopDominantLanguageDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopDominantLanguageDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopDominantLanguageDetectionJobError::InternalServer(ref cause) => cause,
-            StopDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
-            StopDominantLanguageDetectionJobError::JobNotFound(ref cause) => cause,
+            StopDominantLanguageDetectionJobError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDominantLanguageDetectionJobError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopDominantLanguageDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopDominantLanguageDetectionJobError {}
 /// Errors returned by StopEntitiesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopEntitiesDetectionJobError {
@@ -4632,18 +5014,14 @@ impl StopEntitiesDetectionJobError {
 }
 impl fmt::Display for StopEntitiesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopEntitiesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopEntitiesDetectionJobError::InternalServer(ref cause) => cause,
-            StopEntitiesDetectionJobError::InvalidRequest(ref cause) => cause,
-            StopEntitiesDetectionJobError::JobNotFound(ref cause) => cause,
+            StopEntitiesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopEntitiesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopEntitiesDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopEntitiesDetectionJobError {}
 /// Errors returned by StopKeyPhrasesDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopKeyPhrasesDetectionJobError {
@@ -4685,18 +5063,14 @@ impl StopKeyPhrasesDetectionJobError {
 }
 impl fmt::Display for StopKeyPhrasesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopKeyPhrasesDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopKeyPhrasesDetectionJobError::InternalServer(ref cause) => cause,
-            StopKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => cause,
-            StopKeyPhrasesDetectionJobError::JobNotFound(ref cause) => cause,
+            StopKeyPhrasesDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopKeyPhrasesDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopKeyPhrasesDetectionJobError {}
 /// Errors returned by StopSentimentDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopSentimentDetectionJobError {
@@ -4736,18 +5110,14 @@ impl StopSentimentDetectionJobError {
 }
 impl fmt::Display for StopSentimentDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopSentimentDetectionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopSentimentDetectionJobError::InternalServer(ref cause) => cause,
-            StopSentimentDetectionJobError::InvalidRequest(ref cause) => cause,
-            StopSentimentDetectionJobError::JobNotFound(ref cause) => cause,
+            StopSentimentDetectionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopSentimentDetectionJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopSentimentDetectionJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopSentimentDetectionJobError {}
 /// Errors returned by StopTrainingDocumentClassifier
 #[derive(Debug, PartialEq)]
 pub enum StopTrainingDocumentClassifierError {
@@ -4796,19 +5166,23 @@ impl StopTrainingDocumentClassifierError {
 }
 impl fmt::Display for StopTrainingDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopTrainingDocumentClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            StopTrainingDocumentClassifierError::InternalServer(ref cause) => cause,
-            StopTrainingDocumentClassifierError::InvalidRequest(ref cause) => cause,
-            StopTrainingDocumentClassifierError::ResourceNotFound(ref cause) => cause,
-            StopTrainingDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            StopTrainingDocumentClassifierError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopTrainingDocumentClassifierError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopTrainingDocumentClassifierError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopTrainingDocumentClassifierError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StopTrainingDocumentClassifierError {}
 /// Errors returned by StopTrainingEntityRecognizer
 #[derive(Debug, PartialEq)]
 pub enum StopTrainingEntityRecognizerError {
@@ -4857,19 +5231,17 @@ impl StopTrainingEntityRecognizerError {
 }
 impl fmt::Display for StopTrainingEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopTrainingEntityRecognizerError {
-    fn description(&self) -> &str {
         match *self {
-            StopTrainingEntityRecognizerError::InternalServer(ref cause) => cause,
-            StopTrainingEntityRecognizerError::InvalidRequest(ref cause) => cause,
-            StopTrainingEntityRecognizerError::ResourceNotFound(ref cause) => cause,
-            StopTrainingEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            StopTrainingEntityRecognizerError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopTrainingEntityRecognizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopTrainingEntityRecognizerError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopTrainingEntityRecognizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopTrainingEntityRecognizerError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4913,20 +5285,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ConcurrentModification(ref cause) => cause,
-            TagResourceError::InternalServer(ref cause) => cause,
-            TagResourceError::InvalidRequest(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4972,20 +5340,83 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ConcurrentModification(ref cause) => cause,
-            UntagResourceError::InternalServer(ref cause) => cause,
-            UntagResourceError::InvalidRequest(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::TooManyTagKeys(ref cause) => cause,
+            UntagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyTagKeys(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
+/// Errors returned by UpdateEndpoint
+#[derive(Debug, PartialEq)]
+pub enum UpdateEndpointError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    ResourceInUse(String),
+    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    ResourceUnavailable(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEndpointError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(UpdateEndpointError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateEndpointError::InvalidRequest(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(UpdateEndpointError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(UpdateEndpointError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateEndpointError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(UpdateEndpointError::ResourceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateEndpointError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateEndpointError {}
 /// Trait representing the capabilities of the Amazon Comprehend API. Amazon Comprehend clients implement this trait.
 pub trait Comprehend {
     /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
@@ -5018,11 +5449,23 @@ pub trait Comprehend {
         input: BatchDetectSyntaxRequest,
     ) -> RusotoFuture<BatchDetectSyntaxResponse, BatchDetectSyntaxError>;
 
+    /// <p>Creates a new document classification request to analyze a single document in real-time, using a previously created and trained custom model and an endpoint.</p>
+    fn classify_document(
+        &self,
+        input: ClassifyDocumentRequest,
+    ) -> RusotoFuture<ClassifyDocumentResponse, ClassifyDocumentError>;
+
     /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
     fn create_document_classifier(
         &self,
         input: CreateDocumentClassifierRequest,
     ) -> RusotoFuture<CreateDocumentClassifierResponse, CreateDocumentClassifierError>;
+
+    /// <p>Creates a model-specific endpoint for synchronous inference for a previously trained custom model </p>
+    fn create_endpoint(
+        &self,
+        input: CreateEndpointRequest,
+    ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError>;
 
     /// <p>Creates an entity recognizer using submitted files. After your <code>CreateEntityRecognizer</code> request is submitted, you can check job status using the API. </p>
     fn create_entity_recognizer(
@@ -5035,6 +5478,12 @@ pub trait Comprehend {
         &self,
         input: DeleteDocumentClassifierRequest,
     ) -> RusotoFuture<DeleteDocumentClassifierResponse, DeleteDocumentClassifierError>;
+
+    /// <p>Deletes a model-specific endpoint for a previously-trained custom model. All endpoints must be deleted in order for the model to be deleted.</p>
+    fn delete_endpoint(
+        &self,
+        input: DeleteEndpointRequest,
+    ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError>;
 
     /// <p>Deletes an entity recognizer.</p> <p>Only those recognizers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the recognizer into a DELETING state, and it is then removed by a background job. Once removed, the recognizer disappears from your account and is no longer available for use. </p>
     fn delete_entity_recognizer(
@@ -5065,6 +5514,12 @@ pub trait Comprehend {
         DescribeDominantLanguageDetectionJobResponse,
         DescribeDominantLanguageDetectionJobError,
     >;
+
+    /// <p>Gets the properties associated with a specific endpoint. Use this operation to get the status of an endpoint.</p>
+    fn describe_endpoint(
+        &self,
+        input: DescribeEndpointRequest,
+    ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError>;
 
     /// <p>Gets the properties associated with an entities detection job. Use this operation to get the status of a detection job.</p>
     fn describe_entities_detection_job(
@@ -5146,6 +5601,12 @@ pub trait Comprehend {
         ListDominantLanguageDetectionJobsResponse,
         ListDominantLanguageDetectionJobsError,
     >;
+
+    /// <p>Gets a list of all existing endpoints that you've created.</p>
+    fn list_endpoints(
+        &self,
+        input: ListEndpointsRequest,
+    ) -> RusotoFuture<ListEndpointsResponse, ListEndpointsError>;
 
     /// <p>Gets a list of the entity detection jobs that you have submitted.</p>
     fn list_entities_detection_jobs(
@@ -5269,6 +5730,12 @@ pub trait Comprehend {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+
+    /// <p>Updates information about the specified endpoint.</p>
+    fn update_endpoint(
+        &self,
+        input: UpdateEndpointRequest,
+    ) -> RusotoFuture<UpdateEndpointResponse, UpdateEndpointError>;
 }
 /// A client for the Amazon Comprehend API.
 #[derive(Clone)]
@@ -5304,6 +5771,14 @@ impl ComprehendClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> ComprehendClient {
         ComprehendClient { client, region }
+    }
+}
+
+impl fmt::Debug for ComprehendClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ComprehendClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -5450,6 +5925,35 @@ impl Comprehend for ComprehendClient {
         })
     }
 
+    /// <p>Creates a new document classification request to analyze a single document in real-time, using a previously created and trained custom model and an endpoint.</p>
+    fn classify_document(
+        &self,
+        input: ClassifyDocumentRequest,
+    ) -> RusotoFuture<ClassifyDocumentResponse, ClassifyDocumentError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.ClassifyDocument");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ClassifyDocumentResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ClassifyDocumentError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
     fn create_document_classifier(
         &self,
@@ -5475,6 +5979,35 @@ impl Comprehend for ComprehendClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDocumentClassifierError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Creates a model-specific endpoint for synchronous inference for a previously trained custom model </p>
+    fn create_endpoint(
+        &self,
+        input: CreateEndpointRequest,
+    ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.CreateEndpoint");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateEndpointResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateEndpointError::from_response(response))),
+                )
             }
         })
     }
@@ -5532,6 +6065,35 @@ impl Comprehend for ComprehendClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDocumentClassifierError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Deletes a model-specific endpoint for a previously-trained custom model. All endpoints must be deleted in order for the model to be deleted.</p>
+    fn delete_endpoint(
+        &self,
+        input: DeleteEndpointRequest,
+    ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.DeleteEndpoint");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteEndpointResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteEndpointError::from_response(response))),
+                )
             }
         })
     }
@@ -5657,6 +6219,35 @@ impl Comprehend for ComprehendClient {
                         response,
                     ))
                 }))
+            }
+        })
+    }
+
+    /// <p>Gets the properties associated with a specific endpoint. Use this operation to get the status of an endpoint.</p>
+    fn describe_endpoint(
+        &self,
+        input: DescribeEndpointRequest,
+    ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.DescribeEndpoint");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeEndpointResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeEndpointError::from_response(response))),
+                )
             }
         })
     }
@@ -6041,6 +6632,35 @@ impl Comprehend for ComprehendClient {
                         response,
                     ))
                 }))
+            }
+        })
+    }
+
+    /// <p>Gets a list of all existing endpoints that you've created.</p>
+    fn list_endpoints(
+        &self,
+        input: ListEndpointsRequest,
+    ) -> RusotoFuture<ListEndpointsResponse, ListEndpointsError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.ListEndpoints");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListEndpointsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListEndpointsError::from_response(response))),
+                )
             }
         })
     }
@@ -6628,6 +7248,35 @@ impl Comprehend for ComprehendClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates information about the specified endpoint.</p>
+    fn update_endpoint(
+        &self,
+        input: UpdateEndpointRequest,
+    ) -> RusotoFuture<UpdateEndpointResponse, UpdateEndpointError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.UpdateEndpoint");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateEndpointResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateEndpointError::from_response(response))),
                 )
             }
         })

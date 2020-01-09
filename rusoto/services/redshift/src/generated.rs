@@ -805,6 +805,8 @@ pub struct Cluster {
     pub master_username: Option<String>,
     /// <p>The status of a modify operation, if any, initiated for the cluster.</p>
     pub modify_status: Option<String>,
+    /// <p>The date and time in UTC when system maintenance can begin.</p>
+    pub next_maintenance_window_start_time: Option<String>,
     /// <p>The node type for the nodes in the cluster.</p>
     pub node_type: Option<String>,
     /// <p>The number of compute nodes in the cluster.</p>
@@ -1008,6 +1010,12 @@ impl ClusterDeserializer {
                 "ModifyStatus" => {
                     obj.modify_status =
                         Some(StringDeserializer::deserialize("ModifyStatus", stack)?);
+                }
+                "NextMaintenanceWindowStartTime" => {
+                    obj.next_maintenance_window_start_time = Some(TStampDeserializer::deserialize(
+                        "NextMaintenanceWindowStartTime",
+                        stack,
+                    )?);
                 }
                 "NodeType" => {
                     obj.node_type = Some(StringDeserializer::deserialize("NodeType", stack)?);
@@ -3005,6 +3013,65 @@ impl CreateHsmConfigurationResultDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateScheduledActionMessage {
+    /// <p>If true, the schedule is enabled. If false, the scheduled action does not trigger. For more information about <code>state</code> of the scheduled action, see <a>ScheduledAction</a>. </p>
+    pub enable: Option<bool>,
+    /// <p>The end time in UTC of the scheduled action. After this time, the scheduled action does not trigger. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub end_time: Option<String>,
+    /// <p>The IAM role to assume to run the target action. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub iam_role: String,
+    /// <p>The schedule in <code>at( )</code> or <code>cron( )</code> format. For more information about this parameter, see <a>ScheduledAction</a>.</p>
+    pub schedule: String,
+    /// <p>The description of the scheduled action. </p>
+    pub scheduled_action_description: Option<String>,
+    /// <p>The name of the scheduled action. The name must be unique within an account. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub scheduled_action_name: String,
+    /// <p>The start time in UTC of the scheduled action. Before this time, the scheduled action does not trigger. For more information about this parameter, see <a>ScheduledAction</a>.</p>
+    pub start_time: Option<String>,
+    /// <p>A JSON format string of the Amazon Redshift API operation with input parameters. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub target_action: ScheduledActionType,
+}
+
+/// Serialize `CreateScheduledActionMessage` contents to a `SignedRequest`.
+struct CreateScheduledActionMessageSerializer;
+impl CreateScheduledActionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateScheduledActionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.enable {
+            params.put(&format!("{}{}", prefix, "Enable"), &field_value);
+        }
+        if let Some(ref field_value) = obj.end_time {
+            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "IamRole"), &obj.iam_role);
+        params.put(&format!("{}{}", prefix, "Schedule"), &obj.schedule);
+        if let Some(ref field_value) = obj.scheduled_action_description {
+            params.put(
+                &format!("{}{}", prefix, "ScheduledActionDescription"),
+                &field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ScheduledActionName"),
+            &obj.scheduled_action_name,
+        );
+        if let Some(ref field_value) = obj.start_time {
+            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+        }
+        ScheduledActionTypeSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "TargetAction"),
+            &obj.target_action,
+        );
+    }
+}
+
 /// <p>The result of the <code>CreateSnapshotCopyGrant</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3662,6 +3729,29 @@ impl DeleteHsmConfigurationMessageSerializer {
         params.put(
             &format!("{}{}", prefix, "HsmConfigurationIdentifier"),
             &obj.hsm_configuration_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteScheduledActionMessage {
+    /// <p>The name of the scheduled action to delete. </p>
+    pub scheduled_action_name: String,
+}
+
+/// Serialize `DeleteScheduledActionMessage` contents to a `SignedRequest`.
+struct DeleteScheduledActionMessageSerializer;
+impl DeleteScheduledActionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteScheduledActionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ScheduledActionName"),
+            &obj.scheduled_action_name,
         );
     }
 }
@@ -4535,6 +4625,60 @@ impl DescribeLoggingStatusMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeNodeConfigurationOptionsMessage {
+    /// <p>The action type to evaluate for possible node configurations. Specify "restore-cluster" to get configuration combinations based on an existing snapshot. Specify "recommend-node-config" to get configuration recommendations based on an existing cluster or snapshot. </p>
+    pub action_type: String,
+    /// <p>The identifier of the cluster to evaluate for possible node configurations.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>A set of name, operator, and value items to filter the results.</p>
+    pub filters: Option<Vec<NodeConfigurationOptionsFilter>>,
+    /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeNodeConfigurationOptions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>500</code> </p> <p>Constraints: minimum 100, maximum 500.</p>
+    pub max_records: Option<i64>,
+    /// <p>The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot.</p>
+    pub owner_account: Option<String>,
+    /// <p>The identifier of the snapshot to evaluate for possible node configurations.</p>
+    pub snapshot_identifier: Option<String>,
+}
+
+/// Serialize `DescribeNodeConfigurationOptionsMessage` contents to a `SignedRequest`.
+struct DescribeNodeConfigurationOptionsMessageSerializer;
+impl DescribeNodeConfigurationOptionsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeNodeConfigurationOptionsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "ActionType"), &obj.action_type);
+        if let Some(ref field_value) = obj.cluster_identifier {
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            NodeConfigurationOptionsFilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "NodeConfigurationOptionsFilter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.owner_account {
+            params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
+        }
+        if let Some(ref field_value) = obj.snapshot_identifier {
+            params.put(&format!("{}{}", prefix, "SnapshotIdentifier"), &field_value);
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -4663,6 +4807,70 @@ impl DescribeResizeMessageSerializer {
             &format!("{}{}", prefix, "ClusterIdentifier"),
             &obj.cluster_identifier,
         );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeScheduledActionsMessage {
+    /// <p>If true, retrieve only active scheduled actions. If false, retrieve only disabled scheduled actions. </p>
+    pub active: Option<bool>,
+    /// <p>The end time in UTC of the scheduled action to retrieve. Only active scheduled actions that have invocations before this time are retrieved.</p>
+    pub end_time: Option<String>,
+    /// <p>List of scheduled action filters. </p>
+    pub filters: Option<Vec<ScheduledActionFilter>>,
+    /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeScheduledActions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
+    pub max_records: Option<i64>,
+    /// <p>The name of the scheduled action to retrieve. </p>
+    pub scheduled_action_name: Option<String>,
+    /// <p>The start time in UTC of the scheduled actions to retrieve. Only active scheduled actions that have invocations after this time are retrieved.</p>
+    pub start_time: Option<String>,
+    /// <p>The type of the scheduled actions to retrieve. </p>
+    pub target_action_type: Option<String>,
+}
+
+/// Serialize `DescribeScheduledActionsMessage` contents to a `SignedRequest`.
+struct DescribeScheduledActionsMessageSerializer;
+impl DescribeScheduledActionsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeScheduledActionsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.active {
+            params.put(&format!("{}{}", prefix, "Active"), &field_value);
+        }
+        if let Some(ref field_value) = obj.end_time {
+            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            ScheduledActionFilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ScheduledActionFilter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.scheduled_action_name {
+            params.put(
+                &format!("{}{}", prefix, "ScheduledActionName"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.start_time {
+            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+        }
+        if let Some(ref field_value) = obj.target_action_type {
+            params.put(&format!("{}{}", prefix, "TargetActionType"), &field_value);
+        }
     }
 }
 
@@ -6359,6 +6567,17 @@ impl MaintenanceTrackDeserializer {
         })
     }
 }
+struct ModeDeserializer;
+impl ModeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterDbRevisionMessage {
@@ -7054,6 +7273,71 @@ impl ModifyEventSubscriptionResultDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyScheduledActionMessage {
+    /// <p>A modified enable flag of the scheduled action. If true, the scheduled action is active. If false, the scheduled action is disabled. </p>
+    pub enable: Option<bool>,
+    /// <p>A modified end time of the scheduled action. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub end_time: Option<String>,
+    /// <p>A different IAM role to assume to run the target action. For more information about this parameter, see <a>ScheduledAction</a>.</p>
+    pub iam_role: Option<String>,
+    /// <p>A modified schedule in either <code>at( )</code> or <code>cron( )</code> format. For more information about this parameter, see <a>ScheduledAction</a>.</p>
+    pub schedule: Option<String>,
+    /// <p>A modified description of the scheduled action. </p>
+    pub scheduled_action_description: Option<String>,
+    /// <p>The name of the scheduled action to modify. </p>
+    pub scheduled_action_name: String,
+    /// <p>A modified start time of the scheduled action. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub start_time: Option<String>,
+    /// <p>A modified JSON format of the scheduled action. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub target_action: Option<ScheduledActionType>,
+}
+
+/// Serialize `ModifyScheduledActionMessage` contents to a `SignedRequest`.
+struct ModifyScheduledActionMessageSerializer;
+impl ModifyScheduledActionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyScheduledActionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.enable {
+            params.put(&format!("{}{}", prefix, "Enable"), &field_value);
+        }
+        if let Some(ref field_value) = obj.end_time {
+            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
+        }
+        if let Some(ref field_value) = obj.iam_role {
+            params.put(&format!("{}{}", prefix, "IamRole"), &field_value);
+        }
+        if let Some(ref field_value) = obj.schedule {
+            params.put(&format!("{}{}", prefix, "Schedule"), &field_value);
+        }
+        if let Some(ref field_value) = obj.scheduled_action_description {
+            params.put(
+                &format!("{}{}", prefix, "ScheduledActionDescription"),
+                &field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ScheduledActionName"),
+            &obj.scheduled_action_name,
+        );
+        if let Some(ref field_value) = obj.start_time {
+            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+        }
+        if let Some(ref field_value) = obj.target_action {
+            ScheduledActionTypeSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TargetAction"),
+                field_value,
+            );
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -7147,6 +7431,163 @@ impl ModifySnapshotScheduleMessageSerializer {
     }
 }
 
+/// <p>A list of node configurations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct NodeConfigurationOption {
+    /// <p>The estimated disk utilizaton percentage.</p>
+    pub estimated_disk_utilization_percent: Option<f64>,
+    /// <p>The category of the node configuration recommendation.</p>
+    pub mode: Option<String>,
+    /// <p>The node type, such as, "ds2.8xlarge".</p>
+    pub node_type: Option<String>,
+    /// <p>The number of nodes.</p>
+    pub number_of_nodes: Option<i64>,
+}
+
+struct NodeConfigurationOptionDeserializer;
+impl NodeConfigurationOptionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<NodeConfigurationOption, XmlParseError> {
+        deserialize_elements::<_, NodeConfigurationOption, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EstimatedDiskUtilizationPercent" => {
+                        obj.estimated_disk_utilization_percent =
+                            Some(DoubleOptionalDeserializer::deserialize(
+                                "EstimatedDiskUtilizationPercent",
+                                stack,
+                            )?);
+                    }
+                    "Mode" => {
+                        obj.mode = Some(ModeDeserializer::deserialize("Mode", stack)?);
+                    }
+                    "NodeType" => {
+                        obj.node_type = Some(StringDeserializer::deserialize("NodeType", stack)?);
+                    }
+                    "NumberOfNodes" => {
+                        obj.number_of_nodes =
+                            Some(IntegerDeserializer::deserialize("NumberOfNodes", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct NodeConfigurationOptionListDeserializer;
+impl NodeConfigurationOptionListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<NodeConfigurationOption>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "NodeConfigurationOption" {
+                obj.push(NodeConfigurationOptionDeserializer::deserialize(
+                    "NodeConfigurationOption",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A set of elements to filter the returned node configurations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct NodeConfigurationOptionsFilter {
+    /// <p>The name of the element to filter.</p>
+    pub name: Option<String>,
+    /// <p>The filter operator. If filter Name is NodeType only the 'in' operator is supported. Provide one value to evaluate for 'eq', 'lt', 'le', 'gt', and 'ge'. Provide two values to evaluate for 'between'. Provide a list of values for 'in'.</p>
+    pub operator: Option<String>,
+    /// <p>List of values. Compare Name using Operator to Values. If filter Name is NumberOfNodes, then values can range from 0 to 200. If filter Name is EstimatedDiskUtilizationPercent, then values can range from 0 to 100. For example, filter NumberOfNodes (name) GT (operator) 3 (values).</p>
+    pub values: Option<Vec<String>>,
+}
+
+/// Serialize `NodeConfigurationOptionsFilter` contents to a `SignedRequest`.
+struct NodeConfigurationOptionsFilterSerializer;
+impl NodeConfigurationOptionsFilterSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &NodeConfigurationOptionsFilter) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.name {
+            params.put(&format!("{}{}", prefix, "Name"), &field_value);
+        }
+        if let Some(ref field_value) = obj.operator {
+            params.put(&format!("{}{}", prefix, "Operator"), &field_value);
+        }
+        if let Some(ref field_value) = obj.values {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "item"),
+                field_value,
+            );
+        }
+    }
+}
+
+/// Serialize `NodeConfigurationOptionsFilterList` contents to a `SignedRequest`.
+struct NodeConfigurationOptionsFilterListSerializer;
+impl NodeConfigurationOptionsFilterListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<NodeConfigurationOptionsFilter>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            NodeConfigurationOptionsFilterSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct NodeConfigurationOptionsMessage {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+    /// <p>A list of valid node configurations.</p>
+    pub node_configuration_option_list: Option<Vec<NodeConfigurationOption>>,
+}
+
+struct NodeConfigurationOptionsMessageDeserializer;
+impl NodeConfigurationOptionsMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<NodeConfigurationOptionsMessage, XmlParseError> {
+        deserialize_elements::<_, NodeConfigurationOptionsMessage, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "NodeConfigurationOptionList" => {
+                        obj.node_configuration_option_list
+                            .get_or_insert(vec![])
+                            .extend(NodeConfigurationOptionListDeserializer::deserialize(
+                                "NodeConfigurationOptionList",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Describes an orderable cluster option.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -8049,6 +8490,7 @@ impl ResetClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResizeClusterMessage {
     /// <p>A boolean value indicating whether the resize operation is using the classic resize process. If you don't provide this parameter or set the value to <code>false</code>, the resize type is elastic. </p>
@@ -8061,6 +8503,38 @@ pub struct ResizeClusterMessage {
     pub node_type: Option<String>,
     /// <p>The new number of nodes for the cluster.</p>
     pub number_of_nodes: i64,
+}
+
+struct ResizeClusterMessageDeserializer;
+impl ResizeClusterMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResizeClusterMessage, XmlParseError> {
+        deserialize_elements::<_, ResizeClusterMessage, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Classic" => {
+                    obj.classic = Some(BooleanOptionalDeserializer::deserialize("Classic", stack)?);
+                }
+                "ClusterIdentifier" => {
+                    obj.cluster_identifier =
+                        StringDeserializer::deserialize("ClusterIdentifier", stack)?;
+                }
+                "ClusterType" => {
+                    obj.cluster_type = Some(StringDeserializer::deserialize("ClusterType", stack)?);
+                }
+                "NodeType" => {
+                    obj.node_type = Some(StringDeserializer::deserialize("NodeType", stack)?);
+                }
+                "NumberOfNodes" => {
+                    obj.number_of_nodes = IntegerDeserializer::deserialize("NumberOfNodes", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
 }
 
 /// Serialize `ResizeClusterMessage` contents to a `SignedRequest`.
@@ -8349,6 +8823,8 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub manual_snapshot_retention_period: Option<i64>,
     /// <p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds1.xlarge into ds2.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type or dc2.large instance type. You can't restore dc1.8xlarge to dc2.8xlarge. First restore to a dc1.8xlareg cluster, then resize to a dc2.8large cluster. For more information about node types, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     pub node_type: Option<String>,
+    /// <p>The number of nodes specified when provisioning the restored cluster.</p>
+    pub number_of_nodes: Option<i64>,
     /// <p>The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot.</p>
     pub owner_account: Option<String>,
     /// <p>The port number on which the cluster accepts connections.</p> <p>Default: The same port as the original cluster.</p> <p>Constraints: Must be between <code>1115</code> and <code>65535</code>.</p>
@@ -8460,6 +8936,9 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.node_type {
             params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
         }
+        if let Some(ref field_value) = obj.number_of_nodes {
+            params.put(&format!("{}{}", prefix, "NumberOfNodes"), &field_value);
+        }
         if let Some(ref field_value) = obj.owner_account {
             params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
         }
@@ -8533,15 +9012,15 @@ impl RestoreFromClusterSnapshotResultDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreStatus {
-    /// <p>The number of megabytes per second being transferred from the backup storage. Returns the average rate for a completed backup.</p>
+    /// <p>The number of megabytes per second being transferred from the backup storage. Returns the average rate for a completed backup. This field is only updated when you restore to DC2 and DS2 node types. </p>
     pub current_restore_rate_in_mega_bytes_per_second: Option<f64>,
-    /// <p>The amount of time an in-progress restore has been running, or the amount of time it took a completed restore to finish.</p>
+    /// <p>The amount of time an in-progress restore has been running, or the amount of time it took a completed restore to finish. This field is only updated when you restore to DC2 and DS2 node types. </p>
     pub elapsed_time_in_seconds: Option<i64>,
-    /// <p>The estimate of the time remaining before the restore will complete. Returns 0 for a completed restore.</p>
+    /// <p>The estimate of the time remaining before the restore will complete. Returns 0 for a completed restore. This field is only updated when you restore to DC2 and DS2 node types. </p>
     pub estimated_time_to_completion_in_seconds: Option<i64>,
-    /// <p>The number of megabytes that have been transferred from snapshot storage.</p>
+    /// <p>The number of megabytes that have been transferred from snapshot storage. This field is only updated when you restore to DC2 and DS2 node types. </p>
     pub progress_in_mega_bytes: Option<i64>,
-    /// <p>The size of the set of snapshot data used to restore the cluster.</p>
+    /// <p>The size of the set of snapshot data used to restore the cluster. This field is only updated when you restore to DC2 and DS2 node types. </p>
     pub snapshot_size_in_mega_bytes: Option<i64>,
     /// <p>The status of the restore action. Returns starting, restoring, completed, or failed.</p>
     pub status: Option<String>,
@@ -8984,6 +9463,260 @@ impl ScheduleStateDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
+    }
+}
+/// <p>Describes a scheduled action. You can use a scheduled action to trigger some Amazon Redshift API operations on a schedule. For information about which API operations can be scheduled, see <a>ScheduledActionType</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ScheduledAction {
+    /// <p>The end time in UTC when the schedule is no longer active. After this time, the scheduled action does not trigger. </p>
+    pub end_time: Option<String>,
+    /// <p>The IAM role to assume to run the scheduled action. This IAM role must have permission to run the Amazon Redshift API operation in the scheduled action. This IAM role must allow the Amazon Redshift scheduler (Principal scheduler.redshift.amazonaws.com) to assume permissions on your behalf. For more information about the IAM role to use with the Amazon Redshift scheduler, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-identity-based.html">Using Identity-Based Policies for Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    pub iam_role: Option<String>,
+    /// <p>List of times when the scheduled action will run. </p>
+    pub next_invocations: Option<Vec<String>>,
+    /// <p>The schedule for a one-time (at format) or recurring (cron format) scheduled action. Schedule invocations must be separated by at least one hour.</p> <p>Format of at expressions is "<code>at(yyyy-mm-ddThh:mm:ss)</code>". For example, "<code>at(2016-03-04T17:27:00)</code>".</p> <p>Format of cron expressions is "<code>cron(Minutes Hours Day-of-month Month Day-of-week Year)</code>". For example, "<code>cron(0, 10, *, *, MON, *)</code>". For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions">Cron Expressions</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>
+    pub schedule: Option<String>,
+    /// <p>The description of the scheduled action. </p>
+    pub scheduled_action_description: Option<String>,
+    /// <p>The name of the scheduled action. </p>
+    pub scheduled_action_name: Option<String>,
+    /// <p>The start time in UTC when the schedule is active. Before this time, the scheduled action does not trigger. </p>
+    pub start_time: Option<String>,
+    /// <p>The state of the scheduled action. For example, <code>DISABLED</code>. </p>
+    pub state: Option<String>,
+    /// <p>A JSON format string of the Amazon Redshift API operation with input parameters. </p> <p>"<code>{\"ResizeCluster\":{\"NodeType\":\"ds2.8xlarge\",\"ClusterIdentifier\":\"my-test-cluster\",\"NumberOfNodes\":3}}</code>". </p>
+    pub target_action: Option<ScheduledActionType>,
+}
+
+struct ScheduledActionDeserializer;
+impl ScheduledActionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScheduledAction, XmlParseError> {
+        deserialize_elements::<_, ScheduledAction, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EndTime" => {
+                    obj.end_time = Some(TStampDeserializer::deserialize("EndTime", stack)?);
+                }
+                "IamRole" => {
+                    obj.iam_role = Some(StringDeserializer::deserialize("IamRole", stack)?);
+                }
+                "NextInvocations" => {
+                    obj.next_invocations.get_or_insert(vec![]).extend(
+                        ScheduledActionTimeListDeserializer::deserialize("NextInvocations", stack)?,
+                    );
+                }
+                "Schedule" => {
+                    obj.schedule = Some(StringDeserializer::deserialize("Schedule", stack)?);
+                }
+                "ScheduledActionDescription" => {
+                    obj.scheduled_action_description = Some(StringDeserializer::deserialize(
+                        "ScheduledActionDescription",
+                        stack,
+                    )?);
+                }
+                "ScheduledActionName" => {
+                    obj.scheduled_action_name = Some(StringDeserializer::deserialize(
+                        "ScheduledActionName",
+                        stack,
+                    )?);
+                }
+                "StartTime" => {
+                    obj.start_time = Some(TStampDeserializer::deserialize("StartTime", stack)?);
+                }
+                "State" => {
+                    obj.state = Some(ScheduledActionStateDeserializer::deserialize(
+                        "State", stack,
+                    )?);
+                }
+                "TargetAction" => {
+                    obj.target_action = Some(ScheduledActionTypeDeserializer::deserialize(
+                        "TargetAction",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A set of elements to filter the returned scheduled actions. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ScheduledActionFilter {
+    /// <p>The type of element to filter. </p>
+    pub name: String,
+    /// <p>List of values. Compare if the value (of type defined by <code>Name</code>) equals an item in the list of scheduled actions. </p>
+    pub values: Vec<String>,
+}
+
+/// Serialize `ScheduledActionFilter` contents to a `SignedRequest`.
+struct ScheduledActionFilterSerializer;
+impl ScheduledActionFilterSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ScheduledActionFilter) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        ValueStringListSerializer::serialize(params, &format!("{}{}", prefix, "item"), &obj.values);
+    }
+}
+
+/// Serialize `ScheduledActionFilterList` contents to a `SignedRequest`.
+struct ScheduledActionFilterListSerializer;
+impl ScheduledActionFilterListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ScheduledActionFilter>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            ScheduledActionFilterSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+struct ScheduledActionListDeserializer;
+impl ScheduledActionListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ScheduledAction>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "ScheduledAction" {
+                obj.push(ScheduledActionDeserializer::deserialize(
+                    "ScheduledAction",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct ScheduledActionStateDeserializer;
+impl ScheduledActionStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct ScheduledActionTimeListDeserializer;
+impl ScheduledActionTimeListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "ScheduledActionTime" {
+                obj.push(TStampDeserializer::deserialize(
+                    "ScheduledActionTime",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The action type that specifies an Amazon Redshift API operation that is supported by the Amazon Redshift scheduler. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ScheduledActionType {
+    /// <p>An action that runs a <code>ResizeCluster</code> API operation. </p>
+    pub resize_cluster: Option<ResizeClusterMessage>,
+}
+
+struct ScheduledActionTypeDeserializer;
+impl ScheduledActionTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScheduledActionType, XmlParseError> {
+        deserialize_elements::<_, ScheduledActionType, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ResizeCluster" => {
+                    obj.resize_cluster = Some(ResizeClusterMessageDeserializer::deserialize(
+                        "ResizeCluster",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `ScheduledActionType` contents to a `SignedRequest`.
+struct ScheduledActionTypeSerializer;
+impl ScheduledActionTypeSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ScheduledActionType) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.resize_cluster {
+            ResizeClusterMessageSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ResizeCluster"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ScheduledActionsMessage {
+    /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeScheduledActions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
+    pub marker: Option<String>,
+    /// <p>List of retrieved scheduled actions. </p>
+    pub scheduled_actions: Option<Vec<ScheduledAction>>,
+}
+
+struct ScheduledActionsMessageDeserializer;
+impl ScheduledActionsMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScheduledActionsMessage, XmlParseError> {
+        deserialize_elements::<_, ScheduledActionsMessage, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "ScheduledActions" => {
+                        obj.scheduled_actions.get_or_insert(vec![]).extend(
+                            ScheduledActionListDeserializer::deserialize(
+                                "ScheduledActions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 struct ScheduledSnapshotTimeListDeserializer;
@@ -10333,6 +11066,17 @@ impl UpdateTargetDeserializer {
     }
 }
 
+/// Serialize `ValueStringList` contents to a `SignedRequest`.
+struct ValueStringListSerializer;
+impl ValueStringListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 /// Serialize `VpcSecurityGroupIdList` contents to a `SignedRequest`.
 struct VpcSecurityGroupIdListSerializer;
 impl VpcSecurityGroupIdListSerializer {
@@ -10497,22 +11241,32 @@ impl AcceptReservedNodeExchangeError {
 }
 impl fmt::Display for AcceptReservedNodeExchangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcceptReservedNodeExchangeError {
-    fn description(&self) -> &str {
         match *self {
-            AcceptReservedNodeExchangeError::DependentServiceUnavailableFault(ref cause) => cause,
-            AcceptReservedNodeExchangeError::InvalidReservedNodeStateFault(ref cause) => cause,
-            AcceptReservedNodeExchangeError::ReservedNodeAlreadyExistsFault(ref cause) => cause,
-            AcceptReservedNodeExchangeError::ReservedNodeAlreadyMigratedFault(ref cause) => cause,
-            AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(ref cause) => cause,
-            AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(ref cause) => cause,
-            AcceptReservedNodeExchangeError::UnsupportedOperationFault(ref cause) => cause,
+            AcceptReservedNodeExchangeError::DependentServiceUnavailableFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptReservedNodeExchangeError::InvalidReservedNodeStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptReservedNodeExchangeError::ReservedNodeAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptReservedNodeExchangeError::ReservedNodeAlreadyMigratedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptReservedNodeExchangeError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AcceptReservedNodeExchangeError {}
 /// Errors returned by AuthorizeClusterSecurityGroupIngress
 #[derive(Debug, PartialEq)]
 pub enum AuthorizeClusterSecurityGroupIngressError {
@@ -10553,27 +11307,23 @@ impl AuthorizeClusterSecurityGroupIngressError {
 }
 impl fmt::Display for AuthorizeClusterSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AuthorizeClusterSecurityGroupIngressError {
-    fn description(&self) -> &str {
         match *self {
             AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AuthorizeClusterSecurityGroupIngressError {}
 /// Errors returned by AuthorizeSnapshotAccess
 #[derive(Debug, PartialEq)]
 pub enum AuthorizeSnapshotAccessError {
@@ -10656,23 +11406,27 @@ impl AuthorizeSnapshotAccessError {
 }
 impl fmt::Display for AuthorizeSnapshotAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AuthorizeSnapshotAccessError {
-    fn description(&self) -> &str {
         match *self {
-            AuthorizeSnapshotAccessError::AuthorizationAlreadyExistsFault(ref cause) => cause,
-            AuthorizeSnapshotAccessError::AuthorizationQuotaExceededFault(ref cause) => cause,
-            AuthorizeSnapshotAccessError::ClusterSnapshotNotFoundFault(ref cause) => cause,
-            AuthorizeSnapshotAccessError::DependentServiceRequestThrottlingFault(ref cause) => {
-                cause
+            AuthorizeSnapshotAccessError::AuthorizationAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
             }
-            AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(ref cause) => cause,
-            AuthorizeSnapshotAccessError::LimitExceededFault(ref cause) => cause,
+            AuthorizeSnapshotAccessError::AuthorizationQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AuthorizeSnapshotAccessError::ClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AuthorizeSnapshotAccessError::DependentServiceRequestThrottlingFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AuthorizeSnapshotAccessError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AuthorizeSnapshotAccessError {}
 /// Errors returned by BatchDeleteClusterSnapshots
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteClusterSnapshotsError {
@@ -10714,18 +11468,14 @@ impl BatchDeleteClusterSnapshotsError {
 }
 impl fmt::Display for BatchDeleteClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteClusterSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
             BatchDeleteClusterSnapshotsError::BatchDeleteRequestSizeExceededFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for BatchDeleteClusterSnapshotsError {}
 /// Errors returned by BatchModifyClusterSnapshots
 #[derive(Debug, PartialEq)]
 pub enum BatchModifyClusterSnapshotsError {
@@ -10762,19 +11512,17 @@ impl BatchModifyClusterSnapshotsError {
 }
 impl fmt::Display for BatchModifyClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchModifyClusterSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
             BatchModifyClusterSnapshotsError::BatchModifyClusterSnapshotsLimitExceededFault(
                 ref cause,
-            ) => cause,
-            BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchModifyClusterSnapshotsError {}
 /// Errors returned by CancelResize
 #[derive(Debug, PartialEq)]
 pub enum CancelResizeError {
@@ -10833,19 +11581,15 @@ impl CancelResizeError {
 }
 impl fmt::Display for CancelResizeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelResizeError {
-    fn description(&self) -> &str {
         match *self {
-            CancelResizeError::ClusterNotFoundFault(ref cause) => cause,
-            CancelResizeError::InvalidClusterStateFault(ref cause) => cause,
-            CancelResizeError::ResizeNotFoundFault(ref cause) => cause,
-            CancelResizeError::UnsupportedOperationFault(ref cause) => cause,
+            CancelResizeError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CancelResizeError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            CancelResizeError::ResizeNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CancelResizeError::UnsupportedOperationFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelResizeError {}
 /// Errors returned by CopyClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CopyClusterSnapshotError {
@@ -10921,20 +11665,26 @@ impl CopyClusterSnapshotError {
 }
 impl fmt::Display for CopyClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopyClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CopyClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(ref cause) => cause,
-            CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => cause,
-            CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(ref cause) => cause,
-            CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => cause,
-            CopyClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => cause,
+            CopyClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CopyClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CopyClusterSnapshotError {}
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
@@ -11137,37 +11887,51 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateClusterError::ClusterAlreadyExistsFault(ref cause) => cause,
-            CreateClusterError::ClusterParameterGroupNotFoundFault(ref cause) => cause,
-            CreateClusterError::ClusterQuotaExceededFault(ref cause) => cause,
-            CreateClusterError::ClusterSecurityGroupNotFoundFault(ref cause) => cause,
-            CreateClusterError::ClusterSubnetGroupNotFoundFault(ref cause) => cause,
-            CreateClusterError::DependentServiceRequestThrottlingFault(ref cause) => cause,
-            CreateClusterError::HsmClientCertificateNotFoundFault(ref cause) => cause,
-            CreateClusterError::HsmConfigurationNotFoundFault(ref cause) => cause,
-            CreateClusterError::InsufficientClusterCapacityFault(ref cause) => cause,
-            CreateClusterError::InvalidClusterSubnetGroupStateFault(ref cause) => cause,
-            CreateClusterError::InvalidClusterTrackFault(ref cause) => cause,
-            CreateClusterError::InvalidElasticIpFault(ref cause) => cause,
-            CreateClusterError::InvalidRetentionPeriodFault(ref cause) => cause,
-            CreateClusterError::InvalidSubnet(ref cause) => cause,
-            CreateClusterError::InvalidTagFault(ref cause) => cause,
-            CreateClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            CreateClusterError::LimitExceededFault(ref cause) => cause,
-            CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => cause,
-            CreateClusterError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
-            CreateClusterError::SnapshotScheduleNotFoundFault(ref cause) => cause,
-            CreateClusterError::TagLimitExceededFault(ref cause) => cause,
-            CreateClusterError::UnauthorizedOperation(ref cause) => cause,
+            CreateClusterError::ClusterAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::ClusterParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::ClusterQuotaExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::ClusterSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::ClusterSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::DependentServiceRequestThrottlingFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::HsmClientCertificateNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::HsmConfigurationNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InsufficientClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::InvalidClusterSubnetGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::InvalidClusterTrackFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidElasticIpFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidRetentionPeriodFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::NumberOfNodesQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::SnapshotScheduleNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::TagLimitExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateClusterError {}
 /// Errors returned by CreateClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterParameterGroupError {
@@ -11230,23 +11994,21 @@ impl CreateClusterParameterGroupError {
 }
 impl fmt::Display for CreateClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
             CreateClusterParameterGroupError::ClusterParameterGroupAlreadyExistsFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             CreateClusterParameterGroupError::ClusterParameterGroupQuotaExceededFault(
                 ref cause,
-            ) => cause,
-            CreateClusterParameterGroupError::InvalidTagFault(ref cause) => cause,
-            CreateClusterParameterGroupError::TagLimitExceededFault(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            CreateClusterParameterGroupError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterParameterGroupError::TagLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateClusterParameterGroupError {}
 /// Errors returned by CreateClusterSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterSecurityGroupError {
@@ -11313,23 +12075,21 @@ impl CreateClusterSecurityGroupError {
 }
 impl fmt::Display for CreateClusterSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterSecurityGroupError {
-    fn description(&self) -> &str {
         match *self {
             CreateClusterSecurityGroupError::ClusterSecurityGroupAlreadyExistsFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             CreateClusterSecurityGroupError::ClusterSecurityGroupQuotaExceededFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateClusterSecurityGroupError::InvalidTagFault(ref cause) => cause,
-            CreateClusterSecurityGroupError::TagLimitExceededFault(ref cause) => cause,
+            CreateClusterSecurityGroupError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterSecurityGroupError::TagLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateClusterSecurityGroupError {}
 /// Errors returned by CreateClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterSnapshotError {
@@ -11417,22 +12177,26 @@ impl CreateClusterSnapshotError {
 }
 impl fmt::Display for CreateClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateClusterSnapshotError::ClusterNotFoundFault(ref cause) => cause,
-            CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(ref cause) => cause,
-            CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(ref cause) => cause,
-            CreateClusterSnapshotError::InvalidClusterStateFault(ref cause) => cause,
-            CreateClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => cause,
-            CreateClusterSnapshotError::InvalidTagFault(ref cause) => cause,
-            CreateClusterSnapshotError::TagLimitExceededFault(ref cause) => cause,
+            CreateClusterSnapshotError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterSnapshotError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterSnapshotError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterSnapshotError::TagLimitExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateClusterSnapshotError {}
 /// Errors returned by CreateClusterSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterSubnetGroupError {
@@ -11531,25 +12295,31 @@ impl CreateClusterSubnetGroupError {
 }
 impl fmt::Display for CreateClusterSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateClusterSubnetGroupError::ClusterSubnetGroupAlreadyExistsFault(ref cause) => cause,
-            CreateClusterSubnetGroupError::ClusterSubnetGroupQuotaExceededFault(ref cause) => cause,
-            CreateClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(ref cause) => cause,
-            CreateClusterSubnetGroupError::DependentServiceRequestThrottlingFault(ref cause) => {
-                cause
+            CreateClusterSubnetGroupError::ClusterSubnetGroupAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
             }
-            CreateClusterSubnetGroupError::InvalidSubnet(ref cause) => cause,
-            CreateClusterSubnetGroupError::InvalidTagFault(ref cause) => cause,
-            CreateClusterSubnetGroupError::TagLimitExceededFault(ref cause) => cause,
-            CreateClusterSubnetGroupError::UnauthorizedOperation(ref cause) => cause,
+            CreateClusterSubnetGroupError::ClusterSubnetGroupQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterSubnetGroupError::DependentServiceRequestThrottlingFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateClusterSubnetGroupError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterSubnetGroupError::TagLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterSubnetGroupError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateClusterSubnetGroupError {}
 /// Errors returned by CreateEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSubscriptionError {
@@ -11675,26 +12445,38 @@ impl CreateEventSubscriptionError {
 }
 impl fmt::Display for CreateEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEventSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(ref cause) => cause,
-            CreateEventSubscriptionError::InvalidTagFault(ref cause) => cause,
-            CreateEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,
-            CreateEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => cause,
-            CreateEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => cause,
-            CreateEventSubscriptionError::SourceNotFoundFault(ref cause) => cause,
-            CreateEventSubscriptionError::SubscriptionAlreadyExistFault(ref cause) => cause,
-            CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => cause,
-            CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(ref cause) => cause,
-            CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(ref cause) => cause,
-            CreateEventSubscriptionError::TagLimitExceededFault(ref cause) => cause,
+            CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::SNSInvalidTopicFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::SubscriptionAlreadyExistFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::TagLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateEventSubscriptionError {}
 /// Errors returned by CreateHsmClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum CreateHsmClientCertificateError {
@@ -11761,23 +12543,21 @@ impl CreateHsmClientCertificateError {
 }
 impl fmt::Display for CreateHsmClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHsmClientCertificateError {
-    fn description(&self) -> &str {
         match *self {
             CreateHsmClientCertificateError::HsmClientCertificateAlreadyExistsFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             CreateHsmClientCertificateError::HsmClientCertificateQuotaExceededFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateHsmClientCertificateError::InvalidTagFault(ref cause) => cause,
-            CreateHsmClientCertificateError::TagLimitExceededFault(ref cause) => cause,
+            CreateHsmClientCertificateError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            CreateHsmClientCertificateError::TagLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateHsmClientCertificateError {}
 /// Errors returned by CreateHsmConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateHsmConfigurationError {
@@ -11842,19 +12622,118 @@ impl CreateHsmConfigurationError {
 }
 impl fmt::Display for CreateHsmConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHsmConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHsmConfigurationError::HsmConfigurationAlreadyExistsFault(ref cause) => cause,
-            CreateHsmConfigurationError::HsmConfigurationQuotaExceededFault(ref cause) => cause,
-            CreateHsmConfigurationError::InvalidTagFault(ref cause) => cause,
-            CreateHsmConfigurationError::TagLimitExceededFault(ref cause) => cause,
+            CreateHsmConfigurationError::HsmConfigurationAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateHsmConfigurationError::HsmConfigurationQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateHsmConfigurationError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            CreateHsmConfigurationError::TagLimitExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHsmConfigurationError {}
+/// Errors returned by CreateScheduledAction
+#[derive(Debug, PartialEq)]
+pub enum CreateScheduledActionError {
+    /// <p>The schedule you submitted isn't valid.</p>
+    InvalidScheduleFault(String),
+    /// <p>The scheduled action is not valid. </p>
+    InvalidScheduledActionFault(String),
+    /// <p>The scheduled action already exists. </p>
+    ScheduledActionAlreadyExistsFault(String),
+    /// <p>The quota for scheduled actions exceeded. </p>
+    ScheduledActionQuotaExceededFault(String),
+    /// <p>The action type specified for a scheduled action is not supported. </p>
+    ScheduledActionTypeUnsupportedFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+}
+
+impl CreateScheduledActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateScheduledActionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidSchedule" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::InvalidScheduleFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidScheduledAction" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::InvalidScheduledActionFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ScheduledActionAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::ScheduledActionAlreadyExistsFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ScheduledActionQuotaExceeded" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::ScheduledActionQuotaExceededFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ScheduledActionTypeUnsupported" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::ScheduledActionTypeUnsupportedFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::UnauthorizedOperation(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateScheduledActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateScheduledActionError::InvalidScheduleFault(ref cause) => write!(f, "{}", cause),
+            CreateScheduledActionError::InvalidScheduledActionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateScheduledActionError::ScheduledActionAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateScheduledActionError::ScheduledActionQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateScheduledActionError::ScheduledActionTypeUnsupportedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateScheduledActionError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateScheduledActionError {}
 /// Errors returned by CreateSnapshotCopyGrant
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotCopyGrantError {
@@ -11935,23 +12814,25 @@ impl CreateSnapshotCopyGrantError {
 }
 impl fmt::Display for CreateSnapshotCopyGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSnapshotCopyGrantError {
-    fn description(&self) -> &str {
         match *self {
             CreateSnapshotCopyGrantError::DependentServiceRequestThrottlingFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateSnapshotCopyGrantError::InvalidTagFault(ref cause) => cause,
-            CreateSnapshotCopyGrantError::LimitExceededFault(ref cause) => cause,
-            CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(ref cause) => cause,
-            CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(ref cause) => cause,
-            CreateSnapshotCopyGrantError::TagLimitExceededFault(ref cause) => cause,
+            CreateSnapshotCopyGrantError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotCopyGrantError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotCopyGrantError::TagLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateSnapshotCopyGrantError {}
 /// Errors returned by CreateSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotScheduleError {
@@ -12025,20 +12906,22 @@ impl CreateSnapshotScheduleError {
 }
 impl fmt::Display for CreateSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSnapshotScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSnapshotScheduleError::InvalidScheduleFault(ref cause) => cause,
-            CreateSnapshotScheduleError::ScheduleDefinitionTypeUnsupportedFault(ref cause) => cause,
-            CreateSnapshotScheduleError::SnapshotScheduleAlreadyExistsFault(ref cause) => cause,
-            CreateSnapshotScheduleError::SnapshotScheduleQuotaExceededFault(ref cause) => cause,
-            CreateSnapshotScheduleError::TagLimitExceededFault(ref cause) => cause,
+            CreateSnapshotScheduleError::InvalidScheduleFault(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotScheduleError::ScheduleDefinitionTypeUnsupportedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotScheduleError::SnapshotScheduleAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotScheduleError::SnapshotScheduleQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotScheduleError::TagLimitExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSnapshotScheduleError {}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
@@ -12090,18 +12973,14 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTagsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTagsError::InvalidTagFault(ref cause) => cause,
-            CreateTagsError::ResourceNotFoundFault(ref cause) => cause,
-            CreateTagsError::TagLimitExceededFault(ref cause) => cause,
+            CreateTagsError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::TagLimitExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTagsError {}
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
@@ -12171,20 +13050,20 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClusterError::ClusterNotFoundFault(ref cause) => cause,
-            DeleteClusterError::ClusterSnapshotAlreadyExistsFault(ref cause) => cause,
-            DeleteClusterError::ClusterSnapshotQuotaExceededFault(ref cause) => cause,
-            DeleteClusterError::InvalidClusterStateFault(ref cause) => cause,
-            DeleteClusterError::InvalidRetentionPeriodFault(ref cause) => cause,
+            DeleteClusterError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::ClusterSnapshotAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteClusterError::ClusterSnapshotQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteClusterError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::InvalidRetentionPeriodFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteClusterError {}
 /// Errors returned by DeleteClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterParameterGroupError {
@@ -12233,21 +13112,17 @@ impl DeleteClusterParameterGroupError {
 }
 impl fmt::Display for DeleteClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
             DeleteClusterParameterGroupError::ClusterParameterGroupNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DeleteClusterParameterGroupError::InvalidClusterParameterGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DeleteClusterParameterGroupError {}
 /// Errors returned by DeleteClusterSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterSecurityGroupError {
@@ -12298,19 +13173,17 @@ impl DeleteClusterSecurityGroupError {
 }
 impl fmt::Display for DeleteClusterSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClusterSecurityGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClusterSecurityGroupError::ClusterSecurityGroupNotFoundFault(ref cause) => cause,
+            DeleteClusterSecurityGroupError::ClusterSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteClusterSecurityGroupError::InvalidClusterSecurityGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DeleteClusterSecurityGroupError {}
 /// Errors returned by DeleteClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterSnapshotError {
@@ -12359,17 +13232,17 @@ impl DeleteClusterSnapshotError {
 }
 impl fmt::Display for DeleteClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => cause,
-            DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => cause,
+            DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteClusterSnapshotError {}
 /// Errors returned by DeleteClusterSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterSubnetGroupError {
@@ -12427,18 +13300,20 @@ impl DeleteClusterSubnetGroupError {
 }
 impl fmt::Display for DeleteClusterSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClusterSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(ref cause) => cause,
-            DeleteClusterSubnetGroupError::InvalidClusterSubnetGroupStateFault(ref cause) => cause,
-            DeleteClusterSubnetGroupError::InvalidClusterSubnetStateFault(ref cause) => cause,
+            DeleteClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteClusterSubnetGroupError::InvalidClusterSubnetGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteClusterSubnetGroupError::InvalidClusterSubnetStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteClusterSubnetGroupError {}
 /// Errors returned by DeleteEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSubscriptionError {
@@ -12487,17 +13362,17 @@ impl DeleteEventSubscriptionError {
 }
 impl fmt::Display for DeleteEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEventSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEventSubscriptionError::InvalidSubscriptionStateFault(ref cause) => cause,
-            DeleteEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
+            DeleteEventSubscriptionError::InvalidSubscriptionStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteEventSubscriptionError {}
 /// Errors returned by DeleteHsmClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteHsmClientCertificateError {
@@ -12548,19 +13423,17 @@ impl DeleteHsmClientCertificateError {
 }
 impl fmt::Display for DeleteHsmClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteHsmClientCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteHsmClientCertificateError::HsmClientCertificateNotFoundFault(ref cause) => cause,
+            DeleteHsmClientCertificateError::HsmClientCertificateNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteHsmClientCertificateError::InvalidHsmClientCertificateStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DeleteHsmClientCertificateError {}
 /// Errors returned by DeleteHsmConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteHsmConfigurationError {
@@ -12609,17 +13482,72 @@ impl DeleteHsmConfigurationError {
 }
 impl fmt::Display for DeleteHsmConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteHsmConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(ref cause) => cause,
-            DeleteHsmConfigurationError::InvalidHsmConfigurationStateFault(ref cause) => cause,
+            DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteHsmConfigurationError::InvalidHsmConfigurationStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteHsmConfigurationError {}
+/// Errors returned by DeleteScheduledAction
+#[derive(Debug, PartialEq)]
+pub enum DeleteScheduledActionError {
+    /// <p>The scheduled action cannot be found. </p>
+    ScheduledActionNotFoundFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+}
+
+impl DeleteScheduledActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScheduledActionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ScheduledActionNotFound" => {
+                        return RusotoError::Service(
+                            DeleteScheduledActionError::ScheduledActionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            DeleteScheduledActionError::UnauthorizedOperation(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteScheduledActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteScheduledActionError::ScheduledActionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteScheduledActionError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteScheduledActionError {}
 /// Errors returned by DeleteSnapshotCopyGrant
 #[derive(Debug, PartialEq)]
 pub enum DeleteSnapshotCopyGrantError {
@@ -12668,17 +13596,17 @@ impl DeleteSnapshotCopyGrantError {
 }
 impl fmt::Display for DeleteSnapshotCopyGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSnapshotCopyGrantError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSnapshotCopyGrantError::InvalidSnapshotCopyGrantStateFault(ref cause) => cause,
-            DeleteSnapshotCopyGrantError::SnapshotCopyGrantNotFoundFault(ref cause) => cause,
+            DeleteSnapshotCopyGrantError::InvalidSnapshotCopyGrantStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteSnapshotCopyGrantError::SnapshotCopyGrantNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteSnapshotCopyGrantError {}
 /// Errors returned by DeleteSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum DeleteSnapshotScheduleError {
@@ -12727,19 +13655,17 @@ impl DeleteSnapshotScheduleError {
 }
 impl fmt::Display for DeleteSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSnapshotScheduleError {
-    fn description(&self) -> &str {
         match *self {
             DeleteSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DeleteSnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => cause,
+            DeleteSnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteSnapshotScheduleError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -12784,17 +13710,13 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsError::InvalidTagFault(ref cause) => cause,
-            DeleteTagsError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteTagsError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DescribeAccountAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountAttributesError {}
@@ -12824,14 +13746,10 @@ impl DescribeAccountAttributesError {
 }
 impl fmt::Display for DescribeAccountAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountAttributesError {}
 /// Errors returned by DescribeClusterDbRevisions
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterDbRevisionsError {
@@ -12882,17 +13800,17 @@ impl DescribeClusterDbRevisionsError {
 }
 impl fmt::Display for DescribeClusterDbRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterDbRevisionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterDbRevisionsError::ClusterNotFoundFault(ref cause) => cause,
-            DescribeClusterDbRevisionsError::InvalidClusterStateFault(ref cause) => cause,
+            DescribeClusterDbRevisionsError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeClusterDbRevisionsError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeClusterDbRevisionsError {}
 /// Errors returned by DescribeClusterParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterParameterGroupsError {
@@ -12943,19 +13861,17 @@ impl DescribeClusterParameterGroupsError {
 }
 impl fmt::Display for DescribeClusterParameterGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterParameterGroupsError {
-    fn description(&self) -> &str {
         match *self {
             DescribeClusterParameterGroupsError::ClusterParameterGroupNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DescribeClusterParameterGroupsError::InvalidTagFault(ref cause) => cause,
+            DescribeClusterParameterGroupsError::InvalidTagFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeClusterParameterGroupsError {}
 /// Errors returned by DescribeClusterParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterParametersError {
@@ -12995,16 +13911,14 @@ impl DescribeClusterParametersError {
 }
 impl fmt::Display for DescribeClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(ref cause) => cause,
+            DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeClusterParametersError {}
 /// Errors returned by DescribeClusterSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterSecurityGroupsError {
@@ -13055,19 +13969,17 @@ impl DescribeClusterSecurityGroupsError {
 }
 impl fmt::Display for DescribeClusterSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterSecurityGroupsError {
-    fn description(&self) -> &str {
         match *self {
             DescribeClusterSecurityGroupsError::ClusterSecurityGroupNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DescribeClusterSecurityGroupsError::InvalidTagFault(ref cause) => cause,
+            DescribeClusterSecurityGroupsError::InvalidTagFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeClusterSecurityGroupsError {}
 /// Errors returned by DescribeClusterSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterSnapshotsError {
@@ -13123,18 +14035,18 @@ impl DescribeClusterSnapshotsError {
 }
 impl fmt::Display for DescribeClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterSnapshotsError::ClusterNotFoundFault(ref cause) => cause,
-            DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(ref cause) => cause,
-            DescribeClusterSnapshotsError::InvalidTagFault(ref cause) => cause,
+            DescribeClusterSnapshotsError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeClusterSnapshotsError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClusterSnapshotsError {}
 /// Errors returned by DescribeClusterSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterSubnetGroupsError {
@@ -13183,17 +14095,15 @@ impl DescribeClusterSubnetGroupsError {
 }
 impl fmt::Display for DescribeClusterSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterSubnetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(ref cause) => cause,
-            DescribeClusterSubnetGroupsError::InvalidTagFault(ref cause) => cause,
+            DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeClusterSubnetGroupsError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClusterSubnetGroupsError {}
 /// Errors returned by DescribeClusterTracks
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterTracksError {
@@ -13240,17 +14150,15 @@ impl DescribeClusterTracksError {
 }
 impl fmt::Display for DescribeClusterTracksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterTracksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterTracksError::InvalidClusterTrackFault(ref cause) => cause,
-            DescribeClusterTracksError::UnauthorizedOperation(ref cause) => cause,
+            DescribeClusterTracksError::InvalidClusterTrackFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeClusterTracksError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClusterTracksError {}
 /// Errors returned by DescribeClusterVersions
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterVersionsError {}
@@ -13280,14 +14188,10 @@ impl DescribeClusterVersionsError {
 }
 impl fmt::Display for DescribeClusterVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterVersionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeClusterVersionsError {}
 /// Errors returned by DescribeClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeClustersError {
@@ -13332,17 +14236,13 @@ impl DescribeClustersError {
 }
 impl fmt::Display for DescribeClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClustersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClustersError::ClusterNotFoundFault(ref cause) => cause,
-            DescribeClustersError::InvalidTagFault(ref cause) => cause,
+            DescribeClustersError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DescribeClustersError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClustersError {}
 /// Errors returned by DescribeDefaultClusterParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeDefaultClusterParametersError {}
@@ -13374,14 +14274,10 @@ impl DescribeDefaultClusterParametersError {
 }
 impl fmt::Display for DescribeDefaultClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDefaultClusterParametersError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeDefaultClusterParametersError {}
 /// Errors returned by DescribeEventCategories
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventCategoriesError {}
@@ -13411,14 +14307,10 @@ impl DescribeEventCategoriesError {
 }
 impl fmt::Display for DescribeEventCategoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventCategoriesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventCategoriesError {}
 /// Errors returned by DescribeEventSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventSubscriptionsError {
@@ -13467,17 +14359,15 @@ impl DescribeEventSubscriptionsError {
 }
 impl fmt::Display for DescribeEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventSubscriptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventSubscriptionsError::InvalidTagFault(ref cause) => cause,
-            DescribeEventSubscriptionsError::SubscriptionNotFoundFault(ref cause) => cause,
+            DescribeEventSubscriptionsError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            DescribeEventSubscriptionsError::SubscriptionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEventSubscriptionsError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {}
@@ -13507,14 +14397,10 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventsError {}
 /// Errors returned by DescribeHsmClientCertificates
 #[derive(Debug, PartialEq)]
 pub enum DescribeHsmClientCertificatesError {
@@ -13565,19 +14451,17 @@ impl DescribeHsmClientCertificatesError {
 }
 impl fmt::Display for DescribeHsmClientCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHsmClientCertificatesError {
-    fn description(&self) -> &str {
         match *self {
             DescribeHsmClientCertificatesError::HsmClientCertificateNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DescribeHsmClientCertificatesError::InvalidTagFault(ref cause) => cause,
+            DescribeHsmClientCertificatesError::InvalidTagFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeHsmClientCertificatesError {}
 /// Errors returned by DescribeHsmConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeHsmConfigurationsError {
@@ -13624,17 +14508,15 @@ impl DescribeHsmConfigurationsError {
 }
 impl fmt::Display for DescribeHsmConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHsmConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHsmConfigurationsError::HsmConfigurationNotFoundFault(ref cause) => cause,
-            DescribeHsmConfigurationsError::InvalidTagFault(ref cause) => cause,
+            DescribeHsmConfigurationsError::HsmConfigurationNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeHsmConfigurationsError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeHsmConfigurationsError {}
 /// Errors returned by DescribeLoggingStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoggingStatusError {
@@ -13672,16 +14554,97 @@ impl DescribeLoggingStatusError {
 }
 impl fmt::Display for DescribeLoggingStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoggingStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoggingStatusError::ClusterNotFoundFault(ref cause) => cause,
+            DescribeLoggingStatusError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLoggingStatusError {}
+/// Errors returned by DescribeNodeConfigurationOptions
+#[derive(Debug, PartialEq)]
+pub enum DescribeNodeConfigurationOptionsError {
+    /// <p>The owner of the specified snapshot has not authorized your account to access the snapshot.</p>
+    AccessToSnapshotDeniedFault(String),
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
+    ClusterSnapshotNotFoundFault(String),
+    /// <p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
+    InvalidClusterSnapshotStateFault(String),
+}
+
+impl DescribeNodeConfigurationOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeNodeConfigurationOptionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessToSnapshotDenied" => {
+                        return RusotoError::Service(
+                            DescribeNodeConfigurationOptionsError::AccessToSnapshotDeniedFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            DescribeNodeConfigurationOptionsError::ClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ClusterSnapshotNotFound" => {
+                        return RusotoError::Service(
+                            DescribeNodeConfigurationOptionsError::ClusterSnapshotNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterSnapshotState" => {
+                        return RusotoError::Service(
+                            DescribeNodeConfigurationOptionsError::InvalidClusterSnapshotStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeNodeConfigurationOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeNodeConfigurationOptionsError::AccessToSnapshotDeniedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNodeConfigurationOptionsError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNodeConfigurationOptionsError::ClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNodeConfigurationOptionsError::InvalidClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeNodeConfigurationOptionsError {}
 /// Errors returned by DescribeOrderableClusterOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrderableClusterOptionsError {}
@@ -13713,14 +14676,10 @@ impl DescribeOrderableClusterOptionsError {
 }
 impl fmt::Display for DescribeOrderableClusterOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrderableClusterOptionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeOrderableClusterOptionsError {}
 /// Errors returned by DescribeReservedNodeOfferings
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedNodeOfferingsError {
@@ -13780,22 +14739,20 @@ impl DescribeReservedNodeOfferingsError {
 }
 impl fmt::Display for DescribeReservedNodeOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReservedNodeOfferingsError {
-    fn description(&self) -> &str {
         match *self {
             DescribeReservedNodeOfferingsError::DependentServiceUnavailableFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DescribeReservedNodeOfferingsError::UnsupportedOperationFault(ref cause) => cause,
+            DescribeReservedNodeOfferingsError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReservedNodeOfferingsError {}
 /// Errors returned by DescribeReservedNodes
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedNodesError {
@@ -13844,17 +14801,17 @@ impl DescribeReservedNodesError {
 }
 impl fmt::Display for DescribeReservedNodesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReservedNodesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReservedNodesError::DependentServiceUnavailableFault(ref cause) => cause,
-            DescribeReservedNodesError::ReservedNodeNotFoundFault(ref cause) => cause,
+            DescribeReservedNodesError::DependentServiceUnavailableFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeReservedNodesError::ReservedNodeNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReservedNodesError {}
 /// Errors returned by DescribeResize
 #[derive(Debug, PartialEq)]
 pub enum DescribeResizeError {
@@ -13899,17 +14856,72 @@ impl DescribeResizeError {
 }
 impl fmt::Display for DescribeResizeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeResizeError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeResizeError::ClusterNotFoundFault(ref cause) => cause,
-            DescribeResizeError::ResizeNotFoundFault(ref cause) => cause,
+            DescribeResizeError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DescribeResizeError::ResizeNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeResizeError {}
+/// Errors returned by DescribeScheduledActions
+#[derive(Debug, PartialEq)]
+pub enum DescribeScheduledActionsError {
+    /// <p>The scheduled action cannot be found. </p>
+    ScheduledActionNotFoundFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+}
+
+impl DescribeScheduledActionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScheduledActionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ScheduledActionNotFound" => {
+                        return RusotoError::Service(
+                            DescribeScheduledActionsError::ScheduledActionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            DescribeScheduledActionsError::UnauthorizedOperation(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeScheduledActionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeScheduledActionsError::ScheduledActionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeScheduledActionsError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeScheduledActionsError {}
 /// Errors returned by DescribeSnapshotCopyGrants
 #[derive(Debug, PartialEq)]
 pub enum DescribeSnapshotCopyGrantsError {
@@ -13958,17 +14970,15 @@ impl DescribeSnapshotCopyGrantsError {
 }
 impl fmt::Display for DescribeSnapshotCopyGrantsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSnapshotCopyGrantsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSnapshotCopyGrantsError::InvalidTagFault(ref cause) => cause,
-            DescribeSnapshotCopyGrantsError::SnapshotCopyGrantNotFoundFault(ref cause) => cause,
+            DescribeSnapshotCopyGrantsError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            DescribeSnapshotCopyGrantsError::SnapshotCopyGrantNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeSnapshotCopyGrantsError {}
 /// Errors returned by DescribeSnapshotSchedules
 #[derive(Debug, PartialEq)]
 pub enum DescribeSnapshotSchedulesError {}
@@ -13998,14 +15008,10 @@ impl DescribeSnapshotSchedulesError {
 }
 impl fmt::Display for DescribeSnapshotSchedulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSnapshotSchedulesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeSnapshotSchedulesError {}
 /// Errors returned by DescribeStorage
 #[derive(Debug, PartialEq)]
 pub enum DescribeStorageError {}
@@ -14035,14 +15041,10 @@ impl DescribeStorageError {
 }
 impl fmt::Display for DescribeStorageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStorageError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStorageError {}
 /// Errors returned by DescribeTableRestoreStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeTableRestoreStatusError {
@@ -14093,17 +15095,17 @@ impl DescribeTableRestoreStatusError {
 }
 impl fmt::Display for DescribeTableRestoreStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTableRestoreStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTableRestoreStatusError::ClusterNotFoundFault(ref cause) => cause,
-            DescribeTableRestoreStatusError::TableRestoreNotFoundFault(ref cause) => cause,
+            DescribeTableRestoreStatusError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeTableRestoreStatusError::TableRestoreNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTableRestoreStatusError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -14148,17 +15150,13 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::InvalidTagFault(ref cause) => cause,
-            DescribeTagsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeTagsError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by DisableLogging
 #[derive(Debug, PartialEq)]
 pub enum DisableLoggingError {
@@ -14196,16 +15194,12 @@ impl DisableLoggingError {
 }
 impl fmt::Display for DisableLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableLoggingError {
-    fn description(&self) -> &str {
         match *self {
-            DisableLoggingError::ClusterNotFoundFault(ref cause) => cause,
+            DisableLoggingError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableLoggingError {}
 /// Errors returned by DisableSnapshotCopy
 #[derive(Debug, PartialEq)]
 pub enum DisableSnapshotCopyError {
@@ -14268,19 +15262,17 @@ impl DisableSnapshotCopyError {
 }
 impl fmt::Display for DisableSnapshotCopyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableSnapshotCopyError {
-    fn description(&self) -> &str {
         match *self {
-            DisableSnapshotCopyError::ClusterNotFoundFault(ref cause) => cause,
-            DisableSnapshotCopyError::InvalidClusterStateFault(ref cause) => cause,
-            DisableSnapshotCopyError::SnapshotCopyAlreadyDisabledFault(ref cause) => cause,
-            DisableSnapshotCopyError::UnauthorizedOperation(ref cause) => cause,
+            DisableSnapshotCopyError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DisableSnapshotCopyError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            DisableSnapshotCopyError::SnapshotCopyAlreadyDisabledFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableSnapshotCopyError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableSnapshotCopyError {}
 /// Errors returned by EnableLogging
 #[derive(Debug, PartialEq)]
 pub enum EnableLoggingError {
@@ -14348,20 +15340,18 @@ impl EnableLoggingError {
 }
 impl fmt::Display for EnableLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableLoggingError {
-    fn description(&self) -> &str {
         match *self {
-            EnableLoggingError::BucketNotFoundFault(ref cause) => cause,
-            EnableLoggingError::ClusterNotFoundFault(ref cause) => cause,
-            EnableLoggingError::InsufficientS3BucketPolicyFault(ref cause) => cause,
-            EnableLoggingError::InvalidS3BucketNameFault(ref cause) => cause,
-            EnableLoggingError::InvalidS3KeyPrefixFault(ref cause) => cause,
+            EnableLoggingError::BucketNotFoundFault(ref cause) => write!(f, "{}", cause),
+            EnableLoggingError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            EnableLoggingError::InsufficientS3BucketPolicyFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableLoggingError::InvalidS3BucketNameFault(ref cause) => write!(f, "{}", cause),
+            EnableLoggingError::InvalidS3KeyPrefixFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableLoggingError {}
 /// Errors returned by EnableSnapshotCopy
 #[derive(Debug, PartialEq)]
 pub enum EnableSnapshotCopyError {
@@ -14483,26 +15473,34 @@ impl EnableSnapshotCopyError {
 }
 impl fmt::Display for EnableSnapshotCopyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableSnapshotCopyError {
-    fn description(&self) -> &str {
         match *self {
-            EnableSnapshotCopyError::ClusterNotFoundFault(ref cause) => cause,
-            EnableSnapshotCopyError::CopyToRegionDisabledFault(ref cause) => cause,
-            EnableSnapshotCopyError::DependentServiceRequestThrottlingFault(ref cause) => cause,
-            EnableSnapshotCopyError::IncompatibleOrderableOptions(ref cause) => cause,
-            EnableSnapshotCopyError::InvalidClusterStateFault(ref cause) => cause,
-            EnableSnapshotCopyError::InvalidRetentionPeriodFault(ref cause) => cause,
-            EnableSnapshotCopyError::LimitExceededFault(ref cause) => cause,
-            EnableSnapshotCopyError::SnapshotCopyAlreadyEnabledFault(ref cause) => cause,
-            EnableSnapshotCopyError::SnapshotCopyGrantNotFoundFault(ref cause) => cause,
-            EnableSnapshotCopyError::UnauthorizedOperation(ref cause) => cause,
-            EnableSnapshotCopyError::UnknownSnapshotCopyRegionFault(ref cause) => cause,
+            EnableSnapshotCopyError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            EnableSnapshotCopyError::CopyToRegionDisabledFault(ref cause) => write!(f, "{}", cause),
+            EnableSnapshotCopyError::DependentServiceRequestThrottlingFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableSnapshotCopyError::IncompatibleOrderableOptions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableSnapshotCopyError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            EnableSnapshotCopyError::InvalidRetentionPeriodFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableSnapshotCopyError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            EnableSnapshotCopyError::SnapshotCopyAlreadyEnabledFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableSnapshotCopyError::SnapshotCopyGrantNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableSnapshotCopyError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            EnableSnapshotCopyError::UnknownSnapshotCopyRegionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for EnableSnapshotCopyError {}
 /// Errors returned by GetClusterCredentials
 #[derive(Debug, PartialEq)]
 pub enum GetClusterCredentialsError {
@@ -14549,17 +15547,15 @@ impl GetClusterCredentialsError {
 }
 impl fmt::Display for GetClusterCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetClusterCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            GetClusterCredentialsError::ClusterNotFoundFault(ref cause) => cause,
-            GetClusterCredentialsError::UnsupportedOperationFault(ref cause) => cause,
+            GetClusterCredentialsError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            GetClusterCredentialsError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetClusterCredentialsError {}
 /// Errors returned by GetReservedNodeExchangeOfferings
 #[derive(Debug, PartialEq)]
 pub enum GetReservedNodeExchangeOfferingsError {
@@ -14644,29 +15640,29 @@ impl GetReservedNodeExchangeOfferingsError {
 }
 impl fmt::Display for GetReservedNodeExchangeOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReservedNodeExchangeOfferingsError {
-    fn description(&self) -> &str {
         match *self {
             GetReservedNodeExchangeOfferingsError::DependentServiceUnavailableFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             GetReservedNodeExchangeOfferingsError::InvalidReservedNodeStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             GetReservedNodeExchangeOfferingsError::ReservedNodeAlreadyMigratedFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            GetReservedNodeExchangeOfferingsError::ReservedNodeNotFoundFault(ref cause) => cause,
+            GetReservedNodeExchangeOfferingsError::ReservedNodeNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetReservedNodeExchangeOfferingsError::ReservedNodeOfferingNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            GetReservedNodeExchangeOfferingsError::UnsupportedOperationFault(ref cause) => cause,
+            GetReservedNodeExchangeOfferingsError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetReservedNodeExchangeOfferingsError {}
 /// Errors returned by ModifyCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterError {
@@ -14846,34 +15842,46 @@ impl ModifyClusterError {
 }
 impl fmt::Display for ModifyClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyClusterError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyClusterError::ClusterAlreadyExistsFault(ref cause) => cause,
-            ModifyClusterError::ClusterNotFoundFault(ref cause) => cause,
-            ModifyClusterError::ClusterParameterGroupNotFoundFault(ref cause) => cause,
-            ModifyClusterError::ClusterSecurityGroupNotFoundFault(ref cause) => cause,
-            ModifyClusterError::DependentServiceRequestThrottlingFault(ref cause) => cause,
-            ModifyClusterError::HsmClientCertificateNotFoundFault(ref cause) => cause,
-            ModifyClusterError::HsmConfigurationNotFoundFault(ref cause) => cause,
-            ModifyClusterError::InsufficientClusterCapacityFault(ref cause) => cause,
-            ModifyClusterError::InvalidClusterSecurityGroupStateFault(ref cause) => cause,
-            ModifyClusterError::InvalidClusterStateFault(ref cause) => cause,
-            ModifyClusterError::InvalidClusterTrackFault(ref cause) => cause,
-            ModifyClusterError::InvalidElasticIpFault(ref cause) => cause,
-            ModifyClusterError::InvalidRetentionPeriodFault(ref cause) => cause,
-            ModifyClusterError::LimitExceededFault(ref cause) => cause,
-            ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => cause,
-            ModifyClusterError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
-            ModifyClusterError::TableLimitExceededFault(ref cause) => cause,
-            ModifyClusterError::UnauthorizedOperation(ref cause) => cause,
-            ModifyClusterError::UnsupportedOptionFault(ref cause) => cause,
+            ModifyClusterError::ClusterAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::ClusterParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterError::ClusterSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterError::DependentServiceRequestThrottlingFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterError::HsmClientCertificateNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterError::HsmConfigurationNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::InsufficientClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterError::InvalidClusterSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::InvalidClusterTrackFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::InvalidElasticIpFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::InvalidRetentionPeriodFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterError::NumberOfNodesQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterError::TableLimitExceededFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::UnsupportedOptionFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyClusterError {}
 /// Errors returned by ModifyClusterDbRevision
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterDbRevisionError {
@@ -14931,18 +15939,18 @@ impl ModifyClusterDbRevisionError {
 }
 impl fmt::Display for ModifyClusterDbRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyClusterDbRevisionError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyClusterDbRevisionError::ClusterNotFoundFault(ref cause) => cause,
-            ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(ref cause) => cause,
-            ModifyClusterDbRevisionError::InvalidClusterStateFault(ref cause) => cause,
+            ModifyClusterDbRevisionError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterDbRevisionError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyClusterDbRevisionError {}
 /// Errors returned by ModifyClusterIamRoles
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterIamRolesError {
@@ -14989,17 +15997,15 @@ impl ModifyClusterIamRolesError {
 }
 impl fmt::Display for ModifyClusterIamRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyClusterIamRolesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyClusterIamRolesError::ClusterNotFoundFault(ref cause) => cause,
-            ModifyClusterIamRolesError::InvalidClusterStateFault(ref cause) => cause,
+            ModifyClusterIamRolesError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyClusterIamRolesError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyClusterIamRolesError {}
 /// Errors returned by ModifyClusterMaintenance
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterMaintenanceError {
@@ -15039,16 +16045,14 @@ impl ModifyClusterMaintenanceError {
 }
 impl fmt::Display for ModifyClusterMaintenanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyClusterMaintenanceError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyClusterMaintenanceError::ClusterNotFoundFault(ref cause) => cause,
+            ModifyClusterMaintenanceError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyClusterMaintenanceError {}
 /// Errors returned by ModifyClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterParameterGroupError {
@@ -15097,21 +16101,17 @@ impl ModifyClusterParameterGroupError {
 }
 impl fmt::Display for ModifyClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
             ModifyClusterParameterGroupError::ClusterParameterGroupNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             ModifyClusterParameterGroupError::InvalidClusterParameterGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ModifyClusterParameterGroupError {}
 /// Errors returned by ModifyClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterSnapshotError {
@@ -15169,18 +16169,20 @@ impl ModifyClusterSnapshotError {
 }
 impl fmt::Display for ModifyClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => cause,
-            ModifyClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => cause,
-            ModifyClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => cause,
+            ModifyClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyClusterSnapshotError {}
 /// Errors returned by ModifyClusterSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterSnapshotScheduleError {
@@ -15219,20 +16221,20 @@ impl ModifyClusterSnapshotScheduleError {
 }
 impl fmt::Display for ModifyClusterSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyClusterSnapshotScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyClusterSnapshotScheduleError::ClusterNotFoundFault(ref cause) => cause,
+            ModifyClusterSnapshotScheduleError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ModifyClusterSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(
                 ref cause,
-            ) => cause,
-            ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyClusterSnapshotScheduleError {}
 /// Errors returned by ModifyClusterSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterSubnetGroupError {
@@ -15313,23 +16315,25 @@ impl ModifyClusterSubnetGroupError {
 }
 impl fmt::Display for ModifyClusterSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyClusterSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(ref cause) => cause,
-            ModifyClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(ref cause) => cause,
-            ModifyClusterSubnetGroupError::DependentServiceRequestThrottlingFault(ref cause) => {
-                cause
+            ModifyClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
             }
-            ModifyClusterSubnetGroupError::InvalidSubnet(ref cause) => cause,
-            ModifyClusterSubnetGroupError::SubnetAlreadyInUse(ref cause) => cause,
-            ModifyClusterSubnetGroupError::UnauthorizedOperation(ref cause) => cause,
+            ModifyClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterSubnetGroupError::DependentServiceRequestThrottlingFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            ModifyClusterSubnetGroupError::SubnetAlreadyInUse(ref cause) => write!(f, "{}", cause),
+            ModifyClusterSubnetGroupError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyClusterSubnetGroupError {}
 /// Errors returned by ModifyEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum ModifyEventSubscriptionError {
@@ -15439,24 +16443,121 @@ impl ModifyEventSubscriptionError {
 }
 impl fmt::Display for ModifyEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyEventSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyEventSubscriptionError::InvalidSubscriptionStateFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SourceNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(ref cause) => cause,
+            ModifyEventSubscriptionError::InvalidSubscriptionStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SNSInvalidTopicFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyEventSubscriptionError {}
+/// Errors returned by ModifyScheduledAction
+#[derive(Debug, PartialEq)]
+pub enum ModifyScheduledActionError {
+    /// <p>The schedule you submitted isn't valid.</p>
+    InvalidScheduleFault(String),
+    /// <p>The scheduled action is not valid. </p>
+    InvalidScheduledActionFault(String),
+    /// <p>The scheduled action cannot be found. </p>
+    ScheduledActionNotFoundFault(String),
+    /// <p>The action type specified for a scheduled action is not supported. </p>
+    ScheduledActionTypeUnsupportedFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+}
+
+impl ModifyScheduledActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyScheduledActionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidSchedule" => {
+                        return RusotoError::Service(
+                            ModifyScheduledActionError::InvalidScheduleFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidScheduledAction" => {
+                        return RusotoError::Service(
+                            ModifyScheduledActionError::InvalidScheduledActionFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ScheduledActionNotFound" => {
+                        return RusotoError::Service(
+                            ModifyScheduledActionError::ScheduledActionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ScheduledActionTypeUnsupported" => {
+                        return RusotoError::Service(
+                            ModifyScheduledActionError::ScheduledActionTypeUnsupportedFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            ModifyScheduledActionError::UnauthorizedOperation(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyScheduledActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyScheduledActionError::InvalidScheduleFault(ref cause) => write!(f, "{}", cause),
+            ModifyScheduledActionError::InvalidScheduledActionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyScheduledActionError::ScheduledActionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyScheduledActionError::ScheduledActionTypeUnsupportedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyScheduledActionError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ModifyScheduledActionError {}
 /// Errors returned by ModifySnapshotCopyRetentionPeriod
 #[derive(Debug, PartialEq)]
 pub enum ModifySnapshotCopyRetentionPeriodError {
@@ -15534,20 +16635,26 @@ impl ModifySnapshotCopyRetentionPeriodError {
 }
 impl fmt::Display for ModifySnapshotCopyRetentionPeriodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifySnapshotCopyRetentionPeriodError {
-    fn description(&self) -> &str {
         match *self {
-            ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(ref cause) => cause,
-            ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(ref cause) => cause,
-            ModifySnapshotCopyRetentionPeriodError::InvalidRetentionPeriodFault(ref cause) => cause,
-            ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(ref cause) => cause,
-            ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(ref cause) => cause,
+            ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifySnapshotCopyRetentionPeriodError::InvalidRetentionPeriodFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifySnapshotCopyRetentionPeriodError {}
 /// Errors returned by ModifySnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum ModifySnapshotScheduleError {
@@ -15603,18 +16710,18 @@ impl ModifySnapshotScheduleError {
 }
 impl fmt::Display for ModifySnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifySnapshotScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            ModifySnapshotScheduleError::InvalidScheduleFault(ref cause) => cause,
-            ModifySnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => cause,
-            ModifySnapshotScheduleError::SnapshotScheduleUpdateInProgressFault(ref cause) => cause,
+            ModifySnapshotScheduleError::InvalidScheduleFault(ref cause) => write!(f, "{}", cause),
+            ModifySnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifySnapshotScheduleError::SnapshotScheduleUpdateInProgressFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifySnapshotScheduleError {}
 /// Errors returned by PurchaseReservedNodeOffering
 #[derive(Debug, PartialEq)]
 pub enum PurchaseReservedNodeOfferingError {
@@ -15683,21 +16790,23 @@ impl PurchaseReservedNodeOfferingError {
 }
 impl fmt::Display for PurchaseReservedNodeOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PurchaseReservedNodeOfferingError {
-    fn description(&self) -> &str {
         match *self {
-            PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(ref cause) => cause,
-            PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(ref cause) => {
-                cause
+            PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
             }
-            PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(ref cause) => cause,
-            PurchaseReservedNodeOfferingError::UnsupportedOperationFault(ref cause) => cause,
+            PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PurchaseReservedNodeOfferingError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PurchaseReservedNodeOfferingError {}
 /// Errors returned by RebootCluster
 #[derive(Debug, PartialEq)]
 pub enum RebootClusterError {
@@ -15742,17 +16851,13 @@ impl RebootClusterError {
 }
 impl fmt::Display for RebootClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootClusterError {
-    fn description(&self) -> &str {
         match *self {
-            RebootClusterError::ClusterNotFoundFault(ref cause) => cause,
-            RebootClusterError::InvalidClusterStateFault(ref cause) => cause,
+            RebootClusterError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RebootClusterError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebootClusterError {}
 /// Errors returned by ResetClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ResetClusterParameterGroupError {
@@ -15803,19 +16908,17 @@ impl ResetClusterParameterGroupError {
 }
 impl fmt::Display for ResetClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetClusterParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ResetClusterParameterGroupError::ClusterParameterGroupNotFoundFault(ref cause) => cause,
+            ResetClusterParameterGroupError::ClusterParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ResetClusterParameterGroupError::InvalidClusterParameterGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ResetClusterParameterGroupError {}
 /// Errors returned by ResizeCluster
 #[derive(Debug, PartialEq)]
 pub enum ResizeClusterError {
@@ -15915,24 +17018,26 @@ impl ResizeClusterError {
 }
 impl fmt::Display for ResizeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResizeClusterError {
-    fn description(&self) -> &str {
         match *self {
-            ResizeClusterError::ClusterNotFoundFault(ref cause) => cause,
-            ResizeClusterError::InsufficientClusterCapacityFault(ref cause) => cause,
-            ResizeClusterError::InvalidClusterStateFault(ref cause) => cause,
-            ResizeClusterError::LimitExceededFault(ref cause) => cause,
-            ResizeClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => cause,
-            ResizeClusterError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
-            ResizeClusterError::UnauthorizedOperation(ref cause) => cause,
-            ResizeClusterError::UnsupportedOperationFault(ref cause) => cause,
-            ResizeClusterError::UnsupportedOptionFault(ref cause) => cause,
+            ResizeClusterError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ResizeClusterError::InsufficientClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResizeClusterError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            ResizeClusterError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            ResizeClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResizeClusterError::NumberOfNodesQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResizeClusterError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            ResizeClusterError::UnsupportedOperationFault(ref cause) => write!(f, "{}", cause),
+            ResizeClusterError::UnsupportedOptionFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResizeClusterError {}
 /// Errors returned by RestoreFromClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum RestoreFromClusterSnapshotError {
@@ -16184,46 +17289,82 @@ impl RestoreFromClusterSnapshotError {
 }
 impl fmt::Display for RestoreFromClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreFromClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::ClusterSubnetGroupNotFoundFault(ref cause) => cause,
+            RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::ClusterSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RestoreFromClusterSnapshotError::DependentServiceRequestThrottlingFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            RestoreFromClusterSnapshotError::HsmClientCertificateNotFoundFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::HsmConfigurationNotFoundFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => cause,
+            RestoreFromClusterSnapshotError::HsmClientCertificateNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::HsmConfigurationNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            RestoreFromClusterSnapshotError::InvalidClusterTrackFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::InvalidElasticIpFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::InvalidRestoreFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::InvalidSubnet(ref cause) => cause,
-            RestoreFromClusterSnapshotError::InvalidTagFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::LimitExceededFault(ref cause) => cause,
+            RestoreFromClusterSnapshotError::InvalidClusterTrackFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::InvalidElasticIpFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::InvalidRestoreFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            RestoreFromClusterSnapshotError::InvalidTagFault(ref cause) => write!(f, "{}", cause),
+            RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::LimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(
                 ref cause,
-            ) => cause,
-            RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::TagLimitExceededFault(ref cause) => cause,
-            RestoreFromClusterSnapshotError::UnauthorizedOperation(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::TagLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreFromClusterSnapshotError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RestoreFromClusterSnapshotError {}
 /// Errors returned by RestoreTableFromClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum RestoreTableFromClusterSnapshotError {
@@ -16270,28 +17411,32 @@ impl RestoreTableFromClusterSnapshotError {
 }
 impl fmt::Display for RestoreTableFromClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreTableFromClusterSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(ref cause) => cause,
-            RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => cause,
+            RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RestoreTableFromClusterSnapshotError::InProgressTableRestoreQuotaExceededFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(ref cause) => cause,
+            RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(ref cause) => cause,
+            RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RestoreTableFromClusterSnapshotError {}
 /// Errors returned by RevokeClusterSecurityGroupIngress
 #[derive(Debug, PartialEq)]
 pub enum RevokeClusterSecurityGroupIngressError {
@@ -16330,22 +17475,20 @@ impl RevokeClusterSecurityGroupIngressError {
 }
 impl fmt::Display for RevokeClusterSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RevokeClusterSecurityGroupIngressError {
-    fn description(&self) -> &str {
         match *self {
-            RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(ref cause) => cause,
+            RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RevokeClusterSecurityGroupIngressError {}
 /// Errors returned by RevokeSnapshotAccess
 #[derive(Debug, PartialEq)]
 pub enum RevokeSnapshotAccessError {
@@ -16403,18 +17546,20 @@ impl RevokeSnapshotAccessError {
 }
 impl fmt::Display for RevokeSnapshotAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RevokeSnapshotAccessError {
-    fn description(&self) -> &str {
         match *self {
-            RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(ref cause) => cause,
-            RevokeSnapshotAccessError::AuthorizationNotFoundFault(ref cause) => cause,
-            RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(ref cause) => cause,
+            RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RevokeSnapshotAccessError::AuthorizationNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RevokeSnapshotAccessError {}
 /// Errors returned by RotateEncryptionKey
 #[derive(Debug, PartialEq)]
 pub enum RotateEncryptionKeyError {
@@ -16470,18 +17615,16 @@ impl RotateEncryptionKeyError {
 }
 impl fmt::Display for RotateEncryptionKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RotateEncryptionKeyError {
-    fn description(&self) -> &str {
         match *self {
-            RotateEncryptionKeyError::ClusterNotFoundFault(ref cause) => cause,
-            RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(ref cause) => cause,
-            RotateEncryptionKeyError::InvalidClusterStateFault(ref cause) => cause,
+            RotateEncryptionKeyError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RotateEncryptionKeyError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RotateEncryptionKeyError {}
 /// Trait representing the capabilities of the Amazon Redshift API. Amazon Redshift clients implement this trait.
 pub trait Redshift {
     /// <p>Exchanges a DC1 Reserved Node for a DC2 Reserved Node with no changes to the configuration (term, payment type, or number of nodes) and no additional costs. </p>
@@ -16577,6 +17720,12 @@ pub trait Redshift {
         input: CreateHsmConfigurationMessage,
     ) -> RusotoFuture<CreateHsmConfigurationResult, CreateHsmConfigurationError>;
 
+    /// <p>Creates a scheduled action. A scheduled action contains a schedule and an Amazon Redshift API action. For example, you can create a schedule of when to run the <code>ResizeCluster</code> API operation. </p>
+    fn create_scheduled_action(
+        &self,
+        input: CreateScheduledActionMessage,
+    ) -> RusotoFuture<ScheduledAction, CreateScheduledActionError>;
+
     /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn create_snapshot_copy_grant(
         &self,
@@ -16639,6 +17788,12 @@ pub trait Redshift {
         &self,
         input: DeleteHsmConfigurationMessage,
     ) -> RusotoFuture<(), DeleteHsmConfigurationError>;
+
+    /// <p>Deletes a scheduled action. </p>
+    fn delete_scheduled_action(
+        &self,
+        input: DeleteScheduledActionMessage,
+    ) -> RusotoFuture<(), DeleteScheduledActionError>;
 
     /// <p>Deletes the specified snapshot copy grant.</p>
     fn delete_snapshot_copy_grant(
@@ -16757,6 +17912,12 @@ pub trait Redshift {
         input: DescribeLoggingStatusMessage,
     ) -> RusotoFuture<LoggingStatus, DescribeLoggingStatusError>;
 
+    /// <p>Returns properties of possible node configurations such as node type, number of nodes, and disk usage for the specified action type.</p>
+    fn describe_node_configuration_options(
+        &self,
+        input: DescribeNodeConfigurationOptionsMessage,
+    ) -> RusotoFuture<NodeConfigurationOptionsMessage, DescribeNodeConfigurationOptionsError>;
+
     /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_orderable_cluster_options(
         &self,
@@ -16780,6 +17941,12 @@ pub trait Redshift {
         &self,
         input: DescribeResizeMessage,
     ) -> RusotoFuture<ResizeProgressMessage, DescribeResizeError>;
+
+    /// <p>Describes properties of scheduled actions. </p>
+    fn describe_scheduled_actions(
+        &self,
+        input: DescribeScheduledActionsMessage,
+    ) -> RusotoFuture<ScheduledActionsMessage, DescribeScheduledActionsError>;
 
     /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn describe_snapshot_copy_grants(
@@ -16901,6 +18068,12 @@ pub trait Redshift {
         input: ModifyEventSubscriptionMessage,
     ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
 
+    /// <p>Modify a scheduled action. </p>
+    fn modify_scheduled_action(
+        &self,
+        input: ModifyScheduledActionMessage,
+    ) -> RusotoFuture<ScheduledAction, ModifyScheduledActionError>;
+
     /// <p>Modifies the number of days to retain snapshots in the destination AWS Region after they are copied from the source AWS Region. By default, this operation only changes the retention period of copied automated snapshots. The retention periods for both new and existing copied automated snapshots are updated with the new retention period. You can set the manual option to change only the retention periods of copied manual snapshots. If you set this option, only newly copied manual snapshots have the new retention period. </p>
     fn modify_snapshot_copy_retention_period(
         &self,
@@ -17001,6 +18174,14 @@ impl RedshiftClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> RedshiftClient {
         RedshiftClient { client, region }
+    }
+}
+
+impl fmt::Debug for RedshiftClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("RedshiftClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -17740,6 +18921,54 @@ impl Redshift for RedshiftClient {
         })
     }
 
+    /// <p>Creates a scheduled action. A scheduled action contains a schedule and an Amazon Redshift API action. For example, you can create a schedule of when to run the <code>ResizeCluster</code> API operation. </p>
+    fn create_scheduled_action(
+        &self,
+        input: CreateScheduledActionMessage,
+    ) -> RusotoFuture<ScheduledAction, CreateScheduledActionError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateScheduledAction");
+        params.put("Version", "2012-12-01");
+        CreateScheduledActionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateScheduledActionError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ScheduledAction::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ScheduledActionDeserializer::deserialize(
+                        "CreateScheduledActionResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn create_snapshot_copy_grant(
         &self,
@@ -18103,6 +19332,31 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHsmConfigurationError::from_response(response))
+                }));
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Deletes a scheduled action. </p>
+    fn delete_scheduled_action(
+        &self,
+        input: DeleteScheduledActionMessage,
+    ) -> RusotoFuture<(), DeleteScheduledActionError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteScheduledAction");
+        params.put("Version", "2012-12-01");
+        DeleteScheduledActionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteScheduledActionError::from_response(response))
                 }));
             }
 
@@ -19008,6 +20262,56 @@ impl Redshift for RedshiftClient {
         })
     }
 
+    /// <p>Returns properties of possible node configurations such as node type, number of nodes, and disk usage for the specified action type.</p>
+    fn describe_node_configuration_options(
+        &self,
+        input: DescribeNodeConfigurationOptionsMessage,
+    ) -> RusotoFuture<NodeConfigurationOptionsMessage, DescribeNodeConfigurationOptionsError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeNodeConfigurationOptions");
+        params.put("Version", "2012-12-01");
+        DescribeNodeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeNodeConfigurationOptionsError::from_response(
+                        response,
+                    ))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = NodeConfigurationOptionsMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = NodeConfigurationOptionsMessageDeserializer::deserialize(
+                        "DescribeNodeConfigurationOptionsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_orderable_cluster_options(
         &self,
@@ -19194,6 +20498,54 @@ impl Redshift for RedshiftClient {
                     start_element(&actual_tag_name, &mut stack)?;
                     result = ResizeProgressMessageDeserializer::deserialize(
                         "DescribeResizeResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Describes properties of scheduled actions. </p>
+    fn describe_scheduled_actions(
+        &self,
+        input: DescribeScheduledActionsMessage,
+    ) -> RusotoFuture<ScheduledActionsMessage, DescribeScheduledActionsError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeScheduledActions");
+        params.put("Version", "2012-12-01");
+        DescribeScheduledActionsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeScheduledActionsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ScheduledActionsMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ScheduledActionsMessageDeserializer::deserialize(
+                        "DescribeScheduledActionsResult",
                         &mut stack,
                     )?;
                     skip_tree(&mut stack);
@@ -20150,6 +21502,54 @@ impl Redshift for RedshiftClient {
                     start_element(&actual_tag_name, &mut stack)?;
                     result = ModifyEventSubscriptionResultDeserializer::deserialize(
                         "ModifyEventSubscriptionResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Modify a scheduled action. </p>
+    fn modify_scheduled_action(
+        &self,
+        input: ModifyScheduledActionMessage,
+    ) -> RusotoFuture<ScheduledAction, ModifyScheduledActionError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyScheduledAction");
+        params.put("Version", "2012-12-01");
+        ModifyScheduledActionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyScheduledActionError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ScheduledAction::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ScheduledActionDeserializer::deserialize(
+                        "ModifyScheduledActionResult",
                         &mut stack,
                     )?;
                     skip_tree(&mut stack);

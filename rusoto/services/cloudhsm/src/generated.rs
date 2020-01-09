@@ -644,18 +644,14 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToResourceError::CloudHsmInternal(ref cause) => cause,
-            AddTagsToResourceError::CloudHsmService(ref cause) => cause,
-            AddTagsToResourceError::InvalidRequest(ref cause) => cause,
+            AddTagsToResourceError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToResourceError {}
 /// Errors returned by CreateHapg
 #[derive(Debug, PartialEq)]
 pub enum CreateHapgError {
@@ -689,18 +685,14 @@ impl CreateHapgError {
 }
 impl fmt::Display for CreateHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHapgError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHapgError::CloudHsmInternal(ref cause) => cause,
-            CreateHapgError::CloudHsmService(ref cause) => cause,
-            CreateHapgError::InvalidRequest(ref cause) => cause,
+            CreateHapgError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            CreateHapgError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            CreateHapgError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHapgError {}
 /// Errors returned by CreateHsm
 #[derive(Debug, PartialEq)]
 pub enum CreateHsmError {
@@ -734,18 +726,14 @@ impl CreateHsmError {
 }
 impl fmt::Display for CreateHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHsmError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHsmError::CloudHsmInternal(ref cause) => cause,
-            CreateHsmError::CloudHsmService(ref cause) => cause,
-            CreateHsmError::InvalidRequest(ref cause) => cause,
+            CreateHsmError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            CreateHsmError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            CreateHsmError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHsmError {}
 /// Errors returned by CreateLunaClient
 #[derive(Debug, PartialEq)]
 pub enum CreateLunaClientError {
@@ -779,18 +767,14 @@ impl CreateLunaClientError {
 }
 impl fmt::Display for CreateLunaClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLunaClientError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLunaClientError::CloudHsmInternal(ref cause) => cause,
-            CreateLunaClientError::CloudHsmService(ref cause) => cause,
-            CreateLunaClientError::InvalidRequest(ref cause) => cause,
+            CreateLunaClientError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            CreateLunaClientError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            CreateLunaClientError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLunaClientError {}
 /// Errors returned by DeleteHapg
 #[derive(Debug, PartialEq)]
 pub enum DeleteHapgError {
@@ -824,18 +808,14 @@ impl DeleteHapgError {
 }
 impl fmt::Display for DeleteHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteHapgError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteHapgError::CloudHsmInternal(ref cause) => cause,
-            DeleteHapgError::CloudHsmService(ref cause) => cause,
-            DeleteHapgError::InvalidRequest(ref cause) => cause,
+            DeleteHapgError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            DeleteHapgError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            DeleteHapgError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteHapgError {}
 /// Errors returned by DeleteHsm
 #[derive(Debug, PartialEq)]
 pub enum DeleteHsmError {
@@ -869,18 +849,14 @@ impl DeleteHsmError {
 }
 impl fmt::Display for DeleteHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteHsmError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteHsmError::CloudHsmInternal(ref cause) => cause,
-            DeleteHsmError::CloudHsmService(ref cause) => cause,
-            DeleteHsmError::InvalidRequest(ref cause) => cause,
+            DeleteHsmError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            DeleteHsmError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            DeleteHsmError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteHsmError {}
 /// Errors returned by DeleteLunaClient
 #[derive(Debug, PartialEq)]
 pub enum DeleteLunaClientError {
@@ -914,18 +890,14 @@ impl DeleteLunaClientError {
 }
 impl fmt::Display for DeleteLunaClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLunaClientError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLunaClientError::CloudHsmInternal(ref cause) => cause,
-            DeleteLunaClientError::CloudHsmService(ref cause) => cause,
-            DeleteLunaClientError::InvalidRequest(ref cause) => cause,
+            DeleteLunaClientError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            DeleteLunaClientError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            DeleteLunaClientError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLunaClientError {}
 /// Errors returned by DescribeHapg
 #[derive(Debug, PartialEq)]
 pub enum DescribeHapgError {
@@ -959,18 +931,14 @@ impl DescribeHapgError {
 }
 impl fmt::Display for DescribeHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHapgError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHapgError::CloudHsmInternal(ref cause) => cause,
-            DescribeHapgError::CloudHsmService(ref cause) => cause,
-            DescribeHapgError::InvalidRequest(ref cause) => cause,
+            DescribeHapgError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            DescribeHapgError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            DescribeHapgError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeHapgError {}
 /// Errors returned by DescribeHsm
 #[derive(Debug, PartialEq)]
 pub enum DescribeHsmError {
@@ -1004,18 +972,14 @@ impl DescribeHsmError {
 }
 impl fmt::Display for DescribeHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHsmError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHsmError::CloudHsmInternal(ref cause) => cause,
-            DescribeHsmError::CloudHsmService(ref cause) => cause,
-            DescribeHsmError::InvalidRequest(ref cause) => cause,
+            DescribeHsmError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            DescribeHsmError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            DescribeHsmError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeHsmError {}
 /// Errors returned by DescribeLunaClient
 #[derive(Debug, PartialEq)]
 pub enum DescribeLunaClientError {
@@ -1049,18 +1013,14 @@ impl DescribeLunaClientError {
 }
 impl fmt::Display for DescribeLunaClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLunaClientError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLunaClientError::CloudHsmInternal(ref cause) => cause,
-            DescribeLunaClientError::CloudHsmService(ref cause) => cause,
-            DescribeLunaClientError::InvalidRequest(ref cause) => cause,
+            DescribeLunaClientError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            DescribeLunaClientError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            DescribeLunaClientError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLunaClientError {}
 /// Errors returned by GetConfig
 #[derive(Debug, PartialEq)]
 pub enum GetConfigError {
@@ -1094,18 +1054,14 @@ impl GetConfigError {
 }
 impl fmt::Display for GetConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetConfigError::CloudHsmInternal(ref cause) => cause,
-            GetConfigError::CloudHsmService(ref cause) => cause,
-            GetConfigError::InvalidRequest(ref cause) => cause,
+            GetConfigError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            GetConfigError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            GetConfigError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConfigError {}
 /// Errors returned by ListAvailableZones
 #[derive(Debug, PartialEq)]
 pub enum ListAvailableZonesError {
@@ -1139,18 +1095,14 @@ impl ListAvailableZonesError {
 }
 impl fmt::Display for ListAvailableZonesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAvailableZonesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAvailableZonesError::CloudHsmInternal(ref cause) => cause,
-            ListAvailableZonesError::CloudHsmService(ref cause) => cause,
-            ListAvailableZonesError::InvalidRequest(ref cause) => cause,
+            ListAvailableZonesError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            ListAvailableZonesError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            ListAvailableZonesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAvailableZonesError {}
 /// Errors returned by ListHapgs
 #[derive(Debug, PartialEq)]
 pub enum ListHapgsError {
@@ -1184,18 +1136,14 @@ impl ListHapgsError {
 }
 impl fmt::Display for ListHapgsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHapgsError {
-    fn description(&self) -> &str {
         match *self {
-            ListHapgsError::CloudHsmInternal(ref cause) => cause,
-            ListHapgsError::CloudHsmService(ref cause) => cause,
-            ListHapgsError::InvalidRequest(ref cause) => cause,
+            ListHapgsError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            ListHapgsError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            ListHapgsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHapgsError {}
 /// Errors returned by ListHsms
 #[derive(Debug, PartialEq)]
 pub enum ListHsmsError {
@@ -1229,18 +1177,14 @@ impl ListHsmsError {
 }
 impl fmt::Display for ListHsmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHsmsError {
-    fn description(&self) -> &str {
         match *self {
-            ListHsmsError::CloudHsmInternal(ref cause) => cause,
-            ListHsmsError::CloudHsmService(ref cause) => cause,
-            ListHsmsError::InvalidRequest(ref cause) => cause,
+            ListHsmsError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            ListHsmsError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            ListHsmsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHsmsError {}
 /// Errors returned by ListLunaClients
 #[derive(Debug, PartialEq)]
 pub enum ListLunaClientsError {
@@ -1274,18 +1218,14 @@ impl ListLunaClientsError {
 }
 impl fmt::Display for ListLunaClientsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLunaClientsError {
-    fn description(&self) -> &str {
         match *self {
-            ListLunaClientsError::CloudHsmInternal(ref cause) => cause,
-            ListLunaClientsError::CloudHsmService(ref cause) => cause,
-            ListLunaClientsError::InvalidRequest(ref cause) => cause,
+            ListLunaClientsError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            ListLunaClientsError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            ListLunaClientsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListLunaClientsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1321,18 +1261,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::CloudHsmInternal(ref cause) => cause,
-            ListTagsForResourceError::CloudHsmService(ref cause) => cause,
-            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
+            ListTagsForResourceError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ModifyHapg
 #[derive(Debug, PartialEq)]
 pub enum ModifyHapgError {
@@ -1366,18 +1302,14 @@ impl ModifyHapgError {
 }
 impl fmt::Display for ModifyHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyHapgError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyHapgError::CloudHsmInternal(ref cause) => cause,
-            ModifyHapgError::CloudHsmService(ref cause) => cause,
-            ModifyHapgError::InvalidRequest(ref cause) => cause,
+            ModifyHapgError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            ModifyHapgError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            ModifyHapgError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyHapgError {}
 /// Errors returned by ModifyHsm
 #[derive(Debug, PartialEq)]
 pub enum ModifyHsmError {
@@ -1411,18 +1343,14 @@ impl ModifyHsmError {
 }
 impl fmt::Display for ModifyHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyHsmError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyHsmError::CloudHsmInternal(ref cause) => cause,
-            ModifyHsmError::CloudHsmService(ref cause) => cause,
-            ModifyHsmError::InvalidRequest(ref cause) => cause,
+            ModifyHsmError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            ModifyHsmError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            ModifyHsmError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyHsmError {}
 /// Errors returned by ModifyLunaClient
 #[derive(Debug, PartialEq)]
 pub enum ModifyLunaClientError {
@@ -1446,16 +1374,12 @@ impl ModifyLunaClientError {
 }
 impl fmt::Display for ModifyLunaClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyLunaClientError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyLunaClientError::CloudHsmService(ref cause) => cause,
+            ModifyLunaClientError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyLunaClientError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -1495,18 +1419,14 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromResourceError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromResourceError::CloudHsmInternal(ref cause) => cause,
-            RemoveTagsFromResourceError::CloudHsmService(ref cause) => cause,
-            RemoveTagsFromResourceError::InvalidRequest(ref cause) => cause,
+            RemoveTagsFromResourceError::CloudHsmInternal(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromResourceError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsFromResourceError {}
 /// Trait representing the capabilities of the CloudHSM API. CloudHSM clients implement this trait.
 pub trait CloudHsm {
     /// <p>This is documentation for <b>AWS CloudHSM Classic</b>. For more information, see <a href="http://aws.amazon.com/cloudhsm/faqs-classic/">AWS CloudHSM Classic FAQs</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/classic/userguide/">AWS CloudHSM Classic User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/classic/APIReference/">AWS CloudHSM Classic API Reference</a>.</p> <p> <b>For information about the current version of AWS CloudHSM</b>, see <a href="http://aws.amazon.com/cloudhsm/">AWS CloudHSM</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/">AWS CloudHSM User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/">AWS CloudHSM API Reference</a>.</p> <p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p> <p>Each tag consists of a key and a value. Tag keys must be unique to each resource.</p>
@@ -1659,6 +1579,14 @@ impl CloudHsmClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> CloudHsmClient {
         CloudHsmClient { client, region }
+    }
+}
+
+impl fmt::Debug for CloudHsmClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CloudHsmClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

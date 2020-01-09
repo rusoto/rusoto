@@ -893,6 +893,29 @@ pub struct DeleteVolumeOutput {
     pub volume_arn: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAvailabilityMonitorTestInput {
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAvailabilityMonitorTestOutput {
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+    /// <p>The time the High Availability monitoring test was started. If a test hasn't been performed, the value of this field is null.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The status of the High Availability monitoring test. If a test hasn't been performed, the value of this field is null.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
 /// <p>A JSON object containing the of the gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1006,7 +1029,7 @@ pub struct DescribeGatewayInformationInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGatewayInformationOutput {
-    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that was used to monitor and log events in the gateway.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch Log Group that is used to monitor events in the gateway.</p>
     #[serde(rename = "CloudWatchLogGroupARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_log_group_arn: Option<String>,
@@ -1045,6 +1068,10 @@ pub struct DescribeGatewayInformationOutput {
     #[serde(rename = "GatewayType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_type: Option<String>,
+    /// <p>The type of hypervisor environment used by the host.</p>
+    #[serde(rename = "HostEnvironment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_environment: Option<String>,
     /// <p>The date on which the last software update was applied to the gateway. If the gateway has never been updated, this field does not return a value in the response.</p>
     #[serde(rename = "LastSoftwareUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1148,6 +1175,10 @@ pub struct DescribeSMBSettingsInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSMBSettingsOutput {
+    /// <p><p>Indicates the status of a gateway that is a member of the Active Directory domain.</p> <ul> <li> <p>ACCESS<em>DENIED: Indicates that the <code>JoinDomain</code> operation failed due to an authentication error.</p> </li> <li> <p>DETACHED: Indicates that gateway is not joined to a domain.</p> </li> <li> <p>JOINED: Indicates that the gateway has successfully joined a domain.</p> </li> <li> <p>JOINING: Indicates that a <code>JoinDomain</code> operation is in progress.</p> </li> <li> <p>NETWORK</em>ERROR: Indicates that <code>JoinDomain</code> operation failed due to a network or connectivity error.</p> </li> <li> <p>TIMEOUT: Indicates that the <code>JoinDomain</code> operation failed because the operation didn&#39;t complete within the allotted time.</p> </li> <li> <p>UNKNOWN_ERROR: Indicates that the <code>JoinDomain</code> operation failed due to another type of error.</p> </li> </ul></p>
+    #[serde(rename = "ActiveDirectoryStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_directory_status: Option<String>,
     /// <p>The name of the domain that the gateway is joined to.</p>
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1588,7 +1619,11 @@ pub struct JoinDomainInput {
     /// <p>Sets the password of the user who has permission to add the gateway to the Active Directory domain.</p>
     #[serde(rename = "Password")]
     pub password: String,
-    /// <p>Sets the user name of user who has permission to add the gateway to the Active Directory domain.</p>
+    /// <p>Specifies the time in seconds, in which the <code>JoinDomain</code> operation must complete. The default is 20 seconds.</p>
+    #[serde(rename = "TimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_seconds: Option<i64>,
+    /// <p>Sets the user name of user who has permission to add the gateway to the Active Directory domain. The domain user account should be enabled to join computers to the domain. For example, you can use the domain administrator account or an account with delegated permissions to join computers to the domain.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -1597,6 +1632,10 @@ pub struct JoinDomainInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JoinDomainOutput {
+    /// <p><p>Indicates the status of the gateway as a member of the Active Directory domain.</p> <ul> <li> <p>ACCESS<em>DENIED: Indicates that the <code>JoinDomain</code> operation failed due to an authentication error.</p> </li> <li> <p>DETACHED: Indicates that gateway is not joined to a domain.</p> </li> <li> <p>JOINED: Indicates that the gateway has successfully joined a domain.</p> </li> <li> <p>JOINING: Indicates that a <code>JoinDomain</code> operation is in progress.</p> </li> <li> <p>NETWORK</em>ERROR: Indicates that <code>JoinDomain</code> operation failed due to a network or connectivity error.</p> </li> <li> <p>TIMEOUT: Indicates that the <code>JoinDomain</code> operation failed because the operation didn&#39;t complete within the allotted time.</p> </li> <li> <p>UNKNOWN_ERROR: Indicates that the <code>JoinDomain</code> operation failed due to another type of error.</p> </li> </ul></p>
+    #[serde(rename = "ActiveDirectoryStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_directory_status: Option<String>,
     /// <p>The unique Amazon Resource Name (ARN) of the gateway that joined the domain.</p>
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2183,6 +2222,21 @@ pub struct ShutdownGatewayInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ShutdownGatewayOutput {
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartAvailabilityMonitorTestInput {
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartAvailabilityMonitorTestOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -2900,17 +2954,13 @@ impl ActivateGatewayError {
 }
 impl fmt::Display for ActivateGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ActivateGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            ActivateGatewayError::InternalServerError(ref cause) => cause,
-            ActivateGatewayError::InvalidGatewayRequest(ref cause) => cause,
+            ActivateGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ActivateGatewayError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ActivateGatewayError {}
 /// Errors returned by AddCache
 #[derive(Debug, PartialEq)]
 pub enum AddCacheError {
@@ -2939,17 +2989,13 @@ impl AddCacheError {
 }
 impl fmt::Display for AddCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddCacheError {
-    fn description(&self) -> &str {
         match *self {
-            AddCacheError::InternalServerError(ref cause) => cause,
-            AddCacheError::InvalidGatewayRequest(ref cause) => cause,
+            AddCacheError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddCacheError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddCacheError {}
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
@@ -2982,17 +3028,13 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToResourceError::InternalServerError(ref cause) => cause,
-            AddTagsToResourceError::InvalidGatewayRequest(ref cause) => cause,
+            AddTagsToResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddTagsToResourceError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToResourceError {}
 /// Errors returned by AddUploadBuffer
 #[derive(Debug, PartialEq)]
 pub enum AddUploadBufferError {
@@ -3023,17 +3065,13 @@ impl AddUploadBufferError {
 }
 impl fmt::Display for AddUploadBufferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddUploadBufferError {
-    fn description(&self) -> &str {
         match *self {
-            AddUploadBufferError::InternalServerError(ref cause) => cause,
-            AddUploadBufferError::InvalidGatewayRequest(ref cause) => cause,
+            AddUploadBufferError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddUploadBufferError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddUploadBufferError {}
 /// Errors returned by AddWorkingStorage
 #[derive(Debug, PartialEq)]
 pub enum AddWorkingStorageError {
@@ -3066,17 +3104,13 @@ impl AddWorkingStorageError {
 }
 impl fmt::Display for AddWorkingStorageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddWorkingStorageError {
-    fn description(&self) -> &str {
         match *self {
-            AddWorkingStorageError::InternalServerError(ref cause) => cause,
-            AddWorkingStorageError::InvalidGatewayRequest(ref cause) => cause,
+            AddWorkingStorageError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddWorkingStorageError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddWorkingStorageError {}
 /// Errors returned by AssignTapePool
 #[derive(Debug, PartialEq)]
 pub enum AssignTapePoolError {
@@ -3107,17 +3141,13 @@ impl AssignTapePoolError {
 }
 impl fmt::Display for AssignTapePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssignTapePoolError {
-    fn description(&self) -> &str {
         match *self {
-            AssignTapePoolError::InternalServerError(ref cause) => cause,
-            AssignTapePoolError::InvalidGatewayRequest(ref cause) => cause,
+            AssignTapePoolError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AssignTapePoolError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssignTapePoolError {}
 /// Errors returned by AttachVolume
 #[derive(Debug, PartialEq)]
 pub enum AttachVolumeError {
@@ -3146,17 +3176,13 @@ impl AttachVolumeError {
 }
 impl fmt::Display for AttachVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            AttachVolumeError::InternalServerError(ref cause) => cause,
-            AttachVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            AttachVolumeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AttachVolumeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachVolumeError {}
 /// Errors returned by CancelArchival
 #[derive(Debug, PartialEq)]
 pub enum CancelArchivalError {
@@ -3187,17 +3213,13 @@ impl CancelArchivalError {
 }
 impl fmt::Display for CancelArchivalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelArchivalError {
-    fn description(&self) -> &str {
         match *self {
-            CancelArchivalError::InternalServerError(ref cause) => cause,
-            CancelArchivalError::InvalidGatewayRequest(ref cause) => cause,
+            CancelArchivalError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CancelArchivalError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelArchivalError {}
 /// Errors returned by CancelRetrieval
 #[derive(Debug, PartialEq)]
 pub enum CancelRetrievalError {
@@ -3228,17 +3250,13 @@ impl CancelRetrievalError {
 }
 impl fmt::Display for CancelRetrievalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelRetrievalError {
-    fn description(&self) -> &str {
         match *self {
-            CancelRetrievalError::InternalServerError(ref cause) => cause,
-            CancelRetrievalError::InvalidGatewayRequest(ref cause) => cause,
+            CancelRetrievalError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CancelRetrievalError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelRetrievalError {}
 /// Errors returned by CreateCachediSCSIVolume
 #[derive(Debug, PartialEq)]
 pub enum CreateCachediSCSIVolumeError {
@@ -3271,17 +3289,15 @@ impl CreateCachediSCSIVolumeError {
 }
 impl fmt::Display for CreateCachediSCSIVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCachediSCSIVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCachediSCSIVolumeError::InternalServerError(ref cause) => cause,
-            CreateCachediSCSIVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            CreateCachediSCSIVolumeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateCachediSCSIVolumeError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateCachediSCSIVolumeError {}
 /// Errors returned by CreateNFSFileShare
 #[derive(Debug, PartialEq)]
 pub enum CreateNFSFileShareError {
@@ -3314,17 +3330,13 @@ impl CreateNFSFileShareError {
 }
 impl fmt::Display for CreateNFSFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNFSFileShareError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNFSFileShareError::InternalServerError(ref cause) => cause,
-            CreateNFSFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            CreateNFSFileShareError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateNFSFileShareError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateNFSFileShareError {}
 /// Errors returned by CreateSMBFileShare
 #[derive(Debug, PartialEq)]
 pub enum CreateSMBFileShareError {
@@ -3357,17 +3369,13 @@ impl CreateSMBFileShareError {
 }
 impl fmt::Display for CreateSMBFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSMBFileShareError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSMBFileShareError::InternalServerError(ref cause) => cause,
-            CreateSMBFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            CreateSMBFileShareError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateSMBFileShareError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSMBFileShareError {}
 /// Errors returned by CreateSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotError {
@@ -3405,18 +3413,14 @@ impl CreateSnapshotError {
 }
 impl fmt::Display for CreateSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSnapshotError::InternalServerError(ref cause) => cause,
-            CreateSnapshotError::InvalidGatewayRequest(ref cause) => cause,
-            CreateSnapshotError::ServiceUnavailableError(ref cause) => cause,
+            CreateSnapshotError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
+            CreateSnapshotError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSnapshotError {}
 /// Errors returned by CreateSnapshotFromVolumeRecoveryPoint
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotFromVolumeRecoveryPointError {
@@ -3460,18 +3464,20 @@ impl CreateSnapshotFromVolumeRecoveryPointError {
 }
 impl fmt::Display for CreateSnapshotFromVolumeRecoveryPointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSnapshotFromVolumeRecoveryPointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(ref cause) => cause,
-            CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(ref cause) => cause,
-            CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(ref cause) => cause,
+            CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateSnapshotFromVolumeRecoveryPointError {}
 /// Errors returned by CreateStorediSCSIVolume
 #[derive(Debug, PartialEq)]
 pub enum CreateStorediSCSIVolumeError {
@@ -3504,17 +3510,15 @@ impl CreateStorediSCSIVolumeError {
 }
 impl fmt::Display for CreateStorediSCSIVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStorediSCSIVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStorediSCSIVolumeError::InternalServerError(ref cause) => cause,
-            CreateStorediSCSIVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            CreateStorediSCSIVolumeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateStorediSCSIVolumeError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateStorediSCSIVolumeError {}
 /// Errors returned by CreateTapeWithBarcode
 #[derive(Debug, PartialEq)]
 pub enum CreateTapeWithBarcodeError {
@@ -3547,17 +3551,13 @@ impl CreateTapeWithBarcodeError {
 }
 impl fmt::Display for CreateTapeWithBarcodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTapeWithBarcodeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTapeWithBarcodeError::InternalServerError(ref cause) => cause,
-            CreateTapeWithBarcodeError::InvalidGatewayRequest(ref cause) => cause,
+            CreateTapeWithBarcodeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateTapeWithBarcodeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTapeWithBarcodeError {}
 /// Errors returned by CreateTapes
 #[derive(Debug, PartialEq)]
 pub enum CreateTapesError {
@@ -3586,17 +3586,13 @@ impl CreateTapesError {
 }
 impl fmt::Display for CreateTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTapesError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTapesError::InternalServerError(ref cause) => cause,
-            CreateTapesError::InvalidGatewayRequest(ref cause) => cause,
+            CreateTapesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateTapesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTapesError {}
 /// Errors returned by DeleteBandwidthRateLimit
 #[derive(Debug, PartialEq)]
 pub enum DeleteBandwidthRateLimitError {
@@ -3629,17 +3625,15 @@ impl DeleteBandwidthRateLimitError {
 }
 impl fmt::Display for DeleteBandwidthRateLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBandwidthRateLimitError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBandwidthRateLimitError::InternalServerError(ref cause) => cause,
-            DeleteBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteBandwidthRateLimitError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteBandwidthRateLimitError {}
 /// Errors returned by DeleteChapCredentials
 #[derive(Debug, PartialEq)]
 pub enum DeleteChapCredentialsError {
@@ -3672,17 +3666,13 @@ impl DeleteChapCredentialsError {
 }
 impl fmt::Display for DeleteChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteChapCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteChapCredentialsError::InternalServerError(ref cause) => cause,
-            DeleteChapCredentialsError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteChapCredentialsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteChapCredentialsError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteChapCredentialsError {}
 /// Errors returned by DeleteFileShare
 #[derive(Debug, PartialEq)]
 pub enum DeleteFileShareError {
@@ -3713,17 +3703,13 @@ impl DeleteFileShareError {
 }
 impl fmt::Display for DeleteFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFileShareError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFileShareError::InternalServerError(ref cause) => cause,
-            DeleteFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteFileShareError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteFileShareError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFileShareError {}
 /// Errors returned by DeleteGateway
 #[derive(Debug, PartialEq)]
 pub enum DeleteGatewayError {
@@ -3752,17 +3738,13 @@ impl DeleteGatewayError {
 }
 impl fmt::Display for DeleteGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGatewayError::InternalServerError(ref cause) => cause,
-            DeleteGatewayError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGatewayError {}
 /// Errors returned by DeleteSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum DeleteSnapshotScheduleError {
@@ -3795,17 +3777,13 @@ impl DeleteSnapshotScheduleError {
 }
 impl fmt::Display for DeleteSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSnapshotScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSnapshotScheduleError::InternalServerError(ref cause) => cause,
-            DeleteSnapshotScheduleError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteSnapshotScheduleError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteSnapshotScheduleError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSnapshotScheduleError {}
 /// Errors returned by DeleteTape
 #[derive(Debug, PartialEq)]
 pub enum DeleteTapeError {
@@ -3834,17 +3812,13 @@ impl DeleteTapeError {
 }
 impl fmt::Display for DeleteTapeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTapeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTapeError::InternalServerError(ref cause) => cause,
-            DeleteTapeError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteTapeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteTapeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTapeError {}
 /// Errors returned by DeleteTapeArchive
 #[derive(Debug, PartialEq)]
 pub enum DeleteTapeArchiveError {
@@ -3877,17 +3851,13 @@ impl DeleteTapeArchiveError {
 }
 impl fmt::Display for DeleteTapeArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTapeArchiveError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTapeArchiveError::InternalServerError(ref cause) => cause,
-            DeleteTapeArchiveError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteTapeArchiveError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteTapeArchiveError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTapeArchiveError {}
 /// Errors returned by DeleteVolume
 #[derive(Debug, PartialEq)]
 pub enum DeleteVolumeError {
@@ -3916,17 +3886,58 @@ impl DeleteVolumeError {
 }
 impl fmt::Display for DeleteVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVolumeError::InternalServerError(ref cause) => cause,
-            DeleteVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            DeleteVolumeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteVolumeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVolumeError {}
+/// Errors returned by DescribeAvailabilityMonitorTest
+#[derive(Debug, PartialEq)]
+pub enum DescribeAvailabilityMonitorTestError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl DescribeAvailabilityMonitorTestError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeAvailabilityMonitorTestError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeAvailabilityMonitorTestError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(
+                        DescribeAvailabilityMonitorTestError::InvalidGatewayRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeAvailabilityMonitorTestError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAvailabilityMonitorTestError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAvailabilityMonitorTestError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeAvailabilityMonitorTestError {}
 /// Errors returned by DescribeBandwidthRateLimit
 #[derive(Debug, PartialEq)]
 pub enum DescribeBandwidthRateLimitError {
@@ -3961,17 +3972,17 @@ impl DescribeBandwidthRateLimitError {
 }
 impl fmt::Display for DescribeBandwidthRateLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBandwidthRateLimitError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBandwidthRateLimitError::InternalServerError(ref cause) => cause,
-            DescribeBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeBandwidthRateLimitError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeBandwidthRateLimitError {}
 /// Errors returned by DescribeCache
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheError {
@@ -4000,17 +4011,13 @@ impl DescribeCacheError {
 }
 impl fmt::Display for DescribeCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCacheError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCacheError::InternalServerError(ref cause) => cause,
-            DescribeCacheError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeCacheError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeCacheError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCacheError {}
 /// Errors returned by DescribeCachediSCSIVolumes
 #[derive(Debug, PartialEq)]
 pub enum DescribeCachediSCSIVolumesError {
@@ -4045,17 +4052,17 @@ impl DescribeCachediSCSIVolumesError {
 }
 impl fmt::Display for DescribeCachediSCSIVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCachediSCSIVolumesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCachediSCSIVolumesError::InternalServerError(ref cause) => cause,
-            DescribeCachediSCSIVolumesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeCachediSCSIVolumesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCachediSCSIVolumesError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCachediSCSIVolumesError {}
 /// Errors returned by DescribeChapCredentials
 #[derive(Debug, PartialEq)]
 pub enum DescribeChapCredentialsError {
@@ -4088,17 +4095,15 @@ impl DescribeChapCredentialsError {
 }
 impl fmt::Display for DescribeChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeChapCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeChapCredentialsError::InternalServerError(ref cause) => cause,
-            DescribeChapCredentialsError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeChapCredentialsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeChapCredentialsError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeChapCredentialsError {}
 /// Errors returned by DescribeGatewayInformation
 #[derive(Debug, PartialEq)]
 pub enum DescribeGatewayInformationError {
@@ -4133,17 +4138,17 @@ impl DescribeGatewayInformationError {
 }
 impl fmt::Display for DescribeGatewayInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeGatewayInformationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeGatewayInformationError::InternalServerError(ref cause) => cause,
-            DescribeGatewayInformationError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeGatewayInformationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeGatewayInformationError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeGatewayInformationError {}
 /// Errors returned by DescribeMaintenanceStartTime
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceStartTimeError {
@@ -4178,17 +4183,17 @@ impl DescribeMaintenanceStartTimeError {
 }
 impl fmt::Display for DescribeMaintenanceStartTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMaintenanceStartTimeError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMaintenanceStartTimeError::InternalServerError(ref cause) => cause,
-            DescribeMaintenanceStartTimeError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeMaintenanceStartTimeError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeMaintenanceStartTimeError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMaintenanceStartTimeError {}
 /// Errors returned by DescribeNFSFileShares
 #[derive(Debug, PartialEq)]
 pub enum DescribeNFSFileSharesError {
@@ -4221,17 +4226,13 @@ impl DescribeNFSFileSharesError {
 }
 impl fmt::Display for DescribeNFSFileSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNFSFileSharesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeNFSFileSharesError::InternalServerError(ref cause) => cause,
-            DescribeNFSFileSharesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeNFSFileSharesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeNFSFileSharesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeNFSFileSharesError {}
 /// Errors returned by DescribeSMBFileShares
 #[derive(Debug, PartialEq)]
 pub enum DescribeSMBFileSharesError {
@@ -4264,17 +4265,13 @@ impl DescribeSMBFileSharesError {
 }
 impl fmt::Display for DescribeSMBFileSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSMBFileSharesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSMBFileSharesError::InternalServerError(ref cause) => cause,
-            DescribeSMBFileSharesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeSMBFileSharesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeSMBFileSharesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSMBFileSharesError {}
 /// Errors returned by DescribeSMBSettings
 #[derive(Debug, PartialEq)]
 pub enum DescribeSMBSettingsError {
@@ -4307,17 +4304,13 @@ impl DescribeSMBSettingsError {
 }
 impl fmt::Display for DescribeSMBSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSMBSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSMBSettingsError::InternalServerError(ref cause) => cause,
-            DescribeSMBSettingsError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeSMBSettingsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeSMBSettingsError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSMBSettingsError {}
 /// Errors returned by DescribeSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum DescribeSnapshotScheduleError {
@@ -4350,17 +4343,15 @@ impl DescribeSnapshotScheduleError {
 }
 impl fmt::Display for DescribeSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSnapshotScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSnapshotScheduleError::InternalServerError(ref cause) => cause,
-            DescribeSnapshotScheduleError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeSnapshotScheduleError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeSnapshotScheduleError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeSnapshotScheduleError {}
 /// Errors returned by DescribeStorediSCSIVolumes
 #[derive(Debug, PartialEq)]
 pub enum DescribeStorediSCSIVolumesError {
@@ -4395,17 +4386,17 @@ impl DescribeStorediSCSIVolumesError {
 }
 impl fmt::Display for DescribeStorediSCSIVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStorediSCSIVolumesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStorediSCSIVolumesError::InternalServerError(ref cause) => cause,
-            DescribeStorediSCSIVolumesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeStorediSCSIVolumesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeStorediSCSIVolumesError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeStorediSCSIVolumesError {}
 /// Errors returned by DescribeTapeArchives
 #[derive(Debug, PartialEq)]
 pub enum DescribeTapeArchivesError {
@@ -4438,17 +4429,13 @@ impl DescribeTapeArchivesError {
 }
 impl fmt::Display for DescribeTapeArchivesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTapeArchivesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTapeArchivesError::InternalServerError(ref cause) => cause,
-            DescribeTapeArchivesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeTapeArchivesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeTapeArchivesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTapeArchivesError {}
 /// Errors returned by DescribeTapeRecoveryPoints
 #[derive(Debug, PartialEq)]
 pub enum DescribeTapeRecoveryPointsError {
@@ -4483,17 +4470,17 @@ impl DescribeTapeRecoveryPointsError {
 }
 impl fmt::Display for DescribeTapeRecoveryPointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTapeRecoveryPointsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTapeRecoveryPointsError::InternalServerError(ref cause) => cause,
-            DescribeTapeRecoveryPointsError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeTapeRecoveryPointsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeTapeRecoveryPointsError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTapeRecoveryPointsError {}
 /// Errors returned by DescribeTapes
 #[derive(Debug, PartialEq)]
 pub enum DescribeTapesError {
@@ -4522,17 +4509,13 @@ impl DescribeTapesError {
 }
 impl fmt::Display for DescribeTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTapesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTapesError::InternalServerError(ref cause) => cause,
-            DescribeTapesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeTapesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeTapesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTapesError {}
 /// Errors returned by DescribeUploadBuffer
 #[derive(Debug, PartialEq)]
 pub enum DescribeUploadBufferError {
@@ -4565,17 +4548,13 @@ impl DescribeUploadBufferError {
 }
 impl fmt::Display for DescribeUploadBufferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUploadBufferError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUploadBufferError::InternalServerError(ref cause) => cause,
-            DescribeUploadBufferError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeUploadBufferError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeUploadBufferError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUploadBufferError {}
 /// Errors returned by DescribeVTLDevices
 #[derive(Debug, PartialEq)]
 pub enum DescribeVTLDevicesError {
@@ -4608,17 +4587,13 @@ impl DescribeVTLDevicesError {
 }
 impl fmt::Display for DescribeVTLDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVTLDevicesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVTLDevicesError::InternalServerError(ref cause) => cause,
-            DescribeVTLDevicesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeVTLDevicesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeVTLDevicesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeVTLDevicesError {}
 /// Errors returned by DescribeWorkingStorage
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkingStorageError {
@@ -4651,17 +4626,13 @@ impl DescribeWorkingStorageError {
 }
 impl fmt::Display for DescribeWorkingStorageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkingStorageError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeWorkingStorageError::InternalServerError(ref cause) => cause,
-            DescribeWorkingStorageError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeWorkingStorageError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeWorkingStorageError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeWorkingStorageError {}
 /// Errors returned by DetachVolume
 #[derive(Debug, PartialEq)]
 pub enum DetachVolumeError {
@@ -4690,17 +4661,13 @@ impl DetachVolumeError {
 }
 impl fmt::Display for DetachVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachVolumeError {
-    fn description(&self) -> &str {
         match *self {
-            DetachVolumeError::InternalServerError(ref cause) => cause,
-            DetachVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            DetachVolumeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DetachVolumeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachVolumeError {}
 /// Errors returned by DisableGateway
 #[derive(Debug, PartialEq)]
 pub enum DisableGatewayError {
@@ -4731,17 +4698,13 @@ impl DisableGatewayError {
 }
 impl fmt::Display for DisableGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            DisableGatewayError::InternalServerError(ref cause) => cause,
-            DisableGatewayError::InvalidGatewayRequest(ref cause) => cause,
+            DisableGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DisableGatewayError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableGatewayError {}
 /// Errors returned by JoinDomain
 #[derive(Debug, PartialEq)]
 pub enum JoinDomainError {
@@ -4770,17 +4733,13 @@ impl JoinDomainError {
 }
 impl fmt::Display for JoinDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for JoinDomainError {
-    fn description(&self) -> &str {
         match *self {
-            JoinDomainError::InternalServerError(ref cause) => cause,
-            JoinDomainError::InvalidGatewayRequest(ref cause) => cause,
+            JoinDomainError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            JoinDomainError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for JoinDomainError {}
 /// Errors returned by ListFileShares
 #[derive(Debug, PartialEq)]
 pub enum ListFileSharesError {
@@ -4811,17 +4770,13 @@ impl ListFileSharesError {
 }
 impl fmt::Display for ListFileSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFileSharesError {
-    fn description(&self) -> &str {
         match *self {
-            ListFileSharesError::InternalServerError(ref cause) => cause,
-            ListFileSharesError::InvalidGatewayRequest(ref cause) => cause,
+            ListFileSharesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListFileSharesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFileSharesError {}
 /// Errors returned by ListGateways
 #[derive(Debug, PartialEq)]
 pub enum ListGatewaysError {
@@ -4850,17 +4805,13 @@ impl ListGatewaysError {
 }
 impl fmt::Display for ListGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGatewaysError {
-    fn description(&self) -> &str {
         match *self {
-            ListGatewaysError::InternalServerError(ref cause) => cause,
-            ListGatewaysError::InvalidGatewayRequest(ref cause) => cause,
+            ListGatewaysError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListGatewaysError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGatewaysError {}
 /// Errors returned by ListLocalDisks
 #[derive(Debug, PartialEq)]
 pub enum ListLocalDisksError {
@@ -4891,17 +4842,13 @@ impl ListLocalDisksError {
 }
 impl fmt::Display for ListLocalDisksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLocalDisksError {
-    fn description(&self) -> &str {
         match *self {
-            ListLocalDisksError::InternalServerError(ref cause) => cause,
-            ListLocalDisksError::InvalidGatewayRequest(ref cause) => cause,
+            ListLocalDisksError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListLocalDisksError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListLocalDisksError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -4934,17 +4881,13 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
-            ListTagsForResourceError::InvalidGatewayRequest(ref cause) => cause,
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTapes
 #[derive(Debug, PartialEq)]
 pub enum ListTapesError {
@@ -4973,17 +4916,13 @@ impl ListTapesError {
 }
 impl fmt::Display for ListTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTapesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTapesError::InternalServerError(ref cause) => cause,
-            ListTapesError::InvalidGatewayRequest(ref cause) => cause,
+            ListTapesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTapesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTapesError {}
 /// Errors returned by ListVolumeInitiators
 #[derive(Debug, PartialEq)]
 pub enum ListVolumeInitiatorsError {
@@ -5016,17 +4955,13 @@ impl ListVolumeInitiatorsError {
 }
 impl fmt::Display for ListVolumeInitiatorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVolumeInitiatorsError {
-    fn description(&self) -> &str {
         match *self {
-            ListVolumeInitiatorsError::InternalServerError(ref cause) => cause,
-            ListVolumeInitiatorsError::InvalidGatewayRequest(ref cause) => cause,
+            ListVolumeInitiatorsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListVolumeInitiatorsError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVolumeInitiatorsError {}
 /// Errors returned by ListVolumeRecoveryPoints
 #[derive(Debug, PartialEq)]
 pub enum ListVolumeRecoveryPointsError {
@@ -5059,17 +4994,15 @@ impl ListVolumeRecoveryPointsError {
 }
 impl fmt::Display for ListVolumeRecoveryPointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVolumeRecoveryPointsError {
-    fn description(&self) -> &str {
         match *self {
-            ListVolumeRecoveryPointsError::InternalServerError(ref cause) => cause,
-            ListVolumeRecoveryPointsError::InvalidGatewayRequest(ref cause) => cause,
+            ListVolumeRecoveryPointsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListVolumeRecoveryPointsError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListVolumeRecoveryPointsError {}
 /// Errors returned by ListVolumes
 #[derive(Debug, PartialEq)]
 pub enum ListVolumesError {
@@ -5098,17 +5031,13 @@ impl ListVolumesError {
 }
 impl fmt::Display for ListVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVolumesError {
-    fn description(&self) -> &str {
         match *self {
-            ListVolumesError::InternalServerError(ref cause) => cause,
-            ListVolumesError::InvalidGatewayRequest(ref cause) => cause,
+            ListVolumesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListVolumesError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVolumesError {}
 /// Errors returned by NotifyWhenUploaded
 #[derive(Debug, PartialEq)]
 pub enum NotifyWhenUploadedError {
@@ -5141,17 +5070,13 @@ impl NotifyWhenUploadedError {
 }
 impl fmt::Display for NotifyWhenUploadedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for NotifyWhenUploadedError {
-    fn description(&self) -> &str {
         match *self {
-            NotifyWhenUploadedError::InternalServerError(ref cause) => cause,
-            NotifyWhenUploadedError::InvalidGatewayRequest(ref cause) => cause,
+            NotifyWhenUploadedError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            NotifyWhenUploadedError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for NotifyWhenUploadedError {}
 /// Errors returned by RefreshCache
 #[derive(Debug, PartialEq)]
 pub enum RefreshCacheError {
@@ -5180,17 +5105,13 @@ impl RefreshCacheError {
 }
 impl fmt::Display for RefreshCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RefreshCacheError {
-    fn description(&self) -> &str {
         match *self {
-            RefreshCacheError::InternalServerError(ref cause) => cause,
-            RefreshCacheError::InvalidGatewayRequest(ref cause) => cause,
+            RefreshCacheError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RefreshCacheError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RefreshCacheError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -5223,17 +5144,13 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromResourceError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromResourceError::InternalServerError(ref cause) => cause,
-            RemoveTagsFromResourceError::InvalidGatewayRequest(ref cause) => cause,
+            RemoveTagsFromResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromResourceError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsFromResourceError {}
 /// Errors returned by ResetCache
 #[derive(Debug, PartialEq)]
 pub enum ResetCacheError {
@@ -5262,17 +5179,13 @@ impl ResetCacheError {
 }
 impl fmt::Display for ResetCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetCacheError {
-    fn description(&self) -> &str {
         match *self {
-            ResetCacheError::InternalServerError(ref cause) => cause,
-            ResetCacheError::InvalidGatewayRequest(ref cause) => cause,
+            ResetCacheError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ResetCacheError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResetCacheError {}
 /// Errors returned by RetrieveTapeArchive
 #[derive(Debug, PartialEq)]
 pub enum RetrieveTapeArchiveError {
@@ -5305,17 +5218,13 @@ impl RetrieveTapeArchiveError {
 }
 impl fmt::Display for RetrieveTapeArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RetrieveTapeArchiveError {
-    fn description(&self) -> &str {
         match *self {
-            RetrieveTapeArchiveError::InternalServerError(ref cause) => cause,
-            RetrieveTapeArchiveError::InvalidGatewayRequest(ref cause) => cause,
+            RetrieveTapeArchiveError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RetrieveTapeArchiveError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RetrieveTapeArchiveError {}
 /// Errors returned by RetrieveTapeRecoveryPoint
 #[derive(Debug, PartialEq)]
 pub enum RetrieveTapeRecoveryPointError {
@@ -5348,17 +5257,17 @@ impl RetrieveTapeRecoveryPointError {
 }
 impl fmt::Display for RetrieveTapeRecoveryPointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RetrieveTapeRecoveryPointError {
-    fn description(&self) -> &str {
         match *self {
-            RetrieveTapeRecoveryPointError::InternalServerError(ref cause) => cause,
-            RetrieveTapeRecoveryPointError::InvalidGatewayRequest(ref cause) => cause,
+            RetrieveTapeRecoveryPointError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RetrieveTapeRecoveryPointError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RetrieveTapeRecoveryPointError {}
 /// Errors returned by SetLocalConsolePassword
 #[derive(Debug, PartialEq)]
 pub enum SetLocalConsolePasswordError {
@@ -5391,17 +5300,15 @@ impl SetLocalConsolePasswordError {
 }
 impl fmt::Display for SetLocalConsolePasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetLocalConsolePasswordError {
-    fn description(&self) -> &str {
         match *self {
-            SetLocalConsolePasswordError::InternalServerError(ref cause) => cause,
-            SetLocalConsolePasswordError::InvalidGatewayRequest(ref cause) => cause,
+            SetLocalConsolePasswordError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            SetLocalConsolePasswordError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetLocalConsolePasswordError {}
 /// Errors returned by SetSMBGuestPassword
 #[derive(Debug, PartialEq)]
 pub enum SetSMBGuestPasswordError {
@@ -5434,17 +5341,13 @@ impl SetSMBGuestPasswordError {
 }
 impl fmt::Display for SetSMBGuestPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSMBGuestPasswordError {
-    fn description(&self) -> &str {
         match *self {
-            SetSMBGuestPasswordError::InternalServerError(ref cause) => cause,
-            SetSMBGuestPasswordError::InvalidGatewayRequest(ref cause) => cause,
+            SetSMBGuestPasswordError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            SetSMBGuestPasswordError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSMBGuestPasswordError {}
 /// Errors returned by ShutdownGateway
 #[derive(Debug, PartialEq)]
 pub enum ShutdownGatewayError {
@@ -5475,17 +5378,58 @@ impl ShutdownGatewayError {
 }
 impl fmt::Display for ShutdownGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ShutdownGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            ShutdownGatewayError::InternalServerError(ref cause) => cause,
-            ShutdownGatewayError::InvalidGatewayRequest(ref cause) => cause,
+            ShutdownGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ShutdownGatewayError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ShutdownGatewayError {}
+/// Errors returned by StartAvailabilityMonitorTest
+#[derive(Debug, PartialEq)]
+pub enum StartAvailabilityMonitorTestError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl StartAvailabilityMonitorTestError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartAvailabilityMonitorTestError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        StartAvailabilityMonitorTestError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(
+                        StartAvailabilityMonitorTestError::InvalidGatewayRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartAvailabilityMonitorTestError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartAvailabilityMonitorTestError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAvailabilityMonitorTestError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for StartAvailabilityMonitorTestError {}
 /// Errors returned by StartGateway
 #[derive(Debug, PartialEq)]
 pub enum StartGatewayError {
@@ -5514,17 +5458,13 @@ impl StartGatewayError {
 }
 impl fmt::Display for StartGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            StartGatewayError::InternalServerError(ref cause) => cause,
-            StartGatewayError::InvalidGatewayRequest(ref cause) => cause,
+            StartGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartGatewayError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartGatewayError {}
 /// Errors returned by UpdateBandwidthRateLimit
 #[derive(Debug, PartialEq)]
 pub enum UpdateBandwidthRateLimitError {
@@ -5557,17 +5497,15 @@ impl UpdateBandwidthRateLimitError {
 }
 impl fmt::Display for UpdateBandwidthRateLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBandwidthRateLimitError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBandwidthRateLimitError::InternalServerError(ref cause) => cause,
-            UpdateBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateBandwidthRateLimitError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateBandwidthRateLimitError {}
 /// Errors returned by UpdateChapCredentials
 #[derive(Debug, PartialEq)]
 pub enum UpdateChapCredentialsError {
@@ -5600,17 +5538,13 @@ impl UpdateChapCredentialsError {
 }
 impl fmt::Display for UpdateChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateChapCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateChapCredentialsError::InternalServerError(ref cause) => cause,
-            UpdateChapCredentialsError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateChapCredentialsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateChapCredentialsError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateChapCredentialsError {}
 /// Errors returned by UpdateGatewayInformation
 #[derive(Debug, PartialEq)]
 pub enum UpdateGatewayInformationError {
@@ -5643,17 +5577,15 @@ impl UpdateGatewayInformationError {
 }
 impl fmt::Display for UpdateGatewayInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGatewayInformationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGatewayInformationError::InternalServerError(ref cause) => cause,
-            UpdateGatewayInformationError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateGatewayInformationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayInformationError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateGatewayInformationError {}
 /// Errors returned by UpdateGatewaySoftwareNow
 #[derive(Debug, PartialEq)]
 pub enum UpdateGatewaySoftwareNowError {
@@ -5686,17 +5618,15 @@ impl UpdateGatewaySoftwareNowError {
 }
 impl fmt::Display for UpdateGatewaySoftwareNowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGatewaySoftwareNowError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGatewaySoftwareNowError::InternalServerError(ref cause) => cause,
-            UpdateGatewaySoftwareNowError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateGatewaySoftwareNowError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateGatewaySoftwareNowError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateGatewaySoftwareNowError {}
 /// Errors returned by UpdateMaintenanceStartTime
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceStartTimeError {
@@ -5731,17 +5661,17 @@ impl UpdateMaintenanceStartTimeError {
 }
 impl fmt::Display for UpdateMaintenanceStartTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMaintenanceStartTimeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMaintenanceStartTimeError::InternalServerError(ref cause) => cause,
-            UpdateMaintenanceStartTimeError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateMaintenanceStartTimeError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateMaintenanceStartTimeError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateMaintenanceStartTimeError {}
 /// Errors returned by UpdateNFSFileShare
 #[derive(Debug, PartialEq)]
 pub enum UpdateNFSFileShareError {
@@ -5774,17 +5704,13 @@ impl UpdateNFSFileShareError {
 }
 impl fmt::Display for UpdateNFSFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNFSFileShareError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNFSFileShareError::InternalServerError(ref cause) => cause,
-            UpdateNFSFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateNFSFileShareError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateNFSFileShareError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNFSFileShareError {}
 /// Errors returned by UpdateSMBFileShare
 #[derive(Debug, PartialEq)]
 pub enum UpdateSMBFileShareError {
@@ -5817,17 +5743,13 @@ impl UpdateSMBFileShareError {
 }
 impl fmt::Display for UpdateSMBFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSMBFileShareError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSMBFileShareError::InternalServerError(ref cause) => cause,
-            UpdateSMBFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateSMBFileShareError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateSMBFileShareError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSMBFileShareError {}
 /// Errors returned by UpdateSMBSecurityStrategy
 #[derive(Debug, PartialEq)]
 pub enum UpdateSMBSecurityStrategyError {
@@ -5860,17 +5782,17 @@ impl UpdateSMBSecurityStrategyError {
 }
 impl fmt::Display for UpdateSMBSecurityStrategyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSMBSecurityStrategyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSMBSecurityStrategyError::InternalServerError(ref cause) => cause,
-            UpdateSMBSecurityStrategyError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateSMBSecurityStrategyError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSMBSecurityStrategyError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateSMBSecurityStrategyError {}
 /// Errors returned by UpdateSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateSnapshotScheduleError {
@@ -5903,17 +5825,13 @@ impl UpdateSnapshotScheduleError {
 }
 impl fmt::Display for UpdateSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSnapshotScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSnapshotScheduleError::InternalServerError(ref cause) => cause,
-            UpdateSnapshotScheduleError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateSnapshotScheduleError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateSnapshotScheduleError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSnapshotScheduleError {}
 /// Errors returned by UpdateVTLDeviceType
 #[derive(Debug, PartialEq)]
 pub enum UpdateVTLDeviceTypeError {
@@ -5946,17 +5864,13 @@ impl UpdateVTLDeviceTypeError {
 }
 impl fmt::Display for UpdateVTLDeviceTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVTLDeviceTypeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVTLDeviceTypeError::InternalServerError(ref cause) => cause,
-            UpdateVTLDeviceTypeError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateVTLDeviceTypeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateVTLDeviceTypeError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVTLDeviceTypeError {}
 /// Trait representing the capabilities of the AWS Storage Gateway API. AWS Storage Gateway clients implement this trait.
 pub trait StorageGateway {
     /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the AWS Region that you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
@@ -6061,13 +5975,13 @@ pub trait StorageGateway {
         input: CreateTapesInput,
     ) -> RusotoFuture<CreateTapesOutput, CreateTapesError>;
 
-    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request. This operation is supported for the stored volume, cached volume and tape gateway types.</p>
     fn delete_bandwidth_rate_limit(
         &self,
         input: DeleteBandwidthRateLimitInput,
     ) -> RusotoFuture<DeleteBandwidthRateLimitOutput, DeleteBandwidthRateLimitError>;
 
-    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair.</p>
+    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair. This operation is supported in volume and tape gateway types.</p>
     fn delete_chap_credentials(
         &self,
         input: DeleteChapCredentialsInput,
@@ -6109,7 +6023,13 @@ pub trait StorageGateway {
         input: DeleteVolumeInput,
     ) -> RusotoFuture<DeleteVolumeOutput, DeleteVolumeError>;
 
-    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Returns information about the most recent High Availability monitoring test that was performed on the host in a cluster. If a test isn't performed, the status and start time in the response would be null.</p>
+    fn describe_availability_monitor_test(
+        &self,
+        input: DescribeAvailabilityMonitorTestInput,
+    ) -> RusotoFuture<DescribeAvailabilityMonitorTestOutput, DescribeAvailabilityMonitorTestError>;
+
+    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     fn describe_bandwidth_rate_limit(
         &self,
         input: DescribeBandwidthRateLimitInput,
@@ -6127,7 +6047,7 @@ pub trait StorageGateway {
         input: DescribeCachediSCSIVolumesInput,
     ) -> RusotoFuture<DescribeCachediSCSIVolumesOutput, DescribeCachediSCSIVolumesError>;
 
-    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair.</p>
+    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair. This operation is supported in the volume and tape gateway types.</p>
     fn describe_chap_credentials(
         &self,
         input: DescribeChapCredentialsInput,
@@ -6211,7 +6131,7 @@ pub trait StorageGateway {
         input: DescribeWorkingStorageInput,
     ) -> RusotoFuture<DescribeWorkingStorageOutput, DescribeWorkingStorageError>;
 
-    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
+    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance. This operation is only supported in the volume gateway type.</p>
     fn detach_volume(
         &self,
         input: DetachVolumeInput,
@@ -6247,7 +6167,7 @@ pub trait StorageGateway {
         input: ListLocalDisksInput,
     ) -> RusotoFuture<ListLocalDisksOutput, ListLocalDisksError>;
 
-    /// <p>Lists the tags that have been added to the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway type.</p>
+    /// <p>Lists the tags that have been added to the specified resource. This operation is supported in storage gateways of all types.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
@@ -6280,13 +6200,13 @@ pub trait StorageGateway {
         input: NotifyWhenUploadedInput,
     ) -> RusotoFuture<NotifyWhenUploadedOutput, NotifyWhenUploadedError>;
 
-    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p>
+    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p> <p>Throttle limit: This API is asynchronous so the gateway will accept no more than two refreshes at any time. We recommend using the refresh-complete CloudWatch event notification before issuing additional requests. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>If you invoke the RefreshCache API when two requests are already being processed, any new request will cause an <code>InvalidGatewayRequestException</code> error because too many requests were sent to the server.</p> <p>For more information, see "https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification".</p>
     fn refresh_cache(
         &self,
         input: RefreshCacheInput,
     ) -> RusotoFuture<RefreshCacheOutput, RefreshCacheError>;
 
-    /// <p>Removes one or more tags from the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway types.</p>
+    /// <p>Removes one or more tags from the specified resource. This operation is supported in storage gateways of all types.</p>
     fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceInput,
@@ -6328,19 +6248,25 @@ pub trait StorageGateway {
         input: ShutdownGatewayInput,
     ) -> RusotoFuture<ShutdownGatewayOutput, ShutdownGatewayError>;
 
+    /// <p><p>Start a test that verifies that the specified gateway is configured for High Availability monitoring in your host environment. This request only initiates the test and that a successful response only indicates that the test was started. It doesn&#39;t indicate that the test passed. For the status of the test, invoke the <code>DescribeAvailabilityMonitorTest</code> API. </p> <note> <p>Starting this test will cause your gateway to go offline for a brief period.</p> </note></p>
+    fn start_availability_monitor_test(
+        &self,
+        input: StartAvailabilityMonitorTestInput,
+    ) -> RusotoFuture<StartAvailabilityMonitorTestOutput, StartAvailabilityMonitorTestError>;
+
     /// <p>Starts a gateway that you previously shut down (see <a>ShutdownGateway</a>). After the gateway starts, you can then make other API calls, your applications can read from or write to the gateway's storage volumes and you will be able to take snapshot backups.</p> <note> <p>When you make a request, you will get a 200 OK success response immediately. However, it might take some time for the gateway to be ready. You should call <a>DescribeGatewayInformation</a> and check the status before making any additional API calls. For more information, see <a>ActivateGateway</a>.</p> </note> <p>To specify which gateway to start, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     fn start_gateway(
         &self,
         input: StartGatewayInput,
     ) -> RusotoFuture<StartGatewayOutput, StartGatewayError>;
 
-    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains.</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     fn update_bandwidth_rate_limit(
         &self,
         input: UpdateBandwidthRateLimitInput,
     ) -> RusotoFuture<UpdateBandwidthRateLimitOutput, UpdateBandwidthRateLimitError>;
 
-    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
+    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it. This operation is supported in the volume and tape gateway types.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
     fn update_chap_credentials(
         &self,
         input: UpdateChapCredentialsInput,
@@ -6428,6 +6354,14 @@ impl StorageGatewayClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> StorageGatewayClient {
         StorageGatewayClient { client, region }
+    }
+}
+
+impl fmt::Debug for StorageGatewayClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("StorageGatewayClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -6928,7 +6862,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request. This operation is supported for the stored volume, cached volume and tape gateway types.</p>
     fn delete_bandwidth_rate_limit(
         &self,
         input: DeleteBandwidthRateLimitInput,
@@ -6957,7 +6891,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair.</p>
+    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair. This operation is supported in volume and tape gateway types.</p>
     fn delete_chap_credentials(
         &self,
         input: DeleteChapCredentialsInput,
@@ -7164,7 +7098,39 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Returns information about the most recent High Availability monitoring test that was performed on the host in a cluster. If a test isn't performed, the status and start time in the response would be null.</p>
+    fn describe_availability_monitor_test(
+        &self,
+        input: DescribeAvailabilityMonitorTestInput,
+    ) -> RusotoFuture<DescribeAvailabilityMonitorTestOutput, DescribeAvailabilityMonitorTestError>
+    {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.DescribeAvailabilityMonitorTest",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeAvailabilityMonitorTestOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAvailabilityMonitorTestError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     fn describe_bandwidth_rate_limit(
         &self,
         input: DescribeBandwidthRateLimitInput,
@@ -7251,7 +7217,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair.</p>
+    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair. This operation is supported in the volume and tape gateway types.</p>
     fn describe_chap_credentials(
         &self,
         input: DescribeChapCredentialsInput,
@@ -7669,7 +7635,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
+    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance. This operation is only supported in the volume gateway type.</p>
     fn detach_volume(
         &self,
         input: DetachVolumeInput,
@@ -7843,7 +7809,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Lists the tags that have been added to the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway type.</p>
+    /// <p>Lists the tags that have been added to the specified resource. This operation is supported in storage gateways of all types.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
@@ -8017,7 +7983,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p>
+    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p> <p>Throttle limit: This API is asynchronous so the gateway will accept no more than two refreshes at any time. We recommend using the refresh-complete CloudWatch event notification before issuing additional requests. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>If you invoke the RefreshCache API when two requests are already being processed, any new request will cause an <code>InvalidGatewayRequestException</code> error because too many requests were sent to the server.</p> <p>For more information, see "https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification".</p>
     fn refresh_cache(
         &self,
         input: RefreshCacheInput,
@@ -8046,7 +8012,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Removes one or more tags from the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway types.</p>
+    /// <p>Removes one or more tags from the specified resource. This operation is supported in storage gateways of all types.</p>
     fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceInput,
@@ -8255,6 +8221,35 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
+    /// <p><p>Start a test that verifies that the specified gateway is configured for High Availability monitoring in your host environment. This request only initiates the test and that a successful response only indicates that the test was started. It doesn&#39;t indicate that the test passed. For the status of the test, invoke the <code>DescribeAvailabilityMonitorTest</code> API. </p> <note> <p>Starting this test will cause your gateway to go offline for a brief period.</p> </note></p>
+    fn start_availability_monitor_test(
+        &self,
+        input: StartAvailabilityMonitorTestInput,
+    ) -> RusotoFuture<StartAvailabilityMonitorTestOutput, StartAvailabilityMonitorTestError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.StartAvailabilityMonitorTest",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartAvailabilityMonitorTestOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartAvailabilityMonitorTestError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Starts a gateway that you previously shut down (see <a>ShutdownGateway</a>). After the gateway starts, you can then make other API calls, your applications can read from or write to the gateway's storage volumes and you will be able to take snapshot backups.</p> <note> <p>When you make a request, you will get a 200 OK success response immediately. However, it might take some time for the gateway to be ready. You should call <a>DescribeGatewayInformation</a> and check the status before making any additional API calls. For more information, see <a>ActivateGateway</a>.</p> </note> <p>To specify which gateway to start, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     fn start_gateway(
         &self,
@@ -8284,7 +8279,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains.</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     fn update_bandwidth_rate_limit(
         &self,
         input: UpdateBandwidthRateLimitInput,
@@ -8313,7 +8308,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
+    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it. This operation is supported in the volume and tape gateway types.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
     fn update_chap_credentials(
         &self,
         input: UpdateChapCredentialsInput,

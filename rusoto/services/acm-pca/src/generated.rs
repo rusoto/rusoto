@@ -706,19 +706,15 @@ impl CreateCertificateAuthorityError {
 }
 impl fmt::Display for CreateCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCertificateAuthorityError::InvalidArgs(ref cause) => cause,
-            CreateCertificateAuthorityError::InvalidPolicy(ref cause) => cause,
-            CreateCertificateAuthorityError::InvalidTag(ref cause) => cause,
-            CreateCertificateAuthorityError::LimitExceeded(ref cause) => cause,
+            CreateCertificateAuthorityError::InvalidArgs(ref cause) => write!(f, "{}", cause),
+            CreateCertificateAuthorityError::InvalidPolicy(ref cause) => write!(f, "{}", cause),
+            CreateCertificateAuthorityError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            CreateCertificateAuthorityError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCertificateAuthorityError {}
 /// Errors returned by CreateCertificateAuthorityAuditReport
 #[derive(Debug, PartialEq)]
 pub enum CreateCertificateAuthorityAuditReportError {
@@ -781,21 +777,29 @@ impl CreateCertificateAuthorityAuditReportError {
 }
 impl fmt::Display for CreateCertificateAuthorityAuditReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCertificateAuthorityAuditReportError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCertificateAuthorityAuditReportError::InvalidArgs(ref cause) => cause,
-            CreateCertificateAuthorityAuditReportError::InvalidArn(ref cause) => cause,
-            CreateCertificateAuthorityAuditReportError::InvalidState(ref cause) => cause,
-            CreateCertificateAuthorityAuditReportError::RequestFailed(ref cause) => cause,
-            CreateCertificateAuthorityAuditReportError::RequestInProgress(ref cause) => cause,
-            CreateCertificateAuthorityAuditReportError::ResourceNotFound(ref cause) => cause,
+            CreateCertificateAuthorityAuditReportError::InvalidArgs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCertificateAuthorityAuditReportError::InvalidArn(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCertificateAuthorityAuditReportError::InvalidState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCertificateAuthorityAuditReportError::RequestFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCertificateAuthorityAuditReportError::RequestInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCertificateAuthorityAuditReportError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateCertificateAuthorityAuditReportError {}
 /// Errors returned by CreatePermission
 #[derive(Debug, PartialEq)]
 pub enum CreatePermissionError {
@@ -846,21 +850,17 @@ impl CreatePermissionError {
 }
 impl fmt::Display for CreatePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePermissionError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePermissionError::InvalidArn(ref cause) => cause,
-            CreatePermissionError::InvalidState(ref cause) => cause,
-            CreatePermissionError::LimitExceeded(ref cause) => cause,
-            CreatePermissionError::PermissionAlreadyExists(ref cause) => cause,
-            CreatePermissionError::RequestFailed(ref cause) => cause,
-            CreatePermissionError::ResourceNotFound(ref cause) => cause,
+            CreatePermissionError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CreatePermissionError::InvalidState(ref cause) => write!(f, "{}", cause),
+            CreatePermissionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePermissionError::PermissionAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreatePermissionError::RequestFailed(ref cause) => write!(f, "{}", cause),
+            CreatePermissionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePermissionError {}
 /// Errors returned by DeleteCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum DeleteCertificateAuthorityError {
@@ -909,19 +909,17 @@ impl DeleteCertificateAuthorityError {
 }
 impl fmt::Display for DeleteCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCertificateAuthorityError::ConcurrentModification(ref cause) => cause,
-            DeleteCertificateAuthorityError::InvalidArn(ref cause) => cause,
-            DeleteCertificateAuthorityError::InvalidState(ref cause) => cause,
-            DeleteCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
+            DeleteCertificateAuthorityError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCertificateAuthorityError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateAuthorityError::InvalidState(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateAuthorityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCertificateAuthorityError {}
 /// Errors returned by DeletePermission
 #[derive(Debug, PartialEq)]
 pub enum DeletePermissionError {
@@ -960,19 +958,15 @@ impl DeletePermissionError {
 }
 impl fmt::Display for DeletePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePermissionError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePermissionError::InvalidArn(ref cause) => cause,
-            DeletePermissionError::InvalidState(ref cause) => cause,
-            DeletePermissionError::RequestFailed(ref cause) => cause,
-            DeletePermissionError::ResourceNotFound(ref cause) => cause,
+            DeletePermissionError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DeletePermissionError::InvalidState(ref cause) => write!(f, "{}", cause),
+            DeletePermissionError::RequestFailed(ref cause) => write!(f, "{}", cause),
+            DeletePermissionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePermissionError {}
 /// Errors returned by DescribeCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificateAuthorityError {
@@ -1007,17 +1001,15 @@ impl DescribeCertificateAuthorityError {
 }
 impl fmt::Display for DescribeCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCertificateAuthorityError::InvalidArn(ref cause) => cause,
-            DescribeCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
+            DescribeCertificateAuthorityError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DescribeCertificateAuthorityError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCertificateAuthorityError {}
 /// Errors returned by DescribeCertificateAuthorityAuditReport
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificateAuthorityAuditReportError {
@@ -1059,18 +1051,20 @@ impl DescribeCertificateAuthorityAuditReportError {
 }
 impl fmt::Display for DescribeCertificateAuthorityAuditReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCertificateAuthorityAuditReportError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCertificateAuthorityAuditReportError::InvalidArgs(ref cause) => cause,
-            DescribeCertificateAuthorityAuditReportError::InvalidArn(ref cause) => cause,
-            DescribeCertificateAuthorityAuditReportError::ResourceNotFound(ref cause) => cause,
+            DescribeCertificateAuthorityAuditReportError::InvalidArgs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCertificateAuthorityAuditReportError::InvalidArn(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCertificateAuthorityAuditReportError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCertificateAuthorityAuditReportError {}
 /// Errors returned by GetCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetCertificateError {
@@ -1114,20 +1108,16 @@ impl GetCertificateError {
 }
 impl fmt::Display for GetCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            GetCertificateError::InvalidArn(ref cause) => cause,
-            GetCertificateError::InvalidState(ref cause) => cause,
-            GetCertificateError::RequestFailed(ref cause) => cause,
-            GetCertificateError::RequestInProgress(ref cause) => cause,
-            GetCertificateError::ResourceNotFound(ref cause) => cause,
+            GetCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetCertificateError::InvalidState(ref cause) => write!(f, "{}", cause),
+            GetCertificateError::RequestFailed(ref cause) => write!(f, "{}", cause),
+            GetCertificateError::RequestInProgress(ref cause) => write!(f, "{}", cause),
+            GetCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCertificateError {}
 /// Errors returned by GetCertificateAuthorityCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetCertificateAuthorityCertificateError {
@@ -1169,18 +1159,20 @@ impl GetCertificateAuthorityCertificateError {
 }
 impl fmt::Display for GetCertificateAuthorityCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCertificateAuthorityCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            GetCertificateAuthorityCertificateError::InvalidArn(ref cause) => cause,
-            GetCertificateAuthorityCertificateError::InvalidState(ref cause) => cause,
-            GetCertificateAuthorityCertificateError::ResourceNotFound(ref cause) => cause,
+            GetCertificateAuthorityCertificateError::InvalidArn(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCertificateAuthorityCertificateError::InvalidState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCertificateAuthorityCertificateError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetCertificateAuthorityCertificateError {}
 /// Errors returned by GetCertificateAuthorityCsr
 #[derive(Debug, PartialEq)]
 pub enum GetCertificateAuthorityCsrError {
@@ -1236,20 +1228,16 @@ impl GetCertificateAuthorityCsrError {
 }
 impl fmt::Display for GetCertificateAuthorityCsrError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCertificateAuthorityCsrError {
-    fn description(&self) -> &str {
         match *self {
-            GetCertificateAuthorityCsrError::InvalidArn(ref cause) => cause,
-            GetCertificateAuthorityCsrError::InvalidState(ref cause) => cause,
-            GetCertificateAuthorityCsrError::RequestFailed(ref cause) => cause,
-            GetCertificateAuthorityCsrError::RequestInProgress(ref cause) => cause,
-            GetCertificateAuthorityCsrError::ResourceNotFound(ref cause) => cause,
+            GetCertificateAuthorityCsrError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetCertificateAuthorityCsrError::InvalidState(ref cause) => write!(f, "{}", cause),
+            GetCertificateAuthorityCsrError::RequestFailed(ref cause) => write!(f, "{}", cause),
+            GetCertificateAuthorityCsrError::RequestInProgress(ref cause) => write!(f, "{}", cause),
+            GetCertificateAuthorityCsrError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCertificateAuthorityCsrError {}
 /// Errors returned by ImportCertificateAuthorityCertificate
 #[derive(Debug, PartialEq)]
 pub enum ImportCertificateAuthorityCertificateError {
@@ -1333,24 +1321,38 @@ impl ImportCertificateAuthorityCertificateError {
 }
 impl fmt::Display for ImportCertificateAuthorityCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportCertificateAuthorityCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            ImportCertificateAuthorityCertificateError::CertificateMismatch(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::ConcurrentModification(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::InvalidArn(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::InvalidRequest(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::InvalidState(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::MalformedCertificate(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::RequestFailed(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::RequestInProgress(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::ResourceNotFound(ref cause) => cause,
+            ImportCertificateAuthorityCertificateError::CertificateMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ImportCertificateAuthorityCertificateError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ImportCertificateAuthorityCertificateError::InvalidArn(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ImportCertificateAuthorityCertificateError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ImportCertificateAuthorityCertificateError::InvalidState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ImportCertificateAuthorityCertificateError::MalformedCertificate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ImportCertificateAuthorityCertificateError::RequestFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ImportCertificateAuthorityCertificateError::RequestInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ImportCertificateAuthorityCertificateError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ImportCertificateAuthorityCertificateError {}
 /// Errors returned by IssueCertificate
 #[derive(Debug, PartialEq)]
 pub enum IssueCertificateError {
@@ -1399,21 +1401,17 @@ impl IssueCertificateError {
 }
 impl fmt::Display for IssueCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for IssueCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            IssueCertificateError::InvalidArgs(ref cause) => cause,
-            IssueCertificateError::InvalidArn(ref cause) => cause,
-            IssueCertificateError::InvalidState(ref cause) => cause,
-            IssueCertificateError::LimitExceeded(ref cause) => cause,
-            IssueCertificateError::MalformedCSR(ref cause) => cause,
-            IssueCertificateError::ResourceNotFound(ref cause) => cause,
+            IssueCertificateError::InvalidArgs(ref cause) => write!(f, "{}", cause),
+            IssueCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            IssueCertificateError::InvalidState(ref cause) => write!(f, "{}", cause),
+            IssueCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            IssueCertificateError::MalformedCSR(ref cause) => write!(f, "{}", cause),
+            IssueCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for IssueCertificateError {}
 /// Errors returned by ListCertificateAuthorities
 #[derive(Debug, PartialEq)]
 pub enum ListCertificateAuthoritiesError {
@@ -1441,16 +1439,12 @@ impl ListCertificateAuthoritiesError {
 }
 impl fmt::Display for ListCertificateAuthoritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCertificateAuthoritiesError {
-    fn description(&self) -> &str {
         match *self {
-            ListCertificateAuthoritiesError::InvalidNextToken(ref cause) => cause,
+            ListCertificateAuthoritiesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCertificateAuthoritiesError {}
 /// Errors returned by ListPermissions
 #[derive(Debug, PartialEq)]
 pub enum ListPermissionsError {
@@ -1494,20 +1488,16 @@ impl ListPermissionsError {
 }
 impl fmt::Display for ListPermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPermissionsError::InvalidArn(ref cause) => cause,
-            ListPermissionsError::InvalidNextToken(ref cause) => cause,
-            ListPermissionsError::InvalidState(ref cause) => cause,
-            ListPermissionsError::RequestFailed(ref cause) => cause,
-            ListPermissionsError::ResourceNotFound(ref cause) => cause,
+            ListPermissionsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListPermissionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListPermissionsError::InvalidState(ref cause) => write!(f, "{}", cause),
+            ListPermissionsError::RequestFailed(ref cause) => write!(f, "{}", cause),
+            ListPermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPermissionsError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
@@ -1541,18 +1531,14 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsError::InvalidArn(ref cause) => cause,
-            ListTagsError::InvalidState(ref cause) => cause,
-            ListTagsError::ResourceNotFound(ref cause) => cause,
+            ListTagsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListTagsError::InvalidState(ref cause) => write!(f, "{}", cause),
+            ListTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsError {}
 /// Errors returned by RestoreCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum RestoreCertificateAuthorityError {
@@ -1594,18 +1580,14 @@ impl RestoreCertificateAuthorityError {
 }
 impl fmt::Display for RestoreCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreCertificateAuthorityError::InvalidArn(ref cause) => cause,
-            RestoreCertificateAuthorityError::InvalidState(ref cause) => cause,
-            RestoreCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
+            RestoreCertificateAuthorityError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            RestoreCertificateAuthorityError::InvalidState(ref cause) => write!(f, "{}", cause),
+            RestoreCertificateAuthorityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RestoreCertificateAuthorityError {}
 /// Errors returned by RevokeCertificate
 #[derive(Debug, PartialEq)]
 pub enum RevokeCertificateError {
@@ -1673,24 +1655,20 @@ impl RevokeCertificateError {
 }
 impl fmt::Display for RevokeCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RevokeCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            RevokeCertificateError::ConcurrentModification(ref cause) => cause,
-            RevokeCertificateError::InvalidArn(ref cause) => cause,
-            RevokeCertificateError::InvalidRequest(ref cause) => cause,
-            RevokeCertificateError::InvalidState(ref cause) => cause,
-            RevokeCertificateError::LimitExceeded(ref cause) => cause,
-            RevokeCertificateError::RequestAlreadyProcessed(ref cause) => cause,
-            RevokeCertificateError::RequestFailed(ref cause) => cause,
-            RevokeCertificateError::RequestInProgress(ref cause) => cause,
-            RevokeCertificateError::ResourceNotFound(ref cause) => cause,
+            RevokeCertificateError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            RevokeCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            RevokeCertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RevokeCertificateError::InvalidState(ref cause) => write!(f, "{}", cause),
+            RevokeCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RevokeCertificateError::RequestAlreadyProcessed(ref cause) => write!(f, "{}", cause),
+            RevokeCertificateError::RequestFailed(ref cause) => write!(f, "{}", cause),
+            RevokeCertificateError::RequestInProgress(ref cause) => write!(f, "{}", cause),
+            RevokeCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RevokeCertificateError {}
 /// Errors returned by TagCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum TagCertificateAuthorityError {
@@ -1738,20 +1716,16 @@ impl TagCertificateAuthorityError {
 }
 impl fmt::Display for TagCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            TagCertificateAuthorityError::InvalidArn(ref cause) => cause,
-            TagCertificateAuthorityError::InvalidState(ref cause) => cause,
-            TagCertificateAuthorityError::InvalidTag(ref cause) => cause,
-            TagCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
-            TagCertificateAuthorityError::TooManyTags(ref cause) => cause,
+            TagCertificateAuthorityError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            TagCertificateAuthorityError::InvalidState(ref cause) => write!(f, "{}", cause),
+            TagCertificateAuthorityError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            TagCertificateAuthorityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagCertificateAuthorityError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagCertificateAuthorityError {}
 /// Errors returned by UntagCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum UntagCertificateAuthorityError {
@@ -1798,19 +1772,15 @@ impl UntagCertificateAuthorityError {
 }
 impl fmt::Display for UntagCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            UntagCertificateAuthorityError::InvalidArn(ref cause) => cause,
-            UntagCertificateAuthorityError::InvalidState(ref cause) => cause,
-            UntagCertificateAuthorityError::InvalidTag(ref cause) => cause,
-            UntagCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
+            UntagCertificateAuthorityError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UntagCertificateAuthorityError::InvalidState(ref cause) => write!(f, "{}", cause),
+            UntagCertificateAuthorityError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            UntagCertificateAuthorityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagCertificateAuthorityError {}
 /// Errors returned by UpdateCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum UpdateCertificateAuthorityError {
@@ -1873,21 +1843,19 @@ impl UpdateCertificateAuthorityError {
 }
 impl fmt::Display for UpdateCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCertificateAuthorityError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCertificateAuthorityError::ConcurrentModification(ref cause) => cause,
-            UpdateCertificateAuthorityError::InvalidArgs(ref cause) => cause,
-            UpdateCertificateAuthorityError::InvalidArn(ref cause) => cause,
-            UpdateCertificateAuthorityError::InvalidPolicy(ref cause) => cause,
-            UpdateCertificateAuthorityError::InvalidState(ref cause) => cause,
-            UpdateCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
+            UpdateCertificateAuthorityError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCertificateAuthorityError::InvalidArgs(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateAuthorityError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateAuthorityError::InvalidPolicy(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateAuthorityError::InvalidState(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateAuthorityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateCertificateAuthorityError {}
 /// Trait representing the capabilities of the ACM-PCA API. ACM-PCA clients implement this trait.
 pub trait AcmPca {
     /// <p>Creates a root or subordinate private certificate authority (CA). You must specify the CA configuration, the certificate revocation list (CRL) configuration, the CA type, and an optional idempotency token to avoid accidental creation of multiple CAs. The CA configuration specifies the name of the algorithm and key size to be used to create the CA private key, the type of signing algorithm that the CA uses, and X.500 subject information. The CRL configuration specifies the CRL expiration period in days (the validity period of the CRL), the Amazon S3 bucket that will contain the CRL, and a CNAME alias for the S3 bucket that is included in certificates issued by the CA. If successful, this action returns the Amazon Resource Name (ARN) of the CA.</p>
@@ -2050,6 +2018,14 @@ impl AcmPcaClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> AcmPcaClient {
         AcmPcaClient { client, region }
+    }
+}
+
+impl fmt::Debug for AcmPcaClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AcmPcaClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -198,10 +198,10 @@ pub struct CreateFileSystemRequest {
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The storage capacity of the file system being created.</p> <p>For Windows file systems, the storage capacity has a minimum of 300 GiB, and a maximum of 65,536 GiB.</p> <p>For Lustre file systems, the storage capacity has a minimum of 3,600 GiB. Storage capacity is provisioned in increments of 3,600 GiB.</p>
+    /// <p>The storage capacity of the file system being created.</p> <p>For Windows file systems, valid values are 32 GiB - 65,536 GiB.</p> <p>For Lustre file systems, valid values are 1,200, 2,400, 3,600, then continuing in increments of 3600 GiB.</p>
     #[serde(rename = "StorageCapacity")]
     pub storage_capacity: i64,
-    /// <p>The IDs of the subnets that the file system will be accessible from. File systems support only one subnet. The file server is also launched in that subnet's Availability Zone.</p>
+    /// <p>Specifies the IDs of the subnets that the file system will be accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment types, provide exactly two subnet IDs, one for the preferred file server and one for the standy file server. You specify one of these subnets as the preferred subnet using the <code>WindowsConfiguration &gt; PreferredSubnetID</code> property.</p> <p>For Windows <code>SINGLE_AZ_1</code> file system deployment types and Lustre file systems, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.</p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
     /// <p>The tags to apply to the file system being created. The key value of the <code>Name</code> tag appears in the console as the file system name.</p>
@@ -244,6 +244,14 @@ pub struct CreateFileSystemWindowsConfiguration {
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
+    /// <p>Specifies the file system deployment type, valid values are the following:</p> <ul> <li> <p>MULTI_AZ_1 - Deploys a high availability file system that is configured for Multi-AZ redundancy to tolerate temporary Availability Zone (AZ) unavailability. You can only deploy a Multi-AZ file system in AWS Regions that have a minimum of three Availability Zones.</p> </li> <li> <p>SINGLE_AZ_1 - (Default) Choose to deploy a file system that is configured for single AZ redundancy.</p> </li> </ul> <p>To learn more about high availability Multi-AZ file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html"> High Availability for Amazon FSx for Windows File Server</a>.</p>
+    #[serde(rename = "DeploymentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_type: Option<String>,
+    /// <p>Required when <code>DeploymentType</code> is set to <code>MULTI_AZ_1</code>. This specifies the subnet in which you want the preferred file server to be located. For in-AWS applications, we recommend that you launch your clients in the same Availability Zone (AZ) as your preferred file server to reduce cross-AZ data transfer costs and minimize latency. </p>
+    #[serde(rename = "PreferredSubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_subnet_id: Option<String>,
     #[serde(rename = "SelfManagedActiveDirectoryConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub self_managed_active_directory_configuration:
@@ -458,7 +466,7 @@ pub struct FileSystem {
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p><p>The lifecycle status of the file system:</p> <ul> <li> <p> <code>AVAILABLE</code> indicates that the file system is reachable and available for use.</p> </li> <li> <p> <code>CREATING</code> indicates that Amazon FSx is in the process of creating the new file system.</p> </li> <li> <p> <code>DELETING</code> indicates that Amazon FSx is in the process of deleting the file system.</p> </li> <li> <p> <code>FAILED</code> indicates that Amazon FSx was not able to create the file system.</p> </li> <li> <p> <code>MISCONFIGURED</code> indicates that the file system is in a failed but recoverable state.</p> </li> <li> <p> <code>UPDATING</code> indicates that the file system is undergoing a customer initiated update.</p> </li> </ul></p>
+    /// <p><p>The lifecycle status of the file system, following are the possible values and what they mean:</p> <ul> <li> <p> <code>AVAILABLE</code> - The file system is in a healthy state, and is reachable and available for use.</p> </li> <li> <p> <code>CREATING</code> - Amazon FSx is creating the new file system.</p> </li> <li> <p> <code>DELETING</code> - Amazon FSx is deleting an existing file system.</p> </li> <li> <p> <code>FAILED</code> - An existing file system has experienced an unrecoverable failure. When creating a new file system, Amazon FSx was unable to create the file system.</p> </li> <li> <p> <code>MISCONFIGURED</code> indicates that the file system is in a failed but recoverable state.</p> </li> <li> <p> <code>UPDATING</code> indicates that the file system is undergoing a customer initiated update.</p> </li> </ul></p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle: Option<String>,
@@ -603,7 +611,7 @@ pub struct SelfManagedActiveDirectoryConfiguration {
     /// <p>The fully qualified domain name of the self-managed AD directory, such as <code>corp.example.com</code>.</p>
     #[serde(rename = "DomainName")]
     pub domain_name: String,
-    /// <p>(Optional) The name of the domain group whose members are granted administrative privileges for the file system. Administrative privileges include taking ownership of files and folders, and setting audit controls (audit ACLs) on files and folders. The group that you specify must already exist in your domain. If you don't provide one, your AD domain's Domain Admins group is used.</p>
+    /// <p>(Optional) The name of the domain group whose members are granted administrative privileges for the file system. Administrative privileges include taking ownership of files and folders, setting audit controls (audit ACLs) on files and folders, and administering the file system remotely by using the FSx Remote PowerShell. The group that you specify must already exist in your domain. If you don't provide one, your AD domain's Domain Admins group is used.</p>
     #[serde(rename = "FileSystemAdministratorsGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_system_administrators_group: Option<String>,
@@ -766,10 +774,26 @@ pub struct WindowsFileSystemConfiguration {
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
+    /// <p><p>Specifies the file system deployment type, valid values are the following:</p> <ul> <li> <p> <code>MULTI<em>AZ</em>1</code> - Specifies a high availability file system that is configured for Multi-AZ redundancy to tolerate temporary Availability Zone (AZ) unavailability.</p> </li> <li> <p> <code>SINGLE<em>AZ</em>1</code> - (Default) Specifies a file system that is configured for single AZ redundancy.</p> </li> </ul></p>
+    #[serde(rename = "DeploymentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_type: Option<String>,
     /// <p>The list of maintenance operations in progress for this file system.</p>
     #[serde(rename = "MaintenanceOperationsInProgress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maintenance_operations_in_progress: Option<Vec<String>>,
+    /// <p>For <code>MULTI_AZ_1</code> deployment types, the IP address of the primary, or preferred, file server.</p> <p>Use this IP address when mounting the file system on Linux SMB clients or Windows SMB clients that are not joined to a Microsoft Active Directory. Applicable for both <code>SINGLE_AZ_1</code> and <code>MULTI_AZ_1</code> deployment types. This IP address is temporarily unavailable when the file system is undergoing maintenance. For Linux and Windows SMB clients that are joined to an Active Directory, use the file system's DNSName instead. For more information and instruction on mapping and mounting file shares, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/accessing-file-shares.html">https://docs.aws.amazon.com/fsx/latest/WindowsGuide/accessing-file-shares.html</a>.</p>
+    #[serde(rename = "PreferredFileServerIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_file_server_ip: Option<String>,
+    /// <p>For <code>MULTI_AZ_1</code> deployment types, it specifies the ID of the subnet where the preferred file server is located. Must be one of the two subnet IDs specified in <code>SubnetIds</code> property. Amazon FSx serves traffic from this subnet except in the event of a failover to the secondary file server.</p> <p>For <code>SINGLE_AZ_1</code> deployment types, this value is the same as that for <code>SubnetIDs</code>.</p>
+    #[serde(rename = "PreferredSubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_subnet_id: Option<String>,
+    /// <p>For <code>MULTI_AZ_1</code> deployment types, use this endpoint when performing administrative tasks on the file system using Amazon FSx Remote PowerShell.</p> <p>For <code>SINGLE_AZ_1</code> deployment types, this is the DNS name of the file system.</p> <p>This endpoint is temporarily unavailable when the file system is undergoing maintenance.</p>
+    #[serde(rename = "RemoteAdministrationEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote_administration_endpoint: Option<String>,
     #[serde(rename = "SelfManagedActiveDirectoryConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub self_managed_active_directory_configuration: Option<SelfManagedActiveDirectoryAttributes>,
@@ -838,22 +862,18 @@ impl CreateBackupError {
 }
 impl fmt::Display for CreateBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBackupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBackupError::BackupInProgress(ref cause) => cause,
-            CreateBackupError::BadRequest(ref cause) => cause,
-            CreateBackupError::FileSystemNotFound(ref cause) => cause,
-            CreateBackupError::IncompatibleParameterError(ref cause) => cause,
-            CreateBackupError::InternalServerError(ref cause) => cause,
-            CreateBackupError::ServiceLimitExceeded(ref cause) => cause,
-            CreateBackupError::UnsupportedOperation(ref cause) => cause,
+            CreateBackupError::BackupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::ServiceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBackupError {}
 /// Errors returned by CreateFileSystem
 #[derive(Debug, PartialEq)]
 pub enum CreateFileSystemError {
@@ -929,24 +949,22 @@ impl CreateFileSystemError {
 }
 impl fmt::Display for CreateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFileSystemError::ActiveDirectoryError(ref cause) => cause,
-            CreateFileSystemError::BadRequest(ref cause) => cause,
-            CreateFileSystemError::IncompatibleParameterError(ref cause) => cause,
-            CreateFileSystemError::InternalServerError(ref cause) => cause,
-            CreateFileSystemError::InvalidExportPath(ref cause) => cause,
-            CreateFileSystemError::InvalidImportPath(ref cause) => cause,
-            CreateFileSystemError::InvalidNetworkSettings(ref cause) => cause,
-            CreateFileSystemError::MissingFileSystemConfiguration(ref cause) => cause,
-            CreateFileSystemError::ServiceLimitExceeded(ref cause) => cause,
+            CreateFileSystemError::ActiveDirectoryError(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InvalidExportPath(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InvalidImportPath(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InvalidNetworkSettings(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::MissingFileSystemConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemError::ServiceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFileSystemError {}
 /// Errors returned by CreateFileSystemFromBackup
 #[derive(Debug, PartialEq)]
 pub enum CreateFileSystemFromBackupError {
@@ -1023,23 +1041,31 @@ impl CreateFileSystemFromBackupError {
 }
 impl fmt::Display for CreateFileSystemFromBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFileSystemFromBackupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFileSystemFromBackupError::ActiveDirectoryError(ref cause) => cause,
-            CreateFileSystemFromBackupError::BackupNotFound(ref cause) => cause,
-            CreateFileSystemFromBackupError::BadRequest(ref cause) => cause,
-            CreateFileSystemFromBackupError::IncompatibleParameterError(ref cause) => cause,
-            CreateFileSystemFromBackupError::InternalServerError(ref cause) => cause,
-            CreateFileSystemFromBackupError::InvalidNetworkSettings(ref cause) => cause,
-            CreateFileSystemFromBackupError::MissingFileSystemConfiguration(ref cause) => cause,
-            CreateFileSystemFromBackupError::ServiceLimitExceeded(ref cause) => cause,
+            CreateFileSystemFromBackupError::ActiveDirectoryError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemFromBackupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemFromBackupError::IncompatibleParameterError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::InvalidNetworkSettings(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::MissingFileSystemConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::ServiceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateFileSystemFromBackupError {}
 /// Errors returned by DeleteBackup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackupError {
@@ -1090,21 +1116,17 @@ impl DeleteBackupError {
 }
 impl fmt::Display for DeleteBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBackupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBackupError::BackupInProgress(ref cause) => cause,
-            DeleteBackupError::BackupNotFound(ref cause) => cause,
-            DeleteBackupError::BackupRestoring(ref cause) => cause,
-            DeleteBackupError::BadRequest(ref cause) => cause,
-            DeleteBackupError::IncompatibleParameterError(ref cause) => cause,
-            DeleteBackupError::InternalServerError(ref cause) => cause,
+            DeleteBackupError::BackupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::BackupRestoring(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBackupError {}
 /// Errors returned by DeleteFileSystem
 #[derive(Debug, PartialEq)]
 pub enum DeleteFileSystemError {
@@ -1154,20 +1176,16 @@ impl DeleteFileSystemError {
 }
 impl fmt::Display for DeleteFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFileSystemError::BadRequest(ref cause) => cause,
-            DeleteFileSystemError::FileSystemNotFound(ref cause) => cause,
-            DeleteFileSystemError::IncompatibleParameterError(ref cause) => cause,
-            DeleteFileSystemError::InternalServerError(ref cause) => cause,
-            DeleteFileSystemError::ServiceLimitExceeded(ref cause) => cause,
+            DeleteFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::ServiceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFileSystemError {}
 /// Errors returned by DescribeBackups
 #[derive(Debug, PartialEq)]
 pub enum DescribeBackupsError {
@@ -1206,19 +1224,15 @@ impl DescribeBackupsError {
 }
 impl fmt::Display for DescribeBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBackupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBackupsError::BackupNotFound(ref cause) => cause,
-            DescribeBackupsError::BadRequest(ref cause) => cause,
-            DescribeBackupsError::FileSystemNotFound(ref cause) => cause,
-            DescribeBackupsError::InternalServerError(ref cause) => cause,
+            DescribeBackupsError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBackupsError {}
 /// Errors returned by DescribeFileSystems
 #[derive(Debug, PartialEq)]
 pub enum DescribeFileSystemsError {
@@ -1256,18 +1270,14 @@ impl DescribeFileSystemsError {
 }
 impl fmt::Display for DescribeFileSystemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFileSystemsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFileSystemsError::BadRequest(ref cause) => cause,
-            DescribeFileSystemsError::FileSystemNotFound(ref cause) => cause,
-            DescribeFileSystemsError::InternalServerError(ref cause) => cause,
+            DescribeFileSystemsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFileSystemsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1319,20 +1329,18 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
-            ListTagsForResourceError::NotServiceResourceError(ref cause) => cause,
-            ListTagsForResourceError::ResourceDoesNotSupportTagging(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotServiceResourceError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceDoesNotSupportTagging(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1376,20 +1384,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::InternalServerError(ref cause) => cause,
-            TagResourceError::NotServiceResourceError(ref cause) => cause,
-            TagResourceError::ResourceDoesNotSupportTagging(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotServiceResourceError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceDoesNotSupportTagging(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1437,20 +1441,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::InternalServerError(ref cause) => cause,
-            UntagResourceError::NotServiceResourceError(ref cause) => cause,
-            UntagResourceError::ResourceDoesNotSupportTagging(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotServiceResourceError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceDoesNotSupportTagging(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateFileSystem
 #[derive(Debug, PartialEq)]
 pub enum UpdateFileSystemError {
@@ -1507,21 +1507,19 @@ impl UpdateFileSystemError {
 }
 impl fmt::Display for UpdateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFileSystemError::BadRequest(ref cause) => cause,
-            UpdateFileSystemError::FileSystemNotFound(ref cause) => cause,
-            UpdateFileSystemError::IncompatibleParameterError(ref cause) => cause,
-            UpdateFileSystemError::InternalServerError(ref cause) => cause,
-            UpdateFileSystemError::MissingFileSystemConfiguration(ref cause) => cause,
-            UpdateFileSystemError::UnsupportedOperation(ref cause) => cause,
+            UpdateFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::MissingFileSystemConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFileSystemError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFileSystemError {}
 /// Trait representing the capabilities of the Amazon FSx API. Amazon FSx clients implement this trait.
 pub trait Fsx {
     /// <p><p>Creates a backup of an existing Amazon FSx for Windows File Server file system. Creating regular backups for your file system is a best practice that complements the replication that Amazon FSx for Windows File Server performs for your file system. It also enables you to restore from user modification of data.</p> <p>If a backup with the specified client request token exists, and the parameters match, this operation returns the description of the existing backup. If a backup specified client request token exists, and the parameters don&#39;t match, this operation returns <code>IncompatibleParameterError</code>. If a backup with the specified client request token doesn&#39;t exist, <code>CreateBackup</code> does the following: </p> <ul> <li> <p>Creates a new Amazon FSx backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the backup.</p> </li> </ul> <p>By using the idempotent operation, you can retry a <code>CreateBackup</code> operation without the risk of creating an extra backup. This approach can be useful when an initial call fails in a way that makes it unclear whether a backup was created. If you use the same client request token and the initial call created a backup, the operation returns a successful result because all the parameters are the same.</p> <p>The <code>CreateFileSystem</code> operation returns while the backup&#39;s lifecycle state is still <code>CREATING</code>. You can check the file system creation status by calling the <a>DescribeBackups</a> operation, which returns the backup state along with other information.</p> <note> <p/> </note></p>
@@ -1624,6 +1622,14 @@ impl FsxClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> FsxClient {
         FsxClient { client, region }
+    }
+}
+
+impl fmt::Debug for FsxClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("FsxClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

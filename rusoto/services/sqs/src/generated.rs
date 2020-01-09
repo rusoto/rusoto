@@ -2103,16 +2103,12 @@ impl AddPermissionError {
 }
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            AddPermissionError::OverLimit(ref cause) => cause,
+            AddPermissionError::OverLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddPermissionError {}
 /// Errors returned by ChangeMessageVisibility
 #[derive(Debug, PartialEq)]
 pub enum ChangeMessageVisibilityError {
@@ -2159,17 +2155,15 @@ impl ChangeMessageVisibilityError {
 }
 impl fmt::Display for ChangeMessageVisibilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ChangeMessageVisibilityError {
-    fn description(&self) -> &str {
         match *self {
-            ChangeMessageVisibilityError::MessageNotInflight(ref cause) => cause,
-            ChangeMessageVisibilityError::ReceiptHandleIsInvalid(ref cause) => cause,
+            ChangeMessageVisibilityError::MessageNotInflight(ref cause) => write!(f, "{}", cause),
+            ChangeMessageVisibilityError::ReceiptHandleIsInvalid(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ChangeMessageVisibilityError {}
 /// Errors returned by ChangeMessageVisibilityBatch
 #[derive(Debug, PartialEq)]
 pub enum ChangeMessageVisibilityBatchError {
@@ -2238,19 +2232,23 @@ impl ChangeMessageVisibilityBatchError {
 }
 impl fmt::Display for ChangeMessageVisibilityBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ChangeMessageVisibilityBatchError {
-    fn description(&self) -> &str {
         match *self {
-            ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
-            ChangeMessageVisibilityBatchError::EmptyBatchRequest(ref cause) => cause,
-            ChangeMessageVisibilityBatchError::InvalidBatchEntryId(ref cause) => cause,
-            ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
+            ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ChangeMessageVisibilityBatchError::EmptyBatchRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ChangeMessageVisibilityBatchError::InvalidBatchEntryId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ChangeMessageVisibilityBatchError {}
 /// Errors returned by CreateQueue
 #[derive(Debug, PartialEq)]
 pub enum CreateQueueError {
@@ -2295,17 +2293,13 @@ impl CreateQueueError {
 }
 impl fmt::Display for CreateQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateQueueError {
-    fn description(&self) -> &str {
         match *self {
-            CreateQueueError::QueueDeletedRecently(ref cause) => cause,
-            CreateQueueError::QueueNameExists(ref cause) => cause,
+            CreateQueueError::QueueDeletedRecently(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::QueueNameExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateQueueError {}
 /// Errors returned by DeleteMessage
 #[derive(Debug, PartialEq)]
 pub enum DeleteMessageError {
@@ -2350,17 +2344,13 @@ impl DeleteMessageError {
 }
 impl fmt::Display for DeleteMessageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMessageError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMessageError::InvalidIdFormat(ref cause) => cause,
-            DeleteMessageError::ReceiptHandleIsInvalid(ref cause) => cause,
+            DeleteMessageError::InvalidIdFormat(ref cause) => write!(f, "{}", cause),
+            DeleteMessageError::ReceiptHandleIsInvalid(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMessageError {}
 /// Errors returned by DeleteMessageBatch
 #[derive(Debug, PartialEq)]
 pub enum DeleteMessageBatchError {
@@ -2421,19 +2411,17 @@ impl DeleteMessageBatchError {
 }
 impl fmt::Display for DeleteMessageBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMessageBatchError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
-            DeleteMessageBatchError::EmptyBatchRequest(ref cause) => cause,
-            DeleteMessageBatchError::InvalidBatchEntryId(ref cause) => cause,
-            DeleteMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
+            DeleteMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => write!(f, "{}", cause),
+            DeleteMessageBatchError::EmptyBatchRequest(ref cause) => write!(f, "{}", cause),
+            DeleteMessageBatchError::InvalidBatchEntryId(ref cause) => write!(f, "{}", cause),
+            DeleteMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteMessageBatchError {}
 /// Errors returned by DeleteQueue
 #[derive(Debug, PartialEq)]
 pub enum DeleteQueueError {}
@@ -2463,14 +2451,10 @@ impl DeleteQueueError {
 }
 impl fmt::Display for DeleteQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteQueueError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteQueueError {}
 /// Errors returned by GetQueueAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetQueueAttributesError {
@@ -2508,16 +2492,12 @@ impl GetQueueAttributesError {
 }
 impl fmt::Display for GetQueueAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQueueAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetQueueAttributesError::InvalidAttributeName(ref cause) => cause,
+            GetQueueAttributesError::InvalidAttributeName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQueueAttributesError {}
 /// Errors returned by GetQueueUrl
 #[derive(Debug, PartialEq)]
 pub enum GetQueueUrlError {
@@ -2555,16 +2535,12 @@ impl GetQueueUrlError {
 }
 impl fmt::Display for GetQueueUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQueueUrlError {
-    fn description(&self) -> &str {
         match *self {
-            GetQueueUrlError::QueueDoesNotExist(ref cause) => cause,
+            GetQueueUrlError::QueueDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQueueUrlError {}
 /// Errors returned by ListDeadLetterSourceQueues
 #[derive(Debug, PartialEq)]
 pub enum ListDeadLetterSourceQueuesError {
@@ -2606,16 +2582,12 @@ impl ListDeadLetterSourceQueuesError {
 }
 impl fmt::Display for ListDeadLetterSourceQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeadLetterSourceQueuesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeadLetterSourceQueuesError::QueueDoesNotExist(ref cause) => cause,
+            ListDeadLetterSourceQueuesError::QueueDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDeadLetterSourceQueuesError {}
 /// Errors returned by ListQueueTags
 #[derive(Debug, PartialEq)]
 pub enum ListQueueTagsError {}
@@ -2645,14 +2617,10 @@ impl ListQueueTagsError {
 }
 impl fmt::Display for ListQueueTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQueueTagsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListQueueTagsError {}
 /// Errors returned by ListQueues
 #[derive(Debug, PartialEq)]
 pub enum ListQueuesError {}
@@ -2682,14 +2650,10 @@ impl ListQueuesError {
 }
 impl fmt::Display for ListQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQueuesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListQueuesError {}
 /// Errors returned by PurgeQueue
 #[derive(Debug, PartialEq)]
 pub enum PurgeQueueError {
@@ -2734,17 +2698,13 @@ impl PurgeQueueError {
 }
 impl fmt::Display for PurgeQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PurgeQueueError {
-    fn description(&self) -> &str {
         match *self {
-            PurgeQueueError::PurgeQueueInProgress(ref cause) => cause,
-            PurgeQueueError::QueueDoesNotExist(ref cause) => cause,
+            PurgeQueueError::PurgeQueueInProgress(ref cause) => write!(f, "{}", cause),
+            PurgeQueueError::QueueDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PurgeQueueError {}
 /// Errors returned by ReceiveMessage
 #[derive(Debug, PartialEq)]
 pub enum ReceiveMessageError {
@@ -2782,16 +2742,12 @@ impl ReceiveMessageError {
 }
 impl fmt::Display for ReceiveMessageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReceiveMessageError {
-    fn description(&self) -> &str {
         match *self {
-            ReceiveMessageError::OverLimit(ref cause) => cause,
+            ReceiveMessageError::OverLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReceiveMessageError {}
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {}
@@ -2821,14 +2777,10 @@ impl RemovePermissionError {
 }
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemovePermissionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RemovePermissionError {}
 /// Errors returned by SendMessage
 #[derive(Debug, PartialEq)]
 pub enum SendMessageError {
@@ -2873,17 +2825,13 @@ impl SendMessageError {
 }
 impl fmt::Display for SendMessageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendMessageError {
-    fn description(&self) -> &str {
         match *self {
-            SendMessageError::InvalidMessageContents(ref cause) => cause,
-            SendMessageError::UnsupportedOperation(ref cause) => cause,
+            SendMessageError::InvalidMessageContents(ref cause) => write!(f, "{}", cause),
+            SendMessageError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendMessageError {}
 /// Errors returned by SendMessageBatch
 #[derive(Debug, PartialEq)]
 pub enum SendMessageBatchError {
@@ -2958,21 +2906,19 @@ impl SendMessageBatchError {
 }
 impl fmt::Display for SendMessageBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendMessageBatchError {
-    fn description(&self) -> &str {
         match *self {
-            SendMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
-            SendMessageBatchError::BatchRequestTooLong(ref cause) => cause,
-            SendMessageBatchError::EmptyBatchRequest(ref cause) => cause,
-            SendMessageBatchError::InvalidBatchEntryId(ref cause) => cause,
-            SendMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
-            SendMessageBatchError::UnsupportedOperation(ref cause) => cause,
+            SendMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => write!(f, "{}", cause),
+            SendMessageBatchError::BatchRequestTooLong(ref cause) => write!(f, "{}", cause),
+            SendMessageBatchError::EmptyBatchRequest(ref cause) => write!(f, "{}", cause),
+            SendMessageBatchError::InvalidBatchEntryId(ref cause) => write!(f, "{}", cause),
+            SendMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendMessageBatchError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendMessageBatchError {}
 /// Errors returned by SetQueueAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetQueueAttributesError {
@@ -3010,16 +2956,12 @@ impl SetQueueAttributesError {
 }
 impl fmt::Display for SetQueueAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetQueueAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetQueueAttributesError::InvalidAttributeName(ref cause) => cause,
+            SetQueueAttributesError::InvalidAttributeName(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetQueueAttributesError {}
 /// Errors returned by TagQueue
 #[derive(Debug, PartialEq)]
 pub enum TagQueueError {}
@@ -3049,14 +2991,10 @@ impl TagQueueError {
 }
 impl fmt::Display for TagQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagQueueError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for TagQueueError {}
 /// Errors returned by UntagQueue
 #[derive(Debug, PartialEq)]
 pub enum UntagQueueError {}
@@ -3086,14 +3024,10 @@ impl UntagQueueError {
 }
 impl fmt::Display for UntagQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagQueueError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UntagQueueError {}
 /// Trait representing the capabilities of the Amazon SQS API. Amazon SQS clients implement this trait.
 pub trait Sqs {
     /// <p><p>Adds a permission to a queue for a specific <a href="https://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P">principal</a>. This allows sharing access to the queue.</p> <p>When you create a queue, you have full control access rights for the queue. Only you, the owner of the queue, can grant or deny permissions to the queue. For more information about these permissions, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-writing-an-sqs-policy.html#write-messages-to-shared-queue">Allow Developers to Write Messages to a Shared Queue</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <note> <ul> <li> <p> <code>AddPermission</code> generates a policy for you. You can use <code> <a>SetQueueAttributes</a> </code> to upload your policy. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-creating-custom-policies.html">Using Custom Policies with the Amazon SQS Access Policy Language</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </li> <li> <p>An Amazon SQS policy can have a maximum of 7 actions.</p> </li> <li> <p>To remove the ability to change queue permissions, you must deny permission to the <code>AddPermission</code>, <code>RemovePermission</code>, and <code>SetQueueAttributes</code> actions in your IAM policy.</p> </li> </ul> </note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=first</code> </p> <p> <code>&amp;Attribute.2=second</code> </p> <note> <p>Cross-account permissions don&#39;t apply to this action. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-customer-managed-policy-examples.html#grant-cross-account-permissions-to-role-and-user-name">Grant Cross-Account Permissions to a Role and a User Name</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </note></p>
@@ -3232,6 +3166,14 @@ impl SqsClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> SqsClient {
         SqsClient { client, region }
+    }
+}
+
+impl fmt::Debug for SqsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SqsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

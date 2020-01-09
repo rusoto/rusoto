@@ -78,7 +78,7 @@ impl InstanceMetadataProvider {
 
     /// Allow overriding host and port of instance metadata service.
     pub fn set_ip_addr_with_port(&mut self, ip: &str, port: &str) {
-        self.metadata_ip_addr = format!("{}:{}", ip, port.to_string());
+        self.metadata_ip_addr = format!("{}:{}", ip, port);
     }
 }
 
@@ -111,7 +111,7 @@ impl Future for InstanceMetadataProviderFuture {
         let new_state = match self.state {
             InstanceMetadataFutureState::Start => {
                 let new_future =
-                    get_role_name(&self.client, self.timeout, self.metadata_ip_addr.clone())?;
+                    get_role_name(&self.client, self.timeout, &self.metadata_ip_addr)?;
                 InstanceMetadataFutureState::GetRoleName(new_future)
             }
             InstanceMetadataFutureState::GetRoleName(ref mut future) => {
@@ -120,7 +120,7 @@ impl Future for InstanceMetadataProviderFuture {
                     &self.client,
                     self.timeout,
                     &role_name,
-                    self.metadata_ip_addr.clone(),
+                    &self.metadata_ip_addr,
                 )?;
                 InstanceMetadataFutureState::GetCredentialsFromRole(new_future)
             }
@@ -155,7 +155,7 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
 fn get_role_name(
     client: &HttpClient,
     timeout: Duration,
-    ip_addr: String,
+    ip_addr: &str,
 ) -> Result<HttpClientFuture, CredentialsError> {
     let role_name_address = format!("http://{}/{}/", ip_addr, AWS_CREDENTIALS_PROVIDER_PATH);
     let uri = match role_name_address.parse::<Uri>() {
@@ -171,7 +171,7 @@ fn get_credentials_from_role(
     client: &HttpClient,
     timeout: Duration,
     role_name: &str,
-    ip_addr: String,
+    ip_addr: &str,
 ) -> Result<HttpClientFuture, CredentialsError> {
     let credentials_provider_url = format!(
         "http://{}/{}/{}",

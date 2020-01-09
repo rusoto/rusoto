@@ -646,7 +646,7 @@ pub struct ConfigurationItem {
     #[serde(rename = "configurationStateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_state_id: Option<String>,
-    /// <p>A list of CloudTrail event IDs.</p> <p>A populated field indicates that the current configuration was initiated by the events recorded in the CloudTrail log. For more information about CloudTrail, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/what_is_cloud_trail_top_level.html">What Is AWS CloudTrail</a>.</p> <p>An empty field indicates that the current configuration was not initiated by any event.</p>
+    /// <p>A list of CloudTrail event IDs.</p> <p>A populated field indicates that the current configuration was initiated by the events recorded in the CloudTrail log. For more information about CloudTrail, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/what_is_cloud_trail_top_level.html">What Is AWS CloudTrail</a>.</p> <p>An empty field indicates that the current configuration was not initiated by any event. As of Version 1.3, the relatedEvents field is empty. You can access the <a href="https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html">LookupEvents API</a> in the <i>AWS CloudTrail API Reference</i> to retrieve the events for the resource.</p>
     #[serde(rename = "relatedEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub related_events: Option<Vec<String>>,
@@ -739,6 +739,166 @@ pub struct ConfigurationRecorderStatus {
     pub recording: Option<bool>,
 }
 
+/// <p>Filters the conformance pack by compliance types and AWS Config rule names.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ConformancePackComplianceFilters {
+    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_type: Option<String>,
+    /// <p>Filters the results by AWS Config rule names.</p>
+    #[serde(rename = "ConfigRuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_rule_names: Option<Vec<String>>,
+}
+
+/// <p>Summary includes the name and status of the conformance pack.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConformancePackComplianceSummary {
+    /// <p>The status of the conformance pack. The allowed values are COMPLIANT and NON_COMPLIANT. </p>
+    #[serde(rename = "ConformancePackComplianceStatus")]
+    pub conformance_pack_compliance_status: String,
+    /// <p>The name of the conformance pack name.</p>
+    #[serde(rename = "ConformancePackName")]
+    pub conformance_pack_name: String,
+}
+
+/// <p>Returns details of a conformance pack. A conformance pack is a collection of AWS Config rules and remediation actions that can be easily deployed in an account and a region.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConformancePackDetail {
+    /// <p>Amazon Resource Name (ARN) of the conformance pack.</p>
+    #[serde(rename = "ConformancePackArn")]
+    pub conformance_pack_arn: String,
+    /// <p>ID of the conformance pack.</p>
+    #[serde(rename = "ConformancePackId")]
+    pub conformance_pack_id: String,
+    /// <p>A list of <code>ConformancePackInputParameter</code> objects.</p>
+    #[serde(rename = "ConformancePackInputParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_input_parameters: Option<Vec<ConformancePackInputParameter>>,
+    /// <p>Name of the conformance pack.</p>
+    #[serde(rename = "ConformancePackName")]
+    pub conformance_pack_name: String,
+    /// <p>AWS service that created the conformance pack.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<String>,
+    /// <p>Conformance pack template that is used to create a pack. The delivery bucket name should start with awsconfigconforms. For example: "Resource": "arn:aws:s3:::your_bucket_name/*".</p>
+    #[serde(rename = "DeliveryS3Bucket")]
+    pub delivery_s3_bucket: String,
+    /// <p>The prefix for the Amazon S3 bucket.</p>
+    #[serde(rename = "DeliveryS3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_s3_key_prefix: Option<String>,
+    /// <p>Last time when conformation pack update was requested. </p>
+    #[serde(rename = "LastUpdateRequestedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_requested_time: Option<f64>,
+}
+
+/// <p>Filters a conformance pack by AWS Config rule names, compliance types, AWS resource types, and resource IDs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ConformancePackEvaluationFilters {
+    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_type: Option<String>,
+    /// <p>Filters the results by AWS Config rule names.</p>
+    #[serde(rename = "ConfigRuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_rule_names: Option<Vec<String>>,
+    /// <p><p>Filters the results by resource IDs.</p> <note> <p>This is valid only when you provide resource type. If there is no resource type, you will see an error.</p> </note></p>
+    #[serde(rename = "ResourceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_ids: Option<Vec<String>>,
+    /// <p>Filters the results by the resource type (for example, <code>"AWS::EC2::Instance"</code>). </p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
+/// <p>The details of a conformance pack evaluation. Provides AWS Config rule and AWS resource type that was evaluated, the compliance of the conformance pack, related time stamps, and supplementary information. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConformancePackEvaluationResult {
+    /// <p>Supplementary information about how the evaluation determined the compliance. </p>
+    #[serde(rename = "Annotation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub annotation: Option<String>,
+    /// <p>The compliance type. The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>. </p>
+    #[serde(rename = "ComplianceType")]
+    pub compliance_type: String,
+    /// <p>The time when AWS Config rule evaluated AWS resource.</p>
+    #[serde(rename = "ConfigRuleInvokedTime")]
+    pub config_rule_invoked_time: f64,
+    #[serde(rename = "EvaluationResultIdentifier")]
+    pub evaluation_result_identifier: EvaluationResultIdentifier,
+    /// <p>The time when AWS Config recorded the evaluation result. </p>
+    #[serde(rename = "ResultRecordedTime")]
+    pub result_recorded_time: f64,
+}
+
+/// <p>Input parameters in the form of key-value pairs for the conformance pack, both of which you define. Keys can have a maximum character length of 128 characters, and values can have a maximum length of 256 characters.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ConformancePackInputParameter {
+    /// <p>One part of a key-value pair.</p>
+    #[serde(rename = "ParameterName")]
+    pub parameter_name: String,
+    /// <p>Another part of the key-value pair. </p>
+    #[serde(rename = "ParameterValue")]
+    pub parameter_value: String,
+}
+
+/// <p>Compliance information of one or more AWS Config rules within a conformance pack. You can filter using AWS Config rule names and compliance types.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConformancePackRuleCompliance {
+    /// <p>Compliance of the AWS Config rule</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_type: Option<String>,
+    /// <p>Name of the config rule.</p>
+    #[serde(rename = "ConfigRuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_rule_name: Option<String>,
+}
+
+/// <p>Status details of a conformance pack.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConformancePackStatusDetail {
+    /// <p>Amazon Resource Name (ARN) of comformance pack.</p>
+    #[serde(rename = "ConformancePackArn")]
+    pub conformance_pack_arn: String,
+    /// <p>ID of the conformance pack.</p>
+    #[serde(rename = "ConformancePackId")]
+    pub conformance_pack_id: String,
+    /// <p>Name of the conformance pack.</p>
+    #[serde(rename = "ConformancePackName")]
+    pub conformance_pack_name: String,
+    /// <p><p>Indicates deployment status of conformance pack.</p> <p>AWS Config sets the state of the conformance pack to:</p> <ul> <li> <p>CREATE<em>IN</em>PROGRESS when a conformance pack creation is in progress for an account.</p> </li> <li> <p>CREATE<em>COMPLETE when a conformance pack has been successfully created in your account.</p> </li> <li> <p>CREATE</em>FAILED when a conformance pack creation failed in your account.</p> </li> <li> <p>DELETE<em>IN</em>PROGRESS when a conformance pack deletion is in progress. </p> </li> <li> <p>DELETE_FAILED when a conformance pack deletion failed in your account.</p> </li> </ul></p>
+    #[serde(rename = "ConformancePackState")]
+    pub conformance_pack_state: String,
+    /// <p>The reason of conformance pack creation failure.</p>
+    #[serde(rename = "ConformancePackStatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_status_reason: Option<String>,
+    /// <p>Last time when conformation pack creation and update was successful.</p>
+    #[serde(rename = "LastUpdateCompletedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_completed_time: Option<f64>,
+    /// <p>Last time when conformation pack creation and update was requested.</p>
+    #[serde(rename = "LastUpdateRequestedTime")]
+    pub last_update_requested_time: f64,
+    /// <p>Amazon Resource Name (ARN) of AWS CloudFormation stack. </p>
+    #[serde(rename = "StackArn")]
+    pub stack_arn: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAggregationAuthorizationRequest {
@@ -776,6 +936,14 @@ pub struct DeleteConfigurationRecorderRequest {
     pub configuration_recorder_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteConformancePackRequest {
+    /// <p>Name of the conformance pack you want to delete.</p>
+    #[serde(rename = "ConformancePackName")]
+    pub conformance_pack_name: String,
+}
+
 /// <p>The input for the <a>DeleteDeliveryChannel</a> action. The action accepts the following data, in JSON format. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -805,6 +973,14 @@ pub struct DeleteOrganizationConfigRuleRequest {
     /// <p>The name of organization config rule that you want to delete.</p>
     #[serde(rename = "OrganizationConfigRuleName")]
     pub organization_config_rule_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteOrganizationConformancePackRequest {
+    /// <p>The name of organization conformance pack that you want to delete.</p>
+    #[serde(rename = "OrganizationConformancePackName")]
+    pub organization_conformance_pack_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -852,6 +1028,17 @@ pub struct DeleteRemediationExceptionsResponse {
     #[serde(rename = "FailedBatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_batches: Option<Vec<FailedDeleteRemediationExceptionsBatch>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteResourceConfigRequest {
+    /// <p>Unique identifier of the resource.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>The type of the resource.</p>
+    #[serde(rename = "ResourceType")]
+    pub resource_type: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1222,6 +1409,101 @@ pub struct DescribeConfigurationRecordersResponse {
     pub configuration_recorders: Option<Vec<ConfigurationRecorder>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeConformancePackComplianceRequest {
+    /// <p>Name of the conformance pack.</p>
+    #[serde(rename = "ConformancePackName")]
+    pub conformance_pack_name: String,
+    /// <p>A <code>ConformancePackComplianceFilters</code> object.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<ConformancePackComplianceFilters>,
+    /// <p>The maximum number of AWS Config rules within a conformance pack are returned on each page.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeConformancePackComplianceResponse {
+    /// <p>Name of the conformance pack.</p>
+    #[serde(rename = "ConformancePackName")]
+    pub conformance_pack_name: String,
+    /// <p>Returns a list of <code>ConformancePackRuleCompliance</code> objects.</p>
+    #[serde(rename = "ConformancePackRuleComplianceList")]
+    pub conformance_pack_rule_compliance_list: Vec<ConformancePackRuleCompliance>,
+    /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeConformancePackStatusRequest {
+    /// <p>Comma-separated list of conformance pack names.</p>
+    #[serde(rename = "ConformancePackNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_names: Option<Vec<String>>,
+    /// <p>The maximum number of conformance packs status returned on each page.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeConformancePackStatusResponse {
+    /// <p>A list of <code>ConformancePackStatusDetail</code> objects.</p>
+    #[serde(rename = "ConformancePackStatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_status_details: Option<Vec<ConformancePackStatusDetail>>,
+    /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeConformancePacksRequest {
+    /// <p>Comma-separated list of conformance pack names for which you want details. If you do not specify any names, AWS Config returns details for all your conformance packs. </p>
+    #[serde(rename = "ConformancePackNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_names: Option<Vec<String>>,
+    /// <p>The maximum number of conformance packs returned on each page.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeConformancePacksResponse {
+    /// <p>Returns a list of <code>ConformancePackDetail</code> objects.</p>
+    #[serde(rename = "ConformancePackDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_details: Option<Vec<ConformancePackDetail>>,
+    /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>The input for the <a>DeliveryChannelStatus</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1316,10 +1598,70 @@ pub struct DescribeOrganizationConfigRulesResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Retuns a list <code>OrganizationConfigRule</code> objects.</p>
+    /// <p>Returns a list of <code>OrganizationConfigRule</code> objects.</p>
     #[serde(rename = "OrganizationConfigRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_config_rules: Option<Vec<OrganizationConfigRule>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeOrganizationConformancePackStatusesRequest {
+    /// <p>The maximum number of OrganizationConformancePackStatuses returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100. </p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The names of organization conformance packs for which you want status details. If you do not specify any names, AWS Config returns details for all your organization conformance packs. </p>
+    #[serde(rename = "OrganizationConformancePackNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_conformance_pack_names: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeOrganizationConformancePackStatusesResponse {
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of <code>OrganizationConformancePackStatus</code> objects. </p>
+    #[serde(rename = "OrganizationConformancePackStatuses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_conformance_pack_statuses: Option<Vec<OrganizationConformancePackStatus>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeOrganizationConformancePacksRequest {
+    /// <p>The maximum number of organization config packs returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name that you assign to an organization conformance pack.</p>
+    #[serde(rename = "OrganizationConformancePackNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_conformance_pack_names: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeOrganizationConformancePacksResponse {
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Returns a list of OrganizationConformancePacks objects.</p>
+    #[serde(rename = "OrganizationConformancePacks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_conformance_packs: Option<Vec<OrganizationConformancePack>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1849,6 +2191,71 @@ pub struct GetComplianceSummaryByResourceTypeResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetConformancePackComplianceDetailsRequest {
+    /// <p>Name of the conformance pack.</p>
+    #[serde(rename = "ConformancePackName")]
+    pub conformance_pack_name: String,
+    /// <p>A <code>ConformancePackEvaluationFilters</code> object.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<ConformancePackEvaluationFilters>,
+    /// <p>The maximum number of evaluation results returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetConformancePackComplianceDetailsResponse {
+    /// <p>Name of the conformance pack.</p>
+    #[serde(rename = "ConformancePackName")]
+    pub conformance_pack_name: String,
+    /// <p>Returns a list of <code>ConformancePackEvaluationResult</code> objects.</p>
+    #[serde(rename = "ConformancePackRuleEvaluationResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_rule_evaluation_results: Option<Vec<ConformancePackEvaluationResult>>,
+    /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetConformancePackComplianceSummaryRequest {
+    /// <p>Names of conformance packs.</p>
+    #[serde(rename = "ConformancePackNames")]
+    pub conformance_pack_names: Vec<String>,
+    /// <p>The maximum number of conformance packs returned on each page.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetConformancePackComplianceSummaryResponse {
+    /// <p>A list of <code>ConformancePackComplianceSummary</code> objects. </p>
+    #[serde(rename = "ConformancePackComplianceSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_compliance_summary_list: Option<Vec<ConformancePackComplianceSummary>>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiscoveredResourceCountsRequest {
     /// <p>The maximum number of <a>ResourceCount</a> objects returned on each page. The default is 100. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "limit")]
@@ -1912,6 +2319,40 @@ pub struct GetOrganizationConfigRuleDetailedStatusResponse {
     #[serde(rename = "OrganizationConfigRuleDetailedStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_config_rule_detailed_status: Option<Vec<MemberAccountStatus>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetOrganizationConformancePackDetailedStatusRequest {
+    /// <p>An <code>OrganizationResourceDetailedStatusFilters</code> object.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<OrganizationResourceDetailedStatusFilters>,
+    /// <p>The maximum number of <code>OrganizationConformancePackDetailedStatuses</code> returned on each page. If you do not specify a number, AWS Config uses the default. The default is 100. </p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of organization conformance pack for which you want status details for member accounts.</p>
+    #[serde(rename = "OrganizationConformancePackName")]
+    pub organization_conformance_pack_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetOrganizationConformancePackDetailedStatusResponse {
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of <code>OrganizationConformancePackDetailedStatus</code> objects. </p>
+    #[serde(rename = "OrganizationConformancePackDetailedStatuses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_conformance_pack_detailed_statuses:
+        Option<Vec<OrganizationConformancePackDetailedStatus>>,
 }
 
 /// <p>The input for the <a>GetResourceConfigHistory</a> action.</p>
@@ -2135,7 +2576,7 @@ pub struct OrganizationConfigRule {
     #[serde(rename = "LastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_time: Option<f64>,
-    /// <p>The Amazon Resource Name (ARN) of organization config rule.</p>
+    /// <p>Amazon Resource Name (ARN) of organization config rule.</p>
     #[serde(rename = "OrganizationConfigRuleArn")]
     pub organization_config_rule_arn: String,
     /// <p>The name that you assign to organization config rule.</p>
@@ -2173,6 +2614,87 @@ pub struct OrganizationConfigRuleStatus {
     /// <p><p>Indicates deployment status of an organization config rule. When master account calls PutOrganizationConfigRule action for the first time, config rule status is created in all the member accounts. When master account calls PutOrganizationConfigRule action for the second time, config rule status is updated in all the member accounts. Additionally, config rule status is updated when one or more member accounts join or leave an organization. Config rule status is deleted when the master account deletes OrganizationConfigRule in all the member accounts and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <p>AWS Config sets the state of the rule to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when an organization config rule has been successfully created in all the member accounts. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when an organization config rule creation is in progress.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when an organization config rule creation failed in one or more member accounts within that organization.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when an organization config rule deletion failed in one or more member accounts within that organization.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when an organization config rule deletion is in progress.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when an organization config rule has been successfully deleted from all the member accounts.</p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when an organization config rule has been successfully updated in all the member accounts.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when an organization config rule update is in progress.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when an organization config rule update failed in one or more member accounts within that organization.</p> </li> </ul></p>
     #[serde(rename = "OrganizationRuleStatus")]
     pub organization_rule_status: String,
+}
+
+/// <p>An organization conformance pack that has information about conformance packs that AWS Config creates in member accounts. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationConformancePack {
+    /// <p>A list of <code>ConformancePackInputParameter</code> objects.</p>
+    #[serde(rename = "ConformancePackInputParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_input_parameters: Option<Vec<ConformancePackInputParameter>>,
+    /// <p>Location of an Amazon S3 bucket where AWS Config can deliver evaluation results and conformance pack template that is used to create a pack. </p>
+    #[serde(rename = "DeliveryS3Bucket")]
+    pub delivery_s3_bucket: String,
+    /// <p>Any folder structure you want to add to an Amazon S3 bucket.</p>
+    #[serde(rename = "DeliveryS3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_s3_key_prefix: Option<String>,
+    /// <p>A comma-separated list of accounts excluded from organization conformance pack.</p>
+    #[serde(rename = "ExcludedAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub excluded_accounts: Option<Vec<String>>,
+    /// <p>Last time when organization conformation pack was updated.</p>
+    #[serde(rename = "LastUpdateTime")]
+    pub last_update_time: f64,
+    /// <p>Amazon Resource Name (ARN) of organization conformance pack.</p>
+    #[serde(rename = "OrganizationConformancePackArn")]
+    pub organization_conformance_pack_arn: String,
+    /// <p>The name you assign to an organization conformance pack.</p>
+    #[serde(rename = "OrganizationConformancePackName")]
+    pub organization_conformance_pack_name: String,
+}
+
+/// <p>Organization conformance pack creation or deletion status in each member account. This includes the name of the conformance pack, the status, error code and error message when the conformance pack creation or deletion failed. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationConformancePackDetailedStatus {
+    /// <p>The 12-digit account ID of a member account.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The name of conformance pack deployed in the member account.</p>
+    #[serde(rename = "ConformancePackName")]
+    pub conformance_pack_name: String,
+    /// <p>An error code that is returned when conformance pack creation or deletion failed in the member account. </p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>An error message indicating that conformance pack account creation or deletion has failed due to an error in the member account. </p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The timestamp of the last status update.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    /// <p><p>Indicates deployment status for conformance pack in a member account. When master account calls <code>PutOrganizationConformancePack</code> action for the first time, conformance pack status is created in the member account. When master account calls <code>PutOrganizationConformancePack</code> action for the second time, conformance pack status is updated in the member account. Conformance pack status is deleted when the master account deletes <code>OrganizationConformancePack</code> and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>. </p> <p> AWS Config sets the state of the conformance pack to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when conformance pack has been created in the member account. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when conformance pack is being created in the member account.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when conformance pack creation has failed in the member account.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when conformance pack deletion has failed in the member account.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when conformance pack is being deleted in the member account.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when conformance pack has been deleted in the member account. </p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when conformance pack has been updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when conformance pack is being updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when conformance pack deletion has failed in the member account.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    pub status: String,
+}
+
+/// <p>Returns the status for an organization conformance pack in an organization.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationConformancePackStatus {
+    /// <p>An error code that is returned when organization conformance pack creation or deletion has failed in a member account. </p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>An error message indicating that organization conformance pack creation or deletion failed due to an error. </p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The timestamp of the last update.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    /// <p>The name that you assign to organization conformance pack.</p>
+    #[serde(rename = "OrganizationConformancePackName")]
+    pub organization_conformance_pack_name: String,
+    /// <p><p>Indicates deployment status of an organization conformance pack. When master account calls PutOrganizationConformancePack for the first time, conformance pack status is created in all the member accounts. When master account calls PutOrganizationConformancePack for the second time, conformance pack status is updated in all the member accounts. Additionally, conformance pack status is updated when one or more member accounts join or leave an organization. Conformance pack status is deleted when the master account deletes OrganizationConformancePack in all the member accounts and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <p>AWS Config sets the state of the conformance pack to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when an organization conformance pack has been successfully created in all the member accounts. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when an organization conformance pack creation is in progress.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when an organization conformance pack creation failed in one or more member accounts within that organization.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when an organization conformance pack deletion failed in one or more member accounts within that organization.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when an organization conformance pack deletion is in progress.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when an organization conformance pack has been successfully deleted from all the member accounts.</p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when an organization conformance pack has been successfully updated in all the member accounts.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when an organization conformance pack update is in progress.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when an organization conformance pack update failed in one or more member accounts within that organization.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    pub status: String,
 }
 
 /// <p>An object that specifies organization custom rule metadata such as resource type, resource ID of AWS resource, Lamdba function ARN, and organization trigger types that trigger AWS Config to evaluate your AWS resources against a rule. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic.</p>
@@ -2248,6 +2770,20 @@ pub struct OrganizationManagedRuleMetadata {
     #[serde(rename = "TagValueScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_value_scope: Option<String>,
+}
+
+/// <p>Status filter object to filter results based on specific member account ID or status type for an organization conformance pack.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OrganizationResourceDetailedStatusFilters {
+    /// <p>The 12-digit account ID of the member account within an organization.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p><p>Indicates deployment status for conformance pack in a member account. When master account calls <code>PutOrganizationConformancePack</code> action for the first time, conformance pack status is created in the member account. When master account calls <code>PutOrganizationConformancePack</code> action for the second time, conformance pack status is updated in the member account. Conformance pack status is deleted when the master account deletes <code>OrganizationConformancePack</code> and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>. </p> <p> AWS Config sets the state of the conformance pack to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when conformance pack has been created in the member account. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when conformance pack is being created in the member account.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when conformance pack creation has failed in the member account.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when conformance pack deletion has failed in the member account.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when conformance pack is being deleted in the member account.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when conformance pack has been deleted in the member account. </p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when conformance pack has been updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when conformance pack is being updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when conformance pack deletion has failed in the member account.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>An object that represents the account ID and region of an aggregator account that is requesting authorization but is not yet authorized.</p>
@@ -2338,6 +2874,42 @@ pub struct PutConfigurationRecorderRequest {
     pub configuration_recorder: ConfigurationRecorder,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutConformancePackRequest {
+    /// <p>A list of <code>ConformancePackInputParameter</code> objects.</p>
+    #[serde(rename = "ConformancePackInputParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_input_parameters: Option<Vec<ConformancePackInputParameter>>,
+    /// <p>Name of the conformance pack you want to create.</p>
+    #[serde(rename = "ConformancePackName")]
+    pub conformance_pack_name: String,
+    /// <p>AWS Config stores intermediate files while processing conformance pack template.</p>
+    #[serde(rename = "DeliveryS3Bucket")]
+    pub delivery_s3_bucket: String,
+    /// <p>The prefix for the Amazon S3 bucket. </p>
+    #[serde(rename = "DeliveryS3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_s3_key_prefix: Option<String>,
+    /// <p><p>A string containing full conformance pack template body. Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes.</p> <note> <p>You can only use a YAML template with one resource type, that is, config rule and a remediation action. </p> </note></p>
+    #[serde(rename = "TemplateBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_body: Option<String>,
+    /// <p><p>Location of file containing the template body (<code>s3://bucketname/prefix</code>). The uri must point to the conformance pack template (max size: 300 KB) that is located in an Amazon S3 bucket in the same region as the conformance pack. </p> <note> <p>You must have access to read Amazon S3 bucket.</p> </note></p>
+    #[serde(rename = "TemplateS3Uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_s3_uri: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutConformancePackResponse {
+    /// <p>ARN of the conformance pack.</p>
+    #[serde(rename = "ConformancePackArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_arn: Option<String>,
+}
+
 /// <p>The input for the <a>PutDeliveryChannel</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2405,6 +2977,46 @@ pub struct PutOrganizationConfigRuleResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutOrganizationConformancePackRequest {
+    /// <p>A list of <code>ConformancePackInputParameter</code> objects.</p>
+    #[serde(rename = "ConformancePackInputParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_input_parameters: Option<Vec<ConformancePackInputParameter>>,
+    /// <p>Location of an Amazon S3 bucket where AWS Config can deliver evaluation results. AWS Config stores intermediate files while processing conformance pack template. </p> <p>The delivery bucket name should start with awsconfigconforms. For example: "Resource": "arn:aws:s3:::your_bucket_name/*". For more information, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/conformance-pack-organization-apis.html">Permissions for cross account bucket access</a>.</p>
+    #[serde(rename = "DeliveryS3Bucket")]
+    pub delivery_s3_bucket: String,
+    /// <p>The prefix for the Amazon S3 bucket.</p>
+    #[serde(rename = "DeliveryS3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_s3_key_prefix: Option<String>,
+    /// <p>A list of AWS accounts to be excluded from an organization conformance pack while deploying a conformance pack.</p>
+    #[serde(rename = "ExcludedAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub excluded_accounts: Option<Vec<String>>,
+    /// <p>Name of the organization conformance pack you want to create.</p>
+    #[serde(rename = "OrganizationConformancePackName")]
+    pub organization_conformance_pack_name: String,
+    /// <p>A string containing full conformance pack template body. Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes.</p>
+    #[serde(rename = "TemplateBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_body: Option<String>,
+    /// <p><p>Location of file containing the template body. The uri must point to the conformance pack template (max size: 300 KB).</p> <note> <p>You must have access to read Amazon S3 bucket.</p> </note></p>
+    #[serde(rename = "TemplateS3Uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_s3_uri: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutOrganizationConformancePackResponse {
+    /// <p>ARN of the organization conformance pack.</p>
+    #[serde(rename = "OrganizationConformancePackArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_conformance_pack_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRemediationConfigurationsRequest {
     /// <p>A list of remediation configuration objects.</p>
     #[serde(rename = "RemediationConfigurations")]
@@ -2446,6 +3058,31 @@ pub struct PutRemediationExceptionsResponse {
     #[serde(rename = "FailedBatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_batches: Option<Vec<FailedRemediationExceptionBatch>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutResourceConfigRequest {
+    /// <p><p>The configuration object of the resource in valid JSON format. It must match the schema registered with AWS CloudFormation.</p> <note> <p>The configuration JSON must not exceed 64 KB.</p> </note></p>
+    #[serde(rename = "Configuration")]
+    pub configuration: String,
+    /// <p>Unique identifier of the resource.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>Name of the resource.</p>
+    #[serde(rename = "ResourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_name: Option<String>,
+    /// <p><p>The type of the resource. The custom resource type must be registered with AWS CloudFormation. </p> <note> <p>You cannot use the organization names “aws”, “amzn”, “amazon”, “alexa”, “custom” with custom resource types. It is the first part of the ResourceType up to the first ::.</p> </note></p>
+    #[serde(rename = "ResourceType")]
+    pub resource_type: String,
+    /// <p>Version of the schema registered for the ResourceType in AWS CloudFormation.</p>
+    #[serde(rename = "SchemaVersionId")]
+    pub schema_version_id: String,
+    /// <p>Tags associated with the resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3013,16 +3650,14 @@ impl BatchGetAggregateResourceConfigError {
 }
 impl fmt::Display for BatchGetAggregateResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetAggregateResourceConfigError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => cause,
+            BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchGetAggregateResourceConfigError {}
 /// Errors returned by BatchGetResourceConfig
 #[derive(Debug, PartialEq)]
 pub enum BatchGetResourceConfigError {
@@ -3048,16 +3683,14 @@ impl BatchGetResourceConfigError {
 }
 impl fmt::Display for BatchGetResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetResourceConfigError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetResourceConfigError::NoAvailableConfigurationRecorder(ref cause) => cause,
+            BatchGetResourceConfigError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchGetResourceConfigError {}
 /// Errors returned by DeleteAggregationAuthorization
 #[derive(Debug, PartialEq)]
 pub enum DeleteAggregationAuthorizationError {
@@ -3085,22 +3718,20 @@ impl DeleteAggregationAuthorizationError {
 }
 impl fmt::Display for DeleteAggregationAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAggregationAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAggregationAuthorizationError::InvalidParameterValue(ref cause) => cause,
+            DeleteAggregationAuthorizationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteAggregationAuthorizationError {}
 /// Errors returned by DeleteConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigRuleError {
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
 }
 
@@ -3123,17 +3754,13 @@ impl DeleteConfigRuleError {
 }
 impl fmt::Display for DeleteConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConfigRuleError::NoSuchConfigRule(ref cause) => cause,
-            DeleteConfigRuleError::ResourceInUse(ref cause) => cause,
+            DeleteConfigRuleError::NoSuchConfigRule(ref cause) => write!(f, "{}", cause),
+            DeleteConfigRuleError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteConfigRuleError {}
 /// Errors returned by DeleteConfigurationAggregator
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationAggregatorError {
@@ -3161,16 +3788,14 @@ impl DeleteConfigurationAggregatorError {
 }
 impl fmt::Display for DeleteConfigurationAggregatorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConfigurationAggregatorError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(ref cause) => cause,
+            DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteConfigurationAggregatorError {}
 /// Errors returned by DeleteConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationRecorderError {
@@ -3198,16 +3823,51 @@ impl DeleteConfigurationRecorderError {
 }
 impl fmt::Display for DeleteConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConfigurationRecorderError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => cause,
+            DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteConfigurationRecorderError {}
+/// Errors returned by DeleteConformancePack
+#[derive(Debug, PartialEq)]
+pub enum DeleteConformancePackError {
+    /// <p>You specified one or more conformance packs that do not exist.</p>
+    NoSuchConformancePack(String),
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
+    ResourceInUse(String),
+}
+
+impl DeleteConformancePackError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConformancePackError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NoSuchConformancePackException" => {
+                    return RusotoError::Service(DeleteConformancePackError::NoSuchConformancePack(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteConformancePackError::ResourceInUse(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteConformancePackError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteConformancePackError::NoSuchConformancePack(ref cause) => write!(f, "{}", cause),
+            DeleteConformancePackError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteConformancePackError {}
 /// Errors returned by DeleteDeliveryChannel
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeliveryChannelError {
@@ -3240,23 +3900,21 @@ impl DeleteDeliveryChannelError {
 }
 impl fmt::Display for DeleteDeliveryChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDeliveryChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(ref cause) => cause,
-            DeleteDeliveryChannelError::NoSuchDeliveryChannel(ref cause) => cause,
+            DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDeliveryChannelError::NoSuchDeliveryChannel(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDeliveryChannelError {}
 /// Errors returned by DeleteEvaluationResults
 #[derive(Debug, PartialEq)]
 pub enum DeleteEvaluationResultsError {
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
 }
 
@@ -3283,25 +3941,21 @@ impl DeleteEvaluationResultsError {
 }
 impl fmt::Display for DeleteEvaluationResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEvaluationResultsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEvaluationResultsError::NoSuchConfigRule(ref cause) => cause,
-            DeleteEvaluationResultsError::ResourceInUse(ref cause) => cause,
+            DeleteEvaluationResultsError::NoSuchConfigRule(ref cause) => write!(f, "{}", cause),
+            DeleteEvaluationResultsError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEvaluationResultsError {}
 /// Errors returned by DeleteOrganizationConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteOrganizationConfigRuleError {
     /// <p>You specified one or more organization config rules that do not exist.</p>
     NoSuchOrganizationConfigRule(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
-    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
 }
 
@@ -3335,18 +3989,75 @@ impl DeleteOrganizationConfigRuleError {
 }
 impl fmt::Display for DeleteOrganizationConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteOrganizationConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteOrganizationConfigRuleError::NoSuchOrganizationConfigRule(ref cause) => cause,
-            DeleteOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => cause,
-            DeleteOrganizationConfigRuleError::ResourceInUse(ref cause) => cause,
+            DeleteOrganizationConfigRuleError::NoSuchOrganizationConfigRule(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOrganizationConfigRuleError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteOrganizationConfigRuleError {}
+/// Errors returned by DeleteOrganizationConformancePack
+#[derive(Debug, PartialEq)]
+pub enum DeleteOrganizationConformancePackError {
+    /// <p>AWS Config organization conformance pack that you passed in the filter does not exist.</p> <p>For DeleteOrganizationConformancePack, you tried to delete an organization conformance pack that does not exist.</p>
+    NoSuchOrganizationConformancePack(String),
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    OrganizationAccessDenied(String),
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
+    ResourceInUse(String),
+}
+
+impl DeleteOrganizationConformancePackError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteOrganizationConformancePackError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NoSuchOrganizationConformancePackException" => {
+                    return RusotoError::Service(
+                        DeleteOrganizationConformancePackError::NoSuchOrganizationConformancePack(
+                            err.msg,
+                        ),
+                    )
+                }
+                "OrganizationAccessDeniedException" => {
+                    return RusotoError::Service(
+                        DeleteOrganizationConformancePackError::OrganizationAccessDenied(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(
+                        DeleteOrganizationConformancePackError::ResourceInUse(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteOrganizationConformancePackError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteOrganizationConformancePackError::NoSuchOrganizationConformancePack(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            DeleteOrganizationConformancePackError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOrganizationConformancePackError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteOrganizationConformancePackError {}
 /// Errors returned by DeletePendingAggregationRequest
 #[derive(Debug, PartialEq)]
 pub enum DeletePendingAggregationRequestError {
@@ -3374,16 +4085,14 @@ impl DeletePendingAggregationRequestError {
 }
 impl fmt::Display for DeletePendingAggregationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePendingAggregationRequestError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePendingAggregationRequestError::InvalidParameterValue(ref cause) => cause,
+            DeletePendingAggregationRequestError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeletePendingAggregationRequestError {}
 /// Errors returned by DeleteRemediationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteRemediationConfigurationError {
@@ -3420,17 +4129,17 @@ impl DeleteRemediationConfigurationError {
 }
 impl fmt::Display for DeleteRemediationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRemediationConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(ref cause) => cause,
-            DeleteRemediationConfigurationError::RemediationInProgress(ref cause) => cause,
+            DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRemediationConfigurationError::RemediationInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRemediationConfigurationError {}
 /// Errors returned by DeleteRemediationExceptions
 #[derive(Debug, PartialEq)]
 pub enum DeleteRemediationExceptionsError {
@@ -3458,16 +4167,47 @@ impl DeleteRemediationExceptionsError {
 }
 impl fmt::Display for DeleteRemediationExceptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRemediationExceptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRemediationExceptionsError::NoSuchRemediation(ref cause) => cause,
+            DeleteRemediationExceptionsError::NoSuchRemediation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRemediationExceptionsError {}
+/// Errors returned by DeleteResourceConfig
+#[derive(Debug, PartialEq)]
+pub enum DeleteResourceConfigError {
+    /// <p>There is no configuration recorder running.</p>
+    NoRunningConfigurationRecorder(String),
+}
+
+impl DeleteResourceConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NoRunningConfigurationRecorderException" => {
+                    return RusotoError::Service(
+                        DeleteResourceConfigError::NoRunningConfigurationRecorder(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteResourceConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteResourceConfigError::NoRunningConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteResourceConfigError {}
 /// Errors returned by DeleteRetentionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteRetentionConfigurationError {
@@ -3502,17 +4242,17 @@ impl DeleteRetentionConfigurationError {
 }
 impl fmt::Display for DeleteRetentionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRetentionConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRetentionConfigurationError::InvalidParameterValue(ref cause) => cause,
-            DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(ref cause) => cause,
+            DeleteRetentionConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRetentionConfigurationError {}
 /// Errors returned by DeliverConfigSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeliverConfigSnapshotError {
@@ -3552,18 +4292,18 @@ impl DeliverConfigSnapshotError {
 }
 impl fmt::Display for DeliverConfigSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeliverConfigSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(ref cause) => cause,
-            DeliverConfigSnapshotError::NoRunningConfigurationRecorder(ref cause) => cause,
-            DeliverConfigSnapshotError::NoSuchDeliveryChannel(ref cause) => cause,
+            DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeliverConfigSnapshotError::NoRunningConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeliverConfigSnapshotError::NoSuchDeliveryChannel(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeliverConfigSnapshotError {}
 /// Errors returned by DescribeAggregateComplianceByConfigRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeAggregateComplianceByConfigRulesError {
@@ -3605,20 +4345,20 @@ impl DescribeAggregateComplianceByConfigRulesError {
 }
 impl fmt::Display for DescribeAggregateComplianceByConfigRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAggregateComplianceByConfigRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAggregateComplianceByConfigRulesError::InvalidLimit(ref cause) => cause,
-            DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(ref cause) => cause,
+            DescribeAggregateComplianceByConfigRulesError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAggregateComplianceByConfigRulesError {}
 /// Errors returned by DescribeAggregationAuthorizations
 #[derive(Debug, PartialEq)]
 pub enum DescribeAggregationAuthorizationsError {
@@ -3660,18 +4400,20 @@ impl DescribeAggregationAuthorizationsError {
 }
 impl fmt::Display for DescribeAggregationAuthorizationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAggregationAuthorizationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAggregationAuthorizationsError::InvalidLimit(ref cause) => cause,
-            DescribeAggregationAuthorizationsError::InvalidNextToken(ref cause) => cause,
-            DescribeAggregationAuthorizationsError::InvalidParameterValue(ref cause) => cause,
+            DescribeAggregationAuthorizationsError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAggregationAuthorizationsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAggregationAuthorizationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAggregationAuthorizationsError {}
 /// Errors returned by DescribeComplianceByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DescribeComplianceByConfigRuleError {
@@ -3713,18 +4455,20 @@ impl DescribeComplianceByConfigRuleError {
 }
 impl fmt::Display for DescribeComplianceByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeComplianceByConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeComplianceByConfigRuleError::InvalidNextToken(ref cause) => cause,
-            DescribeComplianceByConfigRuleError::InvalidParameterValue(ref cause) => cause,
-            DescribeComplianceByConfigRuleError::NoSuchConfigRule(ref cause) => cause,
+            DescribeComplianceByConfigRuleError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeComplianceByConfigRuleError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeComplianceByConfigRuleError::NoSuchConfigRule(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeComplianceByConfigRuleError {}
 /// Errors returned by DescribeComplianceByResource
 #[derive(Debug, PartialEq)]
 pub enum DescribeComplianceByResourceError {
@@ -3759,17 +4503,17 @@ impl DescribeComplianceByResourceError {
 }
 impl fmt::Display for DescribeComplianceByResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeComplianceByResourceError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeComplianceByResourceError::InvalidNextToken(ref cause) => cause,
-            DescribeComplianceByResourceError::InvalidParameterValue(ref cause) => cause,
+            DescribeComplianceByResourceError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeComplianceByResourceError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeComplianceByResourceError {}
 /// Errors returned by DescribeConfigRuleEvaluationStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigRuleEvaluationStatusError {
@@ -3811,18 +4555,20 @@ impl DescribeConfigRuleEvaluationStatusError {
 }
 impl fmt::Display for DescribeConfigRuleEvaluationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigRuleEvaluationStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigRuleEvaluationStatusError::InvalidNextToken(ref cause) => cause,
-            DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(ref cause) => cause,
-            DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(ref cause) => cause,
+            DescribeConfigRuleEvaluationStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeConfigRuleEvaluationStatusError {}
 /// Errors returned by DescribeConfigRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigRulesError {
@@ -3855,17 +4601,13 @@ impl DescribeConfigRulesError {
 }
 impl fmt::Display for DescribeConfigRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigRulesError::InvalidNextToken(ref cause) => cause,
-            DescribeConfigRulesError::NoSuchConfigRule(ref cause) => cause,
+            DescribeConfigRulesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeConfigRulesError::NoSuchConfigRule(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigRulesError {}
 /// Errors returned by DescribeConfigurationAggregatorSourcesStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationAggregatorSourcesStatusError {
@@ -3898,23 +4640,23 @@ _ => {}
 }
 impl fmt::Display for DescribeConfigurationAggregatorSourcesStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationAggregatorSourcesStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(ref cause) => cause,
-            DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(ref cause) => cause,
+            DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigurationAggregatorSourcesStatusError {}
 /// Errors returned by DescribeConfigurationAggregators
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationAggregatorsError {
@@ -3965,21 +4707,23 @@ impl DescribeConfigurationAggregatorsError {
 }
 impl fmt::Display for DescribeConfigurationAggregatorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationAggregatorsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationAggregatorsError::InvalidLimit(ref cause) => cause,
-            DescribeConfigurationAggregatorsError::InvalidNextToken(ref cause) => cause,
-            DescribeConfigurationAggregatorsError::InvalidParameterValue(ref cause) => cause,
+            DescribeConfigurationAggregatorsError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigurationAggregatorsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigurationAggregatorsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeConfigurationAggregatorsError {}
 /// Errors returned by DescribeConfigurationRecorderStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationRecorderStatusError {
@@ -4009,18 +4753,14 @@ impl DescribeConfigurationRecorderStatusError {
 }
 impl fmt::Display for DescribeConfigurationRecorderStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationRecorderStatusError {
-    fn description(&self) -> &str {
         match *self {
             DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeConfigurationRecorderStatusError {}
 /// Errors returned by DescribeConfigurationRecorders
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationRecordersError {
@@ -4048,16 +4788,183 @@ impl DescribeConfigurationRecordersError {
 }
 impl fmt::Display for DescribeConfigurationRecordersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationRecordersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(ref cause) => cause,
+            DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeConfigurationRecordersError {}
+/// Errors returned by DescribeConformancePackCompliance
+#[derive(Debug, PartialEq)]
+pub enum DescribeConformancePackComplianceError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>AWS Config rule that you passed in the filter does not exist.</p>
+    NoSuchConfigRuleInConformancePack(String),
+    /// <p>You specified one or more conformance packs that do not exist.</p>
+    NoSuchConformancePack(String),
+}
+
+impl DescribeConformancePackComplianceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConformancePackComplianceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        DescribeConformancePackComplianceError::InvalidLimit(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeConformancePackComplianceError::InvalidNextToken(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeConformancePackComplianceError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "NoSuchConfigRuleInConformancePackException" => {
+                    return RusotoError::Service(
+                        DescribeConformancePackComplianceError::NoSuchConfigRuleInConformancePack(
+                            err.msg,
+                        ),
+                    )
+                }
+                "NoSuchConformancePackException" => {
+                    return RusotoError::Service(
+                        DescribeConformancePackComplianceError::NoSuchConformancePack(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeConformancePackComplianceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeConformancePackComplianceError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConformancePackComplianceError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConformancePackComplianceError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConformancePackComplianceError::NoSuchConfigRuleInConformancePack(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            DescribeConformancePackComplianceError::NoSuchConformancePack(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeConformancePackComplianceError {}
+/// Errors returned by DescribeConformancePackStatus
+#[derive(Debug, PartialEq)]
+pub enum DescribeConformancePackStatusError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+}
+
+impl DescribeConformancePackStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConformancePackStatusError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(DescribeConformancePackStatusError::InvalidLimit(
+                        err.msg,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeConformancePackStatusError::InvalidNextToken(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeConformancePackStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeConformancePackStatusError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            DescribeConformancePackStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeConformancePackStatusError {}
+/// Errors returned by DescribeConformancePacks
+#[derive(Debug, PartialEq)]
+pub enum DescribeConformancePacksError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You specified one or more conformance packs that do not exist.</p>
+    NoSuchConformancePack(String),
+}
+
+impl DescribeConformancePacksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConformancePacksError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(DescribeConformancePacksError::InvalidLimit(
+                        err.msg,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(DescribeConformancePacksError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "NoSuchConformancePackException" => {
+                    return RusotoError::Service(
+                        DescribeConformancePacksError::NoSuchConformancePack(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeConformancePacksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeConformancePacksError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            DescribeConformancePacksError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeConformancePacksError::NoSuchConformancePack(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeConformancePacksError {}
 /// Errors returned by DescribeDeliveryChannelStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeDeliveryChannelStatusError {
@@ -4085,16 +4992,14 @@ impl DescribeDeliveryChannelStatusError {
 }
 impl fmt::Display for DescribeDeliveryChannelStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDeliveryChannelStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(ref cause) => cause,
+            DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDeliveryChannelStatusError {}
 /// Errors returned by DescribeDeliveryChannels
 #[derive(Debug, PartialEq)]
 pub enum DescribeDeliveryChannelsError {
@@ -4120,16 +5025,14 @@ impl DescribeDeliveryChannelsError {
 }
 impl fmt::Display for DescribeDeliveryChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDeliveryChannelsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDeliveryChannelsError::NoSuchDeliveryChannel(ref cause) => cause,
+            DescribeDeliveryChannelsError::NoSuchDeliveryChannel(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDeliveryChannelsError {}
 /// Errors returned by DescribeOrganizationConfigRuleStatuses
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrganizationConfigRuleStatusesError {
@@ -4139,7 +5042,7 @@ pub enum DescribeOrganizationConfigRuleStatusesError {
     InvalidNextToken(String),
     /// <p>You specified one or more organization config rules that do not exist.</p>
     NoSuchOrganizationConfigRule(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
 }
 
@@ -4182,23 +5085,23 @@ impl DescribeOrganizationConfigRuleStatusesError {
 }
 impl fmt::Display for DescribeOrganizationConfigRuleStatusesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrganizationConfigRuleStatusesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOrganizationConfigRuleStatusesError::InvalidLimit(ref cause) => cause,
-            DescribeOrganizationConfigRuleStatusesError::InvalidNextToken(ref cause) => cause,
+            DescribeOrganizationConfigRuleStatusesError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConfigRuleStatusesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeOrganizationConfigRuleStatusesError::NoSuchOrganizationConfigRule(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             DescribeOrganizationConfigRuleStatusesError::OrganizationAccessDenied(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeOrganizationConfigRuleStatusesError {}
 /// Errors returned by DescribeOrganizationConfigRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrganizationConfigRulesError {
@@ -4208,7 +5111,7 @@ pub enum DescribeOrganizationConfigRulesError {
     InvalidNextToken(String),
     /// <p>You specified one or more organization config rules that do not exist.</p>
     NoSuchOrganizationConfigRule(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
 }
 
@@ -4247,19 +5150,137 @@ impl DescribeOrganizationConfigRulesError {
 }
 impl fmt::Display for DescribeOrganizationConfigRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrganizationConfigRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOrganizationConfigRulesError::InvalidLimit(ref cause) => cause,
-            DescribeOrganizationConfigRulesError::InvalidNextToken(ref cause) => cause,
-            DescribeOrganizationConfigRulesError::NoSuchOrganizationConfigRule(ref cause) => cause,
-            DescribeOrganizationConfigRulesError::OrganizationAccessDenied(ref cause) => cause,
+            DescribeOrganizationConfigRulesError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            DescribeOrganizationConfigRulesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConfigRulesError::NoSuchOrganizationConfigRule(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConfigRulesError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeOrganizationConfigRulesError {}
+/// Errors returned by DescribeOrganizationConformancePackStatuses
+#[derive(Debug, PartialEq)]
+pub enum DescribeOrganizationConformancePackStatusesError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>AWS Config organization conformance pack that you passed in the filter does not exist.</p> <p>For DeleteOrganizationConformancePack, you tried to delete an organization conformance pack that does not exist.</p>
+    NoSuchOrganizationConformancePack(String),
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    OrganizationAccessDenied(String),
+}
+
+impl DescribeOrganizationConformancePackStatusesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOrganizationConformancePackStatusesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                                "InvalidLimitException" => return RusotoError::Service(DescribeOrganizationConformancePackStatusesError::InvalidLimit(err.msg)),
+"InvalidNextTokenException" => return RusotoError::Service(DescribeOrganizationConformancePackStatusesError::InvalidNextToken(err.msg)),
+"NoSuchOrganizationConformancePackException" => return RusotoError::Service(DescribeOrganizationConformancePackStatusesError::NoSuchOrganizationConformancePack(err.msg)),
+"OrganizationAccessDeniedException" => return RusotoError::Service(DescribeOrganizationConformancePackStatusesError::OrganizationAccessDenied(err.msg)),
+"ValidationException" => return RusotoError::Validation(err.msg),
+_ => {}
+                            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeOrganizationConformancePackStatusesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeOrganizationConformancePackStatusesError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConformancePackStatusesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConformancePackStatusesError::NoSuchOrganizationConformancePack(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            DescribeOrganizationConformancePackStatusesError::OrganizationAccessDenied(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeOrganizationConformancePackStatusesError {}
+/// Errors returned by DescribeOrganizationConformancePacks
+#[derive(Debug, PartialEq)]
+pub enum DescribeOrganizationConformancePacksError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>AWS Config organization conformance pack that you passed in the filter does not exist.</p> <p>For DeleteOrganizationConformancePack, you tried to delete an organization conformance pack that does not exist.</p>
+    NoSuchOrganizationConformancePack(String),
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    OrganizationAccessDenied(String),
+}
+
+impl DescribeOrganizationConformancePacksError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOrganizationConformancePacksError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConformancePacksError::InvalidLimit(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConformancePacksError::InvalidNextToken(err.msg),
+                    )
+                }
+                "NoSuchOrganizationConformancePackException" => return RusotoError::Service(
+                    DescribeOrganizationConformancePacksError::NoSuchOrganizationConformancePack(
+                        err.msg,
+                    ),
+                ),
+                "OrganizationAccessDeniedException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConformancePacksError::OrganizationAccessDenied(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeOrganizationConformancePacksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeOrganizationConformancePacksError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConformancePacksError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConformancePacksError::NoSuchOrganizationConformancePack(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            DescribeOrganizationConformancePacksError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeOrganizationConformancePacksError {}
 /// Errors returned by DescribePendingAggregationRequests
 #[derive(Debug, PartialEq)]
 pub enum DescribePendingAggregationRequestsError {
@@ -4301,18 +5322,20 @@ impl DescribePendingAggregationRequestsError {
 }
 impl fmt::Display for DescribePendingAggregationRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePendingAggregationRequestsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePendingAggregationRequestsError::InvalidLimit(ref cause) => cause,
-            DescribePendingAggregationRequestsError::InvalidNextToken(ref cause) => cause,
-            DescribePendingAggregationRequestsError::InvalidParameterValue(ref cause) => cause,
+            DescribePendingAggregationRequestsError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePendingAggregationRequestsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePendingAggregationRequestsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribePendingAggregationRequestsError {}
 /// Errors returned by DescribeRemediationConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeRemediationConfigurationsError {}
@@ -4332,14 +5355,10 @@ impl DescribeRemediationConfigurationsError {
 }
 impl fmt::Display for DescribeRemediationConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRemediationConfigurationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeRemediationConfigurationsError {}
 /// Errors returned by DescribeRemediationExceptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeRemediationExceptionsError {
@@ -4374,17 +5393,17 @@ impl DescribeRemediationExceptionsError {
 }
 impl fmt::Display for DescribeRemediationExceptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRemediationExceptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRemediationExceptionsError::InvalidNextToken(ref cause) => cause,
-            DescribeRemediationExceptionsError::InvalidParameterValue(ref cause) => cause,
+            DescribeRemediationExceptionsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRemediationExceptionsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeRemediationExceptionsError {}
 /// Errors returned by DescribeRemediationExecutionStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeRemediationExecutionStatusError {
@@ -4421,19 +5440,17 @@ impl DescribeRemediationExecutionStatusError {
 }
 impl fmt::Display for DescribeRemediationExecutionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRemediationExecutionStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRemediationExecutionStatusError::InvalidNextToken(ref cause) => cause,
+            DescribeRemediationExecutionStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeRemediationExecutionStatusError::NoSuchRemediationConfiguration(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeRemediationExecutionStatusError {}
 /// Errors returned by DescribeRetentionConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeRetentionConfigurationsError {
@@ -4475,18 +5492,20 @@ impl DescribeRetentionConfigurationsError {
 }
 impl fmt::Display for DescribeRetentionConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRetentionConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRetentionConfigurationsError::InvalidNextToken(ref cause) => cause,
-            DescribeRetentionConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(ref cause) => cause,
+            DescribeRetentionConfigurationsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRetentionConfigurationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeRetentionConfigurationsError {}
 /// Errors returned by GetAggregateComplianceDetailsByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum GetAggregateComplianceDetailsByConfigRuleError {
@@ -4528,20 +5547,20 @@ impl GetAggregateComplianceDetailsByConfigRuleError {
 }
 impl fmt::Display for GetAggregateComplianceDetailsByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAggregateComplianceDetailsByConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(ref cause) => cause,
-            GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(ref cause) => cause,
+            GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAggregateComplianceDetailsByConfigRuleError {}
 /// Errors returned by GetAggregateConfigRuleComplianceSummary
 #[derive(Debug, PartialEq)]
 pub enum GetAggregateConfigRuleComplianceSummaryError {
@@ -4585,20 +5604,20 @@ impl GetAggregateConfigRuleComplianceSummaryError {
 }
 impl fmt::Display for GetAggregateConfigRuleComplianceSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAggregateConfigRuleComplianceSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(ref cause) => cause,
-            GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(ref cause) => cause,
+            GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAggregateConfigRuleComplianceSummaryError {}
 /// Errors returned by GetAggregateDiscoveredResourceCounts
 #[derive(Debug, PartialEq)]
 pub enum GetAggregateDiscoveredResourceCountsError {
@@ -4642,20 +5661,20 @@ impl GetAggregateDiscoveredResourceCountsError {
 }
 impl fmt::Display for GetAggregateDiscoveredResourceCountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAggregateDiscoveredResourceCountsError {
-    fn description(&self) -> &str {
         match *self {
-            GetAggregateDiscoveredResourceCountsError::InvalidLimit(ref cause) => cause,
-            GetAggregateDiscoveredResourceCountsError::InvalidNextToken(ref cause) => cause,
+            GetAggregateDiscoveredResourceCountsError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateDiscoveredResourceCountsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetAggregateDiscoveredResourceCountsError::NoSuchConfigurationAggregator(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetAggregateDiscoveredResourceCountsError {}
 /// Errors returned by GetAggregateResourceConfig
 #[derive(Debug, PartialEq)]
 pub enum GetAggregateResourceConfigError {
@@ -4697,18 +5716,20 @@ impl GetAggregateResourceConfigError {
 }
 impl fmt::Display for GetAggregateResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAggregateResourceConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => cause,
-            GetAggregateResourceConfigError::OversizedConfigurationItem(ref cause) => cause,
-            GetAggregateResourceConfigError::ResourceNotDiscovered(ref cause) => cause,
+            GetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateResourceConfigError::OversizedConfigurationItem(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateResourceConfigError::ResourceNotDiscovered(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetAggregateResourceConfigError {}
 /// Errors returned by GetComplianceDetailsByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceDetailsByConfigRuleError {
@@ -4750,18 +5771,20 @@ impl GetComplianceDetailsByConfigRuleError {
 }
 impl fmt::Display for GetComplianceDetailsByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetComplianceDetailsByConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            GetComplianceDetailsByConfigRuleError::InvalidNextToken(ref cause) => cause,
-            GetComplianceDetailsByConfigRuleError::InvalidParameterValue(ref cause) => cause,
-            GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(ref cause) => cause,
+            GetComplianceDetailsByConfigRuleError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetComplianceDetailsByConfigRuleError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetComplianceDetailsByConfigRuleError {}
 /// Errors returned by GetComplianceDetailsByResource
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceDetailsByResourceError {
@@ -4789,16 +5812,14 @@ impl GetComplianceDetailsByResourceError {
 }
 impl fmt::Display for GetComplianceDetailsByResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetComplianceDetailsByResourceError {
-    fn description(&self) -> &str {
         match *self {
-            GetComplianceDetailsByResourceError::InvalidParameterValue(ref cause) => cause,
+            GetComplianceDetailsByResourceError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetComplianceDetailsByResourceError {}
 /// Errors returned by GetComplianceSummaryByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceSummaryByConfigRuleError {}
@@ -4818,14 +5839,10 @@ impl GetComplianceSummaryByConfigRuleError {
 }
 impl fmt::Display for GetComplianceSummaryByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetComplianceSummaryByConfigRuleError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetComplianceSummaryByConfigRuleError {}
 /// Errors returned by GetComplianceSummaryByResourceType
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceSummaryByResourceTypeError {
@@ -4853,16 +5870,146 @@ impl GetComplianceSummaryByResourceTypeError {
 }
 impl fmt::Display for GetComplianceSummaryByResourceTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetComplianceSummaryByResourceTypeError {
-    fn description(&self) -> &str {
         match *self {
-            GetComplianceSummaryByResourceTypeError::InvalidParameterValue(ref cause) => cause,
+            GetComplianceSummaryByResourceTypeError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetComplianceSummaryByResourceTypeError {}
+/// Errors returned by GetConformancePackComplianceDetails
+#[derive(Debug, PartialEq)]
+pub enum GetConformancePackComplianceDetailsError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>AWS Config rule that you passed in the filter does not exist.</p>
+    NoSuchConfigRuleInConformancePack(String),
+    /// <p>You specified one or more conformance packs that do not exist.</p>
+    NoSuchConformancePack(String),
+}
+
+impl GetConformancePackComplianceDetailsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetConformancePackComplianceDetailsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        GetConformancePackComplianceDetailsError::InvalidLimit(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        GetConformancePackComplianceDetailsError::InvalidNextToken(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        GetConformancePackComplianceDetailsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "NoSuchConfigRuleInConformancePackException" => {
+                    return RusotoError::Service(
+                        GetConformancePackComplianceDetailsError::NoSuchConfigRuleInConformancePack(
+                            err.msg,
+                        ),
+                    )
+                }
+                "NoSuchConformancePackException" => {
+                    return RusotoError::Service(
+                        GetConformancePackComplianceDetailsError::NoSuchConformancePack(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetConformancePackComplianceDetailsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetConformancePackComplianceDetailsError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetConformancePackComplianceDetailsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetConformancePackComplianceDetailsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetConformancePackComplianceDetailsError::NoSuchConfigRuleInConformancePack(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            GetConformancePackComplianceDetailsError::NoSuchConformancePack(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetConformancePackComplianceDetailsError {}
+/// Errors returned by GetConformancePackComplianceSummary
+#[derive(Debug, PartialEq)]
+pub enum GetConformancePackComplianceSummaryError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You specified one or more conformance packs that do not exist.</p>
+    NoSuchConformancePack(String),
+}
+
+impl GetConformancePackComplianceSummaryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetConformancePackComplianceSummaryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        GetConformancePackComplianceSummaryError::InvalidLimit(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        GetConformancePackComplianceSummaryError::InvalidNextToken(err.msg),
+                    )
+                }
+                "NoSuchConformancePackException" => {
+                    return RusotoError::Service(
+                        GetConformancePackComplianceSummaryError::NoSuchConformancePack(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetConformancePackComplianceSummaryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetConformancePackComplianceSummaryError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetConformancePackComplianceSummaryError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetConformancePackComplianceSummaryError::NoSuchConformancePack(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetConformancePackComplianceSummaryError {}
 /// Errors returned by GetDiscoveredResourceCounts
 #[derive(Debug, PartialEq)]
 pub enum GetDiscoveredResourceCountsError {
@@ -4897,17 +6044,13 @@ impl GetDiscoveredResourceCountsError {
 }
 impl fmt::Display for GetDiscoveredResourceCountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDiscoveredResourceCountsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDiscoveredResourceCountsError::InvalidLimit(ref cause) => cause,
-            GetDiscoveredResourceCountsError::InvalidNextToken(ref cause) => cause,
+            GetDiscoveredResourceCountsError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            GetDiscoveredResourceCountsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDiscoveredResourceCountsError {}
 /// Errors returned by GetOrganizationConfigRuleDetailedStatus
 #[derive(Debug, PartialEq)]
 pub enum GetOrganizationConfigRuleDetailedStatusError {
@@ -4917,7 +6060,7 @@ pub enum GetOrganizationConfigRuleDetailedStatusError {
     InvalidNextToken(String),
     /// <p>You specified one or more organization config rules that do not exist.</p>
     NoSuchOrganizationConfigRule(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
 }
 
@@ -4960,23 +6103,64 @@ impl GetOrganizationConfigRuleDetailedStatusError {
 }
 impl fmt::Display for GetOrganizationConfigRuleDetailedStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOrganizationConfigRuleDetailedStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetOrganizationConfigRuleDetailedStatusError::InvalidLimit(ref cause) => cause,
-            GetOrganizationConfigRuleDetailedStatusError::InvalidNextToken(ref cause) => cause,
+            GetOrganizationConfigRuleDetailedStatusError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetOrganizationConfigRuleDetailedStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetOrganizationConfigRuleDetailedStatusError::NoSuchOrganizationConfigRule(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             GetOrganizationConfigRuleDetailedStatusError::OrganizationAccessDenied(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetOrganizationConfigRuleDetailedStatusError {}
+/// Errors returned by GetOrganizationConformancePackDetailedStatus
+#[derive(Debug, PartialEq)]
+pub enum GetOrganizationConformancePackDetailedStatusError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>AWS Config organization conformance pack that you passed in the filter does not exist.</p> <p>For DeleteOrganizationConformancePack, you tried to delete an organization conformance pack that does not exist.</p>
+    NoSuchOrganizationConformancePack(String),
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    OrganizationAccessDenied(String),
+}
+
+impl GetOrganizationConformancePackDetailedStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetOrganizationConformancePackDetailedStatusError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                                "InvalidLimitException" => return RusotoError::Service(GetOrganizationConformancePackDetailedStatusError::InvalidLimit(err.msg)),
+"InvalidNextTokenException" => return RusotoError::Service(GetOrganizationConformancePackDetailedStatusError::InvalidNextToken(err.msg)),
+"NoSuchOrganizationConformancePackException" => return RusotoError::Service(GetOrganizationConformancePackDetailedStatusError::NoSuchOrganizationConformancePack(err.msg)),
+"OrganizationAccessDeniedException" => return RusotoError::Service(GetOrganizationConformancePackDetailedStatusError::OrganizationAccessDenied(err.msg)),
+"ValidationException" => return RusotoError::Validation(err.msg),
+_ => {}
+                            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetOrganizationConformancePackDetailedStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+                            GetOrganizationConformancePackDetailedStatusError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+GetOrganizationConformancePackDetailedStatusError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+GetOrganizationConformancePackDetailedStatusError::NoSuchOrganizationConformancePack(ref cause) => write!(f, "{}", cause),
+GetOrganizationConformancePackDetailedStatusError::OrganizationAccessDenied(ref cause) => write!(f, "{}", cause)
+                        }
+    }
+}
+impl Error for GetOrganizationConformancePackDetailedStatusError {}
 /// Errors returned by GetResourceConfigHistory
 #[derive(Debug, PartialEq)]
 pub enum GetResourceConfigHistoryError {
@@ -5030,20 +6214,20 @@ impl GetResourceConfigHistoryError {
 }
 impl fmt::Display for GetResourceConfigHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourceConfigHistoryError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourceConfigHistoryError::InvalidLimit(ref cause) => cause,
-            GetResourceConfigHistoryError::InvalidNextToken(ref cause) => cause,
-            GetResourceConfigHistoryError::InvalidTimeRange(ref cause) => cause,
-            GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(ref cause) => cause,
-            GetResourceConfigHistoryError::ResourceNotDiscovered(ref cause) => cause,
+            GetResourceConfigHistoryError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            GetResourceConfigHistoryError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetResourceConfigHistoryError::InvalidTimeRange(ref cause) => write!(f, "{}", cause),
+            GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetResourceConfigHistoryError::ResourceNotDiscovered(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetResourceConfigHistoryError {}
 /// Errors returned by ListAggregateDiscoveredResources
 #[derive(Debug, PartialEq)]
 pub enum ListAggregateDiscoveredResourcesError {
@@ -5087,20 +6271,20 @@ impl ListAggregateDiscoveredResourcesError {
 }
 impl fmt::Display for ListAggregateDiscoveredResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAggregateDiscoveredResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAggregateDiscoveredResourcesError::InvalidLimit(ref cause) => cause,
-            ListAggregateDiscoveredResourcesError::InvalidNextToken(ref cause) => cause,
+            ListAggregateDiscoveredResourcesError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAggregateDiscoveredResourcesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ListAggregateDiscoveredResourcesError::NoSuchConfigurationAggregator(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ListAggregateDiscoveredResourcesError {}
 /// Errors returned by ListDiscoveredResources
 #[derive(Debug, PartialEq)]
 pub enum ListDiscoveredResourcesError {
@@ -5140,18 +6324,16 @@ impl ListDiscoveredResourcesError {
 }
 impl fmt::Display for ListDiscoveredResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDiscoveredResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDiscoveredResourcesError::InvalidLimit(ref cause) => cause,
-            ListDiscoveredResourcesError::InvalidNextToken(ref cause) => cause,
-            ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(ref cause) => cause,
+            ListDiscoveredResourcesError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListDiscoveredResourcesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -5189,18 +6371,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InvalidLimit(ref cause) => cause,
-            ListTagsForResourceError::InvalidNextToken(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutAggregationAuthorization
 #[derive(Debug, PartialEq)]
 pub enum PutAggregationAuthorizationError {
@@ -5228,20 +6406,18 @@ impl PutAggregationAuthorizationError {
 }
 impl fmt::Display for PutAggregationAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAggregationAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            PutAggregationAuthorizationError::InvalidParameterValue(ref cause) => cause,
+            PutAggregationAuthorizationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutAggregationAuthorizationError {}
 /// Errors returned by PutConfigRule
 #[derive(Debug, PartialEq)]
 pub enum PutConfigRuleError {
-    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For OrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create service linked role.</p> </li> </ul></p>
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For PutOrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack cannot be created because you do not have permissions: </p> <ul> <li> <p>To call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>To read Amazon S3 bucket.</p> </li> </ul> </li> </ul></p>
     InsufficientPermissions(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -5249,7 +6425,7 @@ pub enum PutConfigRuleError {
     MaxNumberOfConfigRulesExceeded(String),
     /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
-    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
 }
 
@@ -5287,20 +6463,18 @@ impl PutConfigRuleError {
 }
 impl fmt::Display for PutConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            PutConfigRuleError::InsufficientPermissions(ref cause) => cause,
-            PutConfigRuleError::InvalidParameterValue(ref cause) => cause,
-            PutConfigRuleError::MaxNumberOfConfigRulesExceeded(ref cause) => cause,
-            PutConfigRuleError::NoAvailableConfigurationRecorder(ref cause) => cause,
-            PutConfigRuleError::ResourceInUse(ref cause) => cause,
+            PutConfigRuleError::InsufficientPermissions(ref cause) => write!(f, "{}", cause),
+            PutConfigRuleError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutConfigRuleError::MaxNumberOfConfigRulesExceeded(ref cause) => write!(f, "{}", cause),
+            PutConfigRuleError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigRuleError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutConfigRuleError {}
 /// Errors returned by PutConfigurationAggregator
 #[derive(Debug, PartialEq)]
 pub enum PutConfigurationAggregatorError {
@@ -5312,7 +6486,7 @@ pub enum PutConfigurationAggregatorError {
     LimitExceeded(String),
     /// <p>Organization is no longer available.</p>
     NoAvailableOrganization(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
     /// <p>AWS Config resource cannot be created because your organization does not have all features enabled.</p>
     OrganizationAllFeaturesNotEnabled(String),
@@ -5363,21 +6537,25 @@ impl PutConfigurationAggregatorError {
 }
 impl fmt::Display for PutConfigurationAggregatorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutConfigurationAggregatorError {
-    fn description(&self) -> &str {
         match *self {
-            PutConfigurationAggregatorError::InvalidParameterValue(ref cause) => cause,
-            PutConfigurationAggregatorError::InvalidRole(ref cause) => cause,
-            PutConfigurationAggregatorError::LimitExceeded(ref cause) => cause,
-            PutConfigurationAggregatorError::NoAvailableOrganization(ref cause) => cause,
-            PutConfigurationAggregatorError::OrganizationAccessDenied(ref cause) => cause,
-            PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(ref cause) => cause,
+            PutConfigurationAggregatorError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigurationAggregatorError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            PutConfigurationAggregatorError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutConfigurationAggregatorError::NoAvailableOrganization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigurationAggregatorError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutConfigurationAggregatorError {}
 /// Errors returned by PutConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum PutConfigurationRecorderError {
@@ -5426,21 +6604,86 @@ impl PutConfigurationRecorderError {
 }
 impl fmt::Display for PutConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutConfigurationRecorderError {
-    fn description(&self) -> &str {
         match *self {
-            PutConfigurationRecorderError::InvalidConfigurationRecorderName(ref cause) => cause,
-            PutConfigurationRecorderError::InvalidRecordingGroup(ref cause) => cause,
-            PutConfigurationRecorderError::InvalidRole(ref cause) => cause,
+            PutConfigurationRecorderError::InvalidConfigurationRecorderName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigurationRecorderError::InvalidRecordingGroup(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigurationRecorderError::InvalidRole(ref cause) => write!(f, "{}", cause),
             PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for PutConfigurationRecorderError {}
+/// Errors returned by PutConformancePack
+#[derive(Debug, PartialEq)]
+pub enum PutConformancePackError {
+    /// <p>You have specified a template that is not valid or supported.</p>
+    ConformancePackTemplateValidation(String),
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For PutOrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack cannot be created because you do not have permissions: </p> <ul> <li> <p>To call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>To read Amazon S3 bucket.</p> </li> </ul> </li> </ul></p>
+    InsufficientPermissions(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>You have reached the limit (6) of the number of conformance packs in an account (6 conformance pack with 25 AWS Config rules per pack).</p>
+    MaxNumberOfConformancePacksExceeded(String),
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
+    ResourceInUse(String),
+}
+
+impl PutConformancePackError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutConformancePackError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConformancePackTemplateValidationException" => {
+                    return RusotoError::Service(
+                        PutConformancePackError::ConformancePackTemplateValidation(err.msg),
+                    )
+                }
+                "InsufficientPermissionsException" => {
+                    return RusotoError::Service(PutConformancePackError::InsufficientPermissions(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(PutConformancePackError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "MaxNumberOfConformancePacksExceededException" => {
+                    return RusotoError::Service(
+                        PutConformancePackError::MaxNumberOfConformancePacksExceeded(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(PutConformancePackError::ResourceInUse(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutConformancePackError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutConformancePackError::ConformancePackTemplateValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConformancePackError::InsufficientPermissions(ref cause) => write!(f, "{}", cause),
+            PutConformancePackError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutConformancePackError::MaxNumberOfConformancePacksExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConformancePackError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutConformancePackError {}
 /// Errors returned by PutDeliveryChannel
 #[derive(Debug, PartialEq)]
 pub enum PutDeliveryChannelError {
@@ -5506,22 +6749,26 @@ impl PutDeliveryChannelError {
 }
 impl fmt::Display for PutDeliveryChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutDeliveryChannelError {
-    fn description(&self) -> &str {
         match *self {
-            PutDeliveryChannelError::InsufficientDeliveryPolicy(ref cause) => cause,
-            PutDeliveryChannelError::InvalidDeliveryChannelName(ref cause) => cause,
-            PutDeliveryChannelError::InvalidS3KeyPrefix(ref cause) => cause,
-            PutDeliveryChannelError::InvalidSNSTopicARN(ref cause) => cause,
-            PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(ref cause) => cause,
-            PutDeliveryChannelError::NoAvailableConfigurationRecorder(ref cause) => cause,
-            PutDeliveryChannelError::NoSuchBucket(ref cause) => cause,
+            PutDeliveryChannelError::InsufficientDeliveryPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutDeliveryChannelError::InvalidDeliveryChannelName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutDeliveryChannelError::InvalidS3KeyPrefix(ref cause) => write!(f, "{}", cause),
+            PutDeliveryChannelError::InvalidSNSTopicARN(ref cause) => write!(f, "{}", cause),
+            PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutDeliveryChannelError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutDeliveryChannelError::NoSuchBucket(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutDeliveryChannelError {}
 /// Errors returned by PutEvaluations
 #[derive(Debug, PartialEq)]
 pub enum PutEvaluationsError {
@@ -5557,22 +6804,18 @@ impl PutEvaluationsError {
 }
 impl fmt::Display for PutEvaluationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutEvaluationsError {
-    fn description(&self) -> &str {
         match *self {
-            PutEvaluationsError::InvalidParameterValue(ref cause) => cause,
-            PutEvaluationsError::InvalidResultToken(ref cause) => cause,
-            PutEvaluationsError::NoSuchConfigRule(ref cause) => cause,
+            PutEvaluationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutEvaluationsError::InvalidResultToken(ref cause) => write!(f, "{}", cause),
+            PutEvaluationsError::NoSuchConfigRule(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutEvaluationsError {}
 /// Errors returned by PutOrganizationConfigRule
 #[derive(Debug, PartialEq)]
 pub enum PutOrganizationConfigRuleError {
-    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For OrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create service linked role.</p> </li> </ul></p>
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For PutOrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack cannot be created because you do not have permissions: </p> <ul> <li> <p>To call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>To read Amazon S3 bucket.</p> </li> </ul> </li> </ul></p>
     InsufficientPermissions(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -5580,11 +6823,11 @@ pub enum PutOrganizationConfigRuleError {
     MaxNumberOfOrganizationConfigRulesExceeded(String),
     /// <p>Organization is no longer available.</p>
     NoAvailableOrganization(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
     /// <p>AWS Config resource cannot be created because your organization does not have all features enabled.</p>
     OrganizationAllFeaturesNotEnabled(String),
-    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
 }
 
@@ -5638,28 +6881,87 @@ impl PutOrganizationConfigRuleError {
 }
 impl fmt::Display for PutOrganizationConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutOrganizationConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            PutOrganizationConfigRuleError::InsufficientPermissions(ref cause) => cause,
-            PutOrganizationConfigRuleError::InvalidParameterValue(ref cause) => cause,
+            PutOrganizationConfigRuleError::InsufficientPermissions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutOrganizationConfigRuleError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             PutOrganizationConfigRuleError::MaxNumberOfOrganizationConfigRulesExceeded(
                 ref cause,
-            ) => cause,
-            PutOrganizationConfigRuleError::NoAvailableOrganization(ref cause) => cause,
-            PutOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => cause,
-            PutOrganizationConfigRuleError::OrganizationAllFeaturesNotEnabled(ref cause) => cause,
-            PutOrganizationConfigRuleError::ResourceInUse(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            PutOrganizationConfigRuleError::NoAvailableOrganization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutOrganizationConfigRuleError::OrganizationAllFeaturesNotEnabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutOrganizationConfigRuleError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutOrganizationConfigRuleError {}
+/// Errors returned by PutOrganizationConformancePack
+#[derive(Debug, PartialEq)]
+pub enum PutOrganizationConformancePackError {
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For PutOrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack cannot be created because you do not have permissions: </p> <ul> <li> <p>To call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>To read Amazon S3 bucket.</p> </li> </ul> </li> </ul></p>
+    InsufficientPermissions(String),
+    /// <p>You have reached the limit (6) of the number of organization conformance packs in an account (6 conformance pack with 25 AWS Config rules per pack per account).</p>
+    MaxNumberOfOrganizationConformancePacksExceeded(String),
+    /// <p>Organization is no longer available.</p>
+    NoAvailableOrganization(String),
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    OrganizationAccessDenied(String),
+    /// <p>AWS Config resource cannot be created because your organization does not have all features enabled.</p>
+    OrganizationAllFeaturesNotEnabled(String),
+    /// <p>You have specified a template that is not valid or supported.</p>
+    OrganizationConformancePackTemplateValidation(String),
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
+    ResourceInUse(String),
+}
+
+impl PutOrganizationConformancePackError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutOrganizationConformancePackError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                                "InsufficientPermissionsException" => return RusotoError::Service(PutOrganizationConformancePackError::InsufficientPermissions(err.msg)),
+"MaxNumberOfOrganizationConformancePacksExceededException" => return RusotoError::Service(PutOrganizationConformancePackError::MaxNumberOfOrganizationConformancePacksExceeded(err.msg)),
+"NoAvailableOrganizationException" => return RusotoError::Service(PutOrganizationConformancePackError::NoAvailableOrganization(err.msg)),
+"OrganizationAccessDeniedException" => return RusotoError::Service(PutOrganizationConformancePackError::OrganizationAccessDenied(err.msg)),
+"OrganizationAllFeaturesNotEnabledException" => return RusotoError::Service(PutOrganizationConformancePackError::OrganizationAllFeaturesNotEnabled(err.msg)),
+"OrganizationConformancePackTemplateValidationException" => return RusotoError::Service(PutOrganizationConformancePackError::OrganizationConformancePackTemplateValidation(err.msg)),
+"ResourceInUseException" => return RusotoError::Service(PutOrganizationConformancePackError::ResourceInUse(err.msg)),
+"ValidationException" => return RusotoError::Validation(err.msg),
+_ => {}
+                            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutOrganizationConformancePackError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+                            PutOrganizationConformancePackError::InsufficientPermissions(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::MaxNumberOfOrganizationConformancePacksExceeded(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::NoAvailableOrganization(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::OrganizationAccessDenied(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::OrganizationAllFeaturesNotEnabled(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::OrganizationConformancePackTemplateValidation(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::ResourceInUse(ref cause) => write!(f, "{}", cause)
+                        }
+    }
+}
+impl Error for PutOrganizationConformancePackError {}
 /// Errors returned by PutRemediationConfigurations
 #[derive(Debug, PartialEq)]
 pub enum PutRemediationConfigurationsError {
-    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For OrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create service linked role.</p> </li> </ul></p>
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For PutOrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack cannot be created because you do not have permissions: </p> <ul> <li> <p>To call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>To read Amazon S3 bucket.</p> </li> </ul> </li> </ul></p>
     InsufficientPermissions(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -5690,17 +6992,17 @@ impl PutRemediationConfigurationsError {
 }
 impl fmt::Display for PutRemediationConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRemediationConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            PutRemediationConfigurationsError::InsufficientPermissions(ref cause) => cause,
-            PutRemediationConfigurationsError::InvalidParameterValue(ref cause) => cause,
+            PutRemediationConfigurationsError::InsufficientPermissions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRemediationConfigurationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutRemediationConfigurationsError {}
 /// Errors returned by PutRemediationExceptions
 #[derive(Debug, PartialEq)]
 pub enum PutRemediationExceptionsError {
@@ -5726,16 +7028,63 @@ impl PutRemediationExceptionsError {
 }
 impl fmt::Display for PutRemediationExceptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRemediationExceptionsError {
-    fn description(&self) -> &str {
         match *self {
-            PutRemediationExceptionsError::InvalidParameterValue(ref cause) => cause,
+            PutRemediationExceptionsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutRemediationExceptionsError {}
+/// Errors returned by PutResourceConfig
+#[derive(Debug, PartialEq)]
+pub enum PutResourceConfigError {
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For PutOrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack cannot be created because you do not have permissions: </p> <ul> <li> <p>To call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>To read Amazon S3 bucket.</p> </li> </ul> </li> </ul></p>
+    InsufficientPermissions(String),
+    /// <p>You have reached the limit (100,000) of active custom resource types in your account. Delete unused resources using <code>DeleteResourceConfig</code>.</p>
+    MaxActiveResourcesExceeded(String),
+    /// <p>There is no configuration recorder running.</p>
+    NoRunningConfigurationRecorder(String),
+}
+
+impl PutResourceConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourceConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InsufficientPermissionsException" => {
+                    return RusotoError::Service(PutResourceConfigError::InsufficientPermissions(
+                        err.msg,
+                    ))
+                }
+                "MaxActiveResourcesExceededException" => {
+                    return RusotoError::Service(
+                        PutResourceConfigError::MaxActiveResourcesExceeded(err.msg),
+                    )
+                }
+                "NoRunningConfigurationRecorderException" => {
+                    return RusotoError::Service(
+                        PutResourceConfigError::NoRunningConfigurationRecorder(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutResourceConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutResourceConfigError::InsufficientPermissions(ref cause) => write!(f, "{}", cause),
+            PutResourceConfigError::MaxActiveResourcesExceeded(ref cause) => write!(f, "{}", cause),
+            PutResourceConfigError::NoRunningConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for PutResourceConfigError {}
 /// Errors returned by PutRetentionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutRetentionConfigurationError {
@@ -5770,19 +7119,17 @@ impl PutRetentionConfigurationError {
 }
 impl fmt::Display for PutRetentionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRetentionConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutRetentionConfigurationError::InvalidParameterValue(ref cause) => cause,
+            PutRetentionConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutRetentionConfigurationError {}
 /// Errors returned by SelectResourceConfig
 #[derive(Debug, PartialEq)]
 pub enum SelectResourceConfigError {
@@ -5820,18 +7167,14 @@ impl SelectResourceConfigError {
 }
 impl fmt::Display for SelectResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SelectResourceConfigError {
-    fn description(&self) -> &str {
         match *self {
-            SelectResourceConfigError::InvalidExpression(ref cause) => cause,
-            SelectResourceConfigError::InvalidLimit(ref cause) => cause,
-            SelectResourceConfigError::InvalidNextToken(ref cause) => cause,
+            SelectResourceConfigError::InvalidExpression(ref cause) => write!(f, "{}", cause),
+            SelectResourceConfigError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            SelectResourceConfigError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SelectResourceConfigError {}
 /// Errors returned by StartConfigRulesEvaluation
 #[derive(Debug, PartialEq)]
 pub enum StartConfigRulesEvaluationError {
@@ -5841,7 +7184,7 @@ pub enum StartConfigRulesEvaluationError {
     LimitExceeded(String),
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
 }
 
@@ -5880,19 +7223,17 @@ impl StartConfigRulesEvaluationError {
 }
 impl fmt::Display for StartConfigRulesEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartConfigRulesEvaluationError {
-    fn description(&self) -> &str {
         match *self {
-            StartConfigRulesEvaluationError::InvalidParameterValue(ref cause) => cause,
-            StartConfigRulesEvaluationError::LimitExceeded(ref cause) => cause,
-            StartConfigRulesEvaluationError::NoSuchConfigRule(ref cause) => cause,
-            StartConfigRulesEvaluationError::ResourceInUse(ref cause) => cause,
+            StartConfigRulesEvaluationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartConfigRulesEvaluationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartConfigRulesEvaluationError::NoSuchConfigRule(ref cause) => write!(f, "{}", cause),
+            StartConfigRulesEvaluationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartConfigRulesEvaluationError {}
 /// Errors returned by StartConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum StartConfigurationRecorderError {
@@ -5927,21 +7268,21 @@ impl StartConfigurationRecorderError {
 }
 impl fmt::Display for StartConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartConfigurationRecorderError {
-    fn description(&self) -> &str {
         match *self {
-            StartConfigurationRecorderError::NoAvailableDeliveryChannel(ref cause) => cause,
-            StartConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => cause,
+            StartConfigurationRecorderError::NoAvailableDeliveryChannel(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartConfigurationRecorderError {}
 /// Errors returned by StartRemediationExecution
 #[derive(Debug, PartialEq)]
 pub enum StartRemediationExecutionError {
-    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For OrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create service linked role.</p> </li> </ul></p>
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For PutOrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack cannot be created because you do not have permissions: </p> <ul> <li> <p>To call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>To read Amazon S3 bucket.</p> </li> </ul> </li> </ul></p>
     InsufficientPermissions(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -5977,18 +7318,20 @@ impl StartRemediationExecutionError {
 }
 impl fmt::Display for StartRemediationExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartRemediationExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StartRemediationExecutionError::InsufficientPermissions(ref cause) => cause,
-            StartRemediationExecutionError::InvalidParameterValue(ref cause) => cause,
-            StartRemediationExecutionError::NoSuchRemediationConfiguration(ref cause) => cause,
+            StartRemediationExecutionError::InsufficientPermissions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartRemediationExecutionError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartRemediationExecutionError::NoSuchRemediationConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartRemediationExecutionError {}
 /// Errors returned by StopConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum StopConfigurationRecorderError {
@@ -6014,16 +7357,14 @@ impl StopConfigurationRecorderError {
 }
 impl fmt::Display for StopConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopConfigurationRecorderError {
-    fn description(&self) -> &str {
         match *self {
-            StopConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => cause,
+            StopConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StopConfigurationRecorderError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -6052,17 +7393,13 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -6086,16 +7423,12 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Config Service API. Config Service clients implement this trait.
 pub trait ConfigService {
     /// <p><p>Returns the current configuration items for resources that are present in your AWS Config aggregator. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty <code>unprocessedResourceIdentifiers</code> list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return tags and relationships.</p> </li> </ul> </note></p>
@@ -6134,6 +7467,12 @@ pub trait ConfigService {
         input: DeleteConfigurationRecorderRequest,
     ) -> RusotoFuture<(), DeleteConfigurationRecorderError>;
 
+    /// <p>Deletes the specified conformance pack and all the AWS Config rules, remediation actions, and all evaluation results within that conformance pack.</p> <p>AWS Config sets the conformance pack to <code>DELETE_IN_PROGRESS</code> until the deletion is complete. You cannot update a conformance pack while it is in this state.</p>
+    fn delete_conformance_pack(
+        &self,
+        input: DeleteConformancePackRequest,
+    ) -> RusotoFuture<(), DeleteConformancePackError>;
+
     /// <p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>
     fn delete_delivery_channel(
         &self,
@@ -6152,6 +7491,12 @@ pub trait ConfigService {
         input: DeleteOrganizationConfigRuleRequest,
     ) -> RusotoFuture<(), DeleteOrganizationConfigRuleError>;
 
+    /// <p>Deletes the specified organization conformance pack and all of the config rules and remediation actions from all member accounts in that organization. Only a master account can delete an organization conformance pack.</p> <p>AWS Config sets the state of a conformance pack to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a conformance pack while it is in this state. </p>
+    fn delete_organization_conformance_pack(
+        &self,
+        input: DeleteOrganizationConformancePackRequest,
+    ) -> RusotoFuture<(), DeleteOrganizationConformancePackError>;
+
     /// <p>Deletes pending authorization requests for a specified aggregator account in a specified region.</p>
     fn delete_pending_aggregation_request(
         &self,
@@ -6169,6 +7514,12 @@ pub trait ConfigService {
         &self,
         input: DeleteRemediationExceptionsRequest,
     ) -> RusotoFuture<DeleteRemediationExceptionsResponse, DeleteRemediationExceptionsError>;
+
+    /// <p>Records the configuration state for a custom resource that has been deleted. This API records a new ConfigurationItem with a ResourceDeleted status. You can retrieve the ConfigurationItems recorded for this resource in your AWS Config History. </p>
+    fn delete_resource_config(
+        &self,
+        input: DeleteResourceConfigRequest,
+    ) -> RusotoFuture<(), DeleteResourceConfigError>;
 
     /// <p>Deletes the retention configuration.</p>
     fn delete_retention_configuration(
@@ -6257,6 +7608,27 @@ pub trait ConfigService {
         input: DescribeConfigurationRecordersRequest,
     ) -> RusotoFuture<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError>;
 
+    /// <p><p>Returns compliance details for each rule in that conformance pack.</p> <note> <p>You must provide exact rule names.</p> </note></p>
+    fn describe_conformance_pack_compliance(
+        &self,
+        input: DescribeConformancePackComplianceRequest,
+    ) -> RusotoFuture<
+        DescribeConformancePackComplianceResponse,
+        DescribeConformancePackComplianceError,
+    >;
+
+    /// <p><p>Provides one or more conformance packs deployment status.</p> <note> <p>If there are no conformance packs then you will see an empty result.</p> </note></p>
+    fn describe_conformance_pack_status(
+        &self,
+        input: DescribeConformancePackStatusRequest,
+    ) -> RusotoFuture<DescribeConformancePackStatusResponse, DescribeConformancePackStatusError>;
+
+    /// <p>Returns a list of one or more conformance packs.</p>
+    fn describe_conformance_packs(
+        &self,
+        input: DescribeConformancePacksRequest,
+    ) -> RusotoFuture<DescribeConformancePacksResponse, DescribeConformancePacksError>;
+
     /// <p><p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
     fn describe_delivery_channel_status(
         &self,
@@ -6283,6 +7655,24 @@ pub trait ConfigService {
         &self,
         input: DescribeOrganizationConfigRulesRequest,
     ) -> RusotoFuture<DescribeOrganizationConfigRulesResponse, DescribeOrganizationConfigRulesError>;
+
+    /// <p><p>Provides organization conformance pack deployment status for an organization.</p> <note> <p>The status is not considered successful until organization conformance pack is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization conformance pack names. They are only applicable, when you request all the organization conformance packs.</p> <p>Only a master account can call this API.</p> </note></p>
+    fn describe_organization_conformance_pack_statuses(
+        &self,
+        input: DescribeOrganizationConformancePackStatusesRequest,
+    ) -> RusotoFuture<
+        DescribeOrganizationConformancePackStatusesResponse,
+        DescribeOrganizationConformancePackStatusesError,
+    >;
+
+    /// <p><p>Returns a list of organization conformance packs.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you specify organization conformance packs names. They are only applicable, when you request all the organization conformance packs. </p> <p>Only a master account can call this API.</p> </note></p>
+    fn describe_organization_conformance_packs(
+        &self,
+        input: DescribeOrganizationConformancePacksRequest,
+    ) -> RusotoFuture<
+        DescribeOrganizationConformancePacksResponse,
+        DescribeOrganizationConformancePacksError,
+    >;
 
     /// <p>Returns a list of all pending aggregation requests.</p>
     fn describe_pending_aggregation_requests(
@@ -6382,6 +7772,24 @@ pub trait ConfigService {
         GetComplianceSummaryByResourceTypeError,
     >;
 
+    /// <p>Returns compliance details of a conformance pack for all AWS resources that are monitered by conformance pack.</p>
+    fn get_conformance_pack_compliance_details(
+        &self,
+        input: GetConformancePackComplianceDetailsRequest,
+    ) -> RusotoFuture<
+        GetConformancePackComplianceDetailsResponse,
+        GetConformancePackComplianceDetailsError,
+    >;
+
+    /// <p>Returns compliance details for the conformance pack based on the cumulative compliance results of all the rules in that conformance pack.</p>
+    fn get_conformance_pack_compliance_summary(
+        &self,
+        input: GetConformancePackComplianceSummaryRequest,
+    ) -> RusotoFuture<
+        GetConformancePackComplianceSummaryResponse,
+        GetConformancePackComplianceSummaryError,
+    >;
+
     /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets).</p> </li> <li> <p>The number of each resource type (25, 20, and 15).</p> </li> <li> <p>The total number of all resources (60).</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you might not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer.</p> </li> <li> <p>You just enabled resource recording.</p> </li> </ul> <p>It might take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
     fn get_discovered_resource_counts(
         &self,
@@ -6395,6 +7803,15 @@ pub trait ConfigService {
     ) -> RusotoFuture<
         GetOrganizationConfigRuleDetailedStatusResponse,
         GetOrganizationConfigRuleDetailedStatusError,
+    >;
+
+    /// <p>Returns detailed status for each member account within an organization for a given organization conformance pack.</p> <p>Only a master account can call this API.</p>
+    fn get_organization_conformance_pack_detailed_status(
+        &self,
+        input: GetOrganizationConformancePackDetailedStatusRequest,
+    ) -> RusotoFuture<
+        GetOrganizationConformancePackDetailedStatusResponse,
+        GetOrganizationConformancePackDetailedStatusError,
     >;
 
     /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
@@ -6442,6 +7859,12 @@ pub trait ConfigService {
         input: PutConfigurationRecorderRequest,
     ) -> RusotoFuture<(), PutConfigurationRecorderError>;
 
+    /// <p><p>Creates or updates a conformance pack. A conformance pack is a collection of AWS Config rules that can be easily deployed in an account and a region and across AWS Organization.</p> <p>This API creates a service linked role <code>AWSServiceRoleForConfigConforms</code> in your account. The service linked role is created only when the role does not exist in your account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> </note></p>
+    fn put_conformance_pack(
+        &self,
+        input: PutConformancePackRequest,
+    ) -> RusotoFuture<PutConformancePackResponse, PutConformancePackError>;
+
     /// <p><p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note></p>
     fn put_delivery_channel(
         &self,
@@ -6460,6 +7883,12 @@ pub trait ConfigService {
         input: PutOrganizationConfigRuleRequest,
     ) -> RusotoFuture<PutOrganizationConfigRuleResponse, PutOrganizationConfigRuleError>;
 
+    /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with GetRole action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the confomance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 6 conformance packs with 25 AWS Config rules in each pack.</p> </note></p>
+    fn put_organization_conformance_pack(
+        &self,
+        input: PutOrganizationConformancePackRequest,
+    ) -> RusotoFuture<PutOrganizationConformancePackResponse, PutOrganizationConformancePackError>;
+
     /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
     fn put_remediation_configurations(
         &self,
@@ -6471,6 +7900,12 @@ pub trait ConfigService {
         &self,
         input: PutRemediationExceptionsRequest,
     ) -> RusotoFuture<PutRemediationExceptionsResponse, PutRemediationExceptionsError>;
+
+    /// <p><p>Records the configuration state for the resource provided in the request. The configuration state of a resource is represented in AWS Config as Configuration Items. Once this API records the configuration item, you can retrieve the list of configuration items for the custom resource type using existing AWS Config APIs. </p> <note> <p>The custom resource type must be registered with AWS CloudFormation. This API accepts the configuration item registered with AWS CloudFormation.</p> <p>When you call this API, AWS Config only stores configuration state of the resource provided in the request. This API does not change or remediate the configuration of the resource. </p> </note></p>
+    fn put_resource_config(
+        &self,
+        input: PutResourceConfigRequest,
+    ) -> RusotoFuture<(), PutResourceConfigError>;
 
     /// <p><p>Creates and updates the retention configuration with details about retention period (number of days) that AWS Config stores your historical information. The API creates the <code>RetentionConfiguration</code> object and names the object as <b>default</b>. When you have a <code>RetentionConfiguration</code> object named <b>default</b>, calling the API modifies the default object. </p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
     fn put_retention_configuration(
@@ -6548,6 +7983,14 @@ impl ConfigServiceClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> ConfigServiceClient {
         ConfigServiceClient { client, region }
+    }
+}
+
+impl fmt::Debug for ConfigServiceClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ConfigServiceClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -6716,6 +8159,31 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
+    /// <p>Deletes the specified conformance pack and all the AWS Config rules, remediation actions, and all evaluation results within that conformance pack.</p> <p>AWS Config sets the conformance pack to <code>DELETE_IN_PROGRESS</code> until the deletion is complete. You cannot update a conformance pack while it is in this state.</p>
+    fn delete_conformance_pack(
+        &self,
+        input: DeleteConformancePackRequest,
+    ) -> RusotoFuture<(), DeleteConformancePackError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StarlingDoveService.DeleteConformancePack");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteConformancePackError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>
     fn delete_delivery_channel(
         &self,
@@ -6791,6 +8259,34 @@ impl ConfigService for ConfigServiceClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteOrganizationConfigRuleError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes the specified organization conformance pack and all of the config rules and remediation actions from all member accounts in that organization. Only a master account can delete an organization conformance pack.</p> <p>AWS Config sets the state of a conformance pack to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a conformance pack while it is in this state. </p>
+    fn delete_organization_conformance_pack(
+        &self,
+        input: DeleteOrganizationConformancePackRequest,
+    ) -> RusotoFuture<(), DeleteOrganizationConformancePackError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DeleteOrganizationConformancePack",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteOrganizationConformancePackError::from_response(
+                        response,
+                    ))
                 }))
             }
         })
@@ -6879,6 +8375,31 @@ impl ConfigService for ConfigServiceClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRemediationExceptionsError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Records the configuration state for a custom resource that has been deleted. This API records a new ConfigurationItem with a ResourceDeleted status. You can retrieve the ConfigurationItems recorded for this resource in your AWS Config History. </p>
+    fn delete_resource_config(
+        &self,
+        input: DeleteResourceConfigRequest,
+    ) -> RusotoFuture<(), DeleteResourceConfigError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StarlingDoveService.DeleteResourceConfig");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteResourceConfigError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -7251,6 +8772,99 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
+    /// <p><p>Returns compliance details for each rule in that conformance pack.</p> <note> <p>You must provide exact rule names.</p> </note></p>
+    fn describe_conformance_pack_compliance(
+        &self,
+        input: DescribeConformancePackComplianceRequest,
+    ) -> RusotoFuture<
+        DescribeConformancePackComplianceResponse,
+        DescribeConformancePackComplianceError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeConformancePackCompliance",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConformancePackComplianceResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeConformancePackComplianceError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p><p>Provides one or more conformance packs deployment status.</p> <note> <p>If there are no conformance packs then you will see an empty result.</p> </note></p>
+    fn describe_conformance_pack_status(
+        &self,
+        input: DescribeConformancePackStatusRequest,
+    ) -> RusotoFuture<DescribeConformancePackStatusResponse, DescribeConformancePackStatusError>
+    {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeConformancePackStatus",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConformancePackStatusResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeConformancePackStatusError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns a list of one or more conformance packs.</p>
+    fn describe_conformance_packs(
+        &self,
+        input: DescribeConformancePacksRequest,
+    ) -> RusotoFuture<DescribeConformancePacksResponse, DescribeConformancePacksError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeConformancePacks",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConformancePacksResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeConformancePacksError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p><p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
     fn describe_delivery_channel_status(
         &self,
@@ -7369,6 +8983,72 @@ impl ConfigService for ConfigServiceClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOrganizationConfigRulesError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p><p>Provides organization conformance pack deployment status for an organization.</p> <note> <p>The status is not considered successful until organization conformance pack is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization conformance pack names. They are only applicable, when you request all the organization conformance packs.</p> <p>Only a master account can call this API.</p> </note></p>
+    fn describe_organization_conformance_pack_statuses(
+        &self,
+        input: DescribeOrganizationConformancePackStatusesRequest,
+    ) -> RusotoFuture<
+        DescribeOrganizationConformancePackStatusesResponse,
+        DescribeOrganizationConformancePackStatusesError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeOrganizationConformancePackStatuses",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeOrganizationConformancePackStatusesResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeOrganizationConformancePackStatusesError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p><p>Returns a list of organization conformance packs.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you specify organization conformance packs names. They are only applicable, when you request all the organization conformance packs. </p> <p>Only a master account can call this API.</p> </note></p>
+    fn describe_organization_conformance_packs(
+        &self,
+        input: DescribeOrganizationConformancePacksRequest,
+    ) -> RusotoFuture<
+        DescribeOrganizationConformancePacksResponse,
+        DescribeOrganizationConformancePacksError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeOrganizationConformancePacks",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeOrganizationConformancePacksResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeOrganizationConformancePacksError::from_response(
                         response,
                     ))
                 }))
@@ -7795,6 +9475,74 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
+    /// <p>Returns compliance details of a conformance pack for all AWS resources that are monitered by conformance pack.</p>
+    fn get_conformance_pack_compliance_details(
+        &self,
+        input: GetConformancePackComplianceDetailsRequest,
+    ) -> RusotoFuture<
+        GetConformancePackComplianceDetailsResponse,
+        GetConformancePackComplianceDetailsError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetConformancePackComplianceDetails",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetConformancePackComplianceDetailsResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetConformancePackComplianceDetailsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns compliance details for the conformance pack based on the cumulative compliance results of all the rules in that conformance pack.</p>
+    fn get_conformance_pack_compliance_summary(
+        &self,
+        input: GetConformancePackComplianceSummaryRequest,
+    ) -> RusotoFuture<
+        GetConformancePackComplianceSummaryResponse,
+        GetConformancePackComplianceSummaryError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetConformancePackComplianceSummary",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetConformancePackComplianceSummaryResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetConformancePackComplianceSummaryError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets).</p> </li> <li> <p>The number of each resource type (25, 20, and 15).</p> </li> <li> <p>The total number of all resources (60).</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you might not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer.</p> </li> <li> <p>You just enabled resource recording.</p> </li> </ul> <p>It might take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
     fn get_discovered_resource_counts(
         &self,
@@ -7856,6 +9604,37 @@ impl ConfigService for ConfigServiceClient {
                 }))
             }
         })
+    }
+
+    /// <p>Returns detailed status for each member account within an organization for a given organization conformance pack.</p> <p>Only a master account can call this API.</p>
+    fn get_organization_conformance_pack_detailed_status(
+        &self,
+        input: GetOrganizationConformancePackDetailedStatusRequest,
+    ) -> RusotoFuture<
+        GetOrganizationConformancePackDetailedStatusResponse,
+        GetOrganizationConformancePackDetailedStatusError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetOrganizationConformancePackDetailedStatus",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+                        if response.status.is_success() {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<GetOrganizationConformancePackDetailedStatusResponse, _>()
+                }))
+                        } else {
+                            Box::new(response.buffer().from_err().and_then(|response| {
+                                Err(GetOrganizationConformancePackDetailedStatusError::from_response(response))
+                            }))
+                        }
+                    })
     }
 
     /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
@@ -8083,6 +9862,35 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
+    /// <p><p>Creates or updates a conformance pack. A conformance pack is a collection of AWS Config rules that can be easily deployed in an account and a region and across AWS Organization.</p> <p>This API creates a service linked role <code>AWSServiceRoleForConfigConforms</code> in your account. The service linked role is created only when the role does not exist in your account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> </note></p>
+    fn put_conformance_pack(
+        &self,
+        input: PutConformancePackRequest,
+    ) -> RusotoFuture<PutConformancePackResponse, PutConformancePackError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StarlingDoveService.PutConformancePack");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutConformancePackResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutConformancePackError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p><p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note></p>
     fn put_delivery_channel(
         &self,
@@ -8167,6 +9975,36 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
+    /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with GetRole action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the confomance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 6 conformance packs with 25 AWS Config rules in each pack.</p> </note></p>
+    fn put_organization_conformance_pack(
+        &self,
+        input: PutOrganizationConformancePackRequest,
+    ) -> RusotoFuture<PutOrganizationConformancePackResponse, PutOrganizationConformancePackError>
+    {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.PutOrganizationConformancePack",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutOrganizationConformancePackResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutOrganizationConformancePackError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
     fn put_remediation_configurations(
         &self,
@@ -8221,6 +10059,32 @@ impl ConfigService for ConfigServiceClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutRemediationExceptionsError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p><p>Records the configuration state for the resource provided in the request. The configuration state of a resource is represented in AWS Config as Configuration Items. Once this API records the configuration item, you can retrieve the list of configuration items for the custom resource type using existing AWS Config APIs. </p> <note> <p>The custom resource type must be registered with AWS CloudFormation. This API accepts the configuration item registered with AWS CloudFormation.</p> <p>When you call this API, AWS Config only stores configuration state of the resource provided in the request. This API does not change or remediate the configuration of the resource. </p> </note></p>
+    fn put_resource_config(
+        &self,
+        input: PutResourceConfigRequest,
+    ) -> RusotoFuture<(), PutResourceConfigError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StarlingDoveService.PutResourceConfig");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutResourceConfigError::from_response(response))),
+                )
             }
         })
     }

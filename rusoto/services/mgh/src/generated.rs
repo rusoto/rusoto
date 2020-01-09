@@ -33,7 +33,7 @@ pub struct AssociateCreatedArtifactRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Unique identifier that references the migration task.</p>
+    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream. </p>
@@ -55,7 +55,7 @@ pub struct AssociateDiscoveredResourceRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>The identifier given to the MigrationTask.</p>
+    /// <p>The identifier given to the MigrationTask. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream.</p>
@@ -74,7 +74,7 @@ pub struct CreateProgressUpdateStreamRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>The name of the ProgressUpdateStream. </p>
+    /// <p>The name of the ProgressUpdateStream. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "ProgressUpdateStreamName")]
     pub progress_update_stream_name: String,
 }
@@ -102,7 +102,7 @@ pub struct DeleteProgressUpdateStreamRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>The name of the ProgressUpdateStream. </p>
+    /// <p>The name of the ProgressUpdateStream. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "ProgressUpdateStreamName")]
     pub progress_update_stream_name: String,
 }
@@ -114,7 +114,7 @@ pub struct DeleteProgressUpdateStreamResult {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationStateRequest {
-    /// <p>The configurationId in ADS that uniquely identifies the grouped application.</p>
+    /// <p>The configurationId in Application Discovery Service that uniquely identifies the grouped application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
 }
@@ -135,7 +135,7 @@ pub struct DescribeApplicationStateResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMigrationTaskRequest {
-    /// <p>The identifier given to the MigrationTask.</p>
+    /// <p>The identifier given to the MigrationTask. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream. </p>
@@ -162,7 +162,7 @@ pub struct DisassociateCreatedArtifactRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Unique identifier that references the migration task to be disassociated with the artifact.</p>
+    /// <p>Unique identifier that references the migration task to be disassociated with the artifact. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream. </p>
@@ -177,14 +177,14 @@ pub struct DisassociateCreatedArtifactResult {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDiscoveredResourceRequest {
-    /// <p>ConfigurationId of the ADS resource to be disassociated.</p>
+    /// <p>ConfigurationId of the Application Discovery Service resource to be disassociated.</p>
     #[serde(rename = "ConfigurationId")]
     pub configuration_id: String,
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>The identifier given to the MigrationTask.</p>
+    /// <p>The identifier given to the MigrationTask. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream.</p>
@@ -199,7 +199,7 @@ pub struct DisassociateDiscoveredResourceResult {}
 /// <p>Object representing the on-premises resource being migrated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DiscoveredResource {
-    /// <p>The configurationId in ADS that uniquely identifies the on-premise resource.</p>
+    /// <p>The configurationId in Application Discovery Service that uniquely identifies the on-premise resource.</p>
     #[serde(rename = "ConfigurationId")]
     pub configuration_id: String,
     /// <p>A description that can be free-form text to record additional detail about the discovered resource for clarity or later reference.</p>
@@ -215,10 +215,10 @@ pub struct ImportMigrationTaskRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Unique identifier that references the migration task.</p>
+    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    /// <p>The name of the ProgressUpdateStream. </p>
+    /// <p>The name of the ProgressUpdateStream. &gt;</p>
     #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
 }
@@ -234,7 +234,7 @@ pub struct ListCreatedArtifactsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Unique identifier that references the migration task.</p>
+    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>
@@ -266,7 +266,7 @@ pub struct ListDiscoveredResourcesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The name of the MigrationTask.</p>
+    /// <p>The name of the MigrationTask. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>
@@ -351,7 +351,7 @@ pub struct ListProgressUpdateStreamsResult {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MigrationTask {
-    /// <p>Unique identifier that references the migration task.</p>
+    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_task_name: Option<String>,
@@ -359,7 +359,7 @@ pub struct MigrationTask {
     #[serde(rename = "ProgressUpdateStream")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_update_stream: Option<String>,
-    /// <p><p/></p>
+    /// <p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service repository.</p>
     #[serde(rename = "ResourceAttributeList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_attribute_list: Option<Vec<ResourceAttribute>>,
@@ -377,11 +377,11 @@ pub struct MigrationTask {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MigrationTaskSummary {
-    /// <p>Unique identifier that references the migration task.</p>
+    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_task_name: Option<String>,
-    /// <p><p/></p>
+    /// <p>Indication of the percentage completion of the task.</p>
     #[serde(rename = "ProgressPercent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_percent: Option<i64>,
@@ -406,7 +406,7 @@ pub struct MigrationTaskSummary {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyApplicationStateRequest {
-    /// <p>The configurationId in ADS that uniquely identifies the grouped application.</p>
+    /// <p>The configurationId in Application Discovery Service that uniquely identifies the grouped application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
@@ -416,6 +416,10 @@ pub struct NotifyApplicationStateRequest {
     /// <p>Status of the application - Not Started, In-Progress, Complete.</p>
     #[serde(rename = "Status")]
     pub status: String,
+    /// <p>The timestamp when the application state changed.</p>
+    #[serde(rename = "UpdateDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_date_time: Option<f64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -429,7 +433,7 @@ pub struct NotifyMigrationTaskStateRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Unique identifier that references the migration task.</p>
+    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>Number of seconds after the UpdateDateTime within which the Migration Hub can expect an update. If Migration Hub does not receive an update within the specified interval, then the migration task will be considered stale.</p>
@@ -454,7 +458,7 @@ pub struct NotifyMigrationTaskStateResult {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProgressUpdateStreamSummary {
-    /// <p>The name of the ProgressUpdateStream. </p>
+    /// <p>The name of the ProgressUpdateStream. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "ProgressUpdateStreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_update_stream_name: Option<String>,
@@ -467,13 +471,13 @@ pub struct PutResourceAttributesRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Unique identifier that references the migration task.</p>
+    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream. </p>
     #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
-    /// <p><p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service (ADS)&#39;s repository.</p> <note> <p>Takes the object array of <code>ResourceAttribute</code> where the <code>Type</code> field is reserved for the following values: <code>IPV4<em>ADDRESS | IPV6</em>ADDRESS | MAC<em>ADDRESS | FQDN | VM</em>MANAGER<em>ID | VM</em>MANAGED<em>OBJECT</em>REFERENCE | VM<em>NAME | VM</em>PATH | BIOS<em>ID | MOTHERBOARD</em>SERIAL<em>NUMBER</code> where the identifying value can be a string up to 256 characters.</p> </note> <important> <ul> <li> <p>If any &quot;VM&quot; related value is set for a <code>ResourceAttribute</code> object, it is required that <code>VM</em>MANAGER<em>ID</code>, as a minimum, is always set. If <code>VM</em>MANAGER<em>ID</code> is not set, then all &quot;VM&quot; fields will be discarded and &quot;VM&quot; fields will not be used for matching the migration task to a server in Application Discovery Service (ADS)&#39;s repository. See the &lt;a href=&quot;https://docs.aws.amazon.com/migrationhub/latest/ug/API</em>PutResourceAttributes.html#API<em>PutResourceAttributes</em>Examples&quot;&gt;Example</a> section below for a use case of specifying &quot;VM&quot; related values.</p> </li> <li> <p> If a server you are trying to match has multiple IP or MAC addresses, you should provide as many as you know in separate type/value pairs passed to the <code>ResourceAttributeList</code> parameter to maximize the chances of matching.</p> </li> </ul> </important></p>
+    /// <p><p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service repository.</p> <note> <p>Takes the object array of <code>ResourceAttribute</code> where the <code>Type</code> field is reserved for the following values: <code>IPV4<em>ADDRESS | IPV6</em>ADDRESS | MAC<em>ADDRESS | FQDN | VM</em>MANAGER<em>ID | VM</em>MANAGED<em>OBJECT</em>REFERENCE | VM<em>NAME | VM</em>PATH | BIOS<em>ID | MOTHERBOARD</em>SERIAL<em>NUMBER</code> where the identifying value can be a string up to 256 characters.</p> </note> <important> <ul> <li> <p>If any &quot;VM&quot; related value is set for a <code>ResourceAttribute</code> object, it is required that <code>VM</em>MANAGER<em>ID</code>, as a minimum, is always set. If <code>VM</em>MANAGER<em>ID</code> is not set, then all &quot;VM&quot; fields will be discarded and &quot;VM&quot; fields will not be used for matching the migration task to a server in Application Discovery Service repository. See the &lt;a href=&quot;https://docs.aws.amazon.com/migrationhub/latest/ug/API</em>PutResourceAttributes.html#API<em>PutResourceAttributes</em>Examples&quot;&gt;Example</a> section below for a use case of specifying &quot;VM&quot; related values.</p> </li> <li> <p> If a server you are trying to match has multiple IP or MAC addresses, you should provide as many as you know in separate type/value pairs passed to the <code>ResourceAttributeList</code> parameter to maximize the chances of matching.</p> </li> </ul> </important></p>
     #[serde(rename = "ResourceAttributeList")]
     pub resource_attribute_list: Vec<ResourceAttribute>,
 }
@@ -516,11 +520,13 @@ pub enum AssociateCreatedArtifactError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -539,6 +545,11 @@ impl AssociateCreatedArtifactError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(AssociateCreatedArtifactError::DryRunOperation(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(AssociateCreatedArtifactError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -576,22 +587,21 @@ impl AssociateCreatedArtifactError {
 }
 impl fmt::Display for AssociateCreatedArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateCreatedArtifactError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateCreatedArtifactError::AccessDenied(ref cause) => cause,
-            AssociateCreatedArtifactError::DryRunOperation(ref cause) => cause,
-            AssociateCreatedArtifactError::InternalServerError(ref cause) => cause,
-            AssociateCreatedArtifactError::InvalidInput(ref cause) => cause,
-            AssociateCreatedArtifactError::ResourceNotFound(ref cause) => cause,
-            AssociateCreatedArtifactError::ServiceUnavailable(ref cause) => cause,
-            AssociateCreatedArtifactError::UnauthorizedOperation(ref cause) => cause,
+            AssociateCreatedArtifactError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateCreatedArtifactError {}
 /// Errors returned by AssociateDiscoveredResource
 #[derive(Debug, PartialEq)]
 pub enum AssociateDiscoveredResourceError {
@@ -599,13 +609,15 @@ pub enum AssociateDiscoveredResourceError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing Application Discovery Service (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -628,6 +640,11 @@ impl AssociateDiscoveredResourceError {
                     return RusotoError::Service(AssociateDiscoveredResourceError::DryRunOperation(
                         err.msg,
                     ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(
+                        AssociateDiscoveredResourceError::HomeRegionNotSet(err.msg),
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -668,23 +685,26 @@ impl AssociateDiscoveredResourceError {
 }
 impl fmt::Display for AssociateDiscoveredResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateDiscoveredResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateDiscoveredResourceError::AccessDenied(ref cause) => cause,
-            AssociateDiscoveredResourceError::DryRunOperation(ref cause) => cause,
-            AssociateDiscoveredResourceError::InternalServerError(ref cause) => cause,
-            AssociateDiscoveredResourceError::InvalidInput(ref cause) => cause,
-            AssociateDiscoveredResourceError::PolicyError(ref cause) => cause,
-            AssociateDiscoveredResourceError::ResourceNotFound(ref cause) => cause,
-            AssociateDiscoveredResourceError::ServiceUnavailable(ref cause) => cause,
-            AssociateDiscoveredResourceError::UnauthorizedOperation(ref cause) => cause,
+            AssociateDiscoveredResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateDiscoveredResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::PolicyError(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateDiscoveredResourceError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateDiscoveredResourceError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateDiscoveredResourceError {}
 /// Errors returned by CreateProgressUpdateStream
 #[derive(Debug, PartialEq)]
 pub enum CreateProgressUpdateStreamError {
@@ -692,7 +712,9 @@ pub enum CreateProgressUpdateStreamError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
@@ -715,6 +737,11 @@ impl CreateProgressUpdateStreamError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(CreateProgressUpdateStreamError::DryRunOperation(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(CreateProgressUpdateStreamError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -747,21 +774,24 @@ impl CreateProgressUpdateStreamError {
 }
 impl fmt::Display for CreateProgressUpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProgressUpdateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProgressUpdateStreamError::AccessDenied(ref cause) => cause,
-            CreateProgressUpdateStreamError::DryRunOperation(ref cause) => cause,
-            CreateProgressUpdateStreamError::InternalServerError(ref cause) => cause,
-            CreateProgressUpdateStreamError::InvalidInput(ref cause) => cause,
-            CreateProgressUpdateStreamError::ServiceUnavailable(ref cause) => cause,
-            CreateProgressUpdateStreamError::UnauthorizedOperation(ref cause) => cause,
+            CreateProgressUpdateStreamError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateProgressUpdateStreamError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            CreateProgressUpdateStreamError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            CreateProgressUpdateStreamError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProgressUpdateStreamError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateProgressUpdateStreamError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProgressUpdateStreamError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateProgressUpdateStreamError {}
 /// Errors returned by DeleteProgressUpdateStream
 #[derive(Debug, PartialEq)]
 pub enum DeleteProgressUpdateStreamError {
@@ -769,11 +799,13 @@ pub enum DeleteProgressUpdateStreamError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -794,6 +826,11 @@ impl DeleteProgressUpdateStreamError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(DeleteProgressUpdateStreamError::DryRunOperation(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DeleteProgressUpdateStreamError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -831,34 +868,39 @@ impl DeleteProgressUpdateStreamError {
 }
 impl fmt::Display for DeleteProgressUpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProgressUpdateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteProgressUpdateStreamError::AccessDenied(ref cause) => cause,
-            DeleteProgressUpdateStreamError::DryRunOperation(ref cause) => cause,
-            DeleteProgressUpdateStreamError::InternalServerError(ref cause) => cause,
-            DeleteProgressUpdateStreamError::InvalidInput(ref cause) => cause,
-            DeleteProgressUpdateStreamError::ResourceNotFound(ref cause) => cause,
-            DeleteProgressUpdateStreamError::ServiceUnavailable(ref cause) => cause,
-            DeleteProgressUpdateStreamError::UnauthorizedOperation(ref cause) => cause,
+            DeleteProgressUpdateStreamError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteProgressUpdateStreamError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            DeleteProgressUpdateStreamError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DeleteProgressUpdateStreamError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProgressUpdateStreamError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteProgressUpdateStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteProgressUpdateStreamError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProgressUpdateStreamError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteProgressUpdateStreamError {}
 /// Errors returned by DescribeApplicationState
 #[derive(Debug, PartialEq)]
 pub enum DescribeApplicationStateError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing Application Discovery Service (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -870,6 +912,11 @@ impl DescribeApplicationStateError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeApplicationStateError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DescribeApplicationStateError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -907,31 +954,30 @@ impl DescribeApplicationStateError {
 }
 impl fmt::Display for DescribeApplicationStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeApplicationStateError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeApplicationStateError::AccessDenied(ref cause) => cause,
-            DescribeApplicationStateError::InternalServerError(ref cause) => cause,
-            DescribeApplicationStateError::InvalidInput(ref cause) => cause,
-            DescribeApplicationStateError::PolicyError(ref cause) => cause,
-            DescribeApplicationStateError::ResourceNotFound(ref cause) => cause,
-            DescribeApplicationStateError::ServiceUnavailable(ref cause) => cause,
+            DescribeApplicationStateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::PolicyError(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeApplicationStateError {}
 /// Errors returned by DescribeMigrationTask
 #[derive(Debug, PartialEq)]
 pub enum DescribeMigrationTaskError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -943,6 +989,11 @@ impl DescribeMigrationTaskError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeMigrationTaskError::AccessDenied(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(DescribeMigrationTaskError::HomeRegionNotSet(
+                        err.msg,
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeMigrationTaskError::InternalServerError(
@@ -971,20 +1022,17 @@ impl DescribeMigrationTaskError {
 }
 impl fmt::Display for DescribeMigrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMigrationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMigrationTaskError::AccessDenied(ref cause) => cause,
-            DescribeMigrationTaskError::InternalServerError(ref cause) => cause,
-            DescribeMigrationTaskError::InvalidInput(ref cause) => cause,
-            DescribeMigrationTaskError::ResourceNotFound(ref cause) => cause,
-            DescribeMigrationTaskError::ServiceUnavailable(ref cause) => cause,
+            DescribeMigrationTaskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMigrationTaskError {}
 /// Errors returned by DisassociateCreatedArtifact
 #[derive(Debug, PartialEq)]
 pub enum DisassociateCreatedArtifactError {
@@ -992,11 +1040,13 @@ pub enum DisassociateCreatedArtifactError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1019,6 +1069,11 @@ impl DisassociateCreatedArtifactError {
                     return RusotoError::Service(DisassociateCreatedArtifactError::DryRunOperation(
                         err.msg,
                     ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(
+                        DisassociateCreatedArtifactError::HomeRegionNotSet(err.msg),
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -1054,22 +1109,25 @@ impl DisassociateCreatedArtifactError {
 }
 impl fmt::Display for DisassociateCreatedArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateCreatedArtifactError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateCreatedArtifactError::AccessDenied(ref cause) => cause,
-            DisassociateCreatedArtifactError::DryRunOperation(ref cause) => cause,
-            DisassociateCreatedArtifactError::InternalServerError(ref cause) => cause,
-            DisassociateCreatedArtifactError::InvalidInput(ref cause) => cause,
-            DisassociateCreatedArtifactError::ResourceNotFound(ref cause) => cause,
-            DisassociateCreatedArtifactError::ServiceUnavailable(ref cause) => cause,
-            DisassociateCreatedArtifactError::UnauthorizedOperation(ref cause) => cause,
+            DisassociateCreatedArtifactError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisassociateCreatedArtifactError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            DisassociateCreatedArtifactError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            DisassociateCreatedArtifactError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateCreatedArtifactError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisassociateCreatedArtifactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DisassociateCreatedArtifactError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateCreatedArtifactError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateCreatedArtifactError {}
 /// Errors returned by DisassociateDiscoveredResource
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDiscoveredResourceError {
@@ -1077,11 +1135,13 @@ pub enum DisassociateDiscoveredResourceError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1103,6 +1163,11 @@ impl DisassociateDiscoveredResourceError {
                 "DryRunOperation" => {
                     return RusotoError::Service(
                         DisassociateDiscoveredResourceError::DryRunOperation(err.msg),
+                    )
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(
+                        DisassociateDiscoveredResourceError::HomeRegionNotSet(err.msg),
                     )
                 }
                 "InternalServerError" => {
@@ -1139,22 +1204,31 @@ impl DisassociateDiscoveredResourceError {
 }
 impl fmt::Display for DisassociateDiscoveredResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateDiscoveredResourceError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateDiscoveredResourceError::AccessDenied(ref cause) => cause,
-            DisassociateDiscoveredResourceError::DryRunOperation(ref cause) => cause,
-            DisassociateDiscoveredResourceError::InternalServerError(ref cause) => cause,
-            DisassociateDiscoveredResourceError::InvalidInput(ref cause) => cause,
-            DisassociateDiscoveredResourceError::ResourceNotFound(ref cause) => cause,
-            DisassociateDiscoveredResourceError::ServiceUnavailable(ref cause) => cause,
-            DisassociateDiscoveredResourceError::UnauthorizedOperation(ref cause) => cause,
+            DisassociateDiscoveredResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisassociateDiscoveredResourceError::DryRunOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDiscoveredResourceError::HomeRegionNotSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDiscoveredResourceError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDiscoveredResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisassociateDiscoveredResourceError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDiscoveredResourceError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDiscoveredResourceError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateDiscoveredResourceError {}
 /// Errors returned by ImportMigrationTask
 #[derive(Debug, PartialEq)]
 pub enum ImportMigrationTaskError {
@@ -1162,11 +1236,13 @@ pub enum ImportMigrationTaskError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1183,6 +1259,11 @@ impl ImportMigrationTaskError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(ImportMigrationTaskError::DryRunOperation(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(ImportMigrationTaskError::HomeRegionNotSet(
+                        err.msg,
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ImportMigrationTaskError::InternalServerError(
@@ -1216,32 +1297,31 @@ impl ImportMigrationTaskError {
 }
 impl fmt::Display for ImportMigrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportMigrationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            ImportMigrationTaskError::AccessDenied(ref cause) => cause,
-            ImportMigrationTaskError::DryRunOperation(ref cause) => cause,
-            ImportMigrationTaskError::InternalServerError(ref cause) => cause,
-            ImportMigrationTaskError::InvalidInput(ref cause) => cause,
-            ImportMigrationTaskError::ResourceNotFound(ref cause) => cause,
-            ImportMigrationTaskError::ServiceUnavailable(ref cause) => cause,
-            ImportMigrationTaskError::UnauthorizedOperation(ref cause) => cause,
+            ImportMigrationTaskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportMigrationTaskError {}
 /// Errors returned by ListCreatedArtifacts
 #[derive(Debug, PartialEq)]
 pub enum ListCreatedArtifactsError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1253,6 +1333,11 @@ impl ListCreatedArtifactsError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListCreatedArtifactsError::AccessDenied(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(ListCreatedArtifactsError::HomeRegionNotSet(
+                        err.msg,
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ListCreatedArtifactsError::InternalServerError(
@@ -1281,30 +1366,29 @@ impl ListCreatedArtifactsError {
 }
 impl fmt::Display for ListCreatedArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCreatedArtifactsError {
-    fn description(&self) -> &str {
         match *self {
-            ListCreatedArtifactsError::AccessDenied(ref cause) => cause,
-            ListCreatedArtifactsError::InternalServerError(ref cause) => cause,
-            ListCreatedArtifactsError::InvalidInput(ref cause) => cause,
-            ListCreatedArtifactsError::ResourceNotFound(ref cause) => cause,
-            ListCreatedArtifactsError::ServiceUnavailable(ref cause) => cause,
+            ListCreatedArtifactsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCreatedArtifactsError {}
 /// Errors returned by ListDiscoveredResources
 #[derive(Debug, PartialEq)]
 pub enum ListDiscoveredResourcesError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1316,6 +1400,11 @@ impl ListDiscoveredResourcesError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDiscoveredResourcesError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(ListDiscoveredResourcesError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1348,32 +1437,31 @@ impl ListDiscoveredResourcesError {
 }
 impl fmt::Display for ListDiscoveredResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDiscoveredResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDiscoveredResourcesError::AccessDenied(ref cause) => cause,
-            ListDiscoveredResourcesError::InternalServerError(ref cause) => cause,
-            ListDiscoveredResourcesError::InvalidInput(ref cause) => cause,
-            ListDiscoveredResourcesError::ResourceNotFound(ref cause) => cause,
-            ListDiscoveredResourcesError::ServiceUnavailable(ref cause) => cause,
+            ListDiscoveredResourcesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDiscoveredResourcesError {}
 /// Errors returned by ListMigrationTasks
 #[derive(Debug, PartialEq)]
 pub enum ListMigrationTasksError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing Application Discovery Service (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1385,6 +1473,9 @@ impl ListMigrationTasksError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListMigrationTasksError::AccessDenied(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(ListMigrationTasksError::HomeRegionNotSet(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ListMigrationTasksError::InternalServerError(
@@ -1414,27 +1505,26 @@ impl ListMigrationTasksError {
 }
 impl fmt::Display for ListMigrationTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMigrationTasksError {
-    fn description(&self) -> &str {
         match *self {
-            ListMigrationTasksError::AccessDenied(ref cause) => cause,
-            ListMigrationTasksError::InternalServerError(ref cause) => cause,
-            ListMigrationTasksError::InvalidInput(ref cause) => cause,
-            ListMigrationTasksError::PolicyError(ref cause) => cause,
-            ListMigrationTasksError::ResourceNotFound(ref cause) => cause,
-            ListMigrationTasksError::ServiceUnavailable(ref cause) => cause,
+            ListMigrationTasksError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::PolicyError(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMigrationTasksError {}
 /// Errors returned by ListProgressUpdateStreams
 #[derive(Debug, PartialEq)]
 pub enum ListProgressUpdateStreamsError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
@@ -1448,6 +1538,11 @@ impl ListProgressUpdateStreamsError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListProgressUpdateStreamsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(ListProgressUpdateStreamsError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1475,19 +1570,18 @@ impl ListProgressUpdateStreamsError {
 }
 impl fmt::Display for ListProgressUpdateStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProgressUpdateStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            ListProgressUpdateStreamsError::AccessDenied(ref cause) => cause,
-            ListProgressUpdateStreamsError::InternalServerError(ref cause) => cause,
-            ListProgressUpdateStreamsError::InvalidInput(ref cause) => cause,
-            ListProgressUpdateStreamsError::ServiceUnavailable(ref cause) => cause,
+            ListProgressUpdateStreamsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListProgressUpdateStreamsError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            ListProgressUpdateStreamsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListProgressUpdateStreamsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListProgressUpdateStreamsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListProgressUpdateStreamsError {}
 /// Errors returned by NotifyApplicationState
 #[derive(Debug, PartialEq)]
 pub enum NotifyApplicationStateError {
@@ -1495,13 +1589,15 @@ pub enum NotifyApplicationStateError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing Application Discovery Service (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1518,6 +1614,11 @@ impl NotifyApplicationStateError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(NotifyApplicationStateError::DryRunOperation(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(NotifyApplicationStateError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1556,23 +1657,20 @@ impl NotifyApplicationStateError {
 }
 impl fmt::Display for NotifyApplicationStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for NotifyApplicationStateError {
-    fn description(&self) -> &str {
         match *self {
-            NotifyApplicationStateError::AccessDenied(ref cause) => cause,
-            NotifyApplicationStateError::DryRunOperation(ref cause) => cause,
-            NotifyApplicationStateError::InternalServerError(ref cause) => cause,
-            NotifyApplicationStateError::InvalidInput(ref cause) => cause,
-            NotifyApplicationStateError::PolicyError(ref cause) => cause,
-            NotifyApplicationStateError::ResourceNotFound(ref cause) => cause,
-            NotifyApplicationStateError::ServiceUnavailable(ref cause) => cause,
-            NotifyApplicationStateError::UnauthorizedOperation(ref cause) => cause,
+            NotifyApplicationStateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::PolicyError(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for NotifyApplicationStateError {}
 /// Errors returned by NotifyMigrationTaskState
 #[derive(Debug, PartialEq)]
 pub enum NotifyMigrationTaskStateError {
@@ -1580,11 +1678,13 @@ pub enum NotifyMigrationTaskStateError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1603,6 +1703,11 @@ impl NotifyMigrationTaskStateError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(NotifyMigrationTaskStateError::DryRunOperation(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(NotifyMigrationTaskStateError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1640,22 +1745,21 @@ impl NotifyMigrationTaskStateError {
 }
 impl fmt::Display for NotifyMigrationTaskStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for NotifyMigrationTaskStateError {
-    fn description(&self) -> &str {
         match *self {
-            NotifyMigrationTaskStateError::AccessDenied(ref cause) => cause,
-            NotifyMigrationTaskStateError::DryRunOperation(ref cause) => cause,
-            NotifyMigrationTaskStateError::InternalServerError(ref cause) => cause,
-            NotifyMigrationTaskStateError::InvalidInput(ref cause) => cause,
-            NotifyMigrationTaskStateError::ResourceNotFound(ref cause) => cause,
-            NotifyMigrationTaskStateError::ServiceUnavailable(ref cause) => cause,
-            NotifyMigrationTaskStateError::UnauthorizedOperation(ref cause) => cause,
+            NotifyMigrationTaskStateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for NotifyMigrationTaskStateError {}
 /// Errors returned by PutResourceAttributes
 #[derive(Debug, PartialEq)]
 pub enum PutResourceAttributesError {
@@ -1663,11 +1767,13 @@ pub enum PutResourceAttributesError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1684,6 +1790,11 @@ impl PutResourceAttributesError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(PutResourceAttributesError::DryRunOperation(
+                        err.msg,
+                    ))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(PutResourceAttributesError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1719,22 +1830,19 @@ impl PutResourceAttributesError {
 }
 impl fmt::Display for PutResourceAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutResourceAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            PutResourceAttributesError::AccessDenied(ref cause) => cause,
-            PutResourceAttributesError::DryRunOperation(ref cause) => cause,
-            PutResourceAttributesError::InternalServerError(ref cause) => cause,
-            PutResourceAttributesError::InvalidInput(ref cause) => cause,
-            PutResourceAttributesError::ResourceNotFound(ref cause) => cause,
-            PutResourceAttributesError::ServiceUnavailable(ref cause) => cause,
-            PutResourceAttributesError::UnauthorizedOperation(ref cause) => cause,
+            PutResourceAttributesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::DryRunOperation(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::HomeRegionNotSet(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutResourceAttributesError {}
 /// Trait representing the capabilities of the AWS Migration Hub API. AWS Migration Hub clients implement this trait.
 pub trait MigrationHub {
     /// <p><p>Associates a created artifact of an AWS cloud resource, the target receiving the migration, with the migration task performed by a migration tool. This API has the following traits:</p> <ul> <li> <p>Migration tools can call the <code>AssociateCreatedArtifact</code> operation to indicate which AWS artifact is associated with a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI&#39;s, EC2 instance, or DMS endpoint, etc.</p> </li> </ul></p>
@@ -1743,7 +1851,7 @@ pub trait MigrationHub {
         input: AssociateCreatedArtifactRequest,
     ) -> RusotoFuture<AssociateCreatedArtifactResult, AssociateCreatedArtifactError>;
 
-    /// <p>Associates a discovered resource ID from Application Discovery Service (ADS) with a migration task.</p>
+    /// <p>Associates a discovered resource ID from Application Discovery Service with a migration task.</p>
     fn associate_discovered_resource(
         &self,
         input: AssociateDiscoveredResourceRequest,
@@ -1755,7 +1863,7 @@ pub trait MigrationHub {
         input: CreateProgressUpdateStreamRequest,
     ) -> RusotoFuture<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError>;
 
-    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
+    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs related to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
     fn delete_progress_update_stream(
         &self,
         input: DeleteProgressUpdateStreamRequest,
@@ -1779,7 +1887,7 @@ pub trait MigrationHub {
         input: DisassociateCreatedArtifactRequest,
     ) -> RusotoFuture<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError>;
 
-    /// <p>Disassociate an Application Discovery Service (ADS) discovered resource from a migration task.</p>
+    /// <p>Disassociate an Application Discovery Service discovered resource from a migration task.</p>
     fn disassociate_discovered_resource(
         &self,
         input: DisassociateDiscoveredResourceRequest,
@@ -1827,7 +1935,7 @@ pub trait MigrationHub {
         input: NotifyMigrationTaskStateRequest,
     ) -> RusotoFuture<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError>;
 
-    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value. </p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
+    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overriding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value.</p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
     fn put_resource_attributes(
         &self,
         input: PutResourceAttributesRequest,
@@ -1870,6 +1978,14 @@ impl MigrationHubClient {
     }
 }
 
+impl fmt::Debug for MigrationHubClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MigrationHubClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl MigrationHub for MigrationHubClient {
     /// <p><p>Associates a created artifact of an AWS cloud resource, the target receiving the migration, with the migration task performed by a migration tool. This API has the following traits:</p> <ul> <li> <p>Migration tools can call the <code>AssociateCreatedArtifact</code> operation to indicate which AWS artifact is associated with a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI&#39;s, EC2 instance, or DMS endpoint, etc.</p> </li> </ul></p>
     fn associate_created_artifact(
@@ -1897,7 +2013,7 @@ impl MigrationHub for MigrationHubClient {
         })
     }
 
-    /// <p>Associates a discovered resource ID from Application Discovery Service (ADS) with a migration task.</p>
+    /// <p>Associates a discovered resource ID from Application Discovery Service with a migration task.</p>
     fn associate_discovered_resource(
         &self,
         input: AssociateDiscoveredResourceRequest,
@@ -1952,7 +2068,7 @@ impl MigrationHub for MigrationHubClient {
         })
     }
 
-    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
+    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs related to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
     fn delete_progress_update_stream(
         &self,
         input: DeleteProgressUpdateStreamRequest,
@@ -2061,7 +2177,7 @@ impl MigrationHub for MigrationHubClient {
         })
     }
 
-    /// <p>Disassociate an Application Discovery Service (ADS) discovered resource from a migration task.</p>
+    /// <p>Disassociate an Application Discovery Service discovered resource from a migration task.</p>
     fn disassociate_discovered_resource(
         &self,
         input: DisassociateDiscoveredResourceRequest,
@@ -2282,7 +2398,7 @@ impl MigrationHub for MigrationHubClient {
         })
     }
 
-    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value. </p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
+    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overriding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value.</p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
     fn put_resource_attributes(
         &self,
         input: PutResourceAttributesRequest,

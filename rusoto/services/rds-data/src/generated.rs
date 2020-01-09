@@ -23,8 +23,32 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-/// <p>The request parameters represent the input of a SQL statement over an array of
-/// data.</p>
+/// <p>Contains an array.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ArrayValue {
+    /// <p>An array of arrays.</p>
+    #[serde(rename = "arrayValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub array_values: Option<Vec<ArrayValue>>,
+    /// <p>An array of Boolean values.</p>
+    #[serde(rename = "booleanValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub boolean_values: Option<Vec<bool>>,
+    /// <p>An array of integers.</p>
+    #[serde(rename = "doubleValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub double_values: Option<Vec<f64>>,
+    /// <p>An array of floating point numbers.</p>
+    #[serde(rename = "longValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_values: Option<Vec<i64>>,
+    /// <p>An array of strings.</p>
+    #[serde(rename = "stringValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub string_values: Option<Vec<String>>,
+}
+
+/// <p>The request parameters represent the input of a SQL statement over an array of data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchExecuteStatementRequest {
@@ -32,7 +56,7 @@ pub struct BatchExecuteStatementRequest {
     #[serde(rename = "database")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database: Option<String>,
-    /// <p>The parameter set for the batch operation.</p>
+    /// <p>The parameter set for the batch operation.</p> <p>The maximum number of parameters in a parameter set is 1,000.</p>
     #[serde(rename = "parameterSets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_sets: Option<Vec<Vec<SqlParameter>>>,
@@ -49,20 +73,13 @@ pub struct BatchExecuteStatementRequest {
     /// <p>The SQL statement to run.</p>
     #[serde(rename = "sql")]
     pub sql: String,
-    /// <p>The identifier of a transaction that was started by using the
-    /// <code>BeginTransaction</code> operation. Specify the transaction ID of the
-    /// transaction that you want to include the SQL statement in.</p>
-    ///
-    /// <pre><code>    &lt;p&gt;If the SQL statement is not part of a transaction, don&#39;t set this
-    /// parameter.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>The identifier of a transaction that was started by using the <code>BeginTransaction</code> operation. Specify the transaction ID of the transaction that you want to include the SQL statement in.</p> <p>If the SQL statement is not part of a transaction, don't set this parameter.</p>
     #[serde(rename = "transactionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transaction_id: Option<String>,
 }
 
-/// <p>The response elements represent the output of a SQL statement over an array of
-/// data.</p>
+/// <p>The response elements represent the output of a SQL statement over an array of data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchExecuteStatementResponse {
@@ -72,8 +89,7 @@ pub struct BatchExecuteStatementResponse {
     pub update_results: Option<Vec<UpdateResult>>,
 }
 
-/// <p>The request parameters represent the input of a request to start a SQL
-/// transaction.</p>
+/// <p>The request parameters represent the input of a request to start a SQL transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BeginTransactionRequest {
@@ -93,8 +109,7 @@ pub struct BeginTransactionRequest {
     pub secret_arn: String,
 }
 
-/// <p>The response elements represent the output of a request to start a SQL
-/// transaction.</p>
+/// <p>The response elements represent the output of a request to start a SQL transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BeginTransactionResponse {
@@ -191,8 +206,7 @@ pub struct CommitTransactionResponse {
     pub transaction_status: Option<String>,
 }
 
-/// <p>The request parameters represent the input of a request to run one or more SQL
-/// statements.</p>
+/// <p>The request parameters represent the input of a request to run one or more SQL statements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteSqlRequest {
@@ -210,18 +224,12 @@ pub struct ExecuteSqlRequest {
     #[serde(rename = "schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
-    /// <p>One or more SQL statements to run on the DB cluster.</p>
-    ///
-    /// <pre><code>    &lt;p&gt;You can separate SQL statements from each other with a semicolon (;). Any valid SQL
-    /// statement is permitted, including data definition, data manipulation, and commit
-    /// statements. &lt;/p&gt;
-    /// </code></pre>
+    /// <p>One or more SQL statements to run on the DB cluster.</p> <p>You can separate SQL statements from each other with a semicolon (;). Any valid SQL statement is permitted, including data definition, data manipulation, and commit statements. </p>
     #[serde(rename = "sqlStatements")]
     pub sql_statements: String,
 }
 
-/// <p>The response elements represent the output of a request to run one or more SQL
-/// statements.</p>
+/// <p>The response elements represent the output of a request to run one or more SQL statements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteSqlResponse {
@@ -231,21 +239,11 @@ pub struct ExecuteSqlResponse {
     pub sql_statement_results: Option<Vec<SqlStatementResult>>,
 }
 
-/// <p>The request parameters represent the input of a request to run a SQL statement against
-/// a database.</p>
+/// <p>The request parameters represent the input of a request to run a SQL statement against a database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteStatementRequest {
-    /// <p>A value that indicates whether to continue running the statement after
-    /// the call times out. By default, the statement stops running when the call
-    /// times out.</p>
-    ///
-    /// <pre><code>    &lt;important&gt;
-    /// &lt;p&gt;For DDL statements, we recommend continuing to run the statement after
-    /// the call times out. When a DDL statement terminates before it is finished
-    /// running, it can result in errors and possibly corrupted data structures.&lt;/p&gt;
-    /// &lt;/important&gt;
-    /// </code></pre>
+    /// <p><p>A value that indicates whether to continue running the statement after the call times out. By default, the statement stops running when the call times out.</p> <important> <p>For DDL statements, we recommend continuing to run the statement after the call times out. When a DDL statement terminates before it is finished running, it can result in errors and possibly corrupted data structures.</p> </important></p>
     #[serde(rename = "continueAfterTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub continue_after_timeout: Option<bool>,
@@ -264,6 +262,10 @@ pub struct ExecuteStatementRequest {
     /// <p>The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
+    /// <p>Options that control how the result set is returned.</p>
+    #[serde(rename = "resultSetOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result_set_options: Option<ResultSetOptions>,
     /// <p>The name of the database schema.</p>
     #[serde(rename = "schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -274,19 +276,13 @@ pub struct ExecuteStatementRequest {
     /// <p>The SQL statement to run.</p>
     #[serde(rename = "sql")]
     pub sql: String,
-    /// <p>The identifier of a transaction that was started by using the
-    /// <code>BeginTransaction</code> operation. Specify the transaction ID of the
-    /// transaction that you want to include the SQL statement in.</p>
-    ///
-    /// <pre><code>    &lt;p&gt;If the SQL statement is not part of a transaction, don&#39;t set this parameter.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>The identifier of a transaction that was started by using the <code>BeginTransaction</code> operation. Specify the transaction ID of the transaction that you want to include the SQL statement in.</p> <p>If the SQL statement is not part of a transaction, don't set this parameter.</p>
     #[serde(rename = "transactionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transaction_id: Option<String>,
 }
 
-/// <p>The response elements represent the output of a request to run a SQL statement against
-/// a database.</p>
+/// <p>The response elements represent the output of a request to run a SQL statement against a database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteStatementResponse {
@@ -294,7 +290,7 @@ pub struct ExecuteStatementResponse {
     #[serde(rename = "columnMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub column_metadata: Option<Vec<ColumnMetadata>>,
-    /// <p>Values for fields generated during the request.</p>
+    /// <p><p>Values for fields generated during the request.</p> <pre><code> &lt;note&gt; &lt;p&gt;The &lt;code&gt;generatedFields&lt;/code&gt; data isn&#39;t supported by Aurora PostgreSQL. To get the values of generated fields, use the &lt;code&gt;RETURNING&lt;/code&gt; clause. For more information, see &lt;a href=&quot;https://www.postgresql.org/docs/10/dml-returning.html&quot;&gt;Returning Data From Modified Rows&lt;/a&gt; in the PostgreSQL documentation.&lt;/p&gt; &lt;/note&gt; </code></pre></p>
     #[serde(rename = "generatedFields")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generated_fields: Option<Vec<Field>>,
@@ -311,6 +307,10 @@ pub struct ExecuteStatementResponse {
 /// <p>Contains a value.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Field {
+    /// <p>An array of values.</p>
+    #[serde(rename = "arrayValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub array_value: Option<ArrayValue>,
     /// <p>A value of BLOB data type.</p>
     #[serde(rename = "blobValue")]
     #[serde(
@@ -380,8 +380,17 @@ pub struct ResultSetMetadata {
     pub column_metadata: Option<Vec<ColumnMetadata>>,
 }
 
-/// <p>The request parameters represent the input of a request to perform a rollback of a
-/// transaction.</p>
+/// <p>Options that control how the result set is returned.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ResultSetOptions {
+    /// <p><p>A value that indicates how a field of <code>DECIMAL</code> type is represented in the response. The value of <code>STRING</code>, the default, specifies that it is converted to a String value. The value of <code>DOUBLE<em>OR</em>LONG</code> specifies that it is converted to a Long value if its scale is 0, or to a Double value otherwise.</p> <important> <p>Conversion to Double or Long can result in roundoff errors due to precision loss. We recommend converting to String, especially when working with currency values.</p> </important></p>
+    #[serde(rename = "decimalReturnType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub decimal_return_type: Option<String>,
+}
+
+/// <p>The request parameters represent the input of a request to perform a rollback of a transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackTransactionRequest {
@@ -396,8 +405,7 @@ pub struct RollbackTransactionRequest {
     pub transaction_id: String,
 }
 
-/// <p>The response elements represent the output of a request to perform a rollback of a
-/// transaction.</p>
+/// <p>The response elements represent the output of a request to perform a rollback of a transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RollbackTransactionResponse {
@@ -415,13 +423,17 @@ pub struct SqlParameter {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p><p>A hint that specifies the correct object type for data type mapping.</p> <p> <b>Values:</b> </p> <ul> <li> <p> <code>DECIMAL</code> - The corresponding <code>String</code> parameter value is sent as an object of <code>DECIMAL</code> type to the database.</p> </li> <li> <p> <code>TIMESTAMP</code> - The corresponding <code>String</code> parameter value is sent as an object of <code>TIMESTAMP</code> type to the database. The accepted format is <code>YYYY-MM-DD HH:MM:SS[.FFF]</code>.</p> </li> <li> <p> <code>TIME</code> - The corresponding <code>String</code> parameter value is sent as an object of <code>TIME</code> type to the database. The accepted format is <code>HH:MM:SS[.FFF]</code>.</p> </li> <li> <p> <code>DATE</code> - The corresponding <code>String</code> parameter value is sent as an object of <code>DATE</code> type to the database. The accepted format is <code>YYYY-MM-DD</code>.</p> </li> </ul></p>
+    #[serde(rename = "typeHint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_hint: Option<String>,
     /// <p>The value of the parameter.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<Field>,
 }
 
-/// <p>The result of a SQL statement.</p>
+/// <p><p>The result of a SQL statement.</p> <pre><code> &lt;important&gt; &lt;p&gt;This data type is deprecated.&lt;/p&gt; &lt;/important&gt; </code></pre></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SqlStatementResult {
@@ -455,7 +467,7 @@ pub struct UpdateResult {
     pub generated_fields: Option<Vec<Field>>,
 }
 
-/// <p>Contains the value of a column.</p>
+/// <p><p>Contains the value of a column.</p> <pre><code> &lt;important&gt; &lt;p&gt;This data type is deprecated.&lt;/p&gt; &lt;/important&gt; </code></pre></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Value {
@@ -515,8 +527,7 @@ pub enum BatchExecuteStatementError {
     Forbidden(String),
     /// <p>An internal error occurred.</p>
     InternalServerError(String),
-    /// <p>The service specified by the <code>resourceArn</code> parameter is not
-    /// available.</p>
+    /// <p>The service specified by the <code>resourceArn</code> parameter is not available.</p>
     ServiceUnavailableError(String),
     /// <p>The execution of the SQL statement timed out.</p>
     StatementTimeout(String),
@@ -556,20 +567,18 @@ impl BatchExecuteStatementError {
 }
 impl fmt::Display for BatchExecuteStatementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchExecuteStatementError {
-    fn description(&self) -> &str {
         match *self {
-            BatchExecuteStatementError::BadRequest(ref cause) => cause,
-            BatchExecuteStatementError::Forbidden(ref cause) => cause,
-            BatchExecuteStatementError::InternalServerError(ref cause) => cause,
-            BatchExecuteStatementError::ServiceUnavailableError(ref cause) => cause,
-            BatchExecuteStatementError::StatementTimeout(ref cause) => cause,
+            BatchExecuteStatementError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchExecuteStatementError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchExecuteStatementError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BatchExecuteStatementError::ServiceUnavailableError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchExecuteStatementError::StatementTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchExecuteStatementError {}
 /// Errors returned by BeginTransaction
 #[derive(Debug, PartialEq)]
 pub enum BeginTransactionError {
@@ -579,8 +588,7 @@ pub enum BeginTransactionError {
     Forbidden(String),
     /// <p>An internal error occurred.</p>
     InternalServerError(String),
-    /// <p>The service specified by the <code>resourceArn</code> parameter is not
-    /// available.</p>
+    /// <p>The service specified by the <code>resourceArn</code> parameter is not available.</p>
     ServiceUnavailableError(String),
     /// <p>The execution of the SQL statement timed out.</p>
     StatementTimeout(String),
@@ -618,20 +626,16 @@ impl BeginTransactionError {
 }
 impl fmt::Display for BeginTransactionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BeginTransactionError {
-    fn description(&self) -> &str {
         match *self {
-            BeginTransactionError::BadRequest(ref cause) => cause,
-            BeginTransactionError::Forbidden(ref cause) => cause,
-            BeginTransactionError::InternalServerError(ref cause) => cause,
-            BeginTransactionError::ServiceUnavailableError(ref cause) => cause,
-            BeginTransactionError::StatementTimeout(ref cause) => cause,
+            BeginTransactionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BeginTransactionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BeginTransactionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BeginTransactionError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
+            BeginTransactionError::StatementTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BeginTransactionError {}
 /// Errors returned by CommitTransaction
 #[derive(Debug, PartialEq)]
 pub enum CommitTransactionError {
@@ -643,9 +647,10 @@ pub enum CommitTransactionError {
     InternalServerError(String),
     /// <p>The <code>resourceArn</code>, <code>secretArn</code>, or <code>transactionId</code> value can't be found.</p>
     NotFound(String),
-    /// <p>The service specified by the <code>resourceArn</code> parameter is not
-    /// available.</p>
+    /// <p>The service specified by the <code>resourceArn</code> parameter is not available.</p>
     ServiceUnavailableError(String),
+    /// <p>The execution of the SQL statement timed out.</p>
+    StatementTimeout(String),
 }
 
 impl CommitTransactionError {
@@ -671,6 +676,9 @@ impl CommitTransactionError {
                         err.msg,
                     ))
                 }
+                "StatementTimeoutException" => {
+                    return RusotoError::Service(CommitTransactionError::StatementTimeout(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -680,20 +688,17 @@ impl CommitTransactionError {
 }
 impl fmt::Display for CommitTransactionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CommitTransactionError {
-    fn description(&self) -> &str {
         match *self {
-            CommitTransactionError::BadRequest(ref cause) => cause,
-            CommitTransactionError::Forbidden(ref cause) => cause,
-            CommitTransactionError::InternalServerError(ref cause) => cause,
-            CommitTransactionError::NotFound(ref cause) => cause,
-            CommitTransactionError::ServiceUnavailableError(ref cause) => cause,
+            CommitTransactionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CommitTransactionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CommitTransactionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CommitTransactionError::NotFound(ref cause) => write!(f, "{}", cause),
+            CommitTransactionError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
+            CommitTransactionError::StatementTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CommitTransactionError {}
 /// Errors returned by ExecuteSql
 #[derive(Debug, PartialEq)]
 pub enum ExecuteSqlError {
@@ -703,8 +708,7 @@ pub enum ExecuteSqlError {
     Forbidden(String),
     /// <p>An internal error occurred.</p>
     InternalServerError(String),
-    /// <p>The service specified by the <code>resourceArn</code> parameter is not
-    /// available.</p>
+    /// <p>The service specified by the <code>resourceArn</code> parameter is not available.</p>
     ServiceUnavailableError(String),
 }
 
@@ -733,19 +737,15 @@ impl ExecuteSqlError {
 }
 impl fmt::Display for ExecuteSqlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExecuteSqlError {
-    fn description(&self) -> &str {
         match *self {
-            ExecuteSqlError::BadRequest(ref cause) => cause,
-            ExecuteSqlError::Forbidden(ref cause) => cause,
-            ExecuteSqlError::InternalServerError(ref cause) => cause,
-            ExecuteSqlError::ServiceUnavailableError(ref cause) => cause,
+            ExecuteSqlError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ExecuteSqlError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ExecuteSqlError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ExecuteSqlError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExecuteSqlError {}
 /// Errors returned by ExecuteStatement
 #[derive(Debug, PartialEq)]
 pub enum ExecuteStatementError {
@@ -755,8 +755,7 @@ pub enum ExecuteStatementError {
     Forbidden(String),
     /// <p>An internal error occurred.</p>
     InternalServerError(String),
-    /// <p>The service specified by the <code>resourceArn</code> parameter is not
-    /// available.</p>
+    /// <p>The service specified by the <code>resourceArn</code> parameter is not available.</p>
     ServiceUnavailableError(String),
     /// <p>The execution of the SQL statement timed out.</p>
     StatementTimeout(String),
@@ -794,20 +793,16 @@ impl ExecuteStatementError {
 }
 impl fmt::Display for ExecuteStatementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExecuteStatementError {
-    fn description(&self) -> &str {
         match *self {
-            ExecuteStatementError::BadRequest(ref cause) => cause,
-            ExecuteStatementError::Forbidden(ref cause) => cause,
-            ExecuteStatementError::InternalServerError(ref cause) => cause,
-            ExecuteStatementError::ServiceUnavailableError(ref cause) => cause,
-            ExecuteStatementError::StatementTimeout(ref cause) => cause,
+            ExecuteStatementError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
+            ExecuteStatementError::StatementTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExecuteStatementError {}
 /// Errors returned by RollbackTransaction
 #[derive(Debug, PartialEq)]
 pub enum RollbackTransactionError {
@@ -819,9 +814,10 @@ pub enum RollbackTransactionError {
     InternalServerError(String),
     /// <p>The <code>resourceArn</code>, <code>secretArn</code>, or <code>transactionId</code> value can't be found.</p>
     NotFound(String),
-    /// <p>The service specified by the <code>resourceArn</code> parameter is not
-    /// available.</p>
+    /// <p>The service specified by the <code>resourceArn</code> parameter is not available.</p>
     ServiceUnavailableError(String),
+    /// <p>The execution of the SQL statement timed out.</p>
+    StatementTimeout(String),
 }
 
 impl RollbackTransactionError {
@@ -847,6 +843,11 @@ impl RollbackTransactionError {
                         err.msg,
                     ))
                 }
+                "StatementTimeoutException" => {
+                    return RusotoError::Service(RollbackTransactionError::StatementTimeout(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -856,84 +857,44 @@ impl RollbackTransactionError {
 }
 impl fmt::Display for RollbackTransactionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RollbackTransactionError {
-    fn description(&self) -> &str {
         match *self {
-            RollbackTransactionError::BadRequest(ref cause) => cause,
-            RollbackTransactionError::Forbidden(ref cause) => cause,
-            RollbackTransactionError::InternalServerError(ref cause) => cause,
-            RollbackTransactionError::NotFound(ref cause) => cause,
-            RollbackTransactionError::ServiceUnavailableError(ref cause) => cause,
+            RollbackTransactionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RollbackTransactionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RollbackTransactionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RollbackTransactionError::NotFound(ref cause) => write!(f, "{}", cause),
+            RollbackTransactionError::ServiceUnavailableError(ref cause) => write!(f, "{}", cause),
+            RollbackTransactionError::StatementTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RollbackTransactionError {}
 /// Trait representing the capabilities of the AWS RDS DataService API. AWS RDS DataService clients implement this trait.
 pub trait RdsData {
-    /// <p>Runs a batch SQL statement over an array of data.</p>
-    ///
-    /// <pre><code>    &lt;p&gt;You can run bulk update and insert operations for multiple records using a DML
-    /// statement with different parameter sets. Bulk operations can provide a significant
-    /// performance improvement over individual insert and update operations.&lt;/p&gt;
-    /// &lt;important&gt;
-    /// &lt;p&gt;If a call isn&#39;t part of a transaction because it doesn&#39;t include the
-    /// &lt;code&gt;transactionID&lt;/code&gt; parameter, changes that result from the call are
-    /// committed automatically.&lt;/p&gt;
-    /// &lt;/important&gt;
-    /// </code></pre>
+    /// <p><p>Runs a batch SQL statement over an array of data.</p> <p>You can run bulk update and insert operations for multiple records using a DML statement with different parameter sets. Bulk operations can provide a significant performance improvement over individual insert and update operations.</p> <important> <p>If a call isn&#39;t part of a transaction because it doesn&#39;t include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important></p>
     fn batch_execute_statement(
         &self,
         input: BatchExecuteStatementRequest,
     ) -> RusotoFuture<BatchExecuteStatementResponse, BatchExecuteStatementError>;
 
-    /// <p>Starts a SQL transaction.</p>
-    ///
-    /// <pre><code>    &lt;important&gt;
-    /// &lt;p&gt;A transaction can run for a maximum of 24 hours. A transaction is terminated and
-    /// rolled back automatically after 24 hours.&lt;/p&gt;
-    /// &lt;p&gt;A transaction times out if no calls use its transaction ID in three minutes.
-    /// If a transaction times out before it&#39;s committed, it&#39;s rolled back
-    /// automatically.&lt;/p&gt;
-    /// &lt;p&gt;DDL statements inside a transaction cause an implicit commit. We recommend
-    /// that you run each DDL statement in a separate &lt;code&gt;ExecuteStatement&lt;/code&gt; call with
-    /// &lt;code&gt;continueAfterTimeout&lt;/code&gt; enabled.&lt;/p&gt;
-    /// &lt;/important&gt;
-    /// </code></pre>
+    /// <p><p>Starts a SQL transaction.</p> <pre><code> &lt;important&gt; &lt;p&gt;A transaction can run for a maximum of 24 hours. A transaction is terminated and rolled back automatically after 24 hours.&lt;/p&gt; &lt;p&gt;A transaction times out if no calls use its transaction ID in three minutes. If a transaction times out before it&#39;s committed, it&#39;s rolled back automatically.&lt;/p&gt; &lt;p&gt;DDL statements inside a transaction cause an implicit commit. We recommend that you run each DDL statement in a separate &lt;code&gt;ExecuteStatement&lt;/code&gt; call with &lt;code&gt;continueAfterTimeout&lt;/code&gt; enabled.&lt;/p&gt; &lt;/important&gt; </code></pre></p>
     fn begin_transaction(
         &self,
         input: BeginTransactionRequest,
     ) -> RusotoFuture<BeginTransactionResponse, BeginTransactionError>;
 
-    /// <p>Ends a SQL transaction started with the <code>BeginTransaction</code> operation and
-    /// commits the changes.</p>
+    /// <p>Ends a SQL transaction started with the <code>BeginTransaction</code> operation and commits the changes.</p>
     fn commit_transaction(
         &self,
         input: CommitTransactionRequest,
     ) -> RusotoFuture<CommitTransactionResponse, CommitTransactionError>;
 
-    /// <p>Runs one or more SQL statements.</p>
-    ///
-    /// <pre><code>    &lt;important&gt;
-    /// &lt;p&gt;This operation is deprecated. Use the &lt;code&gt;BatchExecuteStatement&lt;/code&gt; or
-    /// &lt;code&gt;ExecuteStatement&lt;/code&gt; operation.&lt;/p&gt;
-    /// &lt;/important&gt;
-    /// </code></pre>
+    /// <p><p>Runs one or more SQL statements.</p> <important> <p>This operation is deprecated. Use the <code>BatchExecuteStatement</code> or <code>ExecuteStatement</code> operation.</p> </important></p>
     fn execute_sql(
         &self,
         input: ExecuteSqlRequest,
     ) -> RusotoFuture<ExecuteSqlResponse, ExecuteSqlError>;
 
-    /// <p>Runs a SQL statement against a database.</p>
-    ///
-    /// <pre><code>    &lt;important&gt;
-    /// &lt;p&gt;If a call isn&#39;t part of a transaction because it doesn&#39;t include the
-    /// &lt;code&gt;transactionID&lt;/code&gt; parameter, changes that result from the call are
-    /// committed automatically.&lt;/p&gt;
-    /// &lt;/important&gt;
-    /// &lt;p&gt;The response size limit is 1 MB or 1,000 records. If the call returns more than 1 MB of response data or over 1,000 records, the call is terminated.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Runs a SQL statement against a database.</p> <important> <p>If a call isn't part of a transaction because it doesn't include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important> <p>The response size limit is 1 MB or 1,000 records. If the call returns more than 1 MB of response data or over 1,000 records, the call is terminated.</p>
     fn execute_statement(
         &self,
         input: ExecuteStatementRequest,
@@ -982,18 +943,16 @@ impl RdsDataClient {
     }
 }
 
+impl fmt::Debug for RdsDataClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("RdsDataClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl RdsData for RdsDataClient {
-    /// <p>Runs a batch SQL statement over an array of data.</p>
-    ///
-    /// <pre><code>    &lt;p&gt;You can run bulk update and insert operations for multiple records using a DML
-    /// statement with different parameter sets. Bulk operations can provide a significant
-    /// performance improvement over individual insert and update operations.&lt;/p&gt;
-    /// &lt;important&gt;
-    /// &lt;p&gt;If a call isn&#39;t part of a transaction because it doesn&#39;t include the
-    /// &lt;code&gt;transactionID&lt;/code&gt; parameter, changes that result from the call are
-    /// committed automatically.&lt;/p&gt;
-    /// &lt;/important&gt;
-    /// </code></pre>
+    /// <p><p>Runs a batch SQL statement over an array of data.</p> <p>You can run bulk update and insert operations for multiple records using a DML statement with different parameter sets. Bulk operations can provide a significant performance improvement over individual insert and update operations.</p> <important> <p>If a call isn&#39;t part of a transaction because it doesn&#39;t include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important></p>
     fn batch_execute_statement(
         &self,
         input: BatchExecuteStatementRequest,
@@ -1024,19 +983,7 @@ impl RdsData for RdsDataClient {
         })
     }
 
-    /// <p>Starts a SQL transaction.</p>
-    ///
-    /// <pre><code>    &lt;important&gt;
-    /// &lt;p&gt;A transaction can run for a maximum of 24 hours. A transaction is terminated and
-    /// rolled back automatically after 24 hours.&lt;/p&gt;
-    /// &lt;p&gt;A transaction times out if no calls use its transaction ID in three minutes.
-    /// If a transaction times out before it&#39;s committed, it&#39;s rolled back
-    /// automatically.&lt;/p&gt;
-    /// &lt;p&gt;DDL statements inside a transaction cause an implicit commit. We recommend
-    /// that you run each DDL statement in a separate &lt;code&gt;ExecuteStatement&lt;/code&gt; call with
-    /// &lt;code&gt;continueAfterTimeout&lt;/code&gt; enabled.&lt;/p&gt;
-    /// &lt;/important&gt;
-    /// </code></pre>
+    /// <p><p>Starts a SQL transaction.</p> <pre><code> &lt;important&gt; &lt;p&gt;A transaction can run for a maximum of 24 hours. A transaction is terminated and rolled back automatically after 24 hours.&lt;/p&gt; &lt;p&gt;A transaction times out if no calls use its transaction ID in three minutes. If a transaction times out before it&#39;s committed, it&#39;s rolled back automatically.&lt;/p&gt; &lt;p&gt;DDL statements inside a transaction cause an implicit commit. We recommend that you run each DDL statement in a separate &lt;code&gt;ExecuteStatement&lt;/code&gt; call with &lt;code&gt;continueAfterTimeout&lt;/code&gt; enabled.&lt;/p&gt; &lt;/important&gt; </code></pre></p>
     fn begin_transaction(
         &self,
         input: BeginTransactionRequest,
@@ -1068,8 +1015,7 @@ impl RdsData for RdsDataClient {
         })
     }
 
-    /// <p>Ends a SQL transaction started with the <code>BeginTransaction</code> operation and
-    /// commits the changes.</p>
+    /// <p>Ends a SQL transaction started with the <code>BeginTransaction</code> operation and commits the changes.</p>
     fn commit_transaction(
         &self,
         input: CommitTransactionRequest,
@@ -1101,13 +1047,7 @@ impl RdsData for RdsDataClient {
         })
     }
 
-    /// <p>Runs one or more SQL statements.</p>
-    ///
-    /// <pre><code>    &lt;important&gt;
-    /// &lt;p&gt;This operation is deprecated. Use the &lt;code&gt;BatchExecuteStatement&lt;/code&gt; or
-    /// &lt;code&gt;ExecuteStatement&lt;/code&gt; operation.&lt;/p&gt;
-    /// &lt;/important&gt;
-    /// </code></pre>
+    /// <p><p>Runs one or more SQL statements.</p> <important> <p>This operation is deprecated. Use the <code>BatchExecuteStatement</code> or <code>ExecuteStatement</code> operation.</p> </important></p>
     fn execute_sql(
         &self,
         input: ExecuteSqlRequest,
@@ -1139,15 +1079,7 @@ impl RdsData for RdsDataClient {
         })
     }
 
-    /// <p>Runs a SQL statement against a database.</p>
-    ///
-    /// <pre><code>    &lt;important&gt;
-    /// &lt;p&gt;If a call isn&#39;t part of a transaction because it doesn&#39;t include the
-    /// &lt;code&gt;transactionID&lt;/code&gt; parameter, changes that result from the call are
-    /// committed automatically.&lt;/p&gt;
-    /// &lt;/important&gt;
-    /// &lt;p&gt;The response size limit is 1 MB or 1,000 records. If the call returns more than 1 MB of response data or over 1,000 records, the call is terminated.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Runs a SQL statement against a database.</p> <important> <p>If a call isn't part of a transaction because it doesn't include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important> <p>The response size limit is 1 MB or 1,000 records. If the call returns more than 1 MB of response data or over 1,000 records, the call is terminated.</p>
     fn execute_statement(
         &self,
         input: ExecuteStatementRequest,

@@ -108,6 +108,10 @@ pub struct GetPlaybackConfigurationResponse {
     #[serde(rename = "HlsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_configuration: Option<HlsConfiguration>,
+    /// <p>The configuration for pre-roll ad insertion.</p>
+    #[serde(rename = "LivePreRollConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub live_pre_roll_configuration: Option<LivePreRollConfiguration>,
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -200,6 +204,19 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>The configuration for pre-roll ad insertion.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LivePreRollConfiguration {
+    /// <p>The URL for the ad decision server (ADS) for pre-roll ads. This includes the specification of static parameters and placeholders for dynamic parameters. AWS Elemental MediaTailor substitutes player-specific and session-specific parameters as needed when calling the ADS. Alternately, for testing, you can provide a static VAST URL. The maximum length is 25,000 characters.</p>
+    #[serde(rename = "AdDecisionServerUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_decision_server_url: Option<String>,
+    /// <p>The maximum allowed duration for the pre-roll ad avail. AWS Elemental MediaTailor won&#39;t play pre-roll ads to exceed this duration, regardless of the total duration of ads that the ADS returns.</p>
+    #[serde(rename = "MaxDurationSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_duration_seconds: Option<i64>,
+}
+
 /// <p>The AWSMediaTailor configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -269,6 +286,10 @@ pub struct PutPlaybackConfigurationRequest {
     #[serde(rename = "DashConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dash_configuration: Option<DashConfigurationForPut>,
+    /// <p>The configuration for pre-roll ad insertion.</p>
+    #[serde(rename = "LivePreRollConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub live_pre_roll_configuration: Option<LivePreRollConfiguration>,
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -310,6 +331,10 @@ pub struct PutPlaybackConfigurationResponse {
     #[serde(rename = "HlsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_configuration: Option<HlsConfiguration>,
+    /// <p>The configuration for pre-roll ad insertion.</p>
+    #[serde(rename = "LivePreRollConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub live_pre_roll_configuration: Option<LivePreRollConfiguration>,
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -390,14 +415,10 @@ impl DeletePlaybackConfigurationError {
 }
 impl fmt::Display for DeletePlaybackConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePlaybackConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeletePlaybackConfigurationError {}
 /// Errors returned by GetPlaybackConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetPlaybackConfigurationError {}
@@ -415,14 +436,10 @@ impl GetPlaybackConfigurationError {
 }
 impl fmt::Display for GetPlaybackConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPlaybackConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetPlaybackConfigurationError {}
 /// Errors returned by ListPlaybackConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListPlaybackConfigurationsError {}
@@ -442,14 +459,10 @@ impl ListPlaybackConfigurationsError {
 }
 impl fmt::Display for ListPlaybackConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPlaybackConfigurationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListPlaybackConfigurationsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -473,16 +486,12 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutPlaybackConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutPlaybackConfigurationError {}
@@ -500,14 +509,10 @@ impl PutPlaybackConfigurationError {
 }
 impl fmt::Display for PutPlaybackConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutPlaybackConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutPlaybackConfigurationError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -531,16 +536,12 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -564,16 +565,12 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the MediaTailor API. MediaTailor clients implement this trait.
 pub trait MediaTailor {
     /// <p>Deletes the playback configuration for the specified name. </p>
@@ -646,6 +643,14 @@ impl MediaTailorClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> MediaTailorClient {
         MediaTailorClient { client, region }
+    }
+}
+
+impl fmt::Debug for MediaTailorClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MediaTailorClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -232,7 +232,7 @@ impl<'b> Service<'b> {
             "rusoto_mock".to_owned(),
             cargo::Dependency::Extended {
                 path: Some("../../../mock".into()),
-                version: Some("0.42.0".into()),
+                version: Some(self.config.core_version.clone()),
                 optional: None,
                 default_features: Some(false),
                 features: None,

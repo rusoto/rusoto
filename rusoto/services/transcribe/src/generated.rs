@@ -33,7 +33,7 @@ pub struct CreateVocabularyRequest {
     #[serde(rename = "Phrases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phrases: Option<Vec<String>>,
-    /// <p>The S3 location of the text file that contains the definition of the custom vocabulary. The URI must be in the same region as the API endpoint that you are calling. The general form is </p> <p> <code> https://s3-&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/vocab.txt</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Custom Vocabularies</a>.</p>
+    /// <p>The S3 location of the text file that contains the definition of the custom vocabulary. The URI must be in the same region as the API endpoint that you are calling. The general form is </p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3.us-east-1.amazonaws.com/examplebucket/vocab.txt</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Custom Vocabularies</a>.</p>
     #[serde(rename = "VocabularyFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_file_uri: Option<String>,
@@ -216,7 +216,7 @@ pub struct ListVocabulariesResponse {
 /// <p>Describes the input media file in a transcription request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Media {
-    /// <p>The S3 location of the input media file. The URI must be in the same region as the API endpoint that you are calling. The general form is:</p> <p> <code> https://s3-&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/example.mp4</code> </p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/mediadocs/example.mp4</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p>
+    /// <p>The S3 location of the input media file. The URI must be in the same region as the API endpoint that you are calling. The general form is:</p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3.us-east-1.amazonaws.com/examplebucket/example.mp4</code> </p> <p> <code>https://s3.us-east-1.amazonaws.com/examplebucket/mediadocs/example.mp4</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p>
     #[serde(rename = "MediaFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_file_uri: Option<String>,
@@ -229,10 +229,18 @@ pub struct Settings {
     #[serde(rename = "ChannelIdentification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_identification: Option<bool>,
+    /// <p>The number of alternative transcriptions that the service should return. If you specify the <code>MaxAlternatives</code> field, you must set the <code>ShowAlternatives</code> field to true.</p>
+    #[serde(rename = "MaxAlternatives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_alternatives: Option<i64>,
     /// <p>The maximum number of speakers to identify in the input audio. If there are more speakers in the audio than this number, multiple speakers will be identified as a single speaker. If you specify the <code>MaxSpeakerLabels</code> field, you must set the <code>ShowSpeakerLabels</code> field to true.</p>
     #[serde(rename = "MaxSpeakerLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_speaker_labels: Option<i64>,
+    /// <p>Determines whether the transcription contains alternative transcriptions. If you set the <code>ShowAlternatives</code> field to true, you must also set the maximum number of alternatives to return in the <code>MaxAlternatives</code> field.</p>
+    #[serde(rename = "ShowAlternatives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub show_alternatives: Option<bool>,
     /// <p>Determines whether the transcription job uses speaker recognition to identify different speakers in the input audio. Speaker recognition labels individual speakers in the audio file. If you set the <code>ShowSpeakerLabels</code> field to true, you must also set the maximum number of speaker labels <code>MaxSpeakerLabels</code> field.</p> <p>You can't set both <code>ShowSpeakerLabels</code> and <code>ChannelIdentification</code> in the same request. If you set both, your request returns a <code>BadRequestException</code>.</p>
     #[serde(rename = "ShowSpeakerLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -252,18 +260,22 @@ pub struct StartTranscriptionJobRequest {
     /// <p>An object that describes the input media for a transcription job.</p>
     #[serde(rename = "Media")]
     pub media: Media,
-    /// <p>The format of the input media file.</p> <p> If you do not specify the format of the media file, Amazon Transcribe determines the format. If the format is not recognized, Amazon Transcribe returns an <code>InternalFailureException</code> exception. If you specify the format, it must match the format detected by Amazon Transcribe, otherwise you get an <code>InternalFailureException</code> exception.</p>
+    /// <p>The format of the input media file.</p>
     #[serde(rename = "MediaFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_format: Option<String>,
-    /// <p>The sample rate of the audio track in the input media file in Hertz. </p> <p>If you do not specify the media sample rate, Amazon Transcribe determines the sample rate. If you specify the sample rate, it must match the sample rate detected by Amazon Transcribe. In most cases, you should leave the <code>MediaSampleRateHertz</code> field blank and let Amazon Transcribe determine the sample rate.</p>
+    /// <p>The sample rate, in Hertz, of the audio track in the input media file. </p> <p>If you do not specify the media sample rate, Amazon Transcribe determines the sample rate. If you specify the sample rate, it must match the sample rate detected by Amazon Transcribe. In most cases, you should leave the <code>MediaSampleRateHertz</code> field blank and let Amazon Transcribe determine the sample rate.</p>
     #[serde(rename = "MediaSampleRateHertz")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_sample_rate_hertz: Option<i64>,
-    /// <p>The location where the transcription is stored.</p> <p>If you set the <code>OutputBucketName</code>, Amazon Transcribe puts the transcription in the specified S3 bucket. When you call the <a>GetTranscriptionJob</a> operation, the operation returns this location in the <code>TranscriptFileUri</code> field. The S3 bucket must have permissions that allow Amazon Transcribe to put files in the bucket. For more information, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/security_iam_id-based-policy-examples.html#auth-role-iam-user">Permissions Required for IAM User Roles</a>.</p> <p>Amazon Transcribe uses the default Amazon S3 key for server-side encryption of transcripts that are placed in your S3 bucket. You can't specify your own encryption key.</p> <p>If you don't set the <code>OutputBucketName</code>, Amazon Transcribe generates a pre-signed URL, a shareable URL that provides secure access to your transcription, and returns it in the <code>TranscriptFileUri</code> field. Use this URL to download the transcription.</p>
+    /// <p>The location where the transcription is stored.</p> <p>If you set the <code>OutputBucketName</code>, Amazon Transcribe puts the transcription in the specified S3 bucket. When you call the <a>GetTranscriptionJob</a> operation, the operation returns this location in the <code>TranscriptFileUri</code> field. The S3 bucket must have permissions that allow Amazon Transcribe to put files in the bucket. For more information, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/security_iam_id-based-policy-examples.html#auth-role-iam-user">Permissions Required for IAM User Roles</a>.</p> <p>You can specify an AWS Key Management Service (KMS) key to encrypt the output of your transcription using the <code>OutputEncryptionKMSKeyId</code> parameter. If you don't specify a KMS key, Amazon Transcribe uses the default Amazon S3 key for server-side encryption of transcripts that are placed in your S3 bucket.</p> <p>If you don't set the <code>OutputBucketName</code>, Amazon Transcribe generates a pre-signed URL, a shareable URL that provides secure access to your transcription, and returns it in the <code>TranscriptFileUri</code> field. Use this URL to download the transcription.</p>
     #[serde(rename = "OutputBucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_bucket_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Key Management Service (KMS) key used to encrypt the output of the transcription job. The user calling the <code>StartTranscriptionJob</code> operation must have permission to use the specified KMS key.</p> <p>You can use either of the following to identify a KMS key in the current account:</p> <ul> <li> <p>KMS Key ID: "1234abcd-12ab-34cd-56ef-1234567890ab"</p> </li> <li> <p>KMS Key Alias: "alias/ExampleAlias"</p> </li> </ul> <p>You can use either of the following to identify a KMS key in the current account or another account:</p> <ul> <li> <p>Amazon Resource Name (ARN) of a KMS Key: "arn:aws:kms:region:account ID:key/1234abcd-12ab-34cd-56ef-1234567890ab"</p> </li> <li> <p>ARN of a KMS Key Alias: "arn:aws:kms:region:account ID:alias/ExampleAlias"</p> </li> </ul> <p>If you don't specify an encryption key, the output of the transcription job is encrypted with the default Amazon S3 key (SSE-S3). </p> <p>If you specify a KMS key to encrypt your output, you must also specify an output location in the <code>OutputBucketName</code> parameter.</p>
+    #[serde(rename = "OutputEncryptionKMSKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_encryption_kms_key_id: Option<String>,
     /// <p>A <code>Settings</code> object that provides optional settings for a transcription job.</p>
     #[serde(rename = "Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -342,7 +354,7 @@ pub struct TranscriptionJob {
     pub transcription_job_status: Option<String>,
 }
 
-/// <p>Provides a summary of information about a transcription job. .</p>
+/// <p>Provides a summary of information about a transcription job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TranscriptionJobSummary {
@@ -386,7 +398,7 @@ pub struct UpdateVocabularyRequest {
     #[serde(rename = "Phrases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phrases: Option<Vec<String>>,
-    /// <p>The S3 location of the text file that contains the definition of the custom vocabulary. The URI must be in the same region as the API endpoint that you are calling. The general form is </p> <p> <code> https://s3-&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/vocab.txt</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Custom Vocabularies</a>.</p>
+    /// <p>The S3 location of the text file that contains the definition of the custom vocabulary. The URI must be in the same region as the API endpoint that you are calling. The general form is </p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3.us-east-1.amazonaws.com/examplebucket/vocab.txt</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Custom Vocabularies</a>.</p>
     #[serde(rename = "VocabularyFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_file_uri: Option<String>,
@@ -443,7 +455,7 @@ pub struct VocabularyInfo {
 pub enum CreateVocabularyError {
     /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>When you are using the <code>StartTranscriptionJob</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
+    /// <p>When you are using the <code>CreateVocabulary</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -476,19 +488,15 @@ impl CreateVocabularyError {
 }
 impl fmt::Display for CreateVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVocabularyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVocabularyError::BadRequest(ref cause) => cause,
-            CreateVocabularyError::Conflict(ref cause) => cause,
-            CreateVocabularyError::InternalFailure(ref cause) => cause,
-            CreateVocabularyError::LimitExceeded(ref cause) => cause,
+            CreateVocabularyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateVocabularyError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateVocabularyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateVocabularyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVocabularyError {}
 /// Errors returned by DeleteTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteTranscriptionJobError {
@@ -526,18 +534,14 @@ impl DeleteTranscriptionJobError {
 }
 impl fmt::Display for DeleteTranscriptionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTranscriptionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTranscriptionJobError::BadRequest(ref cause) => cause,
-            DeleteTranscriptionJobError::InternalFailure(ref cause) => cause,
-            DeleteTranscriptionJobError::LimitExceeded(ref cause) => cause,
+            DeleteTranscriptionJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteTranscriptionJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteTranscriptionJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTranscriptionJobError {}
 /// Errors returned by DeleteVocabulary
 #[derive(Debug, PartialEq)]
 pub enum DeleteVocabularyError {
@@ -576,19 +580,15 @@ impl DeleteVocabularyError {
 }
 impl fmt::Display for DeleteVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVocabularyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVocabularyError::BadRequest(ref cause) => cause,
-            DeleteVocabularyError::InternalFailure(ref cause) => cause,
-            DeleteVocabularyError::LimitExceeded(ref cause) => cause,
-            DeleteVocabularyError::NotFound(ref cause) => cause,
+            DeleteVocabularyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVocabularyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteVocabularyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteVocabularyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVocabularyError {}
 /// Errors returned by GetTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum GetTranscriptionJobError {
@@ -627,19 +627,15 @@ impl GetTranscriptionJobError {
 }
 impl fmt::Display for GetTranscriptionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTranscriptionJobError {
-    fn description(&self) -> &str {
         match *self {
-            GetTranscriptionJobError::BadRequest(ref cause) => cause,
-            GetTranscriptionJobError::InternalFailure(ref cause) => cause,
-            GetTranscriptionJobError::LimitExceeded(ref cause) => cause,
-            GetTranscriptionJobError::NotFound(ref cause) => cause,
+            GetTranscriptionJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetTranscriptionJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetTranscriptionJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetTranscriptionJobError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTranscriptionJobError {}
 /// Errors returned by GetVocabulary
 #[derive(Debug, PartialEq)]
 pub enum GetVocabularyError {
@@ -678,19 +674,15 @@ impl GetVocabularyError {
 }
 impl fmt::Display for GetVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVocabularyError {
-    fn description(&self) -> &str {
         match *self {
-            GetVocabularyError::BadRequest(ref cause) => cause,
-            GetVocabularyError::InternalFailure(ref cause) => cause,
-            GetVocabularyError::LimitExceeded(ref cause) => cause,
-            GetVocabularyError::NotFound(ref cause) => cause,
+            GetVocabularyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetVocabularyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetVocabularyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetVocabularyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetVocabularyError {}
 /// Errors returned by ListTranscriptionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTranscriptionJobsError {
@@ -726,18 +718,14 @@ impl ListTranscriptionJobsError {
 }
 impl fmt::Display for ListTranscriptionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTranscriptionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTranscriptionJobsError::BadRequest(ref cause) => cause,
-            ListTranscriptionJobsError::InternalFailure(ref cause) => cause,
-            ListTranscriptionJobsError::LimitExceeded(ref cause) => cause,
+            ListTranscriptionJobsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTranscriptionJobsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTranscriptionJobsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTranscriptionJobsError {}
 /// Errors returned by ListVocabularies
 #[derive(Debug, PartialEq)]
 pub enum ListVocabulariesError {
@@ -771,24 +759,20 @@ impl ListVocabulariesError {
 }
 impl fmt::Display for ListVocabulariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVocabulariesError {
-    fn description(&self) -> &str {
         match *self {
-            ListVocabulariesError::BadRequest(ref cause) => cause,
-            ListVocabulariesError::InternalFailure(ref cause) => cause,
-            ListVocabulariesError::LimitExceeded(ref cause) => cause,
+            ListVocabulariesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListVocabulariesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListVocabulariesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVocabulariesError {}
 /// Errors returned by StartTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum StartTranscriptionJobError {
     /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>When you are using the <code>StartTranscriptionJob</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
+    /// <p>When you are using the <code>CreateVocabulary</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -823,25 +807,21 @@ impl StartTranscriptionJobError {
 }
 impl fmt::Display for StartTranscriptionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartTranscriptionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartTranscriptionJobError::BadRequest(ref cause) => cause,
-            StartTranscriptionJobError::Conflict(ref cause) => cause,
-            StartTranscriptionJobError::InternalFailure(ref cause) => cause,
-            StartTranscriptionJobError::LimitExceeded(ref cause) => cause,
+            StartTranscriptionJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StartTranscriptionJobError::Conflict(ref cause) => write!(f, "{}", cause),
+            StartTranscriptionJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StartTranscriptionJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartTranscriptionJobError {}
 /// Errors returned by UpdateVocabulary
 #[derive(Debug, PartialEq)]
 pub enum UpdateVocabularyError {
     /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>When you are using the <code>StartTranscriptionJob</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
+    /// <p>When you are using the <code>CreateVocabulary</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -879,20 +859,16 @@ impl UpdateVocabularyError {
 }
 impl fmt::Display for UpdateVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVocabularyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVocabularyError::BadRequest(ref cause) => cause,
-            UpdateVocabularyError::Conflict(ref cause) => cause,
-            UpdateVocabularyError::InternalFailure(ref cause) => cause,
-            UpdateVocabularyError::LimitExceeded(ref cause) => cause,
-            UpdateVocabularyError::NotFound(ref cause) => cause,
+            UpdateVocabularyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateVocabularyError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateVocabularyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateVocabularyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateVocabularyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVocabularyError {}
 /// Trait representing the capabilities of the Amazon Transcribe Service API. Amazon Transcribe Service clients implement this trait.
 pub trait Transcribe {
     /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>
@@ -983,6 +959,14 @@ impl TranscribeClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> TranscribeClient {
         TranscribeClient { client, region }
+    }
+}
+
+impl fmt::Debug for TranscribeClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("TranscribeClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

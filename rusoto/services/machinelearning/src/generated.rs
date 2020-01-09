@@ -1686,20 +1686,16 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsError::InternalServer(ref cause) => cause,
-            AddTagsError::InvalidInput(ref cause) => cause,
-            AddTagsError::InvalidTag(ref cause) => cause,
-            AddTagsError::ResourceNotFound(ref cause) => cause,
-            AddTagsError::TagLimitExceeded(ref cause) => cause,
+            AddTagsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            AddTagsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AddTagsError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            AddTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by CreateBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum CreateBatchPredictionError {
@@ -1737,18 +1733,16 @@ impl CreateBatchPredictionError {
 }
 impl fmt::Display for CreateBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBatchPredictionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBatchPredictionError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateBatchPredictionError::InternalServer(ref cause) => cause,
-            CreateBatchPredictionError::InvalidInput(ref cause) => cause,
+            CreateBatchPredictionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateBatchPredictionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateBatchPredictionError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBatchPredictionError {}
 /// Errors returned by CreateDataSourceFromRDS
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceFromRDSError {
@@ -1788,18 +1782,16 @@ impl CreateDataSourceFromRDSError {
 }
 impl fmt::Display for CreateDataSourceFromRDSError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDataSourceFromRDSError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDataSourceFromRDSError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateDataSourceFromRDSError::InternalServer(ref cause) => cause,
-            CreateDataSourceFromRDSError::InvalidInput(ref cause) => cause,
+            CreateDataSourceFromRDSError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDataSourceFromRDSError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateDataSourceFromRDSError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDataSourceFromRDSError {}
 /// Errors returned by CreateDataSourceFromRedshift
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceFromRedshiftError {
@@ -1841,18 +1833,16 @@ impl CreateDataSourceFromRedshiftError {
 }
 impl fmt::Display for CreateDataSourceFromRedshiftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDataSourceFromRedshiftError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDataSourceFromRedshiftError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateDataSourceFromRedshiftError::InternalServer(ref cause) => cause,
-            CreateDataSourceFromRedshiftError::InvalidInput(ref cause) => cause,
+            CreateDataSourceFromRedshiftError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDataSourceFromRedshiftError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateDataSourceFromRedshiftError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDataSourceFromRedshiftError {}
 /// Errors returned by CreateDataSourceFromS3
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceFromS3Error {
@@ -1890,18 +1880,16 @@ impl CreateDataSourceFromS3Error {
 }
 impl fmt::Display for CreateDataSourceFromS3Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDataSourceFromS3Error {
-    fn description(&self) -> &str {
         match *self {
-            CreateDataSourceFromS3Error::IdempotentParameterMismatch(ref cause) => cause,
-            CreateDataSourceFromS3Error::InternalServer(ref cause) => cause,
-            CreateDataSourceFromS3Error::InvalidInput(ref cause) => cause,
+            CreateDataSourceFromS3Error::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDataSourceFromS3Error::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateDataSourceFromS3Error::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDataSourceFromS3Error {}
 /// Errors returned by CreateEvaluation
 #[derive(Debug, PartialEq)]
 pub enum CreateEvaluationError {
@@ -1937,18 +1925,14 @@ impl CreateEvaluationError {
 }
 impl fmt::Display for CreateEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEvaluationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEvaluationError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateEvaluationError::InternalServer(ref cause) => cause,
-            CreateEvaluationError::InvalidInput(ref cause) => cause,
+            CreateEvaluationError::IdempotentParameterMismatch(ref cause) => write!(f, "{}", cause),
+            CreateEvaluationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateEvaluationError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEvaluationError {}
 /// Errors returned by CreateMLModel
 #[derive(Debug, PartialEq)]
 pub enum CreateMLModelError {
@@ -1984,18 +1968,14 @@ impl CreateMLModelError {
 }
 impl fmt::Display for CreateMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMLModelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMLModelError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateMLModelError::InternalServer(ref cause) => cause,
-            CreateMLModelError::InvalidInput(ref cause) => cause,
+            CreateMLModelError::IdempotentParameterMismatch(ref cause) => write!(f, "{}", cause),
+            CreateMLModelError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateMLModelError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateMLModelError {}
 /// Errors returned by CreateRealtimeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateRealtimeEndpointError {
@@ -2033,18 +2013,14 @@ impl CreateRealtimeEndpointError {
 }
 impl fmt::Display for CreateRealtimeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRealtimeEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRealtimeEndpointError::InternalServer(ref cause) => cause,
-            CreateRealtimeEndpointError::InvalidInput(ref cause) => cause,
-            CreateRealtimeEndpointError::ResourceNotFound(ref cause) => cause,
+            CreateRealtimeEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateRealtimeEndpointError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateRealtimeEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRealtimeEndpointError {}
 /// Errors returned by DeleteBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum DeleteBatchPredictionError {
@@ -2082,18 +2058,14 @@ impl DeleteBatchPredictionError {
 }
 impl fmt::Display for DeleteBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBatchPredictionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBatchPredictionError::InternalServer(ref cause) => cause,
-            DeleteBatchPredictionError::InvalidInput(ref cause) => cause,
-            DeleteBatchPredictionError::ResourceNotFound(ref cause) => cause,
+            DeleteBatchPredictionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteBatchPredictionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteBatchPredictionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBatchPredictionError {}
 /// Errors returned by DeleteDataSource
 #[derive(Debug, PartialEq)]
 pub enum DeleteDataSourceError {
@@ -2127,18 +2099,14 @@ impl DeleteDataSourceError {
 }
 impl fmt::Display for DeleteDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDataSourceError::InternalServer(ref cause) => cause,
-            DeleteDataSourceError::InvalidInput(ref cause) => cause,
-            DeleteDataSourceError::ResourceNotFound(ref cause) => cause,
+            DeleteDataSourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDataSourceError {}
 /// Errors returned by DeleteEvaluation
 #[derive(Debug, PartialEq)]
 pub enum DeleteEvaluationError {
@@ -2172,18 +2140,14 @@ impl DeleteEvaluationError {
 }
 impl fmt::Display for DeleteEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEvaluationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEvaluationError::InternalServer(ref cause) => cause,
-            DeleteEvaluationError::InvalidInput(ref cause) => cause,
-            DeleteEvaluationError::ResourceNotFound(ref cause) => cause,
+            DeleteEvaluationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteEvaluationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteEvaluationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEvaluationError {}
 /// Errors returned by DeleteMLModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteMLModelError {
@@ -2217,18 +2181,14 @@ impl DeleteMLModelError {
 }
 impl fmt::Display for DeleteMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMLModelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMLModelError::InternalServer(ref cause) => cause,
-            DeleteMLModelError::InvalidInput(ref cause) => cause,
-            DeleteMLModelError::ResourceNotFound(ref cause) => cause,
+            DeleteMLModelError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteMLModelError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteMLModelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMLModelError {}
 /// Errors returned by DeleteRealtimeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteRealtimeEndpointError {
@@ -2266,18 +2226,14 @@ impl DeleteRealtimeEndpointError {
 }
 impl fmt::Display for DeleteRealtimeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRealtimeEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRealtimeEndpointError::InternalServer(ref cause) => cause,
-            DeleteRealtimeEndpointError::InvalidInput(ref cause) => cause,
-            DeleteRealtimeEndpointError::ResourceNotFound(ref cause) => cause,
+            DeleteRealtimeEndpointError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteRealtimeEndpointError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteRealtimeEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRealtimeEndpointError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -2316,19 +2272,15 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsError::InternalServer(ref cause) => cause,
-            DeleteTagsError::InvalidInput(ref cause) => cause,
-            DeleteTagsError::InvalidTag(ref cause) => cause,
-            DeleteTagsError::ResourceNotFound(ref cause) => cause,
+            DeleteTagsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DescribeBatchPredictions
 #[derive(Debug, PartialEq)]
 pub enum DescribeBatchPredictionsError {
@@ -2361,17 +2313,13 @@ impl DescribeBatchPredictionsError {
 }
 impl fmt::Display for DescribeBatchPredictionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBatchPredictionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBatchPredictionsError::InternalServer(ref cause) => cause,
-            DescribeBatchPredictionsError::InvalidInput(ref cause) => cause,
+            DescribeBatchPredictionsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeBatchPredictionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBatchPredictionsError {}
 /// Errors returned by DescribeDataSources
 #[derive(Debug, PartialEq)]
 pub enum DescribeDataSourcesError {
@@ -2400,17 +2348,13 @@ impl DescribeDataSourcesError {
 }
 impl fmt::Display for DescribeDataSourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDataSourcesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDataSourcesError::InternalServer(ref cause) => cause,
-            DescribeDataSourcesError::InvalidInput(ref cause) => cause,
+            DescribeDataSourcesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeDataSourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDataSourcesError {}
 /// Errors returned by DescribeEvaluations
 #[derive(Debug, PartialEq)]
 pub enum DescribeEvaluationsError {
@@ -2439,17 +2383,13 @@ impl DescribeEvaluationsError {
 }
 impl fmt::Display for DescribeEvaluationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEvaluationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEvaluationsError::InternalServer(ref cause) => cause,
-            DescribeEvaluationsError::InvalidInput(ref cause) => cause,
+            DescribeEvaluationsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeEvaluationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEvaluationsError {}
 /// Errors returned by DescribeMLModels
 #[derive(Debug, PartialEq)]
 pub enum DescribeMLModelsError {
@@ -2478,17 +2418,13 @@ impl DescribeMLModelsError {
 }
 impl fmt::Display for DescribeMLModelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMLModelsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMLModelsError::InternalServer(ref cause) => cause,
-            DescribeMLModelsError::InvalidInput(ref cause) => cause,
+            DescribeMLModelsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeMLModelsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMLModelsError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -2522,18 +2458,14 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::InternalServer(ref cause) => cause,
-            DescribeTagsError::InvalidInput(ref cause) => cause,
-            DescribeTagsError::ResourceNotFound(ref cause) => cause,
+            DescribeTagsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by GetBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum GetBatchPredictionError {
@@ -2567,18 +2499,14 @@ impl GetBatchPredictionError {
 }
 impl fmt::Display for GetBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBatchPredictionError {
-    fn description(&self) -> &str {
         match *self {
-            GetBatchPredictionError::InternalServer(ref cause) => cause,
-            GetBatchPredictionError::InvalidInput(ref cause) => cause,
-            GetBatchPredictionError::ResourceNotFound(ref cause) => cause,
+            GetBatchPredictionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetBatchPredictionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetBatchPredictionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBatchPredictionError {}
 /// Errors returned by GetDataSource
 #[derive(Debug, PartialEq)]
 pub enum GetDataSourceError {
@@ -2612,18 +2540,14 @@ impl GetDataSourceError {
 }
 impl fmt::Display for GetDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            GetDataSourceError::InternalServer(ref cause) => cause,
-            GetDataSourceError::InvalidInput(ref cause) => cause,
-            GetDataSourceError::ResourceNotFound(ref cause) => cause,
+            GetDataSourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetDataSourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDataSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDataSourceError {}
 /// Errors returned by GetEvaluation
 #[derive(Debug, PartialEq)]
 pub enum GetEvaluationError {
@@ -2657,18 +2581,14 @@ impl GetEvaluationError {
 }
 impl fmt::Display for GetEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEvaluationError {
-    fn description(&self) -> &str {
         match *self {
-            GetEvaluationError::InternalServer(ref cause) => cause,
-            GetEvaluationError::InvalidInput(ref cause) => cause,
-            GetEvaluationError::ResourceNotFound(ref cause) => cause,
+            GetEvaluationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetEvaluationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetEvaluationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEvaluationError {}
 /// Errors returned by GetMLModel
 #[derive(Debug, PartialEq)]
 pub enum GetMLModelError {
@@ -2702,18 +2622,14 @@ impl GetMLModelError {
 }
 impl fmt::Display for GetMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMLModelError {
-    fn description(&self) -> &str {
         match *self {
-            GetMLModelError::InternalServer(ref cause) => cause,
-            GetMLModelError::InvalidInput(ref cause) => cause,
-            GetMLModelError::ResourceNotFound(ref cause) => cause,
+            GetMLModelError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetMLModelError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetMLModelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMLModelError {}
 /// Errors returned by Predict
 #[derive(Debug, PartialEq)]
 pub enum PredictError {
@@ -2757,20 +2673,16 @@ impl PredictError {
 }
 impl fmt::Display for PredictError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PredictError {
-    fn description(&self) -> &str {
         match *self {
-            PredictError::InternalServer(ref cause) => cause,
-            PredictError::InvalidInput(ref cause) => cause,
-            PredictError::LimitExceeded(ref cause) => cause,
-            PredictError::PredictorNotMounted(ref cause) => cause,
-            PredictError::ResourceNotFound(ref cause) => cause,
+            PredictError::InternalServer(ref cause) => write!(f, "{}", cause),
+            PredictError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PredictError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PredictError::PredictorNotMounted(ref cause) => write!(f, "{}", cause),
+            PredictError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PredictError {}
 /// Errors returned by UpdateBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum UpdateBatchPredictionError {
@@ -2808,18 +2720,14 @@ impl UpdateBatchPredictionError {
 }
 impl fmt::Display for UpdateBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBatchPredictionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBatchPredictionError::InternalServer(ref cause) => cause,
-            UpdateBatchPredictionError::InvalidInput(ref cause) => cause,
-            UpdateBatchPredictionError::ResourceNotFound(ref cause) => cause,
+            UpdateBatchPredictionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateBatchPredictionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateBatchPredictionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBatchPredictionError {}
 /// Errors returned by UpdateDataSource
 #[derive(Debug, PartialEq)]
 pub enum UpdateDataSourceError {
@@ -2853,18 +2761,14 @@ impl UpdateDataSourceError {
 }
 impl fmt::Display for UpdateDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDataSourceError::InternalServer(ref cause) => cause,
-            UpdateDataSourceError::InvalidInput(ref cause) => cause,
-            UpdateDataSourceError::ResourceNotFound(ref cause) => cause,
+            UpdateDataSourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateDataSourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDataSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDataSourceError {}
 /// Errors returned by UpdateEvaluation
 #[derive(Debug, PartialEq)]
 pub enum UpdateEvaluationError {
@@ -2898,18 +2802,14 @@ impl UpdateEvaluationError {
 }
 impl fmt::Display for UpdateEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEvaluationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEvaluationError::InternalServer(ref cause) => cause,
-            UpdateEvaluationError::InvalidInput(ref cause) => cause,
-            UpdateEvaluationError::ResourceNotFound(ref cause) => cause,
+            UpdateEvaluationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateEvaluationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateEvaluationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateEvaluationError {}
 /// Errors returned by UpdateMLModel
 #[derive(Debug, PartialEq)]
 pub enum UpdateMLModelError {
@@ -2943,18 +2843,14 @@ impl UpdateMLModelError {
 }
 impl fmt::Display for UpdateMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMLModelError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMLModelError::InternalServer(ref cause) => cause,
-            UpdateMLModelError::InvalidInput(ref cause) => cause,
-            UpdateMLModelError::ResourceNotFound(ref cause) => cause,
+            UpdateMLModelError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateMLModelError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateMLModelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMLModelError {}
 /// Trait representing the capabilities of the Amazon Machine Learning API. Amazon Machine Learning clients implement this trait.
 pub trait MachineLearning {
     /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
@@ -3153,6 +3049,14 @@ impl MachineLearningClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> MachineLearningClient {
         MachineLearningClient { client, region }
+    }
+}
+
+impl fmt::Debug for MachineLearningClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MachineLearningClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

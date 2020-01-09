@@ -3274,23 +3274,19 @@ impl AddFacetToObjectError {
 }
 impl fmt::Display for AddFacetToObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddFacetToObjectError {
-    fn description(&self) -> &str {
         match *self {
-            AddFacetToObjectError::AccessDenied(ref cause) => cause,
-            AddFacetToObjectError::DirectoryNotEnabled(ref cause) => cause,
-            AddFacetToObjectError::FacetValidation(ref cause) => cause,
-            AddFacetToObjectError::InternalService(ref cause) => cause,
-            AddFacetToObjectError::InvalidArn(ref cause) => cause,
-            AddFacetToObjectError::LimitExceeded(ref cause) => cause,
-            AddFacetToObjectError::ResourceNotFound(ref cause) => cause,
-            AddFacetToObjectError::RetryableConflict(ref cause) => cause,
+            AddFacetToObjectError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AddFacetToObjectError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            AddFacetToObjectError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            AddFacetToObjectError::InternalService(ref cause) => write!(f, "{}", cause),
+            AddFacetToObjectError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            AddFacetToObjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddFacetToObjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddFacetToObjectError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddFacetToObjectError {}
 /// Errors returned by ApplySchema
 #[derive(Debug, PartialEq)]
 pub enum ApplySchemaError {
@@ -3349,23 +3345,19 @@ impl ApplySchemaError {
 }
 impl fmt::Display for ApplySchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApplySchemaError {
-    fn description(&self) -> &str {
         match *self {
-            ApplySchemaError::AccessDenied(ref cause) => cause,
-            ApplySchemaError::InternalService(ref cause) => cause,
-            ApplySchemaError::InvalidArn(ref cause) => cause,
-            ApplySchemaError::InvalidAttachment(ref cause) => cause,
-            ApplySchemaError::LimitExceeded(ref cause) => cause,
-            ApplySchemaError::ResourceNotFound(ref cause) => cause,
-            ApplySchemaError::RetryableConflict(ref cause) => cause,
-            ApplySchemaError::SchemaAlreadyExists(ref cause) => cause,
+            ApplySchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ApplySchemaError::InternalService(ref cause) => write!(f, "{}", cause),
+            ApplySchemaError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ApplySchemaError::InvalidAttachment(ref cause) => write!(f, "{}", cause),
+            ApplySchemaError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ApplySchemaError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ApplySchemaError::RetryableConflict(ref cause) => write!(f, "{}", cause),
+            ApplySchemaError::SchemaAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ApplySchemaError {}
 /// Errors returned by AttachObject
 #[derive(Debug, PartialEq)]
 pub enum AttachObjectError {
@@ -3434,25 +3426,21 @@ impl AttachObjectError {
 }
 impl fmt::Display for AttachObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachObjectError {
-    fn description(&self) -> &str {
         match *self {
-            AttachObjectError::AccessDenied(ref cause) => cause,
-            AttachObjectError::DirectoryNotEnabled(ref cause) => cause,
-            AttachObjectError::FacetValidation(ref cause) => cause,
-            AttachObjectError::InternalService(ref cause) => cause,
-            AttachObjectError::InvalidArn(ref cause) => cause,
-            AttachObjectError::InvalidAttachment(ref cause) => cause,
-            AttachObjectError::LimitExceeded(ref cause) => cause,
-            AttachObjectError::LinkNameAlreadyInUse(ref cause) => cause,
-            AttachObjectError::ResourceNotFound(ref cause) => cause,
-            AttachObjectError::RetryableConflict(ref cause) => cause,
+            AttachObjectError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachObjectError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            AttachObjectError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            AttachObjectError::InternalService(ref cause) => write!(f, "{}", cause),
+            AttachObjectError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            AttachObjectError::InvalidAttachment(ref cause) => write!(f, "{}", cause),
+            AttachObjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachObjectError::LinkNameAlreadyInUse(ref cause) => write!(f, "{}", cause),
+            AttachObjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AttachObjectError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachObjectError {}
 /// Errors returned by AttachPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachPolicyError {
@@ -3511,23 +3499,19 @@ impl AttachPolicyError {
 }
 impl fmt::Display for AttachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            AttachPolicyError::AccessDenied(ref cause) => cause,
-            AttachPolicyError::DirectoryNotEnabled(ref cause) => cause,
-            AttachPolicyError::InternalService(ref cause) => cause,
-            AttachPolicyError::InvalidArn(ref cause) => cause,
-            AttachPolicyError::LimitExceeded(ref cause) => cause,
-            AttachPolicyError::NotPolicy(ref cause) => cause,
-            AttachPolicyError::ResourceNotFound(ref cause) => cause,
-            AttachPolicyError::RetryableConflict(ref cause) => cause,
+            AttachPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::NotPolicy(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachPolicyError {}
 /// Errors returned by AttachToIndex
 #[derive(Debug, PartialEq)]
 pub enum AttachToIndexError {
@@ -3603,26 +3587,22 @@ impl AttachToIndexError {
 }
 impl fmt::Display for AttachToIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachToIndexError {
-    fn description(&self) -> &str {
         match *self {
-            AttachToIndexError::AccessDenied(ref cause) => cause,
-            AttachToIndexError::DirectoryNotEnabled(ref cause) => cause,
-            AttachToIndexError::IndexedAttributeMissing(ref cause) => cause,
-            AttachToIndexError::InternalService(ref cause) => cause,
-            AttachToIndexError::InvalidArn(ref cause) => cause,
-            AttachToIndexError::InvalidAttachment(ref cause) => cause,
-            AttachToIndexError::LimitExceeded(ref cause) => cause,
-            AttachToIndexError::LinkNameAlreadyInUse(ref cause) => cause,
-            AttachToIndexError::NotIndex(ref cause) => cause,
-            AttachToIndexError::ResourceNotFound(ref cause) => cause,
-            AttachToIndexError::RetryableConflict(ref cause) => cause,
+            AttachToIndexError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachToIndexError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            AttachToIndexError::IndexedAttributeMissing(ref cause) => write!(f, "{}", cause),
+            AttachToIndexError::InternalService(ref cause) => write!(f, "{}", cause),
+            AttachToIndexError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            AttachToIndexError::InvalidAttachment(ref cause) => write!(f, "{}", cause),
+            AttachToIndexError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachToIndexError::LinkNameAlreadyInUse(ref cause) => write!(f, "{}", cause),
+            AttachToIndexError::NotIndex(ref cause) => write!(f, "{}", cause),
+            AttachToIndexError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AttachToIndexError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachToIndexError {}
 /// Errors returned by AttachTypedLink
 #[derive(Debug, PartialEq)]
 pub enum AttachTypedLinkError {
@@ -3686,24 +3666,20 @@ impl AttachTypedLinkError {
 }
 impl fmt::Display for AttachTypedLinkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachTypedLinkError {
-    fn description(&self) -> &str {
         match *self {
-            AttachTypedLinkError::AccessDenied(ref cause) => cause,
-            AttachTypedLinkError::DirectoryNotEnabled(ref cause) => cause,
-            AttachTypedLinkError::FacetValidation(ref cause) => cause,
-            AttachTypedLinkError::InternalService(ref cause) => cause,
-            AttachTypedLinkError::InvalidArn(ref cause) => cause,
-            AttachTypedLinkError::InvalidAttachment(ref cause) => cause,
-            AttachTypedLinkError::LimitExceeded(ref cause) => cause,
-            AttachTypedLinkError::ResourceNotFound(ref cause) => cause,
-            AttachTypedLinkError::RetryableConflict(ref cause) => cause,
+            AttachTypedLinkError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachTypedLinkError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            AttachTypedLinkError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            AttachTypedLinkError::InternalService(ref cause) => write!(f, "{}", cause),
+            AttachTypedLinkError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            AttachTypedLinkError::InvalidAttachment(ref cause) => write!(f, "{}", cause),
+            AttachTypedLinkError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachTypedLinkError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AttachTypedLinkError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachTypedLinkError {}
 /// Errors returned by BatchRead
 #[derive(Debug, PartialEq)]
 pub enum BatchReadError {
@@ -3752,21 +3728,17 @@ impl BatchReadError {
 }
 impl fmt::Display for BatchReadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchReadError {
-    fn description(&self) -> &str {
         match *self {
-            BatchReadError::AccessDenied(ref cause) => cause,
-            BatchReadError::DirectoryNotEnabled(ref cause) => cause,
-            BatchReadError::InternalService(ref cause) => cause,
-            BatchReadError::InvalidArn(ref cause) => cause,
-            BatchReadError::LimitExceeded(ref cause) => cause,
-            BatchReadError::RetryableConflict(ref cause) => cause,
+            BatchReadError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            BatchReadError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            BatchReadError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchReadError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            BatchReadError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchReadError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchReadError {}
 /// Errors returned by BatchWrite
 #[derive(Debug, PartialEq)]
 pub enum BatchWriteError {
@@ -3820,22 +3792,18 @@ impl BatchWriteError {
 }
 impl fmt::Display for BatchWriteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchWriteError {
-    fn description(&self) -> &str {
         match *self {
-            BatchWriteError::AccessDenied(ref cause) => cause,
-            BatchWriteError::BatchWrite(ref cause) => cause,
-            BatchWriteError::DirectoryNotEnabled(ref cause) => cause,
-            BatchWriteError::InternalService(ref cause) => cause,
-            BatchWriteError::InvalidArn(ref cause) => cause,
-            BatchWriteError::LimitExceeded(ref cause) => cause,
-            BatchWriteError::RetryableConflict(ref cause) => cause,
+            BatchWriteError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            BatchWriteError::BatchWrite(ref cause) => write!(f, "{}", cause),
+            BatchWriteError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            BatchWriteError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchWriteError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            BatchWriteError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchWriteError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchWriteError {}
 /// Errors returned by CreateDirectory
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectoryError {
@@ -3891,22 +3859,18 @@ impl CreateDirectoryError {
 }
 impl fmt::Display for CreateDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDirectoryError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDirectoryError::AccessDenied(ref cause) => cause,
-            CreateDirectoryError::DirectoryAlreadyExists(ref cause) => cause,
-            CreateDirectoryError::InternalService(ref cause) => cause,
-            CreateDirectoryError::InvalidArn(ref cause) => cause,
-            CreateDirectoryError::LimitExceeded(ref cause) => cause,
-            CreateDirectoryError::ResourceNotFound(ref cause) => cause,
-            CreateDirectoryError::RetryableConflict(ref cause) => cause,
+            CreateDirectoryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryError::DirectoryAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDirectoryError {}
 /// Errors returned by CreateFacet
 #[derive(Debug, PartialEq)]
 pub enum CreateFacetError {
@@ -3970,24 +3934,20 @@ impl CreateFacetError {
 }
 impl fmt::Display for CreateFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFacetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFacetError::AccessDenied(ref cause) => cause,
-            CreateFacetError::FacetAlreadyExists(ref cause) => cause,
-            CreateFacetError::FacetValidation(ref cause) => cause,
-            CreateFacetError::InternalService(ref cause) => cause,
-            CreateFacetError::InvalidArn(ref cause) => cause,
-            CreateFacetError::InvalidRule(ref cause) => cause,
-            CreateFacetError::LimitExceeded(ref cause) => cause,
-            CreateFacetError::ResourceNotFound(ref cause) => cause,
-            CreateFacetError::RetryableConflict(ref cause) => cause,
+            CreateFacetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateFacetError::FacetAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateFacetError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            CreateFacetError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateFacetError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CreateFacetError::InvalidRule(ref cause) => write!(f, "{}", cause),
+            CreateFacetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFacetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateFacetError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFacetError {}
 /// Errors returned by CreateIndex
 #[derive(Debug, PartialEq)]
 pub enum CreateIndexError {
@@ -4056,25 +4016,21 @@ impl CreateIndexError {
 }
 impl fmt::Display for CreateIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateIndexError {
-    fn description(&self) -> &str {
         match *self {
-            CreateIndexError::AccessDenied(ref cause) => cause,
-            CreateIndexError::DirectoryNotEnabled(ref cause) => cause,
-            CreateIndexError::FacetValidation(ref cause) => cause,
-            CreateIndexError::InternalService(ref cause) => cause,
-            CreateIndexError::InvalidArn(ref cause) => cause,
-            CreateIndexError::LimitExceeded(ref cause) => cause,
-            CreateIndexError::LinkNameAlreadyInUse(ref cause) => cause,
-            CreateIndexError::ResourceNotFound(ref cause) => cause,
-            CreateIndexError::RetryableConflict(ref cause) => cause,
-            CreateIndexError::UnsupportedIndexType(ref cause) => cause,
+            CreateIndexError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateIndexError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            CreateIndexError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            CreateIndexError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateIndexError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CreateIndexError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateIndexError::LinkNameAlreadyInUse(ref cause) => write!(f, "{}", cause),
+            CreateIndexError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateIndexError::RetryableConflict(ref cause) => write!(f, "{}", cause),
+            CreateIndexError::UnsupportedIndexType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateIndexError {}
 /// Errors returned by CreateObject
 #[derive(Debug, PartialEq)]
 pub enum CreateObjectError {
@@ -4143,25 +4099,21 @@ impl CreateObjectError {
 }
 impl fmt::Display for CreateObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateObjectError {
-    fn description(&self) -> &str {
         match *self {
-            CreateObjectError::AccessDenied(ref cause) => cause,
-            CreateObjectError::DirectoryNotEnabled(ref cause) => cause,
-            CreateObjectError::FacetValidation(ref cause) => cause,
-            CreateObjectError::InternalService(ref cause) => cause,
-            CreateObjectError::InvalidArn(ref cause) => cause,
-            CreateObjectError::LimitExceeded(ref cause) => cause,
-            CreateObjectError::LinkNameAlreadyInUse(ref cause) => cause,
-            CreateObjectError::ResourceNotFound(ref cause) => cause,
-            CreateObjectError::RetryableConflict(ref cause) => cause,
-            CreateObjectError::UnsupportedIndexType(ref cause) => cause,
+            CreateObjectError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateObjectError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            CreateObjectError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            CreateObjectError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateObjectError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CreateObjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateObjectError::LinkNameAlreadyInUse(ref cause) => write!(f, "{}", cause),
+            CreateObjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateObjectError::RetryableConflict(ref cause) => write!(f, "{}", cause),
+            CreateObjectError::UnsupportedIndexType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateObjectError {}
 /// Errors returned by CreateSchema
 #[derive(Debug, PartialEq)]
 pub enum CreateSchemaError {
@@ -4210,21 +4162,17 @@ impl CreateSchemaError {
 }
 impl fmt::Display for CreateSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSchemaError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSchemaError::AccessDenied(ref cause) => cause,
-            CreateSchemaError::InternalService(ref cause) => cause,
-            CreateSchemaError::InvalidArn(ref cause) => cause,
-            CreateSchemaError::LimitExceeded(ref cause) => cause,
-            CreateSchemaError::RetryableConflict(ref cause) => cause,
-            CreateSchemaError::SchemaAlreadyExists(ref cause) => cause,
+            CreateSchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateSchemaError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateSchemaError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CreateSchemaError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSchemaError::RetryableConflict(ref cause) => write!(f, "{}", cause),
+            CreateSchemaError::SchemaAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSchemaError {}
 /// Errors returned by CreateTypedLinkFacet
 #[derive(Debug, PartialEq)]
 pub enum CreateTypedLinkFacetError {
@@ -4298,24 +4246,20 @@ impl CreateTypedLinkFacetError {
 }
 impl fmt::Display for CreateTypedLinkFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTypedLinkFacetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTypedLinkFacetError::AccessDenied(ref cause) => cause,
-            CreateTypedLinkFacetError::FacetAlreadyExists(ref cause) => cause,
-            CreateTypedLinkFacetError::FacetValidation(ref cause) => cause,
-            CreateTypedLinkFacetError::InternalService(ref cause) => cause,
-            CreateTypedLinkFacetError::InvalidArn(ref cause) => cause,
-            CreateTypedLinkFacetError::InvalidRule(ref cause) => cause,
-            CreateTypedLinkFacetError::LimitExceeded(ref cause) => cause,
-            CreateTypedLinkFacetError::ResourceNotFound(ref cause) => cause,
-            CreateTypedLinkFacetError::RetryableConflict(ref cause) => cause,
+            CreateTypedLinkFacetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateTypedLinkFacetError::FacetAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateTypedLinkFacetError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            CreateTypedLinkFacetError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateTypedLinkFacetError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CreateTypedLinkFacetError::InvalidRule(ref cause) => write!(f, "{}", cause),
+            CreateTypedLinkFacetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTypedLinkFacetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateTypedLinkFacetError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTypedLinkFacetError {}
 /// Errors returned by DeleteDirectory
 #[derive(Debug, PartialEq)]
 pub enum DeleteDirectoryError {
@@ -4376,23 +4320,19 @@ impl DeleteDirectoryError {
 }
 impl fmt::Display for DeleteDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDirectoryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDirectoryError::AccessDenied(ref cause) => cause,
-            DeleteDirectoryError::DirectoryDeleted(ref cause) => cause,
-            DeleteDirectoryError::DirectoryNotDisabled(ref cause) => cause,
-            DeleteDirectoryError::InternalService(ref cause) => cause,
-            DeleteDirectoryError::InvalidArn(ref cause) => cause,
-            DeleteDirectoryError::LimitExceeded(ref cause) => cause,
-            DeleteDirectoryError::ResourceNotFound(ref cause) => cause,
-            DeleteDirectoryError::RetryableConflict(ref cause) => cause,
+            DeleteDirectoryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDirectoryError::DirectoryDeleted(ref cause) => write!(f, "{}", cause),
+            DeleteDirectoryError::DirectoryNotDisabled(ref cause) => write!(f, "{}", cause),
+            DeleteDirectoryError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteDirectoryError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DeleteDirectoryError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteDirectoryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDirectoryError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDirectoryError {}
 /// Errors returned by DeleteFacet
 #[derive(Debug, PartialEq)]
 pub enum DeleteFacetError {
@@ -4451,23 +4391,19 @@ impl DeleteFacetError {
 }
 impl fmt::Display for DeleteFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFacetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFacetError::AccessDenied(ref cause) => cause,
-            DeleteFacetError::FacetInUse(ref cause) => cause,
-            DeleteFacetError::FacetNotFound(ref cause) => cause,
-            DeleteFacetError::InternalService(ref cause) => cause,
-            DeleteFacetError::InvalidArn(ref cause) => cause,
-            DeleteFacetError::LimitExceeded(ref cause) => cause,
-            DeleteFacetError::ResourceNotFound(ref cause) => cause,
-            DeleteFacetError::RetryableConflict(ref cause) => cause,
+            DeleteFacetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteFacetError::FacetInUse(ref cause) => write!(f, "{}", cause),
+            DeleteFacetError::FacetNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFacetError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteFacetError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DeleteFacetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteFacetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFacetError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFacetError {}
 /// Errors returned by DeleteObject
 #[derive(Debug, PartialEq)]
 pub enum DeleteObjectError {
@@ -4526,23 +4462,19 @@ impl DeleteObjectError {
 }
 impl fmt::Display for DeleteObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteObjectError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteObjectError::AccessDenied(ref cause) => cause,
-            DeleteObjectError::DirectoryNotEnabled(ref cause) => cause,
-            DeleteObjectError::InternalService(ref cause) => cause,
-            DeleteObjectError::InvalidArn(ref cause) => cause,
-            DeleteObjectError::LimitExceeded(ref cause) => cause,
-            DeleteObjectError::ObjectNotDetached(ref cause) => cause,
-            DeleteObjectError::ResourceNotFound(ref cause) => cause,
-            DeleteObjectError::RetryableConflict(ref cause) => cause,
+            DeleteObjectError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteObjectError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            DeleteObjectError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteObjectError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DeleteObjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteObjectError::ObjectNotDetached(ref cause) => write!(f, "{}", cause),
+            DeleteObjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteObjectError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteObjectError {}
 /// Errors returned by DeleteSchema
 #[derive(Debug, PartialEq)]
 pub enum DeleteSchemaError {
@@ -4596,22 +4528,18 @@ impl DeleteSchemaError {
 }
 impl fmt::Display for DeleteSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSchemaError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSchemaError::AccessDenied(ref cause) => cause,
-            DeleteSchemaError::InternalService(ref cause) => cause,
-            DeleteSchemaError::InvalidArn(ref cause) => cause,
-            DeleteSchemaError::LimitExceeded(ref cause) => cause,
-            DeleteSchemaError::ResourceNotFound(ref cause) => cause,
-            DeleteSchemaError::RetryableConflict(ref cause) => cause,
-            DeleteSchemaError::StillContainsLinks(ref cause) => cause,
+            DeleteSchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaError::RetryableConflict(ref cause) => write!(f, "{}", cause),
+            DeleteSchemaError::StillContainsLinks(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSchemaError {}
 /// Errors returned by DeleteTypedLinkFacet
 #[derive(Debug, PartialEq)]
 pub enum DeleteTypedLinkFacetError {
@@ -4671,22 +4599,18 @@ impl DeleteTypedLinkFacetError {
 }
 impl fmt::Display for DeleteTypedLinkFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTypedLinkFacetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTypedLinkFacetError::AccessDenied(ref cause) => cause,
-            DeleteTypedLinkFacetError::FacetNotFound(ref cause) => cause,
-            DeleteTypedLinkFacetError::InternalService(ref cause) => cause,
-            DeleteTypedLinkFacetError::InvalidArn(ref cause) => cause,
-            DeleteTypedLinkFacetError::LimitExceeded(ref cause) => cause,
-            DeleteTypedLinkFacetError::ResourceNotFound(ref cause) => cause,
-            DeleteTypedLinkFacetError::RetryableConflict(ref cause) => cause,
+            DeleteTypedLinkFacetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteTypedLinkFacetError::FacetNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTypedLinkFacetError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteTypedLinkFacetError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DeleteTypedLinkFacetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteTypedLinkFacetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTypedLinkFacetError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTypedLinkFacetError {}
 /// Errors returned by DetachFromIndex
 #[derive(Debug, PartialEq)]
 pub enum DetachFromIndexError {
@@ -4752,24 +4676,20 @@ impl DetachFromIndexError {
 }
 impl fmt::Display for DetachFromIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachFromIndexError {
-    fn description(&self) -> &str {
         match *self {
-            DetachFromIndexError::AccessDenied(ref cause) => cause,
-            DetachFromIndexError::DirectoryNotEnabled(ref cause) => cause,
-            DetachFromIndexError::InternalService(ref cause) => cause,
-            DetachFromIndexError::InvalidArn(ref cause) => cause,
-            DetachFromIndexError::LimitExceeded(ref cause) => cause,
-            DetachFromIndexError::NotIndex(ref cause) => cause,
-            DetachFromIndexError::ObjectAlreadyDetached(ref cause) => cause,
-            DetachFromIndexError::ResourceNotFound(ref cause) => cause,
-            DetachFromIndexError::RetryableConflict(ref cause) => cause,
+            DetachFromIndexError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachFromIndexError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            DetachFromIndexError::InternalService(ref cause) => write!(f, "{}", cause),
+            DetachFromIndexError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DetachFromIndexError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachFromIndexError::NotIndex(ref cause) => write!(f, "{}", cause),
+            DetachFromIndexError::ObjectAlreadyDetached(ref cause) => write!(f, "{}", cause),
+            DetachFromIndexError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DetachFromIndexError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachFromIndexError {}
 /// Errors returned by DetachObject
 #[derive(Debug, PartialEq)]
 pub enum DetachObjectError {
@@ -4828,23 +4748,19 @@ impl DetachObjectError {
 }
 impl fmt::Display for DetachObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachObjectError {
-    fn description(&self) -> &str {
         match *self {
-            DetachObjectError::AccessDenied(ref cause) => cause,
-            DetachObjectError::DirectoryNotEnabled(ref cause) => cause,
-            DetachObjectError::InternalService(ref cause) => cause,
-            DetachObjectError::InvalidArn(ref cause) => cause,
-            DetachObjectError::LimitExceeded(ref cause) => cause,
-            DetachObjectError::NotNode(ref cause) => cause,
-            DetachObjectError::ResourceNotFound(ref cause) => cause,
-            DetachObjectError::RetryableConflict(ref cause) => cause,
+            DetachObjectError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachObjectError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            DetachObjectError::InternalService(ref cause) => write!(f, "{}", cause),
+            DetachObjectError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DetachObjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachObjectError::NotNode(ref cause) => write!(f, "{}", cause),
+            DetachObjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DetachObjectError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachObjectError {}
 /// Errors returned by DetachPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachPolicyError {
@@ -4903,23 +4819,19 @@ impl DetachPolicyError {
 }
 impl fmt::Display for DetachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DetachPolicyError::AccessDenied(ref cause) => cause,
-            DetachPolicyError::DirectoryNotEnabled(ref cause) => cause,
-            DetachPolicyError::InternalService(ref cause) => cause,
-            DetachPolicyError::InvalidArn(ref cause) => cause,
-            DetachPolicyError::LimitExceeded(ref cause) => cause,
-            DetachPolicyError::NotPolicy(ref cause) => cause,
-            DetachPolicyError::ResourceNotFound(ref cause) => cause,
-            DetachPolicyError::RetryableConflict(ref cause) => cause,
+            DetachPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::NotPolicy(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachPolicyError {}
 /// Errors returned by DetachTypedLink
 #[derive(Debug, PartialEq)]
 pub enum DetachTypedLinkError {
@@ -4978,23 +4890,19 @@ impl DetachTypedLinkError {
 }
 impl fmt::Display for DetachTypedLinkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachTypedLinkError {
-    fn description(&self) -> &str {
         match *self {
-            DetachTypedLinkError::AccessDenied(ref cause) => cause,
-            DetachTypedLinkError::DirectoryNotEnabled(ref cause) => cause,
-            DetachTypedLinkError::FacetValidation(ref cause) => cause,
-            DetachTypedLinkError::InternalService(ref cause) => cause,
-            DetachTypedLinkError::InvalidArn(ref cause) => cause,
-            DetachTypedLinkError::LimitExceeded(ref cause) => cause,
-            DetachTypedLinkError::ResourceNotFound(ref cause) => cause,
-            DetachTypedLinkError::RetryableConflict(ref cause) => cause,
+            DetachTypedLinkError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachTypedLinkError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            DetachTypedLinkError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            DetachTypedLinkError::InternalService(ref cause) => write!(f, "{}", cause),
+            DetachTypedLinkError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DetachTypedLinkError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachTypedLinkError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DetachTypedLinkError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachTypedLinkError {}
 /// Errors returned by DisableDirectory
 #[derive(Debug, PartialEq)]
 pub enum DisableDirectoryError {
@@ -5048,22 +4956,18 @@ impl DisableDirectoryError {
 }
 impl fmt::Display for DisableDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableDirectoryError {
-    fn description(&self) -> &str {
         match *self {
-            DisableDirectoryError::AccessDenied(ref cause) => cause,
-            DisableDirectoryError::DirectoryDeleted(ref cause) => cause,
-            DisableDirectoryError::InternalService(ref cause) => cause,
-            DisableDirectoryError::InvalidArn(ref cause) => cause,
-            DisableDirectoryError::LimitExceeded(ref cause) => cause,
-            DisableDirectoryError::ResourceNotFound(ref cause) => cause,
-            DisableDirectoryError::RetryableConflict(ref cause) => cause,
+            DisableDirectoryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisableDirectoryError::DirectoryDeleted(ref cause) => write!(f, "{}", cause),
+            DisableDirectoryError::InternalService(ref cause) => write!(f, "{}", cause),
+            DisableDirectoryError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DisableDirectoryError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DisableDirectoryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DisableDirectoryError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableDirectoryError {}
 /// Errors returned by EnableDirectory
 #[derive(Debug, PartialEq)]
 pub enum EnableDirectoryError {
@@ -5117,22 +5021,18 @@ impl EnableDirectoryError {
 }
 impl fmt::Display for EnableDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableDirectoryError {
-    fn description(&self) -> &str {
         match *self {
-            EnableDirectoryError::AccessDenied(ref cause) => cause,
-            EnableDirectoryError::DirectoryDeleted(ref cause) => cause,
-            EnableDirectoryError::InternalService(ref cause) => cause,
-            EnableDirectoryError::InvalidArn(ref cause) => cause,
-            EnableDirectoryError::LimitExceeded(ref cause) => cause,
-            EnableDirectoryError::ResourceNotFound(ref cause) => cause,
-            EnableDirectoryError::RetryableConflict(ref cause) => cause,
+            EnableDirectoryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            EnableDirectoryError::DirectoryDeleted(ref cause) => write!(f, "{}", cause),
+            EnableDirectoryError::InternalService(ref cause) => write!(f, "{}", cause),
+            EnableDirectoryError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            EnableDirectoryError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            EnableDirectoryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            EnableDirectoryError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableDirectoryError {}
 /// Errors returned by GetAppliedSchemaVersion
 #[derive(Debug, PartialEq)]
 pub enum GetAppliedSchemaVersionError {
@@ -5191,21 +5091,17 @@ impl GetAppliedSchemaVersionError {
 }
 impl fmt::Display for GetAppliedSchemaVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAppliedSchemaVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetAppliedSchemaVersionError::AccessDenied(ref cause) => cause,
-            GetAppliedSchemaVersionError::InternalService(ref cause) => cause,
-            GetAppliedSchemaVersionError::InvalidArn(ref cause) => cause,
-            GetAppliedSchemaVersionError::LimitExceeded(ref cause) => cause,
-            GetAppliedSchemaVersionError::ResourceNotFound(ref cause) => cause,
-            GetAppliedSchemaVersionError::RetryableConflict(ref cause) => cause,
+            GetAppliedSchemaVersionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetAppliedSchemaVersionError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetAppliedSchemaVersionError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetAppliedSchemaVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetAppliedSchemaVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetAppliedSchemaVersionError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAppliedSchemaVersionError {}
 /// Errors returned by GetDirectory
 #[derive(Debug, PartialEq)]
 pub enum GetDirectoryError {
@@ -5249,20 +5145,16 @@ impl GetDirectoryError {
 }
 impl fmt::Display for GetDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDirectoryError {
-    fn description(&self) -> &str {
         match *self {
-            GetDirectoryError::AccessDenied(ref cause) => cause,
-            GetDirectoryError::InternalService(ref cause) => cause,
-            GetDirectoryError::InvalidArn(ref cause) => cause,
-            GetDirectoryError::LimitExceeded(ref cause) => cause,
-            GetDirectoryError::RetryableConflict(ref cause) => cause,
+            GetDirectoryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDirectoryError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetDirectoryError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetDirectoryError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetDirectoryError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDirectoryError {}
 /// Errors returned by GetFacet
 #[derive(Debug, PartialEq)]
 pub enum GetFacetError {
@@ -5316,22 +5208,18 @@ impl GetFacetError {
 }
 impl fmt::Display for GetFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFacetError {
-    fn description(&self) -> &str {
         match *self {
-            GetFacetError::AccessDenied(ref cause) => cause,
-            GetFacetError::FacetNotFound(ref cause) => cause,
-            GetFacetError::InternalService(ref cause) => cause,
-            GetFacetError::InvalidArn(ref cause) => cause,
-            GetFacetError::LimitExceeded(ref cause) => cause,
-            GetFacetError::ResourceNotFound(ref cause) => cause,
-            GetFacetError::RetryableConflict(ref cause) => cause,
+            GetFacetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFacetError::FacetNotFound(ref cause) => write!(f, "{}", cause),
+            GetFacetError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetFacetError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetFacetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetFacetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFacetError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFacetError {}
 /// Errors returned by GetLinkAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetLinkAttributesError {
@@ -5392,23 +5280,19 @@ impl GetLinkAttributesError {
 }
 impl fmt::Display for GetLinkAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLinkAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetLinkAttributesError::AccessDenied(ref cause) => cause,
-            GetLinkAttributesError::DirectoryNotEnabled(ref cause) => cause,
-            GetLinkAttributesError::FacetValidation(ref cause) => cause,
-            GetLinkAttributesError::InternalService(ref cause) => cause,
-            GetLinkAttributesError::InvalidArn(ref cause) => cause,
-            GetLinkAttributesError::LimitExceeded(ref cause) => cause,
-            GetLinkAttributesError::ResourceNotFound(ref cause) => cause,
-            GetLinkAttributesError::RetryableConflict(ref cause) => cause,
+            GetLinkAttributesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLinkAttributesError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            GetLinkAttributesError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            GetLinkAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetLinkAttributesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetLinkAttributesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetLinkAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetLinkAttributesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLinkAttributesError {}
 /// Errors returned by GetObjectAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetObjectAttributesError {
@@ -5473,23 +5357,19 @@ impl GetObjectAttributesError {
 }
 impl fmt::Display for GetObjectAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetObjectAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetObjectAttributesError::AccessDenied(ref cause) => cause,
-            GetObjectAttributesError::DirectoryNotEnabled(ref cause) => cause,
-            GetObjectAttributesError::FacetValidation(ref cause) => cause,
-            GetObjectAttributesError::InternalService(ref cause) => cause,
-            GetObjectAttributesError::InvalidArn(ref cause) => cause,
-            GetObjectAttributesError::LimitExceeded(ref cause) => cause,
-            GetObjectAttributesError::ResourceNotFound(ref cause) => cause,
-            GetObjectAttributesError::RetryableConflict(ref cause) => cause,
+            GetObjectAttributesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetObjectAttributesError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            GetObjectAttributesError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            GetObjectAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetObjectAttributesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetObjectAttributesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetObjectAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetObjectAttributesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetObjectAttributesError {}
 /// Errors returned by GetObjectInformation
 #[derive(Debug, PartialEq)]
 pub enum GetObjectInformationError {
@@ -5551,22 +5431,18 @@ impl GetObjectInformationError {
 }
 impl fmt::Display for GetObjectInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetObjectInformationError {
-    fn description(&self) -> &str {
         match *self {
-            GetObjectInformationError::AccessDenied(ref cause) => cause,
-            GetObjectInformationError::DirectoryNotEnabled(ref cause) => cause,
-            GetObjectInformationError::InternalService(ref cause) => cause,
-            GetObjectInformationError::InvalidArn(ref cause) => cause,
-            GetObjectInformationError::LimitExceeded(ref cause) => cause,
-            GetObjectInformationError::ResourceNotFound(ref cause) => cause,
-            GetObjectInformationError::RetryableConflict(ref cause) => cause,
+            GetObjectInformationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetObjectInformationError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            GetObjectInformationError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetObjectInformationError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetObjectInformationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetObjectInformationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetObjectInformationError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetObjectInformationError {}
 /// Errors returned by GetSchemaAsJson
 #[derive(Debug, PartialEq)]
 pub enum GetSchemaAsJsonError {
@@ -5615,21 +5491,17 @@ impl GetSchemaAsJsonError {
 }
 impl fmt::Display for GetSchemaAsJsonError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSchemaAsJsonError {
-    fn description(&self) -> &str {
         match *self {
-            GetSchemaAsJsonError::AccessDenied(ref cause) => cause,
-            GetSchemaAsJsonError::InternalService(ref cause) => cause,
-            GetSchemaAsJsonError::InvalidArn(ref cause) => cause,
-            GetSchemaAsJsonError::LimitExceeded(ref cause) => cause,
-            GetSchemaAsJsonError::ResourceNotFound(ref cause) => cause,
-            GetSchemaAsJsonError::RetryableConflict(ref cause) => cause,
+            GetSchemaAsJsonError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetSchemaAsJsonError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetSchemaAsJsonError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetSchemaAsJsonError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetSchemaAsJsonError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetSchemaAsJsonError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSchemaAsJsonError {}
 /// Errors returned by GetTypedLinkFacetInformation
 #[derive(Debug, PartialEq)]
 pub enum GetTypedLinkFacetInformationError {
@@ -5706,23 +5578,25 @@ impl GetTypedLinkFacetInformationError {
 }
 impl fmt::Display for GetTypedLinkFacetInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTypedLinkFacetInformationError {
-    fn description(&self) -> &str {
         match *self {
-            GetTypedLinkFacetInformationError::AccessDenied(ref cause) => cause,
-            GetTypedLinkFacetInformationError::FacetNotFound(ref cause) => cause,
-            GetTypedLinkFacetInformationError::InternalService(ref cause) => cause,
-            GetTypedLinkFacetInformationError::InvalidArn(ref cause) => cause,
-            GetTypedLinkFacetInformationError::InvalidNextToken(ref cause) => cause,
-            GetTypedLinkFacetInformationError::LimitExceeded(ref cause) => cause,
-            GetTypedLinkFacetInformationError::ResourceNotFound(ref cause) => cause,
-            GetTypedLinkFacetInformationError::RetryableConflict(ref cause) => cause,
+            GetTypedLinkFacetInformationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetTypedLinkFacetInformationError::FacetNotFound(ref cause) => write!(f, "{}", cause),
+            GetTypedLinkFacetInformationError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetTypedLinkFacetInformationError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetTypedLinkFacetInformationError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetTypedLinkFacetInformationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetTypedLinkFacetInformationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetTypedLinkFacetInformationError::RetryableConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetTypedLinkFacetInformationError {}
 /// Errors returned by ListAppliedSchemaArns
 #[derive(Debug, PartialEq)]
 pub enum ListAppliedSchemaArnsError {
@@ -5784,22 +5658,18 @@ impl ListAppliedSchemaArnsError {
 }
 impl fmt::Display for ListAppliedSchemaArnsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAppliedSchemaArnsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAppliedSchemaArnsError::AccessDenied(ref cause) => cause,
-            ListAppliedSchemaArnsError::InternalService(ref cause) => cause,
-            ListAppliedSchemaArnsError::InvalidArn(ref cause) => cause,
-            ListAppliedSchemaArnsError::InvalidNextToken(ref cause) => cause,
-            ListAppliedSchemaArnsError::LimitExceeded(ref cause) => cause,
-            ListAppliedSchemaArnsError::ResourceNotFound(ref cause) => cause,
-            ListAppliedSchemaArnsError::RetryableConflict(ref cause) => cause,
+            ListAppliedSchemaArnsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListAppliedSchemaArnsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListAppliedSchemaArnsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListAppliedSchemaArnsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListAppliedSchemaArnsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListAppliedSchemaArnsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListAppliedSchemaArnsError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAppliedSchemaArnsError {}
 /// Errors returned by ListAttachedIndices
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedIndicesError {
@@ -5859,22 +5729,18 @@ impl ListAttachedIndicesError {
 }
 impl fmt::Display for ListAttachedIndicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttachedIndicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttachedIndicesError::AccessDenied(ref cause) => cause,
-            ListAttachedIndicesError::DirectoryNotEnabled(ref cause) => cause,
-            ListAttachedIndicesError::InternalService(ref cause) => cause,
-            ListAttachedIndicesError::InvalidArn(ref cause) => cause,
-            ListAttachedIndicesError::LimitExceeded(ref cause) => cause,
-            ListAttachedIndicesError::ResourceNotFound(ref cause) => cause,
-            ListAttachedIndicesError::RetryableConflict(ref cause) => cause,
+            ListAttachedIndicesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListAttachedIndicesError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            ListAttachedIndicesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListAttachedIndicesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListAttachedIndicesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListAttachedIndicesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListAttachedIndicesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttachedIndicesError {}
 /// Errors returned by ListDevelopmentSchemaArns
 #[derive(Debug, PartialEq)]
 pub enum ListDevelopmentSchemaArnsError {
@@ -5942,22 +5808,18 @@ impl ListDevelopmentSchemaArnsError {
 }
 impl fmt::Display for ListDevelopmentSchemaArnsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDevelopmentSchemaArnsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDevelopmentSchemaArnsError::AccessDenied(ref cause) => cause,
-            ListDevelopmentSchemaArnsError::InternalService(ref cause) => cause,
-            ListDevelopmentSchemaArnsError::InvalidArn(ref cause) => cause,
-            ListDevelopmentSchemaArnsError::InvalidNextToken(ref cause) => cause,
-            ListDevelopmentSchemaArnsError::LimitExceeded(ref cause) => cause,
-            ListDevelopmentSchemaArnsError::ResourceNotFound(ref cause) => cause,
-            ListDevelopmentSchemaArnsError::RetryableConflict(ref cause) => cause,
+            ListDevelopmentSchemaArnsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListDevelopmentSchemaArnsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListDevelopmentSchemaArnsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListDevelopmentSchemaArnsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListDevelopmentSchemaArnsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListDevelopmentSchemaArnsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListDevelopmentSchemaArnsError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDevelopmentSchemaArnsError {}
 /// Errors returned by ListDirectories
 #[derive(Debug, PartialEq)]
 pub enum ListDirectoriesError {
@@ -6006,21 +5868,17 @@ impl ListDirectoriesError {
 }
 impl fmt::Display for ListDirectoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDirectoriesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDirectoriesError::AccessDenied(ref cause) => cause,
-            ListDirectoriesError::InternalService(ref cause) => cause,
-            ListDirectoriesError::InvalidArn(ref cause) => cause,
-            ListDirectoriesError::InvalidNextToken(ref cause) => cause,
-            ListDirectoriesError::LimitExceeded(ref cause) => cause,
-            ListDirectoriesError::RetryableConflict(ref cause) => cause,
+            ListDirectoriesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListDirectoriesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListDirectoriesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListDirectoriesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListDirectoriesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListDirectoriesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDirectoriesError {}
 /// Errors returned by ListFacetAttributes
 #[derive(Debug, PartialEq)]
 pub enum ListFacetAttributesError {
@@ -6085,23 +5943,19 @@ impl ListFacetAttributesError {
 }
 impl fmt::Display for ListFacetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFacetAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            ListFacetAttributesError::AccessDenied(ref cause) => cause,
-            ListFacetAttributesError::FacetNotFound(ref cause) => cause,
-            ListFacetAttributesError::InternalService(ref cause) => cause,
-            ListFacetAttributesError::InvalidArn(ref cause) => cause,
-            ListFacetAttributesError::InvalidNextToken(ref cause) => cause,
-            ListFacetAttributesError::LimitExceeded(ref cause) => cause,
-            ListFacetAttributesError::ResourceNotFound(ref cause) => cause,
-            ListFacetAttributesError::RetryableConflict(ref cause) => cause,
+            ListFacetAttributesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFacetAttributesError::FacetNotFound(ref cause) => write!(f, "{}", cause),
+            ListFacetAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListFacetAttributesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListFacetAttributesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListFacetAttributesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListFacetAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListFacetAttributesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFacetAttributesError {}
 /// Errors returned by ListFacetNames
 #[derive(Debug, PartialEq)]
 pub enum ListFacetNamesError {
@@ -6155,22 +6009,18 @@ impl ListFacetNamesError {
 }
 impl fmt::Display for ListFacetNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFacetNamesError {
-    fn description(&self) -> &str {
         match *self {
-            ListFacetNamesError::AccessDenied(ref cause) => cause,
-            ListFacetNamesError::InternalService(ref cause) => cause,
-            ListFacetNamesError::InvalidArn(ref cause) => cause,
-            ListFacetNamesError::InvalidNextToken(ref cause) => cause,
-            ListFacetNamesError::LimitExceeded(ref cause) => cause,
-            ListFacetNamesError::ResourceNotFound(ref cause) => cause,
-            ListFacetNamesError::RetryableConflict(ref cause) => cause,
+            ListFacetNamesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFacetNamesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListFacetNamesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListFacetNamesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListFacetNamesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListFacetNamesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListFacetNamesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFacetNamesError {}
 /// Errors returned by ListIncomingTypedLinks
 #[derive(Debug, PartialEq)]
 pub enum ListIncomingTypedLinksError {
@@ -6248,24 +6098,20 @@ impl ListIncomingTypedLinksError {
 }
 impl fmt::Display for ListIncomingTypedLinksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListIncomingTypedLinksError {
-    fn description(&self) -> &str {
         match *self {
-            ListIncomingTypedLinksError::AccessDenied(ref cause) => cause,
-            ListIncomingTypedLinksError::DirectoryNotEnabled(ref cause) => cause,
-            ListIncomingTypedLinksError::FacetValidation(ref cause) => cause,
-            ListIncomingTypedLinksError::InternalService(ref cause) => cause,
-            ListIncomingTypedLinksError::InvalidArn(ref cause) => cause,
-            ListIncomingTypedLinksError::InvalidNextToken(ref cause) => cause,
-            ListIncomingTypedLinksError::LimitExceeded(ref cause) => cause,
-            ListIncomingTypedLinksError::ResourceNotFound(ref cause) => cause,
-            ListIncomingTypedLinksError::RetryableConflict(ref cause) => cause,
+            ListIncomingTypedLinksError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListIncomingTypedLinksError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            ListIncomingTypedLinksError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            ListIncomingTypedLinksError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListIncomingTypedLinksError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListIncomingTypedLinksError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListIncomingTypedLinksError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListIncomingTypedLinksError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListIncomingTypedLinksError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListIncomingTypedLinksError {}
 /// Errors returned by ListIndex
 #[derive(Debug, PartialEq)]
 pub enum ListIndexError {
@@ -6334,25 +6180,21 @@ impl ListIndexError {
 }
 impl fmt::Display for ListIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListIndexError {
-    fn description(&self) -> &str {
         match *self {
-            ListIndexError::AccessDenied(ref cause) => cause,
-            ListIndexError::DirectoryNotEnabled(ref cause) => cause,
-            ListIndexError::FacetValidation(ref cause) => cause,
-            ListIndexError::InternalService(ref cause) => cause,
-            ListIndexError::InvalidArn(ref cause) => cause,
-            ListIndexError::InvalidNextToken(ref cause) => cause,
-            ListIndexError::LimitExceeded(ref cause) => cause,
-            ListIndexError::NotIndex(ref cause) => cause,
-            ListIndexError::ResourceNotFound(ref cause) => cause,
-            ListIndexError::RetryableConflict(ref cause) => cause,
+            ListIndexError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListIndexError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            ListIndexError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            ListIndexError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListIndexError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListIndexError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListIndexError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListIndexError::NotIndex(ref cause) => write!(f, "{}", cause),
+            ListIndexError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListIndexError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListIndexError {}
 /// Errors returned by ListManagedSchemaArns
 #[derive(Debug, PartialEq)]
 pub enum ListManagedSchemaArnsError {
@@ -6402,20 +6244,16 @@ impl ListManagedSchemaArnsError {
 }
 impl fmt::Display for ListManagedSchemaArnsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListManagedSchemaArnsError {
-    fn description(&self) -> &str {
         match *self {
-            ListManagedSchemaArnsError::AccessDenied(ref cause) => cause,
-            ListManagedSchemaArnsError::InternalService(ref cause) => cause,
-            ListManagedSchemaArnsError::InvalidArn(ref cause) => cause,
-            ListManagedSchemaArnsError::InvalidNextToken(ref cause) => cause,
-            ListManagedSchemaArnsError::ResourceNotFound(ref cause) => cause,
+            ListManagedSchemaArnsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListManagedSchemaArnsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListManagedSchemaArnsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListManagedSchemaArnsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListManagedSchemaArnsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListManagedSchemaArnsError {}
 /// Errors returned by ListObjectAttributes
 #[derive(Debug, PartialEq)]
 pub enum ListObjectAttributesError {
@@ -6491,24 +6329,20 @@ impl ListObjectAttributesError {
 }
 impl fmt::Display for ListObjectAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListObjectAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            ListObjectAttributesError::AccessDenied(ref cause) => cause,
-            ListObjectAttributesError::DirectoryNotEnabled(ref cause) => cause,
-            ListObjectAttributesError::FacetValidation(ref cause) => cause,
-            ListObjectAttributesError::InternalService(ref cause) => cause,
-            ListObjectAttributesError::InvalidArn(ref cause) => cause,
-            ListObjectAttributesError::InvalidNextToken(ref cause) => cause,
-            ListObjectAttributesError::LimitExceeded(ref cause) => cause,
-            ListObjectAttributesError::ResourceNotFound(ref cause) => cause,
-            ListObjectAttributesError::RetryableConflict(ref cause) => cause,
+            ListObjectAttributesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListObjectAttributesError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            ListObjectAttributesError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            ListObjectAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListObjectAttributesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListObjectAttributesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListObjectAttributesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListObjectAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListObjectAttributesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListObjectAttributesError {}
 /// Errors returned by ListObjectChildren
 #[derive(Debug, PartialEq)]
 pub enum ListObjectChildrenError {
@@ -6576,24 +6410,20 @@ impl ListObjectChildrenError {
 }
 impl fmt::Display for ListObjectChildrenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListObjectChildrenError {
-    fn description(&self) -> &str {
         match *self {
-            ListObjectChildrenError::AccessDenied(ref cause) => cause,
-            ListObjectChildrenError::DirectoryNotEnabled(ref cause) => cause,
-            ListObjectChildrenError::InternalService(ref cause) => cause,
-            ListObjectChildrenError::InvalidArn(ref cause) => cause,
-            ListObjectChildrenError::InvalidNextToken(ref cause) => cause,
-            ListObjectChildrenError::LimitExceeded(ref cause) => cause,
-            ListObjectChildrenError::NotNode(ref cause) => cause,
-            ListObjectChildrenError::ResourceNotFound(ref cause) => cause,
-            ListObjectChildrenError::RetryableConflict(ref cause) => cause,
+            ListObjectChildrenError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListObjectChildrenError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            ListObjectChildrenError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListObjectChildrenError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListObjectChildrenError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListObjectChildrenError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListObjectChildrenError::NotNode(ref cause) => write!(f, "{}", cause),
+            ListObjectChildrenError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListObjectChildrenError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListObjectChildrenError {}
 /// Errors returned by ListObjectParentPaths
 #[derive(Debug, PartialEq)]
 pub enum ListObjectParentPathsError {
@@ -6662,23 +6492,19 @@ impl ListObjectParentPathsError {
 }
 impl fmt::Display for ListObjectParentPathsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListObjectParentPathsError {
-    fn description(&self) -> &str {
         match *self {
-            ListObjectParentPathsError::AccessDenied(ref cause) => cause,
-            ListObjectParentPathsError::DirectoryNotEnabled(ref cause) => cause,
-            ListObjectParentPathsError::InternalService(ref cause) => cause,
-            ListObjectParentPathsError::InvalidArn(ref cause) => cause,
-            ListObjectParentPathsError::InvalidNextToken(ref cause) => cause,
-            ListObjectParentPathsError::LimitExceeded(ref cause) => cause,
-            ListObjectParentPathsError::ResourceNotFound(ref cause) => cause,
-            ListObjectParentPathsError::RetryableConflict(ref cause) => cause,
+            ListObjectParentPathsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListObjectParentPathsError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            ListObjectParentPathsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListObjectParentPathsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListObjectParentPathsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListObjectParentPathsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListObjectParentPathsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListObjectParentPathsError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListObjectParentPathsError {}
 /// Errors returned by ListObjectParents
 #[derive(Debug, PartialEq)]
 pub enum ListObjectParentsError {
@@ -6746,24 +6572,20 @@ impl ListObjectParentsError {
 }
 impl fmt::Display for ListObjectParentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListObjectParentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListObjectParentsError::AccessDenied(ref cause) => cause,
-            ListObjectParentsError::CannotListParentOfRoot(ref cause) => cause,
-            ListObjectParentsError::DirectoryNotEnabled(ref cause) => cause,
-            ListObjectParentsError::InternalService(ref cause) => cause,
-            ListObjectParentsError::InvalidArn(ref cause) => cause,
-            ListObjectParentsError::InvalidNextToken(ref cause) => cause,
-            ListObjectParentsError::LimitExceeded(ref cause) => cause,
-            ListObjectParentsError::ResourceNotFound(ref cause) => cause,
-            ListObjectParentsError::RetryableConflict(ref cause) => cause,
+            ListObjectParentsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListObjectParentsError::CannotListParentOfRoot(ref cause) => write!(f, "{}", cause),
+            ListObjectParentsError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            ListObjectParentsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListObjectParentsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListObjectParentsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListObjectParentsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListObjectParentsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListObjectParentsError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListObjectParentsError {}
 /// Errors returned by ListObjectPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListObjectPoliciesError {
@@ -6826,23 +6648,19 @@ impl ListObjectPoliciesError {
 }
 impl fmt::Display for ListObjectPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListObjectPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListObjectPoliciesError::AccessDenied(ref cause) => cause,
-            ListObjectPoliciesError::DirectoryNotEnabled(ref cause) => cause,
-            ListObjectPoliciesError::InternalService(ref cause) => cause,
-            ListObjectPoliciesError::InvalidArn(ref cause) => cause,
-            ListObjectPoliciesError::InvalidNextToken(ref cause) => cause,
-            ListObjectPoliciesError::LimitExceeded(ref cause) => cause,
-            ListObjectPoliciesError::ResourceNotFound(ref cause) => cause,
-            ListObjectPoliciesError::RetryableConflict(ref cause) => cause,
+            ListObjectPoliciesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListObjectPoliciesError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            ListObjectPoliciesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListObjectPoliciesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListObjectPoliciesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListObjectPoliciesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListObjectPoliciesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListObjectPoliciesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListObjectPoliciesError {}
 /// Errors returned by ListOutgoingTypedLinks
 #[derive(Debug, PartialEq)]
 pub enum ListOutgoingTypedLinksError {
@@ -6920,24 +6738,20 @@ impl ListOutgoingTypedLinksError {
 }
 impl fmt::Display for ListOutgoingTypedLinksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOutgoingTypedLinksError {
-    fn description(&self) -> &str {
         match *self {
-            ListOutgoingTypedLinksError::AccessDenied(ref cause) => cause,
-            ListOutgoingTypedLinksError::DirectoryNotEnabled(ref cause) => cause,
-            ListOutgoingTypedLinksError::FacetValidation(ref cause) => cause,
-            ListOutgoingTypedLinksError::InternalService(ref cause) => cause,
-            ListOutgoingTypedLinksError::InvalidArn(ref cause) => cause,
-            ListOutgoingTypedLinksError::InvalidNextToken(ref cause) => cause,
-            ListOutgoingTypedLinksError::LimitExceeded(ref cause) => cause,
-            ListOutgoingTypedLinksError::ResourceNotFound(ref cause) => cause,
-            ListOutgoingTypedLinksError::RetryableConflict(ref cause) => cause,
+            ListOutgoingTypedLinksError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListOutgoingTypedLinksError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            ListOutgoingTypedLinksError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            ListOutgoingTypedLinksError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListOutgoingTypedLinksError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListOutgoingTypedLinksError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListOutgoingTypedLinksError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListOutgoingTypedLinksError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListOutgoingTypedLinksError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOutgoingTypedLinksError {}
 /// Errors returned by ListPolicyAttachments
 #[derive(Debug, PartialEq)]
 pub enum ListPolicyAttachmentsError {
@@ -7011,24 +6825,20 @@ impl ListPolicyAttachmentsError {
 }
 impl fmt::Display for ListPolicyAttachmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPolicyAttachmentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPolicyAttachmentsError::AccessDenied(ref cause) => cause,
-            ListPolicyAttachmentsError::DirectoryNotEnabled(ref cause) => cause,
-            ListPolicyAttachmentsError::InternalService(ref cause) => cause,
-            ListPolicyAttachmentsError::InvalidArn(ref cause) => cause,
-            ListPolicyAttachmentsError::InvalidNextToken(ref cause) => cause,
-            ListPolicyAttachmentsError::LimitExceeded(ref cause) => cause,
-            ListPolicyAttachmentsError::NotPolicy(ref cause) => cause,
-            ListPolicyAttachmentsError::ResourceNotFound(ref cause) => cause,
-            ListPolicyAttachmentsError::RetryableConflict(ref cause) => cause,
+            ListPolicyAttachmentsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListPolicyAttachmentsError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            ListPolicyAttachmentsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListPolicyAttachmentsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListPolicyAttachmentsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListPolicyAttachmentsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListPolicyAttachmentsError::NotPolicy(ref cause) => write!(f, "{}", cause),
+            ListPolicyAttachmentsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListPolicyAttachmentsError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPolicyAttachmentsError {}
 /// Errors returned by ListPublishedSchemaArns
 #[derive(Debug, PartialEq)]
 pub enum ListPublishedSchemaArnsError {
@@ -7094,22 +6904,18 @@ impl ListPublishedSchemaArnsError {
 }
 impl fmt::Display for ListPublishedSchemaArnsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPublishedSchemaArnsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPublishedSchemaArnsError::AccessDenied(ref cause) => cause,
-            ListPublishedSchemaArnsError::InternalService(ref cause) => cause,
-            ListPublishedSchemaArnsError::InvalidArn(ref cause) => cause,
-            ListPublishedSchemaArnsError::InvalidNextToken(ref cause) => cause,
-            ListPublishedSchemaArnsError::LimitExceeded(ref cause) => cause,
-            ListPublishedSchemaArnsError::ResourceNotFound(ref cause) => cause,
-            ListPublishedSchemaArnsError::RetryableConflict(ref cause) => cause,
+            ListPublishedSchemaArnsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListPublishedSchemaArnsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListPublishedSchemaArnsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListPublishedSchemaArnsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListPublishedSchemaArnsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListPublishedSchemaArnsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListPublishedSchemaArnsError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPublishedSchemaArnsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -7169,22 +6975,18 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AccessDenied(ref cause) => cause,
-            ListTagsForResourceError::InternalService(ref cause) => cause,
-            ListTagsForResourceError::InvalidArn(ref cause) => cause,
-            ListTagsForResourceError::InvalidTaggingRequest(ref cause) => cause,
-            ListTagsForResourceError::LimitExceeded(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::RetryableConflict(ref cause) => cause,
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidTaggingRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTypedLinkFacetAttributes
 #[derive(Debug, PartialEq)]
 pub enum ListTypedLinkFacetAttributesError {
@@ -7261,23 +7063,25 @@ impl ListTypedLinkFacetAttributesError {
 }
 impl fmt::Display for ListTypedLinkFacetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTypedLinkFacetAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTypedLinkFacetAttributesError::AccessDenied(ref cause) => cause,
-            ListTypedLinkFacetAttributesError::FacetNotFound(ref cause) => cause,
-            ListTypedLinkFacetAttributesError::InternalService(ref cause) => cause,
-            ListTypedLinkFacetAttributesError::InvalidArn(ref cause) => cause,
-            ListTypedLinkFacetAttributesError::InvalidNextToken(ref cause) => cause,
-            ListTypedLinkFacetAttributesError::LimitExceeded(ref cause) => cause,
-            ListTypedLinkFacetAttributesError::ResourceNotFound(ref cause) => cause,
-            ListTypedLinkFacetAttributesError::RetryableConflict(ref cause) => cause,
+            ListTypedLinkFacetAttributesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetAttributesError::FacetNotFound(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetAttributesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetAttributesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTypedLinkFacetAttributesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetAttributesError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTypedLinkFacetAttributesError::RetryableConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListTypedLinkFacetAttributesError {}
 /// Errors returned by ListTypedLinkFacetNames
 #[derive(Debug, PartialEq)]
 pub enum ListTypedLinkFacetNamesError {
@@ -7343,22 +7147,18 @@ impl ListTypedLinkFacetNamesError {
 }
 impl fmt::Display for ListTypedLinkFacetNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTypedLinkFacetNamesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTypedLinkFacetNamesError::AccessDenied(ref cause) => cause,
-            ListTypedLinkFacetNamesError::InternalService(ref cause) => cause,
-            ListTypedLinkFacetNamesError::InvalidArn(ref cause) => cause,
-            ListTypedLinkFacetNamesError::InvalidNextToken(ref cause) => cause,
-            ListTypedLinkFacetNamesError::LimitExceeded(ref cause) => cause,
-            ListTypedLinkFacetNamesError::ResourceNotFound(ref cause) => cause,
-            ListTypedLinkFacetNamesError::RetryableConflict(ref cause) => cause,
+            ListTypedLinkFacetNamesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetNamesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetNamesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetNamesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetNamesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetNamesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTypedLinkFacetNamesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTypedLinkFacetNamesError {}
 /// Errors returned by LookupPolicy
 #[derive(Debug, PartialEq)]
 pub enum LookupPolicyError {
@@ -7417,23 +7217,19 @@ impl LookupPolicyError {
 }
 impl fmt::Display for LookupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for LookupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            LookupPolicyError::AccessDenied(ref cause) => cause,
-            LookupPolicyError::DirectoryNotEnabled(ref cause) => cause,
-            LookupPolicyError::InternalService(ref cause) => cause,
-            LookupPolicyError::InvalidArn(ref cause) => cause,
-            LookupPolicyError::InvalidNextToken(ref cause) => cause,
-            LookupPolicyError::LimitExceeded(ref cause) => cause,
-            LookupPolicyError::ResourceNotFound(ref cause) => cause,
-            LookupPolicyError::RetryableConflict(ref cause) => cause,
+            LookupPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            LookupPolicyError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            LookupPolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            LookupPolicyError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            LookupPolicyError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            LookupPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            LookupPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            LookupPolicyError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for LookupPolicyError {}
 /// Errors returned by PublishSchema
 #[derive(Debug, PartialEq)]
 pub enum PublishSchemaError {
@@ -7489,22 +7285,18 @@ impl PublishSchemaError {
 }
 impl fmt::Display for PublishSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PublishSchemaError {
-    fn description(&self) -> &str {
         match *self {
-            PublishSchemaError::AccessDenied(ref cause) => cause,
-            PublishSchemaError::InternalService(ref cause) => cause,
-            PublishSchemaError::InvalidArn(ref cause) => cause,
-            PublishSchemaError::LimitExceeded(ref cause) => cause,
-            PublishSchemaError::ResourceNotFound(ref cause) => cause,
-            PublishSchemaError::RetryableConflict(ref cause) => cause,
-            PublishSchemaError::SchemaAlreadyPublished(ref cause) => cause,
+            PublishSchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PublishSchemaError::InternalService(ref cause) => write!(f, "{}", cause),
+            PublishSchemaError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            PublishSchemaError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PublishSchemaError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PublishSchemaError::RetryableConflict(ref cause) => write!(f, "{}", cause),
+            PublishSchemaError::SchemaAlreadyPublished(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PublishSchemaError {}
 /// Errors returned by PutSchemaFromJson
 #[derive(Debug, PartialEq)]
 pub enum PutSchemaFromJsonError {
@@ -7558,22 +7350,18 @@ impl PutSchemaFromJsonError {
 }
 impl fmt::Display for PutSchemaFromJsonError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutSchemaFromJsonError {
-    fn description(&self) -> &str {
         match *self {
-            PutSchemaFromJsonError::AccessDenied(ref cause) => cause,
-            PutSchemaFromJsonError::InternalService(ref cause) => cause,
-            PutSchemaFromJsonError::InvalidArn(ref cause) => cause,
-            PutSchemaFromJsonError::InvalidRule(ref cause) => cause,
-            PutSchemaFromJsonError::InvalidSchemaDoc(ref cause) => cause,
-            PutSchemaFromJsonError::LimitExceeded(ref cause) => cause,
-            PutSchemaFromJsonError::RetryableConflict(ref cause) => cause,
+            PutSchemaFromJsonError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutSchemaFromJsonError::InternalService(ref cause) => write!(f, "{}", cause),
+            PutSchemaFromJsonError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            PutSchemaFromJsonError::InvalidRule(ref cause) => write!(f, "{}", cause),
+            PutSchemaFromJsonError::InvalidSchemaDoc(ref cause) => write!(f, "{}", cause),
+            PutSchemaFromJsonError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutSchemaFromJsonError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutSchemaFromJsonError {}
 /// Errors returned by RemoveFacetFromObject
 #[derive(Debug, PartialEq)]
 pub enum RemoveFacetFromObjectError {
@@ -7642,23 +7430,19 @@ impl RemoveFacetFromObjectError {
 }
 impl fmt::Display for RemoveFacetFromObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveFacetFromObjectError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveFacetFromObjectError::AccessDenied(ref cause) => cause,
-            RemoveFacetFromObjectError::DirectoryNotEnabled(ref cause) => cause,
-            RemoveFacetFromObjectError::FacetValidation(ref cause) => cause,
-            RemoveFacetFromObjectError::InternalService(ref cause) => cause,
-            RemoveFacetFromObjectError::InvalidArn(ref cause) => cause,
-            RemoveFacetFromObjectError::LimitExceeded(ref cause) => cause,
-            RemoveFacetFromObjectError::ResourceNotFound(ref cause) => cause,
-            RemoveFacetFromObjectError::RetryableConflict(ref cause) => cause,
+            RemoveFacetFromObjectError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RemoveFacetFromObjectError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            RemoveFacetFromObjectError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            RemoveFacetFromObjectError::InternalService(ref cause) => write!(f, "{}", cause),
+            RemoveFacetFromObjectError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            RemoveFacetFromObjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RemoveFacetFromObjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveFacetFromObjectError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveFacetFromObjectError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -7712,22 +7496,18 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AccessDenied(ref cause) => cause,
-            TagResourceError::InternalService(ref cause) => cause,
-            TagResourceError::InvalidArn(ref cause) => cause,
-            TagResourceError::InvalidTaggingRequest(ref cause) => cause,
-            TagResourceError::LimitExceeded(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::RetryableConflict(ref cause) => cause,
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalService(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidTaggingRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -7781,22 +7561,18 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AccessDenied(ref cause) => cause,
-            UntagResourceError::InternalService(ref cause) => cause,
-            UntagResourceError::InvalidArn(ref cause) => cause,
-            UntagResourceError::InvalidTaggingRequest(ref cause) => cause,
-            UntagResourceError::LimitExceeded(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::RetryableConflict(ref cause) => cause,
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalService(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidTaggingRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateFacet
 #[derive(Debug, PartialEq)]
 pub enum UpdateFacetError {
@@ -7865,25 +7641,21 @@ impl UpdateFacetError {
 }
 impl fmt::Display for UpdateFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFacetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFacetError::AccessDenied(ref cause) => cause,
-            UpdateFacetError::FacetNotFound(ref cause) => cause,
-            UpdateFacetError::FacetValidation(ref cause) => cause,
-            UpdateFacetError::InternalService(ref cause) => cause,
-            UpdateFacetError::InvalidArn(ref cause) => cause,
-            UpdateFacetError::InvalidFacetUpdate(ref cause) => cause,
-            UpdateFacetError::InvalidRule(ref cause) => cause,
-            UpdateFacetError::LimitExceeded(ref cause) => cause,
-            UpdateFacetError::ResourceNotFound(ref cause) => cause,
-            UpdateFacetError::RetryableConflict(ref cause) => cause,
+            UpdateFacetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateFacetError::FacetNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFacetError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            UpdateFacetError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateFacetError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpdateFacetError::InvalidFacetUpdate(ref cause) => write!(f, "{}", cause),
+            UpdateFacetError::InvalidRule(ref cause) => write!(f, "{}", cause),
+            UpdateFacetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFacetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFacetError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFacetError {}
 /// Errors returned by UpdateLinkAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateLinkAttributesError {
@@ -7952,23 +7724,19 @@ impl UpdateLinkAttributesError {
 }
 impl fmt::Display for UpdateLinkAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLinkAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLinkAttributesError::AccessDenied(ref cause) => cause,
-            UpdateLinkAttributesError::DirectoryNotEnabled(ref cause) => cause,
-            UpdateLinkAttributesError::FacetValidation(ref cause) => cause,
-            UpdateLinkAttributesError::InternalService(ref cause) => cause,
-            UpdateLinkAttributesError::InvalidArn(ref cause) => cause,
-            UpdateLinkAttributesError::LimitExceeded(ref cause) => cause,
-            UpdateLinkAttributesError::ResourceNotFound(ref cause) => cause,
-            UpdateLinkAttributesError::RetryableConflict(ref cause) => cause,
+            UpdateLinkAttributesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateLinkAttributesError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            UpdateLinkAttributesError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            UpdateLinkAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateLinkAttributesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpdateLinkAttributesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateLinkAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateLinkAttributesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateLinkAttributesError {}
 /// Errors returned by UpdateObjectAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateObjectAttributesError {
@@ -8046,24 +7814,20 @@ impl UpdateObjectAttributesError {
 }
 impl fmt::Display for UpdateObjectAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateObjectAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateObjectAttributesError::AccessDenied(ref cause) => cause,
-            UpdateObjectAttributesError::DirectoryNotEnabled(ref cause) => cause,
-            UpdateObjectAttributesError::FacetValidation(ref cause) => cause,
-            UpdateObjectAttributesError::InternalService(ref cause) => cause,
-            UpdateObjectAttributesError::InvalidArn(ref cause) => cause,
-            UpdateObjectAttributesError::LimitExceeded(ref cause) => cause,
-            UpdateObjectAttributesError::LinkNameAlreadyInUse(ref cause) => cause,
-            UpdateObjectAttributesError::ResourceNotFound(ref cause) => cause,
-            UpdateObjectAttributesError::RetryableConflict(ref cause) => cause,
+            UpdateObjectAttributesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateObjectAttributesError::DirectoryNotEnabled(ref cause) => write!(f, "{}", cause),
+            UpdateObjectAttributesError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            UpdateObjectAttributesError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateObjectAttributesError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpdateObjectAttributesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateObjectAttributesError::LinkNameAlreadyInUse(ref cause) => write!(f, "{}", cause),
+            UpdateObjectAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateObjectAttributesError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateObjectAttributesError {}
 /// Errors returned by UpdateSchema
 #[derive(Debug, PartialEq)]
 pub enum UpdateSchemaError {
@@ -8112,21 +7876,17 @@ impl UpdateSchemaError {
 }
 impl fmt::Display for UpdateSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSchemaError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSchemaError::AccessDenied(ref cause) => cause,
-            UpdateSchemaError::InternalService(ref cause) => cause,
-            UpdateSchemaError::InvalidArn(ref cause) => cause,
-            UpdateSchemaError::LimitExceeded(ref cause) => cause,
-            UpdateSchemaError::ResourceNotFound(ref cause) => cause,
-            UpdateSchemaError::RetryableConflict(ref cause) => cause,
+            UpdateSchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateSchemaError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateSchemaError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpdateSchemaError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSchemaError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateSchemaError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSchemaError {}
 /// Errors returned by UpdateTypedLinkFacet
 #[derive(Debug, PartialEq)]
 pub enum UpdateTypedLinkFacetError {
@@ -8205,25 +7965,21 @@ impl UpdateTypedLinkFacetError {
 }
 impl fmt::Display for UpdateTypedLinkFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTypedLinkFacetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTypedLinkFacetError::AccessDenied(ref cause) => cause,
-            UpdateTypedLinkFacetError::FacetNotFound(ref cause) => cause,
-            UpdateTypedLinkFacetError::FacetValidation(ref cause) => cause,
-            UpdateTypedLinkFacetError::InternalService(ref cause) => cause,
-            UpdateTypedLinkFacetError::InvalidArn(ref cause) => cause,
-            UpdateTypedLinkFacetError::InvalidFacetUpdate(ref cause) => cause,
-            UpdateTypedLinkFacetError::InvalidRule(ref cause) => cause,
-            UpdateTypedLinkFacetError::LimitExceeded(ref cause) => cause,
-            UpdateTypedLinkFacetError::ResourceNotFound(ref cause) => cause,
-            UpdateTypedLinkFacetError::RetryableConflict(ref cause) => cause,
+            UpdateTypedLinkFacetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateTypedLinkFacetError::FacetNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTypedLinkFacetError::FacetValidation(ref cause) => write!(f, "{}", cause),
+            UpdateTypedLinkFacetError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateTypedLinkFacetError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpdateTypedLinkFacetError::InvalidFacetUpdate(ref cause) => write!(f, "{}", cause),
+            UpdateTypedLinkFacetError::InvalidRule(ref cause) => write!(f, "{}", cause),
+            UpdateTypedLinkFacetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateTypedLinkFacetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTypedLinkFacetError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTypedLinkFacetError {}
 /// Errors returned by UpgradeAppliedSchema
 #[derive(Debug, PartialEq)]
 pub enum UpgradeAppliedSchemaError {
@@ -8294,23 +8050,19 @@ impl UpgradeAppliedSchemaError {
 }
 impl fmt::Display for UpgradeAppliedSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpgradeAppliedSchemaError {
-    fn description(&self) -> &str {
         match *self {
-            UpgradeAppliedSchemaError::AccessDenied(ref cause) => cause,
-            UpgradeAppliedSchemaError::IncompatibleSchema(ref cause) => cause,
-            UpgradeAppliedSchemaError::InternalService(ref cause) => cause,
-            UpgradeAppliedSchemaError::InvalidArn(ref cause) => cause,
-            UpgradeAppliedSchemaError::InvalidAttachment(ref cause) => cause,
-            UpgradeAppliedSchemaError::ResourceNotFound(ref cause) => cause,
-            UpgradeAppliedSchemaError::RetryableConflict(ref cause) => cause,
-            UpgradeAppliedSchemaError::SchemaAlreadyExists(ref cause) => cause,
+            UpgradeAppliedSchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpgradeAppliedSchemaError::IncompatibleSchema(ref cause) => write!(f, "{}", cause),
+            UpgradeAppliedSchemaError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpgradeAppliedSchemaError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpgradeAppliedSchemaError::InvalidAttachment(ref cause) => write!(f, "{}", cause),
+            UpgradeAppliedSchemaError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpgradeAppliedSchemaError::RetryableConflict(ref cause) => write!(f, "{}", cause),
+            UpgradeAppliedSchemaError::SchemaAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpgradeAppliedSchemaError {}
 /// Errors returned by UpgradePublishedSchema
 #[derive(Debug, PartialEq)]
 pub enum UpgradePublishedSchemaError {
@@ -8381,23 +8133,19 @@ impl UpgradePublishedSchemaError {
 }
 impl fmt::Display for UpgradePublishedSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpgradePublishedSchemaError {
-    fn description(&self) -> &str {
         match *self {
-            UpgradePublishedSchemaError::AccessDenied(ref cause) => cause,
-            UpgradePublishedSchemaError::IncompatibleSchema(ref cause) => cause,
-            UpgradePublishedSchemaError::InternalService(ref cause) => cause,
-            UpgradePublishedSchemaError::InvalidArn(ref cause) => cause,
-            UpgradePublishedSchemaError::InvalidAttachment(ref cause) => cause,
-            UpgradePublishedSchemaError::LimitExceeded(ref cause) => cause,
-            UpgradePublishedSchemaError::ResourceNotFound(ref cause) => cause,
-            UpgradePublishedSchemaError::RetryableConflict(ref cause) => cause,
+            UpgradePublishedSchemaError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpgradePublishedSchemaError::IncompatibleSchema(ref cause) => write!(f, "{}", cause),
+            UpgradePublishedSchemaError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpgradePublishedSchemaError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpgradePublishedSchemaError::InvalidAttachment(ref cause) => write!(f, "{}", cause),
+            UpgradePublishedSchemaError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpgradePublishedSchemaError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpgradePublishedSchemaError::RetryableConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpgradePublishedSchemaError {}
 /// Trait representing the capabilities of the Amazon CloudDirectory API. Amazon CloudDirectory clients implement this trait.
 pub trait CloudDirectory {
     /// <p>Adds a new <a>Facet</a> to an object. An object can have more than one facet applied on it.</p>
@@ -8827,6 +8575,14 @@ impl CloudDirectoryClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> CloudDirectoryClient {
         CloudDirectoryClient { client, region }
+    }
+}
+
+impl fmt::Debug for CloudDirectoryClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CloudDirectoryClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

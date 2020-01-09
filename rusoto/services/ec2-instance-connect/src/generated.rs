@@ -98,20 +98,16 @@ impl SendSSHPublicKeyError {
 }
 impl fmt::Display for SendSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendSSHPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            SendSSHPublicKeyError::Auth(ref cause) => cause,
-            SendSSHPublicKeyError::EC2InstanceNotFound(ref cause) => cause,
-            SendSSHPublicKeyError::InvalidArgs(ref cause) => cause,
-            SendSSHPublicKeyError::Service(ref cause) => cause,
-            SendSSHPublicKeyError::Throttling(ref cause) => cause,
+            SendSSHPublicKeyError::Auth(ref cause) => write!(f, "{}", cause),
+            SendSSHPublicKeyError::EC2InstanceNotFound(ref cause) => write!(f, "{}", cause),
+            SendSSHPublicKeyError::InvalidArgs(ref cause) => write!(f, "{}", cause),
+            SendSSHPublicKeyError::Service(ref cause) => write!(f, "{}", cause),
+            SendSSHPublicKeyError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendSSHPublicKeyError {}
 /// Trait representing the capabilities of the EC2 Instance Connect API. EC2 Instance Connect clients implement this trait.
 pub trait Ec2InstanceConnect {
     /// <p>Pushes an SSH public key to a particular OS user on a given EC2 instance for 60 seconds.</p>
@@ -154,6 +150,14 @@ impl Ec2InstanceConnectClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> Ec2InstanceConnectClient {
         Ec2InstanceConnectClient { client, region }
+    }
+}
+
+impl fmt::Debug for Ec2InstanceConnectClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Ec2InstanceConnectClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

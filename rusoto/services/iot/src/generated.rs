@@ -89,6 +89,10 @@ pub struct Action {
     #[serde(rename = "firehose")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub firehose: Option<FirehoseAction>,
+    /// <p>Send data to an HTTPS endpoint.</p>
+    #[serde(rename = "http")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http: Option<HttpAction>,
     /// <p>Sends message data to an AWS IoT Analytics channel.</p>
     #[serde(rename = "iotAnalytics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -97,6 +101,10 @@ pub struct Action {
     #[serde(rename = "iotEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iot_events: Option<IotEventsAction>,
+    /// <p>Sends data from the MQTT message that triggered the rule to AWS IoT SiteWise asset properties.</p>
+    #[serde(rename = "iotSiteWise")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iot_site_wise: Option<IotSiteWiseAction>,
     /// <p>Write data to an Amazon Kinesis stream.</p>
     #[serde(rename = "kinesis")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -252,6 +260,54 @@ pub struct Allowed {
     pub policies: Option<Vec<Policy>>,
 }
 
+/// <p>An asset property timestamp entry containing the following information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AssetPropertyTimestamp {
+    /// <p>Optional. A string that contains the nanosecond time offset. Accepts substitution templates.</p>
+    #[serde(rename = "offsetInNanos")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offset_in_nanos: Option<String>,
+    /// <p>A string that contains the time in seconds since epoch. Accepts substitution templates.</p>
+    #[serde(rename = "timeInSeconds")]
+    pub time_in_seconds: String,
+}
+
+/// <p>An asset property value entry containing the following information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AssetPropertyValue {
+    /// <p>Optional. A string that describes the quality of the value. Accepts substitution templates. Must be <code>GOOD</code>, <code>BAD</code>, or <code>UNCERTAIN</code>.</p>
+    #[serde(rename = "quality")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quality: Option<String>,
+    /// <p>The asset property value timestamp.</p>
+    #[serde(rename = "timestamp")]
+    pub timestamp: AssetPropertyTimestamp,
+    /// <p>The value of the asset property.</p>
+    #[serde(rename = "value")]
+    pub value: AssetPropertyVariant,
+}
+
+/// <p>Contains an asset property value (of a single type).</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AssetPropertyVariant {
+    /// <p>Optional. A string that contains the boolean value (<code>true</code> or <code>false</code>) of the value entry. Accepts substitution templates.</p>
+    #[serde(rename = "booleanValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub boolean_value: Option<String>,
+    /// <p>Optional. A string that contains the double value of the value entry. Accepts substitution templates.</p>
+    #[serde(rename = "doubleValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub double_value: Option<String>,
+    /// <p>Optional. A string that contains the integer value of the value entry. Accepts substitution templates.</p>
+    #[serde(rename = "integerValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integer_value: Option<String>,
+    /// <p>Optional. The string value of the value entry. Accepts substitution templates.</p>
+    #[serde(rename = "stringValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub string_value: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTargetsWithJobRequest {
@@ -326,7 +382,7 @@ pub struct AttachSecurityProfileResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachThingPrincipalRequest {
-    /// <p>The principal, such as a certificate or other credential.</p>
+    /// <p>The principal, which can be a certificate ARN (as returned from the CreateCertificate operation) or an Amazon Cognito ID.</p>
     #[serde(rename = "principal")]
     pub principal: String,
     /// <p>The name of the thing.</p>
@@ -588,6 +644,19 @@ pub struct AuthResult {
     pub missing_context_values: Option<Vec<String>>,
 }
 
+/// <p>An object that specifies the authorization service for a domain.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuthorizerConfig {
+    /// <p>A Boolean that specifies whether the domain configuration's authorization service can be overridden.</p>
+    #[serde(rename = "allowAuthorizerOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_authorizer_override: Option<bool>,
+    /// <p>The name of the authorization service for a domain configuration.</p>
+    #[serde(rename = "defaultAuthorizerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_authorizer_name: Option<String>,
+}
+
 /// <p>The authorizer description.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -612,6 +681,10 @@ pub struct AuthorizerDescription {
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
+    /// <p>Specifies whether AWS IoT validates the token signature in an authorization request.</p>
+    #[serde(rename = "signingDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_disabled: Option<bool>,
     /// <p>The status of the authorizer.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1076,6 +1149,18 @@ pub struct Configuration {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ConfirmTopicRuleDestinationRequest {
+    /// <p>The token used to confirm ownership or access to the topic rule confirmation URL.</p>
+    #[serde(rename = "confirmationToken")]
+    pub confirmation_token: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConfirmTopicRuleDestinationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
     /// <p>The ARN of the authorizer's Lambda function.</p>
     #[serde(rename = "authorizerFunctionArn")]
@@ -1083,16 +1168,22 @@ pub struct CreateAuthorizerRequest {
     /// <p>The authorizer name.</p>
     #[serde(rename = "authorizerName")]
     pub authorizer_name: String,
+    /// <p>Specifies whether AWS IoT validates the token signature in an authorization request.</p>
+    #[serde(rename = "signingDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_disabled: Option<bool>,
     /// <p>The status of the create authorizer request.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// <p>The name of the token key used to extract the token from the HTTP headers.</p>
     #[serde(rename = "tokenKeyName")]
-    pub token_key_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_key_name: Option<String>,
     /// <p>The public keys used to verify the digital signature returned by your custom authentication service.</p>
     #[serde(rename = "tokenSigningPublicKeys")]
-    pub token_signing_public_keys: ::std::collections::HashMap<String, String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_signing_public_keys: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1170,6 +1261,47 @@ pub struct CreateCertificateFromCsrResponse {
     #[serde(rename = "certificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateDomainConfigurationRequest {
+    /// <p>An object that specifies the authorization service for a domain.</p>
+    #[serde(rename = "authorizerConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_config: Option<AuthorizerConfig>,
+    /// <p>The name of the domain configuration. This value must be unique to a region.</p>
+    #[serde(rename = "domainConfigurationName")]
+    pub domain_configuration_name: String,
+    /// <p>The name of the domain.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The ARNs of the certificates that AWS IoT passes to the device during the TLS handshake. Currently you can specify only one certificate ARN. This value is not required for AWS-managed domains.</p>
+    #[serde(rename = "serverCertificateArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_certificate_arns: Option<Vec<String>>,
+    /// <p>The type of service delivered by the endpoint.</p>
+    #[serde(rename = "serviceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_type: Option<String>,
+    /// <p>The certificate used to validate the server certificate and prove domain name ownership. This certificate must be signed by a public certificate authority. This value is not required for AWS-managed domains.</p>
+    #[serde(rename = "validationCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_certificate_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateDomainConfigurationResponse {
+    /// <p>The ARN of the domain configuration.</p>
+    #[serde(rename = "domainConfigurationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configuration_arn: Option<String>,
+    /// <p>The name of the domain configuration.</p>
+    #[serde(rename = "domainConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configuration_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1491,6 +1623,114 @@ pub struct CreatePolicyVersionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateProvisioningClaimRequest {
+    /// <p>The name of the provisioning template to use.</p>
+    #[serde(rename = "templateName")]
+    pub template_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateProvisioningClaimResponse {
+    /// <p>The ID of the certificate.</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_id: Option<String>,
+    /// <p>The provisioning claim certificate.</p>
+    #[serde(rename = "certificatePem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_pem: Option<String>,
+    /// <p>The provisioning claim expiration time.</p>
+    #[serde(rename = "expiration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration: Option<f64>,
+    /// <p>The provisioning claim key pair.</p>
+    #[serde(rename = "keyPair")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_pair: Option<KeyPair>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateProvisioningTemplateRequest {
+    /// <p>The description of the fleet provisioning template.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>True to enable the fleet provisioning template, otherwise false.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The role ARN for the role associated with the fleet provisioning template. This IoT role grants permission to provision a device.</p>
+    #[serde(rename = "provisioningRoleArn")]
+    pub provisioning_role_arn: String,
+    /// <p><p>Metadata which can be used to manage the fleet provisioning template.</p> <note> <p>For URI Request parameters use format: ...key1=value1&amp;key2=value2...</p> <p>For the CLI command-line parameter use format: &amp;&amp;tags &quot;key1=value1&amp;key2=value2...&quot;</p> <p>For the cli-input-json file use format: &quot;tags&quot;: &quot;key1=value1&amp;key2=value2...&quot;</p> </note></p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The JSON formatted contents of the fleet provisioning template.</p>
+    #[serde(rename = "templateBody")]
+    pub template_body: String,
+    /// <p>The name of the fleet provisioning template.</p>
+    #[serde(rename = "templateName")]
+    pub template_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateProvisioningTemplateResponse {
+    /// <p>The default version of the fleet provisioning template.</p>
+    #[serde(rename = "defaultVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_version_id: Option<i64>,
+    /// <p>The ARN that identifies the provisioning template.</p>
+    #[serde(rename = "templateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_arn: Option<String>,
+    /// <p>The name of the fleet provisioning template.</p>
+    #[serde(rename = "templateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateProvisioningTemplateVersionRequest {
+    /// <p>Sets a fleet provision template version as the default version.</p>
+    #[serde(rename = "setAsDefault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub set_as_default: Option<bool>,
+    /// <p>The JSON formatted contents of the fleet provisioning template.</p>
+    #[serde(rename = "templateBody")]
+    pub template_body: String,
+    /// <p>The name of the fleet provisioning template.</p>
+    #[serde(rename = "templateName")]
+    pub template_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateProvisioningTemplateVersionResponse {
+    /// <p>True if the fleet provisioning template version is the default version, otherwise false.</p>
+    #[serde(rename = "isDefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_default_version: Option<bool>,
+    /// <p>The ARN that identifies the provisioning template.</p>
+    #[serde(rename = "templateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_arn: Option<String>,
+    /// <p>The name of the fleet provisioning template.</p>
+    #[serde(rename = "templateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_name: Option<String>,
+    /// <p>The version of the fleet provisioning template.</p>
+    #[serde(rename = "versionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_id: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoleAliasRequest {
     /// <p>How long (in seconds) the credentials will be valid.</p>
     #[serde(rename = "credentialDurationSeconds")]
@@ -1747,6 +1987,23 @@ pub struct CreateThingTypeResponse {
     pub thing_type_name: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateTopicRuleDestinationRequest {
+    /// <p>The topic rule destination configuration.</p>
+    #[serde(rename = "destinationConfiguration")]
+    pub destination_configuration: TopicRuleDestinationConfiguration,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateTopicRuleDestinationResponse {
+    /// <p>The topic rule destination.</p>
+    #[serde(rename = "topicRuleDestination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_rule_destination: Option<TopicRuleDestination>,
+}
+
 /// <p>The input for the CreateTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1854,6 +2111,18 @@ pub struct DeleteCertificateRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteDomainConfigurationRequest {
+    /// <p>The name of the domain configuration to be deleted.</p>
+    #[serde(rename = "domainConfigurationName")]
+    pub domain_configuration_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteDomainConfigurationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDynamicThingGroupRequest {
     /// <p>The expected version of the dynamic thing group to delete.</p>
     #[serde(rename = "expectedVersion")]
@@ -1950,6 +2219,33 @@ pub struct DeletePolicyVersionRequest {
     #[serde(rename = "policyVersionId")]
     pub policy_version_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteProvisioningTemplateRequest {
+    /// <p>The name of the fleet provision template to delete.</p>
+    #[serde(rename = "templateName")]
+    pub template_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteProvisioningTemplateResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteProvisioningTemplateVersionRequest {
+    /// <p>The name of the fleet provisioning template version to delete.</p>
+    #[serde(rename = "templateName")]
+    pub template_name: String,
+    /// <p>The fleet provisioning template version ID to delete.</p>
+    #[serde(rename = "versionId")]
+    pub version_id: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteProvisioningTemplateVersionResponse {}
 
 /// <p>The input for the DeleteRegistrationCode operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2060,6 +2356,18 @@ pub struct DeleteThingTypeRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThingTypeResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteTopicRuleDestinationRequest {
+    /// <p>The ARN of the topic rule destination to delete.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteTopicRuleDestinationResponse {}
 
 /// <p>The input for the DeleteTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2339,6 +2647,51 @@ pub struct DescribeDefaultAuthorizerResponse {
     pub authorizer_description: Option<AuthorizerDescription>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeDomainConfigurationRequest {
+    /// <p>The name of the domain configuration.</p>
+    #[serde(rename = "domainConfigurationName")]
+    pub domain_configuration_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeDomainConfigurationResponse {
+    /// <p>An object that specifies the authorization service for a domain.</p>
+    #[serde(rename = "authorizerConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_config: Option<AuthorizerConfig>,
+    /// <p>The ARN of the domain configuration.</p>
+    #[serde(rename = "domainConfigurationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configuration_arn: Option<String>,
+    /// <p>The name of the domain configuration.</p>
+    #[serde(rename = "domainConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configuration_name: Option<String>,
+    /// <p>A Boolean value that specifies the current state of the domain configuration.</p>
+    #[serde(rename = "domainConfigurationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configuration_status: Option<String>,
+    /// <p>The name of the domain.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The type of the domain.</p>
+    #[serde(rename = "domainType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_type: Option<String>,
+    /// <p>A list containing summary information about the server certificate included in the domain configuration.</p>
+    #[serde(rename = "serverCertificates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_certificates: Option<Vec<ServerCertificateSummary>>,
+    /// <p>The type of service delivered by the endpoint.</p>
+    #[serde(rename = "serviceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_type: Option<String>,
+}
+
 /// <p>The input for the DescribeEndpoint operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2493,6 +2846,87 @@ pub struct DescribeMitigationActionResponse {
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeProvisioningTemplateRequest {
+    /// <p>The name of the fleet provisioning template.</p>
+    #[serde(rename = "templateName")]
+    pub template_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeProvisioningTemplateResponse {
+    /// <p>The date when the fleet provisioning template was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The default fleet template version ID.</p>
+    #[serde(rename = "defaultVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_version_id: Option<i64>,
+    /// <p>The description of the fleet provisioning template.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>True if the fleet provisioning template is enabled, otherwise false.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The date when the fleet provisioning template was last modified.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The ARN of the role associated with the provisioning template. This IoT role grants permission to provision a device.</p>
+    #[serde(rename = "provisioningRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_role_arn: Option<String>,
+    /// <p>The ARN of the fleet provisioning template.</p>
+    #[serde(rename = "templateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_arn: Option<String>,
+    /// <p>The JSON formatted contents of the fleet provisioning template.</p>
+    #[serde(rename = "templateBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_body: Option<String>,
+    /// <p>The name of the fleet provisioning template.</p>
+    #[serde(rename = "templateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeProvisioningTemplateVersionRequest {
+    /// <p>The template name.</p>
+    #[serde(rename = "templateName")]
+    pub template_name: String,
+    /// <p>The fleet provisioning template version ID.</p>
+    #[serde(rename = "versionId")]
+    pub version_id: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeProvisioningTemplateVersionResponse {
+    /// <p>The date when the fleet provisioning template version was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>True if the fleet provisioning template version is the default version.</p>
+    #[serde(rename = "isDefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_default_version: Option<bool>,
+    /// <p>The JSON formatted contents of the fleet provisioning template version.</p>
+    #[serde(rename = "templateBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_body: Option<String>,
+    /// <p>The fleet provisioning template version ID.</p>
+    #[serde(rename = "versionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_id: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2884,6 +3318,24 @@ pub struct DisableTopicRuleRequest {
     pub rule_name: String,
 }
 
+/// <p><p>The summary of a domain configuration. A domain configuration specifies custom IoT-specific information about a domain. A domain configuration can be associated with an AWS-managed domain (for example, dbc123defghijk.iot.us-west-2.amazonaws.com), a customer managed domain, or a default endpoint.</p> <ul> <li> <p>Data</p> </li> <li> <p>Jobs</p> </li> <li> <p>CredentialProvider</p> </li> </ul> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DomainConfigurationSummary {
+    /// <p>The ARN of the domain configuration.</p>
+    #[serde(rename = "domainConfigurationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configuration_arn: Option<String>,
+    /// <p>The name of the domain configuration. This value must be unique to a region.</p>
+    #[serde(rename = "domainConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configuration_name: Option<String>,
+    /// <p>The type of service delivered by the endpoint.</p>
+    #[serde(rename = "serviceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_type: Option<String>,
+}
+
 /// <p>Describes an action to write to a DynamoDB table.</p> <p>The <code>tableName</code>, <code>hashKeyField</code>, and <code>rangeKeyField</code> values must match the values used when you created the table.</p> <p>The <code>hashKeyValue</code> and <code>rangeKeyvalue</code> fields use a substitution template syntax. These templates provide data at runtime. The syntax is as follows: ${<i>sql-expression</i>}.</p> <p>You can specify any valid expression in a WHERE or SELECT clause, including JSON properties, comparisons, calculations, and functions. For example, the following field uses the third level of the topic:</p> <p> <code>"hashKeyValue": "${topic(3)}"</code> </p> <p>The following field uses the timestamp:</p> <p> <code>"rangeKeyValue": "${timestamp()}"</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DynamoDBAction {
@@ -3032,6 +3484,19 @@ pub struct ExponentialRolloutRate {
     pub rate_increase_criteria: RateIncreaseCriteria,
 }
 
+/// <p>Describes the name and data type at a field.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Field {
+    /// <p>The name of the field.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The datatype of the field.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
 /// <p>The location of the OTA update.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FileLocation {
@@ -3058,6 +3523,35 @@ pub struct FirehoseAction {
     #[serde(rename = "separator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub separator: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCardinalityRequest {
+    /// <p>The field to aggregate.</p>
+    #[serde(rename = "aggregationField")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregation_field: Option<String>,
+    /// <p>The name of the index to search.</p>
+    #[serde(rename = "indexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The search query.</p>
+    #[serde(rename = "queryString")]
+    pub query_string: String,
+    /// <p>The query version.</p>
+    #[serde(rename = "queryVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetCardinalityResponse {
+    /// <p>The approximate count of unique values that match the query.</p>
+    #[serde(rename = "cardinality")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cardinality: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3156,6 +3650,39 @@ pub struct GetOTAUpdateResponse {
     pub ota_update_info: Option<OTAUpdateInfo>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetPercentilesRequest {
+    /// <p>The field to aggregate.</p>
+    #[serde(rename = "aggregationField")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregation_field: Option<String>,
+    /// <p>The name of the index to search.</p>
+    #[serde(rename = "indexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The percentile groups returned.</p>
+    #[serde(rename = "percents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percents: Option<Vec<f64>>,
+    /// <p>The query string.</p>
+    #[serde(rename = "queryString")]
+    pub query_string: String,
+    /// <p>The query version.</p>
+    #[serde(rename = "queryVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetPercentilesResponse {
+    /// <p>The percentile values of the aggregated fields.</p>
+    #[serde(rename = "percentiles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percentiles: Option<Vec<PercentPair>>,
+}
+
 /// <p>The input for the GetPolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3215,7 +3742,7 @@ pub struct GetPolicyVersionRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyVersionResponse {
-    /// <p>The date the policy version was created.</p>
+    /// <p>The date the policy was created.</p>
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
@@ -3227,7 +3754,7 @@ pub struct GetPolicyVersionResponse {
     #[serde(rename = "isDefaultVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default_version: Option<bool>,
-    /// <p>The date the policy version was last modified.</p>
+    /// <p>The date the policy was last modified.</p>
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
@@ -3267,7 +3794,7 @@ pub struct GetRegistrationCodeResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStatisticsRequest {
-    /// <p>The aggregation field name. Currently not supported.</p>
+    /// <p>The aggregation field name.</p>
     #[serde(rename = "aggregationField")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregation_field: Option<String>,
@@ -3291,6 +3818,23 @@ pub struct GetStatisticsResponse {
     #[serde(rename = "statistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistics: Option<Statistics>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetTopicRuleDestinationRequest {
+    /// <p>The ARN of the topic rule destination.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetTopicRuleDestinationResponse {
+    /// <p>The topic rule destination.</p>
+    #[serde(rename = "topicRuleDestination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_rule_destination: Option<TopicRuleDestination>,
 }
 
 /// <p>The input for the GetTopicRule operation.</p>
@@ -3351,6 +3895,89 @@ pub struct GroupNameAndArn {
     pub group_name: Option<String>,
 }
 
+/// <p>Send data to an HTTPS endpoint.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HttpAction {
+    /// <p>The authentication method to use when sending data to an HTTPS endpoint.</p>
+    #[serde(rename = "auth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth: Option<HttpAuthorization>,
+    /// <p>The URL to which AWS IoT sends a confirmation message. The value of the confirmation URL must be a prefix of the endpoint URL. If you do not specify a confirmation URL AWS IoT uses the endpoint URL as the confirmation URL. If you use substitution templates in the confirmationUrl, you must create and enable topic rule destinations that match each possible value of the substituion template before traffic is allowed to your endpoint URL.</p>
+    #[serde(rename = "confirmationUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confirmation_url: Option<String>,
+    /// <p>The HTTP headers to send with the message data.</p>
+    #[serde(rename = "headers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub headers: Option<Vec<HttpActionHeader>>,
+    /// <p>The endpoint URL. If substitution templates are used in the URL, you must also specify a <code>confirmationUrl</code>. If this is a new destination, a new <code>TopicRuleDestination</code> is created if possible.</p>
+    #[serde(rename = "url")]
+    pub url: String,
+}
+
+/// <p>The HTTP action header.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HttpActionHeader {
+    /// <p>The HTTP header key.</p>
+    #[serde(rename = "key")]
+    pub key: String,
+    /// <p>The HTTP header value. Substitution templates are supported.</p>
+    #[serde(rename = "value")]
+    pub value: String,
+}
+
+/// <p>The authorization method used to send messages.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HttpAuthorization {
+    /// <p>Use Sig V4 authorization. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 Signing Process</a>.</p>
+    #[serde(rename = "sigv4")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sigv_4: Option<SigV4Authorization>,
+}
+
+/// <p>Specifies the HTTP context to use for the test authorizer request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct HttpContext {
+    /// <p>The header keys and values in an HTTP authorization request.</p>
+    #[serde(rename = "headers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub headers: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The query string keys and values in an HTTP authorization request.</p>
+    #[serde(rename = "queryString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_string: Option<String>,
+}
+
+/// <p>HTTP URL destination configuration used by the topic rule's HTTP action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct HttpUrlDestinationConfiguration {
+    /// <p>The URL AWS IoT uses to confirm ownership of or access to the topic rule destination URL.</p>
+    #[serde(rename = "confirmationUrl")]
+    pub confirmation_url: String,
+}
+
+/// <p>HTTP URL destination properties.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HttpUrlDestinationProperties {
+    /// <p>The URL used to confirm the HTTP topic rule destination URL.</p>
+    #[serde(rename = "confirmationUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confirmation_url: Option<String>,
+}
+
+/// <p>Information about an HTTP URL destination.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HttpUrlDestinationSummary {
+    /// <p>The URL used to confirm ownership of or access to the HTTP topic rule destination URL.</p>
+    #[serde(rename = "confirmationUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confirmation_url: Option<String>,
+}
+
 /// <p>Information that implicitly denies authorization. When policy doesn't explicitly deny or allow an action on a resource it is considered an implicit deny.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3389,6 +4016,17 @@ pub struct IotEventsAction {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<String>,
     /// <p>The ARN of the role that grants AWS IoT permission to send an input to an AWS IoT Events detector. ("Action":"iotevents:BatchPutMessage").</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+}
+
+/// <p>Describes an action to send data from an MQTT message that triggered the rule to AWS IoT SiteWise asset properties.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IotSiteWiseAction {
+    /// <p>A list of asset property value entries.</p>
+    #[serde(rename = "putAssetPropertyValueEntries")]
+    pub put_asset_property_value_entries: Vec<PutAssetPropertyValueEntry>,
+    /// <p>The ARN of the role that grants AWS IoT permission to send an asset property value to AWS IoTSiteWise. (<code>"Action": "iotsitewise:BatchPutAssetPropertyValue"</code>). The trust policy can restrict access to specific asset hierarchy paths.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
 }
@@ -4109,12 +4747,42 @@ pub struct ListCertificatesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDomainConfigurationsRequest {
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The result page size.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The type of service delivered by the endpoint.</p>
+    #[serde(rename = "serviceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDomainConfigurationsResponse {
+    /// <p>A list of objects that contain summary information about the user's domain configurations.</p>
+    #[serde(rename = "domainConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configurations: Option<Vec<DomainConfigurationSummary>>,
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIndicesRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or <code>null</code> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4127,7 +4795,7 @@ pub struct ListIndicesResponse {
     #[serde(rename = "indexNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_names: Option<Vec<String>>,
-    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or <code>null</code> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4483,6 +5151,61 @@ pub struct ListPrincipalThingsResponse {
     #[serde(rename = "things")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub things: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListProvisioningTemplateVersionsRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of the fleet provisioning template.</p>
+    #[serde(rename = "templateName")]
+    pub template_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListProvisioningTemplateVersionsResponse {
+    /// <p>A token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of fleet provisioning template versions.</p>
+    #[serde(rename = "versions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub versions: Option<Vec<ProvisioningTemplateVersionSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListProvisioningTemplatesRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListProvisioningTemplatesResponse {
+    /// <p>A token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of fleet provisioning templates</p>
+    #[serde(rename = "templates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub templates: Option<Vec<ProvisioningTemplateSummary>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4999,6 +5722,32 @@ pub struct ListThingsResponse {
     pub things: Option<Vec<ThingAttribute>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTopicRuleDestinationsRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTopicRuleDestinationsResponse {
+    /// <p>Information about a topic rule destination.</p>
+    #[serde(rename = "destinationSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_summaries: Option<Vec<TopicRuleDestinationSummary>>,
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>The input for the ListTopicRules operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -5230,6 +5979,29 @@ pub struct MitigationActionParams {
     pub update_device_certificate_params: Option<UpdateDeviceCertificateParams>,
 }
 
+/// <p>Specifies the MQTT context to use for the test authorizer request</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct MqttContext {
+    /// <p>The value of the <code>clientId</code> key in an MQTT authorization request.</p>
+    #[serde(rename = "clientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+    /// <p>The value of the <code>password</code> key in an MQTT authorization request.</p>
+    #[serde(rename = "password")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub password: Option<bytes::Bytes>,
+    /// <p>The value of the <code>username</code> key in an MQTT authorization request.</p>
+    #[serde(rename = "username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+}
+
 /// <p>Information about the resource that was noncompliant with the audit check.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -5383,6 +6155,20 @@ pub struct OutgoingCertificate {
     pub transferred_to: Option<String>,
 }
 
+/// <p>Describes the percentile and percentile value.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PercentPair {
+    /// <p>The percentile.</p>
+    #[serde(rename = "percent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percent: Option<f64>,
+    /// <p>The value of the percentile.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<f64>,
+}
+
 /// <p>Describes an AWS IoT policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -5441,12 +6227,84 @@ pub struct PresignedUrlConfig {
     pub role_arn: Option<String>,
 }
 
+/// <p>A summary of information about a fleet provisioning template.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProvisioningTemplateSummary {
+    /// <p>The date when the fleet provisioning template summary was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The description of the fleet provisioning template.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>True if the fleet provision template is enabled, otherwise false.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The date when the fleet provisioning template summary was last modified.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The ARN of the fleet provisioning template.</p>
+    #[serde(rename = "templateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_arn: Option<String>,
+    /// <p>The name of the fleet provisioning template.</p>
+    #[serde(rename = "templateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_name: Option<String>,
+}
+
+/// <p>A summary of information about a fleet provision template version.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProvisioningTemplateVersionSummary {
+    /// <p>The date when the fleet provisioning template version was created</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>True if the fleet provisioning template version is the default version, otherwise false.</p>
+    #[serde(rename = "isDefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_default_version: Option<bool>,
+    /// <p>The ID of the fleet privisioning template version.</p>
+    #[serde(rename = "versionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_id: Option<i64>,
+}
+
 /// <p>Parameters to define a mitigation action that publishes findings to Amazon SNS. You can implement your own custom actions in response to the Amazon SNS messages.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PublishFindingToSnsParams {
     /// <p>The ARN of the topic to which you want to publish the findings.</p>
     #[serde(rename = "topicArn")]
     pub topic_arn: String,
+}
+
+/// <p>An asset property value entry containing the following information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PutAssetPropertyValueEntry {
+    /// <p>The ID of the AWS IoT SiteWise asset. You must specify either a <code>propertyAlias</code> or both an <code>analiasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
+    #[serde(rename = "assetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub asset_id: Option<String>,
+    /// <p>Optional. A unique identifier for this entry that you can define to better track which message caused an error in case of failure. Accepts substitution templates. Defaults to a new UUID.</p>
+    #[serde(rename = "entryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entry_id: Option<String>,
+    /// <p>The name of the property alias associated with your asset property. You must specify either a <code>propertyAlias</code> or both an <code>aliasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
+    #[serde(rename = "propertyAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub property_alias: Option<String>,
+    /// <p>The ID of the asset's property. You must specify either a <code>propertyAlias</code> or both an <code>analiasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
+    #[serde(rename = "propertyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub property_id: Option<String>,
+    /// <p>A list of property values to insert that each contain timestamp, quality, and value (TQV) information.</p>
+    #[serde(rename = "propertyValues")]
+    pub property_values: Vec<AssetPropertyValue>,
 }
 
 /// <p>The input for the DynamoActionVS action that specifies the DynamoDB table to which the message data will be written.</p>
@@ -5681,7 +6539,7 @@ pub struct ReplaceTopicRuleRequest {
 /// <p>Describes an action to republish to another topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RepublishAction {
-    /// <p>The Quality of Service (QoS) level to use when republishing messages.</p>
+    /// <p>The Quality of Service (QoS) level to use when republishing messages. The default value is 0.</p>
     #[serde(rename = "qos")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qos: Option<i64>,
@@ -5716,10 +6574,18 @@ pub struct ResourceIdentifier {
     #[serde(rename = "deviceCertificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_certificate_id: Option<String>,
+    /// <p>The ARN of the IAM role that has overly permissive actions.</p>
+    #[serde(rename = "iamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_arn: Option<String>,
     /// <p>The version of the policy associated with the resource.</p>
     #[serde(rename = "policyVersionIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_version_identifier: Option<PolicyVersionIdentifier>,
+    /// <p>The ARN of the role alias that has overly permissive actions.</p>
+    #[serde(rename = "roleAliasArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_alias_arn: Option<String>,
 }
 
 /// <p>Role alias description.</p>
@@ -5852,7 +6718,7 @@ pub struct SearchIndexRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or <code>null</code> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5868,7 +6734,7 @@ pub struct SearchIndexRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchIndexResponse {
-    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or <code>null</code> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5915,6 +6781,24 @@ pub struct SecurityProfileTargetMapping {
     #[serde(rename = "target")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target: Option<SecurityProfileTarget>,
+}
+
+/// <p>An object that contains information about a server certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ServerCertificateSummary {
+    /// <p>The ARN of the server certificate.</p>
+    #[serde(rename = "serverCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_certificate_arn: Option<String>,
+    /// <p>The status of the server certificate.</p>
+    #[serde(rename = "serverCertificateStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_certificate_status: Option<String>,
+    /// <p>Details that explain the status of the server certificate.</p>
+    #[serde(rename = "serverCertificateStatusDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_certificate_status_detail: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -5985,6 +6869,20 @@ pub struct SetV2LoggingOptionsRequest {
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
+}
+
+/// <p>Use Sig V4 authorization.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SigV4Authorization {
+    /// <p>The ARN of the signing role.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+    /// <p>The service name to use while signing with Sig V4.</p>
+    #[serde(rename = "serviceName")]
+    pub service_name: String,
+    /// <p>The signing region.</p>
+    #[serde(rename = "signingRegion")]
+    pub signing_region: String,
 }
 
 /// <p>Describes the code-signing profile.</p>
@@ -6133,10 +7031,38 @@ pub struct StatisticalThreshold {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Statistics {
+    /// <p>The average of the aggregated field values.</p>
+    #[serde(rename = "average")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub average: Option<f64>,
     /// <p>The count of things that match the query.</p>
     #[serde(rename = "count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
+    /// <p>The maximum aggregated field value.</p>
+    #[serde(rename = "maximum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum: Option<f64>,
+    /// <p>The minimum aggregated field value.</p>
+    #[serde(rename = "minimum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum: Option<f64>,
+    /// <p>The standard deviation of the aggregated field values.</p>
+    #[serde(rename = "stdDeviation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub std_deviation: Option<f64>,
+    /// <p>The sum of the aggregated field values.</p>
+    #[serde(rename = "sum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sum: Option<f64>,
+    /// <p>The sum of the squares of the aggregated field values.</p>
+    #[serde(rename = "sumOfSquares")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sum_of_squares: Option<f64>,
+    /// <p>The variance of the aggregated field values.</p>
+    #[serde(rename = "variance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub variance: Option<f64>,
 }
 
 /// <p>Starts execution of a Step Functions state machine.</p>
@@ -6383,12 +7309,26 @@ pub struct TestInvokeAuthorizerRequest {
     /// <p>The custom authorizer name.</p>
     #[serde(rename = "authorizerName")]
     pub authorizer_name: String,
+    /// <p>Specifies a test HTTP authorization request.</p>
+    #[serde(rename = "httpContext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_context: Option<HttpContext>,
+    /// <p>Specifies a test MQTT authorization request.&gt;</p>
+    #[serde(rename = "mqttContext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mqtt_context: Option<MqttContext>,
+    /// <p>Specifies a test TLS authorization request.</p>
+    #[serde(rename = "tlsContext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_context: Option<TlsContext>,
     /// <p>The token returned by your custom authentication service.</p>
     #[serde(rename = "token")]
-    pub token: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token: Option<String>,
     /// <p>The signature made with the token and your custom authentication service's private key.</p>
     #[serde(rename = "tokenSignature")]
-    pub token_signature: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_signature: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -6519,6 +7459,14 @@ pub struct ThingGroupDocument {
 /// <p>Thing group indexing configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ThingGroupIndexingConfiguration {
+    /// <p>A list of thing group fields to index. This list cannot contain any managed fields. Use the GetIndexingConfiguration API to get a list of managed fields.</p> <p>Contains custom field names and their data type.</p>
+    #[serde(rename = "customFields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_fields: Option<Vec<Field>>,
+    /// <p>Contains fields that are indexed and whose types are already known by the Fleet Indexing service.</p>
+    #[serde(rename = "managedFields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_fields: Option<Vec<Field>>,
     /// <p>Thing group indexing mode.</p>
     #[serde(rename = "thingGroupIndexingMode")]
     pub thing_group_indexing_mode: String,
@@ -6558,6 +7506,14 @@ pub struct ThingGroupProperties {
 /// <p>The thing indexing configuration. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/managing-index.html">Managing Thing Indexing</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ThingIndexingConfiguration {
+    /// <p>Contains custom field names and their data type.</p>
+    #[serde(rename = "customFields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_fields: Option<Vec<Field>>,
+    /// <p>Contains fields that are indexed and whose types are already known by the Fleet Indexing service.</p>
+    #[serde(rename = "managedFields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_fields: Option<Vec<Field>>,
     /// <p><p>Thing connectivity indexing mode. Valid values are: </p> <ul> <li> <p>STATUS – Your thing index contains connectivity status. To enable thing connectivity indexing, thingIndexMode must not be set to OFF.</p> </li> <li> <p>OFF - Thing connectivity status indexing is disabled.</p> </li> </ul></p>
     #[serde(rename = "thingConnectivityIndexingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6629,6 +7585,16 @@ pub struct TimeoutConfig {
     pub in_progress_timeout_in_minutes: Option<i64>,
 }
 
+/// <p>Specifies the TLS context to use for the test authorizer request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TlsContext {
+    /// <p>The value of the <code>serverName</code> key in a TLS authorization request.</p>
+    #[serde(rename = "serverName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_name: Option<String>,
+}
+
 /// <p>Describes a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -6665,6 +7631,60 @@ pub struct TopicRule {
     #[serde(rename = "sql")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sql: Option<String>,
+}
+
+/// <p>A topic rule destination.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TopicRuleDestination {
+    /// <p>The topic rule destination URL.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Properties of the HTTP URL.</p>
+    #[serde(rename = "httpUrlProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_url_properties: Option<HttpUrlDestinationProperties>,
+    /// <p><p>The status of the topic rule destination. Valid values are:</p> <dl> <dt>IN<em>PROGRESS</dt> <dd> <p>A topic rule destination was created but has not been confirmed. You can set <code>status</code> to <code>IN</em>PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> <dt>ENABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is allowed. You can set <code>status</code> to <code>DISABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>DISABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is not allowed. You can set <code>status</code> to <code>ENABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>ERROR</dt> <dd> <p>Confirmation could not be completed, for example if the confirmation timed out. You can call <code>GetTopicRuleDestination</code> for details about the error. You can set <code>status</code> to <code>IN_PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Additional details or reason why the topic rule destination is in the current status.</p>
+    #[serde(rename = "statusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_reason: Option<String>,
+}
+
+/// <p>Configuration of the topic rule destination.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TopicRuleDestinationConfiguration {
+    /// <p>Configuration of the HTTP URL.</p>
+    #[serde(rename = "httpUrlConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_url_configuration: Option<HttpUrlDestinationConfiguration>,
+}
+
+/// <p>Information about the topic rule destination.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TopicRuleDestinationSummary {
+    /// <p>The topic rule destination ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Information about the HTTP URL.</p>
+    #[serde(rename = "httpUrlSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_url_summary: Option<HttpUrlDestinationSummary>,
+    /// <p><p>The status of the topic rule destination. Valid values are:</p> <dl> <dt>IN<em>PROGRESS</dt> <dd> <p>A topic rule destination was created but has not been confirmed. You can set <code>status</code> to <code>IN</em>PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> <dt>ENABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is allowed. You can set <code>status</code> to <code>DISABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>DISABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is not allowed. You can set <code>status</code> to <code>ENABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>ERROR</dt> <dd> <p>Confirmation could not be completed, for example if the confirmation timed out. You can call <code>GetTopicRuleDestination</code> for details about the error. You can set <code>status</code> to <code>IN_PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The reason the topic rule destination is in the current status.</p>
+    #[serde(rename = "statusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_reason: Option<String>,
 }
 
 /// <p>Describes a rule.</p>
@@ -6927,6 +7947,39 @@ pub struct UpdateDeviceCertificateParams {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateDomainConfigurationRequest {
+    /// <p>An object that specifies the authorization service for a domain.</p>
+    #[serde(rename = "authorizerConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_config: Option<AuthorizerConfig>,
+    /// <p>The name of the domain configuration to be updated.</p>
+    #[serde(rename = "domainConfigurationName")]
+    pub domain_configuration_name: String,
+    /// <p>The status to which the domain configuration should be updated.</p>
+    #[serde(rename = "domainConfigurationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configuration_status: Option<String>,
+    /// <p>Removes the authorization configuration from a domain.</p>
+    #[serde(rename = "removeAuthorizerConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remove_authorizer_config: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateDomainConfigurationResponse {
+    /// <p>The ARN of the domain configuration that was updated.</p>
+    #[serde(rename = "domainConfigurationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configuration_arn: Option<String>,
+    /// <p>The name of the domain configuration that was updated.</p>
+    #[serde(rename = "domainConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_configuration_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDynamicThingGroupRequest {
     /// <p>The expected version of the dynamic thing group to update.</p>
     #[serde(rename = "expectedVersion")]
@@ -7047,6 +8100,34 @@ pub struct UpdateMitigationActionResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_id: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateProvisioningTemplateRequest {
+    /// <p>The ID of the default provisioning template version.</p>
+    #[serde(rename = "defaultVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_version_id: Option<i64>,
+    /// <p>The description of the fleet provisioning template.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>True to enable the fleet provisioning template, otherwise false.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The ARN of the role associated with the provisioning template. This IoT role grants permission to provision a device.</p>
+    #[serde(rename = "provisioningRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_role_arn: Option<String>,
+    /// <p>The name of the fleet provisioning template.</p>
+    #[serde(rename = "templateName")]
+    pub template_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateProvisioningTemplateResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -7313,6 +8394,21 @@ pub struct UpdateThingResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateTopicRuleDestinationRequest {
+    /// <p>The ARN of the topic rule destination.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+    /// <p><p>The status of the topic rule destination. Valid values are:</p> <dl> <dt>IN<em>PROGRESS</dt> <dd> <p>A topic rule destination was created but has not been confirmed. You can set <code>status</code> to <code>IN</em>PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> <dt>ENABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is allowed. You can set <code>status</code> to <code>DISABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>DISABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is not allowed. You can set <code>status</code> to <code>ENABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>ERROR</dt> <dd> <p>Confirmation could not be completed, for example if the confirmation timed out. You can call <code>GetTopicRuleDestination</code> for details about the error. You can set <code>status</code> to <code>IN_PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    pub status: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateTopicRuleDestinationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateSecurityProfileBehaviorsRequest {
     /// <p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>
     #[serde(rename = "behaviors")]
@@ -7443,22 +8539,20 @@ impl AcceptCertificateTransferError {
 }
 impl fmt::Display for AcceptCertificateTransferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcceptCertificateTransferError {
-    fn description(&self) -> &str {
         match *self {
-            AcceptCertificateTransferError::InternalFailure(ref cause) => cause,
-            AcceptCertificateTransferError::InvalidRequest(ref cause) => cause,
-            AcceptCertificateTransferError::ResourceNotFound(ref cause) => cause,
-            AcceptCertificateTransferError::ServiceUnavailable(ref cause) => cause,
-            AcceptCertificateTransferError::Throttling(ref cause) => cause,
-            AcceptCertificateTransferError::TransferAlreadyCompleted(ref cause) => cause,
-            AcceptCertificateTransferError::Unauthorized(ref cause) => cause,
+            AcceptCertificateTransferError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            AcceptCertificateTransferError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AcceptCertificateTransferError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AcceptCertificateTransferError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AcceptCertificateTransferError::Throttling(ref cause) => write!(f, "{}", cause),
+            AcceptCertificateTransferError::TransferAlreadyCompleted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptCertificateTransferError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AcceptCertificateTransferError {}
 /// Errors returned by AddThingToBillingGroup
 #[derive(Debug, PartialEq)]
 pub enum AddThingToBillingGroupError {
@@ -7503,19 +8597,15 @@ impl AddThingToBillingGroupError {
 }
 impl fmt::Display for AddThingToBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddThingToBillingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            AddThingToBillingGroupError::InternalFailure(ref cause) => cause,
-            AddThingToBillingGroupError::InvalidRequest(ref cause) => cause,
-            AddThingToBillingGroupError::ResourceNotFound(ref cause) => cause,
-            AddThingToBillingGroupError::Throttling(ref cause) => cause,
+            AddThingToBillingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            AddThingToBillingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AddThingToBillingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddThingToBillingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddThingToBillingGroupError {}
 /// Errors returned by AddThingToThingGroup
 #[derive(Debug, PartialEq)]
 pub enum AddThingToThingGroupError {
@@ -7558,19 +8648,15 @@ impl AddThingToThingGroupError {
 }
 impl fmt::Display for AddThingToThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddThingToThingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            AddThingToThingGroupError::InternalFailure(ref cause) => cause,
-            AddThingToThingGroupError::InvalidRequest(ref cause) => cause,
-            AddThingToThingGroupError::ResourceNotFound(ref cause) => cause,
-            AddThingToThingGroupError::Throttling(ref cause) => cause,
+            AddThingToThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            AddThingToThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AddThingToThingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddThingToThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddThingToThingGroupError {}
 /// Errors returned by AssociateTargetsWithJob
 #[derive(Debug, PartialEq)]
 pub enum AssociateTargetsWithJobError {
@@ -7622,20 +8708,16 @@ impl AssociateTargetsWithJobError {
 }
 impl fmt::Display for AssociateTargetsWithJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateTargetsWithJobError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateTargetsWithJobError::InvalidRequest(ref cause) => cause,
-            AssociateTargetsWithJobError::LimitExceeded(ref cause) => cause,
-            AssociateTargetsWithJobError::ResourceNotFound(ref cause) => cause,
-            AssociateTargetsWithJobError::ServiceUnavailable(ref cause) => cause,
-            AssociateTargetsWithJobError::Throttling(ref cause) => cause,
+            AssociateTargetsWithJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AssociateTargetsWithJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateTargetsWithJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateTargetsWithJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AssociateTargetsWithJobError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateTargetsWithJobError {}
 /// Errors returned by AttachPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachPolicyError {
@@ -7689,22 +8771,18 @@ impl AttachPolicyError {
 }
 impl fmt::Display for AttachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            AttachPolicyError::InternalFailure(ref cause) => cause,
-            AttachPolicyError::InvalidRequest(ref cause) => cause,
-            AttachPolicyError::LimitExceeded(ref cause) => cause,
-            AttachPolicyError::ResourceNotFound(ref cause) => cause,
-            AttachPolicyError::ServiceUnavailable(ref cause) => cause,
-            AttachPolicyError::Throttling(ref cause) => cause,
-            AttachPolicyError::Unauthorized(ref cause) => cause,
+            AttachPolicyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachPolicyError {}
 /// Errors returned by AttachPrincipalPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachPrincipalPolicyError {
@@ -7766,22 +8844,18 @@ impl AttachPrincipalPolicyError {
 }
 impl fmt::Display for AttachPrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachPrincipalPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            AttachPrincipalPolicyError::InternalFailure(ref cause) => cause,
-            AttachPrincipalPolicyError::InvalidRequest(ref cause) => cause,
-            AttachPrincipalPolicyError::LimitExceeded(ref cause) => cause,
-            AttachPrincipalPolicyError::ResourceNotFound(ref cause) => cause,
-            AttachPrincipalPolicyError::ServiceUnavailable(ref cause) => cause,
-            AttachPrincipalPolicyError::Throttling(ref cause) => cause,
-            AttachPrincipalPolicyError::Unauthorized(ref cause) => cause,
+            AttachPrincipalPolicyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            AttachPrincipalPolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AttachPrincipalPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachPrincipalPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AttachPrincipalPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AttachPrincipalPolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+            AttachPrincipalPolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachPrincipalPolicyError {}
 /// Errors returned by AttachSecurityProfile
 #[derive(Debug, PartialEq)]
 pub enum AttachSecurityProfileError {
@@ -7838,21 +8912,17 @@ impl AttachSecurityProfileError {
 }
 impl fmt::Display for AttachSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachSecurityProfileError {
-    fn description(&self) -> &str {
         match *self {
-            AttachSecurityProfileError::InternalFailure(ref cause) => cause,
-            AttachSecurityProfileError::InvalidRequest(ref cause) => cause,
-            AttachSecurityProfileError::LimitExceeded(ref cause) => cause,
-            AttachSecurityProfileError::ResourceNotFound(ref cause) => cause,
-            AttachSecurityProfileError::Throttling(ref cause) => cause,
-            AttachSecurityProfileError::VersionConflict(ref cause) => cause,
+            AttachSecurityProfileError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            AttachSecurityProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AttachSecurityProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachSecurityProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AttachSecurityProfileError::Throttling(ref cause) => write!(f, "{}", cause),
+            AttachSecurityProfileError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachSecurityProfileError {}
 /// Errors returned by AttachThingPrincipal
 #[derive(Debug, PartialEq)]
 pub enum AttachThingPrincipalError {
@@ -7907,21 +8977,17 @@ impl AttachThingPrincipalError {
 }
 impl fmt::Display for AttachThingPrincipalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachThingPrincipalError {
-    fn description(&self) -> &str {
         match *self {
-            AttachThingPrincipalError::InternalFailure(ref cause) => cause,
-            AttachThingPrincipalError::InvalidRequest(ref cause) => cause,
-            AttachThingPrincipalError::ResourceNotFound(ref cause) => cause,
-            AttachThingPrincipalError::ServiceUnavailable(ref cause) => cause,
-            AttachThingPrincipalError::Throttling(ref cause) => cause,
-            AttachThingPrincipalError::Unauthorized(ref cause) => cause,
+            AttachThingPrincipalError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            AttachThingPrincipalError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AttachThingPrincipalError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AttachThingPrincipalError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AttachThingPrincipalError::Throttling(ref cause) => write!(f, "{}", cause),
+            AttachThingPrincipalError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachThingPrincipalError {}
 /// Errors returned by CancelAuditMitigationActionsTask
 #[derive(Debug, PartialEq)]
 pub enum CancelAuditMitigationActionsTaskError {
@@ -7970,19 +9036,21 @@ impl CancelAuditMitigationActionsTaskError {
 }
 impl fmt::Display for CancelAuditMitigationActionsTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelAuditMitigationActionsTaskError {
-    fn description(&self) -> &str {
         match *self {
-            CancelAuditMitigationActionsTaskError::InternalFailure(ref cause) => cause,
-            CancelAuditMitigationActionsTaskError::InvalidRequest(ref cause) => cause,
-            CancelAuditMitigationActionsTaskError::ResourceNotFound(ref cause) => cause,
-            CancelAuditMitigationActionsTaskError::Throttling(ref cause) => cause,
+            CancelAuditMitigationActionsTaskError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CancelAuditMitigationActionsTaskError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CancelAuditMitigationActionsTaskError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CancelAuditMitigationActionsTaskError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelAuditMitigationActionsTaskError {}
 /// Errors returned by CancelAuditTask
 #[derive(Debug, PartialEq)]
 pub enum CancelAuditTaskError {
@@ -8021,19 +9089,15 @@ impl CancelAuditTaskError {
 }
 impl fmt::Display for CancelAuditTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelAuditTaskError {
-    fn description(&self) -> &str {
         match *self {
-            CancelAuditTaskError::InternalFailure(ref cause) => cause,
-            CancelAuditTaskError::InvalidRequest(ref cause) => cause,
-            CancelAuditTaskError::ResourceNotFound(ref cause) => cause,
-            CancelAuditTaskError::Throttling(ref cause) => cause,
+            CancelAuditTaskError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CancelAuditTaskError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CancelAuditTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CancelAuditTaskError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelAuditTaskError {}
 /// Errors returned by CancelCertificateTransfer
 #[derive(Debug, PartialEq)]
 pub enum CancelCertificateTransferError {
@@ -8101,22 +9165,20 @@ impl CancelCertificateTransferError {
 }
 impl fmt::Display for CancelCertificateTransferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelCertificateTransferError {
-    fn description(&self) -> &str {
         match *self {
-            CancelCertificateTransferError::InternalFailure(ref cause) => cause,
-            CancelCertificateTransferError::InvalidRequest(ref cause) => cause,
-            CancelCertificateTransferError::ResourceNotFound(ref cause) => cause,
-            CancelCertificateTransferError::ServiceUnavailable(ref cause) => cause,
-            CancelCertificateTransferError::Throttling(ref cause) => cause,
-            CancelCertificateTransferError::TransferAlreadyCompleted(ref cause) => cause,
-            CancelCertificateTransferError::Unauthorized(ref cause) => cause,
+            CancelCertificateTransferError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CancelCertificateTransferError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CancelCertificateTransferError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CancelCertificateTransferError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CancelCertificateTransferError::Throttling(ref cause) => write!(f, "{}", cause),
+            CancelCertificateTransferError::TransferAlreadyCompleted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CancelCertificateTransferError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelCertificateTransferError {}
 /// Errors returned by CancelJob
 #[derive(Debug, PartialEq)]
 pub enum CancelJobError {
@@ -8155,19 +9217,15 @@ impl CancelJobError {
 }
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelJobError {
-    fn description(&self) -> &str {
         match *self {
-            CancelJobError::InvalidRequest(ref cause) => cause,
-            CancelJobError::ResourceNotFound(ref cause) => cause,
-            CancelJobError::ServiceUnavailable(ref cause) => cause,
-            CancelJobError::Throttling(ref cause) => cause,
+            CancelJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CancelJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CancelJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CancelJobError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelJobError {}
 /// Errors returned by CancelJobExecution
 #[derive(Debug, PartialEq)]
 pub enum CancelJobExecutionError {
@@ -8220,21 +9278,17 @@ impl CancelJobExecutionError {
 }
 impl fmt::Display for CancelJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelJobExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            CancelJobExecutionError::InvalidRequest(ref cause) => cause,
-            CancelJobExecutionError::InvalidStateTransition(ref cause) => cause,
-            CancelJobExecutionError::ResourceNotFound(ref cause) => cause,
-            CancelJobExecutionError::ServiceUnavailable(ref cause) => cause,
-            CancelJobExecutionError::Throttling(ref cause) => cause,
-            CancelJobExecutionError::VersionConflict(ref cause) => cause,
+            CancelJobExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CancelJobExecutionError::InvalidStateTransition(ref cause) => write!(f, "{}", cause),
+            CancelJobExecutionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CancelJobExecutionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CancelJobExecutionError::Throttling(ref cause) => write!(f, "{}", cause),
+            CancelJobExecutionError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelJobExecutionError {}
 /// Errors returned by ClearDefaultAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum ClearDefaultAuthorizerError {
@@ -8291,21 +9345,86 @@ impl ClearDefaultAuthorizerError {
 }
 impl fmt::Display for ClearDefaultAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ClearDefaultAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            ClearDefaultAuthorizerError::InternalFailure(ref cause) => cause,
-            ClearDefaultAuthorizerError::InvalidRequest(ref cause) => cause,
-            ClearDefaultAuthorizerError::ResourceNotFound(ref cause) => cause,
-            ClearDefaultAuthorizerError::ServiceUnavailable(ref cause) => cause,
-            ClearDefaultAuthorizerError::Throttling(ref cause) => cause,
-            ClearDefaultAuthorizerError::Unauthorized(ref cause) => cause,
+            ClearDefaultAuthorizerError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ClearDefaultAuthorizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ClearDefaultAuthorizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ClearDefaultAuthorizerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ClearDefaultAuthorizerError::Throttling(ref cause) => write!(f, "{}", cause),
+            ClearDefaultAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ClearDefaultAuthorizerError {}
+/// Errors returned by ConfirmTopicRuleDestination
+#[derive(Debug, PartialEq)]
+pub enum ConfirmTopicRuleDestinationError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl ConfirmTopicRuleDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ConfirmTopicRuleDestinationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictingResourceUpdateException" => {
+                    return RusotoError::Service(
+                        ConfirmTopicRuleDestinationError::ConflictingResourceUpdate(err.msg),
+                    )
+                }
+                "InternalException" => {
+                    return RusotoError::Service(ConfirmTopicRuleDestinationError::Internal(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ConfirmTopicRuleDestinationError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        ConfirmTopicRuleDestinationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ConfirmTopicRuleDestinationError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ConfirmTopicRuleDestinationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ConfirmTopicRuleDestinationError::ConflictingResourceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConfirmTopicRuleDestinationError::Internal(ref cause) => write!(f, "{}", cause),
+            ConfirmTopicRuleDestinationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ConfirmTopicRuleDestinationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConfirmTopicRuleDestinationError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ConfirmTopicRuleDestinationError {}
 /// Errors returned by CreateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum CreateAuthorizerError {
@@ -8361,22 +9480,18 @@ impl CreateAuthorizerError {
 }
 impl fmt::Display for CreateAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAuthorizerError::InternalFailure(ref cause) => cause,
-            CreateAuthorizerError::InvalidRequest(ref cause) => cause,
-            CreateAuthorizerError::LimitExceeded(ref cause) => cause,
-            CreateAuthorizerError::ResourceAlreadyExists(ref cause) => cause,
-            CreateAuthorizerError::ServiceUnavailable(ref cause) => cause,
-            CreateAuthorizerError::Throttling(ref cause) => cause,
-            CreateAuthorizerError::Unauthorized(ref cause) => cause,
+            CreateAuthorizerError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateAuthorizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateAuthorizerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAuthorizerError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateAuthorizerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateAuthorizerError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAuthorizerError {}
 /// Errors returned by CreateBillingGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateBillingGroupError {
@@ -8417,19 +9532,15 @@ impl CreateBillingGroupError {
 }
 impl fmt::Display for CreateBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBillingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBillingGroupError::InternalFailure(ref cause) => cause,
-            CreateBillingGroupError::InvalidRequest(ref cause) => cause,
-            CreateBillingGroupError::ResourceAlreadyExists(ref cause) => cause,
-            CreateBillingGroupError::Throttling(ref cause) => cause,
+            CreateBillingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateBillingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateBillingGroupError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateBillingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBillingGroupError {}
 /// Errors returned by CreateCertificateFromCsr
 #[derive(Debug, PartialEq)]
 pub enum CreateCertificateFromCsrError {
@@ -8481,20 +9592,107 @@ impl CreateCertificateFromCsrError {
 }
 impl fmt::Display for CreateCertificateFromCsrError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCertificateFromCsrError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCertificateFromCsrError::InternalFailure(ref cause) => cause,
-            CreateCertificateFromCsrError::InvalidRequest(ref cause) => cause,
-            CreateCertificateFromCsrError::ServiceUnavailable(ref cause) => cause,
-            CreateCertificateFromCsrError::Throttling(ref cause) => cause,
-            CreateCertificateFromCsrError::Unauthorized(ref cause) => cause,
+            CreateCertificateFromCsrError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateCertificateFromCsrError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateCertificateFromCsrError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateCertificateFromCsrError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateCertificateFromCsrError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCertificateFromCsrError {}
+/// Errors returned by CreateDomainConfiguration
+#[derive(Debug, PartialEq)]
+pub enum CreateDomainConfigurationError {
+    /// <p>The certificate is invalid.</p>
+    CertificateValidation(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl CreateDomainConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CertificateValidationException" => {
+                    return RusotoError::Service(
+                        CreateDomainConfigurationError::CertificateValidation(err.msg),
+                    )
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateDomainConfigurationError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateDomainConfigurationError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateDomainConfigurationError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateDomainConfigurationError::ResourceAlreadyExists(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        CreateDomainConfigurationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateDomainConfigurationError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(CreateDomainConfigurationError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateDomainConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateDomainConfigurationError::CertificateValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDomainConfigurationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDomainConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateDomainConfigurationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDomainConfigurationError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDomainConfigurationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateDomainConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateDomainConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateDomainConfigurationError {}
 /// Errors returned by CreateDynamicThingGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateDynamicThingGroupError {
@@ -8560,22 +9758,20 @@ impl CreateDynamicThingGroupError {
 }
 impl fmt::Display for CreateDynamicThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDynamicThingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDynamicThingGroupError::InternalFailure(ref cause) => cause,
-            CreateDynamicThingGroupError::InvalidQuery(ref cause) => cause,
-            CreateDynamicThingGroupError::InvalidRequest(ref cause) => cause,
-            CreateDynamicThingGroupError::LimitExceeded(ref cause) => cause,
-            CreateDynamicThingGroupError::ResourceAlreadyExists(ref cause) => cause,
-            CreateDynamicThingGroupError::ResourceNotFound(ref cause) => cause,
-            CreateDynamicThingGroupError::Throttling(ref cause) => cause,
+            CreateDynamicThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDynamicThingGroupError::InvalidQuery(ref cause) => write!(f, "{}", cause),
+            CreateDynamicThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateDynamicThingGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDynamicThingGroupError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDynamicThingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateDynamicThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDynamicThingGroupError {}
 /// Errors returned by CreateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateJobError {
@@ -8624,21 +9820,17 @@ impl CreateJobError {
 }
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateJobError::InvalidRequest(ref cause) => cause,
-            CreateJobError::LimitExceeded(ref cause) => cause,
-            CreateJobError::ResourceAlreadyExists(ref cause) => cause,
-            CreateJobError::ResourceNotFound(ref cause) => cause,
-            CreateJobError::ServiceUnavailable(ref cause) => cause,
-            CreateJobError::Throttling(ref cause) => cause,
+            CreateJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateJobError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateJobError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateJobError {}
 /// Errors returned by CreateKeysAndCertificate
 #[derive(Debug, PartialEq)]
 pub enum CreateKeysAndCertificateError {
@@ -8690,20 +9882,16 @@ impl CreateKeysAndCertificateError {
 }
 impl fmt::Display for CreateKeysAndCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateKeysAndCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            CreateKeysAndCertificateError::InternalFailure(ref cause) => cause,
-            CreateKeysAndCertificateError::InvalidRequest(ref cause) => cause,
-            CreateKeysAndCertificateError::ServiceUnavailable(ref cause) => cause,
-            CreateKeysAndCertificateError::Throttling(ref cause) => cause,
-            CreateKeysAndCertificateError::Unauthorized(ref cause) => cause,
+            CreateKeysAndCertificateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateKeysAndCertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateKeysAndCertificateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateKeysAndCertificateError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateKeysAndCertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateKeysAndCertificateError {}
 /// Errors returned by CreateMitigationAction
 #[derive(Debug, PartialEq)]
 pub enum CreateMitigationActionError {
@@ -8755,20 +9943,16 @@ impl CreateMitigationActionError {
 }
 impl fmt::Display for CreateMitigationActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMitigationActionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMitigationActionError::InternalFailure(ref cause) => cause,
-            CreateMitigationActionError::InvalidRequest(ref cause) => cause,
-            CreateMitigationActionError::LimitExceeded(ref cause) => cause,
-            CreateMitigationActionError::ResourceAlreadyExists(ref cause) => cause,
-            CreateMitigationActionError::Throttling(ref cause) => cause,
+            CreateMitigationActionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateMitigationActionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateMitigationActionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateMitigationActionError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateMitigationActionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateMitigationActionError {}
 /// Errors returned by CreateOTAUpdate
 #[derive(Debug, PartialEq)]
 pub enum CreateOTAUpdateError {
@@ -8829,23 +10013,19 @@ impl CreateOTAUpdateError {
 }
 impl fmt::Display for CreateOTAUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateOTAUpdateError {
-    fn description(&self) -> &str {
         match *self {
-            CreateOTAUpdateError::InternalFailure(ref cause) => cause,
-            CreateOTAUpdateError::InvalidRequest(ref cause) => cause,
-            CreateOTAUpdateError::LimitExceeded(ref cause) => cause,
-            CreateOTAUpdateError::ResourceAlreadyExists(ref cause) => cause,
-            CreateOTAUpdateError::ResourceNotFound(ref cause) => cause,
-            CreateOTAUpdateError::ServiceUnavailable(ref cause) => cause,
-            CreateOTAUpdateError::Throttling(ref cause) => cause,
-            CreateOTAUpdateError::Unauthorized(ref cause) => cause,
+            CreateOTAUpdateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateOTAUpdateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateOTAUpdateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateOTAUpdateError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateOTAUpdateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateOTAUpdateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateOTAUpdateError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateOTAUpdateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateOTAUpdateError {}
 /// Errors returned by CreatePolicy
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyError {
@@ -8899,22 +10079,18 @@ impl CreatePolicyError {
 }
 impl fmt::Display for CreatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePolicyError::InternalFailure(ref cause) => cause,
-            CreatePolicyError::InvalidRequest(ref cause) => cause,
-            CreatePolicyError::MalformedPolicy(ref cause) => cause,
-            CreatePolicyError::ResourceAlreadyExists(ref cause) => cause,
-            CreatePolicyError::ServiceUnavailable(ref cause) => cause,
-            CreatePolicyError::Throttling(ref cause) => cause,
-            CreatePolicyError::Unauthorized(ref cause) => cause,
+            CreatePolicyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::MalformedPolicy(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePolicyError {}
 /// Errors returned by CreatePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyVersionError {
@@ -8979,23 +10155,256 @@ impl CreatePolicyVersionError {
 }
 impl fmt::Display for CreatePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePolicyVersionError::InternalFailure(ref cause) => cause,
-            CreatePolicyVersionError::InvalidRequest(ref cause) => cause,
-            CreatePolicyVersionError::MalformedPolicy(ref cause) => cause,
-            CreatePolicyVersionError::ResourceNotFound(ref cause) => cause,
-            CreatePolicyVersionError::ServiceUnavailable(ref cause) => cause,
-            CreatePolicyVersionError::Throttling(ref cause) => cause,
-            CreatePolicyVersionError::Unauthorized(ref cause) => cause,
-            CreatePolicyVersionError::VersionsLimitExceeded(ref cause) => cause,
+            CreatePolicyVersionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::MalformedPolicy(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::Unauthorized(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::VersionsLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePolicyVersionError {}
+/// Errors returned by CreateProvisioningClaim
+#[derive(Debug, PartialEq)]
+pub enum CreateProvisioningClaimError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl CreateProvisioningClaimError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProvisioningClaimError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateProvisioningClaimError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateProvisioningClaimError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateProvisioningClaimError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateProvisioningClaimError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateProvisioningClaimError::Throttling(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(CreateProvisioningClaimError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateProvisioningClaimError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateProvisioningClaimError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateProvisioningClaimError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateProvisioningClaimError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateProvisioningClaimError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateProvisioningClaimError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateProvisioningClaimError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateProvisioningClaimError {}
+/// Errors returned by CreateProvisioningTemplate
+#[derive(Debug, PartialEq)]
+pub enum CreateProvisioningTemplateError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl CreateProvisioningTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateProvisioningTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateProvisioningTemplateError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateProvisioningTemplateError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateProvisioningTemplateError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateProvisioningTemplateError::ResourceAlreadyExists(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateProvisioningTemplateError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(CreateProvisioningTemplateError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateProvisioningTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateProvisioningTemplateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateProvisioningTemplateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateProvisioningTemplateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProvisioningTemplateError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProvisioningTemplateError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateProvisioningTemplateError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateProvisioningTemplateError {}
+/// Errors returned by CreateProvisioningTemplateVersion
+#[derive(Debug, PartialEq)]
+pub enum CreateProvisioningTemplateVersionError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// <p>The number of policy versions exceeds the limit.</p>
+    VersionsLimitExceeded(String),
+}
+
+impl CreateProvisioningTemplateVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateProvisioningTemplateVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictingResourceUpdateException" => {
+                    return RusotoError::Service(
+                        CreateProvisioningTemplateVersionError::ConflictingResourceUpdate(err.msg),
+                    )
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        CreateProvisioningTemplateVersionError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        CreateProvisioningTemplateVersionError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateProvisioningTemplateVersionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        CreateProvisioningTemplateVersionError::Throttling(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(
+                        CreateProvisioningTemplateVersionError::Unauthorized(err.msg),
+                    )
+                }
+                "VersionsLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateProvisioningTemplateVersionError::VersionsLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateProvisioningTemplateVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateProvisioningTemplateVersionError::ConflictingResourceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProvisioningTemplateVersionError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProvisioningTemplateVersionError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProvisioningTemplateVersionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProvisioningTemplateVersionError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateProvisioningTemplateVersionError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProvisioningTemplateVersionError::VersionsLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateProvisioningTemplateVersionError {}
 /// Errors returned by CreateRoleAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateRoleAliasError {
@@ -9051,22 +10460,18 @@ impl CreateRoleAliasError {
 }
 impl fmt::Display for CreateRoleAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRoleAliasError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRoleAliasError::InternalFailure(ref cause) => cause,
-            CreateRoleAliasError::InvalidRequest(ref cause) => cause,
-            CreateRoleAliasError::LimitExceeded(ref cause) => cause,
-            CreateRoleAliasError::ResourceAlreadyExists(ref cause) => cause,
-            CreateRoleAliasError::ServiceUnavailable(ref cause) => cause,
-            CreateRoleAliasError::Throttling(ref cause) => cause,
-            CreateRoleAliasError::Unauthorized(ref cause) => cause,
+            CreateRoleAliasError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateRoleAliasError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateRoleAliasError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRoleAliasError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateRoleAliasError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateRoleAliasError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateRoleAliasError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRoleAliasError {}
 /// Errors returned by CreateScheduledAudit
 #[derive(Debug, PartialEq)]
 pub enum CreateScheduledAuditError {
@@ -9114,20 +10519,16 @@ impl CreateScheduledAuditError {
 }
 impl fmt::Display for CreateScheduledAuditError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateScheduledAuditError {
-    fn description(&self) -> &str {
         match *self {
-            CreateScheduledAuditError::InternalFailure(ref cause) => cause,
-            CreateScheduledAuditError::InvalidRequest(ref cause) => cause,
-            CreateScheduledAuditError::LimitExceeded(ref cause) => cause,
-            CreateScheduledAuditError::ResourceAlreadyExists(ref cause) => cause,
-            CreateScheduledAuditError::Throttling(ref cause) => cause,
+            CreateScheduledAuditError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateScheduledAuditError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateScheduledAuditError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateScheduledAuditError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateScheduledAuditError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateScheduledAuditError {}
 /// Errors returned by CreateSecurityProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateSecurityProfileError {
@@ -9172,19 +10573,15 @@ impl CreateSecurityProfileError {
 }
 impl fmt::Display for CreateSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSecurityProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSecurityProfileError::InternalFailure(ref cause) => cause,
-            CreateSecurityProfileError::InvalidRequest(ref cause) => cause,
-            CreateSecurityProfileError::ResourceAlreadyExists(ref cause) => cause,
-            CreateSecurityProfileError::Throttling(ref cause) => cause,
+            CreateSecurityProfileError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateSecurityProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateSecurityProfileError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateSecurityProfileError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSecurityProfileError {}
 /// Errors returned by CreateStream
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamError {
@@ -9243,23 +10640,19 @@ impl CreateStreamError {
 }
 impl fmt::Display for CreateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamError::InternalFailure(ref cause) => cause,
-            CreateStreamError::InvalidRequest(ref cause) => cause,
-            CreateStreamError::LimitExceeded(ref cause) => cause,
-            CreateStreamError::ResourceAlreadyExists(ref cause) => cause,
-            CreateStreamError::ResourceNotFound(ref cause) => cause,
-            CreateStreamError::ServiceUnavailable(ref cause) => cause,
-            CreateStreamError::Throttling(ref cause) => cause,
-            CreateStreamError::Unauthorized(ref cause) => cause,
+            CreateStreamError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStreamError {}
 /// Errors returned by CreateThing
 #[derive(Debug, PartialEq)]
 pub enum CreateThingError {
@@ -9313,22 +10706,18 @@ impl CreateThingError {
 }
 impl fmt::Display for CreateThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateThingError {
-    fn description(&self) -> &str {
         match *self {
-            CreateThingError::InternalFailure(ref cause) => cause,
-            CreateThingError::InvalidRequest(ref cause) => cause,
-            CreateThingError::ResourceAlreadyExists(ref cause) => cause,
-            CreateThingError::ResourceNotFound(ref cause) => cause,
-            CreateThingError::ServiceUnavailable(ref cause) => cause,
-            CreateThingError::Throttling(ref cause) => cause,
-            CreateThingError::Unauthorized(ref cause) => cause,
+            CreateThingError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateThingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateThingError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateThingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateThingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateThingError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateThingError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateThingError {}
 /// Errors returned by CreateThingGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateThingGroupError {
@@ -9369,19 +10758,15 @@ impl CreateThingGroupError {
 }
 impl fmt::Display for CreateThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateThingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateThingGroupError::InternalFailure(ref cause) => cause,
-            CreateThingGroupError::InvalidRequest(ref cause) => cause,
-            CreateThingGroupError::ResourceAlreadyExists(ref cause) => cause,
-            CreateThingGroupError::Throttling(ref cause) => cause,
+            CreateThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateThingGroupError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateThingGroupError {}
 /// Errors returned by CreateThingType
 #[derive(Debug, PartialEq)]
 pub enum CreateThingTypeError {
@@ -9432,21 +10817,17 @@ impl CreateThingTypeError {
 }
 impl fmt::Display for CreateThingTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateThingTypeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateThingTypeError::InternalFailure(ref cause) => cause,
-            CreateThingTypeError::InvalidRequest(ref cause) => cause,
-            CreateThingTypeError::ResourceAlreadyExists(ref cause) => cause,
-            CreateThingTypeError::ServiceUnavailable(ref cause) => cause,
-            CreateThingTypeError::Throttling(ref cause) => cause,
-            CreateThingTypeError::Unauthorized(ref cause) => cause,
+            CreateThingTypeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateThingTypeError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateThingTypeError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateThingTypeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateThingTypeError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateThingTypeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateThingTypeError {}
 /// Errors returned by CreateTopicRule
 #[derive(Debug, PartialEq)]
 pub enum CreateTopicRuleError {
@@ -9499,21 +10880,86 @@ impl CreateTopicRuleError {
 }
 impl fmt::Display for CreateTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTopicRuleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTopicRuleError::ConflictingResourceUpdate(ref cause) => cause,
-            CreateTopicRuleError::Internal(ref cause) => cause,
-            CreateTopicRuleError::InvalidRequest(ref cause) => cause,
-            CreateTopicRuleError::ResourceAlreadyExists(ref cause) => cause,
-            CreateTopicRuleError::ServiceUnavailable(ref cause) => cause,
-            CreateTopicRuleError::SqlParse(ref cause) => cause,
+            CreateTopicRuleError::ConflictingResourceUpdate(ref cause) => write!(f, "{}", cause),
+            CreateTopicRuleError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateTopicRuleError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateTopicRuleError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateTopicRuleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateTopicRuleError::SqlParse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTopicRuleError {}
+/// Errors returned by CreateTopicRuleDestination
+#[derive(Debug, PartialEq)]
+pub enum CreateTopicRuleDestinationError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+}
+
+impl CreateTopicRuleDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateTopicRuleDestinationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictingResourceUpdateException" => {
+                    return RusotoError::Service(
+                        CreateTopicRuleDestinationError::ConflictingResourceUpdate(err.msg),
+                    )
+                }
+                "InternalException" => {
+                    return RusotoError::Service(CreateTopicRuleDestinationError::Internal(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateTopicRuleDestinationError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateTopicRuleDestinationError::ResourceAlreadyExists(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        CreateTopicRuleDestinationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateTopicRuleDestinationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateTopicRuleDestinationError::ConflictingResourceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTopicRuleDestinationError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateTopicRuleDestinationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateTopicRuleDestinationError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTopicRuleDestinationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateTopicRuleDestinationError {}
 /// Errors returned by DeleteAccountAuditConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountAuditConfigurationError {
@@ -9562,19 +11008,21 @@ impl DeleteAccountAuditConfigurationError {
 }
 impl fmt::Display for DeleteAccountAuditConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAccountAuditConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAccountAuditConfigurationError::InternalFailure(ref cause) => cause,
-            DeleteAccountAuditConfigurationError::InvalidRequest(ref cause) => cause,
-            DeleteAccountAuditConfigurationError::ResourceNotFound(ref cause) => cause,
-            DeleteAccountAuditConfigurationError::Throttling(ref cause) => cause,
+            DeleteAccountAuditConfigurationError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAccountAuditConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAccountAuditConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAccountAuditConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAccountAuditConfigurationError {}
 /// Errors returned by DeleteAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteAuthorizerError {
@@ -9628,22 +11076,18 @@ impl DeleteAuthorizerError {
 }
 impl fmt::Display for DeleteAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAuthorizerError::DeleteConflict(ref cause) => cause,
-            DeleteAuthorizerError::InternalFailure(ref cause) => cause,
-            DeleteAuthorizerError::InvalidRequest(ref cause) => cause,
-            DeleteAuthorizerError::ResourceNotFound(ref cause) => cause,
-            DeleteAuthorizerError::ServiceUnavailable(ref cause) => cause,
-            DeleteAuthorizerError::Throttling(ref cause) => cause,
-            DeleteAuthorizerError::Unauthorized(ref cause) => cause,
+            DeleteAuthorizerError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteAuthorizerError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAuthorizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAuthorizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAuthorizerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteAuthorizerError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAuthorizerError {}
 /// Errors returned by DeleteBillingGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBillingGroupError {
@@ -9682,19 +11126,15 @@ impl DeleteBillingGroupError {
 }
 impl fmt::Display for DeleteBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBillingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBillingGroupError::InternalFailure(ref cause) => cause,
-            DeleteBillingGroupError::InvalidRequest(ref cause) => cause,
-            DeleteBillingGroupError::Throttling(ref cause) => cause,
-            DeleteBillingGroupError::VersionConflict(ref cause) => cause,
+            DeleteBillingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteBillingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBillingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteBillingGroupError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBillingGroupError {}
 /// Errors returned by DeleteCACertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCACertificateError {
@@ -9754,22 +11194,18 @@ impl DeleteCACertificateError {
 }
 impl fmt::Display for DeleteCACertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCACertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCACertificateError::CertificateState(ref cause) => cause,
-            DeleteCACertificateError::InternalFailure(ref cause) => cause,
-            DeleteCACertificateError::InvalidRequest(ref cause) => cause,
-            DeleteCACertificateError::ResourceNotFound(ref cause) => cause,
-            DeleteCACertificateError::ServiceUnavailable(ref cause) => cause,
-            DeleteCACertificateError::Throttling(ref cause) => cause,
-            DeleteCACertificateError::Unauthorized(ref cause) => cause,
+            DeleteCACertificateError::CertificateState(ref cause) => write!(f, "{}", cause),
+            DeleteCACertificateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteCACertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteCACertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteCACertificateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteCACertificateError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteCACertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCACertificateError {}
 /// Errors returned by DeleteCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCertificateError {
@@ -9830,23 +11266,90 @@ impl DeleteCertificateError {
 }
 impl fmt::Display for DeleteCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCertificateError::CertificateState(ref cause) => cause,
-            DeleteCertificateError::DeleteConflict(ref cause) => cause,
-            DeleteCertificateError::InternalFailure(ref cause) => cause,
-            DeleteCertificateError::InvalidRequest(ref cause) => cause,
-            DeleteCertificateError::ResourceNotFound(ref cause) => cause,
-            DeleteCertificateError::ServiceUnavailable(ref cause) => cause,
-            DeleteCertificateError::Throttling(ref cause) => cause,
-            DeleteCertificateError::Unauthorized(ref cause) => cause,
+            DeleteCertificateError::CertificateState(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCertificateError {}
+/// Errors returned by DeleteDomainConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteDomainConfigurationError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl DeleteDomainConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteDomainConfigurationError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteDomainConfigurationError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteDomainConfigurationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DeleteDomainConfigurationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteDomainConfigurationError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DeleteDomainConfigurationError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteDomainConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteDomainConfigurationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDomainConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDomainConfigurationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDomainConfigurationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteDomainConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteDomainConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteDomainConfigurationError {}
 /// Errors returned by DeleteDynamicThingGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDynamicThingGroupError {
@@ -9891,19 +11394,15 @@ impl DeleteDynamicThingGroupError {
 }
 impl fmt::Display for DeleteDynamicThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDynamicThingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDynamicThingGroupError::InternalFailure(ref cause) => cause,
-            DeleteDynamicThingGroupError::InvalidRequest(ref cause) => cause,
-            DeleteDynamicThingGroupError::Throttling(ref cause) => cause,
-            DeleteDynamicThingGroupError::VersionConflict(ref cause) => cause,
+            DeleteDynamicThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDynamicThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDynamicThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteDynamicThingGroupError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDynamicThingGroupError {}
 /// Errors returned by DeleteJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobError {
@@ -9952,21 +11451,17 @@ impl DeleteJobError {
 }
 impl fmt::Display for DeleteJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteJobError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteJobError::InvalidRequest(ref cause) => cause,
-            DeleteJobError::InvalidStateTransition(ref cause) => cause,
-            DeleteJobError::LimitExceeded(ref cause) => cause,
-            DeleteJobError::ResourceNotFound(ref cause) => cause,
-            DeleteJobError::ServiceUnavailable(ref cause) => cause,
-            DeleteJobError::Throttling(ref cause) => cause,
+            DeleteJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::InvalidStateTransition(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteJobError {}
 /// Errors returned by DeleteJobExecution
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobExecutionError {
@@ -10014,20 +11509,16 @@ impl DeleteJobExecutionError {
 }
 impl fmt::Display for DeleteJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteJobExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteJobExecutionError::InvalidRequest(ref cause) => cause,
-            DeleteJobExecutionError::InvalidStateTransition(ref cause) => cause,
-            DeleteJobExecutionError::ResourceNotFound(ref cause) => cause,
-            DeleteJobExecutionError::ServiceUnavailable(ref cause) => cause,
-            DeleteJobExecutionError::Throttling(ref cause) => cause,
+            DeleteJobExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteJobExecutionError::InvalidStateTransition(ref cause) => write!(f, "{}", cause),
+            DeleteJobExecutionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteJobExecutionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteJobExecutionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteJobExecutionError {}
 /// Errors returned by DeleteMitigationAction
 #[derive(Debug, PartialEq)]
 pub enum DeleteMitigationActionError {
@@ -10065,18 +11556,14 @@ impl DeleteMitigationActionError {
 }
 impl fmt::Display for DeleteMitigationActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMitigationActionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMitigationActionError::InternalFailure(ref cause) => cause,
-            DeleteMitigationActionError::InvalidRequest(ref cause) => cause,
-            DeleteMitigationActionError::Throttling(ref cause) => cause,
+            DeleteMitigationActionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteMitigationActionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteMitigationActionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMitigationActionError {}
 /// Errors returned by DeleteOTAUpdate
 #[derive(Debug, PartialEq)]
 pub enum DeleteOTAUpdateError {
@@ -10130,22 +11617,18 @@ impl DeleteOTAUpdateError {
 }
 impl fmt::Display for DeleteOTAUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteOTAUpdateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteOTAUpdateError::InternalFailure(ref cause) => cause,
-            DeleteOTAUpdateError::InvalidRequest(ref cause) => cause,
-            DeleteOTAUpdateError::ResourceNotFound(ref cause) => cause,
-            DeleteOTAUpdateError::ServiceUnavailable(ref cause) => cause,
-            DeleteOTAUpdateError::Throttling(ref cause) => cause,
-            DeleteOTAUpdateError::Unauthorized(ref cause) => cause,
-            DeleteOTAUpdateError::VersionConflict(ref cause) => cause,
+            DeleteOTAUpdateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteOTAUpdateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteOTAUpdateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteOTAUpdateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteOTAUpdateError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteOTAUpdateError::Unauthorized(ref cause) => write!(f, "{}", cause),
+            DeleteOTAUpdateError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteOTAUpdateError {}
 /// Errors returned by DeletePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyError {
@@ -10199,22 +11682,18 @@ impl DeletePolicyError {
 }
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePolicyError::DeleteConflict(ref cause) => cause,
-            DeletePolicyError::InternalFailure(ref cause) => cause,
-            DeletePolicyError::InvalidRequest(ref cause) => cause,
-            DeletePolicyError::ResourceNotFound(ref cause) => cause,
-            DeletePolicyError::ServiceUnavailable(ref cause) => cause,
-            DeletePolicyError::Throttling(ref cause) => cause,
-            DeletePolicyError::Unauthorized(ref cause) => cause,
+            DeletePolicyError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePolicyError {}
 /// Errors returned by DeletePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyVersionError {
@@ -10272,22 +11751,174 @@ impl DeletePolicyVersionError {
 }
 impl fmt::Display for DeletePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePolicyVersionError::DeleteConflict(ref cause) => cause,
-            DeletePolicyVersionError::InternalFailure(ref cause) => cause,
-            DeletePolicyVersionError::InvalidRequest(ref cause) => cause,
-            DeletePolicyVersionError::ResourceNotFound(ref cause) => cause,
-            DeletePolicyVersionError::ServiceUnavailable(ref cause) => cause,
-            DeletePolicyVersionError::Throttling(ref cause) => cause,
-            DeletePolicyVersionError::Unauthorized(ref cause) => cause,
+            DeletePolicyVersionError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePolicyVersionError {}
+/// Errors returned by DeleteProvisioningTemplate
+#[derive(Debug, PartialEq)]
+pub enum DeleteProvisioningTemplateError {
+    /// <p>You can't delete the resource because it is attached to one or more resources.</p>
+    DeleteConflict(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl DeleteProvisioningTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteProvisioningTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DeleteConflictException" => {
+                    return RusotoError::Service(DeleteProvisioningTemplateError::DeleteConflict(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteProvisioningTemplateError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteProvisioningTemplateError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteProvisioningTemplateError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteProvisioningTemplateError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DeleteProvisioningTemplateError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteProvisioningTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteProvisioningTemplateError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteProvisioningTemplateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteProvisioningTemplateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteProvisioningTemplateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteProvisioningTemplateError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteProvisioningTemplateError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteProvisioningTemplateError {}
+/// Errors returned by DeleteProvisioningTemplateVersion
+#[derive(Debug, PartialEq)]
+pub enum DeleteProvisioningTemplateVersionError {
+    /// <p>You can't delete the resource because it is attached to one or more resources.</p>
+    DeleteConflict(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl DeleteProvisioningTemplateVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteProvisioningTemplateVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DeleteConflictException" => {
+                    return RusotoError::Service(
+                        DeleteProvisioningTemplateVersionError::DeleteConflict(err.msg),
+                    )
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        DeleteProvisioningTemplateVersionError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DeleteProvisioningTemplateVersionError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteProvisioningTemplateVersionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        DeleteProvisioningTemplateVersionError::Throttling(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(
+                        DeleteProvisioningTemplateVersionError::Unauthorized(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteProvisioningTemplateVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteProvisioningTemplateVersionError::DeleteConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProvisioningTemplateVersionError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProvisioningTemplateVersionError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProvisioningTemplateVersionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProvisioningTemplateVersionError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteProvisioningTemplateVersionError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteProvisioningTemplateVersionError {}
 /// Errors returned by DeleteRegistrationCode
 #[derive(Debug, PartialEq)]
 pub enum DeleteRegistrationCodeError {
@@ -10337,20 +11968,16 @@ impl DeleteRegistrationCodeError {
 }
 impl fmt::Display for DeleteRegistrationCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRegistrationCodeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRegistrationCodeError::InternalFailure(ref cause) => cause,
-            DeleteRegistrationCodeError::ResourceNotFound(ref cause) => cause,
-            DeleteRegistrationCodeError::ServiceUnavailable(ref cause) => cause,
-            DeleteRegistrationCodeError::Throttling(ref cause) => cause,
-            DeleteRegistrationCodeError::Unauthorized(ref cause) => cause,
+            DeleteRegistrationCodeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRegistrationCodeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRegistrationCodeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteRegistrationCodeError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteRegistrationCodeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRegistrationCodeError {}
 /// Errors returned by DeleteRoleAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoleAliasError {
@@ -10404,22 +12031,18 @@ impl DeleteRoleAliasError {
 }
 impl fmt::Display for DeleteRoleAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRoleAliasError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRoleAliasError::DeleteConflict(ref cause) => cause,
-            DeleteRoleAliasError::InternalFailure(ref cause) => cause,
-            DeleteRoleAliasError::InvalidRequest(ref cause) => cause,
-            DeleteRoleAliasError::ResourceNotFound(ref cause) => cause,
-            DeleteRoleAliasError::ServiceUnavailable(ref cause) => cause,
-            DeleteRoleAliasError::Throttling(ref cause) => cause,
-            DeleteRoleAliasError::Unauthorized(ref cause) => cause,
+            DeleteRoleAliasError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteRoleAliasError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRoleAliasError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteRoleAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRoleAliasError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteRoleAliasError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteRoleAliasError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRoleAliasError {}
 /// Errors returned by DeleteScheduledAudit
 #[derive(Debug, PartialEq)]
 pub enum DeleteScheduledAuditError {
@@ -10462,19 +12085,15 @@ impl DeleteScheduledAuditError {
 }
 impl fmt::Display for DeleteScheduledAuditError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteScheduledAuditError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteScheduledAuditError::InternalFailure(ref cause) => cause,
-            DeleteScheduledAuditError::InvalidRequest(ref cause) => cause,
-            DeleteScheduledAuditError::ResourceNotFound(ref cause) => cause,
-            DeleteScheduledAuditError::Throttling(ref cause) => cause,
+            DeleteScheduledAuditError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteScheduledAuditError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteScheduledAuditError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteScheduledAuditError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteScheduledAuditError {}
 /// Errors returned by DeleteSecurityProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteSecurityProfileError {
@@ -10519,19 +12138,15 @@ impl DeleteSecurityProfileError {
 }
 impl fmt::Display for DeleteSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSecurityProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSecurityProfileError::InternalFailure(ref cause) => cause,
-            DeleteSecurityProfileError::InvalidRequest(ref cause) => cause,
-            DeleteSecurityProfileError::Throttling(ref cause) => cause,
-            DeleteSecurityProfileError::VersionConflict(ref cause) => cause,
+            DeleteSecurityProfileError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteSecurityProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteSecurityProfileError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteSecurityProfileError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSecurityProfileError {}
 /// Errors returned by DeleteStream
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamError {
@@ -10585,22 +12200,18 @@ impl DeleteStreamError {
 }
 impl fmt::Display for DeleteStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStreamError::DeleteConflict(ref cause) => cause,
-            DeleteStreamError::InternalFailure(ref cause) => cause,
-            DeleteStreamError::InvalidRequest(ref cause) => cause,
-            DeleteStreamError::ResourceNotFound(ref cause) => cause,
-            DeleteStreamError::ServiceUnavailable(ref cause) => cause,
-            DeleteStreamError::Throttling(ref cause) => cause,
-            DeleteStreamError::Unauthorized(ref cause) => cause,
+            DeleteStreamError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStreamError {}
 /// Errors returned by DeleteThing
 #[derive(Debug, PartialEq)]
 pub enum DeleteThingError {
@@ -10654,22 +12265,18 @@ impl DeleteThingError {
 }
 impl fmt::Display for DeleteThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteThingError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteThingError::InternalFailure(ref cause) => cause,
-            DeleteThingError::InvalidRequest(ref cause) => cause,
-            DeleteThingError::ResourceNotFound(ref cause) => cause,
-            DeleteThingError::ServiceUnavailable(ref cause) => cause,
-            DeleteThingError::Throttling(ref cause) => cause,
-            DeleteThingError::Unauthorized(ref cause) => cause,
-            DeleteThingError::VersionConflict(ref cause) => cause,
+            DeleteThingError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteThingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteThingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteThingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteThingError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteThingError::Unauthorized(ref cause) => write!(f, "{}", cause),
+            DeleteThingError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteThingError {}
 /// Errors returned by DeleteThingGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteThingGroupError {
@@ -10708,19 +12315,15 @@ impl DeleteThingGroupError {
 }
 impl fmt::Display for DeleteThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteThingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteThingGroupError::InternalFailure(ref cause) => cause,
-            DeleteThingGroupError::InvalidRequest(ref cause) => cause,
-            DeleteThingGroupError::Throttling(ref cause) => cause,
-            DeleteThingGroupError::VersionConflict(ref cause) => cause,
+            DeleteThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteThingGroupError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteThingGroupError {}
 /// Errors returned by DeleteThingType
 #[derive(Debug, PartialEq)]
 pub enum DeleteThingTypeError {
@@ -10769,21 +12372,17 @@ impl DeleteThingTypeError {
 }
 impl fmt::Display for DeleteThingTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteThingTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteThingTypeError::InternalFailure(ref cause) => cause,
-            DeleteThingTypeError::InvalidRequest(ref cause) => cause,
-            DeleteThingTypeError::ResourceNotFound(ref cause) => cause,
-            DeleteThingTypeError::ServiceUnavailable(ref cause) => cause,
-            DeleteThingTypeError::Throttling(ref cause) => cause,
-            DeleteThingTypeError::Unauthorized(ref cause) => cause,
+            DeleteThingTypeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteThingTypeError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteThingTypeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteThingTypeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteThingTypeError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteThingTypeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteThingTypeError {}
 /// Errors returned by DeleteTopicRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteTopicRuleError {
@@ -10829,20 +12428,83 @@ impl DeleteTopicRuleError {
 }
 impl fmt::Display for DeleteTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTopicRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTopicRuleError::ConflictingResourceUpdate(ref cause) => cause,
-            DeleteTopicRuleError::Internal(ref cause) => cause,
-            DeleteTopicRuleError::InvalidRequest(ref cause) => cause,
-            DeleteTopicRuleError::ServiceUnavailable(ref cause) => cause,
-            DeleteTopicRuleError::Unauthorized(ref cause) => cause,
+            DeleteTopicRuleError::ConflictingResourceUpdate(ref cause) => write!(f, "{}", cause),
+            DeleteTopicRuleError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteTopicRuleError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteTopicRuleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteTopicRuleError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTopicRuleError {}
+/// Errors returned by DeleteTopicRuleDestination
+#[derive(Debug, PartialEq)]
+pub enum DeleteTopicRuleDestinationError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl DeleteTopicRuleDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteTopicRuleDestinationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictingResourceUpdateException" => {
+                    return RusotoError::Service(
+                        DeleteTopicRuleDestinationError::ConflictingResourceUpdate(err.msg),
+                    )
+                }
+                "InternalException" => {
+                    return RusotoError::Service(DeleteTopicRuleDestinationError::Internal(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteTopicRuleDestinationError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DeleteTopicRuleDestinationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DeleteTopicRuleDestinationError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteTopicRuleDestinationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteTopicRuleDestinationError::ConflictingResourceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteTopicRuleDestinationError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteTopicRuleDestinationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteTopicRuleDestinationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteTopicRuleDestinationError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteTopicRuleDestinationError {}
 /// Errors returned by DeleteV2LoggingLevel
 #[derive(Debug, PartialEq)]
 pub enum DeleteV2LoggingLevelError {
@@ -10878,18 +12540,14 @@ impl DeleteV2LoggingLevelError {
 }
 impl fmt::Display for DeleteV2LoggingLevelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteV2LoggingLevelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteV2LoggingLevelError::Internal(ref cause) => cause,
-            DeleteV2LoggingLevelError::InvalidRequest(ref cause) => cause,
-            DeleteV2LoggingLevelError::ServiceUnavailable(ref cause) => cause,
+            DeleteV2LoggingLevelError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteV2LoggingLevelError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteV2LoggingLevelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteV2LoggingLevelError {}
 /// Errors returned by DeprecateThingType
 #[derive(Debug, PartialEq)]
 pub enum DeprecateThingTypeError {
@@ -10940,21 +12598,17 @@ impl DeprecateThingTypeError {
 }
 impl fmt::Display for DeprecateThingTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeprecateThingTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DeprecateThingTypeError::InternalFailure(ref cause) => cause,
-            DeprecateThingTypeError::InvalidRequest(ref cause) => cause,
-            DeprecateThingTypeError::ResourceNotFound(ref cause) => cause,
-            DeprecateThingTypeError::ServiceUnavailable(ref cause) => cause,
-            DeprecateThingTypeError::Throttling(ref cause) => cause,
-            DeprecateThingTypeError::Unauthorized(ref cause) => cause,
+            DeprecateThingTypeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeprecateThingTypeError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeprecateThingTypeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeprecateThingTypeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeprecateThingTypeError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeprecateThingTypeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeprecateThingTypeError {}
 /// Errors returned by DescribeAccountAuditConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountAuditConfigurationError {
@@ -10989,17 +12643,15 @@ impl DescribeAccountAuditConfigurationError {
 }
 impl fmt::Display for DescribeAccountAuditConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountAuditConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAccountAuditConfigurationError::InternalFailure(ref cause) => cause,
-            DescribeAccountAuditConfigurationError::Throttling(ref cause) => cause,
+            DescribeAccountAuditConfigurationError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAccountAuditConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAccountAuditConfigurationError {}
 /// Errors returned by DescribeAuditFinding
 #[derive(Debug, PartialEq)]
 pub enum DescribeAuditFindingError {
@@ -11042,19 +12694,15 @@ impl DescribeAuditFindingError {
 }
 impl fmt::Display for DescribeAuditFindingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAuditFindingError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAuditFindingError::InternalFailure(ref cause) => cause,
-            DescribeAuditFindingError::InvalidRequest(ref cause) => cause,
-            DescribeAuditFindingError::ResourceNotFound(ref cause) => cause,
-            DescribeAuditFindingError::Throttling(ref cause) => cause,
+            DescribeAuditFindingError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAuditFindingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAuditFindingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAuditFindingError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAuditFindingError {}
 /// Errors returned by DescribeAuditMitigationActionsTask
 #[derive(Debug, PartialEq)]
 pub enum DescribeAuditMitigationActionsTaskError {
@@ -11103,19 +12751,23 @@ impl DescribeAuditMitigationActionsTaskError {
 }
 impl fmt::Display for DescribeAuditMitigationActionsTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAuditMitigationActionsTaskError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAuditMitigationActionsTaskError::InternalFailure(ref cause) => cause,
-            DescribeAuditMitigationActionsTaskError::InvalidRequest(ref cause) => cause,
-            DescribeAuditMitigationActionsTaskError::ResourceNotFound(ref cause) => cause,
-            DescribeAuditMitigationActionsTaskError::Throttling(ref cause) => cause,
+            DescribeAuditMitigationActionsTaskError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAuditMitigationActionsTaskError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAuditMitigationActionsTaskError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAuditMitigationActionsTaskError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAuditMitigationActionsTaskError {}
 /// Errors returned by DescribeAuditTask
 #[derive(Debug, PartialEq)]
 pub enum DescribeAuditTaskError {
@@ -11154,19 +12806,15 @@ impl DescribeAuditTaskError {
 }
 impl fmt::Display for DescribeAuditTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAuditTaskError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAuditTaskError::InternalFailure(ref cause) => cause,
-            DescribeAuditTaskError::InvalidRequest(ref cause) => cause,
-            DescribeAuditTaskError::ResourceNotFound(ref cause) => cause,
-            DescribeAuditTaskError::Throttling(ref cause) => cause,
+            DescribeAuditTaskError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAuditTaskError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAuditTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAuditTaskError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAuditTaskError {}
 /// Errors returned by DescribeAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DescribeAuthorizerError {
@@ -11217,21 +12865,17 @@ impl DescribeAuthorizerError {
 }
 impl fmt::Display for DescribeAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAuthorizerError::InternalFailure(ref cause) => cause,
-            DescribeAuthorizerError::InvalidRequest(ref cause) => cause,
-            DescribeAuthorizerError::ResourceNotFound(ref cause) => cause,
-            DescribeAuthorizerError::ServiceUnavailable(ref cause) => cause,
-            DescribeAuthorizerError::Throttling(ref cause) => cause,
-            DescribeAuthorizerError::Unauthorized(ref cause) => cause,
+            DescribeAuthorizerError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAuthorizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAuthorizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAuthorizerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeAuthorizerError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAuthorizerError {}
 /// Errors returned by DescribeBillingGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeBillingGroupError {
@@ -11274,19 +12918,15 @@ impl DescribeBillingGroupError {
 }
 impl fmt::Display for DescribeBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBillingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBillingGroupError::InternalFailure(ref cause) => cause,
-            DescribeBillingGroupError::InvalidRequest(ref cause) => cause,
-            DescribeBillingGroupError::ResourceNotFound(ref cause) => cause,
-            DescribeBillingGroupError::Throttling(ref cause) => cause,
+            DescribeBillingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeBillingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeBillingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBillingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBillingGroupError {}
 /// Errors returned by DescribeCACertificate
 #[derive(Debug, PartialEq)]
 pub enum DescribeCACertificateError {
@@ -11343,21 +12983,17 @@ impl DescribeCACertificateError {
 }
 impl fmt::Display for DescribeCACertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCACertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCACertificateError::InternalFailure(ref cause) => cause,
-            DescribeCACertificateError::InvalidRequest(ref cause) => cause,
-            DescribeCACertificateError::ResourceNotFound(ref cause) => cause,
-            DescribeCACertificateError::ServiceUnavailable(ref cause) => cause,
-            DescribeCACertificateError::Throttling(ref cause) => cause,
-            DescribeCACertificateError::Unauthorized(ref cause) => cause,
+            DescribeCACertificateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeCACertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeCACertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeCACertificateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeCACertificateError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeCACertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCACertificateError {}
 /// Errors returned by DescribeCertificate
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificateError {
@@ -11410,21 +13046,17 @@ impl DescribeCertificateError {
 }
 impl fmt::Display for DescribeCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCertificateError::InternalFailure(ref cause) => cause,
-            DescribeCertificateError::InvalidRequest(ref cause) => cause,
-            DescribeCertificateError::ResourceNotFound(ref cause) => cause,
-            DescribeCertificateError::ServiceUnavailable(ref cause) => cause,
-            DescribeCertificateError::Throttling(ref cause) => cause,
-            DescribeCertificateError::Unauthorized(ref cause) => cause,
+            DescribeCertificateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeCertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeCertificateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeCertificateError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeCertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCertificateError {}
 /// Errors returned by DescribeDefaultAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DescribeDefaultAuthorizerError {
@@ -11485,21 +13117,84 @@ impl DescribeDefaultAuthorizerError {
 }
 impl fmt::Display for DescribeDefaultAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDefaultAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDefaultAuthorizerError::InternalFailure(ref cause) => cause,
-            DescribeDefaultAuthorizerError::InvalidRequest(ref cause) => cause,
-            DescribeDefaultAuthorizerError::ResourceNotFound(ref cause) => cause,
-            DescribeDefaultAuthorizerError::ServiceUnavailable(ref cause) => cause,
-            DescribeDefaultAuthorizerError::Throttling(ref cause) => cause,
-            DescribeDefaultAuthorizerError::Unauthorized(ref cause) => cause,
+            DescribeDefaultAuthorizerError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeDefaultAuthorizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeDefaultAuthorizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeDefaultAuthorizerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeDefaultAuthorizerError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeDefaultAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDefaultAuthorizerError {}
+/// Errors returned by DescribeDomainConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DescribeDomainConfigurationError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl DescribeDomainConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDomainConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeDomainConfigurationError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeDomainConfigurationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DescribeDomainConfigurationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeDomainConfigurationError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DescribeDomainConfigurationError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeDomainConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeDomainConfigurationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeDomainConfigurationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeDomainConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDomainConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeDomainConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeDomainConfigurationError {}
 /// Errors returned by DescribeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointError {
@@ -11538,19 +13233,15 @@ impl DescribeEndpointError {
 }
 impl fmt::Display for DescribeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEndpointError::InternalFailure(ref cause) => cause,
-            DescribeEndpointError::InvalidRequest(ref cause) => cause,
-            DescribeEndpointError::Throttling(ref cause) => cause,
-            DescribeEndpointError::Unauthorized(ref cause) => cause,
+            DescribeEndpointError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEndpointError {}
 /// Errors returned by DescribeEventConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventConfigurationsError {
@@ -11585,17 +13276,13 @@ impl DescribeEventConfigurationsError {
 }
 impl fmt::Display for DescribeEventConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventConfigurationsError::InternalFailure(ref cause) => cause,
-            DescribeEventConfigurationsError::Throttling(ref cause) => cause,
+            DescribeEventConfigurationsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeEventConfigurationsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEventConfigurationsError {}
 /// Errors returned by DescribeIndex
 #[derive(Debug, PartialEq)]
 pub enum DescribeIndexError {
@@ -11644,21 +13331,17 @@ impl DescribeIndexError {
 }
 impl fmt::Display for DescribeIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeIndexError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeIndexError::InternalFailure(ref cause) => cause,
-            DescribeIndexError::InvalidRequest(ref cause) => cause,
-            DescribeIndexError::ResourceNotFound(ref cause) => cause,
-            DescribeIndexError::ServiceUnavailable(ref cause) => cause,
-            DescribeIndexError::Throttling(ref cause) => cause,
-            DescribeIndexError::Unauthorized(ref cause) => cause,
+            DescribeIndexError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeIndexError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeIndexError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeIndexError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeIndexError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeIndexError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeIndexError {}
 /// Errors returned by DescribeJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobError {
@@ -11697,19 +13380,15 @@ impl DescribeJobError {
 }
 impl fmt::Display for DescribeJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJobError::InvalidRequest(ref cause) => cause,
-            DescribeJobError::ResourceNotFound(ref cause) => cause,
-            DescribeJobError::ServiceUnavailable(ref cause) => cause,
-            DescribeJobError::Throttling(ref cause) => cause,
+            DescribeJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeJobError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJobError {}
 /// Errors returned by DescribeJobExecution
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobExecutionError {
@@ -11752,19 +13431,15 @@ impl DescribeJobExecutionError {
 }
 impl fmt::Display for DescribeJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJobExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJobExecutionError::InvalidRequest(ref cause) => cause,
-            DescribeJobExecutionError::ResourceNotFound(ref cause) => cause,
-            DescribeJobExecutionError::ServiceUnavailable(ref cause) => cause,
-            DescribeJobExecutionError::Throttling(ref cause) => cause,
+            DescribeJobExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeJobExecutionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeJobExecutionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeJobExecutionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJobExecutionError {}
 /// Errors returned by DescribeMitigationAction
 #[derive(Debug, PartialEq)]
 pub enum DescribeMitigationActionError {
@@ -11809,19 +13484,157 @@ impl DescribeMitigationActionError {
 }
 impl fmt::Display for DescribeMitigationActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMitigationActionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMitigationActionError::InternalFailure(ref cause) => cause,
-            DescribeMitigationActionError::InvalidRequest(ref cause) => cause,
-            DescribeMitigationActionError::ResourceNotFound(ref cause) => cause,
-            DescribeMitigationActionError::Throttling(ref cause) => cause,
+            DescribeMitigationActionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeMitigationActionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeMitigationActionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMitigationActionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMitigationActionError {}
+/// Errors returned by DescribeProvisioningTemplate
+#[derive(Debug, PartialEq)]
+pub enum DescribeProvisioningTemplateError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl DescribeProvisioningTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeProvisioningTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        DescribeProvisioningTemplateError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeProvisioningTemplateError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeProvisioningTemplateError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeProvisioningTemplateError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DescribeProvisioningTemplateError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeProvisioningTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeProvisioningTemplateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeProvisioningTemplateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeProvisioningTemplateError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeProvisioningTemplateError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeProvisioningTemplateError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeProvisioningTemplateError {}
+/// Errors returned by DescribeProvisioningTemplateVersion
+#[derive(Debug, PartialEq)]
+pub enum DescribeProvisioningTemplateVersionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl DescribeProvisioningTemplateVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeProvisioningTemplateVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        DescribeProvisioningTemplateVersionError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DescribeProvisioningTemplateVersionError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeProvisioningTemplateVersionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        DescribeProvisioningTemplateVersionError::Throttling(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(
+                        DescribeProvisioningTemplateVersionError::Unauthorized(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeProvisioningTemplateVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeProvisioningTemplateVersionError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeProvisioningTemplateVersionError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeProvisioningTemplateVersionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeProvisioningTemplateVersionError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeProvisioningTemplateVersionError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeProvisioningTemplateVersionError {}
 /// Errors returned by DescribeRoleAlias
 #[derive(Debug, PartialEq)]
 pub enum DescribeRoleAliasError {
@@ -11872,21 +13685,17 @@ impl DescribeRoleAliasError {
 }
 impl fmt::Display for DescribeRoleAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRoleAliasError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRoleAliasError::InternalFailure(ref cause) => cause,
-            DescribeRoleAliasError::InvalidRequest(ref cause) => cause,
-            DescribeRoleAliasError::ResourceNotFound(ref cause) => cause,
-            DescribeRoleAliasError::ServiceUnavailable(ref cause) => cause,
-            DescribeRoleAliasError::Throttling(ref cause) => cause,
-            DescribeRoleAliasError::Unauthorized(ref cause) => cause,
+            DescribeRoleAliasError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeRoleAliasError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeRoleAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRoleAliasError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeRoleAliasError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeRoleAliasError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeRoleAliasError {}
 /// Errors returned by DescribeScheduledAudit
 #[derive(Debug, PartialEq)]
 pub enum DescribeScheduledAuditError {
@@ -11931,19 +13740,15 @@ impl DescribeScheduledAuditError {
 }
 impl fmt::Display for DescribeScheduledAuditError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScheduledAuditError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScheduledAuditError::InternalFailure(ref cause) => cause,
-            DescribeScheduledAuditError::InvalidRequest(ref cause) => cause,
-            DescribeScheduledAuditError::ResourceNotFound(ref cause) => cause,
-            DescribeScheduledAuditError::Throttling(ref cause) => cause,
+            DescribeScheduledAuditError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeScheduledAuditError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeScheduledAuditError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeScheduledAuditError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScheduledAuditError {}
 /// Errors returned by DescribeSecurityProfile
 #[derive(Debug, PartialEq)]
 pub enum DescribeSecurityProfileError {
@@ -11988,19 +13793,15 @@ impl DescribeSecurityProfileError {
 }
 impl fmt::Display for DescribeSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSecurityProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSecurityProfileError::InternalFailure(ref cause) => cause,
-            DescribeSecurityProfileError::InvalidRequest(ref cause) => cause,
-            DescribeSecurityProfileError::ResourceNotFound(ref cause) => cause,
-            DescribeSecurityProfileError::Throttling(ref cause) => cause,
+            DescribeSecurityProfileError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeSecurityProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeSecurityProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeSecurityProfileError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSecurityProfileError {}
 /// Errors returned by DescribeStream
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamError {
@@ -12049,21 +13850,17 @@ impl DescribeStreamError {
 }
 impl fmt::Display for DescribeStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStreamError::InternalFailure(ref cause) => cause,
-            DescribeStreamError::InvalidRequest(ref cause) => cause,
-            DescribeStreamError::ResourceNotFound(ref cause) => cause,
-            DescribeStreamError::ServiceUnavailable(ref cause) => cause,
-            DescribeStreamError::Throttling(ref cause) => cause,
-            DescribeStreamError::Unauthorized(ref cause) => cause,
+            DescribeStreamError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStreamError {}
 /// Errors returned by DescribeThing
 #[derive(Debug, PartialEq)]
 pub enum DescribeThingError {
@@ -12112,21 +13909,17 @@ impl DescribeThingError {
 }
 impl fmt::Display for DescribeThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeThingError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeThingError::InternalFailure(ref cause) => cause,
-            DescribeThingError::InvalidRequest(ref cause) => cause,
-            DescribeThingError::ResourceNotFound(ref cause) => cause,
-            DescribeThingError::ServiceUnavailable(ref cause) => cause,
-            DescribeThingError::Throttling(ref cause) => cause,
-            DescribeThingError::Unauthorized(ref cause) => cause,
+            DescribeThingError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeThingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeThingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeThingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeThingError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeThingError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeThingError {}
 /// Errors returned by DescribeThingGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeThingGroupError {
@@ -12165,19 +13958,15 @@ impl DescribeThingGroupError {
 }
 impl fmt::Display for DescribeThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeThingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeThingGroupError::InternalFailure(ref cause) => cause,
-            DescribeThingGroupError::InvalidRequest(ref cause) => cause,
-            DescribeThingGroupError::ResourceNotFound(ref cause) => cause,
-            DescribeThingGroupError::Throttling(ref cause) => cause,
+            DescribeThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeThingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeThingGroupError {}
 /// Errors returned by DescribeThingRegistrationTask
 #[derive(Debug, PartialEq)]
 pub enum DescribeThingRegistrationTaskError {
@@ -12233,20 +14022,20 @@ impl DescribeThingRegistrationTaskError {
 }
 impl fmt::Display for DescribeThingRegistrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeThingRegistrationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeThingRegistrationTaskError::InternalFailure(ref cause) => cause,
-            DescribeThingRegistrationTaskError::InvalidRequest(ref cause) => cause,
-            DescribeThingRegistrationTaskError::ResourceNotFound(ref cause) => cause,
-            DescribeThingRegistrationTaskError::Throttling(ref cause) => cause,
-            DescribeThingRegistrationTaskError::Unauthorized(ref cause) => cause,
+            DescribeThingRegistrationTaskError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeThingRegistrationTaskError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeThingRegistrationTaskError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeThingRegistrationTaskError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeThingRegistrationTaskError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeThingRegistrationTaskError {}
 /// Errors returned by DescribeThingType
 #[derive(Debug, PartialEq)]
 pub enum DescribeThingTypeError {
@@ -12297,21 +14086,17 @@ impl DescribeThingTypeError {
 }
 impl fmt::Display for DescribeThingTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeThingTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeThingTypeError::InternalFailure(ref cause) => cause,
-            DescribeThingTypeError::InvalidRequest(ref cause) => cause,
-            DescribeThingTypeError::ResourceNotFound(ref cause) => cause,
-            DescribeThingTypeError::ServiceUnavailable(ref cause) => cause,
-            DescribeThingTypeError::Throttling(ref cause) => cause,
-            DescribeThingTypeError::Unauthorized(ref cause) => cause,
+            DescribeThingTypeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeThingTypeError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeThingTypeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeThingTypeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeThingTypeError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeThingTypeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeThingTypeError {}
 /// Errors returned by DetachPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachPolicyError {
@@ -12360,21 +14145,17 @@ impl DetachPolicyError {
 }
 impl fmt::Display for DetachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DetachPolicyError::InternalFailure(ref cause) => cause,
-            DetachPolicyError::InvalidRequest(ref cause) => cause,
-            DetachPolicyError::LimitExceeded(ref cause) => cause,
-            DetachPolicyError::ServiceUnavailable(ref cause) => cause,
-            DetachPolicyError::Throttling(ref cause) => cause,
-            DetachPolicyError::Unauthorized(ref cause) => cause,
+            DetachPolicyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachPolicyError {}
 /// Errors returned by DetachPrincipalPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachPrincipalPolicyError {
@@ -12431,21 +14212,17 @@ impl DetachPrincipalPolicyError {
 }
 impl fmt::Display for DetachPrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachPrincipalPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DetachPrincipalPolicyError::InternalFailure(ref cause) => cause,
-            DetachPrincipalPolicyError::InvalidRequest(ref cause) => cause,
-            DetachPrincipalPolicyError::ResourceNotFound(ref cause) => cause,
-            DetachPrincipalPolicyError::ServiceUnavailable(ref cause) => cause,
-            DetachPrincipalPolicyError::Throttling(ref cause) => cause,
-            DetachPrincipalPolicyError::Unauthorized(ref cause) => cause,
+            DetachPrincipalPolicyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DetachPrincipalPolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetachPrincipalPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DetachPrincipalPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DetachPrincipalPolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+            DetachPrincipalPolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachPrincipalPolicyError {}
 /// Errors returned by DetachSecurityProfile
 #[derive(Debug, PartialEq)]
 pub enum DetachSecurityProfileError {
@@ -12490,19 +14267,15 @@ impl DetachSecurityProfileError {
 }
 impl fmt::Display for DetachSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachSecurityProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DetachSecurityProfileError::InternalFailure(ref cause) => cause,
-            DetachSecurityProfileError::InvalidRequest(ref cause) => cause,
-            DetachSecurityProfileError::ResourceNotFound(ref cause) => cause,
-            DetachSecurityProfileError::Throttling(ref cause) => cause,
+            DetachSecurityProfileError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DetachSecurityProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetachSecurityProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DetachSecurityProfileError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachSecurityProfileError {}
 /// Errors returned by DetachThingPrincipal
 #[derive(Debug, PartialEq)]
 pub enum DetachThingPrincipalError {
@@ -12557,21 +14330,17 @@ impl DetachThingPrincipalError {
 }
 impl fmt::Display for DetachThingPrincipalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachThingPrincipalError {
-    fn description(&self) -> &str {
         match *self {
-            DetachThingPrincipalError::InternalFailure(ref cause) => cause,
-            DetachThingPrincipalError::InvalidRequest(ref cause) => cause,
-            DetachThingPrincipalError::ResourceNotFound(ref cause) => cause,
-            DetachThingPrincipalError::ServiceUnavailable(ref cause) => cause,
-            DetachThingPrincipalError::Throttling(ref cause) => cause,
-            DetachThingPrincipalError::Unauthorized(ref cause) => cause,
+            DetachThingPrincipalError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DetachThingPrincipalError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetachThingPrincipalError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DetachThingPrincipalError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DetachThingPrincipalError::Throttling(ref cause) => write!(f, "{}", cause),
+            DetachThingPrincipalError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachThingPrincipalError {}
 /// Errors returned by DisableTopicRule
 #[derive(Debug, PartialEq)]
 pub enum DisableTopicRuleError {
@@ -12617,20 +14386,16 @@ impl DisableTopicRuleError {
 }
 impl fmt::Display for DisableTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableTopicRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DisableTopicRuleError::ConflictingResourceUpdate(ref cause) => cause,
-            DisableTopicRuleError::Internal(ref cause) => cause,
-            DisableTopicRuleError::InvalidRequest(ref cause) => cause,
-            DisableTopicRuleError::ServiceUnavailable(ref cause) => cause,
-            DisableTopicRuleError::Unauthorized(ref cause) => cause,
+            DisableTopicRuleError::ConflictingResourceUpdate(ref cause) => write!(f, "{}", cause),
+            DisableTopicRuleError::Internal(ref cause) => write!(f, "{}", cause),
+            DisableTopicRuleError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DisableTopicRuleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DisableTopicRuleError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableTopicRuleError {}
 /// Errors returned by EnableTopicRule
 #[derive(Debug, PartialEq)]
 pub enum EnableTopicRuleError {
@@ -12676,20 +14441,93 @@ impl EnableTopicRuleError {
 }
 impl fmt::Display for EnableTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableTopicRuleError {
-    fn description(&self) -> &str {
         match *self {
-            EnableTopicRuleError::ConflictingResourceUpdate(ref cause) => cause,
-            EnableTopicRuleError::Internal(ref cause) => cause,
-            EnableTopicRuleError::InvalidRequest(ref cause) => cause,
-            EnableTopicRuleError::ServiceUnavailable(ref cause) => cause,
-            EnableTopicRuleError::Unauthorized(ref cause) => cause,
+            EnableTopicRuleError::ConflictingResourceUpdate(ref cause) => write!(f, "{}", cause),
+            EnableTopicRuleError::Internal(ref cause) => write!(f, "{}", cause),
+            EnableTopicRuleError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            EnableTopicRuleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            EnableTopicRuleError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableTopicRuleError {}
+/// Errors returned by GetCardinality
+#[derive(Debug, PartialEq)]
+pub enum GetCardinalityError {
+    /// <p>The index is not ready.</p>
+    IndexNotReady(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The aggregation is invalid.</p>
+    InvalidAggregation(String),
+    /// <p>The query is invalid.</p>
+    InvalidQuery(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl GetCardinalityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCardinalityError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "IndexNotReadyException" => {
+                    return RusotoError::Service(GetCardinalityError::IndexNotReady(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetCardinalityError::InternalFailure(err.msg))
+                }
+                "InvalidAggregationException" => {
+                    return RusotoError::Service(GetCardinalityError::InvalidAggregation(err.msg))
+                }
+                "InvalidQueryException" => {
+                    return RusotoError::Service(GetCardinalityError::InvalidQuery(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetCardinalityError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetCardinalityError::ResourceNotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetCardinalityError::ServiceUnavailable(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetCardinalityError::Throttling(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetCardinalityError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetCardinalityError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCardinalityError::IndexNotReady(ref cause) => write!(f, "{}", cause),
+            GetCardinalityError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetCardinalityError::InvalidAggregation(ref cause) => write!(f, "{}", cause),
+            GetCardinalityError::InvalidQuery(ref cause) => write!(f, "{}", cause),
+            GetCardinalityError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetCardinalityError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetCardinalityError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetCardinalityError::Throttling(ref cause) => write!(f, "{}", cause),
+            GetCardinalityError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetCardinalityError {}
 /// Errors returned by GetEffectivePolicies
 #[derive(Debug, PartialEq)]
 pub enum GetEffectivePoliciesError {
@@ -12749,22 +14587,18 @@ impl GetEffectivePoliciesError {
 }
 impl fmt::Display for GetEffectivePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEffectivePoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            GetEffectivePoliciesError::InternalFailure(ref cause) => cause,
-            GetEffectivePoliciesError::InvalidRequest(ref cause) => cause,
-            GetEffectivePoliciesError::LimitExceeded(ref cause) => cause,
-            GetEffectivePoliciesError::ResourceNotFound(ref cause) => cause,
-            GetEffectivePoliciesError::ServiceUnavailable(ref cause) => cause,
-            GetEffectivePoliciesError::Throttling(ref cause) => cause,
-            GetEffectivePoliciesError::Unauthorized(ref cause) => cause,
+            GetEffectivePoliciesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetEffectivePoliciesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetEffectivePoliciesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetEffectivePoliciesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetEffectivePoliciesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetEffectivePoliciesError::Throttling(ref cause) => write!(f, "{}", cause),
+            GetEffectivePoliciesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEffectivePoliciesError {}
 /// Errors returned by GetIndexingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetIndexingConfigurationError {
@@ -12816,20 +14650,16 @@ impl GetIndexingConfigurationError {
 }
 impl fmt::Display for GetIndexingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIndexingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetIndexingConfigurationError::InternalFailure(ref cause) => cause,
-            GetIndexingConfigurationError::InvalidRequest(ref cause) => cause,
-            GetIndexingConfigurationError::ServiceUnavailable(ref cause) => cause,
-            GetIndexingConfigurationError::Throttling(ref cause) => cause,
-            GetIndexingConfigurationError::Unauthorized(ref cause) => cause,
+            GetIndexingConfigurationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetIndexingConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetIndexingConfigurationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetIndexingConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
+            GetIndexingConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetIndexingConfigurationError {}
 /// Errors returned by GetJobDocument
 #[derive(Debug, PartialEq)]
 pub enum GetJobDocumentError {
@@ -12868,19 +14698,15 @@ impl GetJobDocumentError {
 }
 impl fmt::Display for GetJobDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobDocumentError::InvalidRequest(ref cause) => cause,
-            GetJobDocumentError::ResourceNotFound(ref cause) => cause,
-            GetJobDocumentError::ServiceUnavailable(ref cause) => cause,
-            GetJobDocumentError::Throttling(ref cause) => cause,
+            GetJobDocumentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetJobDocumentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetJobDocumentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetJobDocumentError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobDocumentError {}
 /// Errors returned by GetLoggingOptions
 #[derive(Debug, PartialEq)]
 pub enum GetLoggingOptionsError {
@@ -12916,18 +14742,14 @@ impl GetLoggingOptionsError {
 }
 impl fmt::Display for GetLoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoggingOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoggingOptionsError::Internal(ref cause) => cause,
-            GetLoggingOptionsError::InvalidRequest(ref cause) => cause,
-            GetLoggingOptionsError::ServiceUnavailable(ref cause) => cause,
+            GetLoggingOptionsError::Internal(ref cause) => write!(f, "{}", cause),
+            GetLoggingOptionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetLoggingOptionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoggingOptionsError {}
 /// Errors returned by GetOTAUpdate
 #[derive(Debug, PartialEq)]
 pub enum GetOTAUpdateError {
@@ -12976,21 +14798,94 @@ impl GetOTAUpdateError {
 }
 impl fmt::Display for GetOTAUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOTAUpdateError {
-    fn description(&self) -> &str {
         match *self {
-            GetOTAUpdateError::InternalFailure(ref cause) => cause,
-            GetOTAUpdateError::InvalidRequest(ref cause) => cause,
-            GetOTAUpdateError::ResourceNotFound(ref cause) => cause,
-            GetOTAUpdateError::ServiceUnavailable(ref cause) => cause,
-            GetOTAUpdateError::Throttling(ref cause) => cause,
-            GetOTAUpdateError::Unauthorized(ref cause) => cause,
+            GetOTAUpdateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetOTAUpdateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetOTAUpdateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetOTAUpdateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetOTAUpdateError::Throttling(ref cause) => write!(f, "{}", cause),
+            GetOTAUpdateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOTAUpdateError {}
+/// Errors returned by GetPercentiles
+#[derive(Debug, PartialEq)]
+pub enum GetPercentilesError {
+    /// <p>The index is not ready.</p>
+    IndexNotReady(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The aggregation is invalid.</p>
+    InvalidAggregation(String),
+    /// <p>The query is invalid.</p>
+    InvalidQuery(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl GetPercentilesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPercentilesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "IndexNotReadyException" => {
+                    return RusotoError::Service(GetPercentilesError::IndexNotReady(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetPercentilesError::InternalFailure(err.msg))
+                }
+                "InvalidAggregationException" => {
+                    return RusotoError::Service(GetPercentilesError::InvalidAggregation(err.msg))
+                }
+                "InvalidQueryException" => {
+                    return RusotoError::Service(GetPercentilesError::InvalidQuery(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetPercentilesError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetPercentilesError::ResourceNotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetPercentilesError::ServiceUnavailable(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetPercentilesError::Throttling(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetPercentilesError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetPercentilesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetPercentilesError::IndexNotReady(ref cause) => write!(f, "{}", cause),
+            GetPercentilesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetPercentilesError::InvalidAggregation(ref cause) => write!(f, "{}", cause),
+            GetPercentilesError::InvalidQuery(ref cause) => write!(f, "{}", cause),
+            GetPercentilesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetPercentilesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetPercentilesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetPercentilesError::Throttling(ref cause) => write!(f, "{}", cause),
+            GetPercentilesError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetPercentilesError {}
 /// Errors returned by GetPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyError {
@@ -13039,21 +14934,17 @@ impl GetPolicyError {
 }
 impl fmt::Display for GetPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetPolicyError::InternalFailure(ref cause) => cause,
-            GetPolicyError::InvalidRequest(ref cause) => cause,
-            GetPolicyError::ResourceNotFound(ref cause) => cause,
-            GetPolicyError::ServiceUnavailable(ref cause) => cause,
-            GetPolicyError::Throttling(ref cause) => cause,
-            GetPolicyError::Unauthorized(ref cause) => cause,
+            GetPolicyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPolicyError {}
 /// Errors returned by GetPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyVersionError {
@@ -13102,21 +14993,17 @@ impl GetPolicyVersionError {
 }
 impl fmt::Display for GetPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetPolicyVersionError::InternalFailure(ref cause) => cause,
-            GetPolicyVersionError::InvalidRequest(ref cause) => cause,
-            GetPolicyVersionError::ResourceNotFound(ref cause) => cause,
-            GetPolicyVersionError::ServiceUnavailable(ref cause) => cause,
-            GetPolicyVersionError::Throttling(ref cause) => cause,
-            GetPolicyVersionError::Unauthorized(ref cause) => cause,
+            GetPolicyVersionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetPolicyVersionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetPolicyVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetPolicyVersionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetPolicyVersionError::Throttling(ref cause) => write!(f, "{}", cause),
+            GetPolicyVersionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPolicyVersionError {}
 /// Errors returned by GetRegistrationCode
 #[derive(Debug, PartialEq)]
 pub enum GetRegistrationCodeError {
@@ -13162,20 +15049,16 @@ impl GetRegistrationCodeError {
 }
 impl fmt::Display for GetRegistrationCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRegistrationCodeError {
-    fn description(&self) -> &str {
         match *self {
-            GetRegistrationCodeError::InternalFailure(ref cause) => cause,
-            GetRegistrationCodeError::InvalidRequest(ref cause) => cause,
-            GetRegistrationCodeError::ServiceUnavailable(ref cause) => cause,
-            GetRegistrationCodeError::Throttling(ref cause) => cause,
-            GetRegistrationCodeError::Unauthorized(ref cause) => cause,
+            GetRegistrationCodeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetRegistrationCodeError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetRegistrationCodeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetRegistrationCodeError::Throttling(ref cause) => write!(f, "{}", cause),
+            GetRegistrationCodeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRegistrationCodeError {}
 /// Errors returned by GetStatistics
 #[derive(Debug, PartialEq)]
 pub enum GetStatisticsError {
@@ -13239,24 +15122,20 @@ impl GetStatisticsError {
 }
 impl fmt::Display for GetStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStatisticsError {
-    fn description(&self) -> &str {
         match *self {
-            GetStatisticsError::IndexNotReady(ref cause) => cause,
-            GetStatisticsError::InternalFailure(ref cause) => cause,
-            GetStatisticsError::InvalidAggregation(ref cause) => cause,
-            GetStatisticsError::InvalidQuery(ref cause) => cause,
-            GetStatisticsError::InvalidRequest(ref cause) => cause,
-            GetStatisticsError::ResourceNotFound(ref cause) => cause,
-            GetStatisticsError::ServiceUnavailable(ref cause) => cause,
-            GetStatisticsError::Throttling(ref cause) => cause,
-            GetStatisticsError::Unauthorized(ref cause) => cause,
+            GetStatisticsError::IndexNotReady(ref cause) => write!(f, "{}", cause),
+            GetStatisticsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetStatisticsError::InvalidAggregation(ref cause) => write!(f, "{}", cause),
+            GetStatisticsError::InvalidQuery(ref cause) => write!(f, "{}", cause),
+            GetStatisticsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetStatisticsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetStatisticsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetStatisticsError::Throttling(ref cause) => write!(f, "{}", cause),
+            GetStatisticsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetStatisticsError {}
 /// Errors returned by GetTopicRule
 #[derive(Debug, PartialEq)]
 pub enum GetTopicRuleError {
@@ -13295,19 +15174,68 @@ impl GetTopicRuleError {
 }
 impl fmt::Display for GetTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTopicRuleError {
-    fn description(&self) -> &str {
         match *self {
-            GetTopicRuleError::Internal(ref cause) => cause,
-            GetTopicRuleError::InvalidRequest(ref cause) => cause,
-            GetTopicRuleError::ServiceUnavailable(ref cause) => cause,
-            GetTopicRuleError::Unauthorized(ref cause) => cause,
+            GetTopicRuleError::Internal(ref cause) => write!(f, "{}", cause),
+            GetTopicRuleError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetTopicRuleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetTopicRuleError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTopicRuleError {}
+/// Errors returned by GetTopicRuleDestination
+#[derive(Debug, PartialEq)]
+pub enum GetTopicRuleDestinationError {
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl GetTopicRuleDestinationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTopicRuleDestinationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(GetTopicRuleDestinationError::Internal(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetTopicRuleDestinationError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetTopicRuleDestinationError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetTopicRuleDestinationError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetTopicRuleDestinationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetTopicRuleDestinationError::Internal(ref cause) => write!(f, "{}", cause),
+            GetTopicRuleDestinationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetTopicRuleDestinationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetTopicRuleDestinationError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetTopicRuleDestinationError {}
 /// Errors returned by GetV2LoggingOptions
 #[derive(Debug, PartialEq)]
 pub enum GetV2LoggingOptionsError {
@@ -13343,18 +15271,14 @@ impl GetV2LoggingOptionsError {
 }
 impl fmt::Display for GetV2LoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetV2LoggingOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetV2LoggingOptionsError::Internal(ref cause) => cause,
-            GetV2LoggingOptionsError::NotConfigured(ref cause) => cause,
-            GetV2LoggingOptionsError::ServiceUnavailable(ref cause) => cause,
+            GetV2LoggingOptionsError::Internal(ref cause) => write!(f, "{}", cause),
+            GetV2LoggingOptionsError::NotConfigured(ref cause) => write!(f, "{}", cause),
+            GetV2LoggingOptionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetV2LoggingOptionsError {}
 /// Errors returned by ListActiveViolations
 #[derive(Debug, PartialEq)]
 pub enum ListActiveViolationsError {
@@ -13397,19 +15321,15 @@ impl ListActiveViolationsError {
 }
 impl fmt::Display for ListActiveViolationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListActiveViolationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListActiveViolationsError::InternalFailure(ref cause) => cause,
-            ListActiveViolationsError::InvalidRequest(ref cause) => cause,
-            ListActiveViolationsError::ResourceNotFound(ref cause) => cause,
-            ListActiveViolationsError::Throttling(ref cause) => cause,
+            ListActiveViolationsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListActiveViolationsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListActiveViolationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListActiveViolationsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListActiveViolationsError {}
 /// Errors returned by ListAttachedPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedPoliciesError {
@@ -13469,22 +15389,18 @@ impl ListAttachedPoliciesError {
 }
 impl fmt::Display for ListAttachedPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttachedPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttachedPoliciesError::InternalFailure(ref cause) => cause,
-            ListAttachedPoliciesError::InvalidRequest(ref cause) => cause,
-            ListAttachedPoliciesError::LimitExceeded(ref cause) => cause,
-            ListAttachedPoliciesError::ResourceNotFound(ref cause) => cause,
-            ListAttachedPoliciesError::ServiceUnavailable(ref cause) => cause,
-            ListAttachedPoliciesError::Throttling(ref cause) => cause,
-            ListAttachedPoliciesError::Unauthorized(ref cause) => cause,
+            ListAttachedPoliciesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListAttachedPoliciesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListAttachedPoliciesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListAttachedPoliciesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListAttachedPoliciesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListAttachedPoliciesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListAttachedPoliciesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttachedPoliciesError {}
 /// Errors returned by ListAuditFindings
 #[derive(Debug, PartialEq)]
 pub enum ListAuditFindingsError {
@@ -13518,18 +15434,14 @@ impl ListAuditFindingsError {
 }
 impl fmt::Display for ListAuditFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAuditFindingsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAuditFindingsError::InternalFailure(ref cause) => cause,
-            ListAuditFindingsError::InvalidRequest(ref cause) => cause,
-            ListAuditFindingsError::Throttling(ref cause) => cause,
+            ListAuditFindingsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListAuditFindingsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListAuditFindingsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAuditFindingsError {}
 /// Errors returned by ListAuditMitigationActionsExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListAuditMitigationActionsExecutionsError {
@@ -13571,18 +15483,20 @@ impl ListAuditMitigationActionsExecutionsError {
 }
 impl fmt::Display for ListAuditMitigationActionsExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAuditMitigationActionsExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAuditMitigationActionsExecutionsError::InternalFailure(ref cause) => cause,
-            ListAuditMitigationActionsExecutionsError::InvalidRequest(ref cause) => cause,
-            ListAuditMitigationActionsExecutionsError::Throttling(ref cause) => cause,
+            ListAuditMitigationActionsExecutionsError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAuditMitigationActionsExecutionsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAuditMitigationActionsExecutionsError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListAuditMitigationActionsExecutionsError {}
 /// Errors returned by ListAuditMitigationActionsTasks
 #[derive(Debug, PartialEq)]
 pub enum ListAuditMitigationActionsTasksError {
@@ -13624,18 +15538,18 @@ impl ListAuditMitigationActionsTasksError {
 }
 impl fmt::Display for ListAuditMitigationActionsTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAuditMitigationActionsTasksError {
-    fn description(&self) -> &str {
         match *self {
-            ListAuditMitigationActionsTasksError::InternalFailure(ref cause) => cause,
-            ListAuditMitigationActionsTasksError::InvalidRequest(ref cause) => cause,
-            ListAuditMitigationActionsTasksError::Throttling(ref cause) => cause,
+            ListAuditMitigationActionsTasksError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAuditMitigationActionsTasksError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAuditMitigationActionsTasksError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAuditMitigationActionsTasksError {}
 /// Errors returned by ListAuditTasks
 #[derive(Debug, PartialEq)]
 pub enum ListAuditTasksError {
@@ -13669,18 +15583,14 @@ impl ListAuditTasksError {
 }
 impl fmt::Display for ListAuditTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAuditTasksError {
-    fn description(&self) -> &str {
         match *self {
-            ListAuditTasksError::InternalFailure(ref cause) => cause,
-            ListAuditTasksError::InvalidRequest(ref cause) => cause,
-            ListAuditTasksError::Throttling(ref cause) => cause,
+            ListAuditTasksError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListAuditTasksError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListAuditTasksError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAuditTasksError {}
 /// Errors returned by ListAuthorizers
 #[derive(Debug, PartialEq)]
 pub enum ListAuthorizersError {
@@ -13724,20 +15634,16 @@ impl ListAuthorizersError {
 }
 impl fmt::Display for ListAuthorizersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAuthorizersError {
-    fn description(&self) -> &str {
         match *self {
-            ListAuthorizersError::InternalFailure(ref cause) => cause,
-            ListAuthorizersError::InvalidRequest(ref cause) => cause,
-            ListAuthorizersError::ServiceUnavailable(ref cause) => cause,
-            ListAuthorizersError::Throttling(ref cause) => cause,
-            ListAuthorizersError::Unauthorized(ref cause) => cause,
+            ListAuthorizersError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListAuthorizersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListAuthorizersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListAuthorizersError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListAuthorizersError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAuthorizersError {}
 /// Errors returned by ListBillingGroups
 #[derive(Debug, PartialEq)]
 pub enum ListBillingGroupsError {
@@ -13776,19 +15682,15 @@ impl ListBillingGroupsError {
 }
 impl fmt::Display for ListBillingGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBillingGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBillingGroupsError::InternalFailure(ref cause) => cause,
-            ListBillingGroupsError::InvalidRequest(ref cause) => cause,
-            ListBillingGroupsError::ResourceNotFound(ref cause) => cause,
-            ListBillingGroupsError::Throttling(ref cause) => cause,
+            ListBillingGroupsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListBillingGroupsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListBillingGroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListBillingGroupsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBillingGroupsError {}
 /// Errors returned by ListCACertificates
 #[derive(Debug, PartialEq)]
 pub enum ListCACertificatesError {
@@ -13834,20 +15736,16 @@ impl ListCACertificatesError {
 }
 impl fmt::Display for ListCACertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCACertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListCACertificatesError::InternalFailure(ref cause) => cause,
-            ListCACertificatesError::InvalidRequest(ref cause) => cause,
-            ListCACertificatesError::ServiceUnavailable(ref cause) => cause,
-            ListCACertificatesError::Throttling(ref cause) => cause,
-            ListCACertificatesError::Unauthorized(ref cause) => cause,
+            ListCACertificatesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListCACertificatesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListCACertificatesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListCACertificatesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListCACertificatesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCACertificatesError {}
 /// Errors returned by ListCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListCertificatesError {
@@ -13891,20 +15789,16 @@ impl ListCertificatesError {
 }
 impl fmt::Display for ListCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListCertificatesError::InternalFailure(ref cause) => cause,
-            ListCertificatesError::InvalidRequest(ref cause) => cause,
-            ListCertificatesError::ServiceUnavailable(ref cause) => cause,
-            ListCertificatesError::Throttling(ref cause) => cause,
-            ListCertificatesError::Unauthorized(ref cause) => cause,
+            ListCertificatesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListCertificatesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListCertificatesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListCertificatesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListCertificatesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCertificatesError {}
 /// Errors returned by ListCertificatesByCA
 #[derive(Debug, PartialEq)]
 pub enum ListCertificatesByCAError {
@@ -13952,20 +15846,77 @@ impl ListCertificatesByCAError {
 }
 impl fmt::Display for ListCertificatesByCAError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCertificatesByCAError {
-    fn description(&self) -> &str {
         match *self {
-            ListCertificatesByCAError::InternalFailure(ref cause) => cause,
-            ListCertificatesByCAError::InvalidRequest(ref cause) => cause,
-            ListCertificatesByCAError::ServiceUnavailable(ref cause) => cause,
-            ListCertificatesByCAError::Throttling(ref cause) => cause,
-            ListCertificatesByCAError::Unauthorized(ref cause) => cause,
+            ListCertificatesByCAError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListCertificatesByCAError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListCertificatesByCAError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListCertificatesByCAError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListCertificatesByCAError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCertificatesByCAError {}
+/// Errors returned by ListDomainConfigurations
+#[derive(Debug, PartialEq)]
+pub enum ListDomainConfigurationsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl ListDomainConfigurationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainConfigurationsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListDomainConfigurationsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListDomainConfigurationsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListDomainConfigurationsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListDomainConfigurationsError::Throttling(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListDomainConfigurationsError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListDomainConfigurationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDomainConfigurationsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListDomainConfigurationsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDomainConfigurationsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListDomainConfigurationsError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListDomainConfigurationsError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListDomainConfigurationsError {}
 /// Errors returned by ListIndices
 #[derive(Debug, PartialEq)]
 pub enum ListIndicesError {
@@ -14009,20 +15960,16 @@ impl ListIndicesError {
 }
 impl fmt::Display for ListIndicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListIndicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListIndicesError::InternalFailure(ref cause) => cause,
-            ListIndicesError::InvalidRequest(ref cause) => cause,
-            ListIndicesError::ServiceUnavailable(ref cause) => cause,
-            ListIndicesError::Throttling(ref cause) => cause,
-            ListIndicesError::Unauthorized(ref cause) => cause,
+            ListIndicesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListIndicesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListIndicesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListIndicesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListIndicesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListIndicesError {}
 /// Errors returned by ListJobExecutionsForJob
 #[derive(Debug, PartialEq)]
 pub enum ListJobExecutionsForJobError {
@@ -14067,19 +16014,15 @@ impl ListJobExecutionsForJobError {
 }
 impl fmt::Display for ListJobExecutionsForJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobExecutionsForJobError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobExecutionsForJobError::InvalidRequest(ref cause) => cause,
-            ListJobExecutionsForJobError::ResourceNotFound(ref cause) => cause,
-            ListJobExecutionsForJobError::ServiceUnavailable(ref cause) => cause,
-            ListJobExecutionsForJobError::Throttling(ref cause) => cause,
+            ListJobExecutionsForJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListJobExecutionsForJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListJobExecutionsForJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListJobExecutionsForJobError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobExecutionsForJobError {}
 /// Errors returned by ListJobExecutionsForThing
 #[derive(Debug, PartialEq)]
 pub enum ListJobExecutionsForThingError {
@@ -14126,19 +16069,15 @@ impl ListJobExecutionsForThingError {
 }
 impl fmt::Display for ListJobExecutionsForThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobExecutionsForThingError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobExecutionsForThingError::InvalidRequest(ref cause) => cause,
-            ListJobExecutionsForThingError::ResourceNotFound(ref cause) => cause,
-            ListJobExecutionsForThingError::ServiceUnavailable(ref cause) => cause,
-            ListJobExecutionsForThingError::Throttling(ref cause) => cause,
+            ListJobExecutionsForThingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListJobExecutionsForThingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListJobExecutionsForThingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListJobExecutionsForThingError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobExecutionsForThingError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -14177,19 +16116,15 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsError::InvalidRequest(ref cause) => cause,
-            ListJobsError::ResourceNotFound(ref cause) => cause,
-            ListJobsError::ServiceUnavailable(ref cause) => cause,
-            ListJobsError::Throttling(ref cause) => cause,
+            ListJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListJobsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListJobsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListJobsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsError {}
 /// Errors returned by ListMitigationActions
 #[derive(Debug, PartialEq)]
 pub enum ListMitigationActionsError {
@@ -14227,18 +16162,14 @@ impl ListMitigationActionsError {
 }
 impl fmt::Display for ListMitigationActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMitigationActionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListMitigationActionsError::InternalFailure(ref cause) => cause,
-            ListMitigationActionsError::InvalidRequest(ref cause) => cause,
-            ListMitigationActionsError::Throttling(ref cause) => cause,
+            ListMitigationActionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListMitigationActionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListMitigationActionsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMitigationActionsError {}
 /// Errors returned by ListOTAUpdates
 #[derive(Debug, PartialEq)]
 pub enum ListOTAUpdatesError {
@@ -14282,20 +16213,16 @@ impl ListOTAUpdatesError {
 }
 impl fmt::Display for ListOTAUpdatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOTAUpdatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListOTAUpdatesError::InternalFailure(ref cause) => cause,
-            ListOTAUpdatesError::InvalidRequest(ref cause) => cause,
-            ListOTAUpdatesError::ServiceUnavailable(ref cause) => cause,
-            ListOTAUpdatesError::Throttling(ref cause) => cause,
-            ListOTAUpdatesError::Unauthorized(ref cause) => cause,
+            ListOTAUpdatesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListOTAUpdatesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListOTAUpdatesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListOTAUpdatesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListOTAUpdatesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOTAUpdatesError {}
 /// Errors returned by ListOutgoingCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListOutgoingCertificatesError {
@@ -14347,20 +16274,16 @@ impl ListOutgoingCertificatesError {
 }
 impl fmt::Display for ListOutgoingCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOutgoingCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListOutgoingCertificatesError::InternalFailure(ref cause) => cause,
-            ListOutgoingCertificatesError::InvalidRequest(ref cause) => cause,
-            ListOutgoingCertificatesError::ServiceUnavailable(ref cause) => cause,
-            ListOutgoingCertificatesError::Throttling(ref cause) => cause,
-            ListOutgoingCertificatesError::Unauthorized(ref cause) => cause,
+            ListOutgoingCertificatesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListOutgoingCertificatesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListOutgoingCertificatesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListOutgoingCertificatesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListOutgoingCertificatesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOutgoingCertificatesError {}
 /// Errors returned by ListPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListPoliciesError {
@@ -14404,20 +16327,16 @@ impl ListPoliciesError {
 }
 impl fmt::Display for ListPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListPoliciesError::InternalFailure(ref cause) => cause,
-            ListPoliciesError::InvalidRequest(ref cause) => cause,
-            ListPoliciesError::ServiceUnavailable(ref cause) => cause,
-            ListPoliciesError::Throttling(ref cause) => cause,
-            ListPoliciesError::Unauthorized(ref cause) => cause,
+            ListPoliciesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListPoliciesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPoliciesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListPoliciesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListPoliciesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPoliciesError {}
 /// Errors returned by ListPolicyPrincipals
 #[derive(Debug, PartialEq)]
 pub enum ListPolicyPrincipalsError {
@@ -14472,21 +16391,17 @@ impl ListPolicyPrincipalsError {
 }
 impl fmt::Display for ListPolicyPrincipalsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPolicyPrincipalsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPolicyPrincipalsError::InternalFailure(ref cause) => cause,
-            ListPolicyPrincipalsError::InvalidRequest(ref cause) => cause,
-            ListPolicyPrincipalsError::ResourceNotFound(ref cause) => cause,
-            ListPolicyPrincipalsError::ServiceUnavailable(ref cause) => cause,
-            ListPolicyPrincipalsError::Throttling(ref cause) => cause,
-            ListPolicyPrincipalsError::Unauthorized(ref cause) => cause,
+            ListPolicyPrincipalsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListPolicyPrincipalsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPolicyPrincipalsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListPolicyPrincipalsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListPolicyPrincipalsError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListPolicyPrincipalsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPolicyPrincipalsError {}
 /// Errors returned by ListPolicyVersions
 #[derive(Debug, PartialEq)]
 pub enum ListPolicyVersionsError {
@@ -14537,21 +16452,17 @@ impl ListPolicyVersionsError {
 }
 impl fmt::Display for ListPolicyVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPolicyVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPolicyVersionsError::InternalFailure(ref cause) => cause,
-            ListPolicyVersionsError::InvalidRequest(ref cause) => cause,
-            ListPolicyVersionsError::ResourceNotFound(ref cause) => cause,
-            ListPolicyVersionsError::ServiceUnavailable(ref cause) => cause,
-            ListPolicyVersionsError::Throttling(ref cause) => cause,
-            ListPolicyVersionsError::Unauthorized(ref cause) => cause,
+            ListPolicyVersionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListPolicyVersionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPolicyVersionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListPolicyVersionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListPolicyVersionsError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListPolicyVersionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPolicyVersionsError {}
 /// Errors returned by ListPrincipalPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListPrincipalPoliciesError {
@@ -14608,21 +16519,17 @@ impl ListPrincipalPoliciesError {
 }
 impl fmt::Display for ListPrincipalPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPrincipalPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListPrincipalPoliciesError::InternalFailure(ref cause) => cause,
-            ListPrincipalPoliciesError::InvalidRequest(ref cause) => cause,
-            ListPrincipalPoliciesError::ResourceNotFound(ref cause) => cause,
-            ListPrincipalPoliciesError::ServiceUnavailable(ref cause) => cause,
-            ListPrincipalPoliciesError::Throttling(ref cause) => cause,
-            ListPrincipalPoliciesError::Unauthorized(ref cause) => cause,
+            ListPrincipalPoliciesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListPrincipalPoliciesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPrincipalPoliciesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListPrincipalPoliciesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListPrincipalPoliciesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListPrincipalPoliciesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPrincipalPoliciesError {}
 /// Errors returned by ListPrincipalThings
 #[derive(Debug, PartialEq)]
 pub enum ListPrincipalThingsError {
@@ -14675,21 +16582,145 @@ impl ListPrincipalThingsError {
 }
 impl fmt::Display for ListPrincipalThingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPrincipalThingsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPrincipalThingsError::InternalFailure(ref cause) => cause,
-            ListPrincipalThingsError::InvalidRequest(ref cause) => cause,
-            ListPrincipalThingsError::ResourceNotFound(ref cause) => cause,
-            ListPrincipalThingsError::ServiceUnavailable(ref cause) => cause,
-            ListPrincipalThingsError::Throttling(ref cause) => cause,
-            ListPrincipalThingsError::Unauthorized(ref cause) => cause,
+            ListPrincipalThingsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListPrincipalThingsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPrincipalThingsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListPrincipalThingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListPrincipalThingsError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListPrincipalThingsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPrincipalThingsError {}
+/// Errors returned by ListProvisioningTemplateVersions
+#[derive(Debug, PartialEq)]
+pub enum ListProvisioningTemplateVersionsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl ListProvisioningTemplateVersionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListProvisioningTemplateVersionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        ListProvisioningTemplateVersionsError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        ListProvisioningTemplateVersionsError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListProvisioningTemplateVersionsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListProvisioningTemplateVersionsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(
+                        ListProvisioningTemplateVersionsError::Unauthorized(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListProvisioningTemplateVersionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListProvisioningTemplateVersionsError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListProvisioningTemplateVersionsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListProvisioningTemplateVersionsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListProvisioningTemplateVersionsError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListProvisioningTemplateVersionsError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListProvisioningTemplateVersionsError {}
+/// Errors returned by ListProvisioningTemplates
+#[derive(Debug, PartialEq)]
+pub enum ListProvisioningTemplatesError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl ListProvisioningTemplatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProvisioningTemplatesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListProvisioningTemplatesError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListProvisioningTemplatesError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListProvisioningTemplatesError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListProvisioningTemplatesError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListProvisioningTemplatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListProvisioningTemplatesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListProvisioningTemplatesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListProvisioningTemplatesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListProvisioningTemplatesError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListProvisioningTemplatesError {}
 /// Errors returned by ListRoleAliases
 #[derive(Debug, PartialEq)]
 pub enum ListRoleAliasesError {
@@ -14733,20 +16764,16 @@ impl ListRoleAliasesError {
 }
 impl fmt::Display for ListRoleAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRoleAliasesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRoleAliasesError::InternalFailure(ref cause) => cause,
-            ListRoleAliasesError::InvalidRequest(ref cause) => cause,
-            ListRoleAliasesError::ServiceUnavailable(ref cause) => cause,
-            ListRoleAliasesError::Throttling(ref cause) => cause,
-            ListRoleAliasesError::Unauthorized(ref cause) => cause,
+            ListRoleAliasesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListRoleAliasesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListRoleAliasesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListRoleAliasesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListRoleAliasesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRoleAliasesError {}
 /// Errors returned by ListScheduledAudits
 #[derive(Debug, PartialEq)]
 pub enum ListScheduledAuditsError {
@@ -14780,18 +16807,14 @@ impl ListScheduledAuditsError {
 }
 impl fmt::Display for ListScheduledAuditsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListScheduledAuditsError {
-    fn description(&self) -> &str {
         match *self {
-            ListScheduledAuditsError::InternalFailure(ref cause) => cause,
-            ListScheduledAuditsError::InvalidRequest(ref cause) => cause,
-            ListScheduledAuditsError::Throttling(ref cause) => cause,
+            ListScheduledAuditsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListScheduledAuditsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListScheduledAuditsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListScheduledAuditsError {}
 /// Errors returned by ListSecurityProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListSecurityProfilesError {
@@ -14827,18 +16850,14 @@ impl ListSecurityProfilesError {
 }
 impl fmt::Display for ListSecurityProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSecurityProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListSecurityProfilesError::InternalFailure(ref cause) => cause,
-            ListSecurityProfilesError::InvalidRequest(ref cause) => cause,
-            ListSecurityProfilesError::Throttling(ref cause) => cause,
+            ListSecurityProfilesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListSecurityProfilesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListSecurityProfilesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSecurityProfilesError {}
 /// Errors returned by ListSecurityProfilesForTarget
 #[derive(Debug, PartialEq)]
 pub enum ListSecurityProfilesForTargetError {
@@ -14887,19 +16906,19 @@ impl ListSecurityProfilesForTargetError {
 }
 impl fmt::Display for ListSecurityProfilesForTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSecurityProfilesForTargetError {
-    fn description(&self) -> &str {
         match *self {
-            ListSecurityProfilesForTargetError::InternalFailure(ref cause) => cause,
-            ListSecurityProfilesForTargetError::InvalidRequest(ref cause) => cause,
-            ListSecurityProfilesForTargetError::ResourceNotFound(ref cause) => cause,
-            ListSecurityProfilesForTargetError::Throttling(ref cause) => cause,
+            ListSecurityProfilesForTargetError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListSecurityProfilesForTargetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListSecurityProfilesForTargetError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListSecurityProfilesForTargetError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSecurityProfilesForTargetError {}
 /// Errors returned by ListStreams
 #[derive(Debug, PartialEq)]
 pub enum ListStreamsError {
@@ -14943,20 +16962,16 @@ impl ListStreamsError {
 }
 impl fmt::Display for ListStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStreamsError::InternalFailure(ref cause) => cause,
-            ListStreamsError::InvalidRequest(ref cause) => cause,
-            ListStreamsError::ServiceUnavailable(ref cause) => cause,
-            ListStreamsError::Throttling(ref cause) => cause,
-            ListStreamsError::Unauthorized(ref cause) => cause,
+            ListStreamsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListStreamsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListStreamsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListStreamsError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListStreamsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStreamsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -14997,19 +17012,15 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalFailure(ref cause) => cause,
-            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::Throttling(ref cause) => cause,
+            ListTagsForResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTargetsForPolicy
 #[derive(Debug, PartialEq)]
 pub enum ListTargetsForPolicyError {
@@ -15069,22 +17080,18 @@ impl ListTargetsForPolicyError {
 }
 impl fmt::Display for ListTargetsForPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTargetsForPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            ListTargetsForPolicyError::InternalFailure(ref cause) => cause,
-            ListTargetsForPolicyError::InvalidRequest(ref cause) => cause,
-            ListTargetsForPolicyError::LimitExceeded(ref cause) => cause,
-            ListTargetsForPolicyError::ResourceNotFound(ref cause) => cause,
-            ListTargetsForPolicyError::ServiceUnavailable(ref cause) => cause,
-            ListTargetsForPolicyError::Throttling(ref cause) => cause,
-            ListTargetsForPolicyError::Unauthorized(ref cause) => cause,
+            ListTargetsForPolicyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTargetsForPolicyError {}
 /// Errors returned by ListTargetsForSecurityProfile
 #[derive(Debug, PartialEq)]
 pub enum ListTargetsForSecurityProfileError {
@@ -15133,19 +17140,19 @@ impl ListTargetsForSecurityProfileError {
 }
 impl fmt::Display for ListTargetsForSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTargetsForSecurityProfileError {
-    fn description(&self) -> &str {
         match *self {
-            ListTargetsForSecurityProfileError::InternalFailure(ref cause) => cause,
-            ListTargetsForSecurityProfileError::InvalidRequest(ref cause) => cause,
-            ListTargetsForSecurityProfileError::ResourceNotFound(ref cause) => cause,
-            ListTargetsForSecurityProfileError::Throttling(ref cause) => cause,
+            ListTargetsForSecurityProfileError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTargetsForSecurityProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTargetsForSecurityProfileError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTargetsForSecurityProfileError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTargetsForSecurityProfileError {}
 /// Errors returned by ListThingGroups
 #[derive(Debug, PartialEq)]
 pub enum ListThingGroupsError {
@@ -15179,18 +17186,14 @@ impl ListThingGroupsError {
 }
 impl fmt::Display for ListThingGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListThingGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListThingGroupsError::InternalFailure(ref cause) => cause,
-            ListThingGroupsError::InvalidRequest(ref cause) => cause,
-            ListThingGroupsError::ResourceNotFound(ref cause) => cause,
+            ListThingGroupsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThingGroupsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListThingGroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListThingGroupsError {}
 /// Errors returned by ListThingGroupsForThing
 #[derive(Debug, PartialEq)]
 pub enum ListThingGroupsForThingError {
@@ -15230,18 +17233,14 @@ impl ListThingGroupsForThingError {
 }
 impl fmt::Display for ListThingGroupsForThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListThingGroupsForThingError {
-    fn description(&self) -> &str {
         match *self {
-            ListThingGroupsForThingError::InternalFailure(ref cause) => cause,
-            ListThingGroupsForThingError::InvalidRequest(ref cause) => cause,
-            ListThingGroupsForThingError::ResourceNotFound(ref cause) => cause,
+            ListThingGroupsForThingError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThingGroupsForThingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListThingGroupsForThingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListThingGroupsForThingError {}
 /// Errors returned by ListThingPrincipals
 #[derive(Debug, PartialEq)]
 pub enum ListThingPrincipalsError {
@@ -15294,21 +17293,17 @@ impl ListThingPrincipalsError {
 }
 impl fmt::Display for ListThingPrincipalsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListThingPrincipalsError {
-    fn description(&self) -> &str {
         match *self {
-            ListThingPrincipalsError::InternalFailure(ref cause) => cause,
-            ListThingPrincipalsError::InvalidRequest(ref cause) => cause,
-            ListThingPrincipalsError::ResourceNotFound(ref cause) => cause,
-            ListThingPrincipalsError::ServiceUnavailable(ref cause) => cause,
-            ListThingPrincipalsError::Throttling(ref cause) => cause,
-            ListThingPrincipalsError::Unauthorized(ref cause) => cause,
+            ListThingPrincipalsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThingPrincipalsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListThingPrincipalsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThingPrincipalsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListThingPrincipalsError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListThingPrincipalsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListThingPrincipalsError {}
 /// Errors returned by ListThingRegistrationTaskReports
 #[derive(Debug, PartialEq)]
 pub enum ListThingRegistrationTaskReportsError {
@@ -15357,19 +17352,21 @@ impl ListThingRegistrationTaskReportsError {
 }
 impl fmt::Display for ListThingRegistrationTaskReportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListThingRegistrationTaskReportsError {
-    fn description(&self) -> &str {
         match *self {
-            ListThingRegistrationTaskReportsError::InternalFailure(ref cause) => cause,
-            ListThingRegistrationTaskReportsError::InvalidRequest(ref cause) => cause,
-            ListThingRegistrationTaskReportsError::Throttling(ref cause) => cause,
-            ListThingRegistrationTaskReportsError::Unauthorized(ref cause) => cause,
+            ListThingRegistrationTaskReportsError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListThingRegistrationTaskReportsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListThingRegistrationTaskReportsError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListThingRegistrationTaskReportsError::Unauthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListThingRegistrationTaskReportsError {}
 /// Errors returned by ListThingRegistrationTasks
 #[derive(Debug, PartialEq)]
 pub enum ListThingRegistrationTasksError {
@@ -15418,19 +17415,15 @@ impl ListThingRegistrationTasksError {
 }
 impl fmt::Display for ListThingRegistrationTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListThingRegistrationTasksError {
-    fn description(&self) -> &str {
         match *self {
-            ListThingRegistrationTasksError::InternalFailure(ref cause) => cause,
-            ListThingRegistrationTasksError::InvalidRequest(ref cause) => cause,
-            ListThingRegistrationTasksError::Throttling(ref cause) => cause,
-            ListThingRegistrationTasksError::Unauthorized(ref cause) => cause,
+            ListThingRegistrationTasksError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThingRegistrationTasksError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListThingRegistrationTasksError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListThingRegistrationTasksError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListThingRegistrationTasksError {}
 /// Errors returned by ListThingTypes
 #[derive(Debug, PartialEq)]
 pub enum ListThingTypesError {
@@ -15474,20 +17467,16 @@ impl ListThingTypesError {
 }
 impl fmt::Display for ListThingTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListThingTypesError {
-    fn description(&self) -> &str {
         match *self {
-            ListThingTypesError::InternalFailure(ref cause) => cause,
-            ListThingTypesError::InvalidRequest(ref cause) => cause,
-            ListThingTypesError::ServiceUnavailable(ref cause) => cause,
-            ListThingTypesError::Throttling(ref cause) => cause,
-            ListThingTypesError::Unauthorized(ref cause) => cause,
+            ListThingTypesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThingTypesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListThingTypesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListThingTypesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListThingTypesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListThingTypesError {}
 /// Errors returned by ListThings
 #[derive(Debug, PartialEq)]
 pub enum ListThingsError {
@@ -15531,20 +17520,16 @@ impl ListThingsError {
 }
 impl fmt::Display for ListThingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListThingsError {
-    fn description(&self) -> &str {
         match *self {
-            ListThingsError::InternalFailure(ref cause) => cause,
-            ListThingsError::InvalidRequest(ref cause) => cause,
-            ListThingsError::ServiceUnavailable(ref cause) => cause,
-            ListThingsError::Throttling(ref cause) => cause,
-            ListThingsError::Unauthorized(ref cause) => cause,
+            ListThingsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThingsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListThingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListThingsError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListThingsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListThingsError {}
 /// Errors returned by ListThingsInBillingGroup
 #[derive(Debug, PartialEq)]
 pub enum ListThingsInBillingGroupError {
@@ -15589,19 +17574,15 @@ impl ListThingsInBillingGroupError {
 }
 impl fmt::Display for ListThingsInBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListThingsInBillingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ListThingsInBillingGroupError::InternalFailure(ref cause) => cause,
-            ListThingsInBillingGroupError::InvalidRequest(ref cause) => cause,
-            ListThingsInBillingGroupError::ResourceNotFound(ref cause) => cause,
-            ListThingsInBillingGroupError::Throttling(ref cause) => cause,
+            ListThingsInBillingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThingsInBillingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListThingsInBillingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThingsInBillingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListThingsInBillingGroupError {}
 /// Errors returned by ListThingsInThingGroup
 #[derive(Debug, PartialEq)]
 pub enum ListThingsInThingGroupError {
@@ -15641,18 +17622,67 @@ impl ListThingsInThingGroupError {
 }
 impl fmt::Display for ListThingsInThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListThingsInThingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ListThingsInThingGroupError::InternalFailure(ref cause) => cause,
-            ListThingsInThingGroupError::InvalidRequest(ref cause) => cause,
-            ListThingsInThingGroupError::ResourceNotFound(ref cause) => cause,
+            ListThingsInThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThingsInThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListThingsInThingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListThingsInThingGroupError {}
+/// Errors returned by ListTopicRuleDestinations
+#[derive(Debug, PartialEq)]
+pub enum ListTopicRuleDestinationsError {
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl ListTopicRuleDestinationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTopicRuleDestinationsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(ListTopicRuleDestinationsError::Internal(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListTopicRuleDestinationsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        ListTopicRuleDestinationsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListTopicRuleDestinationsError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTopicRuleDestinationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTopicRuleDestinationsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListTopicRuleDestinationsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTopicRuleDestinationsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListTopicRuleDestinationsError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTopicRuleDestinationsError {}
 /// Errors returned by ListTopicRules
 #[derive(Debug, PartialEq)]
 pub enum ListTopicRulesError {
@@ -15686,18 +17716,14 @@ impl ListTopicRulesError {
 }
 impl fmt::Display for ListTopicRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTopicRulesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTopicRulesError::Internal(ref cause) => cause,
-            ListTopicRulesError::InvalidRequest(ref cause) => cause,
-            ListTopicRulesError::ServiceUnavailable(ref cause) => cause,
+            ListTopicRulesError::Internal(ref cause) => write!(f, "{}", cause),
+            ListTopicRulesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTopicRulesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTopicRulesError {}
 /// Errors returned by ListV2LoggingLevels
 #[derive(Debug, PartialEq)]
 pub enum ListV2LoggingLevelsError {
@@ -15738,19 +17764,15 @@ impl ListV2LoggingLevelsError {
 }
 impl fmt::Display for ListV2LoggingLevelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListV2LoggingLevelsError {
-    fn description(&self) -> &str {
         match *self {
-            ListV2LoggingLevelsError::Internal(ref cause) => cause,
-            ListV2LoggingLevelsError::InvalidRequest(ref cause) => cause,
-            ListV2LoggingLevelsError::NotConfigured(ref cause) => cause,
-            ListV2LoggingLevelsError::ServiceUnavailable(ref cause) => cause,
+            ListV2LoggingLevelsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListV2LoggingLevelsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListV2LoggingLevelsError::NotConfigured(ref cause) => write!(f, "{}", cause),
+            ListV2LoggingLevelsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListV2LoggingLevelsError {}
 /// Errors returned by ListViolationEvents
 #[derive(Debug, PartialEq)]
 pub enum ListViolationEventsError {
@@ -15784,18 +17806,14 @@ impl ListViolationEventsError {
 }
 impl fmt::Display for ListViolationEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListViolationEventsError {
-    fn description(&self) -> &str {
         match *self {
-            ListViolationEventsError::InternalFailure(ref cause) => cause,
-            ListViolationEventsError::InvalidRequest(ref cause) => cause,
-            ListViolationEventsError::Throttling(ref cause) => cause,
+            ListViolationEventsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListViolationEventsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListViolationEventsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListViolationEventsError {}
 /// Errors returned by RegisterCACertificate
 #[derive(Debug, PartialEq)]
 pub enum RegisterCACertificateError {
@@ -15871,24 +17889,22 @@ impl RegisterCACertificateError {
 }
 impl fmt::Display for RegisterCACertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterCACertificateError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterCACertificateError::CertificateValidation(ref cause) => cause,
-            RegisterCACertificateError::InternalFailure(ref cause) => cause,
-            RegisterCACertificateError::InvalidRequest(ref cause) => cause,
-            RegisterCACertificateError::LimitExceeded(ref cause) => cause,
-            RegisterCACertificateError::RegistrationCodeValidation(ref cause) => cause,
-            RegisterCACertificateError::ResourceAlreadyExists(ref cause) => cause,
-            RegisterCACertificateError::ServiceUnavailable(ref cause) => cause,
-            RegisterCACertificateError::Throttling(ref cause) => cause,
-            RegisterCACertificateError::Unauthorized(ref cause) => cause,
+            RegisterCACertificateError::CertificateValidation(ref cause) => write!(f, "{}", cause),
+            RegisterCACertificateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            RegisterCACertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RegisterCACertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RegisterCACertificateError::RegistrationCodeValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterCACertificateError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            RegisterCACertificateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RegisterCACertificateError::Throttling(ref cause) => write!(f, "{}", cause),
+            RegisterCACertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterCACertificateError {}
 /// Errors returned by RegisterCertificate
 #[derive(Debug, PartialEq)]
 pub enum RegisterCertificateError {
@@ -15962,24 +17978,20 @@ impl RegisterCertificateError {
 }
 impl fmt::Display for RegisterCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterCertificateError::CertificateConflict(ref cause) => cause,
-            RegisterCertificateError::CertificateState(ref cause) => cause,
-            RegisterCertificateError::CertificateValidation(ref cause) => cause,
-            RegisterCertificateError::InternalFailure(ref cause) => cause,
-            RegisterCertificateError::InvalidRequest(ref cause) => cause,
-            RegisterCertificateError::ResourceAlreadyExists(ref cause) => cause,
-            RegisterCertificateError::ServiceUnavailable(ref cause) => cause,
-            RegisterCertificateError::Throttling(ref cause) => cause,
-            RegisterCertificateError::Unauthorized(ref cause) => cause,
+            RegisterCertificateError::CertificateConflict(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateError::CertificateState(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateError::CertificateValidation(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateError::Throttling(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterCertificateError {}
 /// Errors returned by RegisterThing
 #[derive(Debug, PartialEq)]
 pub enum RegisterThingError {
@@ -16037,22 +18049,18 @@ impl RegisterThingError {
 }
 impl fmt::Display for RegisterThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterThingError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterThingError::ConflictingResourceUpdate(ref cause) => cause,
-            RegisterThingError::InternalFailure(ref cause) => cause,
-            RegisterThingError::InvalidRequest(ref cause) => cause,
-            RegisterThingError::ResourceRegistrationFailure(ref cause) => cause,
-            RegisterThingError::ServiceUnavailable(ref cause) => cause,
-            RegisterThingError::Throttling(ref cause) => cause,
-            RegisterThingError::Unauthorized(ref cause) => cause,
+            RegisterThingError::ConflictingResourceUpdate(ref cause) => write!(f, "{}", cause),
+            RegisterThingError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            RegisterThingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RegisterThingError::ResourceRegistrationFailure(ref cause) => write!(f, "{}", cause),
+            RegisterThingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RegisterThingError::Throttling(ref cause) => write!(f, "{}", cause),
+            RegisterThingError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterThingError {}
 /// Errors returned by RejectCertificateTransfer
 #[derive(Debug, PartialEq)]
 pub enum RejectCertificateTransferError {
@@ -16120,22 +18128,20 @@ impl RejectCertificateTransferError {
 }
 impl fmt::Display for RejectCertificateTransferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RejectCertificateTransferError {
-    fn description(&self) -> &str {
         match *self {
-            RejectCertificateTransferError::InternalFailure(ref cause) => cause,
-            RejectCertificateTransferError::InvalidRequest(ref cause) => cause,
-            RejectCertificateTransferError::ResourceNotFound(ref cause) => cause,
-            RejectCertificateTransferError::ServiceUnavailable(ref cause) => cause,
-            RejectCertificateTransferError::Throttling(ref cause) => cause,
-            RejectCertificateTransferError::TransferAlreadyCompleted(ref cause) => cause,
-            RejectCertificateTransferError::Unauthorized(ref cause) => cause,
+            RejectCertificateTransferError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            RejectCertificateTransferError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RejectCertificateTransferError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RejectCertificateTransferError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RejectCertificateTransferError::Throttling(ref cause) => write!(f, "{}", cause),
+            RejectCertificateTransferError::TransferAlreadyCompleted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RejectCertificateTransferError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RejectCertificateTransferError {}
 /// Errors returned by RemoveThingFromBillingGroup
 #[derive(Debug, PartialEq)]
 pub enum RemoveThingFromBillingGroupError {
@@ -16184,19 +18190,15 @@ impl RemoveThingFromBillingGroupError {
 }
 impl fmt::Display for RemoveThingFromBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveThingFromBillingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveThingFromBillingGroupError::InternalFailure(ref cause) => cause,
-            RemoveThingFromBillingGroupError::InvalidRequest(ref cause) => cause,
-            RemoveThingFromBillingGroupError::ResourceNotFound(ref cause) => cause,
-            RemoveThingFromBillingGroupError::Throttling(ref cause) => cause,
+            RemoveThingFromBillingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            RemoveThingFromBillingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RemoveThingFromBillingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveThingFromBillingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveThingFromBillingGroupError {}
 /// Errors returned by RemoveThingFromThingGroup
 #[derive(Debug, PartialEq)]
 pub enum RemoveThingFromThingGroupError {
@@ -16243,19 +18245,15 @@ impl RemoveThingFromThingGroupError {
 }
 impl fmt::Display for RemoveThingFromThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveThingFromThingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveThingFromThingGroupError::InternalFailure(ref cause) => cause,
-            RemoveThingFromThingGroupError::InvalidRequest(ref cause) => cause,
-            RemoveThingFromThingGroupError::ResourceNotFound(ref cause) => cause,
-            RemoveThingFromThingGroupError::Throttling(ref cause) => cause,
+            RemoveThingFromThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            RemoveThingFromThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RemoveThingFromThingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveThingFromThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveThingFromThingGroupError {}
 /// Errors returned by ReplaceTopicRule
 #[derive(Debug, PartialEq)]
 pub enum ReplaceTopicRuleError {
@@ -16306,21 +18304,17 @@ impl ReplaceTopicRuleError {
 }
 impl fmt::Display for ReplaceTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReplaceTopicRuleError {
-    fn description(&self) -> &str {
         match *self {
-            ReplaceTopicRuleError::ConflictingResourceUpdate(ref cause) => cause,
-            ReplaceTopicRuleError::Internal(ref cause) => cause,
-            ReplaceTopicRuleError::InvalidRequest(ref cause) => cause,
-            ReplaceTopicRuleError::ServiceUnavailable(ref cause) => cause,
-            ReplaceTopicRuleError::SqlParse(ref cause) => cause,
-            ReplaceTopicRuleError::Unauthorized(ref cause) => cause,
+            ReplaceTopicRuleError::ConflictingResourceUpdate(ref cause) => write!(f, "{}", cause),
+            ReplaceTopicRuleError::Internal(ref cause) => write!(f, "{}", cause),
+            ReplaceTopicRuleError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ReplaceTopicRuleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ReplaceTopicRuleError::SqlParse(ref cause) => write!(f, "{}", cause),
+            ReplaceTopicRuleError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReplaceTopicRuleError {}
 /// Errors returned by SearchIndex
 #[derive(Debug, PartialEq)]
 pub enum SearchIndexError {
@@ -16379,23 +18373,19 @@ impl SearchIndexError {
 }
 impl fmt::Display for SearchIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchIndexError {
-    fn description(&self) -> &str {
         match *self {
-            SearchIndexError::IndexNotReady(ref cause) => cause,
-            SearchIndexError::InternalFailure(ref cause) => cause,
-            SearchIndexError::InvalidQuery(ref cause) => cause,
-            SearchIndexError::InvalidRequest(ref cause) => cause,
-            SearchIndexError::ResourceNotFound(ref cause) => cause,
-            SearchIndexError::ServiceUnavailable(ref cause) => cause,
-            SearchIndexError::Throttling(ref cause) => cause,
-            SearchIndexError::Unauthorized(ref cause) => cause,
+            SearchIndexError::IndexNotReady(ref cause) => write!(f, "{}", cause),
+            SearchIndexError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            SearchIndexError::InvalidQuery(ref cause) => write!(f, "{}", cause),
+            SearchIndexError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SearchIndexError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SearchIndexError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            SearchIndexError::Throttling(ref cause) => write!(f, "{}", cause),
+            SearchIndexError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SearchIndexError {}
 /// Errors returned by SetDefaultAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum SetDefaultAuthorizerError {
@@ -16457,22 +18447,18 @@ impl SetDefaultAuthorizerError {
 }
 impl fmt::Display for SetDefaultAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetDefaultAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            SetDefaultAuthorizerError::InternalFailure(ref cause) => cause,
-            SetDefaultAuthorizerError::InvalidRequest(ref cause) => cause,
-            SetDefaultAuthorizerError::ResourceAlreadyExists(ref cause) => cause,
-            SetDefaultAuthorizerError::ResourceNotFound(ref cause) => cause,
-            SetDefaultAuthorizerError::ServiceUnavailable(ref cause) => cause,
-            SetDefaultAuthorizerError::Throttling(ref cause) => cause,
-            SetDefaultAuthorizerError::Unauthorized(ref cause) => cause,
+            SetDefaultAuthorizerError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            SetDefaultAuthorizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SetDefaultAuthorizerError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            SetDefaultAuthorizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetDefaultAuthorizerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            SetDefaultAuthorizerError::Throttling(ref cause) => write!(f, "{}", cause),
+            SetDefaultAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetDefaultAuthorizerError {}
 /// Errors returned by SetDefaultPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum SetDefaultPolicyVersionError {
@@ -16531,21 +18517,17 @@ impl SetDefaultPolicyVersionError {
 }
 impl fmt::Display for SetDefaultPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetDefaultPolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            SetDefaultPolicyVersionError::InternalFailure(ref cause) => cause,
-            SetDefaultPolicyVersionError::InvalidRequest(ref cause) => cause,
-            SetDefaultPolicyVersionError::ResourceNotFound(ref cause) => cause,
-            SetDefaultPolicyVersionError::ServiceUnavailable(ref cause) => cause,
-            SetDefaultPolicyVersionError::Throttling(ref cause) => cause,
-            SetDefaultPolicyVersionError::Unauthorized(ref cause) => cause,
+            SetDefaultPolicyVersionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::Throttling(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetDefaultPolicyVersionError {}
 /// Errors returned by SetLoggingOptions
 #[derive(Debug, PartialEq)]
 pub enum SetLoggingOptionsError {
@@ -16581,18 +18563,14 @@ impl SetLoggingOptionsError {
 }
 impl fmt::Display for SetLoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetLoggingOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            SetLoggingOptionsError::Internal(ref cause) => cause,
-            SetLoggingOptionsError::InvalidRequest(ref cause) => cause,
-            SetLoggingOptionsError::ServiceUnavailable(ref cause) => cause,
+            SetLoggingOptionsError::Internal(ref cause) => write!(f, "{}", cause),
+            SetLoggingOptionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SetLoggingOptionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetLoggingOptionsError {}
 /// Errors returned by SetV2LoggingLevel
 #[derive(Debug, PartialEq)]
 pub enum SetV2LoggingLevelError {
@@ -16633,19 +18611,15 @@ impl SetV2LoggingLevelError {
 }
 impl fmt::Display for SetV2LoggingLevelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetV2LoggingLevelError {
-    fn description(&self) -> &str {
         match *self {
-            SetV2LoggingLevelError::Internal(ref cause) => cause,
-            SetV2LoggingLevelError::InvalidRequest(ref cause) => cause,
-            SetV2LoggingLevelError::NotConfigured(ref cause) => cause,
-            SetV2LoggingLevelError::ServiceUnavailable(ref cause) => cause,
+            SetV2LoggingLevelError::Internal(ref cause) => write!(f, "{}", cause),
+            SetV2LoggingLevelError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SetV2LoggingLevelError::NotConfigured(ref cause) => write!(f, "{}", cause),
+            SetV2LoggingLevelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetV2LoggingLevelError {}
 /// Errors returned by SetV2LoggingOptions
 #[derive(Debug, PartialEq)]
 pub enum SetV2LoggingOptionsError {
@@ -16681,18 +18655,14 @@ impl SetV2LoggingOptionsError {
 }
 impl fmt::Display for SetV2LoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetV2LoggingOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            SetV2LoggingOptionsError::Internal(ref cause) => cause,
-            SetV2LoggingOptionsError::InvalidRequest(ref cause) => cause,
-            SetV2LoggingOptionsError::ServiceUnavailable(ref cause) => cause,
+            SetV2LoggingOptionsError::Internal(ref cause) => write!(f, "{}", cause),
+            SetV2LoggingOptionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SetV2LoggingOptionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetV2LoggingOptionsError {}
 /// Errors returned by StartAuditMitigationActionsTask
 #[derive(Debug, PartialEq)]
 pub enum StartAuditMitigationActionsTaskError {
@@ -16748,20 +18718,24 @@ impl StartAuditMitigationActionsTaskError {
 }
 impl fmt::Display for StartAuditMitigationActionsTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartAuditMitigationActionsTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StartAuditMitigationActionsTaskError::InternalFailure(ref cause) => cause,
-            StartAuditMitigationActionsTaskError::InvalidRequest(ref cause) => cause,
-            StartAuditMitigationActionsTaskError::LimitExceeded(ref cause) => cause,
-            StartAuditMitigationActionsTaskError::TaskAlreadyExists(ref cause) => cause,
-            StartAuditMitigationActionsTaskError::Throttling(ref cause) => cause,
+            StartAuditMitigationActionsTaskError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAuditMitigationActionsTaskError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAuditMitigationActionsTaskError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAuditMitigationActionsTaskError::TaskAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartAuditMitigationActionsTaskError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartAuditMitigationActionsTaskError {}
 /// Errors returned by StartOnDemandAuditTask
 #[derive(Debug, PartialEq)]
 pub enum StartOnDemandAuditTaskError {
@@ -16806,19 +18780,15 @@ impl StartOnDemandAuditTaskError {
 }
 impl fmt::Display for StartOnDemandAuditTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartOnDemandAuditTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StartOnDemandAuditTaskError::InternalFailure(ref cause) => cause,
-            StartOnDemandAuditTaskError::InvalidRequest(ref cause) => cause,
-            StartOnDemandAuditTaskError::LimitExceeded(ref cause) => cause,
-            StartOnDemandAuditTaskError::Throttling(ref cause) => cause,
+            StartOnDemandAuditTaskError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StartOnDemandAuditTaskError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartOnDemandAuditTaskError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartOnDemandAuditTaskError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartOnDemandAuditTaskError {}
 /// Errors returned by StartThingRegistrationTask
 #[derive(Debug, PartialEq)]
 pub enum StartThingRegistrationTaskError {
@@ -16867,19 +18837,15 @@ impl StartThingRegistrationTaskError {
 }
 impl fmt::Display for StartThingRegistrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartThingRegistrationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StartThingRegistrationTaskError::InternalFailure(ref cause) => cause,
-            StartThingRegistrationTaskError::InvalidRequest(ref cause) => cause,
-            StartThingRegistrationTaskError::Throttling(ref cause) => cause,
-            StartThingRegistrationTaskError::Unauthorized(ref cause) => cause,
+            StartThingRegistrationTaskError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StartThingRegistrationTaskError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartThingRegistrationTaskError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartThingRegistrationTaskError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartThingRegistrationTaskError {}
 /// Errors returned by StopThingRegistrationTask
 #[derive(Debug, PartialEq)]
 pub enum StopThingRegistrationTaskError {
@@ -16933,20 +18899,16 @@ impl StopThingRegistrationTaskError {
 }
 impl fmt::Display for StopThingRegistrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopThingRegistrationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StopThingRegistrationTaskError::InternalFailure(ref cause) => cause,
-            StopThingRegistrationTaskError::InvalidRequest(ref cause) => cause,
-            StopThingRegistrationTaskError::ResourceNotFound(ref cause) => cause,
-            StopThingRegistrationTaskError::Throttling(ref cause) => cause,
-            StopThingRegistrationTaskError::Unauthorized(ref cause) => cause,
+            StopThingRegistrationTaskError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StopThingRegistrationTaskError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopThingRegistrationTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StopThingRegistrationTaskError::Throttling(ref cause) => write!(f, "{}", cause),
+            StopThingRegistrationTaskError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopThingRegistrationTaskError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -16990,20 +18952,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InternalFailure(ref cause) => cause,
-            TagResourceError::InvalidRequest(ref cause) => cause,
-            TagResourceError::LimitExceeded(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::Throttling(ref cause) => cause,
+            TagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by TestAuthorization
 #[derive(Debug, PartialEq)]
 pub enum TestAuthorizationError {
@@ -17059,22 +19017,18 @@ impl TestAuthorizationError {
 }
 impl fmt::Display for TestAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            TestAuthorizationError::InternalFailure(ref cause) => cause,
-            TestAuthorizationError::InvalidRequest(ref cause) => cause,
-            TestAuthorizationError::LimitExceeded(ref cause) => cause,
-            TestAuthorizationError::ResourceNotFound(ref cause) => cause,
-            TestAuthorizationError::ServiceUnavailable(ref cause) => cause,
-            TestAuthorizationError::Throttling(ref cause) => cause,
-            TestAuthorizationError::Unauthorized(ref cause) => cause,
+            TestAuthorizationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            TestAuthorizationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TestAuthorizationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TestAuthorizationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TestAuthorizationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            TestAuthorizationError::Throttling(ref cause) => write!(f, "{}", cause),
+            TestAuthorizationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestAuthorizationError {}
 /// Errors returned by TestInvokeAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum TestInvokeAuthorizerError {
@@ -17136,22 +19090,18 @@ impl TestInvokeAuthorizerError {
 }
 impl fmt::Display for TestInvokeAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestInvokeAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            TestInvokeAuthorizerError::InternalFailure(ref cause) => cause,
-            TestInvokeAuthorizerError::InvalidRequest(ref cause) => cause,
-            TestInvokeAuthorizerError::InvalidResponse(ref cause) => cause,
-            TestInvokeAuthorizerError::ResourceNotFound(ref cause) => cause,
-            TestInvokeAuthorizerError::ServiceUnavailable(ref cause) => cause,
-            TestInvokeAuthorizerError::Throttling(ref cause) => cause,
-            TestInvokeAuthorizerError::Unauthorized(ref cause) => cause,
+            TestInvokeAuthorizerError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            TestInvokeAuthorizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TestInvokeAuthorizerError::InvalidResponse(ref cause) => write!(f, "{}", cause),
+            TestInvokeAuthorizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TestInvokeAuthorizerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            TestInvokeAuthorizerError::Throttling(ref cause) => write!(f, "{}", cause),
+            TestInvokeAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestInvokeAuthorizerError {}
 /// Errors returned by TransferCertificate
 #[derive(Debug, PartialEq)]
 pub enum TransferCertificateError {
@@ -17218,23 +19168,19 @@ impl TransferCertificateError {
 }
 impl fmt::Display for TransferCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TransferCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            TransferCertificateError::CertificateState(ref cause) => cause,
-            TransferCertificateError::InternalFailure(ref cause) => cause,
-            TransferCertificateError::InvalidRequest(ref cause) => cause,
-            TransferCertificateError::ResourceNotFound(ref cause) => cause,
-            TransferCertificateError::ServiceUnavailable(ref cause) => cause,
-            TransferCertificateError::Throttling(ref cause) => cause,
-            TransferCertificateError::TransferConflict(ref cause) => cause,
-            TransferCertificateError::Unauthorized(ref cause) => cause,
+            TransferCertificateError::CertificateState(ref cause) => write!(f, "{}", cause),
+            TransferCertificateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            TransferCertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TransferCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TransferCertificateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            TransferCertificateError::Throttling(ref cause) => write!(f, "{}", cause),
+            TransferCertificateError::TransferConflict(ref cause) => write!(f, "{}", cause),
+            TransferCertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TransferCertificateError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -17273,19 +19219,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InternalFailure(ref cause) => cause,
-            UntagResourceError::InvalidRequest(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::Throttling(ref cause) => cause,
+            UntagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateAccountAuditConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountAuditConfigurationError {
@@ -17327,18 +19269,18 @@ impl UpdateAccountAuditConfigurationError {
 }
 impl fmt::Display for UpdateAccountAuditConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAccountAuditConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAccountAuditConfigurationError::InternalFailure(ref cause) => cause,
-            UpdateAccountAuditConfigurationError::InvalidRequest(ref cause) => cause,
-            UpdateAccountAuditConfigurationError::Throttling(ref cause) => cause,
+            UpdateAccountAuditConfigurationError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAccountAuditConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAccountAuditConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAccountAuditConfigurationError {}
 /// Errors returned by UpdateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthorizerError {
@@ -17392,22 +19334,18 @@ impl UpdateAuthorizerError {
 }
 impl fmt::Display for UpdateAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAuthorizerError::InternalFailure(ref cause) => cause,
-            UpdateAuthorizerError::InvalidRequest(ref cause) => cause,
-            UpdateAuthorizerError::LimitExceeded(ref cause) => cause,
-            UpdateAuthorizerError::ResourceNotFound(ref cause) => cause,
-            UpdateAuthorizerError::ServiceUnavailable(ref cause) => cause,
-            UpdateAuthorizerError::Throttling(ref cause) => cause,
-            UpdateAuthorizerError::Unauthorized(ref cause) => cause,
+            UpdateAuthorizerError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAuthorizerError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAuthorizerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateAuthorizerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAuthorizerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateAuthorizerError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAuthorizerError {}
 /// Errors returned by UpdateBillingGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateBillingGroupError {
@@ -17451,20 +19389,16 @@ impl UpdateBillingGroupError {
 }
 impl fmt::Display for UpdateBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBillingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBillingGroupError::InternalFailure(ref cause) => cause,
-            UpdateBillingGroupError::InvalidRequest(ref cause) => cause,
-            UpdateBillingGroupError::ResourceNotFound(ref cause) => cause,
-            UpdateBillingGroupError::Throttling(ref cause) => cause,
-            UpdateBillingGroupError::VersionConflict(ref cause) => cause,
+            UpdateBillingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateBillingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateBillingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateBillingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateBillingGroupError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBillingGroupError {}
 /// Errors returned by UpdateCACertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateCACertificateError {
@@ -17517,21 +19451,17 @@ impl UpdateCACertificateError {
 }
 impl fmt::Display for UpdateCACertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCACertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCACertificateError::InternalFailure(ref cause) => cause,
-            UpdateCACertificateError::InvalidRequest(ref cause) => cause,
-            UpdateCACertificateError::ResourceNotFound(ref cause) => cause,
-            UpdateCACertificateError::ServiceUnavailable(ref cause) => cause,
-            UpdateCACertificateError::Throttling(ref cause) => cause,
-            UpdateCACertificateError::Unauthorized(ref cause) => cause,
+            UpdateCACertificateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateCACertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateCACertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateCACertificateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateCACertificateError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateCACertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateCACertificateError {}
 /// Errors returned by UpdateCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateCertificateError {
@@ -17587,22 +19517,99 @@ impl UpdateCertificateError {
 }
 impl fmt::Display for UpdateCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCertificateError::CertificateState(ref cause) => cause,
-            UpdateCertificateError::InternalFailure(ref cause) => cause,
-            UpdateCertificateError::InvalidRequest(ref cause) => cause,
-            UpdateCertificateError::ResourceNotFound(ref cause) => cause,
-            UpdateCertificateError::ServiceUnavailable(ref cause) => cause,
-            UpdateCertificateError::Throttling(ref cause) => cause,
-            UpdateCertificateError::Unauthorized(ref cause) => cause,
+            UpdateCertificateError::CertificateState(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateCertificateError {}
+/// Errors returned by UpdateDomainConfiguration
+#[derive(Debug, PartialEq)]
+pub enum UpdateDomainConfigurationError {
+    /// <p>The certificate is invalid.</p>
+    CertificateValidation(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl UpdateDomainConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CertificateValidationException" => {
+                    return RusotoError::Service(
+                        UpdateDomainConfigurationError::CertificateValidation(err.msg),
+                    )
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateDomainConfigurationError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateDomainConfigurationError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateDomainConfigurationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        UpdateDomainConfigurationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateDomainConfigurationError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateDomainConfigurationError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateDomainConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateDomainConfigurationError::CertificateValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDomainConfigurationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDomainConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDomainConfigurationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDomainConfigurationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateDomainConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateDomainConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateDomainConfigurationError {}
 /// Errors returned by UpdateDynamicThingGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateDynamicThingGroupError {
@@ -17661,21 +19668,17 @@ impl UpdateDynamicThingGroupError {
 }
 impl fmt::Display for UpdateDynamicThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDynamicThingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDynamicThingGroupError::InternalFailure(ref cause) => cause,
-            UpdateDynamicThingGroupError::InvalidQuery(ref cause) => cause,
-            UpdateDynamicThingGroupError::InvalidRequest(ref cause) => cause,
-            UpdateDynamicThingGroupError::ResourceNotFound(ref cause) => cause,
-            UpdateDynamicThingGroupError::Throttling(ref cause) => cause,
-            UpdateDynamicThingGroupError::VersionConflict(ref cause) => cause,
+            UpdateDynamicThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDynamicThingGroupError::InvalidQuery(ref cause) => write!(f, "{}", cause),
+            UpdateDynamicThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDynamicThingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDynamicThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateDynamicThingGroupError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDynamicThingGroupError {}
 /// Errors returned by UpdateEventConfigurations
 #[derive(Debug, PartialEq)]
 pub enum UpdateEventConfigurationsError {
@@ -17715,18 +19718,14 @@ impl UpdateEventConfigurationsError {
 }
 impl fmt::Display for UpdateEventConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEventConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEventConfigurationsError::InternalFailure(ref cause) => cause,
-            UpdateEventConfigurationsError::InvalidRequest(ref cause) => cause,
-            UpdateEventConfigurationsError::Throttling(ref cause) => cause,
+            UpdateEventConfigurationsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateEventConfigurationsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateEventConfigurationsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateEventConfigurationsError {}
 /// Errors returned by UpdateIndexingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateIndexingConfigurationError {
@@ -17782,20 +19781,18 @@ impl UpdateIndexingConfigurationError {
 }
 impl fmt::Display for UpdateIndexingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateIndexingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateIndexingConfigurationError::InternalFailure(ref cause) => cause,
-            UpdateIndexingConfigurationError::InvalidRequest(ref cause) => cause,
-            UpdateIndexingConfigurationError::ServiceUnavailable(ref cause) => cause,
-            UpdateIndexingConfigurationError::Throttling(ref cause) => cause,
-            UpdateIndexingConfigurationError::Unauthorized(ref cause) => cause,
+            UpdateIndexingConfigurationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateIndexingConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateIndexingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateIndexingConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateIndexingConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateIndexingConfigurationError {}
 /// Errors returned by UpdateJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobError {
@@ -17834,19 +19831,15 @@ impl UpdateJobError {
 }
 impl fmt::Display for UpdateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateJobError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateJobError::InvalidRequest(ref cause) => cause,
-            UpdateJobError::ResourceNotFound(ref cause) => cause,
-            UpdateJobError::ServiceUnavailable(ref cause) => cause,
-            UpdateJobError::Throttling(ref cause) => cause,
+            UpdateJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateJobError {}
 /// Errors returned by UpdateMitigationAction
 #[derive(Debug, PartialEq)]
 pub enum UpdateMitigationActionError {
@@ -17891,19 +19884,82 @@ impl UpdateMitigationActionError {
 }
 impl fmt::Display for UpdateMitigationActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMitigationActionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMitigationActionError::InternalFailure(ref cause) => cause,
-            UpdateMitigationActionError::InvalidRequest(ref cause) => cause,
-            UpdateMitigationActionError::ResourceNotFound(ref cause) => cause,
-            UpdateMitigationActionError::Throttling(ref cause) => cause,
+            UpdateMitigationActionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateMitigationActionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateMitigationActionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMitigationActionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMitigationActionError {}
+/// Errors returned by UpdateProvisioningTemplate
+#[derive(Debug, PartialEq)]
+pub enum UpdateProvisioningTemplateError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl UpdateProvisioningTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateProvisioningTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictingResourceUpdateException" => {
+                    return RusotoError::Service(
+                        UpdateProvisioningTemplateError::ConflictingResourceUpdate(err.msg),
+                    )
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateProvisioningTemplateError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateProvisioningTemplateError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateProvisioningTemplateError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateProvisioningTemplateError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateProvisioningTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateProvisioningTemplateError::ConflictingResourceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateProvisioningTemplateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateProvisioningTemplateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateProvisioningTemplateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateProvisioningTemplateError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateProvisioningTemplateError {}
 /// Errors returned by UpdateRoleAlias
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoleAliasError {
@@ -17952,21 +20008,17 @@ impl UpdateRoleAliasError {
 }
 impl fmt::Display for UpdateRoleAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRoleAliasError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRoleAliasError::InternalFailure(ref cause) => cause,
-            UpdateRoleAliasError::InvalidRequest(ref cause) => cause,
-            UpdateRoleAliasError::ResourceNotFound(ref cause) => cause,
-            UpdateRoleAliasError::ServiceUnavailable(ref cause) => cause,
-            UpdateRoleAliasError::Throttling(ref cause) => cause,
-            UpdateRoleAliasError::Unauthorized(ref cause) => cause,
+            UpdateRoleAliasError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateRoleAliasError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateRoleAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRoleAliasError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateRoleAliasError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateRoleAliasError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRoleAliasError {}
 /// Errors returned by UpdateScheduledAudit
 #[derive(Debug, PartialEq)]
 pub enum UpdateScheduledAuditError {
@@ -18009,19 +20061,15 @@ impl UpdateScheduledAuditError {
 }
 impl fmt::Display for UpdateScheduledAuditError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateScheduledAuditError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateScheduledAuditError::InternalFailure(ref cause) => cause,
-            UpdateScheduledAuditError::InvalidRequest(ref cause) => cause,
-            UpdateScheduledAuditError::ResourceNotFound(ref cause) => cause,
-            UpdateScheduledAuditError::Throttling(ref cause) => cause,
+            UpdateScheduledAuditError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateScheduledAuditError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateScheduledAuditError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateScheduledAuditError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateScheduledAuditError {}
 /// Errors returned by UpdateSecurityProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateSecurityProfileError {
@@ -18073,20 +20121,16 @@ impl UpdateSecurityProfileError {
 }
 impl fmt::Display for UpdateSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSecurityProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSecurityProfileError::InternalFailure(ref cause) => cause,
-            UpdateSecurityProfileError::InvalidRequest(ref cause) => cause,
-            UpdateSecurityProfileError::ResourceNotFound(ref cause) => cause,
-            UpdateSecurityProfileError::Throttling(ref cause) => cause,
-            UpdateSecurityProfileError::VersionConflict(ref cause) => cause,
+            UpdateSecurityProfileError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateSecurityProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateSecurityProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateSecurityProfileError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateSecurityProfileError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSecurityProfileError {}
 /// Errors returned by UpdateStream
 #[derive(Debug, PartialEq)]
 pub enum UpdateStreamError {
@@ -18135,21 +20179,17 @@ impl UpdateStreamError {
 }
 impl fmt::Display for UpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStreamError::InternalFailure(ref cause) => cause,
-            UpdateStreamError::InvalidRequest(ref cause) => cause,
-            UpdateStreamError::ResourceNotFound(ref cause) => cause,
-            UpdateStreamError::ServiceUnavailable(ref cause) => cause,
-            UpdateStreamError::Throttling(ref cause) => cause,
-            UpdateStreamError::Unauthorized(ref cause) => cause,
+            UpdateStreamError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStreamError {}
 /// Errors returned by UpdateThing
 #[derive(Debug, PartialEq)]
 pub enum UpdateThingError {
@@ -18203,22 +20243,18 @@ impl UpdateThingError {
 }
 impl fmt::Display for UpdateThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateThingError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateThingError::InternalFailure(ref cause) => cause,
-            UpdateThingError::InvalidRequest(ref cause) => cause,
-            UpdateThingError::ResourceNotFound(ref cause) => cause,
-            UpdateThingError::ServiceUnavailable(ref cause) => cause,
-            UpdateThingError::Throttling(ref cause) => cause,
-            UpdateThingError::Unauthorized(ref cause) => cause,
-            UpdateThingError::VersionConflict(ref cause) => cause,
+            UpdateThingError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateThingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateThingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateThingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateThingError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateThingError::Unauthorized(ref cause) => write!(f, "{}", cause),
+            UpdateThingError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateThingError {}
 /// Errors returned by UpdateThingGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateThingGroupError {
@@ -18262,20 +20298,16 @@ impl UpdateThingGroupError {
 }
 impl fmt::Display for UpdateThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateThingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateThingGroupError::InternalFailure(ref cause) => cause,
-            UpdateThingGroupError::InvalidRequest(ref cause) => cause,
-            UpdateThingGroupError::ResourceNotFound(ref cause) => cause,
-            UpdateThingGroupError::Throttling(ref cause) => cause,
-            UpdateThingGroupError::VersionConflict(ref cause) => cause,
+            UpdateThingGroupError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateThingGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateThingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateThingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateThingGroupError::VersionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateThingGroupError {}
 /// Errors returned by UpdateThingGroupsForThing
 #[derive(Debug, PartialEq)]
 pub enum UpdateThingGroupsForThingError {
@@ -18322,19 +20354,82 @@ impl UpdateThingGroupsForThingError {
 }
 impl fmt::Display for UpdateThingGroupsForThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateThingGroupsForThingError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateThingGroupsForThingError::InternalFailure(ref cause) => cause,
-            UpdateThingGroupsForThingError::InvalidRequest(ref cause) => cause,
-            UpdateThingGroupsForThingError::ResourceNotFound(ref cause) => cause,
-            UpdateThingGroupsForThingError::Throttling(ref cause) => cause,
+            UpdateThingGroupsForThingError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateThingGroupsForThingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateThingGroupsForThingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateThingGroupsForThingError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateThingGroupsForThingError {}
+/// Errors returned by UpdateTopicRuleDestination
+#[derive(Debug, PartialEq)]
+pub enum UpdateTopicRuleDestinationError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl UpdateTopicRuleDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateTopicRuleDestinationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictingResourceUpdateException" => {
+                    return RusotoError::Service(
+                        UpdateTopicRuleDestinationError::ConflictingResourceUpdate(err.msg),
+                    )
+                }
+                "InternalException" => {
+                    return RusotoError::Service(UpdateTopicRuleDestinationError::Internal(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateTopicRuleDestinationError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        UpdateTopicRuleDestinationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateTopicRuleDestinationError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateTopicRuleDestinationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateTopicRuleDestinationError::ConflictingResourceUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateTopicRuleDestinationError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateTopicRuleDestinationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateTopicRuleDestinationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateTopicRuleDestinationError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateTopicRuleDestinationError {}
 /// Errors returned by ValidateSecurityProfileBehaviors
 #[derive(Debug, PartialEq)]
 pub enum ValidateSecurityProfileBehaviorsError {
@@ -18376,18 +20471,18 @@ impl ValidateSecurityProfileBehaviorsError {
 }
 impl fmt::Display for ValidateSecurityProfileBehaviorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ValidateSecurityProfileBehaviorsError {
-    fn description(&self) -> &str {
         match *self {
-            ValidateSecurityProfileBehaviorsError::InternalFailure(ref cause) => cause,
-            ValidateSecurityProfileBehaviorsError::InvalidRequest(ref cause) => cause,
-            ValidateSecurityProfileBehaviorsError::Throttling(ref cause) => cause,
+            ValidateSecurityProfileBehaviorsError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ValidateSecurityProfileBehaviorsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ValidateSecurityProfileBehaviorsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ValidateSecurityProfileBehaviorsError {}
 /// Trait representing the capabilities of the AWS IoT API. AWS IoT clients implement this trait.
 pub trait Iot {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
@@ -18470,6 +20565,12 @@ pub trait Iot {
         &self,
     ) -> RusotoFuture<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError>;
 
+    /// <p>Confirms a topic rule destination. When you create a rule requiring a destination, AWS IoT sends a confirmation message to the endpoint or base address you specify. The message includes a token which you pass back when calling <code>ConfirmTopicRuleDestination</code> to confirm that you own or have access to the endpoint.</p>
+    fn confirm_topic_rule_destination(
+        &self,
+        input: ConfirmTopicRuleDestinationRequest,
+    ) -> RusotoFuture<ConfirmTopicRuleDestinationResponse, ConfirmTopicRuleDestinationError>;
+
     /// <p>Creates an authorizer.</p>
     fn create_authorizer(
         &self,
@@ -18488,6 +20589,12 @@ pub trait Iot {
         input: CreateCertificateFromCsrRequest,
     ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
 
+    /// <p><p>Creates a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    fn create_domain_configuration(
+        &self,
+        input: CreateDomainConfigurationRequest,
+    ) -> RusotoFuture<CreateDomainConfigurationResponse, CreateDomainConfigurationError>;
+
     /// <p>Creates a dynamic thing group.</p>
     fn create_dynamic_thing_group(
         &self,
@@ -18500,7 +20607,7 @@ pub trait Iot {
         input: CreateJobRequest,
     ) -> RusotoFuture<CreateJobResponse, CreateJobError>;
 
-    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
+    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key. You can also call <code>CreateKeysAndCertificate</code> over MQTT from a device, for more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/provision-wo-cert.html#provision-mqtt-api">Provisioning MQTT API</a>.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
         input: CreateKeysAndCertificateRequest,
@@ -18530,6 +20637,27 @@ pub trait Iot {
         input: CreatePolicyVersionRequest,
     ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError>;
 
+    /// <p>Creates a provisioning claim.</p>
+    fn create_provisioning_claim(
+        &self,
+        input: CreateProvisioningClaimRequest,
+    ) -> RusotoFuture<CreateProvisioningClaimResponse, CreateProvisioningClaimError>;
+
+    /// <p>Creates a fleet provisioning template.</p>
+    fn create_provisioning_template(
+        &self,
+        input: CreateProvisioningTemplateRequest,
+    ) -> RusotoFuture<CreateProvisioningTemplateResponse, CreateProvisioningTemplateError>;
+
+    /// <p>Creates a new version of a fleet provisioning template.</p>
+    fn create_provisioning_template_version(
+        &self,
+        input: CreateProvisioningTemplateVersionRequest,
+    ) -> RusotoFuture<
+        CreateProvisioningTemplateVersionResponse,
+        CreateProvisioningTemplateVersionError,
+    >;
+
     /// <p>Creates a role alias.</p>
     fn create_role_alias(
         &self,
@@ -18548,7 +20676,7 @@ pub trait Iot {
         input: CreateSecurityProfileRequest,
     ) -> RusotoFuture<CreateSecurityProfileResponse, CreateSecurityProfileError>;
 
-    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
+    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream.</p>
     fn create_stream(
         &self,
         input: CreateStreamRequest,
@@ -18577,6 +20705,12 @@ pub trait Iot {
         &self,
         input: CreateTopicRuleRequest,
     ) -> RusotoFuture<(), CreateTopicRuleError>;
+
+    /// <p>Creates a topic rule destination. The destination must be confirmed prior to use.</p>
+    fn create_topic_rule_destination(
+        &self,
+        input: CreateTopicRuleDestinationRequest,
+    ) -> RusotoFuture<CreateTopicRuleDestinationResponse, CreateTopicRuleDestinationError>;
 
     /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
     fn delete_account_audit_configuration(
@@ -18607,6 +20741,12 @@ pub trait Iot {
         &self,
         input: DeleteCertificateRequest,
     ) -> RusotoFuture<(), DeleteCertificateError>;
+
+    /// <p><p>Deletes the specified domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    fn delete_domain_configuration(
+        &self,
+        input: DeleteDomainConfigurationRequest,
+    ) -> RusotoFuture<DeleteDomainConfigurationResponse, DeleteDomainConfigurationError>;
 
     /// <p>Deletes a dynamic thing group.</p>
     fn delete_dynamic_thing_group(
@@ -18643,6 +20783,21 @@ pub trait Iot {
         &self,
         input: DeletePolicyVersionRequest,
     ) -> RusotoFuture<(), DeletePolicyVersionError>;
+
+    /// <p>Deletes a fleet provisioning template.</p>
+    fn delete_provisioning_template(
+        &self,
+        input: DeleteProvisioningTemplateRequest,
+    ) -> RusotoFuture<DeleteProvisioningTemplateResponse, DeleteProvisioningTemplateError>;
+
+    /// <p>Deletes a fleet provisioning template version.</p>
+    fn delete_provisioning_template_version(
+        &self,
+        input: DeleteProvisioningTemplateVersionRequest,
+    ) -> RusotoFuture<
+        DeleteProvisioningTemplateVersionResponse,
+        DeleteProvisioningTemplateVersionError,
+    >;
 
     /// <p>Deletes a CA certificate registration code.</p>
     fn delete_registration_code(
@@ -18696,6 +20851,12 @@ pub trait Iot {
         &self,
         input: DeleteTopicRuleRequest,
     ) -> RusotoFuture<(), DeleteTopicRuleError>;
+
+    /// <p>Deletes a topic rule destination.</p>
+    fn delete_topic_rule_destination(
+        &self,
+        input: DeleteTopicRuleDestinationRequest,
+    ) -> RusotoFuture<DeleteTopicRuleDestinationResponse, DeleteTopicRuleDestinationError>;
 
     /// <p>Deletes a logging level.</p>
     fn delete_v2_logging_level(
@@ -18767,6 +20928,12 @@ pub trait Iot {
         &self,
     ) -> RusotoFuture<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError>;
 
+    /// <p><p>Gets summary information about a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    fn describe_domain_configuration(
+        &self,
+        input: DescribeDomainConfigurationRequest,
+    ) -> RusotoFuture<DescribeDomainConfigurationResponse, DescribeDomainConfigurationError>;
+
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
     fn describe_endpoint(
         &self,
@@ -18801,6 +20968,21 @@ pub trait Iot {
         &self,
         input: DescribeMitigationActionRequest,
     ) -> RusotoFuture<DescribeMitigationActionResponse, DescribeMitigationActionError>;
+
+    /// <p>Returns information about a fleet provisioning template.</p>
+    fn describe_provisioning_template(
+        &self,
+        input: DescribeProvisioningTemplateRequest,
+    ) -> RusotoFuture<DescribeProvisioningTemplateResponse, DescribeProvisioningTemplateError>;
+
+    /// <p>Returns information about a fleet provisioning template version.</p>
+    fn describe_provisioning_template_version(
+        &self,
+        input: DescribeProvisioningTemplateVersionRequest,
+    ) -> RusotoFuture<
+        DescribeProvisioningTemplateVersionResponse,
+        DescribeProvisioningTemplateVersionError,
+    >;
 
     /// <p>Describes a role alias.</p>
     fn describe_role_alias(
@@ -18883,13 +21065,19 @@ pub trait Iot {
         input: EnableTopicRuleRequest,
     ) -> RusotoFuture<(), EnableTopicRuleError>;
 
+    /// <p>Returns the approximate count of unique values that match the query.</p>
+    fn get_cardinality(
+        &self,
+        input: GetCardinalityRequest,
+    ) -> RusotoFuture<GetCardinalityResponse, GetCardinalityError>;
+
     /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
     fn get_effective_policies(
         &self,
         input: GetEffectivePoliciesRequest,
     ) -> RusotoFuture<GetEffectivePoliciesResponse, GetEffectivePoliciesError>;
 
-    /// <p>Gets the search configuration.</p>
+    /// <p>Gets the indexing configuration.</p>
     fn get_indexing_configuration(
         &self,
     ) -> RusotoFuture<GetIndexingConfigurationResponse, GetIndexingConfigurationError>;
@@ -18911,6 +21099,12 @@ pub trait Iot {
         input: GetOTAUpdateRequest,
     ) -> RusotoFuture<GetOTAUpdateResponse, GetOTAUpdateError>;
 
+    /// <p>Groups the aggregated values that match the query into percentile groupings. The default percentile groupings are: 1,5,25,50,75,95,99, although you can specify your own when you call <code>GetPercentiles</code>. This function returns a value for each percentile group specified (or the default percentile groupings). The percentile group "1" contains the aggregated field value that occurs in approximately one percent of the values that match the query. The percentile group "5" contains the aggregated field value that occurs in approximately five percent of the values that match the query, and so on. The result is an approximation, the more values that match the query, the more accurate the percentile values.</p>
+    fn get_percentiles(
+        &self,
+        input: GetPercentilesRequest,
+    ) -> RusotoFuture<GetPercentilesResponse, GetPercentilesError>;
+
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
     fn get_policy(
         &self,
@@ -18928,7 +21122,7 @@ pub trait Iot {
         &self,
     ) -> RusotoFuture<GetRegistrationCodeResponse, GetRegistrationCodeError>;
 
-    /// <p>Gets statistics about things that match the specified query.</p>
+    /// <p>Returns the count, average, sum, minimum, maximum, sum of squares, variance, and standard deviation for the specified aggregated field. If the aggregation field is of type <code>String</code>, only the count statistic is returned.</p>
     fn get_statistics(
         &self,
         input: GetStatisticsRequest,
@@ -18939,6 +21133,12 @@ pub trait Iot {
         &self,
         input: GetTopicRuleRequest,
     ) -> RusotoFuture<GetTopicRuleResponse, GetTopicRuleError>;
+
+    /// <p>Gets information about a topic rule destination.</p>
+    fn get_topic_rule_destination(
+        &self,
+        input: GetTopicRuleDestinationRequest,
+    ) -> RusotoFuture<GetTopicRuleDestinationResponse, GetTopicRuleDestinationError>;
 
     /// <p>Gets the fine grained logging options.</p>
     fn get_v2_logging_options(
@@ -19014,6 +21214,12 @@ pub trait Iot {
         input: ListCertificatesByCARequest,
     ) -> RusotoFuture<ListCertificatesByCAResponse, ListCertificatesByCAError>;
 
+    /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    fn list_domain_configurations(
+        &self,
+        input: ListDomainConfigurationsRequest,
+    ) -> RusotoFuture<ListDomainConfigurationsResponse, ListDomainConfigurationsError>;
+
     /// <p>Lists the search indices.</p>
     fn list_indices(
         &self,
@@ -19082,6 +21288,18 @@ pub trait Iot {
         &self,
         input: ListPrincipalThingsRequest,
     ) -> RusotoFuture<ListPrincipalThingsResponse, ListPrincipalThingsError>;
+
+    /// <p>A list of fleet provisioning template versions.</p>
+    fn list_provisioning_template_versions(
+        &self,
+        input: ListProvisioningTemplateVersionsRequest,
+    ) -> RusotoFuture<ListProvisioningTemplateVersionsResponse, ListProvisioningTemplateVersionsError>;
+
+    /// <p>Lists the fleet provisioning templates in your AWS account.</p>
+    fn list_provisioning_templates(
+        &self,
+        input: ListProvisioningTemplatesRequest,
+    ) -> RusotoFuture<ListProvisioningTemplatesResponse, ListProvisioningTemplatesError>;
 
     /// <p>Lists the role aliases registered in your account.</p>
     fn list_role_aliases(
@@ -19185,6 +21403,12 @@ pub trait Iot {
         input: ListThingsInThingGroupRequest,
     ) -> RusotoFuture<ListThingsInThingGroupResponse, ListThingsInThingGroupError>;
 
+    /// <p>Lists all the topic rule destinations in your AWS account.</p>
+    fn list_topic_rule_destinations(
+        &self,
+        input: ListTopicRuleDestinationsRequest,
+    ) -> RusotoFuture<ListTopicRuleDestinationsResponse, ListTopicRuleDestinationsError>;
+
     /// <p>Lists the rules for the specific topic.</p>
     fn list_topic_rules(
         &self,
@@ -19215,7 +21439,7 @@ pub trait Iot {
         input: RegisterCertificateRequest,
     ) -> RusotoFuture<RegisterCertificateResponse, RegisterCertificateError>;
 
-    /// <p>Provisions a thing.</p>
+    /// <p>Provisions a thing in the device registry. RegisterThing calls other AWS IoT control plane APIs. These calls might exceed your account level <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_iot"> AWS IoT Throttling Limits</a> and cause throttle errors. Please contact <a href="https://console.aws.amazon.com/support/home">AWS Customer Support</a> to raise your throttling limits if necessary.</p>
     fn register_thing(
         &self,
         input: RegisterThingRequest,
@@ -19365,6 +21589,12 @@ pub trait Iot {
         input: UpdateCertificateRequest,
     ) -> RusotoFuture<(), UpdateCertificateError>;
 
+    /// <p><p>Updates values stored in the domain configuration. Domain configurations for default endpoints can&#39;t be updated.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    fn update_domain_configuration(
+        &self,
+        input: UpdateDomainConfigurationRequest,
+    ) -> RusotoFuture<UpdateDomainConfigurationResponse, UpdateDomainConfigurationError>;
+
     /// <p>Updates a dynamic thing group.</p>
     fn update_dynamic_thing_group(
         &self,
@@ -19391,6 +21621,12 @@ pub trait Iot {
         &self,
         input: UpdateMitigationActionRequest,
     ) -> RusotoFuture<UpdateMitigationActionResponse, UpdateMitigationActionError>;
+
+    /// <p>Updates a fleet provisioning template.</p>
+    fn update_provisioning_template(
+        &self,
+        input: UpdateProvisioningTemplateRequest,
+    ) -> RusotoFuture<UpdateProvisioningTemplateResponse, UpdateProvisioningTemplateError>;
 
     /// <p>Updates a role alias.</p>
     fn update_role_alias(
@@ -19434,6 +21670,12 @@ pub trait Iot {
         input: UpdateThingGroupsForThingRequest,
     ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError>;
 
+    /// <p>Updates a topic rule destination. You use this to change the status, endpoint URL, or confirmation URL of the destination.</p>
+    fn update_topic_rule_destination(
+        &self,
+        input: UpdateTopicRuleDestinationRequest,
+    ) -> RusotoFuture<UpdateTopicRuleDestinationResponse, UpdateTopicRuleDestinationError>;
+
     /// <p>Validates a Device Defender security profile behaviors specification.</p>
     fn validate_security_profile_behaviors(
         &self,
@@ -19474,6 +21716,14 @@ impl IotClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> IotClient {
         IotClient { client, region }
+    }
+}
+
+impl fmt::Debug for IotClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("IotClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -19954,6 +22204,37 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Confirms a topic rule destination. When you create a rule requiring a destination, AWS IoT sends a confirmation message to the endpoint or base address you specify. The message includes a token which you pass back when calling <code>ConfirmTopicRuleDestination</code> to confirm that you own or have access to the endpoint.</p>
+    fn confirm_topic_rule_destination(
+        &self,
+        input: ConfirmTopicRuleDestinationRequest,
+    ) -> RusotoFuture<ConfirmTopicRuleDestinationResponse, ConfirmTopicRuleDestinationError> {
+        let request_uri = format!(
+            "/confirmdestination/{confirmation_token}",
+            confirmation_token = input.confirmation_token
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ConfirmTopicRuleDestinationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ConfirmTopicRuleDestinationError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Creates an authorizer.</p>
     fn create_authorizer(
         &self,
@@ -20062,6 +22343,39 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p><p>Creates a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    fn create_domain_configuration(
+        &self,
+        input: CreateDomainConfigurationRequest,
+    ) -> RusotoFuture<CreateDomainConfigurationResponse, CreateDomainConfigurationError> {
+        let request_uri = format!(
+            "/domainConfigurations/{domain_configuration_name}",
+            domain_configuration_name = input.domain_configuration_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateDomainConfigurationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDomainConfigurationError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Creates a dynamic thing group.</p>
     fn create_dynamic_thing_group(
         &self,
@@ -20128,7 +22442,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
+    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key. You can also call <code>CreateKeysAndCertificate</code> over MQTT from a device, for more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/provision-wo-cert.html#provision-mqtt-api">Provisioning MQTT API</a>.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
         input: CreateKeysAndCertificateRequest,
@@ -20307,6 +22621,111 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Creates a provisioning claim.</p>
+    fn create_provisioning_claim(
+        &self,
+        input: CreateProvisioningClaimRequest,
+    ) -> RusotoFuture<CreateProvisioningClaimResponse, CreateProvisioningClaimError> {
+        let request_uri = format!(
+            "/provisioning-templates/{template_name}/provisioning-claim",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateProvisioningClaimResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateProvisioningClaimError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates a fleet provisioning template.</p>
+    fn create_provisioning_template(
+        &self,
+        input: CreateProvisioningTemplateRequest,
+    ) -> RusotoFuture<CreateProvisioningTemplateResponse, CreateProvisioningTemplateError> {
+        let request_uri = "/provisioning-templates";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateProvisioningTemplateResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateProvisioningTemplateError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates a new version of a fleet provisioning template.</p>
+    fn create_provisioning_template_version(
+        &self,
+        input: CreateProvisioningTemplateVersionRequest,
+    ) -> RusotoFuture<
+        CreateProvisioningTemplateVersionResponse,
+        CreateProvisioningTemplateVersionError,
+    > {
+        let request_uri = format!(
+            "/provisioning-templates/{template_name}/versions",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.set_as_default {
+            params.put("setAsDefault", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateProvisioningTemplateVersionResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateProvisioningTemplateVersionError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Creates a role alias.</p>
     fn create_role_alias(
         &self,
@@ -20410,7 +22829,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
+    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream.</p>
     fn create_stream(
         &self,
         input: CreateStreamRequest,
@@ -20580,6 +22999,36 @@ impl Iot for IotClient {
                         .from_err()
                         .and_then(|response| Err(CreateTopicRuleError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Creates a topic rule destination. The destination must be confirmed prior to use.</p>
+    fn create_topic_rule_destination(
+        &self,
+        input: CreateTopicRuleDestinationRequest,
+    ) -> RusotoFuture<CreateTopicRuleDestinationResponse, CreateTopicRuleDestinationError> {
+        let request_uri = "/destinations";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateTopicRuleDestinationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateTopicRuleDestinationError::from_response(response))
+                }))
             }
         })
     }
@@ -20763,6 +23212,37 @@ impl Iot for IotClient {
                         .from_err()
                         .and_then(|response| Err(DeleteCertificateError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p><p>Deletes the specified domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    fn delete_domain_configuration(
+        &self,
+        input: DeleteDomainConfigurationRequest,
+    ) -> RusotoFuture<DeleteDomainConfigurationResponse, DeleteDomainConfigurationError> {
+        let request_uri = format!(
+            "/domainConfigurations/{domain_configuration_name}",
+            domain_configuration_name = input.domain_configuration_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteDomainConfigurationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDomainConfigurationError::from_response(response))
+                }))
             }
         })
     }
@@ -21010,6 +23490,74 @@ impl Iot for IotClient {
                         Err(DeletePolicyVersionError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>Deletes a fleet provisioning template.</p>
+    fn delete_provisioning_template(
+        &self,
+        input: DeleteProvisioningTemplateRequest,
+    ) -> RusotoFuture<DeleteProvisioningTemplateResponse, DeleteProvisioningTemplateError> {
+        let request_uri = format!(
+            "/provisioning-templates/{template_name}",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteProvisioningTemplateResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteProvisioningTemplateError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes a fleet provisioning template version.</p>
+    fn delete_provisioning_template_version(
+        &self,
+        input: DeleteProvisioningTemplateVersionRequest,
+    ) -> RusotoFuture<
+        DeleteProvisioningTemplateVersionResponse,
+        DeleteProvisioningTemplateVersionError,
+    > {
+        let request_uri = format!(
+            "/provisioning-templates/{template_name}/versions/{version_id}",
+            template_name = input.template_name,
+            version_id = input.version_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteProvisioningTemplateVersionResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteProvisioningTemplateVersionError::from_response(
+                        response,
+                    ))
+                }))
             }
         })
     }
@@ -21314,6 +23862,34 @@ impl Iot for IotClient {
                         .from_err()
                         .and_then(|response| Err(DeleteTopicRuleError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Deletes a topic rule destination.</p>
+    fn delete_topic_rule_destination(
+        &self,
+        input: DeleteTopicRuleDestinationRequest,
+    ) -> RusotoFuture<DeleteTopicRuleDestinationResponse, DeleteTopicRuleDestinationError> {
+        let request_uri = format!("/destinations/{arn}", arn = input.arn);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteTopicRuleDestinationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTopicRuleDestinationError::from_response(response))
+                }))
             }
         })
     }
@@ -21680,6 +24256,37 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p><p>Gets summary information about a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    fn describe_domain_configuration(
+        &self,
+        input: DescribeDomainConfigurationRequest,
+    ) -> RusotoFuture<DescribeDomainConfigurationResponse, DescribeDomainConfigurationError> {
+        let request_uri = format!(
+            "/domainConfigurations/{domain_configuration_name}",
+            domain_configuration_name = input.domain_configuration_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeDomainConfigurationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeDomainConfigurationError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
     fn describe_endpoint(
         &self,
@@ -21872,6 +24479,74 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeMitigationActionError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns information about a fleet provisioning template.</p>
+    fn describe_provisioning_template(
+        &self,
+        input: DescribeProvisioningTemplateRequest,
+    ) -> RusotoFuture<DescribeProvisioningTemplateResponse, DescribeProvisioningTemplateError> {
+        let request_uri = format!(
+            "/provisioning-templates/{template_name}",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProvisioningTemplateResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeProvisioningTemplateError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns information about a fleet provisioning template version.</p>
+    fn describe_provisioning_template_version(
+        &self,
+        input: DescribeProvisioningTemplateVersionRequest,
+    ) -> RusotoFuture<
+        DescribeProvisioningTemplateVersionResponse,
+        DescribeProvisioningTemplateVersionError,
+    > {
+        let request_uri = format!(
+            "/provisioning-templates/{template_name}/versions/{version_id}",
+            template_name = input.template_name,
+            version_id = input.version_id
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProvisioningTemplateVersionResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeProvisioningTemplateVersionError::from_response(
+                        response,
+                    ))
                 }))
             }
         })
@@ -22335,6 +25010,39 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Returns the approximate count of unique values that match the query.</p>
+    fn get_cardinality(
+        &self,
+        input: GetCardinalityRequest,
+    ) -> RusotoFuture<GetCardinalityResponse, GetCardinalityError> {
+        let request_uri = "/indices/cardinality";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetCardinalityResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetCardinalityError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
     fn get_effective_policies(
         &self,
@@ -22373,7 +25081,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Gets the search configuration.</p>
+    /// <p>Gets the indexing configuration.</p>
     fn get_indexing_configuration(
         &self,
     ) -> RusotoFuture<GetIndexingConfigurationResponse, GetIndexingConfigurationError> {
@@ -22495,6 +25203,39 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Groups the aggregated values that match the query into percentile groupings. The default percentile groupings are: 1,5,25,50,75,95,99, although you can specify your own when you call <code>GetPercentiles</code>. This function returns a value for each percentile group specified (or the default percentile groupings). The percentile group "1" contains the aggregated field value that occurs in approximately one percent of the values that match the query. The percentile group "5" contains the aggregated field value that occurs in approximately five percent of the values that match the query, and so on. The result is an approximation, the more values that match the query, the more accurate the percentile values.</p>
+    fn get_percentiles(
+        &self,
+        input: GetPercentilesRequest,
+    ) -> RusotoFuture<GetPercentilesResponse, GetPercentilesError> {
+        let request_uri = "/indices/percentiles";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetPercentilesResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetPercentilesError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
     fn get_policy(
         &self,
@@ -22590,7 +25331,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Gets statistics about things that match the specified query.</p>
+    /// <p>Returns the count, average, sum, minimum, maximum, sum of squares, variance, and standard deviation for the specified aggregated field. If the aggregation field is of type <code>String</code>, only the count statistic is returned.</p>
     fn get_statistics(
         &self,
         input: GetStatisticsRequest,
@@ -22650,6 +25391,34 @@ impl Iot for IotClient {
                         .from_err()
                         .and_then(|response| Err(GetTopicRuleError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Gets information about a topic rule destination.</p>
+    fn get_topic_rule_destination(
+        &self,
+        input: GetTopicRuleDestinationRequest,
+    ) -> RusotoFuture<GetTopicRuleDestinationResponse, GetTopicRuleDestinationError> {
+        let request_uri = format!("/destinations/{arn}", arn = input.arn);
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetTopicRuleDestinationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetTopicRuleDestinationError::from_response(response))
+                }))
             }
         })
     }
@@ -23170,6 +25939,46 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    fn list_domain_configurations(
+        &self,
+        input: ListDomainConfigurationsRequest,
+    ) -> RusotoFuture<ListDomainConfigurationsResponse, ListDomainConfigurationsError> {
+        let request_uri = "/domainConfigurations";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
+        }
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
+        }
+        if let Some(ref x) = input.service_type {
+            params.put("serviceType", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListDomainConfigurationsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListDomainConfigurationsError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists the search indices.</p>
     fn list_indices(
         &self,
@@ -23663,6 +26472,86 @@ impl Iot for IotClient {
                         Err(ListPrincipalThingsError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>A list of fleet provisioning template versions.</p>
+    fn list_provisioning_template_versions(
+        &self,
+        input: ListProvisioningTemplateVersionsRequest,
+    ) -> RusotoFuture<ListProvisioningTemplateVersionsResponse, ListProvisioningTemplateVersionsError>
+    {
+        let request_uri = format!(
+            "/provisioning-templates/{template_name}/versions",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListProvisioningTemplateVersionsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListProvisioningTemplateVersionsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists the fleet provisioning templates in your AWS account.</p>
+    fn list_provisioning_templates(
+        &self,
+        input: ListProvisioningTemplatesRequest,
+    ) -> RusotoFuture<ListProvisioningTemplatesResponse, ListProvisioningTemplatesError> {
+        let request_uri = "/provisioning-templates";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListProvisioningTemplatesResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListProvisioningTemplatesError::from_response(response))
+                }))
             }
         })
     }
@@ -24379,6 +27268,43 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Lists all the topic rule destinations in your AWS account.</p>
+    fn list_topic_rule_destinations(
+        &self,
+        input: ListTopicRuleDestinationsRequest,
+    ) -> RusotoFuture<ListTopicRuleDestinationsResponse, ListTopicRuleDestinationsError> {
+        let request_uri = "/destinations";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTopicRuleDestinationsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListTopicRuleDestinationsError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists the rules for the specific topic.</p>
     fn list_topic_rules(
         &self,
@@ -24587,7 +27513,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Provisions a thing.</p>
+    /// <p>Provisions a thing in the device registry. RegisterThing calls other AWS IoT control plane APIs. These calls might exceed your account level <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_iot"> AWS IoT Throttling Limits</a> and cause throttle errors. Please contact <a href="https://console.aws.amazon.com/support/home">AWS Customer Support</a> to raise your throttling limits if necessary.</p>
     fn register_thing(
         &self,
         input: RegisterThingRequest,
@@ -25428,6 +28354,39 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p><p>Updates values stored in the domain configuration. Domain configurations for default endpoints can&#39;t be updated.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    fn update_domain_configuration(
+        &self,
+        input: UpdateDomainConfigurationRequest,
+    ) -> RusotoFuture<UpdateDomainConfigurationResponse, UpdateDomainConfigurationError> {
+        let request_uri = format!(
+            "/domainConfigurations/{domain_configuration_name}",
+            domain_configuration_name = input.domain_configuration_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateDomainConfigurationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateDomainConfigurationError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Updates a dynamic thing group.</p>
     fn update_dynamic_thing_group(
         &self,
@@ -25581,6 +28540,39 @@ impl Iot for IotClient {
                         Err(UpdateMitigationActionError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>Updates a fleet provisioning template.</p>
+    fn update_provisioning_template(
+        &self,
+        input: UpdateProvisioningTemplateRequest,
+    ) -> RusotoFuture<UpdateProvisioningTemplateResponse, UpdateProvisioningTemplateError> {
+        let request_uri = format!(
+            "/provisioning-templates/{template_name}",
+            template_name = input.template_name
+        );
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateProvisioningTemplateResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateProvisioningTemplateError::from_response(response))
+                }))
             }
         })
     }
@@ -25821,6 +28813,36 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateThingGroupsForThingError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates a topic rule destination. You use this to change the status, endpoint URL, or confirmation URL of the destination.</p>
+    fn update_topic_rule_destination(
+        &self,
+        input: UpdateTopicRuleDestinationRequest,
+    ) -> RusotoFuture<UpdateTopicRuleDestinationResponse, UpdateTopicRuleDestinationError> {
+        let request_uri = "/destinations";
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateTopicRuleDestinationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateTopicRuleDestinationError::from_response(response))
                 }))
             }
         })

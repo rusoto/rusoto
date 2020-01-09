@@ -289,18 +289,14 @@ impl AssociateMemberAccountError {
 }
 impl fmt::Display for AssociateMemberAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateMemberAccountError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateMemberAccountError::Internal(ref cause) => cause,
-            AssociateMemberAccountError::InvalidInput(ref cause) => cause,
-            AssociateMemberAccountError::LimitExceeded(ref cause) => cause,
+            AssociateMemberAccountError::Internal(ref cause) => write!(f, "{}", cause),
+            AssociateMemberAccountError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AssociateMemberAccountError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateMemberAccountError {}
 /// Errors returned by AssociateS3Resources
 #[derive(Debug, PartialEq)]
 pub enum AssociateS3ResourcesError {
@@ -339,19 +335,15 @@ impl AssociateS3ResourcesError {
 }
 impl fmt::Display for AssociateS3ResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateS3ResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateS3ResourcesError::AccessDenied(ref cause) => cause,
-            AssociateS3ResourcesError::Internal(ref cause) => cause,
-            AssociateS3ResourcesError::InvalidInput(ref cause) => cause,
-            AssociateS3ResourcesError::LimitExceeded(ref cause) => cause,
+            AssociateS3ResourcesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AssociateS3ResourcesError::Internal(ref cause) => write!(f, "{}", cause),
+            AssociateS3ResourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AssociateS3ResourcesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateS3ResourcesError {}
 /// Errors returned by DisassociateMemberAccount
 #[derive(Debug, PartialEq)]
 pub enum DisassociateMemberAccountError {
@@ -382,17 +374,13 @@ impl DisassociateMemberAccountError {
 }
 impl fmt::Display for DisassociateMemberAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateMemberAccountError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateMemberAccountError::Internal(ref cause) => cause,
-            DisassociateMemberAccountError::InvalidInput(ref cause) => cause,
+            DisassociateMemberAccountError::Internal(ref cause) => write!(f, "{}", cause),
+            DisassociateMemberAccountError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateMemberAccountError {}
 /// Errors returned by DisassociateS3Resources
 #[derive(Debug, PartialEq)]
 pub enum DisassociateS3ResourcesError {
@@ -430,18 +418,14 @@ impl DisassociateS3ResourcesError {
 }
 impl fmt::Display for DisassociateS3ResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateS3ResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateS3ResourcesError::AccessDenied(ref cause) => cause,
-            DisassociateS3ResourcesError::Internal(ref cause) => cause,
-            DisassociateS3ResourcesError::InvalidInput(ref cause) => cause,
+            DisassociateS3ResourcesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisassociateS3ResourcesError::Internal(ref cause) => write!(f, "{}", cause),
+            DisassociateS3ResourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateS3ResourcesError {}
 /// Errors returned by ListMemberAccounts
 #[derive(Debug, PartialEq)]
 pub enum ListMemberAccountsError {
@@ -470,17 +454,13 @@ impl ListMemberAccountsError {
 }
 impl fmt::Display for ListMemberAccountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMemberAccountsError {
-    fn description(&self) -> &str {
         match *self {
-            ListMemberAccountsError::Internal(ref cause) => cause,
-            ListMemberAccountsError::InvalidInput(ref cause) => cause,
+            ListMemberAccountsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListMemberAccountsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMemberAccountsError {}
 /// Errors returned by ListS3Resources
 #[derive(Debug, PartialEq)]
 pub enum ListS3ResourcesError {
@@ -514,18 +494,14 @@ impl ListS3ResourcesError {
 }
 impl fmt::Display for ListS3ResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListS3ResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListS3ResourcesError::AccessDenied(ref cause) => cause,
-            ListS3ResourcesError::Internal(ref cause) => cause,
-            ListS3ResourcesError::InvalidInput(ref cause) => cause,
+            ListS3ResourcesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListS3ResourcesError::Internal(ref cause) => write!(f, "{}", cause),
+            ListS3ResourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListS3ResourcesError {}
 /// Errors returned by UpdateS3Resources
 #[derive(Debug, PartialEq)]
 pub enum UpdateS3ResourcesError {
@@ -559,18 +535,14 @@ impl UpdateS3ResourcesError {
 }
 impl fmt::Display for UpdateS3ResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateS3ResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateS3ResourcesError::AccessDenied(ref cause) => cause,
-            UpdateS3ResourcesError::Internal(ref cause) => cause,
-            UpdateS3ResourcesError::InvalidInput(ref cause) => cause,
+            UpdateS3ResourcesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateS3ResourcesError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateS3ResourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateS3ResourcesError {}
 /// Trait representing the capabilities of the Amazon Macie API. Amazon Macie clients implement this trait.
 pub trait Macie {
     /// <p>Associates a specified AWS account with Amazon Macie as a member account.</p>
@@ -649,6 +621,14 @@ impl MacieClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> MacieClient {
         MacieClient { client, region }
+    }
+}
+
+impl fmt::Debug for MacieClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MacieClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

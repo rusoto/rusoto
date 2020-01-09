@@ -23,6 +23,83 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
+/// <p>A structure that encapsulates a signaling channel's metadata and properties.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelInfo {
+    /// <p>The ARN of the signaling channel.</p>
+    #[serde(rename = "ChannelARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The name of the signaling channel.</p>
+    #[serde(rename = "ChannelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_name: Option<String>,
+    /// <p>Current status of the signaling channel.</p>
+    #[serde(rename = "ChannelStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_status: Option<String>,
+    /// <p>The type of the signaling channel.</p>
+    #[serde(rename = "ChannelType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_type: Option<String>,
+    /// <p>The time at which the signaling channel was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A structure that contains the configuration for the <code>SINGLE_MASTER</code> channel type.</p>
+    #[serde(rename = "SingleMasterConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub single_master_configuration: Option<SingleMasterConfiguration>,
+    /// <p>The current version of the signaling channel.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
+/// <p>An optional input parameter for the <code>ListSignalingChannels</code> API. When this parameter is specified while invoking <code>ListSignalingChannels</code>, the API returns only the channels that satisfy a condition specified in <code>ChannelNameCondition</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ChannelNameCondition {
+    /// <p>A comparison operator. Currently, you can only specify the <code>BEGINS_WITH</code> operator, which finds signaling channels whose names begin with a given prefix.</p>
+    #[serde(rename = "ComparisonOperator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comparison_operator: Option<String>,
+    /// <p>A value to compare.</p>
+    #[serde(rename = "ComparisonValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comparison_value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateSignalingChannelInput {
+    /// <p>A name for the signaling channel that you are creating. It must be unique for each account and region.</p>
+    #[serde(rename = "ChannelName")]
+    pub channel_name: String,
+    /// <p>A type of the signaling channel that you are creating. Currently, <code>SINGLE_MASTER</code> is the only supported channel type. </p>
+    #[serde(rename = "ChannelType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_type: Option<String>,
+    /// <p>A structure containing the configuration for the <code>SINGLE_MASTER</code> channel type. </p>
+    #[serde(rename = "SingleMasterConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub single_master_configuration: Option<SingleMasterConfiguration>,
+    /// <p>A set of tags (key/value pairs) that you want to associate with this channel.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateSignalingChannelOutput {
+    /// <p>The ARN of the created channel.</p>
+    #[serde(rename = "ChannelARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamInput {
@@ -38,7 +115,7 @@ pub struct CreateStreamInput {
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>The media type of the stream. Consumers of the stream can use this information when processing the stream. For more information about media types, see <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">Media Types</a>. If you choose to specify the <code>MediaType</code>, see <a href="https://tools.ietf.org/html/rfc6838#section-4.2">Naming Requirements</a> for guidelines.</p> <p>This parameter is optional; the default value is <code>null</code> (or empty in JSON).</p>
+    /// <p>The media type of the stream. Consumers of the stream can use this information when processing the stream. For more information about media types, see <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">Media Types</a>. If you choose to specify the <code>MediaType</code>, see <a href="https://tools.ietf.org/html/rfc6838#section-4.2">Naming Requirements</a> for guidelines.</p> <p>Example valid values include "video/h264" and "video/h264,audio/aac".</p> <p>This parameter is optional; the default value is <code>null</code> (or empty in JSON).</p>
     #[serde(rename = "MediaType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_type: Option<String>,
@@ -62,6 +139,22 @@ pub struct CreateStreamOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteSignalingChannelInput {
+    /// <p>The ARN of the signaling channel that you want to delete.</p>
+    #[serde(rename = "ChannelARN")]
+    pub channel_arn: String,
+    /// <p>The current version of the signaling channel that you want to delete. You can obtain the current version by invoking the <code>DescribeSignalingChannel</code> or <code>ListSignalingChannels</code> APIs.</p>
+    #[serde(rename = "CurrentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteSignalingChannelOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamInput {
     /// <p>Optional: The version of the stream that you want to delete. </p> <p>Specify the version as a safeguard to ensure that your are deleting the correct stream. To get the stream version, use the <code>DescribeStream</code> API.</p> <p>If not specified, only the <code>CreationTime</code> is checked before deleting the stream.</p>
     #[serde(rename = "CurrentVersion")]
@@ -75,6 +168,28 @@ pub struct DeleteStreamInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteStreamOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeSignalingChannelInput {
+    /// <p>The ARN of the signaling channel that you want to describe.</p>
+    #[serde(rename = "ChannelARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The name of the signaling channel that you want to describe.</p>
+    #[serde(rename = "ChannelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeSignalingChannelOutput {
+    /// <p>A structure that encapsulates the specified signaling channel's metadata and properties.</p>
+    #[serde(rename = "ChannelInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_info: Option<ChannelInfo>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -125,6 +240,58 @@ pub struct GetDataEndpointOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSignalingChannelEndpointInput {
+    /// <p>The ARN of the signalling channel for which you want to get an endpoint.</p>
+    #[serde(rename = "ChannelARN")]
+    pub channel_arn: String,
+    /// <p>A structure containing the endpoint configuration for the <code>SINGLE_MASTER</code> channel type.</p>
+    #[serde(rename = "SingleMasterChannelEndpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub single_master_channel_endpoint_configuration:
+        Option<SingleMasterChannelEndpointConfiguration>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSignalingChannelEndpointOutput {
+    /// <p>A list of endpoints for the specified signaling channel.</p>
+    #[serde(rename = "ResourceEndpointList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_endpoint_list: Option<Vec<ResourceEndpointListItem>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListSignalingChannelsInput {
+    /// <p>Optional: Returns only the channels that satisfy a specific condition.</p>
+    #[serde(rename = "ChannelNameCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_name_condition: Option<ChannelNameCondition>,
+    /// <p>The maximum number of channels to return in the response. The default is 500.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If you specify this parameter, when the result of a <code>ListSignalingChannels</code> operation is truncated, the call returns the <code>NextToken</code> in the response. To get another batch of channels, provide this token in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListSignalingChannelsOutput {
+    /// <p>An array of <code>ChannelInfo</code> objects.</p>
+    #[serde(rename = "ChannelInfoList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_info_list: Option<Vec<ChannelInfo>>,
+    /// <p>If the response is truncated, the call returns this element with a token. To get the next batch of streams, use this token in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsInput {
     /// <p>The maximum number of streams to return in the response. The default is 10,000.</p>
     #[serde(rename = "MaxResults")]
@@ -155,6 +322,31 @@ pub struct ListStreamsOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceInput {
+    /// <p>If you specify this parameter and the result of a ListTagsForResource call is truncated, the response includes a token that you can use in the next request to fetch the next batch of tags. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ARN of the signaling channel for which you want to list tags.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceOutput {
+    /// <p>If you specify this parameter and the result of a ListTagsForResource call is truncated, the response includes a token that you can use in the next request to fetch the next set of tags. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A map of tag keys and values associated with the specified signaling channel.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForStreamInput {
     /// <p>If you specify this parameter and the result of a <code>ListTagsForStream</code> call is truncated, the response includes a token that you can use in the next request to fetch the next batch of tags.</p>
     #[serde(rename = "NextToken")]
@@ -181,6 +373,43 @@ pub struct ListTagsForStreamOutput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>An object that describes the endpoint of the signaling channel returned by the <code>GetSignalingChannelEndpoint</code> API.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResourceEndpointListItem {
+    /// <p>The protocol of the signaling channel returned by the <code>GetSignalingChannelEndpoint</code> API.</p>
+    #[serde(rename = "Protocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol: Option<String>,
+    /// <p>The endpoint of the signaling channel returned by the <code>GetSignalingChannelEndpoint</code> API.</p>
+    #[serde(rename = "ResourceEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_endpoint: Option<String>,
+}
+
+/// <p>An object that contains the endpoint configuration for the <code>SINGLE_MASTER</code> channel type. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SingleMasterChannelEndpointConfiguration {
+    /// <p>This property is used to determine the nature of communication over this <code>SINGLE_MASTER</code> signaling channel. If <code>WSS</code> is specified, this API returns a websocket endpoint. If <code>HTTPS</code> is specified, this API returns an <code>HTTPS</code> endpoint.</p>
+    #[serde(rename = "Protocols")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols: Option<Vec<String>>,
+    /// <p>This property is used to determine messaging permissions in this <code>SINGLE_MASTER</code> signaling channel. If <code>MASTER</code> is specified, this API returns an endpoint that a client can use to receive offers from and send answers to any of the viewers on this signaling channel. If <code>VIEWER</code> is specified, this API returns an endpoint that a client can use only to send offers to another <code>MASTER</code> client on this signaling channel. </p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+}
+
+/// <p>A structure that contains the configuration for the <code>SINGLE_MASTER</code> channel type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SingleMasterConfiguration {
+    /// <p>The period of time a signaling channel retains underlivered messages before they are discarded.</p>
+    #[serde(rename = "MessageTtlSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_ttl_seconds: Option<i64>,
 }
 
 /// <p>An object describing a Kinesis video stream.</p>
@@ -239,6 +468,33 @@ pub struct StreamNameCondition {
     pub comparison_value: Option<String>,
 }
 
+/// <p>A key and value pair that is associated with the specified signaling channel.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct Tag {
+    /// <p>The key of the tag that is associated with the specified signaling channel.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The value of the tag that is associated with the specified signaling channel.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceInput {
+    /// <p>The ARN of the signaling channel to which you want to add tags.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>A list of tags to associate with the specified signaling channel. Each tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceOutput {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagStreamInput {
@@ -258,6 +514,21 @@ pub struct TagStreamInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagStreamOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceInput {
+    /// <p>The ARN of the signaling channel from which you want to remove tags.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>A list of the keys of the tags that you want to remove.</p>
+    #[serde(rename = "TagKeyList")]
+    pub tag_key_list: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -307,6 +578,25 @@ pub struct UpdateDataRetentionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateSignalingChannelInput {
+    /// <p>The ARN of the signaling channel that you want to update.</p>
+    #[serde(rename = "ChannelARN")]
+    pub channel_arn: String,
+    /// <p>The current version of the signaling channel that you want to update.</p>
+    #[serde(rename = "CurrentVersion")]
+    pub current_version: String,
+    /// <p>The structure containing the configuration for the <code>SINGLE_MASTER</code> type of the signaling channel that you want to update. </p>
+    #[serde(rename = "SingleMasterConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub single_master_configuration: Option<SingleMasterConfiguration>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateSignalingChannelOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStreamInput {
     /// <p>The version of the stream whose metadata you want to update.</p>
     #[serde(rename = "CurrentVersion")]
@@ -333,6 +623,79 @@ pub struct UpdateStreamInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStreamOutput {}
 
+/// Errors returned by CreateSignalingChannel
+#[derive(Debug, PartialEq)]
+pub enum CreateSignalingChannelError {
+    /// <p>You do not have required permissions to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>You have reached the maximum limit of active signaling channels for this AWS account in this region.</p>
+    AccountChannelLimitExceeded(String),
+    /// <p>Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.</p>
+    ClientLimitExceeded(String),
+    /// <p>The value for this input parameter is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The stream is currently not available for this operation.</p>
+    ResourceInUse(String),
+    /// <p>You have exceeded the limit of tags that you can associate with the resource. Kinesis video streams support up to 50 tags. </p>
+    TagsPerResourceExceededLimit(String),
+}
+
+impl CreateSignalingChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSignalingChannelError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateSignalingChannelError::AccessDenied(err.msg))
+                }
+                "AccountChannelLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateSignalingChannelError::AccountChannelLimitExceeded(err.msg),
+                    )
+                }
+                "ClientLimitExceededException" => {
+                    return RusotoError::Service(CreateSignalingChannelError::ClientLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(CreateSignalingChannelError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(CreateSignalingChannelError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "TagsPerResourceExceededLimitException" => {
+                    return RusotoError::Service(
+                        CreateSignalingChannelError::TagsPerResourceExceededLimit(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateSignalingChannelError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::AccountChannelLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::TagsPerResourceExceededLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateSignalingChannelError {}
 /// Errors returned by CreateStream
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamError {
@@ -392,22 +755,79 @@ impl CreateStreamError {
 }
 impl fmt::Display for CreateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamError::AccountStreamLimitExceeded(ref cause) => cause,
-            CreateStreamError::ClientLimitExceeded(ref cause) => cause,
-            CreateStreamError::DeviceStreamLimitExceeded(ref cause) => cause,
-            CreateStreamError::InvalidArgument(ref cause) => cause,
-            CreateStreamError::InvalidDevice(ref cause) => cause,
-            CreateStreamError::ResourceInUse(ref cause) => cause,
-            CreateStreamError::TagsPerResourceExceededLimit(ref cause) => cause,
+            CreateStreamError::AccountStreamLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::DeviceStreamLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::InvalidDevice(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::TagsPerResourceExceededLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStreamError {}
+/// Errors returned by DeleteSignalingChannel
+#[derive(Debug, PartialEq)]
+pub enum DeleteSignalingChannelError {
+    /// <p>You do not have required permissions to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.</p>
+    ClientLimitExceeded(String),
+    /// <p>The value for this input parameter is invalid.</p>
+    InvalidArgument(String),
+    /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
+    ResourceNotFound(String),
+    /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
+    VersionMismatch(String),
+}
+
+impl DeleteSignalingChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSignalingChannelError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteSignalingChannelError::AccessDenied(err.msg))
+                }
+                "ClientLimitExceededException" => {
+                    return RusotoError::Service(DeleteSignalingChannelError::ClientLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(DeleteSignalingChannelError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteSignalingChannelError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "VersionMismatchException" => {
+                    return RusotoError::Service(DeleteSignalingChannelError::VersionMismatch(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteSignalingChannelError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::VersionMismatch(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteSignalingChannelError {}
 /// Errors returned by DeleteStream
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamError {
@@ -451,20 +871,71 @@ impl DeleteStreamError {
 }
 impl fmt::Display for DeleteStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStreamError::ClientLimitExceeded(ref cause) => cause,
-            DeleteStreamError::InvalidArgument(ref cause) => cause,
-            DeleteStreamError::NotAuthorized(ref cause) => cause,
-            DeleteStreamError::ResourceNotFound(ref cause) => cause,
-            DeleteStreamError::VersionMismatch(ref cause) => cause,
+            DeleteStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStreamError {}
+/// Errors returned by DescribeSignalingChannel
+#[derive(Debug, PartialEq)]
+pub enum DescribeSignalingChannelError {
+    /// <p>You do not have required permissions to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.</p>
+    ClientLimitExceeded(String),
+    /// <p>The value for this input parameter is invalid.</p>
+    InvalidArgument(String),
+    /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeSignalingChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSignalingChannelError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeSignalingChannelError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ClientLimitExceededException" => {
+                    return RusotoError::Service(
+                        DescribeSignalingChannelError::ClientLimitExceeded(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(DescribeSignalingChannelError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeSignalingChannelError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeSignalingChannelError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeSignalingChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeSignalingChannelError {}
 /// Errors returned by DescribeStream
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamError {
@@ -503,19 +974,15 @@ impl DescribeStreamError {
 }
 impl fmt::Display for DescribeStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStreamError::ClientLimitExceeded(ref cause) => cause,
-            DescribeStreamError::InvalidArgument(ref cause) => cause,
-            DescribeStreamError::NotAuthorized(ref cause) => cause,
-            DescribeStreamError::ResourceNotFound(ref cause) => cause,
+            DescribeStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStreamError {}
 /// Errors returned by GetDataEndpoint
 #[derive(Debug, PartialEq)]
 pub enum GetDataEndpointError {
@@ -554,19 +1021,127 @@ impl GetDataEndpointError {
 }
 impl fmt::Display for GetDataEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDataEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            GetDataEndpointError::ClientLimitExceeded(ref cause) => cause,
-            GetDataEndpointError::InvalidArgument(ref cause) => cause,
-            GetDataEndpointError::NotAuthorized(ref cause) => cause,
-            GetDataEndpointError::ResourceNotFound(ref cause) => cause,
+            GetDataEndpointError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetDataEndpointError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetDataEndpointError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetDataEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDataEndpointError {}
+/// Errors returned by GetSignalingChannelEndpoint
+#[derive(Debug, PartialEq)]
+pub enum GetSignalingChannelEndpointError {
+    /// <p>You do not have required permissions to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.</p>
+    ClientLimitExceeded(String),
+    /// <p>The value for this input parameter is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The stream is currently not available for this operation.</p>
+    ResourceInUse(String),
+    /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
+    ResourceNotFound(String),
+}
+
+impl GetSignalingChannelEndpointError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetSignalingChannelEndpointError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetSignalingChannelEndpointError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ClientLimitExceededException" => {
+                    return RusotoError::Service(
+                        GetSignalingChannelEndpointError::ClientLimitExceeded(err.msg),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(GetSignalingChannelEndpointError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(GetSignalingChannelEndpointError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetSignalingChannelEndpointError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetSignalingChannelEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSignalingChannelEndpointError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetSignalingChannelEndpointError::ClientLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSignalingChannelEndpointError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetSignalingChannelEndpointError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            GetSignalingChannelEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetSignalingChannelEndpointError {}
+/// Errors returned by ListSignalingChannels
+#[derive(Debug, PartialEq)]
+pub enum ListSignalingChannelsError {
+    /// <p>You do not have required permissions to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.</p>
+    ClientLimitExceeded(String),
+    /// <p>The value for this input parameter is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl ListSignalingChannelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSignalingChannelsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListSignalingChannelsError::AccessDenied(err.msg))
+                }
+                "ClientLimitExceededException" => {
+                    return RusotoError::Service(ListSignalingChannelsError::ClientLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(ListSignalingChannelsError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListSignalingChannelsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListSignalingChannelsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListSignalingChannelsError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListSignalingChannelsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListSignalingChannelsError {}
 /// Errors returned by ListStreams
 #[derive(Debug, PartialEq)]
 pub enum ListStreamsError {
@@ -595,17 +1170,64 @@ impl ListStreamsError {
 }
 impl fmt::Display for ListStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStreamsError::ClientLimitExceeded(ref cause) => cause,
-            ListStreamsError::InvalidArgument(ref cause) => cause,
+            ListStreamsError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListStreamsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStreamsError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>You do not have required permissions to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.</p>
+    ClientLimitExceeded(String),
+    /// <p>The value for this input parameter is invalid.</p>
+    InvalidArgument(String),
+    /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
+                }
+                "ClientLimitExceededException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ClientLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidArgument(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTagsForStream
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForStreamError {
@@ -653,20 +1275,71 @@ impl ListTagsForStreamError {
 }
 impl fmt::Display for ListTagsForStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForStreamError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForStreamError::ClientLimitExceeded(ref cause) => cause,
-            ListTagsForStreamError::InvalidArgument(ref cause) => cause,
-            ListTagsForStreamError::InvalidResourceFormat(ref cause) => cause,
-            ListTagsForStreamError::NotAuthorized(ref cause) => cause,
-            ListTagsForStreamError::ResourceNotFound(ref cause) => cause,
+            ListTagsForStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::InvalidResourceFormat(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForStreamError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>You do not have required permissions to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.</p>
+    ClientLimitExceeded(String),
+    /// <p>The value for this input parameter is invalid.</p>
+    InvalidArgument(String),
+    /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
+    ResourceNotFound(String),
+    /// <p>You have exceeded the limit of tags that you can associate with the resource. Kinesis video streams support up to 50 tags. </p>
+    TagsPerResourceExceededLimit(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
+                }
+                "ClientLimitExceededException" => {
+                    return RusotoError::Service(TagResourceError::ClientLimitExceeded(err.msg))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(TagResourceError::InvalidArgument(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "TagsPerResourceExceededLimitException" => {
+                    return RusotoError::Service(TagResourceError::TagsPerResourceExceededLimit(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagsPerResourceExceededLimit(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
 /// Errors returned by TagStream
 #[derive(Debug, PartialEq)]
 pub enum TagStreamError {
@@ -717,21 +1390,64 @@ impl TagStreamError {
 }
 impl fmt::Display for TagStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagStreamError {
-    fn description(&self) -> &str {
         match *self {
-            TagStreamError::ClientLimitExceeded(ref cause) => cause,
-            TagStreamError::InvalidArgument(ref cause) => cause,
-            TagStreamError::InvalidResourceFormat(ref cause) => cause,
-            TagStreamError::NotAuthorized(ref cause) => cause,
-            TagStreamError::ResourceNotFound(ref cause) => cause,
-            TagStreamError::TagsPerResourceExceededLimit(ref cause) => cause,
+            TagStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TagStreamError::InvalidResourceFormat(ref cause) => write!(f, "{}", cause),
+            TagStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            TagStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagStreamError::TagsPerResourceExceededLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagStreamError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>You do not have required permissions to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.</p>
+    ClientLimitExceeded(String),
+    /// <p>The value for this input parameter is invalid.</p>
+    InvalidArgument(String),
+    /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
+                }
+                "ClientLimitExceededException" => {
+                    return RusotoError::Service(UntagResourceError::ClientLimitExceeded(err.msg))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidArgument(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UntagStream
 #[derive(Debug, PartialEq)]
 pub enum UntagStreamError {
@@ -775,20 +1491,16 @@ impl UntagStreamError {
 }
 impl fmt::Display for UntagStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagStreamError {
-    fn description(&self) -> &str {
         match *self {
-            UntagStreamError::ClientLimitExceeded(ref cause) => cause,
-            UntagStreamError::InvalidArgument(ref cause) => cause,
-            UntagStreamError::InvalidResourceFormat(ref cause) => cause,
-            UntagStreamError::NotAuthorized(ref cause) => cause,
-            UntagStreamError::ResourceNotFound(ref cause) => cause,
+            UntagStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::InvalidResourceFormat(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagStreamError {}
 /// Errors returned by UpdateDataRetention
 #[derive(Debug, PartialEq)]
 pub enum UpdateDataRetentionError {
@@ -841,21 +1553,86 @@ impl UpdateDataRetentionError {
 }
 impl fmt::Display for UpdateDataRetentionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDataRetentionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDataRetentionError::ClientLimitExceeded(ref cause) => cause,
-            UpdateDataRetentionError::InvalidArgument(ref cause) => cause,
-            UpdateDataRetentionError::NotAuthorized(ref cause) => cause,
-            UpdateDataRetentionError::ResourceInUse(ref cause) => cause,
-            UpdateDataRetentionError::ResourceNotFound(ref cause) => cause,
-            UpdateDataRetentionError::VersionMismatch(ref cause) => cause,
+            UpdateDataRetentionError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDataRetentionError {}
+/// Errors returned by UpdateSignalingChannel
+#[derive(Debug, PartialEq)]
+pub enum UpdateSignalingChannelError {
+    /// <p>You do not have required permissions to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>Kinesis Video Streams has throttled the request because you have exceeded the limit of allowed client calls. Try making the call later.</p>
+    ClientLimitExceeded(String),
+    /// <p>The value for this input parameter is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The stream is currently not available for this operation.</p>
+    ResourceInUse(String),
+    /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
+    ResourceNotFound(String),
+    /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
+    VersionMismatch(String),
+}
+
+impl UpdateSignalingChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSignalingChannelError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateSignalingChannelError::AccessDenied(err.msg))
+                }
+                "ClientLimitExceededException" => {
+                    return RusotoError::Service(UpdateSignalingChannelError::ClientLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(UpdateSignalingChannelError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(UpdateSignalingChannelError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateSignalingChannelError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "VersionMismatchException" => {
+                    return RusotoError::Service(UpdateSignalingChannelError::VersionMismatch(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateSignalingChannelError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::VersionMismatch(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateSignalingChannelError {}
 /// Errors returned by UpdateStream
 #[derive(Debug, PartialEq)]
 pub enum UpdateStreamError {
@@ -904,34 +1681,48 @@ impl UpdateStreamError {
 }
 impl fmt::Display for UpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStreamError::ClientLimitExceeded(ref cause) => cause,
-            UpdateStreamError::InvalidArgument(ref cause) => cause,
-            UpdateStreamError::NotAuthorized(ref cause) => cause,
-            UpdateStreamError::ResourceInUse(ref cause) => cause,
-            UpdateStreamError::ResourceNotFound(ref cause) => cause,
-            UpdateStreamError::VersionMismatch(ref cause) => cause,
+            UpdateStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStreamError {}
 /// Trait representing the capabilities of the Kinesis Video API. Kinesis Video clients implement this trait.
 pub trait KinesisVideo {
+    /// <p>Creates a signaling channel. </p> <p> <code>CreateSignalingChannel</code> is an asynchronous operation.</p>
+    fn create_signaling_channel(
+        &self,
+        input: CreateSignalingChannelInput,
+    ) -> RusotoFuture<CreateSignalingChannelOutput, CreateSignalingChannelError>;
+
     /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
     fn create_stream(
         &self,
         input: CreateStreamInput,
     ) -> RusotoFuture<CreateStreamOutput, CreateStreamError>;
 
+    /// <p>Deletes a specified signaling channel. <code>DeleteSignalingChannel</code> is an asynchronous operation. If you don't specify the channel's current version, the most recent version is deleted.</p>
+    fn delete_signaling_channel(
+        &self,
+        input: DeleteSignalingChannelInput,
+    ) -> RusotoFuture<DeleteSignalingChannelOutput, DeleteSignalingChannelError>;
+
     /// <p>Deletes a Kinesis video stream and the data contained in the stream. </p> <p>This method marks the stream for deletion, and makes the data in the stream inaccessible immediately.</p> <p> </p> <p> To ensure that you have the latest version of the stream before deleting it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p>This operation requires permission for the <code>KinesisVideo:DeleteStream</code> action.</p>
     fn delete_stream(
         &self,
         input: DeleteStreamInput,
     ) -> RusotoFuture<DeleteStreamOutput, DeleteStreamError>;
+
+    /// <p>Returns the most current information about the signaling channel. You must specify either the name or the ARN of the channel that you want to describe.</p>
+    fn describe_signaling_channel(
+        &self,
+        input: DescribeSignalingChannelInput,
+    ) -> RusotoFuture<DescribeSignalingChannelOutput, DescribeSignalingChannelError>;
 
     /// <p>Returns the most current information about the specified stream. You must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
     fn describe_stream(
@@ -945,11 +1736,29 @@ pub trait KinesisVideo {
         input: GetDataEndpointInput,
     ) -> RusotoFuture<GetDataEndpointOutput, GetDataEndpointError>;
 
+    /// <p>Provides an endpoint for the specified signaling channel to send and receive messages. This API uses the <code>SingleMasterChannelEndpointConfiguration</code> input parameter, which consists of the <code>Protocols</code> and <code>Role</code> properties.</p> <p> <code>Protocols</code> is used to determine the communication mechanism. For example, specifying <code>WSS</code> as the protocol, results in this API producing a secure websocket endpoint, and specifying <code>HTTPS</code> as the protocol, results in this API generating an HTTPS endpoint. </p> <p> <code>Role</code> determines the messaging permissions. A <code>MASTER</code> role results in this API generating an endpoint that a client can use to communicate with any of the viewers on the channel. A <code>VIEWER</code> role results in this API generating an endpoint that a client can use to communicate only with a <code>MASTER</code>. </p>
+    fn get_signaling_channel_endpoint(
+        &self,
+        input: GetSignalingChannelEndpointInput,
+    ) -> RusotoFuture<GetSignalingChannelEndpointOutput, GetSignalingChannelEndpointError>;
+
+    /// <p>Returns an array of <code>ChannelInfo</code> objects. Each object describes a signaling channel. To retrieve only those channels that satisfy a specific condition, you can specify a <code>ChannelNameCondition</code>.</p>
+    fn list_signaling_channels(
+        &self,
+        input: ListSignalingChannelsInput,
+    ) -> RusotoFuture<ListSignalingChannelsOutput, ListSignalingChannelsError>;
+
     /// <p>Returns an array of <code>StreamInfo</code> objects. Each object describes a stream. To retrieve only streams that satisfy a specific condition, you can specify a <code>StreamNameCondition</code>. </p>
     fn list_streams(
         &self,
         input: ListStreamsInput,
     ) -> RusotoFuture<ListStreamsOutput, ListStreamsError>;
+
+    /// <p>Returns a list of tags associated with the specified signaling channel.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
 
     /// <p>Returns a list of tags associated with the specified stream.</p> <p>In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
     fn list_tags_for_stream(
@@ -957,8 +1766,20 @@ pub trait KinesisVideo {
         input: ListTagsForStreamInput,
     ) -> RusotoFuture<ListTagsForStreamOutput, ListTagsForStreamError>;
 
+    /// <p>Adds one or more tags to a signaling channel. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+
     /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
     fn tag_stream(&self, input: TagStreamInput) -> RusotoFuture<TagStreamOutput, TagStreamError>;
+
+    /// <p>Removes one or more tags from a signaling channel. In the request, specify only a tag key or keys; don't specify the value. If you specify a tag key that does not exist, it's ignored.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
 
     /// <p>Removes one or more tags from a stream. In the request, specify only a tag key or keys; don't specify the value. If you specify a tag key that does not exist, it's ignored.</p> <p>In the request, you must provide the <code>StreamName</code> or <code>StreamARN</code>.</p>
     fn untag_stream(
@@ -971,6 +1792,12 @@ pub trait KinesisVideo {
         &self,
         input: UpdateDataRetentionInput,
     ) -> RusotoFuture<UpdateDataRetentionOutput, UpdateDataRetentionError>;
+
+    /// <p>Updates the existing signaling channel. This is an asynchronous operation and takes time to complete. </p> <p>If the <code>MessageTtlSeconds</code> value is updated (either increased or reduced), then it only applies to new messages sent via this channel after it's been updated. Existing messages are still expire as per the previous <code>MessageTtlSeconds</code> value.</p>
+    fn update_signaling_channel(
+        &self,
+        input: UpdateSignalingChannelInput,
+    ) -> RusotoFuture<UpdateSignalingChannelOutput, UpdateSignalingChannelError>;
 
     /// <p>Updates stream metadata, such as the device name and media type.</p> <p>You must provide the stream name or the Amazon Resource Name (ARN) of the stream.</p> <p>To make sure that you have the latest version of the stream before updating it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p> <code>UpdateStream</code> is an asynchronous operation, and takes time to complete.</p>
     fn update_stream(
@@ -1015,7 +1842,46 @@ impl KinesisVideoClient {
     }
 }
 
+impl fmt::Debug for KinesisVideoClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("KinesisVideoClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl KinesisVideo for KinesisVideoClient {
+    /// <p>Creates a signaling channel. </p> <p> <code>CreateSignalingChannel</code> is an asynchronous operation.</p>
+    fn create_signaling_channel(
+        &self,
+        input: CreateSignalingChannelInput,
+    ) -> RusotoFuture<CreateSignalingChannelOutput, CreateSignalingChannelError> {
+        let request_uri = "/createSignalingChannel";
+
+        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateSignalingChannelOutput, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateSignalingChannelError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
     fn create_stream(
         &self,
@@ -1043,6 +1909,37 @@ impl KinesisVideo for KinesisVideoClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(CreateStreamError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a specified signaling channel. <code>DeleteSignalingChannel</code> is an asynchronous operation. If you don't specify the channel's current version, the most recent version is deleted.</p>
+    fn delete_signaling_channel(
+        &self,
+        input: DeleteSignalingChannelInput,
+    ) -> RusotoFuture<DeleteSignalingChannelOutput, DeleteSignalingChannelError> {
+        let request_uri = "/deleteSignalingChannel";
+
+        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteSignalingChannelOutput, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteSignalingChannelError::from_response(response))
+                    }),
                 )
             }
         })
@@ -1076,6 +1973,35 @@ impl KinesisVideo for KinesisVideoClient {
                         .from_err()
                         .and_then(|response| Err(DeleteStreamError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Returns the most current information about the signaling channel. You must specify either the name or the ARN of the channel that you want to describe.</p>
+    fn describe_signaling_channel(
+        &self,
+        input: DescribeSignalingChannelInput,
+    ) -> RusotoFuture<DescribeSignalingChannelOutput, DescribeSignalingChannelError> {
+        let request_uri = "/describeSignalingChannel";
+
+        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeSignalingChannelOutput, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeSignalingChannelError::from_response(response))
+                }))
             }
         })
     }
@@ -1144,6 +2070,66 @@ impl KinesisVideo for KinesisVideoClient {
         })
     }
 
+    /// <p>Provides an endpoint for the specified signaling channel to send and receive messages. This API uses the <code>SingleMasterChannelEndpointConfiguration</code> input parameter, which consists of the <code>Protocols</code> and <code>Role</code> properties.</p> <p> <code>Protocols</code> is used to determine the communication mechanism. For example, specifying <code>WSS</code> as the protocol, results in this API producing a secure websocket endpoint, and specifying <code>HTTPS</code> as the protocol, results in this API generating an HTTPS endpoint. </p> <p> <code>Role</code> determines the messaging permissions. A <code>MASTER</code> role results in this API generating an endpoint that a client can use to communicate with any of the viewers on the channel. A <code>VIEWER</code> role results in this API generating an endpoint that a client can use to communicate only with a <code>MASTER</code>. </p>
+    fn get_signaling_channel_endpoint(
+        &self,
+        input: GetSignalingChannelEndpointInput,
+    ) -> RusotoFuture<GetSignalingChannelEndpointOutput, GetSignalingChannelEndpointError> {
+        let request_uri = "/getSignalingChannelEndpoint";
+
+        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetSignalingChannelEndpointOutput, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetSignalingChannelEndpointError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns an array of <code>ChannelInfo</code> objects. Each object describes a signaling channel. To retrieve only those channels that satisfy a specific condition, you can specify a <code>ChannelNameCondition</code>.</p>
+    fn list_signaling_channels(
+        &self,
+        input: ListSignalingChannelsInput,
+    ) -> RusotoFuture<ListSignalingChannelsOutput, ListSignalingChannelsError> {
+        let request_uri = "/listSignalingChannels";
+
+        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListSignalingChannelsOutput, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListSignalingChannelsError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Returns an array of <code>StreamInfo</code> objects. Each object describes a stream. To retrieve only streams that satisfy a specific condition, you can specify a <code>StreamNameCondition</code>. </p>
     fn list_streams(
         &self,
@@ -1171,6 +2157,37 @@ impl KinesisVideo for KinesisVideoClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListStreamsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a list of tags associated with the specified signaling channel.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
+        let request_uri = "/ListTagsForResource";
+
+        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceOutput, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
                 )
             }
         })
@@ -1208,6 +2225,38 @@ impl KinesisVideo for KinesisVideoClient {
         })
     }
 
+    /// <p>Adds one or more tags to a signaling channel. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
+        let request_uri = "/TagResource";
+
+        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceOutput, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
     fn tag_stream(&self, input: TagStreamInput) -> RusotoFuture<TagStreamOutput, TagStreamError> {
         let request_uri = "/tagStream";
@@ -1232,6 +2281,38 @@ impl KinesisVideo for KinesisVideoClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(TagStreamError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Removes one or more tags from a signaling channel. In the request, specify only a tag key or keys; don't specify the value. If you specify a tag key that does not exist, it's ignored.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
+        let request_uri = "/UntagResource";
+
+        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceOutput, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })
@@ -1294,6 +2375,37 @@ impl KinesisVideo for KinesisVideoClient {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
                         Err(UpdateDataRetentionError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates the existing signaling channel. This is an asynchronous operation and takes time to complete. </p> <p>If the <code>MessageTtlSeconds</code> value is updated (either increased or reduced), then it only applies to new messages sent via this channel after it's been updated. Existing messages are still expire as per the previous <code>MessageTtlSeconds</code> value.</p>
+    fn update_signaling_channel(
+        &self,
+        input: UpdateSignalingChannelInput,
+    ) -> RusotoFuture<UpdateSignalingChannelOutput, UpdateSignalingChannelError> {
+        let request_uri = "/updateSignalingChannel";
+
+        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateSignalingChannelOutput, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateSignalingChannelError::from_response(response))
                     }),
                 )
             }

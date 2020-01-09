@@ -1931,20 +1931,16 @@ impl AcceptInvitationError {
 }
 impl fmt::Display for AcceptInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcceptInvitationError {
-    fn description(&self) -> &str {
         match *self {
-            AcceptInvitationError::Internal(ref cause) => cause,
-            AcceptInvitationError::InvalidAccess(ref cause) => cause,
-            AcceptInvitationError::InvalidInput(ref cause) => cause,
-            AcceptInvitationError::LimitExceeded(ref cause) => cause,
-            AcceptInvitationError::ResourceNotFound(ref cause) => cause,
+            AcceptInvitationError::Internal(ref cause) => write!(f, "{}", cause),
+            AcceptInvitationError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            AcceptInvitationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AcceptInvitationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AcceptInvitationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AcceptInvitationError {}
 /// Errors returned by BatchDisableStandards
 #[derive(Debug, PartialEq)]
 pub enum BatchDisableStandardsError {
@@ -1983,19 +1979,15 @@ impl BatchDisableStandardsError {
 }
 impl fmt::Display for BatchDisableStandardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDisableStandardsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDisableStandardsError::Internal(ref cause) => cause,
-            BatchDisableStandardsError::InvalidAccess(ref cause) => cause,
-            BatchDisableStandardsError::InvalidInput(ref cause) => cause,
-            BatchDisableStandardsError::LimitExceeded(ref cause) => cause,
+            BatchDisableStandardsError::Internal(ref cause) => write!(f, "{}", cause),
+            BatchDisableStandardsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            BatchDisableStandardsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchDisableStandardsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDisableStandardsError {}
 /// Errors returned by BatchEnableStandards
 #[derive(Debug, PartialEq)]
 pub enum BatchEnableStandardsError {
@@ -2034,19 +2026,15 @@ impl BatchEnableStandardsError {
 }
 impl fmt::Display for BatchEnableStandardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchEnableStandardsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchEnableStandardsError::Internal(ref cause) => cause,
-            BatchEnableStandardsError::InvalidAccess(ref cause) => cause,
-            BatchEnableStandardsError::InvalidInput(ref cause) => cause,
-            BatchEnableStandardsError::LimitExceeded(ref cause) => cause,
+            BatchEnableStandardsError::Internal(ref cause) => write!(f, "{}", cause),
+            BatchEnableStandardsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            BatchEnableStandardsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchEnableStandardsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchEnableStandardsError {}
 /// Errors returned by BatchImportFindings
 #[derive(Debug, PartialEq)]
 pub enum BatchImportFindingsError {
@@ -2085,19 +2073,15 @@ impl BatchImportFindingsError {
 }
 impl fmt::Display for BatchImportFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchImportFindingsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchImportFindingsError::Internal(ref cause) => cause,
-            BatchImportFindingsError::InvalidAccess(ref cause) => cause,
-            BatchImportFindingsError::InvalidInput(ref cause) => cause,
-            BatchImportFindingsError::LimitExceeded(ref cause) => cause,
+            BatchImportFindingsError::Internal(ref cause) => write!(f, "{}", cause),
+            BatchImportFindingsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            BatchImportFindingsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchImportFindingsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchImportFindingsError {}
 /// Errors returned by CreateActionTarget
 #[derive(Debug, PartialEq)]
 pub enum CreateActionTargetError {
@@ -2141,20 +2125,16 @@ impl CreateActionTargetError {
 }
 impl fmt::Display for CreateActionTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateActionTargetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateActionTargetError::Internal(ref cause) => cause,
-            CreateActionTargetError::InvalidAccess(ref cause) => cause,
-            CreateActionTargetError::InvalidInput(ref cause) => cause,
-            CreateActionTargetError::LimitExceeded(ref cause) => cause,
-            CreateActionTargetError::ResourceConflict(ref cause) => cause,
+            CreateActionTargetError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateActionTargetError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            CreateActionTargetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateActionTargetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateActionTargetError::ResourceConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateActionTargetError {}
 /// Errors returned by CreateInsight
 #[derive(Debug, PartialEq)]
 pub enum CreateInsightError {
@@ -2198,20 +2178,16 @@ impl CreateInsightError {
 }
 impl fmt::Display for CreateInsightError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInsightError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInsightError::Internal(ref cause) => cause,
-            CreateInsightError::InvalidAccess(ref cause) => cause,
-            CreateInsightError::InvalidInput(ref cause) => cause,
-            CreateInsightError::LimitExceeded(ref cause) => cause,
-            CreateInsightError::ResourceConflict(ref cause) => cause,
+            CreateInsightError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateInsightError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            CreateInsightError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateInsightError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateInsightError::ResourceConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInsightError {}
 /// Errors returned by CreateMembers
 #[derive(Debug, PartialEq)]
 pub enum CreateMembersError {
@@ -2255,20 +2231,16 @@ impl CreateMembersError {
 }
 impl fmt::Display for CreateMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMembersError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMembersError::Internal(ref cause) => cause,
-            CreateMembersError::InvalidAccess(ref cause) => cause,
-            CreateMembersError::InvalidInput(ref cause) => cause,
-            CreateMembersError::LimitExceeded(ref cause) => cause,
-            CreateMembersError::ResourceConflict(ref cause) => cause,
+            CreateMembersError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateMembersError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            CreateMembersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateMembersError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateMembersError::ResourceConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateMembersError {}
 /// Errors returned by DeclineInvitations
 #[derive(Debug, PartialEq)]
 pub enum DeclineInvitationsError {
@@ -2307,19 +2279,15 @@ impl DeclineInvitationsError {
 }
 impl fmt::Display for DeclineInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeclineInvitationsError {
-    fn description(&self) -> &str {
         match *self {
-            DeclineInvitationsError::Internal(ref cause) => cause,
-            DeclineInvitationsError::InvalidAccess(ref cause) => cause,
-            DeclineInvitationsError::InvalidInput(ref cause) => cause,
-            DeclineInvitationsError::ResourceNotFound(ref cause) => cause,
+            DeclineInvitationsError::Internal(ref cause) => write!(f, "{}", cause),
+            DeclineInvitationsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DeclineInvitationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeclineInvitationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeclineInvitationsError {}
 /// Errors returned by DeleteActionTarget
 #[derive(Debug, PartialEq)]
 pub enum DeleteActionTargetError {
@@ -2358,19 +2326,15 @@ impl DeleteActionTargetError {
 }
 impl fmt::Display for DeleteActionTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteActionTargetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteActionTargetError::Internal(ref cause) => cause,
-            DeleteActionTargetError::InvalidAccess(ref cause) => cause,
-            DeleteActionTargetError::InvalidInput(ref cause) => cause,
-            DeleteActionTargetError::ResourceNotFound(ref cause) => cause,
+            DeleteActionTargetError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteActionTargetError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DeleteActionTargetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteActionTargetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteActionTargetError {}
 /// Errors returned by DeleteInsight
 #[derive(Debug, PartialEq)]
 pub enum DeleteInsightError {
@@ -2414,20 +2378,16 @@ impl DeleteInsightError {
 }
 impl fmt::Display for DeleteInsightError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInsightError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInsightError::Internal(ref cause) => cause,
-            DeleteInsightError::InvalidAccess(ref cause) => cause,
-            DeleteInsightError::InvalidInput(ref cause) => cause,
-            DeleteInsightError::LimitExceeded(ref cause) => cause,
-            DeleteInsightError::ResourceNotFound(ref cause) => cause,
+            DeleteInsightError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteInsightError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DeleteInsightError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteInsightError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteInsightError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInsightError {}
 /// Errors returned by DeleteInvitations
 #[derive(Debug, PartialEq)]
 pub enum DeleteInvitationsError {
@@ -2471,20 +2431,16 @@ impl DeleteInvitationsError {
 }
 impl fmt::Display for DeleteInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInvitationsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInvitationsError::Internal(ref cause) => cause,
-            DeleteInvitationsError::InvalidAccess(ref cause) => cause,
-            DeleteInvitationsError::InvalidInput(ref cause) => cause,
-            DeleteInvitationsError::LimitExceeded(ref cause) => cause,
-            DeleteInvitationsError::ResourceNotFound(ref cause) => cause,
+            DeleteInvitationsError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteInvitationsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DeleteInvitationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteInvitationsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteInvitationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInvitationsError {}
 /// Errors returned by DeleteMembers
 #[derive(Debug, PartialEq)]
 pub enum DeleteMembersError {
@@ -2528,20 +2484,16 @@ impl DeleteMembersError {
 }
 impl fmt::Display for DeleteMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMembersError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMembersError::Internal(ref cause) => cause,
-            DeleteMembersError::InvalidAccess(ref cause) => cause,
-            DeleteMembersError::InvalidInput(ref cause) => cause,
-            DeleteMembersError::LimitExceeded(ref cause) => cause,
-            DeleteMembersError::ResourceNotFound(ref cause) => cause,
+            DeleteMembersError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteMembersError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DeleteMembersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteMembersError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteMembersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMembersError {}
 /// Errors returned by DescribeActionTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeActionTargetsError {
@@ -2582,19 +2534,15 @@ impl DescribeActionTargetsError {
 }
 impl fmt::Display for DescribeActionTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeActionTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeActionTargetsError::Internal(ref cause) => cause,
-            DescribeActionTargetsError::InvalidAccess(ref cause) => cause,
-            DescribeActionTargetsError::InvalidInput(ref cause) => cause,
-            DescribeActionTargetsError::ResourceNotFound(ref cause) => cause,
+            DescribeActionTargetsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeActionTargetsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DescribeActionTargetsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeActionTargetsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeActionTargetsError {}
 /// Errors returned by DescribeHub
 #[derive(Debug, PartialEq)]
 pub enum DescribeHubError {
@@ -2638,20 +2586,16 @@ impl DescribeHubError {
 }
 impl fmt::Display for DescribeHubError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHubError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHubError::Internal(ref cause) => cause,
-            DescribeHubError::InvalidAccess(ref cause) => cause,
-            DescribeHubError::InvalidInput(ref cause) => cause,
-            DescribeHubError::LimitExceeded(ref cause) => cause,
-            DescribeHubError::ResourceNotFound(ref cause) => cause,
+            DescribeHubError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeHubError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DescribeHubError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeHubError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeHubError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeHubError {}
 /// Errors returned by DescribeProducts
 #[derive(Debug, PartialEq)]
 pub enum DescribeProductsError {
@@ -2690,19 +2634,15 @@ impl DescribeProductsError {
 }
 impl fmt::Display for DescribeProductsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeProductsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeProductsError::Internal(ref cause) => cause,
-            DescribeProductsError::InvalidAccess(ref cause) => cause,
-            DescribeProductsError::InvalidInput(ref cause) => cause,
-            DescribeProductsError::LimitExceeded(ref cause) => cause,
+            DescribeProductsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeProductsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DescribeProductsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeProductsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeProductsError {}
 /// Errors returned by DisableImportFindingsForProduct
 #[derive(Debug, PartialEq)]
 pub enum DisableImportFindingsForProductError {
@@ -2758,20 +2698,22 @@ impl DisableImportFindingsForProductError {
 }
 impl fmt::Display for DisableImportFindingsForProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableImportFindingsForProductError {
-    fn description(&self) -> &str {
         match *self {
-            DisableImportFindingsForProductError::Internal(ref cause) => cause,
-            DisableImportFindingsForProductError::InvalidAccess(ref cause) => cause,
-            DisableImportFindingsForProductError::InvalidInput(ref cause) => cause,
-            DisableImportFindingsForProductError::LimitExceeded(ref cause) => cause,
-            DisableImportFindingsForProductError::ResourceNotFound(ref cause) => cause,
+            DisableImportFindingsForProductError::Internal(ref cause) => write!(f, "{}", cause),
+            DisableImportFindingsForProductError::InvalidAccess(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableImportFindingsForProductError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisableImportFindingsForProductError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableImportFindingsForProductError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisableImportFindingsForProductError {}
 /// Errors returned by DisableSecurityHub
 #[derive(Debug, PartialEq)]
 pub enum DisableSecurityHubError {
@@ -2810,19 +2752,15 @@ impl DisableSecurityHubError {
 }
 impl fmt::Display for DisableSecurityHubError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableSecurityHubError {
-    fn description(&self) -> &str {
         match *self {
-            DisableSecurityHubError::Internal(ref cause) => cause,
-            DisableSecurityHubError::InvalidAccess(ref cause) => cause,
-            DisableSecurityHubError::LimitExceeded(ref cause) => cause,
-            DisableSecurityHubError::ResourceNotFound(ref cause) => cause,
+            DisableSecurityHubError::Internal(ref cause) => write!(f, "{}", cause),
+            DisableSecurityHubError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DisableSecurityHubError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DisableSecurityHubError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableSecurityHubError {}
 /// Errors returned by DisassociateFromMasterAccount
 #[derive(Debug, PartialEq)]
 pub enum DisassociateFromMasterAccountError {
@@ -2878,20 +2816,18 @@ impl DisassociateFromMasterAccountError {
 }
 impl fmt::Display for DisassociateFromMasterAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateFromMasterAccountError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateFromMasterAccountError::Internal(ref cause) => cause,
-            DisassociateFromMasterAccountError::InvalidAccess(ref cause) => cause,
-            DisassociateFromMasterAccountError::InvalidInput(ref cause) => cause,
-            DisassociateFromMasterAccountError::LimitExceeded(ref cause) => cause,
-            DisassociateFromMasterAccountError::ResourceNotFound(ref cause) => cause,
+            DisassociateFromMasterAccountError::Internal(ref cause) => write!(f, "{}", cause),
+            DisassociateFromMasterAccountError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DisassociateFromMasterAccountError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisassociateFromMasterAccountError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DisassociateFromMasterAccountError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateFromMasterAccountError {}
 /// Errors returned by DisassociateMembers
 #[derive(Debug, PartialEq)]
 pub enum DisassociateMembersError {
@@ -2937,20 +2873,16 @@ impl DisassociateMembersError {
 }
 impl fmt::Display for DisassociateMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateMembersError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateMembersError::Internal(ref cause) => cause,
-            DisassociateMembersError::InvalidAccess(ref cause) => cause,
-            DisassociateMembersError::InvalidInput(ref cause) => cause,
-            DisassociateMembersError::LimitExceeded(ref cause) => cause,
-            DisassociateMembersError::ResourceNotFound(ref cause) => cause,
+            DisassociateMembersError::Internal(ref cause) => write!(f, "{}", cause),
+            DisassociateMembersError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DisassociateMembersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisassociateMembersError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DisassociateMembersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateMembersError {}
 /// Errors returned by EnableImportFindingsForProduct
 #[derive(Debug, PartialEq)]
 pub enum EnableImportFindingsForProductError {
@@ -3006,20 +2938,18 @@ impl EnableImportFindingsForProductError {
 }
 impl fmt::Display for EnableImportFindingsForProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableImportFindingsForProductError {
-    fn description(&self) -> &str {
         match *self {
-            EnableImportFindingsForProductError::Internal(ref cause) => cause,
-            EnableImportFindingsForProductError::InvalidAccess(ref cause) => cause,
-            EnableImportFindingsForProductError::InvalidInput(ref cause) => cause,
-            EnableImportFindingsForProductError::LimitExceeded(ref cause) => cause,
-            EnableImportFindingsForProductError::ResourceConflict(ref cause) => cause,
+            EnableImportFindingsForProductError::Internal(ref cause) => write!(f, "{}", cause),
+            EnableImportFindingsForProductError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            EnableImportFindingsForProductError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            EnableImportFindingsForProductError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            EnableImportFindingsForProductError::ResourceConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for EnableImportFindingsForProductError {}
 /// Errors returned by EnableSecurityHub
 #[derive(Debug, PartialEq)]
 pub enum EnableSecurityHubError {
@@ -3063,20 +2993,16 @@ impl EnableSecurityHubError {
 }
 impl fmt::Display for EnableSecurityHubError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableSecurityHubError {
-    fn description(&self) -> &str {
         match *self {
-            EnableSecurityHubError::AccessDenied(ref cause) => cause,
-            EnableSecurityHubError::Internal(ref cause) => cause,
-            EnableSecurityHubError::InvalidAccess(ref cause) => cause,
-            EnableSecurityHubError::LimitExceeded(ref cause) => cause,
-            EnableSecurityHubError::ResourceConflict(ref cause) => cause,
+            EnableSecurityHubError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            EnableSecurityHubError::Internal(ref cause) => write!(f, "{}", cause),
+            EnableSecurityHubError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            EnableSecurityHubError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            EnableSecurityHubError::ResourceConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableSecurityHubError {}
 /// Errors returned by GetEnabledStandards
 #[derive(Debug, PartialEq)]
 pub enum GetEnabledStandardsError {
@@ -3115,19 +3041,15 @@ impl GetEnabledStandardsError {
 }
 impl fmt::Display for GetEnabledStandardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEnabledStandardsError {
-    fn description(&self) -> &str {
         match *self {
-            GetEnabledStandardsError::Internal(ref cause) => cause,
-            GetEnabledStandardsError::InvalidAccess(ref cause) => cause,
-            GetEnabledStandardsError::InvalidInput(ref cause) => cause,
-            GetEnabledStandardsError::LimitExceeded(ref cause) => cause,
+            GetEnabledStandardsError::Internal(ref cause) => write!(f, "{}", cause),
+            GetEnabledStandardsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            GetEnabledStandardsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetEnabledStandardsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEnabledStandardsError {}
 /// Errors returned by GetFindings
 #[derive(Debug, PartialEq)]
 pub enum GetFindingsError {
@@ -3166,19 +3088,15 @@ impl GetFindingsError {
 }
 impl fmt::Display for GetFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFindingsError {
-    fn description(&self) -> &str {
         match *self {
-            GetFindingsError::Internal(ref cause) => cause,
-            GetFindingsError::InvalidAccess(ref cause) => cause,
-            GetFindingsError::InvalidInput(ref cause) => cause,
-            GetFindingsError::LimitExceeded(ref cause) => cause,
+            GetFindingsError::Internal(ref cause) => write!(f, "{}", cause),
+            GetFindingsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            GetFindingsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetFindingsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFindingsError {}
 /// Errors returned by GetInsightResults
 #[derive(Debug, PartialEq)]
 pub enum GetInsightResultsError {
@@ -3222,20 +3140,16 @@ impl GetInsightResultsError {
 }
 impl fmt::Display for GetInsightResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInsightResultsError {
-    fn description(&self) -> &str {
         match *self {
-            GetInsightResultsError::Internal(ref cause) => cause,
-            GetInsightResultsError::InvalidAccess(ref cause) => cause,
-            GetInsightResultsError::InvalidInput(ref cause) => cause,
-            GetInsightResultsError::LimitExceeded(ref cause) => cause,
-            GetInsightResultsError::ResourceNotFound(ref cause) => cause,
+            GetInsightResultsError::Internal(ref cause) => write!(f, "{}", cause),
+            GetInsightResultsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            GetInsightResultsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInsightResultsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetInsightResultsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInsightResultsError {}
 /// Errors returned by GetInsights
 #[derive(Debug, PartialEq)]
 pub enum GetInsightsError {
@@ -3279,20 +3193,16 @@ impl GetInsightsError {
 }
 impl fmt::Display for GetInsightsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInsightsError {
-    fn description(&self) -> &str {
         match *self {
-            GetInsightsError::Internal(ref cause) => cause,
-            GetInsightsError::InvalidAccess(ref cause) => cause,
-            GetInsightsError::InvalidInput(ref cause) => cause,
-            GetInsightsError::LimitExceeded(ref cause) => cause,
-            GetInsightsError::ResourceNotFound(ref cause) => cause,
+            GetInsightsError::Internal(ref cause) => write!(f, "{}", cause),
+            GetInsightsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            GetInsightsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInsightsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetInsightsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInsightsError {}
 /// Errors returned by GetInvitationsCount
 #[derive(Debug, PartialEq)]
 pub enum GetInvitationsCountError {
@@ -3331,19 +3241,15 @@ impl GetInvitationsCountError {
 }
 impl fmt::Display for GetInvitationsCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInvitationsCountError {
-    fn description(&self) -> &str {
         match *self {
-            GetInvitationsCountError::Internal(ref cause) => cause,
-            GetInvitationsCountError::InvalidAccess(ref cause) => cause,
-            GetInvitationsCountError::InvalidInput(ref cause) => cause,
-            GetInvitationsCountError::LimitExceeded(ref cause) => cause,
+            GetInvitationsCountError::Internal(ref cause) => write!(f, "{}", cause),
+            GetInvitationsCountError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            GetInvitationsCountError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInvitationsCountError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInvitationsCountError {}
 /// Errors returned by GetMasterAccount
 #[derive(Debug, PartialEq)]
 pub enum GetMasterAccountError {
@@ -3387,20 +3293,16 @@ impl GetMasterAccountError {
 }
 impl fmt::Display for GetMasterAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMasterAccountError {
-    fn description(&self) -> &str {
         match *self {
-            GetMasterAccountError::Internal(ref cause) => cause,
-            GetMasterAccountError::InvalidAccess(ref cause) => cause,
-            GetMasterAccountError::InvalidInput(ref cause) => cause,
-            GetMasterAccountError::LimitExceeded(ref cause) => cause,
-            GetMasterAccountError::ResourceNotFound(ref cause) => cause,
+            GetMasterAccountError::Internal(ref cause) => write!(f, "{}", cause),
+            GetMasterAccountError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            GetMasterAccountError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetMasterAccountError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetMasterAccountError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMasterAccountError {}
 /// Errors returned by GetMembers
 #[derive(Debug, PartialEq)]
 pub enum GetMembersError {
@@ -3444,20 +3346,16 @@ impl GetMembersError {
 }
 impl fmt::Display for GetMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMembersError {
-    fn description(&self) -> &str {
         match *self {
-            GetMembersError::Internal(ref cause) => cause,
-            GetMembersError::InvalidAccess(ref cause) => cause,
-            GetMembersError::InvalidInput(ref cause) => cause,
-            GetMembersError::LimitExceeded(ref cause) => cause,
-            GetMembersError::ResourceNotFound(ref cause) => cause,
+            GetMembersError::Internal(ref cause) => write!(f, "{}", cause),
+            GetMembersError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            GetMembersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetMembersError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetMembersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMembersError {}
 /// Errors returned by InviteMembers
 #[derive(Debug, PartialEq)]
 pub enum InviteMembersError {
@@ -3501,20 +3399,16 @@ impl InviteMembersError {
 }
 impl fmt::Display for InviteMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InviteMembersError {
-    fn description(&self) -> &str {
         match *self {
-            InviteMembersError::Internal(ref cause) => cause,
-            InviteMembersError::InvalidAccess(ref cause) => cause,
-            InviteMembersError::InvalidInput(ref cause) => cause,
-            InviteMembersError::LimitExceeded(ref cause) => cause,
-            InviteMembersError::ResourceNotFound(ref cause) => cause,
+            InviteMembersError::Internal(ref cause) => write!(f, "{}", cause),
+            InviteMembersError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            InviteMembersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            InviteMembersError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            InviteMembersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InviteMembersError {}
 /// Errors returned by ListEnabledProductsForImport
 #[derive(Debug, PartialEq)]
 pub enum ListEnabledProductsForImportError {
@@ -3556,18 +3450,14 @@ impl ListEnabledProductsForImportError {
 }
 impl fmt::Display for ListEnabledProductsForImportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEnabledProductsForImportError {
-    fn description(&self) -> &str {
         match *self {
-            ListEnabledProductsForImportError::Internal(ref cause) => cause,
-            ListEnabledProductsForImportError::InvalidAccess(ref cause) => cause,
-            ListEnabledProductsForImportError::LimitExceeded(ref cause) => cause,
+            ListEnabledProductsForImportError::Internal(ref cause) => write!(f, "{}", cause),
+            ListEnabledProductsForImportError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            ListEnabledProductsForImportError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEnabledProductsForImportError {}
 /// Errors returned by ListInvitations
 #[derive(Debug, PartialEq)]
 pub enum ListInvitationsError {
@@ -3606,19 +3496,15 @@ impl ListInvitationsError {
 }
 impl fmt::Display for ListInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInvitationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListInvitationsError::Internal(ref cause) => cause,
-            ListInvitationsError::InvalidAccess(ref cause) => cause,
-            ListInvitationsError::InvalidInput(ref cause) => cause,
-            ListInvitationsError::LimitExceeded(ref cause) => cause,
+            ListInvitationsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListInvitationsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            ListInvitationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListInvitationsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInvitationsError {}
 /// Errors returned by ListMembers
 #[derive(Debug, PartialEq)]
 pub enum ListMembersError {
@@ -3657,19 +3543,15 @@ impl ListMembersError {
 }
 impl fmt::Display for ListMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMembersError {
-    fn description(&self) -> &str {
         match *self {
-            ListMembersError::Internal(ref cause) => cause,
-            ListMembersError::InvalidAccess(ref cause) => cause,
-            ListMembersError::InvalidInput(ref cause) => cause,
-            ListMembersError::LimitExceeded(ref cause) => cause,
+            ListMembersError::Internal(ref cause) => write!(f, "{}", cause),
+            ListMembersError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            ListMembersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListMembersError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMembersError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -3705,18 +3587,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::Internal(ref cause) => cause,
-            ListTagsForResourceError::InvalidInput(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::Internal(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -3750,18 +3628,14 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::Internal(ref cause) => cause,
-            TagResourceError::InvalidInput(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::Internal(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -3795,18 +3669,14 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::Internal(ref cause) => cause,
-            UntagResourceError::InvalidInput(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::Internal(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateActionTarget
 #[derive(Debug, PartialEq)]
 pub enum UpdateActionTargetError {
@@ -3845,19 +3715,15 @@ impl UpdateActionTargetError {
 }
 impl fmt::Display for UpdateActionTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateActionTargetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateActionTargetError::Internal(ref cause) => cause,
-            UpdateActionTargetError::InvalidAccess(ref cause) => cause,
-            UpdateActionTargetError::InvalidInput(ref cause) => cause,
-            UpdateActionTargetError::ResourceNotFound(ref cause) => cause,
+            UpdateActionTargetError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateActionTargetError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            UpdateActionTargetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateActionTargetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateActionTargetError {}
 /// Errors returned by UpdateFindings
 #[derive(Debug, PartialEq)]
 pub enum UpdateFindingsError {
@@ -3901,20 +3767,16 @@ impl UpdateFindingsError {
 }
 impl fmt::Display for UpdateFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFindingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFindingsError::Internal(ref cause) => cause,
-            UpdateFindingsError::InvalidAccess(ref cause) => cause,
-            UpdateFindingsError::InvalidInput(ref cause) => cause,
-            UpdateFindingsError::LimitExceeded(ref cause) => cause,
-            UpdateFindingsError::ResourceNotFound(ref cause) => cause,
+            UpdateFindingsError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateFindingsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            UpdateFindingsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateFindingsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFindingsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFindingsError {}
 /// Errors returned by UpdateInsight
 #[derive(Debug, PartialEq)]
 pub enum UpdateInsightError {
@@ -3958,20 +3820,16 @@ impl UpdateInsightError {
 }
 impl fmt::Display for UpdateInsightError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateInsightError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateInsightError::Internal(ref cause) => cause,
-            UpdateInsightError::InvalidAccess(ref cause) => cause,
-            UpdateInsightError::InvalidInput(ref cause) => cause,
-            UpdateInsightError::LimitExceeded(ref cause) => cause,
-            UpdateInsightError::ResourceNotFound(ref cause) => cause,
+            UpdateInsightError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateInsightError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            UpdateInsightError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateInsightError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateInsightError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateInsightError {}
 /// Trait representing the capabilities of the AWS SecurityHub API. AWS SecurityHub clients implement this trait.
 pub trait SecurityHub {
     /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from. When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
@@ -4230,6 +4088,14 @@ impl SecurityHubClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> SecurityHubClient {
         SecurityHubClient { client, region }
+    }
+}
+
+impl fmt::Debug for SecurityHubClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SecurityHubClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

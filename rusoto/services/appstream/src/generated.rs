@@ -259,7 +259,7 @@ pub struct CreateFleetRequest {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -331,7 +331,7 @@ pub struct CreateImageBuilderRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -343,7 +343,7 @@ pub struct CreateImageBuilderRequest {
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p>The instance type to use when launching the image builder.</p>
+    /// <p><p>The instance type to use when launching the image builder. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
     /// <p>A unique name for the image builder.</p>
@@ -412,6 +412,10 @@ pub struct CreateStackRequest {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// <p>The domains where AppStream 2.0 streaming sessions can be embedded in an iframe. You must approve the domains that you want to host embedded AppStream 2.0 streaming sessions.</p>
+    #[serde(rename = "EmbedHostDomains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub embed_host_domains: Option<Vec<String>>,
     /// <p>The URL that users are redirected to after they click the Send Feedback link. If no URL is specified, no Send Feedback link is displayed.</p>
     #[serde(rename = "FeedbackURL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1090,7 +1094,7 @@ pub struct Fleet {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
-    /// <p>The ARN of the IAM role that is applied to the fleet. To assume a role, the fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    /// <p>The ARN of the IAM role that is applied to the fleet. To assume a role, the fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -1106,7 +1110,7 @@ pub struct Fleet {
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p>The instance type to use when launching fleet instances.</p>
+    /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
     /// <p>The maximum amount of time that a streaming session can remain active, in seconds. If users are still connected to a streaming instance five minutes before this limit is reached, they are prompted to save any open documents before being disconnected. After this time elapses, the instance is terminated and replaced by a new instance. </p> <p>Specify a value between 600 and 360000.</p>
@@ -1244,7 +1248,7 @@ pub struct ImageBuilder {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The ARN of the IAM role that is applied to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. </p>
+    /// <p>The ARN of the IAM role that is applied to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -1256,7 +1260,7 @@ pub struct ImageBuilder {
     #[serde(rename = "ImageBuilderErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_builder_errors: Option<Vec<ResourceError>>,
-    /// <p>The instance type for the image builder.</p>
+    /// <p><p>The instance type for the image builder. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
@@ -1530,6 +1534,10 @@ pub struct Stack {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// <p>The domains where AppStream 2.0 streaming sessions can be embedded in an iframe. You must approve the domains that you want to host embedded AppStream 2.0 streaming sessions.</p>
+    #[serde(rename = "EmbedHostDomains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub embed_host_domains: Option<Vec<String>>,
     /// <p>The URL that users are redirected to after they click the Send Feedback link. If no URL is specified, no Send Feedback link is displayed.</p>
     #[serde(rename = "FeedbackURL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1733,7 +1741,7 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -1817,6 +1825,10 @@ pub struct UpdateStackRequest {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// <p>The domains where AppStream 2.0 streaming sessions can be embedded in an iframe. You must approve the domains that you want to host embedded AppStream 2.0 streaming sessions.</p>
+    #[serde(rename = "EmbedHostDomains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub embed_host_domains: Option<Vec<String>>,
     /// <p>The URL that users are redirected to after they choose the Send Feedback link. If no URL is specified, no Send Feedback link is displayed.</p>
     #[serde(rename = "FeedbackURL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2018,21 +2030,17 @@ impl AssociateFleetError {
 }
 impl fmt::Display for AssociateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateFleetError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateFleetError::ConcurrentModification(ref cause) => cause,
-            AssociateFleetError::IncompatibleImage(ref cause) => cause,
-            AssociateFleetError::InvalidAccountStatus(ref cause) => cause,
-            AssociateFleetError::LimitExceeded(ref cause) => cause,
-            AssociateFleetError::OperationNotPermitted(ref cause) => cause,
-            AssociateFleetError::ResourceNotFound(ref cause) => cause,
+            AssociateFleetError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            AssociateFleetError::IncompatibleImage(ref cause) => write!(f, "{}", cause),
+            AssociateFleetError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            AssociateFleetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateFleetError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            AssociateFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateFleetError {}
 /// Errors returned by BatchAssociateUserStack
 #[derive(Debug, PartialEq)]
 pub enum BatchAssociateUserStackError {
@@ -2058,16 +2066,14 @@ impl BatchAssociateUserStackError {
 }
 impl fmt::Display for BatchAssociateUserStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchAssociateUserStackError {
-    fn description(&self) -> &str {
         match *self {
-            BatchAssociateUserStackError::OperationNotPermitted(ref cause) => cause,
+            BatchAssociateUserStackError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchAssociateUserStackError {}
 /// Errors returned by BatchDisassociateUserStack
 #[derive(Debug, PartialEq)]
 pub enum BatchDisassociateUserStackError {}
@@ -2087,14 +2093,10 @@ impl BatchDisassociateUserStackError {
 }
 impl fmt::Display for BatchDisassociateUserStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDisassociateUserStackError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for BatchDisassociateUserStackError {}
 /// Errors returned by CopyImage
 #[derive(Debug, PartialEq)]
 pub enum CopyImageError {
@@ -2143,21 +2145,17 @@ impl CopyImageError {
 }
 impl fmt::Display for CopyImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopyImageError {
-    fn description(&self) -> &str {
         match *self {
-            CopyImageError::IncompatibleImage(ref cause) => cause,
-            CopyImageError::InvalidAccountStatus(ref cause) => cause,
-            CopyImageError::LimitExceeded(ref cause) => cause,
-            CopyImageError::ResourceAlreadyExists(ref cause) => cause,
-            CopyImageError::ResourceNotAvailable(ref cause) => cause,
-            CopyImageError::ResourceNotFound(ref cause) => cause,
+            CopyImageError::IncompatibleImage(ref cause) => write!(f, "{}", cause),
+            CopyImageError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            CopyImageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CopyImageError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CopyImageError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
+            CopyImageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CopyImageError {}
 /// Errors returned by CreateDirectoryConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectoryConfigError {
@@ -2195,18 +2193,14 @@ impl CreateDirectoryConfigError {
 }
 impl fmt::Display for CreateDirectoryConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDirectoryConfigError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDirectoryConfigError::InvalidAccountStatus(ref cause) => cause,
-            CreateDirectoryConfigError::LimitExceeded(ref cause) => cause,
-            CreateDirectoryConfigError::ResourceAlreadyExists(ref cause) => cause,
+            CreateDirectoryConfigError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryConfigError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDirectoryConfigError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDirectoryConfigError {}
 /// Errors returned by CreateFleet
 #[derive(Debug, PartialEq)]
 pub enum CreateFleetError {
@@ -2277,25 +2271,21 @@ impl CreateFleetError {
 }
 impl fmt::Display for CreateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFleetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFleetError::ConcurrentModification(ref cause) => cause,
-            CreateFleetError::IncompatibleImage(ref cause) => cause,
-            CreateFleetError::InvalidAccountStatus(ref cause) => cause,
-            CreateFleetError::InvalidParameterCombination(ref cause) => cause,
-            CreateFleetError::InvalidRole(ref cause) => cause,
-            CreateFleetError::LimitExceeded(ref cause) => cause,
-            CreateFleetError::OperationNotPermitted(ref cause) => cause,
-            CreateFleetError::ResourceAlreadyExists(ref cause) => cause,
-            CreateFleetError::ResourceNotAvailable(ref cause) => cause,
-            CreateFleetError::ResourceNotFound(ref cause) => cause,
+            CreateFleetError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::IncompatibleImage(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
+            CreateFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFleetError {}
 /// Errors returned by CreateImageBuilder
 #[derive(Debug, PartialEq)]
 pub enum CreateImageBuilderError {
@@ -2378,25 +2368,23 @@ impl CreateImageBuilderError {
 }
 impl fmt::Display for CreateImageBuilderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateImageBuilderError {
-    fn description(&self) -> &str {
         match *self {
-            CreateImageBuilderError::ConcurrentModification(ref cause) => cause,
-            CreateImageBuilderError::IncompatibleImage(ref cause) => cause,
-            CreateImageBuilderError::InvalidAccountStatus(ref cause) => cause,
-            CreateImageBuilderError::InvalidParameterCombination(ref cause) => cause,
-            CreateImageBuilderError::InvalidRole(ref cause) => cause,
-            CreateImageBuilderError::LimitExceeded(ref cause) => cause,
-            CreateImageBuilderError::OperationNotPermitted(ref cause) => cause,
-            CreateImageBuilderError::ResourceAlreadyExists(ref cause) => cause,
-            CreateImageBuilderError::ResourceNotAvailable(ref cause) => cause,
-            CreateImageBuilderError::ResourceNotFound(ref cause) => cause,
+            CreateImageBuilderError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateImageBuilderError::IncompatibleImage(ref cause) => write!(f, "{}", cause),
+            CreateImageBuilderError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            CreateImageBuilderError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateImageBuilderError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            CreateImageBuilderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateImageBuilderError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateImageBuilderError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateImageBuilderError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
+            CreateImageBuilderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateImageBuilderError {}
 /// Errors returned by CreateImageBuilderStreamingURL
 #[derive(Debug, PartialEq)]
 pub enum CreateImageBuilderStreamingURLError {
@@ -2431,17 +2419,17 @@ impl CreateImageBuilderStreamingURLError {
 }
 impl fmt::Display for CreateImageBuilderStreamingURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateImageBuilderStreamingURLError {
-    fn description(&self) -> &str {
         match *self {
-            CreateImageBuilderStreamingURLError::OperationNotPermitted(ref cause) => cause,
-            CreateImageBuilderStreamingURLError::ResourceNotFound(ref cause) => cause,
+            CreateImageBuilderStreamingURLError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateImageBuilderStreamingURLError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateImageBuilderStreamingURLError {}
 /// Errors returned by CreateStack
 #[derive(Debug, PartialEq)]
 pub enum CreateStackError {
@@ -2497,22 +2485,18 @@ impl CreateStackError {
 }
 impl fmt::Display for CreateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStackError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStackError::ConcurrentModification(ref cause) => cause,
-            CreateStackError::InvalidAccountStatus(ref cause) => cause,
-            CreateStackError::InvalidParameterCombination(ref cause) => cause,
-            CreateStackError::InvalidRole(ref cause) => cause,
-            CreateStackError::LimitExceeded(ref cause) => cause,
-            CreateStackError::ResourceAlreadyExists(ref cause) => cause,
-            CreateStackError::ResourceNotFound(ref cause) => cause,
+            CreateStackError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateStackError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            CreateStackError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            CreateStackError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            CreateStackError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStackError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateStackError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStackError {}
 /// Errors returned by CreateStreamingURL
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamingURLError {
@@ -2557,19 +2541,17 @@ impl CreateStreamingURLError {
 }
 impl fmt::Display for CreateStreamingURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamingURLError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamingURLError::InvalidParameterCombination(ref cause) => cause,
-            CreateStreamingURLError::OperationNotPermitted(ref cause) => cause,
-            CreateStreamingURLError::ResourceNotAvailable(ref cause) => cause,
-            CreateStreamingURLError::ResourceNotFound(ref cause) => cause,
+            CreateStreamingURLError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingURLError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateStreamingURLError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
+            CreateStreamingURLError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStreamingURLError {}
 /// Errors returned by CreateUsageReportSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateUsageReportSubscriptionError {
@@ -2611,18 +2593,16 @@ impl CreateUsageReportSubscriptionError {
 }
 impl fmt::Display for CreateUsageReportSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUsageReportSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUsageReportSubscriptionError::InvalidAccountStatus(ref cause) => cause,
-            CreateUsageReportSubscriptionError::InvalidRole(ref cause) => cause,
-            CreateUsageReportSubscriptionError::LimitExceeded(ref cause) => cause,
+            CreateUsageReportSubscriptionError::InvalidAccountStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUsageReportSubscriptionError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            CreateUsageReportSubscriptionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUsageReportSubscriptionError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -2668,20 +2648,16 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserError::InvalidAccountStatus(ref cause) => cause,
-            CreateUserError::InvalidParameterCombination(ref cause) => cause,
-            CreateUserError::LimitExceeded(ref cause) => cause,
-            CreateUserError::OperationNotPermitted(ref cause) => cause,
-            CreateUserError::ResourceAlreadyExists(ref cause) => cause,
+            CreateUserError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            CreateUserError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            CreateUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUserError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserError {}
 /// Errors returned by DeleteDirectoryConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteDirectoryConfigError {
@@ -2712,17 +2688,13 @@ impl DeleteDirectoryConfigError {
 }
 impl fmt::Display for DeleteDirectoryConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDirectoryConfigError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDirectoryConfigError::ResourceInUse(ref cause) => cause,
-            DeleteDirectoryConfigError::ResourceNotFound(ref cause) => cause,
+            DeleteDirectoryConfigError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteDirectoryConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDirectoryConfigError {}
 /// Errors returned by DeleteFleet
 #[derive(Debug, PartialEq)]
 pub enum DeleteFleetError {
@@ -2756,18 +2728,14 @@ impl DeleteFleetError {
 }
 impl fmt::Display for DeleteFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFleetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFleetError::ConcurrentModification(ref cause) => cause,
-            DeleteFleetError::ResourceInUse(ref cause) => cause,
-            DeleteFleetError::ResourceNotFound(ref cause) => cause,
+            DeleteFleetError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteFleetError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFleetError {}
 /// Errors returned by DeleteImage
 #[derive(Debug, PartialEq)]
 pub enum DeleteImageError {
@@ -2806,19 +2774,15 @@ impl DeleteImageError {
 }
 impl fmt::Display for DeleteImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteImageError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteImageError::ConcurrentModification(ref cause) => cause,
-            DeleteImageError::OperationNotPermitted(ref cause) => cause,
-            DeleteImageError::ResourceInUse(ref cause) => cause,
-            DeleteImageError::ResourceNotFound(ref cause) => cause,
+            DeleteImageError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteImageError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteImageError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteImageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteImageError {}
 /// Errors returned by DeleteImageBuilder
 #[derive(Debug, PartialEq)]
 pub enum DeleteImageBuilderError {
@@ -2856,18 +2820,14 @@ impl DeleteImageBuilderError {
 }
 impl fmt::Display for DeleteImageBuilderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteImageBuilderError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteImageBuilderError::ConcurrentModification(ref cause) => cause,
-            DeleteImageBuilderError::OperationNotPermitted(ref cause) => cause,
-            DeleteImageBuilderError::ResourceNotFound(ref cause) => cause,
+            DeleteImageBuilderError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteImageBuilderError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteImageBuilderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteImageBuilderError {}
 /// Errors returned by DeleteImagePermissions
 #[derive(Debug, PartialEq)]
 pub enum DeleteImagePermissionsError {
@@ -2900,17 +2860,13 @@ impl DeleteImagePermissionsError {
 }
 impl fmt::Display for DeleteImagePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteImagePermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteImagePermissionsError::ResourceNotAvailable(ref cause) => cause,
-            DeleteImagePermissionsError::ResourceNotFound(ref cause) => cause,
+            DeleteImagePermissionsError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
+            DeleteImagePermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteImagePermissionsError {}
 /// Errors returned by DeleteStack
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackError {
@@ -2944,18 +2900,14 @@ impl DeleteStackError {
 }
 impl fmt::Display for DeleteStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStackError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStackError::ConcurrentModification(ref cause) => cause,
-            DeleteStackError::ResourceInUse(ref cause) => cause,
-            DeleteStackError::ResourceNotFound(ref cause) => cause,
+            DeleteStackError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteStackError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteStackError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStackError {}
 /// Errors returned by DeleteUsageReportSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteUsageReportSubscriptionError {
@@ -2990,17 +2942,17 @@ impl DeleteUsageReportSubscriptionError {
 }
 impl fmt::Display for DeleteUsageReportSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUsageReportSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUsageReportSubscriptionError::InvalidAccountStatus(ref cause) => cause,
-            DeleteUsageReportSubscriptionError::ResourceNotFound(ref cause) => cause,
+            DeleteUsageReportSubscriptionError::InvalidAccountStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteUsageReportSubscriptionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteUsageReportSubscriptionError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -3024,16 +2976,12 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserError::ResourceNotFound(ref cause) => cause,
+            DeleteUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserError {}
 /// Errors returned by DescribeDirectoryConfigs
 #[derive(Debug, PartialEq)]
 pub enum DescribeDirectoryConfigsError {
@@ -3059,16 +3007,12 @@ impl DescribeDirectoryConfigsError {
 }
 impl fmt::Display for DescribeDirectoryConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDirectoryConfigsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDirectoryConfigsError::ResourceNotFound(ref cause) => cause,
+            DescribeDirectoryConfigsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDirectoryConfigsError {}
 /// Errors returned by DescribeFleets
 #[derive(Debug, PartialEq)]
 pub enum DescribeFleetsError {
@@ -3092,16 +3036,12 @@ impl DescribeFleetsError {
 }
 impl fmt::Display for DescribeFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFleetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFleetsError::ResourceNotFound(ref cause) => cause,
+            DescribeFleetsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFleetsError {}
 /// Errors returned by DescribeImageBuilders
 #[derive(Debug, PartialEq)]
 pub enum DescribeImageBuildersError {
@@ -3127,16 +3067,12 @@ impl DescribeImageBuildersError {
 }
 impl fmt::Display for DescribeImageBuildersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeImageBuildersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeImageBuildersError::ResourceNotFound(ref cause) => cause,
+            DescribeImageBuildersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeImageBuildersError {}
 /// Errors returned by DescribeImagePermissions
 #[derive(Debug, PartialEq)]
 pub enum DescribeImagePermissionsError {
@@ -3162,16 +3098,12 @@ impl DescribeImagePermissionsError {
 }
 impl fmt::Display for DescribeImagePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeImagePermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeImagePermissionsError::ResourceNotFound(ref cause) => cause,
+            DescribeImagePermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeImagePermissionsError {}
 /// Errors returned by DescribeImages
 #[derive(Debug, PartialEq)]
 pub enum DescribeImagesError {
@@ -3202,17 +3134,13 @@ impl DescribeImagesError {
 }
 impl fmt::Display for DescribeImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeImagesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeImagesError::InvalidParameterCombination(ref cause) => cause,
-            DescribeImagesError::ResourceNotFound(ref cause) => cause,
+            DescribeImagesError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            DescribeImagesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeImagesError {}
 /// Errors returned by DescribeSessions
 #[derive(Debug, PartialEq)]
 pub enum DescribeSessionsError {
@@ -3238,16 +3166,12 @@ impl DescribeSessionsError {
 }
 impl fmt::Display for DescribeSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSessionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSessionsError::InvalidParameterCombination(ref cause) => cause,
+            DescribeSessionsError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSessionsError {}
 /// Errors returned by DescribeStacks
 #[derive(Debug, PartialEq)]
 pub enum DescribeStacksError {
@@ -3271,16 +3195,12 @@ impl DescribeStacksError {
 }
 impl fmt::Display for DescribeStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStacksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStacksError::ResourceNotFound(ref cause) => cause,
+            DescribeStacksError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStacksError {}
 /// Errors returned by DescribeUsageReportSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeUsageReportSubscriptionsError {
@@ -3315,17 +3235,17 @@ impl DescribeUsageReportSubscriptionsError {
 }
 impl fmt::Display for DescribeUsageReportSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUsageReportSubscriptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUsageReportSubscriptionsError::InvalidAccountStatus(ref cause) => cause,
-            DescribeUsageReportSubscriptionsError::ResourceNotFound(ref cause) => cause,
+            DescribeUsageReportSubscriptionsError::InvalidAccountStatus(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeUsageReportSubscriptionsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeUsageReportSubscriptionsError {}
 /// Errors returned by DescribeUserStackAssociations
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserStackAssociationsError {
@@ -3353,16 +3273,14 @@ impl DescribeUserStackAssociationsError {
 }
 impl fmt::Display for DescribeUserStackAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserStackAssociationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserStackAssociationsError::InvalidParameterCombination(ref cause) => cause,
+            DescribeUserStackAssociationsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeUserStackAssociationsError {}
 /// Errors returned by DescribeUsers
 #[derive(Debug, PartialEq)]
 pub enum DescribeUsersError {
@@ -3393,17 +3311,13 @@ impl DescribeUsersError {
 }
 impl fmt::Display for DescribeUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUsersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUsersError::InvalidParameterCombination(ref cause) => cause,
-            DescribeUsersError::ResourceNotFound(ref cause) => cause,
+            DescribeUsersError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            DescribeUsersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUsersError {}
 /// Errors returned by DisableUser
 #[derive(Debug, PartialEq)]
 pub enum DisableUserError {
@@ -3427,16 +3341,12 @@ impl DisableUserError {
 }
 impl fmt::Display for DisableUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableUserError {
-    fn description(&self) -> &str {
         match *self {
-            DisableUserError::ResourceNotFound(ref cause) => cause,
+            DisableUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableUserError {}
 /// Errors returned by DisassociateFleet
 #[derive(Debug, PartialEq)]
 pub enum DisassociateFleetError {
@@ -3472,18 +3382,14 @@ impl DisassociateFleetError {
 }
 impl fmt::Display for DisassociateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateFleetError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateFleetError::ConcurrentModification(ref cause) => cause,
-            DisassociateFleetError::ResourceInUse(ref cause) => cause,
-            DisassociateFleetError::ResourceNotFound(ref cause) => cause,
+            DisassociateFleetError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DisassociateFleetError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DisassociateFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateFleetError {}
 /// Errors returned by EnableUser
 #[derive(Debug, PartialEq)]
 pub enum EnableUserError {
@@ -3512,17 +3418,13 @@ impl EnableUserError {
 }
 impl fmt::Display for EnableUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableUserError {
-    fn description(&self) -> &str {
         match *self {
-            EnableUserError::InvalidAccountStatus(ref cause) => cause,
-            EnableUserError::ResourceNotFound(ref cause) => cause,
+            EnableUserError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            EnableUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableUserError {}
 /// Errors returned by ExpireSession
 #[derive(Debug, PartialEq)]
 pub enum ExpireSessionError {}
@@ -3540,14 +3442,10 @@ impl ExpireSessionError {
 }
 impl fmt::Display for ExpireSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExpireSessionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ExpireSessionError {}
 /// Errors returned by ListAssociatedFleets
 #[derive(Debug, PartialEq)]
 pub enum ListAssociatedFleetsError {}
@@ -3565,14 +3463,10 @@ impl ListAssociatedFleetsError {
 }
 impl fmt::Display for ListAssociatedFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssociatedFleetsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListAssociatedFleetsError {}
 /// Errors returned by ListAssociatedStacks
 #[derive(Debug, PartialEq)]
 pub enum ListAssociatedStacksError {}
@@ -3590,14 +3484,10 @@ impl ListAssociatedStacksError {
 }
 impl fmt::Display for ListAssociatedStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAssociatedStacksError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListAssociatedStacksError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -3623,16 +3513,12 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by StartFleet
 #[derive(Debug, PartialEq)]
 pub enum StartFleetError {
@@ -3686,22 +3572,18 @@ impl StartFleetError {
 }
 impl fmt::Display for StartFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartFleetError {
-    fn description(&self) -> &str {
         match *self {
-            StartFleetError::ConcurrentModification(ref cause) => cause,
-            StartFleetError::InvalidAccountStatus(ref cause) => cause,
-            StartFleetError::InvalidRole(ref cause) => cause,
-            StartFleetError::LimitExceeded(ref cause) => cause,
-            StartFleetError::OperationNotPermitted(ref cause) => cause,
-            StartFleetError::ResourceNotAvailable(ref cause) => cause,
-            StartFleetError::ResourceNotFound(ref cause) => cause,
+            StartFleetError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            StartFleetError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            StartFleetError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            StartFleetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartFleetError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StartFleetError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
+            StartFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartFleetError {}
 /// Errors returned by StartImageBuilder
 #[derive(Debug, PartialEq)]
 pub enum StartImageBuilderError {
@@ -3751,20 +3633,16 @@ impl StartImageBuilderError {
 }
 impl fmt::Display for StartImageBuilderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartImageBuilderError {
-    fn description(&self) -> &str {
         match *self {
-            StartImageBuilderError::ConcurrentModification(ref cause) => cause,
-            StartImageBuilderError::IncompatibleImage(ref cause) => cause,
-            StartImageBuilderError::InvalidAccountStatus(ref cause) => cause,
-            StartImageBuilderError::ResourceNotAvailable(ref cause) => cause,
-            StartImageBuilderError::ResourceNotFound(ref cause) => cause,
+            StartImageBuilderError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            StartImageBuilderError::IncompatibleImage(ref cause) => write!(f, "{}", cause),
+            StartImageBuilderError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            StartImageBuilderError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
+            StartImageBuilderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartImageBuilderError {}
 /// Errors returned by StopFleet
 #[derive(Debug, PartialEq)]
 pub enum StopFleetError {
@@ -3793,17 +3671,13 @@ impl StopFleetError {
 }
 impl fmt::Display for StopFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopFleetError {
-    fn description(&self) -> &str {
         match *self {
-            StopFleetError::ConcurrentModification(ref cause) => cause,
-            StopFleetError::ResourceNotFound(ref cause) => cause,
+            StopFleetError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            StopFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopFleetError {}
 /// Errors returned by StopImageBuilder
 #[derive(Debug, PartialEq)]
 pub enum StopImageBuilderError {
@@ -3841,18 +3715,14 @@ impl StopImageBuilderError {
 }
 impl fmt::Display for StopImageBuilderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopImageBuilderError {
-    fn description(&self) -> &str {
         match *self {
-            StopImageBuilderError::ConcurrentModification(ref cause) => cause,
-            StopImageBuilderError::OperationNotPermitted(ref cause) => cause,
-            StopImageBuilderError::ResourceNotFound(ref cause) => cause,
+            StopImageBuilderError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            StopImageBuilderError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StopImageBuilderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopImageBuilderError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -3886,18 +3756,14 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InvalidAccountStatus(ref cause) => cause,
-            TagResourceError::LimitExceeded(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            TagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -3921,16 +3787,12 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateDirectoryConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateDirectoryConfigError {
@@ -3968,18 +3830,14 @@ impl UpdateDirectoryConfigError {
 }
 impl fmt::Display for UpdateDirectoryConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDirectoryConfigError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDirectoryConfigError::ConcurrentModification(ref cause) => cause,
-            UpdateDirectoryConfigError::ResourceInUse(ref cause) => cause,
-            UpdateDirectoryConfigError::ResourceNotFound(ref cause) => cause,
+            UpdateDirectoryConfigError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateDirectoryConfigError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateDirectoryConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDirectoryConfigError {}
 /// Errors returned by UpdateFleet
 #[derive(Debug, PartialEq)]
 pub enum UpdateFleetError {
@@ -4050,25 +3908,21 @@ impl UpdateFleetError {
 }
 impl fmt::Display for UpdateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFleetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFleetError::ConcurrentModification(ref cause) => cause,
-            UpdateFleetError::IncompatibleImage(ref cause) => cause,
-            UpdateFleetError::InvalidAccountStatus(ref cause) => cause,
-            UpdateFleetError::InvalidParameterCombination(ref cause) => cause,
-            UpdateFleetError::InvalidRole(ref cause) => cause,
-            UpdateFleetError::LimitExceeded(ref cause) => cause,
-            UpdateFleetError::OperationNotPermitted(ref cause) => cause,
-            UpdateFleetError::ResourceInUse(ref cause) => cause,
-            UpdateFleetError::ResourceNotAvailable(ref cause) => cause,
-            UpdateFleetError::ResourceNotFound(ref cause) => cause,
+            UpdateFleetError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateFleetError::IncompatibleImage(ref cause) => write!(f, "{}", cause),
+            UpdateFleetError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            UpdateFleetError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            UpdateFleetError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            UpdateFleetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFleetError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            UpdateFleetError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateFleetError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
+            UpdateFleetError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFleetError {}
 /// Errors returned by UpdateImagePermissions
 #[derive(Debug, PartialEq)]
 pub enum UpdateImagePermissionsError {
@@ -4108,18 +3962,14 @@ impl UpdateImagePermissionsError {
 }
 impl fmt::Display for UpdateImagePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateImagePermissionsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateImagePermissionsError::LimitExceeded(ref cause) => cause,
-            UpdateImagePermissionsError::ResourceNotAvailable(ref cause) => cause,
-            UpdateImagePermissionsError::ResourceNotFound(ref cause) => cause,
+            UpdateImagePermissionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateImagePermissionsError::ResourceNotAvailable(ref cause) => write!(f, "{}", cause),
+            UpdateImagePermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateImagePermissionsError {}
 /// Errors returned by UpdateStack
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackError {
@@ -4185,24 +4035,20 @@ impl UpdateStackError {
 }
 impl fmt::Display for UpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStackError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStackError::ConcurrentModification(ref cause) => cause,
-            UpdateStackError::IncompatibleImage(ref cause) => cause,
-            UpdateStackError::InvalidAccountStatus(ref cause) => cause,
-            UpdateStackError::InvalidParameterCombination(ref cause) => cause,
-            UpdateStackError::InvalidRole(ref cause) => cause,
-            UpdateStackError::LimitExceeded(ref cause) => cause,
-            UpdateStackError::OperationNotPermitted(ref cause) => cause,
-            UpdateStackError::ResourceInUse(ref cause) => cause,
-            UpdateStackError::ResourceNotFound(ref cause) => cause,
+            UpdateStackError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateStackError::IncompatibleImage(ref cause) => write!(f, "{}", cause),
+            UpdateStackError::InvalidAccountStatus(ref cause) => write!(f, "{}", cause),
+            UpdateStackError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            UpdateStackError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            UpdateStackError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateStackError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            UpdateStackError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateStackError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStackError {}
 /// Trait representing the capabilities of the Amazon AppStream API. Amazon AppStream clients implement this trait.
 pub trait AppStream {
     /// <p>Associates the specified fleet with the specified stack.</p>
@@ -4516,6 +4362,14 @@ impl AppStreamClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> AppStreamClient {
         AppStreamClient { client, region }
+    }
+}
+
+impl fmt::Debug for AppStreamClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AppStreamClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

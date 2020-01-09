@@ -911,14 +911,10 @@ impl BatchDeleteAttributesError {
 }
 impl fmt::Display for BatchDeleteAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for BatchDeleteAttributesError {}
 /// Errors returned by BatchPutAttributes
 #[derive(Debug, PartialEq)]
 pub enum BatchPutAttributesError {
@@ -1022,24 +1018,28 @@ impl BatchPutAttributesError {
 }
 impl fmt::Display for BatchPutAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchPutAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            BatchPutAttributesError::DuplicateItemName(ref cause) => cause,
-            BatchPutAttributesError::InvalidParameterValue(ref cause) => cause,
-            BatchPutAttributesError::MissingParameter(ref cause) => cause,
-            BatchPutAttributesError::NoSuchDomain(ref cause) => cause,
-            BatchPutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,
-            BatchPutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,
-            BatchPutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
-            BatchPutAttributesError::NumberSubmittedAttributesExceeded(ref cause) => cause,
-            BatchPutAttributesError::NumberSubmittedItemsExceeded(ref cause) => cause,
+            BatchPutAttributesError::DuplicateItemName(ref cause) => write!(f, "{}", cause),
+            BatchPutAttributesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            BatchPutAttributesError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            BatchPutAttributesError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
+            BatchPutAttributesError::NumberDomainAttributesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchPutAttributesError::NumberDomainBytesExceeded(ref cause) => write!(f, "{}", cause),
+            BatchPutAttributesError::NumberItemAttributesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchPutAttributesError::NumberSubmittedAttributesExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchPutAttributesError::NumberSubmittedItemsExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchPutAttributesError {}
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
@@ -1091,18 +1091,14 @@ impl CreateDomainError {
 }
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainError::InvalidParameterValue(ref cause) => cause,
-            CreateDomainError::MissingParameter(ref cause) => cause,
-            CreateDomainError::NumberDomainsExceeded(ref cause) => cause,
+            CreateDomainError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::NumberDomainsExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainError {}
 /// Errors returned by DeleteAttributes
 #[derive(Debug, PartialEq)]
 pub enum DeleteAttributesError {
@@ -1161,19 +1157,15 @@ impl DeleteAttributesError {
 }
 impl fmt::Display for DeleteAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAttributesError::AttributeDoesNotExist(ref cause) => cause,
-            DeleteAttributesError::InvalidParameterValue(ref cause) => cause,
-            DeleteAttributesError::MissingParameter(ref cause) => cause,
-            DeleteAttributesError::NoSuchDomain(ref cause) => cause,
+            DeleteAttributesError::AttributeDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DeleteAttributesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteAttributesError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            DeleteAttributesError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAttributesError {}
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
@@ -1211,16 +1203,12 @@ impl DeleteDomainError {
 }
 impl fmt::Display for DeleteDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainError::MissingParameter(ref cause) => cause,
+            DeleteDomainError::MissingParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainError {}
 /// Errors returned by DomainMetadata
 #[derive(Debug, PartialEq)]
 pub enum DomainMetadataError {
@@ -1265,17 +1253,13 @@ impl DomainMetadataError {
 }
 impl fmt::Display for DomainMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DomainMetadataError {
-    fn description(&self) -> &str {
         match *self {
-            DomainMetadataError::MissingParameter(ref cause) => cause,
-            DomainMetadataError::NoSuchDomain(ref cause) => cause,
+            DomainMetadataError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            DomainMetadataError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DomainMetadataError {}
 /// Errors returned by GetAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetAttributesError {
@@ -1327,18 +1311,14 @@ impl GetAttributesError {
 }
 impl fmt::Display for GetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetAttributesError::InvalidParameterValue(ref cause) => cause,
-            GetAttributesError::MissingParameter(ref cause) => cause,
-            GetAttributesError::NoSuchDomain(ref cause) => cause,
+            GetAttributesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetAttributesError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            GetAttributesError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAttributesError {}
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {
@@ -1383,17 +1363,13 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDomainsError::InvalidNextToken(ref cause) => cause,
-            ListDomainsError::InvalidParameterValue(ref cause) => cause,
+            ListDomainsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListDomainsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDomainsError {}
 /// Errors returned by PutAttributes
 #[derive(Debug, PartialEq)]
 pub enum PutAttributesError {
@@ -1475,22 +1451,18 @@ impl PutAttributesError {
 }
 impl fmt::Display for PutAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            PutAttributesError::AttributeDoesNotExist(ref cause) => cause,
-            PutAttributesError::InvalidParameterValue(ref cause) => cause,
-            PutAttributesError::MissingParameter(ref cause) => cause,
-            PutAttributesError::NoSuchDomain(ref cause) => cause,
-            PutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,
-            PutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,
-            PutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
+            PutAttributesError::AttributeDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::NumberDomainAttributesExceeded(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::NumberDomainBytesExceeded(ref cause) => write!(f, "{}", cause),
+            PutAttributesError::NumberItemAttributesExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutAttributesError {}
 /// Errors returned by Select
 #[derive(Debug, PartialEq)]
 pub enum SelectError {
@@ -1584,24 +1556,20 @@ impl SelectError {
 }
 impl fmt::Display for SelectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SelectError {
-    fn description(&self) -> &str {
         match *self {
-            SelectError::InvalidNextToken(ref cause) => cause,
-            SelectError::InvalidNumberPredicates(ref cause) => cause,
-            SelectError::InvalidNumberValueTests(ref cause) => cause,
-            SelectError::InvalidParameterValue(ref cause) => cause,
-            SelectError::InvalidQueryExpression(ref cause) => cause,
-            SelectError::MissingParameter(ref cause) => cause,
-            SelectError::NoSuchDomain(ref cause) => cause,
-            SelectError::RequestTimeout(ref cause) => cause,
-            SelectError::TooManyRequestedAttributes(ref cause) => cause,
+            SelectError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            SelectError::InvalidNumberPredicates(ref cause) => write!(f, "{}", cause),
+            SelectError::InvalidNumberValueTests(ref cause) => write!(f, "{}", cause),
+            SelectError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            SelectError::InvalidQueryExpression(ref cause) => write!(f, "{}", cause),
+            SelectError::MissingParameter(ref cause) => write!(f, "{}", cause),
+            SelectError::NoSuchDomain(ref cause) => write!(f, "{}", cause),
+            SelectError::RequestTimeout(ref cause) => write!(f, "{}", cause),
+            SelectError::TooManyRequestedAttributes(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SelectError {}
 /// Trait representing the capabilities of the Amazon SimpleDB API. Amazon SimpleDB clients implement this trait.
 pub trait SimpleDb {
     /// <p> Performs multiple DeleteAttributes operations in a single call, which reduces round trips and latencies. This enables Amazon SimpleDB to optimize requests, which generally yields better throughput. </p> <p> The following limitations are enforced for this operation: <ul> <li>1 MB request size</li> <li>25 item limit per BatchDeleteAttributes operation</li> </ul> </p>
@@ -1686,6 +1654,14 @@ impl SimpleDbClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> SimpleDbClient {
         SimpleDbClient { client, region }
+    }
+}
+
+impl fmt::Debug for SimpleDbClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SimpleDbClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

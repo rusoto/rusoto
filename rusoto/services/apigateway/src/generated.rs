@@ -1242,6 +1242,10 @@ pub struct EndpointConfiguration {
     #[serde(rename = "types")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub types: Option<Vec<String>>,
+    /// <p>A list of VpcEndpointIds of an API (<a>RestApi</a>) against which to create Route53 ALIASes. It is only supported for <code>PRIVATE</code> endpoint type.</p>
+    #[serde(rename = "vpcEndpointIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_endpoint_ids: Option<Vec<String>>,
 }
 
 /// <p>The binary blob response to <a>GetExport</a>, which contains the generated SDK.</p>
@@ -3678,21 +3682,17 @@ impl CreateApiKeyError {
 }
 impl fmt::Display for CreateApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApiKeyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApiKeyError::BadRequest(ref cause) => cause,
-            CreateApiKeyError::Conflict(ref cause) => cause,
-            CreateApiKeyError::LimitExceeded(ref cause) => cause,
-            CreateApiKeyError::NotFound(ref cause) => cause,
-            CreateApiKeyError::TooManyRequests(ref cause) => cause,
-            CreateApiKeyError::Unauthorized(ref cause) => cause,
+            CreateApiKeyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApiKeyError {}
 /// Errors returned by CreateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum CreateAuthorizerError {
@@ -3736,20 +3736,16 @@ impl CreateAuthorizerError {
 }
 impl fmt::Display for CreateAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAuthorizerError::BadRequest(ref cause) => cause,
-            CreateAuthorizerError::LimitExceeded(ref cause) => cause,
-            CreateAuthorizerError::NotFound(ref cause) => cause,
-            CreateAuthorizerError::TooManyRequests(ref cause) => cause,
-            CreateAuthorizerError::Unauthorized(ref cause) => cause,
+            CreateAuthorizerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateAuthorizerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAuthorizerError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateAuthorizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAuthorizerError {}
 /// Errors returned by CreateBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum CreateBasePathMappingError {
@@ -3795,20 +3791,16 @@ impl CreateBasePathMappingError {
 }
 impl fmt::Display for CreateBasePathMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBasePathMappingError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBasePathMappingError::BadRequest(ref cause) => cause,
-            CreateBasePathMappingError::Conflict(ref cause) => cause,
-            CreateBasePathMappingError::NotFound(ref cause) => cause,
-            CreateBasePathMappingError::TooManyRequests(ref cause) => cause,
-            CreateBasePathMappingError::Unauthorized(ref cause) => cause,
+            CreateBasePathMappingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateBasePathMappingError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateBasePathMappingError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateBasePathMappingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateBasePathMappingError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBasePathMappingError {}
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
@@ -3862,22 +3854,18 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDeploymentError::BadRequest(ref cause) => cause,
-            CreateDeploymentError::Conflict(ref cause) => cause,
-            CreateDeploymentError::LimitExceeded(ref cause) => cause,
-            CreateDeploymentError::NotFound(ref cause) => cause,
-            CreateDeploymentError::ServiceUnavailable(ref cause) => cause,
-            CreateDeploymentError::TooManyRequests(ref cause) => cause,
-            CreateDeploymentError::Unauthorized(ref cause) => cause,
+            CreateDeploymentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDeploymentError {}
 /// Errors returned by CreateDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentationPartError {
@@ -3932,21 +3920,17 @@ impl CreateDocumentationPartError {
 }
 impl fmt::Display for CreateDocumentationPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDocumentationPartError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDocumentationPartError::BadRequest(ref cause) => cause,
-            CreateDocumentationPartError::Conflict(ref cause) => cause,
-            CreateDocumentationPartError::LimitExceeded(ref cause) => cause,
-            CreateDocumentationPartError::NotFound(ref cause) => cause,
-            CreateDocumentationPartError::TooManyRequests(ref cause) => cause,
-            CreateDocumentationPartError::Unauthorized(ref cause) => cause,
+            CreateDocumentationPartError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateDocumentationPartError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateDocumentationPartError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDocumentationPartError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDocumentationPartError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateDocumentationPartError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDocumentationPartError {}
 /// Errors returned by CreateDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentationVersionError {
@@ -4005,21 +3989,17 @@ impl CreateDocumentationVersionError {
 }
 impl fmt::Display for CreateDocumentationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDocumentationVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDocumentationVersionError::BadRequest(ref cause) => cause,
-            CreateDocumentationVersionError::Conflict(ref cause) => cause,
-            CreateDocumentationVersionError::LimitExceeded(ref cause) => cause,
-            CreateDocumentationVersionError::NotFound(ref cause) => cause,
-            CreateDocumentationVersionError::TooManyRequests(ref cause) => cause,
-            CreateDocumentationVersionError::Unauthorized(ref cause) => cause,
+            CreateDocumentationVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateDocumentationVersionError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateDocumentationVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDocumentationVersionError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDocumentationVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateDocumentationVersionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDocumentationVersionError {}
 /// Errors returned by CreateDomainName
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainNameError {
@@ -4058,19 +4038,15 @@ impl CreateDomainNameError {
 }
 impl fmt::Display for CreateDomainNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainNameError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainNameError::BadRequest(ref cause) => cause,
-            CreateDomainNameError::Conflict(ref cause) => cause,
-            CreateDomainNameError::TooManyRequests(ref cause) => cause,
-            CreateDomainNameError::Unauthorized(ref cause) => cause,
+            CreateDomainNameError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateDomainNameError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateDomainNameError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateDomainNameError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainNameError {}
 /// Errors returned by CreateModel
 #[derive(Debug, PartialEq)]
 pub enum CreateModelError {
@@ -4119,21 +4095,17 @@ impl CreateModelError {
 }
 impl fmt::Display for CreateModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateModelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateModelError::BadRequest(ref cause) => cause,
-            CreateModelError::Conflict(ref cause) => cause,
-            CreateModelError::LimitExceeded(ref cause) => cause,
-            CreateModelError::NotFound(ref cause) => cause,
-            CreateModelError::TooManyRequests(ref cause) => cause,
-            CreateModelError::Unauthorized(ref cause) => cause,
+            CreateModelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateModelError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateModelError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateModelError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateModelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateModelError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateModelError {}
 /// Errors returned by CreateRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum CreateRequestValidatorError {
@@ -4181,20 +4153,16 @@ impl CreateRequestValidatorError {
 }
 impl fmt::Display for CreateRequestValidatorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRequestValidatorError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRequestValidatorError::BadRequest(ref cause) => cause,
-            CreateRequestValidatorError::LimitExceeded(ref cause) => cause,
-            CreateRequestValidatorError::NotFound(ref cause) => cause,
-            CreateRequestValidatorError::TooManyRequests(ref cause) => cause,
-            CreateRequestValidatorError::Unauthorized(ref cause) => cause,
+            CreateRequestValidatorError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateRequestValidatorError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRequestValidatorError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateRequestValidatorError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateRequestValidatorError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRequestValidatorError {}
 /// Errors returned by CreateResource
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceError {
@@ -4243,21 +4211,17 @@ impl CreateResourceError {
 }
 impl fmt::Display for CreateResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateResourceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateResourceError::BadRequest(ref cause) => cause,
-            CreateResourceError::Conflict(ref cause) => cause,
-            CreateResourceError::LimitExceeded(ref cause) => cause,
-            CreateResourceError::NotFound(ref cause) => cause,
-            CreateResourceError::TooManyRequests(ref cause) => cause,
-            CreateResourceError::Unauthorized(ref cause) => cause,
+            CreateResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateResourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateResourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateResourceError {}
 /// Errors returned by CreateRestApi
 #[derive(Debug, PartialEq)]
 pub enum CreateRestApiError {
@@ -4296,19 +4260,15 @@ impl CreateRestApiError {
 }
 impl fmt::Display for CreateRestApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRestApiError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRestApiError::BadRequest(ref cause) => cause,
-            CreateRestApiError::LimitExceeded(ref cause) => cause,
-            CreateRestApiError::TooManyRequests(ref cause) => cause,
-            CreateRestApiError::Unauthorized(ref cause) => cause,
+            CreateRestApiError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateRestApiError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRestApiError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateRestApiError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRestApiError {}
 /// Errors returned by CreateStage
 #[derive(Debug, PartialEq)]
 pub enum CreateStageError {
@@ -4357,21 +4317,17 @@ impl CreateStageError {
 }
 impl fmt::Display for CreateStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStageError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStageError::BadRequest(ref cause) => cause,
-            CreateStageError::Conflict(ref cause) => cause,
-            CreateStageError::LimitExceeded(ref cause) => cause,
-            CreateStageError::NotFound(ref cause) => cause,
-            CreateStageError::TooManyRequests(ref cause) => cause,
-            CreateStageError::Unauthorized(ref cause) => cause,
+            CreateStageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateStageError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateStageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStageError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateStageError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateStageError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStageError {}
 /// Errors returned by CreateUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum CreateUsagePlanError {
@@ -4420,21 +4376,17 @@ impl CreateUsagePlanError {
 }
 impl fmt::Display for CreateUsagePlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUsagePlanError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUsagePlanError::BadRequest(ref cause) => cause,
-            CreateUsagePlanError::Conflict(ref cause) => cause,
-            CreateUsagePlanError::LimitExceeded(ref cause) => cause,
-            CreateUsagePlanError::NotFound(ref cause) => cause,
-            CreateUsagePlanError::TooManyRequests(ref cause) => cause,
-            CreateUsagePlanError::Unauthorized(ref cause) => cause,
+            CreateUsagePlanError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateUsagePlanError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateUsagePlanError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUsagePlanError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateUsagePlanError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateUsagePlanError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUsagePlanError {}
 /// Errors returned by CreateUsagePlanKey
 #[derive(Debug, PartialEq)]
 pub enum CreateUsagePlanKeyError {
@@ -4478,20 +4430,16 @@ impl CreateUsagePlanKeyError {
 }
 impl fmt::Display for CreateUsagePlanKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUsagePlanKeyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUsagePlanKeyError::BadRequest(ref cause) => cause,
-            CreateUsagePlanKeyError::Conflict(ref cause) => cause,
-            CreateUsagePlanKeyError::NotFound(ref cause) => cause,
-            CreateUsagePlanKeyError::TooManyRequests(ref cause) => cause,
-            CreateUsagePlanKeyError::Unauthorized(ref cause) => cause,
+            CreateUsagePlanKeyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateUsagePlanKeyError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateUsagePlanKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateUsagePlanKeyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateUsagePlanKeyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUsagePlanKeyError {}
 /// Errors returned by CreateVpcLink
 #[derive(Debug, PartialEq)]
 pub enum CreateVpcLinkError {
@@ -4525,18 +4473,14 @@ impl CreateVpcLinkError {
 }
 impl fmt::Display for CreateVpcLinkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVpcLinkError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVpcLinkError::BadRequest(ref cause) => cause,
-            CreateVpcLinkError::TooManyRequests(ref cause) => cause,
-            CreateVpcLinkError::Unauthorized(ref cause) => cause,
+            CreateVpcLinkError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateVpcLinkError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateVpcLinkError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVpcLinkError {}
 /// Errors returned by DeleteApiKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiKeyError {
@@ -4570,18 +4514,14 @@ impl DeleteApiKeyError {
 }
 impl fmt::Display for DeleteApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApiKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApiKeyError::NotFound(ref cause) => cause,
-            DeleteApiKeyError::TooManyRequests(ref cause) => cause,
-            DeleteApiKeyError::Unauthorized(ref cause) => cause,
+            DeleteApiKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteApiKeyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteApiKeyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApiKeyError {}
 /// Errors returned by DeleteAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteAuthorizerError {
@@ -4625,20 +4565,16 @@ impl DeleteAuthorizerError {
 }
 impl fmt::Display for DeleteAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAuthorizerError::BadRequest(ref cause) => cause,
-            DeleteAuthorizerError::Conflict(ref cause) => cause,
-            DeleteAuthorizerError::NotFound(ref cause) => cause,
-            DeleteAuthorizerError::TooManyRequests(ref cause) => cause,
-            DeleteAuthorizerError::Unauthorized(ref cause) => cause,
+            DeleteAuthorizerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAuthorizerError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteAuthorizerError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAuthorizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAuthorizerError {}
 /// Errors returned by DeleteBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum DeleteBasePathMappingError {
@@ -4684,20 +4620,16 @@ impl DeleteBasePathMappingError {
 }
 impl fmt::Display for DeleteBasePathMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBasePathMappingError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBasePathMappingError::BadRequest(ref cause) => cause,
-            DeleteBasePathMappingError::Conflict(ref cause) => cause,
-            DeleteBasePathMappingError::NotFound(ref cause) => cause,
-            DeleteBasePathMappingError::TooManyRequests(ref cause) => cause,
-            DeleteBasePathMappingError::Unauthorized(ref cause) => cause,
+            DeleteBasePathMappingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBasePathMappingError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteBasePathMappingError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBasePathMappingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteBasePathMappingError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBasePathMappingError {}
 /// Errors returned by DeleteClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteClientCertificateError {
@@ -4740,19 +4672,15 @@ impl DeleteClientCertificateError {
 }
 impl fmt::Display for DeleteClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClientCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClientCertificateError::BadRequest(ref cause) => cause,
-            DeleteClientCertificateError::NotFound(ref cause) => cause,
-            DeleteClientCertificateError::TooManyRequests(ref cause) => cause,
-            DeleteClientCertificateError::Unauthorized(ref cause) => cause,
+            DeleteClientCertificateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteClientCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteClientCertificateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteClientCertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteClientCertificateError {}
 /// Errors returned by DeleteDeployment
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeploymentError {
@@ -4791,19 +4719,15 @@ impl DeleteDeploymentError {
 }
 impl fmt::Display for DeleteDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDeploymentError::BadRequest(ref cause) => cause,
-            DeleteDeploymentError::NotFound(ref cause) => cause,
-            DeleteDeploymentError::TooManyRequests(ref cause) => cause,
-            DeleteDeploymentError::Unauthorized(ref cause) => cause,
+            DeleteDeploymentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDeploymentError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDeploymentError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteDeploymentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDeploymentError {}
 /// Errors returned by DeleteDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentationPartError {
@@ -4851,20 +4775,16 @@ impl DeleteDocumentationPartError {
 }
 impl fmt::Display for DeleteDocumentationPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDocumentationPartError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDocumentationPartError::BadRequest(ref cause) => cause,
-            DeleteDocumentationPartError::Conflict(ref cause) => cause,
-            DeleteDocumentationPartError::NotFound(ref cause) => cause,
-            DeleteDocumentationPartError::TooManyRequests(ref cause) => cause,
-            DeleteDocumentationPartError::Unauthorized(ref cause) => cause,
+            DeleteDocumentationPartError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentationPartError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentationPartError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentationPartError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentationPartError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDocumentationPartError {}
 /// Errors returned by DeleteDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentationVersionError {
@@ -4916,23 +4836,21 @@ impl DeleteDocumentationVersionError {
 }
 impl fmt::Display for DeleteDocumentationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDocumentationVersionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDocumentationVersionError::BadRequest(ref cause) => cause,
-            DeleteDocumentationVersionError::Conflict(ref cause) => cause,
-            DeleteDocumentationVersionError::NotFound(ref cause) => cause,
-            DeleteDocumentationVersionError::TooManyRequests(ref cause) => cause,
-            DeleteDocumentationVersionError::Unauthorized(ref cause) => cause,
+            DeleteDocumentationVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentationVersionError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentationVersionError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentationVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteDocumentationVersionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDocumentationVersionError {}
 /// Errors returned by DeleteDomainName
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainNameError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
     /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
     /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
@@ -4945,6 +4863,9 @@ impl DeleteDomainNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteDomainNameError::BadRequest(err.msg))
+                }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteDomainNameError::NotFound(err.msg))
                 }
@@ -4963,18 +4884,15 @@ impl DeleteDomainNameError {
 }
 impl fmt::Display for DeleteDomainNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainNameError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainNameError::NotFound(ref cause) => cause,
-            DeleteDomainNameError::TooManyRequests(ref cause) => cause,
-            DeleteDomainNameError::Unauthorized(ref cause) => cause,
+            DeleteDomainNameError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDomainNameError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDomainNameError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteDomainNameError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainNameError {}
 /// Errors returned by DeleteGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteGatewayResponseError {
@@ -5020,20 +4938,16 @@ impl DeleteGatewayResponseError {
 }
 impl fmt::Display for DeleteGatewayResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGatewayResponseError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGatewayResponseError::BadRequest(ref cause) => cause,
-            DeleteGatewayResponseError::Conflict(ref cause) => cause,
-            DeleteGatewayResponseError::NotFound(ref cause) => cause,
-            DeleteGatewayResponseError::TooManyRequests(ref cause) => cause,
-            DeleteGatewayResponseError::Unauthorized(ref cause) => cause,
+            DeleteGatewayResponseError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayResponseError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGatewayResponseError {}
 /// Errors returned by DeleteIntegration
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationError {
@@ -5072,19 +4986,15 @@ impl DeleteIntegrationError {
 }
 impl fmt::Display for DeleteIntegrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteIntegrationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteIntegrationError::Conflict(ref cause) => cause,
-            DeleteIntegrationError::NotFound(ref cause) => cause,
-            DeleteIntegrationError::TooManyRequests(ref cause) => cause,
-            DeleteIntegrationError::Unauthorized(ref cause) => cause,
+            DeleteIntegrationError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteIntegrationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteIntegrationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteIntegrationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteIntegrationError {}
 /// Errors returned by DeleteIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationResponseError {
@@ -5134,20 +5044,16 @@ impl DeleteIntegrationResponseError {
 }
 impl fmt::Display for DeleteIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteIntegrationResponseError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteIntegrationResponseError::BadRequest(ref cause) => cause,
-            DeleteIntegrationResponseError::Conflict(ref cause) => cause,
-            DeleteIntegrationResponseError::NotFound(ref cause) => cause,
-            DeleteIntegrationResponseError::TooManyRequests(ref cause) => cause,
-            DeleteIntegrationResponseError::Unauthorized(ref cause) => cause,
+            DeleteIntegrationResponseError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteIntegrationResponseError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteIntegrationResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteIntegrationResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteIntegrationResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteIntegrationResponseError {}
 /// Errors returned by DeleteMethod
 #[derive(Debug, PartialEq)]
 pub enum DeleteMethodError {
@@ -5186,19 +5092,15 @@ impl DeleteMethodError {
 }
 impl fmt::Display for DeleteMethodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMethodError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMethodError::Conflict(ref cause) => cause,
-            DeleteMethodError::NotFound(ref cause) => cause,
-            DeleteMethodError::TooManyRequests(ref cause) => cause,
-            DeleteMethodError::Unauthorized(ref cause) => cause,
+            DeleteMethodError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteMethodError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMethodError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteMethodError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMethodError {}
 /// Errors returned by DeleteMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteMethodResponseError {
@@ -5244,20 +5146,16 @@ impl DeleteMethodResponseError {
 }
 impl fmt::Display for DeleteMethodResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMethodResponseError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMethodResponseError::BadRequest(ref cause) => cause,
-            DeleteMethodResponseError::Conflict(ref cause) => cause,
-            DeleteMethodResponseError::NotFound(ref cause) => cause,
-            DeleteMethodResponseError::TooManyRequests(ref cause) => cause,
-            DeleteMethodResponseError::Unauthorized(ref cause) => cause,
+            DeleteMethodResponseError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteMethodResponseError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteMethodResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMethodResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteMethodResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMethodResponseError {}
 /// Errors returned by DeleteModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelError {
@@ -5301,20 +5199,16 @@ impl DeleteModelError {
 }
 impl fmt::Display for DeleteModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteModelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteModelError::BadRequest(ref cause) => cause,
-            DeleteModelError::Conflict(ref cause) => cause,
-            DeleteModelError::NotFound(ref cause) => cause,
-            DeleteModelError::TooManyRequests(ref cause) => cause,
-            DeleteModelError::Unauthorized(ref cause) => cause,
+            DeleteModelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteModelError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteModelError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteModelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteModelError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteModelError {}
 /// Errors returned by DeleteRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum DeleteRequestValidatorError {
@@ -5360,20 +5254,16 @@ impl DeleteRequestValidatorError {
 }
 impl fmt::Display for DeleteRequestValidatorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRequestValidatorError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRequestValidatorError::BadRequest(ref cause) => cause,
-            DeleteRequestValidatorError::Conflict(ref cause) => cause,
-            DeleteRequestValidatorError::NotFound(ref cause) => cause,
-            DeleteRequestValidatorError::TooManyRequests(ref cause) => cause,
-            DeleteRequestValidatorError::Unauthorized(ref cause) => cause,
+            DeleteRequestValidatorError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteRequestValidatorError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteRequestValidatorError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRequestValidatorError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteRequestValidatorError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRequestValidatorError {}
 /// Errors returned by DeleteResource
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceError {
@@ -5417,20 +5307,16 @@ impl DeleteResourceError {
 }
 impl fmt::Display for DeleteResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteResourceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteResourceError::BadRequest(ref cause) => cause,
-            DeleteResourceError::Conflict(ref cause) => cause,
-            DeleteResourceError::NotFound(ref cause) => cause,
-            DeleteResourceError::TooManyRequests(ref cause) => cause,
-            DeleteResourceError::Unauthorized(ref cause) => cause,
+            DeleteResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteResourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteResourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteResourceError {}
 /// Errors returned by DeleteRestApi
 #[derive(Debug, PartialEq)]
 pub enum DeleteRestApiError {
@@ -5469,19 +5355,15 @@ impl DeleteRestApiError {
 }
 impl fmt::Display for DeleteRestApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRestApiError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRestApiError::BadRequest(ref cause) => cause,
-            DeleteRestApiError::NotFound(ref cause) => cause,
-            DeleteRestApiError::TooManyRequests(ref cause) => cause,
-            DeleteRestApiError::Unauthorized(ref cause) => cause,
+            DeleteRestApiError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteRestApiError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRestApiError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteRestApiError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRestApiError {}
 /// Errors returned by DeleteStage
 #[derive(Debug, PartialEq)]
 pub enum DeleteStageError {
@@ -5520,19 +5402,15 @@ impl DeleteStageError {
 }
 impl fmt::Display for DeleteStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStageError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStageError::BadRequest(ref cause) => cause,
-            DeleteStageError::NotFound(ref cause) => cause,
-            DeleteStageError::TooManyRequests(ref cause) => cause,
-            DeleteStageError::Unauthorized(ref cause) => cause,
+            DeleteStageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteStageError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteStageError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteStageError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStageError {}
 /// Errors returned by DeleteUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum DeleteUsagePlanError {
@@ -5571,19 +5449,15 @@ impl DeleteUsagePlanError {
 }
 impl fmt::Display for DeleteUsagePlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUsagePlanError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUsagePlanError::BadRequest(ref cause) => cause,
-            DeleteUsagePlanError::NotFound(ref cause) => cause,
-            DeleteUsagePlanError::TooManyRequests(ref cause) => cause,
-            DeleteUsagePlanError::Unauthorized(ref cause) => cause,
+            DeleteUsagePlanError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteUsagePlanError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUsagePlanError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteUsagePlanError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUsagePlanError {}
 /// Errors returned by DeleteUsagePlanKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteUsagePlanKeyError {
@@ -5627,20 +5501,16 @@ impl DeleteUsagePlanKeyError {
 }
 impl fmt::Display for DeleteUsagePlanKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUsagePlanKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUsagePlanKeyError::BadRequest(ref cause) => cause,
-            DeleteUsagePlanKeyError::Conflict(ref cause) => cause,
-            DeleteUsagePlanKeyError::NotFound(ref cause) => cause,
-            DeleteUsagePlanKeyError::TooManyRequests(ref cause) => cause,
-            DeleteUsagePlanKeyError::Unauthorized(ref cause) => cause,
+            DeleteUsagePlanKeyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteUsagePlanKeyError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteUsagePlanKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUsagePlanKeyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteUsagePlanKeyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUsagePlanKeyError {}
 /// Errors returned by DeleteVpcLink
 #[derive(Debug, PartialEq)]
 pub enum DeleteVpcLinkError {
@@ -5679,19 +5549,15 @@ impl DeleteVpcLinkError {
 }
 impl fmt::Display for DeleteVpcLinkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVpcLinkError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVpcLinkError::BadRequest(ref cause) => cause,
-            DeleteVpcLinkError::NotFound(ref cause) => cause,
-            DeleteVpcLinkError::TooManyRequests(ref cause) => cause,
-            DeleteVpcLinkError::Unauthorized(ref cause) => cause,
+            DeleteVpcLinkError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVpcLinkError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVpcLinkError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteVpcLinkError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVpcLinkError {}
 /// Errors returned by FlushStageAuthorizersCache
 #[derive(Debug, PartialEq)]
 pub enum FlushStageAuthorizersCacheError {
@@ -5738,19 +5604,15 @@ impl FlushStageAuthorizersCacheError {
 }
 impl fmt::Display for FlushStageAuthorizersCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for FlushStageAuthorizersCacheError {
-    fn description(&self) -> &str {
         match *self {
-            FlushStageAuthorizersCacheError::BadRequest(ref cause) => cause,
-            FlushStageAuthorizersCacheError::NotFound(ref cause) => cause,
-            FlushStageAuthorizersCacheError::TooManyRequests(ref cause) => cause,
-            FlushStageAuthorizersCacheError::Unauthorized(ref cause) => cause,
+            FlushStageAuthorizersCacheError::BadRequest(ref cause) => write!(f, "{}", cause),
+            FlushStageAuthorizersCacheError::NotFound(ref cause) => write!(f, "{}", cause),
+            FlushStageAuthorizersCacheError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            FlushStageAuthorizersCacheError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for FlushStageAuthorizersCacheError {}
 /// Errors returned by FlushStageCache
 #[derive(Debug, PartialEq)]
 pub enum FlushStageCacheError {
@@ -5789,19 +5651,15 @@ impl FlushStageCacheError {
 }
 impl fmt::Display for FlushStageCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for FlushStageCacheError {
-    fn description(&self) -> &str {
         match *self {
-            FlushStageCacheError::BadRequest(ref cause) => cause,
-            FlushStageCacheError::NotFound(ref cause) => cause,
-            FlushStageCacheError::TooManyRequests(ref cause) => cause,
-            FlushStageCacheError::Unauthorized(ref cause) => cause,
+            FlushStageCacheError::BadRequest(ref cause) => write!(f, "{}", cause),
+            FlushStageCacheError::NotFound(ref cause) => write!(f, "{}", cause),
+            FlushStageCacheError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            FlushStageCacheError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for FlushStageCacheError {}
 /// Errors returned by GenerateClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum GenerateClientCertificateError {
@@ -5841,18 +5699,14 @@ impl GenerateClientCertificateError {
 }
 impl fmt::Display for GenerateClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateClientCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateClientCertificateError::LimitExceeded(ref cause) => cause,
-            GenerateClientCertificateError::TooManyRequests(ref cause) => cause,
-            GenerateClientCertificateError::Unauthorized(ref cause) => cause,
+            GenerateClientCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GenerateClientCertificateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GenerateClientCertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateClientCertificateError {}
 /// Errors returned by GetAccount
 #[derive(Debug, PartialEq)]
 pub enum GetAccountError {
@@ -5886,18 +5740,14 @@ impl GetAccountError {
 }
 impl fmt::Display for GetAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountError::NotFound(ref cause) => cause,
-            GetAccountError::TooManyRequests(ref cause) => cause,
-            GetAccountError::Unauthorized(ref cause) => cause,
+            GetAccountError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAccountError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetAccountError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountError {}
 /// Errors returned by GetApiKey
 #[derive(Debug, PartialEq)]
 pub enum GetApiKeyError {
@@ -5931,18 +5781,14 @@ impl GetApiKeyError {
 }
 impl fmt::Display for GetApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetApiKeyError {
-    fn description(&self) -> &str {
         match *self {
-            GetApiKeyError::NotFound(ref cause) => cause,
-            GetApiKeyError::TooManyRequests(ref cause) => cause,
-            GetApiKeyError::Unauthorized(ref cause) => cause,
+            GetApiKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetApiKeyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetApiKeyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetApiKeyError {}
 /// Errors returned by GetApiKeys
 #[derive(Debug, PartialEq)]
 pub enum GetApiKeysError {
@@ -5976,18 +5822,14 @@ impl GetApiKeysError {
 }
 impl fmt::Display for GetApiKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetApiKeysError {
-    fn description(&self) -> &str {
         match *self {
-            GetApiKeysError::BadRequest(ref cause) => cause,
-            GetApiKeysError::TooManyRequests(ref cause) => cause,
-            GetApiKeysError::Unauthorized(ref cause) => cause,
+            GetApiKeysError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetApiKeysError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetApiKeysError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetApiKeysError {}
 /// Errors returned by GetAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizerError {
@@ -6021,18 +5863,14 @@ impl GetAuthorizerError {
 }
 impl fmt::Display for GetAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            GetAuthorizerError::NotFound(ref cause) => cause,
-            GetAuthorizerError::TooManyRequests(ref cause) => cause,
-            GetAuthorizerError::Unauthorized(ref cause) => cause,
+            GetAuthorizerError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAuthorizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAuthorizerError {}
 /// Errors returned by GetAuthorizers
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizersError {
@@ -6071,19 +5909,15 @@ impl GetAuthorizersError {
 }
 impl fmt::Display for GetAuthorizersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAuthorizersError {
-    fn description(&self) -> &str {
         match *self {
-            GetAuthorizersError::BadRequest(ref cause) => cause,
-            GetAuthorizersError::NotFound(ref cause) => cause,
-            GetAuthorizersError::TooManyRequests(ref cause) => cause,
-            GetAuthorizersError::Unauthorized(ref cause) => cause,
+            GetAuthorizersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetAuthorizersError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAuthorizersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetAuthorizersError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAuthorizersError {}
 /// Errors returned by GetBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum GetBasePathMappingError {
@@ -6117,18 +5951,14 @@ impl GetBasePathMappingError {
 }
 impl fmt::Display for GetBasePathMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBasePathMappingError {
-    fn description(&self) -> &str {
         match *self {
-            GetBasePathMappingError::NotFound(ref cause) => cause,
-            GetBasePathMappingError::TooManyRequests(ref cause) => cause,
-            GetBasePathMappingError::Unauthorized(ref cause) => cause,
+            GetBasePathMappingError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBasePathMappingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetBasePathMappingError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBasePathMappingError {}
 /// Errors returned by GetBasePathMappings
 #[derive(Debug, PartialEq)]
 pub enum GetBasePathMappingsError {
@@ -6162,18 +5992,14 @@ impl GetBasePathMappingsError {
 }
 impl fmt::Display for GetBasePathMappingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBasePathMappingsError {
-    fn description(&self) -> &str {
         match *self {
-            GetBasePathMappingsError::NotFound(ref cause) => cause,
-            GetBasePathMappingsError::TooManyRequests(ref cause) => cause,
-            GetBasePathMappingsError::Unauthorized(ref cause) => cause,
+            GetBasePathMappingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBasePathMappingsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetBasePathMappingsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBasePathMappingsError {}
 /// Errors returned by GetClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetClientCertificateError {
@@ -6209,18 +6035,14 @@ impl GetClientCertificateError {
 }
 impl fmt::Display for GetClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetClientCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            GetClientCertificateError::NotFound(ref cause) => cause,
-            GetClientCertificateError::TooManyRequests(ref cause) => cause,
-            GetClientCertificateError::Unauthorized(ref cause) => cause,
+            GetClientCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetClientCertificateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetClientCertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetClientCertificateError {}
 /// Errors returned by GetClientCertificates
 #[derive(Debug, PartialEq)]
 pub enum GetClientCertificatesError {
@@ -6256,18 +6078,14 @@ impl GetClientCertificatesError {
 }
 impl fmt::Display for GetClientCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetClientCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            GetClientCertificatesError::BadRequest(ref cause) => cause,
-            GetClientCertificatesError::TooManyRequests(ref cause) => cause,
-            GetClientCertificatesError::Unauthorized(ref cause) => cause,
+            GetClientCertificatesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetClientCertificatesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetClientCertificatesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetClientCertificatesError {}
 /// Errors returned by GetDeployment
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentError {
@@ -6306,19 +6124,15 @@ impl GetDeploymentError {
 }
 impl fmt::Display for GetDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeploymentError::NotFound(ref cause) => cause,
-            GetDeploymentError::ServiceUnavailable(ref cause) => cause,
-            GetDeploymentError::TooManyRequests(ref cause) => cause,
-            GetDeploymentError::Unauthorized(ref cause) => cause,
+            GetDeploymentError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDeploymentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetDeploymentError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetDeploymentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeploymentError {}
 /// Errors returned by GetDeployments
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentsError {
@@ -6357,19 +6171,15 @@ impl GetDeploymentsError {
 }
 impl fmt::Display for GetDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeploymentsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeploymentsError::BadRequest(ref cause) => cause,
-            GetDeploymentsError::ServiceUnavailable(ref cause) => cause,
-            GetDeploymentsError::TooManyRequests(ref cause) => cause,
-            GetDeploymentsError::Unauthorized(ref cause) => cause,
+            GetDeploymentsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetDeploymentsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetDeploymentsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetDeploymentsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeploymentsError {}
 /// Errors returned by GetDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationPartError {
@@ -6405,18 +6215,14 @@ impl GetDocumentationPartError {
 }
 impl fmt::Display for GetDocumentationPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDocumentationPartError {
-    fn description(&self) -> &str {
         match *self {
-            GetDocumentationPartError::NotFound(ref cause) => cause,
-            GetDocumentationPartError::TooManyRequests(ref cause) => cause,
-            GetDocumentationPartError::Unauthorized(ref cause) => cause,
+            GetDocumentationPartError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDocumentationPartError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetDocumentationPartError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDocumentationPartError {}
 /// Errors returned by GetDocumentationParts
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationPartsError {
@@ -6457,19 +6263,15 @@ impl GetDocumentationPartsError {
 }
 impl fmt::Display for GetDocumentationPartsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDocumentationPartsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDocumentationPartsError::BadRequest(ref cause) => cause,
-            GetDocumentationPartsError::NotFound(ref cause) => cause,
-            GetDocumentationPartsError::TooManyRequests(ref cause) => cause,
-            GetDocumentationPartsError::Unauthorized(ref cause) => cause,
+            GetDocumentationPartsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetDocumentationPartsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDocumentationPartsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetDocumentationPartsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDocumentationPartsError {}
 /// Errors returned by GetDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationVersionError {
@@ -6507,18 +6309,14 @@ impl GetDocumentationVersionError {
 }
 impl fmt::Display for GetDocumentationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDocumentationVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetDocumentationVersionError::NotFound(ref cause) => cause,
-            GetDocumentationVersionError::TooManyRequests(ref cause) => cause,
-            GetDocumentationVersionError::Unauthorized(ref cause) => cause,
+            GetDocumentationVersionError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDocumentationVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetDocumentationVersionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDocumentationVersionError {}
 /// Errors returned by GetDocumentationVersions
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationVersionsError {
@@ -6561,19 +6359,15 @@ impl GetDocumentationVersionsError {
 }
 impl fmt::Display for GetDocumentationVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDocumentationVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDocumentationVersionsError::BadRequest(ref cause) => cause,
-            GetDocumentationVersionsError::NotFound(ref cause) => cause,
-            GetDocumentationVersionsError::TooManyRequests(ref cause) => cause,
-            GetDocumentationVersionsError::Unauthorized(ref cause) => cause,
+            GetDocumentationVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetDocumentationVersionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDocumentationVersionsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetDocumentationVersionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDocumentationVersionsError {}
 /// Errors returned by GetDomainName
 #[derive(Debug, PartialEq)]
 pub enum GetDomainNameError {
@@ -6612,19 +6406,15 @@ impl GetDomainNameError {
 }
 impl fmt::Display for GetDomainNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDomainNameError {
-    fn description(&self) -> &str {
         match *self {
-            GetDomainNameError::NotFound(ref cause) => cause,
-            GetDomainNameError::ServiceUnavailable(ref cause) => cause,
-            GetDomainNameError::TooManyRequests(ref cause) => cause,
-            GetDomainNameError::Unauthorized(ref cause) => cause,
+            GetDomainNameError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDomainNameError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetDomainNameError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetDomainNameError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDomainNameError {}
 /// Errors returned by GetDomainNames
 #[derive(Debug, PartialEq)]
 pub enum GetDomainNamesError {
@@ -6658,18 +6448,14 @@ impl GetDomainNamesError {
 }
 impl fmt::Display for GetDomainNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDomainNamesError {
-    fn description(&self) -> &str {
         match *self {
-            GetDomainNamesError::BadRequest(ref cause) => cause,
-            GetDomainNamesError::TooManyRequests(ref cause) => cause,
-            GetDomainNamesError::Unauthorized(ref cause) => cause,
+            GetDomainNamesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetDomainNamesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetDomainNamesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDomainNamesError {}
 /// Errors returned by GetExport
 #[derive(Debug, PartialEq)]
 pub enum GetExportError {
@@ -6713,20 +6499,16 @@ impl GetExportError {
 }
 impl fmt::Display for GetExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetExportError {
-    fn description(&self) -> &str {
         match *self {
-            GetExportError::BadRequest(ref cause) => cause,
-            GetExportError::Conflict(ref cause) => cause,
-            GetExportError::NotFound(ref cause) => cause,
-            GetExportError::TooManyRequests(ref cause) => cause,
-            GetExportError::Unauthorized(ref cause) => cause,
+            GetExportError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetExportError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetExportError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetExportError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetExportError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetExportError {}
 /// Errors returned by GetGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum GetGatewayResponseError {
@@ -6760,18 +6542,14 @@ impl GetGatewayResponseError {
 }
 impl fmt::Display for GetGatewayResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGatewayResponseError {
-    fn description(&self) -> &str {
         match *self {
-            GetGatewayResponseError::NotFound(ref cause) => cause,
-            GetGatewayResponseError::TooManyRequests(ref cause) => cause,
-            GetGatewayResponseError::Unauthorized(ref cause) => cause,
+            GetGatewayResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetGatewayResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetGatewayResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGatewayResponseError {}
 /// Errors returned by GetGatewayResponses
 #[derive(Debug, PartialEq)]
 pub enum GetGatewayResponsesError {
@@ -6810,19 +6588,15 @@ impl GetGatewayResponsesError {
 }
 impl fmt::Display for GetGatewayResponsesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGatewayResponsesError {
-    fn description(&self) -> &str {
         match *self {
-            GetGatewayResponsesError::BadRequest(ref cause) => cause,
-            GetGatewayResponsesError::NotFound(ref cause) => cause,
-            GetGatewayResponsesError::TooManyRequests(ref cause) => cause,
-            GetGatewayResponsesError::Unauthorized(ref cause) => cause,
+            GetGatewayResponsesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetGatewayResponsesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetGatewayResponsesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetGatewayResponsesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGatewayResponsesError {}
 /// Errors returned by GetIntegration
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationError {
@@ -6856,18 +6630,14 @@ impl GetIntegrationError {
 }
 impl fmt::Display for GetIntegrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIntegrationError {
-    fn description(&self) -> &str {
         match *self {
-            GetIntegrationError::NotFound(ref cause) => cause,
-            GetIntegrationError::TooManyRequests(ref cause) => cause,
-            GetIntegrationError::Unauthorized(ref cause) => cause,
+            GetIntegrationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetIntegrationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetIntegrationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetIntegrationError {}
 /// Errors returned by GetIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationResponseError {
@@ -6903,18 +6673,14 @@ impl GetIntegrationResponseError {
 }
 impl fmt::Display for GetIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIntegrationResponseError {
-    fn description(&self) -> &str {
         match *self {
-            GetIntegrationResponseError::NotFound(ref cause) => cause,
-            GetIntegrationResponseError::TooManyRequests(ref cause) => cause,
-            GetIntegrationResponseError::Unauthorized(ref cause) => cause,
+            GetIntegrationResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetIntegrationResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetIntegrationResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetIntegrationResponseError {}
 /// Errors returned by GetMethod
 #[derive(Debug, PartialEq)]
 pub enum GetMethodError {
@@ -6948,18 +6714,14 @@ impl GetMethodError {
 }
 impl fmt::Display for GetMethodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMethodError {
-    fn description(&self) -> &str {
         match *self {
-            GetMethodError::NotFound(ref cause) => cause,
-            GetMethodError::TooManyRequests(ref cause) => cause,
-            GetMethodError::Unauthorized(ref cause) => cause,
+            GetMethodError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetMethodError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetMethodError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMethodError {}
 /// Errors returned by GetMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum GetMethodResponseError {
@@ -6993,18 +6755,14 @@ impl GetMethodResponseError {
 }
 impl fmt::Display for GetMethodResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMethodResponseError {
-    fn description(&self) -> &str {
         match *self {
-            GetMethodResponseError::NotFound(ref cause) => cause,
-            GetMethodResponseError::TooManyRequests(ref cause) => cause,
-            GetMethodResponseError::Unauthorized(ref cause) => cause,
+            GetMethodResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetMethodResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetMethodResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMethodResponseError {}
 /// Errors returned by GetModel
 #[derive(Debug, PartialEq)]
 pub enum GetModelError {
@@ -7038,18 +6796,14 @@ impl GetModelError {
 }
 impl fmt::Display for GetModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetModelError {
-    fn description(&self) -> &str {
         match *self {
-            GetModelError::NotFound(ref cause) => cause,
-            GetModelError::TooManyRequests(ref cause) => cause,
-            GetModelError::Unauthorized(ref cause) => cause,
+            GetModelError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetModelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetModelError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetModelError {}
 /// Errors returned by GetModelTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetModelTemplateError {
@@ -7088,19 +6842,15 @@ impl GetModelTemplateError {
 }
 impl fmt::Display for GetModelTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetModelTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            GetModelTemplateError::BadRequest(ref cause) => cause,
-            GetModelTemplateError::NotFound(ref cause) => cause,
-            GetModelTemplateError::TooManyRequests(ref cause) => cause,
-            GetModelTemplateError::Unauthorized(ref cause) => cause,
+            GetModelTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetModelTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetModelTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetModelTemplateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetModelTemplateError {}
 /// Errors returned by GetModels
 #[derive(Debug, PartialEq)]
 pub enum GetModelsError {
@@ -7139,19 +6889,15 @@ impl GetModelsError {
 }
 impl fmt::Display for GetModelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetModelsError {
-    fn description(&self) -> &str {
         match *self {
-            GetModelsError::BadRequest(ref cause) => cause,
-            GetModelsError::NotFound(ref cause) => cause,
-            GetModelsError::TooManyRequests(ref cause) => cause,
-            GetModelsError::Unauthorized(ref cause) => cause,
+            GetModelsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetModelsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetModelsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetModelsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetModelsError {}
 /// Errors returned by GetRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum GetRequestValidatorError {
@@ -7185,18 +6931,14 @@ impl GetRequestValidatorError {
 }
 impl fmt::Display for GetRequestValidatorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRequestValidatorError {
-    fn description(&self) -> &str {
         match *self {
-            GetRequestValidatorError::NotFound(ref cause) => cause,
-            GetRequestValidatorError::TooManyRequests(ref cause) => cause,
-            GetRequestValidatorError::Unauthorized(ref cause) => cause,
+            GetRequestValidatorError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRequestValidatorError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetRequestValidatorError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRequestValidatorError {}
 /// Errors returned by GetRequestValidators
 #[derive(Debug, PartialEq)]
 pub enum GetRequestValidatorsError {
@@ -7237,19 +6979,15 @@ impl GetRequestValidatorsError {
 }
 impl fmt::Display for GetRequestValidatorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRequestValidatorsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRequestValidatorsError::BadRequest(ref cause) => cause,
-            GetRequestValidatorsError::NotFound(ref cause) => cause,
-            GetRequestValidatorsError::TooManyRequests(ref cause) => cause,
-            GetRequestValidatorsError::Unauthorized(ref cause) => cause,
+            GetRequestValidatorsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetRequestValidatorsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRequestValidatorsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetRequestValidatorsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRequestValidatorsError {}
 /// Errors returned by GetResource
 #[derive(Debug, PartialEq)]
 pub enum GetResourceError {
@@ -7283,18 +7021,14 @@ impl GetResourceError {
 }
 impl fmt::Display for GetResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourceError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourceError::NotFound(ref cause) => cause,
-            GetResourceError::TooManyRequests(ref cause) => cause,
-            GetResourceError::Unauthorized(ref cause) => cause,
+            GetResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetResourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourceError {}
 /// Errors returned by GetResources
 #[derive(Debug, PartialEq)]
 pub enum GetResourcesError {
@@ -7333,19 +7067,15 @@ impl GetResourcesError {
 }
 impl fmt::Display for GetResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourcesError::BadRequest(ref cause) => cause,
-            GetResourcesError::NotFound(ref cause) => cause,
-            GetResourcesError::TooManyRequests(ref cause) => cause,
-            GetResourcesError::Unauthorized(ref cause) => cause,
+            GetResourcesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetResourcesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetResourcesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetResourcesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourcesError {}
 /// Errors returned by GetRestApi
 #[derive(Debug, PartialEq)]
 pub enum GetRestApiError {
@@ -7379,18 +7109,14 @@ impl GetRestApiError {
 }
 impl fmt::Display for GetRestApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRestApiError {
-    fn description(&self) -> &str {
         match *self {
-            GetRestApiError::NotFound(ref cause) => cause,
-            GetRestApiError::TooManyRequests(ref cause) => cause,
-            GetRestApiError::Unauthorized(ref cause) => cause,
+            GetRestApiError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRestApiError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetRestApiError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRestApiError {}
 /// Errors returned by GetRestApis
 #[derive(Debug, PartialEq)]
 pub enum GetRestApisError {
@@ -7424,18 +7150,14 @@ impl GetRestApisError {
 }
 impl fmt::Display for GetRestApisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRestApisError {
-    fn description(&self) -> &str {
         match *self {
-            GetRestApisError::BadRequest(ref cause) => cause,
-            GetRestApisError::TooManyRequests(ref cause) => cause,
-            GetRestApisError::Unauthorized(ref cause) => cause,
+            GetRestApisError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetRestApisError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetRestApisError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRestApisError {}
 /// Errors returned by GetSdk
 #[derive(Debug, PartialEq)]
 pub enum GetSdkError {
@@ -7475,20 +7197,16 @@ impl GetSdkError {
 }
 impl fmt::Display for GetSdkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSdkError {
-    fn description(&self) -> &str {
         match *self {
-            GetSdkError::BadRequest(ref cause) => cause,
-            GetSdkError::Conflict(ref cause) => cause,
-            GetSdkError::NotFound(ref cause) => cause,
-            GetSdkError::TooManyRequests(ref cause) => cause,
-            GetSdkError::Unauthorized(ref cause) => cause,
+            GetSdkError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetSdkError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetSdkError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetSdkError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetSdkError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSdkError {}
 /// Errors returned by GetSdkType
 #[derive(Debug, PartialEq)]
 pub enum GetSdkTypeError {
@@ -7522,18 +7240,14 @@ impl GetSdkTypeError {
 }
 impl fmt::Display for GetSdkTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSdkTypeError {
-    fn description(&self) -> &str {
         match *self {
-            GetSdkTypeError::NotFound(ref cause) => cause,
-            GetSdkTypeError::TooManyRequests(ref cause) => cause,
-            GetSdkTypeError::Unauthorized(ref cause) => cause,
+            GetSdkTypeError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetSdkTypeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetSdkTypeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSdkTypeError {}
 /// Errors returned by GetSdkTypes
 #[derive(Debug, PartialEq)]
 pub enum GetSdkTypesError {
@@ -7562,17 +7276,13 @@ impl GetSdkTypesError {
 }
 impl fmt::Display for GetSdkTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSdkTypesError {
-    fn description(&self) -> &str {
         match *self {
-            GetSdkTypesError::TooManyRequests(ref cause) => cause,
-            GetSdkTypesError::Unauthorized(ref cause) => cause,
+            GetSdkTypesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetSdkTypesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSdkTypesError {}
 /// Errors returned by GetStage
 #[derive(Debug, PartialEq)]
 pub enum GetStageError {
@@ -7606,18 +7316,14 @@ impl GetStageError {
 }
 impl fmt::Display for GetStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStageError {
-    fn description(&self) -> &str {
         match *self {
-            GetStageError::NotFound(ref cause) => cause,
-            GetStageError::TooManyRequests(ref cause) => cause,
-            GetStageError::Unauthorized(ref cause) => cause,
+            GetStageError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetStageError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetStageError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetStageError {}
 /// Errors returned by GetStages
 #[derive(Debug, PartialEq)]
 pub enum GetStagesError {
@@ -7651,18 +7357,14 @@ impl GetStagesError {
 }
 impl fmt::Display for GetStagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStagesError {
-    fn description(&self) -> &str {
         match *self {
-            GetStagesError::NotFound(ref cause) => cause,
-            GetStagesError::TooManyRequests(ref cause) => cause,
-            GetStagesError::Unauthorized(ref cause) => cause,
+            GetStagesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetStagesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetStagesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetStagesError {}
 /// Errors returned by GetTags
 #[derive(Debug, PartialEq)]
 pub enum GetTagsError {
@@ -7706,20 +7408,16 @@ impl GetTagsError {
 }
 impl fmt::Display for GetTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTagsError {
-    fn description(&self) -> &str {
         match *self {
-            GetTagsError::BadRequest(ref cause) => cause,
-            GetTagsError::LimitExceeded(ref cause) => cause,
-            GetTagsError::NotFound(ref cause) => cause,
-            GetTagsError::TooManyRequests(ref cause) => cause,
-            GetTagsError::Unauthorized(ref cause) => cause,
+            GetTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetTagsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetTagsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetTagsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetTagsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTagsError {}
 /// Errors returned by GetUsage
 #[derive(Debug, PartialEq)]
 pub enum GetUsageError {
@@ -7758,19 +7456,15 @@ impl GetUsageError {
 }
 impl fmt::Display for GetUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUsageError {
-    fn description(&self) -> &str {
         match *self {
-            GetUsageError::BadRequest(ref cause) => cause,
-            GetUsageError::NotFound(ref cause) => cause,
-            GetUsageError::TooManyRequests(ref cause) => cause,
-            GetUsageError::Unauthorized(ref cause) => cause,
+            GetUsageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetUsageError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetUsageError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetUsageError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUsageError {}
 /// Errors returned by GetUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlanError {
@@ -7809,19 +7503,15 @@ impl GetUsagePlanError {
 }
 impl fmt::Display for GetUsagePlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUsagePlanError {
-    fn description(&self) -> &str {
         match *self {
-            GetUsagePlanError::BadRequest(ref cause) => cause,
-            GetUsagePlanError::NotFound(ref cause) => cause,
-            GetUsagePlanError::TooManyRequests(ref cause) => cause,
-            GetUsagePlanError::Unauthorized(ref cause) => cause,
+            GetUsagePlanError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetUsagePlanError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetUsagePlanError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetUsagePlanError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUsagePlanError {}
 /// Errors returned by GetUsagePlanKey
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlanKeyError {
@@ -7860,19 +7550,15 @@ impl GetUsagePlanKeyError {
 }
 impl fmt::Display for GetUsagePlanKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUsagePlanKeyError {
-    fn description(&self) -> &str {
         match *self {
-            GetUsagePlanKeyError::BadRequest(ref cause) => cause,
-            GetUsagePlanKeyError::NotFound(ref cause) => cause,
-            GetUsagePlanKeyError::TooManyRequests(ref cause) => cause,
-            GetUsagePlanKeyError::Unauthorized(ref cause) => cause,
+            GetUsagePlanKeyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetUsagePlanKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetUsagePlanKeyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetUsagePlanKeyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUsagePlanKeyError {}
 /// Errors returned by GetUsagePlanKeys
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlanKeysError {
@@ -7911,19 +7597,15 @@ impl GetUsagePlanKeysError {
 }
 impl fmt::Display for GetUsagePlanKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUsagePlanKeysError {
-    fn description(&self) -> &str {
         match *self {
-            GetUsagePlanKeysError::BadRequest(ref cause) => cause,
-            GetUsagePlanKeysError::NotFound(ref cause) => cause,
-            GetUsagePlanKeysError::TooManyRequests(ref cause) => cause,
-            GetUsagePlanKeysError::Unauthorized(ref cause) => cause,
+            GetUsagePlanKeysError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetUsagePlanKeysError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetUsagePlanKeysError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetUsagePlanKeysError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUsagePlanKeysError {}
 /// Errors returned by GetUsagePlans
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlansError {
@@ -7967,20 +7649,16 @@ impl GetUsagePlansError {
 }
 impl fmt::Display for GetUsagePlansError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUsagePlansError {
-    fn description(&self) -> &str {
         match *self {
-            GetUsagePlansError::BadRequest(ref cause) => cause,
-            GetUsagePlansError::Conflict(ref cause) => cause,
-            GetUsagePlansError::NotFound(ref cause) => cause,
-            GetUsagePlansError::TooManyRequests(ref cause) => cause,
-            GetUsagePlansError::Unauthorized(ref cause) => cause,
+            GetUsagePlansError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetUsagePlansError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetUsagePlansError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetUsagePlansError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetUsagePlansError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUsagePlansError {}
 /// Errors returned by GetVpcLink
 #[derive(Debug, PartialEq)]
 pub enum GetVpcLinkError {
@@ -8014,18 +7692,14 @@ impl GetVpcLinkError {
 }
 impl fmt::Display for GetVpcLinkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVpcLinkError {
-    fn description(&self) -> &str {
         match *self {
-            GetVpcLinkError::NotFound(ref cause) => cause,
-            GetVpcLinkError::TooManyRequests(ref cause) => cause,
-            GetVpcLinkError::Unauthorized(ref cause) => cause,
+            GetVpcLinkError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetVpcLinkError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetVpcLinkError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetVpcLinkError {}
 /// Errors returned by GetVpcLinks
 #[derive(Debug, PartialEq)]
 pub enum GetVpcLinksError {
@@ -8059,18 +7733,14 @@ impl GetVpcLinksError {
 }
 impl fmt::Display for GetVpcLinksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVpcLinksError {
-    fn description(&self) -> &str {
         match *self {
-            GetVpcLinksError::BadRequest(ref cause) => cause,
-            GetVpcLinksError::TooManyRequests(ref cause) => cause,
-            GetVpcLinksError::Unauthorized(ref cause) => cause,
+            GetVpcLinksError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetVpcLinksError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetVpcLinksError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetVpcLinksError {}
 /// Errors returned by ImportApiKeys
 #[derive(Debug, PartialEq)]
 pub enum ImportApiKeysError {
@@ -8119,21 +7789,17 @@ impl ImportApiKeysError {
 }
 impl fmt::Display for ImportApiKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportApiKeysError {
-    fn description(&self) -> &str {
         match *self {
-            ImportApiKeysError::BadRequest(ref cause) => cause,
-            ImportApiKeysError::Conflict(ref cause) => cause,
-            ImportApiKeysError::LimitExceeded(ref cause) => cause,
-            ImportApiKeysError::NotFound(ref cause) => cause,
-            ImportApiKeysError::TooManyRequests(ref cause) => cause,
-            ImportApiKeysError::Unauthorized(ref cause) => cause,
+            ImportApiKeysError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ImportApiKeysError::Conflict(ref cause) => write!(f, "{}", cause),
+            ImportApiKeysError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ImportApiKeysError::NotFound(ref cause) => write!(f, "{}", cause),
+            ImportApiKeysError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ImportApiKeysError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportApiKeysError {}
 /// Errors returned by ImportDocumentationParts
 #[derive(Debug, PartialEq)]
 pub enum ImportDocumentationPartsError {
@@ -8183,20 +7849,16 @@ impl ImportDocumentationPartsError {
 }
 impl fmt::Display for ImportDocumentationPartsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportDocumentationPartsError {
-    fn description(&self) -> &str {
         match *self {
-            ImportDocumentationPartsError::BadRequest(ref cause) => cause,
-            ImportDocumentationPartsError::LimitExceeded(ref cause) => cause,
-            ImportDocumentationPartsError::NotFound(ref cause) => cause,
-            ImportDocumentationPartsError::TooManyRequests(ref cause) => cause,
-            ImportDocumentationPartsError::Unauthorized(ref cause) => cause,
+            ImportDocumentationPartsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ImportDocumentationPartsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ImportDocumentationPartsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ImportDocumentationPartsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ImportDocumentationPartsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportDocumentationPartsError {}
 /// Errors returned by ImportRestApi
 #[derive(Debug, PartialEq)]
 pub enum ImportRestApiError {
@@ -8240,20 +7902,16 @@ impl ImportRestApiError {
 }
 impl fmt::Display for ImportRestApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportRestApiError {
-    fn description(&self) -> &str {
         match *self {
-            ImportRestApiError::BadRequest(ref cause) => cause,
-            ImportRestApiError::Conflict(ref cause) => cause,
-            ImportRestApiError::LimitExceeded(ref cause) => cause,
-            ImportRestApiError::TooManyRequests(ref cause) => cause,
-            ImportRestApiError::Unauthorized(ref cause) => cause,
+            ImportRestApiError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ImportRestApiError::Conflict(ref cause) => write!(f, "{}", cause),
+            ImportRestApiError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ImportRestApiError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ImportRestApiError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportRestApiError {}
 /// Errors returned by PutGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum PutGatewayResponseError {
@@ -8297,20 +7955,16 @@ impl PutGatewayResponseError {
 }
 impl fmt::Display for PutGatewayResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutGatewayResponseError {
-    fn description(&self) -> &str {
         match *self {
-            PutGatewayResponseError::BadRequest(ref cause) => cause,
-            PutGatewayResponseError::LimitExceeded(ref cause) => cause,
-            PutGatewayResponseError::NotFound(ref cause) => cause,
-            PutGatewayResponseError::TooManyRequests(ref cause) => cause,
-            PutGatewayResponseError::Unauthorized(ref cause) => cause,
+            PutGatewayResponseError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutGatewayResponseError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutGatewayResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutGatewayResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            PutGatewayResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutGatewayResponseError {}
 /// Errors returned by PutIntegration
 #[derive(Debug, PartialEq)]
 pub enum PutIntegrationError {
@@ -8354,20 +8008,16 @@ impl PutIntegrationError {
 }
 impl fmt::Display for PutIntegrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutIntegrationError {
-    fn description(&self) -> &str {
         match *self {
-            PutIntegrationError::BadRequest(ref cause) => cause,
-            PutIntegrationError::Conflict(ref cause) => cause,
-            PutIntegrationError::NotFound(ref cause) => cause,
-            PutIntegrationError::TooManyRequests(ref cause) => cause,
-            PutIntegrationError::Unauthorized(ref cause) => cause,
+            PutIntegrationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutIntegrationError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutIntegrationError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutIntegrationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            PutIntegrationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutIntegrationError {}
 /// Errors returned by PutIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum PutIntegrationResponseError {
@@ -8420,21 +8070,17 @@ impl PutIntegrationResponseError {
 }
 impl fmt::Display for PutIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutIntegrationResponseError {
-    fn description(&self) -> &str {
         match *self {
-            PutIntegrationResponseError::BadRequest(ref cause) => cause,
-            PutIntegrationResponseError::Conflict(ref cause) => cause,
-            PutIntegrationResponseError::LimitExceeded(ref cause) => cause,
-            PutIntegrationResponseError::NotFound(ref cause) => cause,
-            PutIntegrationResponseError::TooManyRequests(ref cause) => cause,
-            PutIntegrationResponseError::Unauthorized(ref cause) => cause,
+            PutIntegrationResponseError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutIntegrationResponseError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutIntegrationResponseError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutIntegrationResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutIntegrationResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            PutIntegrationResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutIntegrationResponseError {}
 /// Errors returned by PutMethod
 #[derive(Debug, PartialEq)]
 pub enum PutMethodError {
@@ -8483,21 +8129,17 @@ impl PutMethodError {
 }
 impl fmt::Display for PutMethodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutMethodError {
-    fn description(&self) -> &str {
         match *self {
-            PutMethodError::BadRequest(ref cause) => cause,
-            PutMethodError::Conflict(ref cause) => cause,
-            PutMethodError::LimitExceeded(ref cause) => cause,
-            PutMethodError::NotFound(ref cause) => cause,
-            PutMethodError::TooManyRequests(ref cause) => cause,
-            PutMethodError::Unauthorized(ref cause) => cause,
+            PutMethodError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutMethodError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutMethodError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutMethodError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutMethodError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            PutMethodError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutMethodError {}
 /// Errors returned by PutMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum PutMethodResponseError {
@@ -8546,21 +8188,17 @@ impl PutMethodResponseError {
 }
 impl fmt::Display for PutMethodResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutMethodResponseError {
-    fn description(&self) -> &str {
         match *self {
-            PutMethodResponseError::BadRequest(ref cause) => cause,
-            PutMethodResponseError::Conflict(ref cause) => cause,
-            PutMethodResponseError::LimitExceeded(ref cause) => cause,
-            PutMethodResponseError::NotFound(ref cause) => cause,
-            PutMethodResponseError::TooManyRequests(ref cause) => cause,
-            PutMethodResponseError::Unauthorized(ref cause) => cause,
+            PutMethodResponseError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutMethodResponseError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutMethodResponseError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutMethodResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutMethodResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            PutMethodResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutMethodResponseError {}
 /// Errors returned by PutRestApi
 #[derive(Debug, PartialEq)]
 pub enum PutRestApiError {
@@ -8609,21 +8247,17 @@ impl PutRestApiError {
 }
 impl fmt::Display for PutRestApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRestApiError {
-    fn description(&self) -> &str {
         match *self {
-            PutRestApiError::BadRequest(ref cause) => cause,
-            PutRestApiError::Conflict(ref cause) => cause,
-            PutRestApiError::LimitExceeded(ref cause) => cause,
-            PutRestApiError::NotFound(ref cause) => cause,
-            PutRestApiError::TooManyRequests(ref cause) => cause,
-            PutRestApiError::Unauthorized(ref cause) => cause,
+            PutRestApiError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutRestApiError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutRestApiError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutRestApiError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutRestApiError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            PutRestApiError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutRestApiError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -8672,21 +8306,17 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::Conflict(ref cause) => cause,
-            TagResourceError::LimitExceeded(ref cause) => cause,
-            TagResourceError::NotFound(ref cause) => cause,
-            TagResourceError::TooManyRequests(ref cause) => cause,
-            TagResourceError::Unauthorized(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            TagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by TestInvokeAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum TestInvokeAuthorizerError {
@@ -8727,19 +8357,15 @@ impl TestInvokeAuthorizerError {
 }
 impl fmt::Display for TestInvokeAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestInvokeAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            TestInvokeAuthorizerError::BadRequest(ref cause) => cause,
-            TestInvokeAuthorizerError::NotFound(ref cause) => cause,
-            TestInvokeAuthorizerError::TooManyRequests(ref cause) => cause,
-            TestInvokeAuthorizerError::Unauthorized(ref cause) => cause,
+            TestInvokeAuthorizerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TestInvokeAuthorizerError::NotFound(ref cause) => write!(f, "{}", cause),
+            TestInvokeAuthorizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            TestInvokeAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestInvokeAuthorizerError {}
 /// Errors returned by TestInvokeMethod
 #[derive(Debug, PartialEq)]
 pub enum TestInvokeMethodError {
@@ -8778,19 +8404,15 @@ impl TestInvokeMethodError {
 }
 impl fmt::Display for TestInvokeMethodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestInvokeMethodError {
-    fn description(&self) -> &str {
         match *self {
-            TestInvokeMethodError::BadRequest(ref cause) => cause,
-            TestInvokeMethodError::NotFound(ref cause) => cause,
-            TestInvokeMethodError::TooManyRequests(ref cause) => cause,
-            TestInvokeMethodError::Unauthorized(ref cause) => cause,
+            TestInvokeMethodError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TestInvokeMethodError::NotFound(ref cause) => write!(f, "{}", cause),
+            TestInvokeMethodError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            TestInvokeMethodError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestInvokeMethodError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -8834,20 +8456,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::Conflict(ref cause) => cause,
-            UntagResourceError::NotFound(ref cause) => cause,
-            UntagResourceError::TooManyRequests(ref cause) => cause,
-            UntagResourceError::Unauthorized(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateAccount
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountError {
@@ -8886,19 +8504,15 @@ impl UpdateAccountError {
 }
 impl fmt::Display for UpdateAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAccountError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAccountError::BadRequest(ref cause) => cause,
-            UpdateAccountError::NotFound(ref cause) => cause,
-            UpdateAccountError::TooManyRequests(ref cause) => cause,
-            UpdateAccountError::Unauthorized(ref cause) => cause,
+            UpdateAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAccountError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAccountError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateAccountError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAccountError {}
 /// Errors returned by UpdateApiKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiKeyError {
@@ -8942,20 +8556,16 @@ impl UpdateApiKeyError {
 }
 impl fmt::Display for UpdateApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApiKeyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateApiKeyError::BadRequest(ref cause) => cause,
-            UpdateApiKeyError::Conflict(ref cause) => cause,
-            UpdateApiKeyError::NotFound(ref cause) => cause,
-            UpdateApiKeyError::TooManyRequests(ref cause) => cause,
-            UpdateApiKeyError::Unauthorized(ref cause) => cause,
+            UpdateApiKeyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateApiKeyError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateApiKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateApiKeyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateApiKeyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateApiKeyError {}
 /// Errors returned by UpdateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthorizerError {
@@ -8994,19 +8604,15 @@ impl UpdateAuthorizerError {
 }
 impl fmt::Display for UpdateAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAuthorizerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAuthorizerError::BadRequest(ref cause) => cause,
-            UpdateAuthorizerError::NotFound(ref cause) => cause,
-            UpdateAuthorizerError::TooManyRequests(ref cause) => cause,
-            UpdateAuthorizerError::Unauthorized(ref cause) => cause,
+            UpdateAuthorizerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAuthorizerError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAuthorizerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateAuthorizerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAuthorizerError {}
 /// Errors returned by UpdateBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum UpdateBasePathMappingError {
@@ -9052,20 +8658,16 @@ impl UpdateBasePathMappingError {
 }
 impl fmt::Display for UpdateBasePathMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBasePathMappingError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBasePathMappingError::BadRequest(ref cause) => cause,
-            UpdateBasePathMappingError::Conflict(ref cause) => cause,
-            UpdateBasePathMappingError::NotFound(ref cause) => cause,
-            UpdateBasePathMappingError::TooManyRequests(ref cause) => cause,
-            UpdateBasePathMappingError::Unauthorized(ref cause) => cause,
+            UpdateBasePathMappingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateBasePathMappingError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateBasePathMappingError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateBasePathMappingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateBasePathMappingError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBasePathMappingError {}
 /// Errors returned by UpdateClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateClientCertificateError {
@@ -9108,19 +8710,15 @@ impl UpdateClientCertificateError {
 }
 impl fmt::Display for UpdateClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateClientCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateClientCertificateError::BadRequest(ref cause) => cause,
-            UpdateClientCertificateError::NotFound(ref cause) => cause,
-            UpdateClientCertificateError::TooManyRequests(ref cause) => cause,
-            UpdateClientCertificateError::Unauthorized(ref cause) => cause,
+            UpdateClientCertificateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateClientCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateClientCertificateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateClientCertificateError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateClientCertificateError {}
 /// Errors returned by UpdateDeployment
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeploymentError {
@@ -9164,20 +8762,16 @@ impl UpdateDeploymentError {
 }
 impl fmt::Display for UpdateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDeploymentError::BadRequest(ref cause) => cause,
-            UpdateDeploymentError::NotFound(ref cause) => cause,
-            UpdateDeploymentError::ServiceUnavailable(ref cause) => cause,
-            UpdateDeploymentError::TooManyRequests(ref cause) => cause,
-            UpdateDeploymentError::Unauthorized(ref cause) => cause,
+            UpdateDeploymentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDeploymentError {}
 /// Errors returned by UpdateDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentationPartError {
@@ -9232,21 +8826,17 @@ impl UpdateDocumentationPartError {
 }
 impl fmt::Display for UpdateDocumentationPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDocumentationPartError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDocumentationPartError::BadRequest(ref cause) => cause,
-            UpdateDocumentationPartError::Conflict(ref cause) => cause,
-            UpdateDocumentationPartError::LimitExceeded(ref cause) => cause,
-            UpdateDocumentationPartError::NotFound(ref cause) => cause,
-            UpdateDocumentationPartError::TooManyRequests(ref cause) => cause,
-            UpdateDocumentationPartError::Unauthorized(ref cause) => cause,
+            UpdateDocumentationPartError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentationPartError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentationPartError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentationPartError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentationPartError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentationPartError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDocumentationPartError {}
 /// Errors returned by UpdateDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentationVersionError {
@@ -9298,20 +8888,16 @@ impl UpdateDocumentationVersionError {
 }
 impl fmt::Display for UpdateDocumentationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDocumentationVersionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDocumentationVersionError::BadRequest(ref cause) => cause,
-            UpdateDocumentationVersionError::Conflict(ref cause) => cause,
-            UpdateDocumentationVersionError::NotFound(ref cause) => cause,
-            UpdateDocumentationVersionError::TooManyRequests(ref cause) => cause,
-            UpdateDocumentationVersionError::Unauthorized(ref cause) => cause,
+            UpdateDocumentationVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentationVersionError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentationVersionError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentationVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentationVersionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDocumentationVersionError {}
 /// Errors returned by UpdateDomainName
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainNameError {
@@ -9355,20 +8941,16 @@ impl UpdateDomainNameError {
 }
 impl fmt::Display for UpdateDomainNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainNameError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainNameError::BadRequest(ref cause) => cause,
-            UpdateDomainNameError::Conflict(ref cause) => cause,
-            UpdateDomainNameError::NotFound(ref cause) => cause,
-            UpdateDomainNameError::TooManyRequests(ref cause) => cause,
-            UpdateDomainNameError::Unauthorized(ref cause) => cause,
+            UpdateDomainNameError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDomainNameError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateDomainNameError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDomainNameError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateDomainNameError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainNameError {}
 /// Errors returned by UpdateGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateGatewayResponseError {
@@ -9409,19 +8991,15 @@ impl UpdateGatewayResponseError {
 }
 impl fmt::Display for UpdateGatewayResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGatewayResponseError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGatewayResponseError::BadRequest(ref cause) => cause,
-            UpdateGatewayResponseError::NotFound(ref cause) => cause,
-            UpdateGatewayResponseError::TooManyRequests(ref cause) => cause,
-            UpdateGatewayResponseError::Unauthorized(ref cause) => cause,
+            UpdateGatewayResponseError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGatewayResponseError {}
 /// Errors returned by UpdateIntegration
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationError {
@@ -9465,20 +9043,16 @@ impl UpdateIntegrationError {
 }
 impl fmt::Display for UpdateIntegrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateIntegrationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateIntegrationError::BadRequest(ref cause) => cause,
-            UpdateIntegrationError::Conflict(ref cause) => cause,
-            UpdateIntegrationError::NotFound(ref cause) => cause,
-            UpdateIntegrationError::TooManyRequests(ref cause) => cause,
-            UpdateIntegrationError::Unauthorized(ref cause) => cause,
+            UpdateIntegrationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateIntegrationError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateIntegrationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateIntegrationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateIntegrationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateIntegrationError {}
 /// Errors returned by UpdateIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationResponseError {
@@ -9528,20 +9102,16 @@ impl UpdateIntegrationResponseError {
 }
 impl fmt::Display for UpdateIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateIntegrationResponseError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateIntegrationResponseError::BadRequest(ref cause) => cause,
-            UpdateIntegrationResponseError::Conflict(ref cause) => cause,
-            UpdateIntegrationResponseError::NotFound(ref cause) => cause,
-            UpdateIntegrationResponseError::TooManyRequests(ref cause) => cause,
-            UpdateIntegrationResponseError::Unauthorized(ref cause) => cause,
+            UpdateIntegrationResponseError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateIntegrationResponseError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateIntegrationResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateIntegrationResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateIntegrationResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateIntegrationResponseError {}
 /// Errors returned by UpdateMethod
 #[derive(Debug, PartialEq)]
 pub enum UpdateMethodError {
@@ -9585,20 +9155,16 @@ impl UpdateMethodError {
 }
 impl fmt::Display for UpdateMethodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMethodError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMethodError::BadRequest(ref cause) => cause,
-            UpdateMethodError::Conflict(ref cause) => cause,
-            UpdateMethodError::NotFound(ref cause) => cause,
-            UpdateMethodError::TooManyRequests(ref cause) => cause,
-            UpdateMethodError::Unauthorized(ref cause) => cause,
+            UpdateMethodError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateMethodError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateMethodError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMethodError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateMethodError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMethodError {}
 /// Errors returned by UpdateMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateMethodResponseError {
@@ -9649,21 +9215,17 @@ impl UpdateMethodResponseError {
 }
 impl fmt::Display for UpdateMethodResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMethodResponseError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMethodResponseError::BadRequest(ref cause) => cause,
-            UpdateMethodResponseError::Conflict(ref cause) => cause,
-            UpdateMethodResponseError::LimitExceeded(ref cause) => cause,
-            UpdateMethodResponseError::NotFound(ref cause) => cause,
-            UpdateMethodResponseError::TooManyRequests(ref cause) => cause,
-            UpdateMethodResponseError::Unauthorized(ref cause) => cause,
+            UpdateMethodResponseError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateMethodResponseError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateMethodResponseError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateMethodResponseError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMethodResponseError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateMethodResponseError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMethodResponseError {}
 /// Errors returned by UpdateModel
 #[derive(Debug, PartialEq)]
 pub enum UpdateModelError {
@@ -9707,20 +9269,16 @@ impl UpdateModelError {
 }
 impl fmt::Display for UpdateModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateModelError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateModelError::BadRequest(ref cause) => cause,
-            UpdateModelError::Conflict(ref cause) => cause,
-            UpdateModelError::NotFound(ref cause) => cause,
-            UpdateModelError::TooManyRequests(ref cause) => cause,
-            UpdateModelError::Unauthorized(ref cause) => cause,
+            UpdateModelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateModelError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateModelError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateModelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateModelError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateModelError {}
 /// Errors returned by UpdateRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum UpdateRequestValidatorError {
@@ -9761,19 +9319,15 @@ impl UpdateRequestValidatorError {
 }
 impl fmt::Display for UpdateRequestValidatorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRequestValidatorError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRequestValidatorError::BadRequest(ref cause) => cause,
-            UpdateRequestValidatorError::NotFound(ref cause) => cause,
-            UpdateRequestValidatorError::TooManyRequests(ref cause) => cause,
-            UpdateRequestValidatorError::Unauthorized(ref cause) => cause,
+            UpdateRequestValidatorError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateRequestValidatorError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRequestValidatorError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateRequestValidatorError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRequestValidatorError {}
 /// Errors returned by UpdateResource
 #[derive(Debug, PartialEq)]
 pub enum UpdateResourceError {
@@ -9817,20 +9371,16 @@ impl UpdateResourceError {
 }
 impl fmt::Display for UpdateResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateResourceError::BadRequest(ref cause) => cause,
-            UpdateResourceError::Conflict(ref cause) => cause,
-            UpdateResourceError::NotFound(ref cause) => cause,
-            UpdateResourceError::TooManyRequests(ref cause) => cause,
-            UpdateResourceError::Unauthorized(ref cause) => cause,
+            UpdateResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateResourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateResourceError {}
 /// Errors returned by UpdateRestApi
 #[derive(Debug, PartialEq)]
 pub enum UpdateRestApiError {
@@ -9874,20 +9424,16 @@ impl UpdateRestApiError {
 }
 impl fmt::Display for UpdateRestApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRestApiError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRestApiError::BadRequest(ref cause) => cause,
-            UpdateRestApiError::Conflict(ref cause) => cause,
-            UpdateRestApiError::NotFound(ref cause) => cause,
-            UpdateRestApiError::TooManyRequests(ref cause) => cause,
-            UpdateRestApiError::Unauthorized(ref cause) => cause,
+            UpdateRestApiError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateRestApiError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateRestApiError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRestApiError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateRestApiError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRestApiError {}
 /// Errors returned by UpdateStage
 #[derive(Debug, PartialEq)]
 pub enum UpdateStageError {
@@ -9931,20 +9477,16 @@ impl UpdateStageError {
 }
 impl fmt::Display for UpdateStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStageError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStageError::BadRequest(ref cause) => cause,
-            UpdateStageError::Conflict(ref cause) => cause,
-            UpdateStageError::NotFound(ref cause) => cause,
-            UpdateStageError::TooManyRequests(ref cause) => cause,
-            UpdateStageError::Unauthorized(ref cause) => cause,
+            UpdateStageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateStageError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateStageError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStageError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateStageError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStageError {}
 /// Errors returned by UpdateUsage
 #[derive(Debug, PartialEq)]
 pub enum UpdateUsageError {
@@ -9983,19 +9525,15 @@ impl UpdateUsageError {
 }
 impl fmt::Display for UpdateUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUsageError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUsageError::BadRequest(ref cause) => cause,
-            UpdateUsageError::NotFound(ref cause) => cause,
-            UpdateUsageError::TooManyRequests(ref cause) => cause,
-            UpdateUsageError::Unauthorized(ref cause) => cause,
+            UpdateUsageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUsageError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUsageError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateUsageError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUsageError {}
 /// Errors returned by UpdateUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum UpdateUsagePlanError {
@@ -10039,20 +9577,16 @@ impl UpdateUsagePlanError {
 }
 impl fmt::Display for UpdateUsagePlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUsagePlanError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUsagePlanError::BadRequest(ref cause) => cause,
-            UpdateUsagePlanError::Conflict(ref cause) => cause,
-            UpdateUsagePlanError::NotFound(ref cause) => cause,
-            UpdateUsagePlanError::TooManyRequests(ref cause) => cause,
-            UpdateUsagePlanError::Unauthorized(ref cause) => cause,
+            UpdateUsagePlanError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUsagePlanError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateUsagePlanError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUsagePlanError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateUsagePlanError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUsagePlanError {}
 /// Errors returned by UpdateVpcLink
 #[derive(Debug, PartialEq)]
 pub enum UpdateVpcLinkError {
@@ -10096,20 +9630,16 @@ impl UpdateVpcLinkError {
 }
 impl fmt::Display for UpdateVpcLinkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVpcLinkError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVpcLinkError::BadRequest(ref cause) => cause,
-            UpdateVpcLinkError::Conflict(ref cause) => cause,
-            UpdateVpcLinkError::NotFound(ref cause) => cause,
-            UpdateVpcLinkError::TooManyRequests(ref cause) => cause,
-            UpdateVpcLinkError::Unauthorized(ref cause) => cause,
+            UpdateVpcLinkError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateVpcLinkError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateVpcLinkError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateVpcLinkError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateVpcLinkError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVpcLinkError {}
 /// Trait representing the capabilities of the Amazon API Gateway API. Amazon API Gateway clients implement this trait.
 pub trait ApiGateway {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
@@ -10744,6 +10274,14 @@ impl ApiGatewayClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> ApiGatewayClient {
         ApiGatewayClient { client, region }
+    }
+}
+
+impl fmt::Debug for ApiGatewayClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ApiGatewayClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

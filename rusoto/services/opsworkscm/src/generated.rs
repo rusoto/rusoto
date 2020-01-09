@@ -194,6 +194,18 @@ pub struct CreateServerRequest {
     #[serde(rename = "BackupRetentionCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_retention_count: Option<i64>,
+    /// <p><p>A PEM-formatted HTTPS certificate. The value can be be a single, self-signed certificate, or a certificate chain. If you specify a custom certificate, you must also specify values for <code>CustomDomain</code> and <code>CustomPrivateKey</code>. The following are requirements for the <code>CustomCertificate</code> value:</p> <ul> <li> <p>You can provide either a self-signed, custom certificate, or the full certificate chain.</p> </li> <li> <p>The certificate must be a valid X509 certificate, or a certificate chain in PEM format.</p> </li> <li> <p>The certificate must be valid at the time of upload. A certificate can&#39;t be used before its validity period begins (the certificate&#39;s <code>NotBefore</code> date), or after it expires (the certificate&#39;s <code>NotAfter</code> date).</p> </li> <li> <p>The certificate’s common name or subject alternative names (SANs), if present, must match the value of <code>CustomDomain</code>.</p> </li> <li> <p>The certificate must match the value of <code>CustomPrivateKey</code>.</p> </li> </ul></p>
+    #[serde(rename = "CustomCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_certificate: Option<String>,
+    /// <p>An optional public endpoint of a server, such as <code>https://aws.my-company.com</code>. To access the server, create a CNAME DNS record in your preferred DNS service that points the custom domain to the endpoint that is generated when the server is created (the value of the CreateServer Endpoint attribute). You cannot access the server by using the generated <code>Endpoint</code> value if the server is using a custom domain. If you specify a custom domain, you must also specify values for <code>CustomCertificate</code> and <code>CustomPrivateKey</code>.</p>
+    #[serde(rename = "CustomDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_domain: Option<String>,
+    /// <p>A private key in PEM format for connecting to the server by using HTTPS. The private key must not be encrypted; it cannot be protected by a password or passphrase. If you specify a custom private key, you must also specify values for <code>CustomDomain</code> and <code>CustomCertificate</code>.</p>
+    #[serde(rename = "CustomPrivateKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_private_key: Option<String>,
     /// <p> Enable or disable scheduled backups. Valid values are <code>true</code> or <code>false</code>. The default value is <code>true</code>. </p>
     #[serde(rename = "DisableAutomatedBackup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -519,11 +531,15 @@ pub struct Server {
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
+    /// <p>An optional public endpoint of a server, such as <code>https://aws.my-company.com</code>. You cannot access the server by using the <code>Endpoint</code> value if the server has a <code>CustomDomain</code> specified.</p>
+    #[serde(rename = "CustomDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_domain: Option<String>,
     /// <p>Disables automated backups. The number of stored backups is dependent on the value of PreferredBackupCount. </p>
     #[serde(rename = "DisableAutomatedBackup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_automated_backup: Option<bool>,
-    /// <p> A DNS name that can be used to access the engine. Example: <code>myserver-asdfghjkl.us-east-1.opsworks.io</code> </p>
+    /// <p> A DNS name that can be used to access the engine. Example: <code>myserver-asdfghjkl.us-east-1.opsworks.io</code>. You cannot access the server by using the <code>Endpoint</code> value if the server has a <code>CustomDomain</code> specified. </p>
     #[serde(rename = "Endpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint: Option<String>,
@@ -723,17 +739,13 @@ impl AssociateNodeError {
 }
 impl fmt::Display for AssociateNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateNodeError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateNodeError::InvalidState(ref cause) => cause,
-            AssociateNodeError::ResourceNotFound(ref cause) => cause,
+            AssociateNodeError::InvalidState(ref cause) => write!(f, "{}", cause),
+            AssociateNodeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateNodeError {}
 /// Errors returned by CreateBackup
 #[derive(Debug, PartialEq)]
 pub enum CreateBackupError {
@@ -767,18 +779,14 @@ impl CreateBackupError {
 }
 impl fmt::Display for CreateBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBackupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBackupError::InvalidState(ref cause) => cause,
-            CreateBackupError::LimitExceeded(ref cause) => cause,
-            CreateBackupError::ResourceNotFound(ref cause) => cause,
+            CreateBackupError::InvalidState(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBackupError {}
 /// Errors returned by CreateServer
 #[derive(Debug, PartialEq)]
 pub enum CreateServerError {
@@ -812,18 +820,14 @@ impl CreateServerError {
 }
 impl fmt::Display for CreateServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateServerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateServerError::LimitExceeded(ref cause) => cause,
-            CreateServerError::ResourceAlreadyExists(ref cause) => cause,
-            CreateServerError::ResourceNotFound(ref cause) => cause,
+            CreateServerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateServerError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateServerError {}
 /// Errors returned by DeleteBackup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackupError {
@@ -852,17 +856,13 @@ impl DeleteBackupError {
 }
 impl fmt::Display for DeleteBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBackupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBackupError::InvalidState(ref cause) => cause,
-            DeleteBackupError::ResourceNotFound(ref cause) => cause,
+            DeleteBackupError::InvalidState(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBackupError {}
 /// Errors returned by DeleteServer
 #[derive(Debug, PartialEq)]
 pub enum DeleteServerError {
@@ -891,17 +891,13 @@ impl DeleteServerError {
 }
 impl fmt::Display for DeleteServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServerError::InvalidState(ref cause) => cause,
-            DeleteServerError::ResourceNotFound(ref cause) => cause,
+            DeleteServerError::InvalidState(ref cause) => write!(f, "{}", cause),
+            DeleteServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServerError {}
 /// Errors returned by DescribeAccountAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountAttributesError {}
@@ -919,14 +915,10 @@ impl DescribeAccountAttributesError {
 }
 impl fmt::Display for DescribeAccountAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountAttributesError {}
 /// Errors returned by DescribeBackups
 #[derive(Debug, PartialEq)]
 pub enum DescribeBackupsError {
@@ -955,17 +947,13 @@ impl DescribeBackupsError {
 }
 impl fmt::Display for DescribeBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBackupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBackupsError::InvalidNextToken(ref cause) => cause,
-            DescribeBackupsError::ResourceNotFound(ref cause) => cause,
+            DescribeBackupsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBackupsError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {
@@ -994,17 +982,13 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventsError::InvalidNextToken(ref cause) => cause,
-            DescribeEventsError::ResourceNotFound(ref cause) => cause,
+            DescribeEventsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeEventsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEventsError {}
 /// Errors returned by DescribeNodeAssociationStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeNodeAssociationStatusError {
@@ -1032,16 +1016,14 @@ impl DescribeNodeAssociationStatusError {
 }
 impl fmt::Display for DescribeNodeAssociationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNodeAssociationStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeNodeAssociationStatusError::ResourceNotFound(ref cause) => cause,
+            DescribeNodeAssociationStatusError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeNodeAssociationStatusError {}
 /// Errors returned by DescribeServers
 #[derive(Debug, PartialEq)]
 pub enum DescribeServersError {
@@ -1070,17 +1052,13 @@ impl DescribeServersError {
 }
 impl fmt::Display for DescribeServersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeServersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeServersError::InvalidNextToken(ref cause) => cause,
-            DescribeServersError::ResourceNotFound(ref cause) => cause,
+            DescribeServersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeServersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeServersError {}
 /// Errors returned by DisassociateNode
 #[derive(Debug, PartialEq)]
 pub enum DisassociateNodeError {
@@ -1109,17 +1087,13 @@ impl DisassociateNodeError {
 }
 impl fmt::Display for DisassociateNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateNodeError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateNodeError::InvalidState(ref cause) => cause,
-            DisassociateNodeError::ResourceNotFound(ref cause) => cause,
+            DisassociateNodeError::InvalidState(ref cause) => write!(f, "{}", cause),
+            DisassociateNodeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateNodeError {}
 /// Errors returned by ExportServerEngineAttribute
 #[derive(Debug, PartialEq)]
 pub enum ExportServerEngineAttributeError {
@@ -1154,17 +1128,13 @@ impl ExportServerEngineAttributeError {
 }
 impl fmt::Display for ExportServerEngineAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExportServerEngineAttributeError {
-    fn description(&self) -> &str {
         match *self {
-            ExportServerEngineAttributeError::InvalidState(ref cause) => cause,
-            ExportServerEngineAttributeError::ResourceNotFound(ref cause) => cause,
+            ExportServerEngineAttributeError::InvalidState(ref cause) => write!(f, "{}", cause),
+            ExportServerEngineAttributeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExportServerEngineAttributeError {}
 /// Errors returned by RestoreServer
 #[derive(Debug, PartialEq)]
 pub enum RestoreServerError {
@@ -1193,17 +1163,13 @@ impl RestoreServerError {
 }
 impl fmt::Display for RestoreServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreServerError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreServerError::InvalidState(ref cause) => cause,
-            RestoreServerError::ResourceNotFound(ref cause) => cause,
+            RestoreServerError::InvalidState(ref cause) => write!(f, "{}", cause),
+            RestoreServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RestoreServerError {}
 /// Errors returned by StartMaintenance
 #[derive(Debug, PartialEq)]
 pub enum StartMaintenanceError {
@@ -1232,17 +1198,13 @@ impl StartMaintenanceError {
 }
 impl fmt::Display for StartMaintenanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartMaintenanceError {
-    fn description(&self) -> &str {
         match *self {
-            StartMaintenanceError::InvalidState(ref cause) => cause,
-            StartMaintenanceError::ResourceNotFound(ref cause) => cause,
+            StartMaintenanceError::InvalidState(ref cause) => write!(f, "{}", cause),
+            StartMaintenanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartMaintenanceError {}
 /// Errors returned by UpdateServer
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerError {
@@ -1271,17 +1233,13 @@ impl UpdateServerError {
 }
 impl fmt::Display for UpdateServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServerError::InvalidState(ref cause) => cause,
-            UpdateServerError::ResourceNotFound(ref cause) => cause,
+            UpdateServerError::InvalidState(ref cause) => write!(f, "{}", cause),
+            UpdateServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServerError {}
 /// Errors returned by UpdateServerEngineAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerEngineAttributesError {
@@ -1316,17 +1274,15 @@ impl UpdateServerEngineAttributesError {
 }
 impl fmt::Display for UpdateServerEngineAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServerEngineAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServerEngineAttributesError::InvalidState(ref cause) => cause,
-            UpdateServerEngineAttributesError::ResourceNotFound(ref cause) => cause,
+            UpdateServerEngineAttributesError::InvalidState(ref cause) => write!(f, "{}", cause),
+            UpdateServerEngineAttributesError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateServerEngineAttributesError {}
 /// Trait representing the capabilities of the OpsWorksCM API. OpsWorksCM clients implement this trait.
 pub trait OpsWorksCM {
     /// <p> Associates a new node with the server. For more information about how to disassociate a node, see <a>DisassociateNode</a>.</p> <p> On a Chef server: This command is an alternative to <code>knife bootstrap</code>.</p> <p> Example (Chef): <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes "Name=<i>CHEF_ORGANIZATION</i>,Value=default" "Name=<i>CHEF_NODE_PUBLIC_KEY</i>,Value=<i>public-key-pem</i>"</code> </p> <p> On a Puppet server, this command is an alternative to the <code>puppet cert sign</code> command that signs a Puppet node CSR. </p> <p> Example (Chef): <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes "Name=<i>PUPPET_NODE_CSR</i>,Value=<i>csr-pem</i>"</code> </p> <p> A node can can only be associated with servers that are in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. The AssociateNode API call can be integrated into Auto Scaling configurations, AWS Cloudformation templates, or the user data of a server's instance. </p>
@@ -1341,7 +1297,7 @@ pub trait OpsWorksCM {
         input: CreateBackupRequest,
     ) -> RusotoFuture<CreateBackupResponse, CreateBackupError>;
 
-    /// <p> Creates and immedately starts a new server. The server is ready to use when it is in the <code>HEALTHY</code> state. By default, you can create a maximum of 10 servers. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when you have created the maximum number of servers (10). A <code>ResourceAlreadyExistsException</code> is thrown when a server with the same name already exists in the account. A <code>ResourceNotFoundException</code> is thrown when you specify a backup ID that is not valid or is for a backup that does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p> <p> If you do not specify a security group by adding the <code>SecurityGroupIds</code> parameter, AWS OpsWorks creates a new security group. </p> <p> <i>Chef Automate:</i> The default security group opens the Chef server to the world on TCP port 443. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p> <i>Puppet Enterprise:</i> The default security group opens TCP ports 22, 443, 4433, 8140, 8142, 8143, and 8170. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p>By default, your server is accessible from any IP address. We recommend that you update your security group rules to allow access from known IP addresses and address ranges only. To edit security group rules, open Security Groups in the navigation pane of the EC2 management console. </p>
+    /// <p> Creates and immedately starts a new server. The server is ready to use when it is in the <code>HEALTHY</code> state. By default, you can create a maximum of 10 servers. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when you have created the maximum number of servers (10). A <code>ResourceAlreadyExistsException</code> is thrown when a server with the same name already exists in the account. A <code>ResourceNotFoundException</code> is thrown when you specify a backup ID that is not valid or is for a backup that does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p> <p> If you do not specify a security group by adding the <code>SecurityGroupIds</code> parameter, AWS OpsWorks creates a new security group. </p> <p> <i>Chef Automate:</i> The default security group opens the Chef server to the world on TCP port 443. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p> <i>Puppet Enterprise:</i> The default security group opens TCP ports 22, 443, 4433, 8140, 8142, 8143, and 8170. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p>By default, your server is accessible from any IP address. We recommend that you update your security group rules to allow access from known IP addresses and address ranges only. To edit security group rules, open Security Groups in the navigation pane of the EC2 management console. </p> <p>To specify your own domain for a server, and provide your own self-signed or CA-signed certificate and private key, specify values for <code>CustomDomain</code>, <code>CustomCertificate</code>, and <code>CustomPrivateKey</code>.</p>
     fn create_server(
         &self,
         input: CreateServerRequest,
@@ -1461,6 +1417,14 @@ impl OpsWorksCMClient {
     }
 }
 
+impl fmt::Debug for OpsWorksCMClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("OpsWorksCMClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl OpsWorksCM for OpsWorksCMClient {
     /// <p> Associates a new node with the server. For more information about how to disassociate a node, see <a>DisassociateNode</a>.</p> <p> On a Chef server: This command is an alternative to <code>knife bootstrap</code>.</p> <p> Example (Chef): <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes "Name=<i>CHEF_ORGANIZATION</i>,Value=default" "Name=<i>CHEF_NODE_PUBLIC_KEY</i>,Value=<i>public-key-pem</i>"</code> </p> <p> On a Puppet server, this command is an alternative to the <code>puppet cert sign</code> command that signs a Puppet node CSR. </p> <p> Example (Chef): <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes "Name=<i>PUPPET_NODE_CSR</i>,Value=<i>csr-pem</i>"</code> </p> <p> A node can can only be associated with servers that are in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. The AssociateNode API call can be integrated into Auto Scaling configurations, AWS Cloudformation templates, or the user data of a server's instance. </p>
     fn associate_node(
@@ -1520,7 +1484,7 @@ impl OpsWorksCM for OpsWorksCMClient {
         })
     }
 
-    /// <p> Creates and immedately starts a new server. The server is ready to use when it is in the <code>HEALTHY</code> state. By default, you can create a maximum of 10 servers. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when you have created the maximum number of servers (10). A <code>ResourceAlreadyExistsException</code> is thrown when a server with the same name already exists in the account. A <code>ResourceNotFoundException</code> is thrown when you specify a backup ID that is not valid or is for a backup that does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p> <p> If you do not specify a security group by adding the <code>SecurityGroupIds</code> parameter, AWS OpsWorks creates a new security group. </p> <p> <i>Chef Automate:</i> The default security group opens the Chef server to the world on TCP port 443. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p> <i>Puppet Enterprise:</i> The default security group opens TCP ports 22, 443, 4433, 8140, 8142, 8143, and 8170. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p>By default, your server is accessible from any IP address. We recommend that you update your security group rules to allow access from known IP addresses and address ranges only. To edit security group rules, open Security Groups in the navigation pane of the EC2 management console. </p>
+    /// <p> Creates and immedately starts a new server. The server is ready to use when it is in the <code>HEALTHY</code> state. By default, you can create a maximum of 10 servers. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when you have created the maximum number of servers (10). A <code>ResourceAlreadyExistsException</code> is thrown when a server with the same name already exists in the account. A <code>ResourceNotFoundException</code> is thrown when you specify a backup ID that is not valid or is for a backup that does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p> <p> If you do not specify a security group by adding the <code>SecurityGroupIds</code> parameter, AWS OpsWorks creates a new security group. </p> <p> <i>Chef Automate:</i> The default security group opens the Chef server to the world on TCP port 443. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p> <i>Puppet Enterprise:</i> The default security group opens TCP ports 22, 443, 4433, 8140, 8142, 8143, and 8170. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p>By default, your server is accessible from any IP address. We recommend that you update your security group rules to allow access from known IP addresses and address ranges only. To edit security group rules, open Security Groups in the navigation pane of the EC2 management console. </p> <p>To specify your own domain for a server, and provide your own self-signed or CA-signed certificate and private key, specify values for <code>CustomDomain</code>, <code>CustomCertificate</code>, and <code>CustomPrivateKey</code>.</p>
     fn create_server(
         &self,
         input: CreateServerRequest,

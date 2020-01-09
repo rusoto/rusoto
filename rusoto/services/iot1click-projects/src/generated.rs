@@ -493,19 +493,19 @@ impl AssociateDeviceWithPlacementError {
 }
 impl fmt::Display for AssociateDeviceWithPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateDeviceWithPlacementError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateDeviceWithPlacementError::InternalFailure(ref cause) => cause,
-            AssociateDeviceWithPlacementError::InvalidRequest(ref cause) => cause,
-            AssociateDeviceWithPlacementError::ResourceConflict(ref cause) => cause,
-            AssociateDeviceWithPlacementError::ResourceNotFound(ref cause) => cause,
+            AssociateDeviceWithPlacementError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            AssociateDeviceWithPlacementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AssociateDeviceWithPlacementError::ResourceConflict(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateDeviceWithPlacementError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateDeviceWithPlacementError {}
 /// Errors returned by CreatePlacement
 #[derive(Debug, PartialEq)]
 pub enum CreatePlacementError {
@@ -544,19 +544,15 @@ impl CreatePlacementError {
 }
 impl fmt::Display for CreatePlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePlacementError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePlacementError::InternalFailure(ref cause) => cause,
-            CreatePlacementError::InvalidRequest(ref cause) => cause,
-            CreatePlacementError::ResourceConflict(ref cause) => cause,
-            CreatePlacementError::ResourceNotFound(ref cause) => cause,
+            CreatePlacementError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreatePlacementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreatePlacementError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            CreatePlacementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePlacementError {}
 /// Errors returned by CreateProject
 #[derive(Debug, PartialEq)]
 pub enum CreateProjectError {
@@ -590,18 +586,14 @@ impl CreateProjectError {
 }
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProjectError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProjectError::InternalFailure(ref cause) => cause,
-            CreateProjectError::InvalidRequest(ref cause) => cause,
-            CreateProjectError::ResourceConflict(ref cause) => cause,
+            CreateProjectError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::ResourceConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateProjectError {}
 /// Errors returned by DeletePlacement
 #[derive(Debug, PartialEq)]
 pub enum DeletePlacementError {
@@ -640,19 +632,15 @@ impl DeletePlacementError {
 }
 impl fmt::Display for DeletePlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePlacementError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePlacementError::InternalFailure(ref cause) => cause,
-            DeletePlacementError::InvalidRequest(ref cause) => cause,
-            DeletePlacementError::ResourceNotFound(ref cause) => cause,
-            DeletePlacementError::TooManyRequests(ref cause) => cause,
+            DeletePlacementError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeletePlacementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeletePlacementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeletePlacementError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePlacementError {}
 /// Errors returned by DeleteProject
 #[derive(Debug, PartialEq)]
 pub enum DeleteProjectError {
@@ -691,19 +679,15 @@ impl DeleteProjectError {
 }
 impl fmt::Display for DeleteProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProjectError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteProjectError::InternalFailure(ref cause) => cause,
-            DeleteProjectError::InvalidRequest(ref cause) => cause,
-            DeleteProjectError::ResourceNotFound(ref cause) => cause,
-            DeleteProjectError::TooManyRequests(ref cause) => cause,
+            DeleteProjectError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteProjectError {}
 /// Errors returned by DescribePlacement
 #[derive(Debug, PartialEq)]
 pub enum DescribePlacementError {
@@ -737,18 +721,14 @@ impl DescribePlacementError {
 }
 impl fmt::Display for DescribePlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePlacementError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePlacementError::InternalFailure(ref cause) => cause,
-            DescribePlacementError::InvalidRequest(ref cause) => cause,
-            DescribePlacementError::ResourceNotFound(ref cause) => cause,
+            DescribePlacementError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribePlacementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribePlacementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePlacementError {}
 /// Errors returned by DescribeProject
 #[derive(Debug, PartialEq)]
 pub enum DescribeProjectError {
@@ -782,18 +762,14 @@ impl DescribeProjectError {
 }
 impl fmt::Display for DescribeProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeProjectError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeProjectError::InternalFailure(ref cause) => cause,
-            DescribeProjectError::InvalidRequest(ref cause) => cause,
-            DescribeProjectError::ResourceNotFound(ref cause) => cause,
+            DescribeProjectError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeProjectError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeProjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeProjectError {}
 /// Errors returned by DisassociateDeviceFromPlacement
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDeviceFromPlacementError {
@@ -842,19 +818,23 @@ impl DisassociateDeviceFromPlacementError {
 }
 impl fmt::Display for DisassociateDeviceFromPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateDeviceFromPlacementError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateDeviceFromPlacementError::InternalFailure(ref cause) => cause,
-            DisassociateDeviceFromPlacementError::InvalidRequest(ref cause) => cause,
-            DisassociateDeviceFromPlacementError::ResourceNotFound(ref cause) => cause,
-            DisassociateDeviceFromPlacementError::TooManyRequests(ref cause) => cause,
+            DisassociateDeviceFromPlacementError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDeviceFromPlacementError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDeviceFromPlacementError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateDeviceFromPlacementError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateDeviceFromPlacementError {}
 /// Errors returned by GetDevicesInPlacement
 #[derive(Debug, PartialEq)]
 pub enum GetDevicesInPlacementError {
@@ -894,18 +874,14 @@ impl GetDevicesInPlacementError {
 }
 impl fmt::Display for GetDevicesInPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDevicesInPlacementError {
-    fn description(&self) -> &str {
         match *self {
-            GetDevicesInPlacementError::InternalFailure(ref cause) => cause,
-            GetDevicesInPlacementError::InvalidRequest(ref cause) => cause,
-            GetDevicesInPlacementError::ResourceNotFound(ref cause) => cause,
+            GetDevicesInPlacementError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetDevicesInPlacementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetDevicesInPlacementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDevicesInPlacementError {}
 /// Errors returned by ListPlacements
 #[derive(Debug, PartialEq)]
 pub enum ListPlacementsError {
@@ -939,18 +915,14 @@ impl ListPlacementsError {
 }
 impl fmt::Display for ListPlacementsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPlacementsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPlacementsError::InternalFailure(ref cause) => cause,
-            ListPlacementsError::InvalidRequest(ref cause) => cause,
-            ListPlacementsError::ResourceNotFound(ref cause) => cause,
+            ListPlacementsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListPlacementsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPlacementsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPlacementsError {}
 /// Errors returned by ListProjects
 #[derive(Debug, PartialEq)]
 pub enum ListProjectsError {
@@ -979,17 +951,13 @@ impl ListProjectsError {
 }
 impl fmt::Display for ListProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProjectsError {
-    fn description(&self) -> &str {
         match *self {
-            ListProjectsError::InternalFailure(ref cause) => cause,
-            ListProjectsError::InvalidRequest(ref cause) => cause,
+            ListProjectsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListProjectsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListProjectsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1025,18 +993,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalFailure(ref cause) => cause,
-            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1070,18 +1034,14 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InternalFailure(ref cause) => cause,
-            TagResourceError::InvalidRequest(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1115,18 +1075,14 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InternalFailure(ref cause) => cause,
-            UntagResourceError::InvalidRequest(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdatePlacement
 #[derive(Debug, PartialEq)]
 pub enum UpdatePlacementError {
@@ -1165,19 +1121,15 @@ impl UpdatePlacementError {
 }
 impl fmt::Display for UpdatePlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePlacementError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePlacementError::InternalFailure(ref cause) => cause,
-            UpdatePlacementError::InvalidRequest(ref cause) => cause,
-            UpdatePlacementError::ResourceNotFound(ref cause) => cause,
-            UpdatePlacementError::TooManyRequests(ref cause) => cause,
+            UpdatePlacementError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdatePlacementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdatePlacementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdatePlacementError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePlacementError {}
 /// Errors returned by UpdateProject
 #[derive(Debug, PartialEq)]
 pub enum UpdateProjectError {
@@ -1216,19 +1168,15 @@ impl UpdateProjectError {
 }
 impl fmt::Display for UpdateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateProjectError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateProjectError::InternalFailure(ref cause) => cause,
-            UpdateProjectError::InvalidRequest(ref cause) => cause,
-            UpdateProjectError::ResourceNotFound(ref cause) => cause,
-            UpdateProjectError::TooManyRequests(ref cause) => cause,
+            UpdateProjectError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateProjectError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateProjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateProjectError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateProjectError {}
 /// Trait representing the capabilities of the AWS IoT 1-Click Projects API. AWS IoT 1-Click Projects clients implement this trait.
 pub trait Iot1ClickProjects {
     /// <p>Associates a physical device with a placement.</p>
@@ -1361,6 +1309,14 @@ impl Iot1ClickProjectsClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> Iot1ClickProjectsClient {
         Iot1ClickProjectsClient { client, region }
+    }
+}
+
+impl fmt::Debug for Iot1ClickProjectsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Iot1ClickProjectsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

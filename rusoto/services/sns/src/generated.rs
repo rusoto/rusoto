@@ -61,7 +61,7 @@ impl ActionsListSerializer {
 pub struct AddPermissionInput {
     /// <p>The AWS account IDs of the users (principals) who will be given access to the specified actions. The users must have AWS accounts, but do not need to be signed up for this service.</p>
     pub aws_account_id: Vec<String>,
-    /// <p>The action you want to allow for the specified principal(s).</p> <p>Valid values: any Amazon SNS action name.</p>
+    /// <p>The action you want to allow for the specified principal(s).</p> <p>Valid values: Any Amazon SNS action name, for example <code>Publish</code>.</p>
     pub action_name: Vec<String>,
     /// <p>A unique identifier for the new policy statement.</p>
     pub label: String,
@@ -277,7 +277,7 @@ pub struct CreatePlatformApplicationInput {
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>Application names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, hyphens, and periods, and must be between 1 and 256 characters long.</p>
     pub name: String,
-    /// <p>The following platforms are supported: ADM (Amazon Device Messaging), APNS (Apple Push Notification Service), APNS_SANDBOX, and GCM (Google Cloud Messaging).</p>
+    /// <p>The following platforms are supported: ADM (Amazon Device Messaging), APNS (Apple Push Notification Service), APNS_SANDBOX, and FCM (Firebase Cloud Messaging).</p>
     pub platform: String,
 }
 
@@ -292,7 +292,7 @@ impl CreatePlatformApplicationInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -343,7 +343,7 @@ pub struct CreatePlatformEndpointInput {
     pub custom_user_data: Option<String>,
     /// <p>PlatformApplicationArn returned from CreatePlatformApplication is used to create a an endpoint.</p>
     pub platform_application_arn: String,
-    /// <p>Unique identifier created by the notification service for an app on a device. The specific name for Token will vary, depending on which notification service is being used. For example, when using APNS as the notification service, you need the device token. Alternatively, when using GCM or ADM, the device token equivalent is called the registration ID.</p>
+    /// <p>Unique identifier created by the notification service for an app on a device. The specific name for Token will vary, depending on which notification service is being used. For example, when using APNS as the notification service, you need the device token. Alternatively, when using FCM or ADM, the device token equivalent is called the registration ID.</p>
     pub token: String,
 }
 
@@ -359,7 +359,7 @@ impl CreatePlatformEndpointInputSerializer {
         if let Some(ref field_value) = obj.attributes {
             MapStringToStringSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Attributes"),
+                &format!("{}{}.entry", prefix, "Attributes"),
                 field_value,
             );
         }
@@ -382,7 +382,7 @@ pub struct CreateTopicInput {
     pub attributes: Option<::std::collections::HashMap<String, String>>,
     /// <p>The name of the topic you want to create.</p> <p>Constraints: Topic names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long.</p>
     pub name: String,
-    /// <p>The list of tags to add to a new topic.</p>
+    /// <p><p>The list of tags to add to a new topic.</p> <note> <p>To be able to tag a topic on creation, you must have the <code>sns:CreateTopic</code> and <code>sns:TagResource</code> permissions.</p> </note></p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -548,7 +548,7 @@ impl GetEndpointAttributesInputSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetEndpointAttributesResponse {
-    /// <p><p>Attributes include the following:</p> <ul> <li> <p> <code>CustomUserData</code> – arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> – flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> – device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul></p>
+    /// <p><p>Attributes include the following:</p> <ul> <li> <p> <code>CustomUserData</code> – arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> – flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> – device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> <note> <p>The device token for the iOS platform is returned in lowercase.</p> </note> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -722,7 +722,7 @@ impl GetSubscriptionAttributesInputSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSubscriptionAttributesResponse {
-    /// <p><p>A map of the subscription&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>ConfirmationWasAuthenticated</code> – <code>true</code> if the subscription confirmation request was authenticated.</p> </li> <li> <p> <code>DeliveryPolicy</code> – The JSON serialization of the subscription&#39;s delivery policy.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – The JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults.</p> </li> <li> <p> <code>FilterPolicy</code> – The filter policy JSON that is assigned to the subscription.</p> </li> <li> <p> <code>Owner</code> – The AWS account ID of the subscription&#39;s owner.</p> </li> <li> <p> <code>PendingConfirmation</code> – <code>true</code> if the subscription hasn&#39;t been confirmed. To confirm a pending subscription, call the <code>ConfirmSubscription</code> action with a confirmation token.</p> </li> <li> <p> <code>RawMessageDelivery</code> – <code>true</code> if raw message delivery is enabled for the subscription. Raw messages are free of JSON formatting and can be sent to HTTP/S and Amazon SQS endpoints.</p> </li> <li> <p> <code>SubscriptionArn</code> – The subscription&#39;s ARN.</p> </li> <li> <p> <code>TopicArn</code> – The topic ARN that the subscription is associated with.</p> </li> </ul></p>
+    /// <p><p>A map of the subscription&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>ConfirmationWasAuthenticated</code> – <code>true</code> if the subscription confirmation request was authenticated.</p> </li> <li> <p> <code>DeliveryPolicy</code> – The JSON serialization of the subscription&#39;s delivery policy.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – The JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults.</p> </li> <li> <p> <code>FilterPolicy</code> – The filter policy JSON that is assigned to the subscription.</p> </li> <li> <p> <code>Owner</code> – The AWS account ID of the subscription&#39;s owner.</p> </li> <li> <p> <code>PendingConfirmation</code> – <code>true</code> if the subscription hasn&#39;t been confirmed. To confirm a pending subscription, call the <code>ConfirmSubscription</code> action with a confirmation token.</p> </li> <li> <p> <code>RawMessageDelivery</code> – <code>true</code> if raw message delivery is enabled for the subscription. Raw messages are free of JSON formatting and can be sent to HTTP/S and Amazon SQS endpoints.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> <li> <p> <code>SubscriptionArn</code> – The subscription&#39;s ARN.</p> </li> <li> <p> <code>TopicArn</code> – The topic ARN that the subscription is associated with.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -776,7 +776,7 @@ impl GetTopicAttributesInputSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTopicAttributesResponse {
-    /// <p><p>A map of the topic&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>TopicArn</code> – the topic&#39;s ARN</p> </li> <li> <p> <code>Owner</code> – the AWS account ID of the topic&#39;s owner</p> </li> <li> <p> <code>Policy</code> – the JSON serialization of the topic&#39;s access control policy</p> </li> <li> <p> <code>DisplayName</code> – the human-readable name used in the &quot;From&quot; field for notifications to email and email-json endpoints</p> </li> <li> <p> <code>SubscriptionsPending</code> – the number of subscriptions pending confirmation on this topic</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> – the number of confirmed subscriptions on this topic</p> </li> <li> <p> <code>SubscriptionsDeleted</code> – the number of deleted subscriptions on this topic</p> </li> <li> <p> <code>DeliveryPolicy</code> – the JSON serialization of the topic&#39;s delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – the JSON serialization of the effective delivery policy that takes into account system defaults</p> </li> </ul></p>
+    /// <p><p>A map of the topic&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The JSON serialization of the topic&#39;s delivery policy.</p> </li> <li> <p> <code>DisplayName</code> – The human-readable name used in the <code>From</code> field for notifications to <code>email</code> and <code>email-json</code> endpoints.</p> </li> <li> <p> <code>Owner</code> – The AWS account ID of the topic&#39;s owner.</p> </li> <li> <p> <code>Policy</code> – The JSON serialization of the topic&#39;s access control policy.</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> – The number of confirmed subscriptions for the topic.</p> </li> <li> <p> <code>SubscriptionsDeleted</code> – The number of deleted subscriptions for the topic.</p> </li> <li> <p> <code>SubscriptionsPending</code> – The number of subscriptions pending confirmation for the topic.</p> </li> <li> <p> <code>TopicArn</code> – The topic&#39;s ARN.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – Yhe JSON serialization of the effective delivery policy, taking system defaults into account.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -1308,7 +1308,7 @@ impl MapStringToStringSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
@@ -1511,11 +1511,11 @@ impl ProtocolDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishInput {
-    /// <p><p>The message you want to send.</p> <important> <p>The <code>Message</code> parameter is always a string. If you set <code>MessageStructure</code> to <code>json</code>, you must string-encode the <code>Message</code> parameter.</p> </important> <p>If you are publishing to a topic and you want to send the same message to all transport protocols, include the text of the message as a String value. If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p/> <p>Constraints:</p> <ul> <li> <p>With the exception of SMS, messages must be UTF-8 encoded strings and at most 256 KB in size (262,144 bytes, not 262,144 characters).</p> </li> <li> <p>For SMS, each message can contain up to 140 characters. This character limit depends on the encoding schema. For example, an SMS message can contain 160 GSM characters, 140 ASCII characters, or 70 UCS-2 characters.</p> <p>If you publish a message that exceeds this size limit, Amazon SNS sends the message as multiple messages, each fitting within the size limit. Messages aren&#39;t truncated mid-word but are cut off at whole-word boundaries.</p> <p>The total size limit for a single SMS <code>Publish</code> action is 1,600 characters.</p> </li> </ul> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, &quot;&quot;, is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul></p>
+    /// <p><p>The message you want to send.</p> <p>If you are publishing to a topic and you want to send the same message to all transport protocols, include the text of the message as a String value. If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p/> <p>Constraints:</p> <ul> <li> <p>With the exception of SMS, messages must be UTF-8 encoded strings and at most 256 KB in size (262,144 bytes, not 262,144 characters).</p> </li> <li> <p>For SMS, each message can contain up to 140 characters. This character limit depends on the encoding schema. For example, an SMS message can contain 160 GSM characters, 140 ASCII characters, or 70 UCS-2 characters.</p> <p>If you publish a message that exceeds this size limit, Amazon SNS sends the message as multiple messages, each fitting within the size limit. Messages aren&#39;t truncated mid-word but are cut off at whole-word boundaries.</p> <p>The total size limit for a single SMS <code>Publish</code> action is 1,600 characters.</p> </li> </ul> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, &quot;&quot;, is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul></p>
     pub message: String,
     /// <p>Message attributes for Publish action.</p>
     pub message_attributes: Option<::std::collections::HashMap<String, MessageAttributeValue>>,
-    /// <p>Set <code>MessageStructure</code> to <code>json</code> if you want to send a different message for each protocol. For example, using one publish action, you can send a short message to your SMS subscribers and a longer message to your email subscribers. If you set <code>MessageStructure</code> to <code>json</code>, the value of the <code>Message</code> parameter must: </p> <ul> <li> <p>be a syntactically valid JSON object; and</p> </li> <li> <p>contain at least a top-level JSON key of "default" with a value that is a string.</p> </li> </ul> <p>You can define other top-level keys that define the message you want to send to a specific transport protocol (e.g., "http").</p> <p>For information about sending different messages for each protocol using the AWS Management Console, go to <a href="https://docs.aws.amazon.com/sns/latest/gsg/Publish.html#sns-message-formatting-by-protocol">Create Different Messages for Each Protocol</a> in the <i>Amazon Simple Notification Service Getting Started Guide</i>. </p> <p>Valid value: <code>json</code> </p>
+    /// <p>Set <code>MessageStructure</code> to <code>json</code> if you want to send a different message for each protocol. For example, using one publish action, you can send a short message to your SMS subscribers and a longer message to your email subscribers. If you set <code>MessageStructure</code> to <code>json</code>, the value of the <code>Message</code> parameter must: </p> <ul> <li> <p>be a syntactically valid JSON object; and</p> </li> <li> <p>contain at least a top-level JSON key of "default" with a value that is a string.</p> </li> </ul> <p>You can define other top-level keys that define the message you want to send to a specific transport protocol (e.g., "http").</p> <p>Valid value: <code>json</code> </p>
     pub message_structure: Option<String>,
     /// <p>The phone number to which you want to deliver an SMS message. Use E.164 format.</p> <p>If you don't specify a value for the <code>PhoneNumber</code> parameter, you must specify a value for the <code>TargetArn</code> or <code>TopicArn</code> parameters.</p>
     pub phone_number: Option<String>,
@@ -1633,7 +1633,7 @@ impl SetEndpointAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
@@ -1644,7 +1644,7 @@ impl SetEndpointAttributesInputSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetPlatformApplicationAttributesInput {
-    /// <p><p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> – The credential received from the notification service. For APNS/APNS<em>SANDBOX, PlatformCredential is private key. For GCM, PlatformCredential is &quot;API key&quot;. For ADM, PlatformCredential is &quot;client secret&quot;.</p> </li> <li> <p> <code>PlatformPrincipal</code> – The principal received from the notification service. For APNS/APNS</em>SANDBOX, PlatformPrincipal is SSL certificate. For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is &quot;client id&quot;.</p> </li> <li> <p> <code>EventEndpointCreated</code> – Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> – Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> – Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> – Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> – IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> – IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> – Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul></p>
+    /// <p><p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> – The credential received from the notification service. For APNS/APNS<em>SANDBOX, PlatformCredential is private key. For FCM, PlatformCredential is &quot;API key&quot;. For ADM, PlatformCredential is &quot;client secret&quot;.</p> </li> <li> <p> <code>PlatformPrincipal</code> – The principal received from the notification service. For APNS/APNS</em>SANDBOX, PlatformPrincipal is SSL certificate. For FCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is &quot;client id&quot;.</p> </li> <li> <p> <code>EventEndpointCreated</code> – Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> – Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> – Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> – Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> – IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> – IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> – Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul></p>
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>PlatformApplicationArn for SetPlatformApplicationAttributes action.</p>
     pub platform_application_arn: String,
@@ -1661,7 +1661,7 @@ impl SetPlatformApplicationAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(
@@ -1690,7 +1690,7 @@ impl SetSMSAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "attributes"),
+            &format!("{}{}.entry", prefix, "attributes"),
             &obj.attributes,
         );
     }
@@ -1721,7 +1721,7 @@ impl SetSMSAttributesResponseDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSubscriptionAttributesInput {
-    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> </ul></p>
+    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> </ul></p>
     pub attribute_name: String,
     /// <p>The new value for the attribute in JSON format.</p>
     pub attribute_value: Option<String>,
@@ -1799,13 +1799,13 @@ impl StringDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeInput {
-    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> </ul></p>
+    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    /// <p><p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the endpoint is an URL beginning with &quot;https://&quot;</p> </li> <li> <p>For the <code>https</code> protocol, the endpoint is a URL beginning with &quot;https://&quot;</p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an AWS Lambda function.</p> </li> </ul></p>
+    /// <p><p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the endpoint is an URL beginning with <code>http://</code> </p> </li> <li> <p>For the <code>https</code> protocol, the endpoint is a URL beginning with <code>https://</code> </p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an Amazon Lambda function.</p> </li> </ul></p>
     pub endpoint: Option<String>,
-    /// <p><p>The protocol you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> – delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> – delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> – delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> – delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> – delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> – delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> – delivery of JSON-encoded message to an EndpointArn for a mobile app and device.</p> </li> <li> <p> <code>lambda</code> – delivery of JSON-encoded message to an AWS Lambda function.</p> </li> </ul></p>
+    /// <p><p>The protocol you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> – delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> – delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> – delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> – delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> – delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> – delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> – delivery of JSON-encoded message to an EndpointArn for a mobile app and device.</p> </li> <li> <p> <code>lambda</code> – delivery of JSON-encoded message to an Amazon Lambda function.</p> </li> </ul></p>
     pub protocol: String,
-    /// <p>Sets whether the response from the <code>Subscribe</code> request includes the subscription ARN, even if the subscription is not yet confirmed.</p> <p>If you set this parameter to <code>false</code>, the response includes the ARN for confirmed subscriptions, but it includes an ARN value of "pending subscription" for subscriptions that are not yet confirmed. A subscription becomes confirmed when the subscriber calls the <code>ConfirmSubscription</code> action with a confirmation token.</p> <p>If you set this parameter to <code>true</code>, the response includes the ARN in all cases, even if the subscription is not yet confirmed.</p> <p>The default value is <code>false</code>.</p>
+    /// <p>Sets whether the response from the <code>Subscribe</code> request includes the subscription ARN, even if the subscription is not yet confirmed.</p> <ul> <li> <p>If you have the subscription ARN returned, the response includes the ARN in all cases, even if the subscription is not yet confirmed.</p> </li> <li> <p>If you don't have the subscription ARN returned, in addition to the ARN for confirmed subscriptions, the response also includes the <code>pending subscription</code> ARN value for subscriptions that aren't yet confirmed. A subscription becomes confirmed when the subscriber calls the <code>ConfirmSubscription</code> action with a confirmation token.</p> </li> </ul> <p>If you set this parameter to <code>true</code>, .</p> <p>The default value is <code>false</code>.</p>
     pub return_subscription_arn: Option<bool>,
     /// <p>The ARN of the topic you want to subscribe to.</p>
     pub topic_arn: String,
@@ -1965,7 +1965,7 @@ impl SubscriptionAttributesMapSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.entry.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
@@ -2206,7 +2206,7 @@ impl TopicAttributesMapSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.entry.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
@@ -2353,19 +2353,15 @@ impl AddPermissionError {
 }
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            AddPermissionError::AuthorizationError(ref cause) => cause,
-            AddPermissionError::InternalError(ref cause) => cause,
-            AddPermissionError::InvalidParameter(ref cause) => cause,
-            AddPermissionError::NotFound(ref cause) => cause,
+            AddPermissionError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::InternalError(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddPermissionError {}
 /// Errors returned by CheckIfPhoneNumberIsOptedOut
 #[derive(Debug, PartialEq)]
 pub enum CheckIfPhoneNumberIsOptedOutError {
@@ -2430,19 +2426,19 @@ impl CheckIfPhoneNumberIsOptedOutError {
 }
 impl fmt::Display for CheckIfPhoneNumberIsOptedOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CheckIfPhoneNumberIsOptedOutError {
-    fn description(&self) -> &str {
         match *self {
-            CheckIfPhoneNumberIsOptedOutError::AuthorizationError(ref cause) => cause,
-            CheckIfPhoneNumberIsOptedOutError::InternalError(ref cause) => cause,
-            CheckIfPhoneNumberIsOptedOutError::InvalidParameter(ref cause) => cause,
-            CheckIfPhoneNumberIsOptedOutError::Throttled(ref cause) => cause,
+            CheckIfPhoneNumberIsOptedOutError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CheckIfPhoneNumberIsOptedOutError::InternalError(ref cause) => write!(f, "{}", cause),
+            CheckIfPhoneNumberIsOptedOutError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CheckIfPhoneNumberIsOptedOutError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CheckIfPhoneNumberIsOptedOutError {}
 /// Errors returned by ConfirmSubscription
 #[derive(Debug, PartialEq)]
 pub enum ConfirmSubscriptionError {
@@ -2519,21 +2515,21 @@ impl ConfirmSubscriptionError {
 }
 impl fmt::Display for ConfirmSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            ConfirmSubscriptionError::AuthorizationError(ref cause) => cause,
-            ConfirmSubscriptionError::FilterPolicyLimitExceeded(ref cause) => cause,
-            ConfirmSubscriptionError::InternalError(ref cause) => cause,
-            ConfirmSubscriptionError::InvalidParameter(ref cause) => cause,
-            ConfirmSubscriptionError::NotFound(ref cause) => cause,
-            ConfirmSubscriptionError::SubscriptionLimitExceeded(ref cause) => cause,
+            ConfirmSubscriptionError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::FilterPolicyLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConfirmSubscriptionError::InternalError(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::NotFound(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::SubscriptionLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ConfirmSubscriptionError {}
 /// Errors returned by CreatePlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum CreatePlatformApplicationError {
@@ -2587,18 +2583,14 @@ impl CreatePlatformApplicationError {
 }
 impl fmt::Display for CreatePlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePlatformApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePlatformApplicationError::AuthorizationError(ref cause) => cause,
-            CreatePlatformApplicationError::InternalError(ref cause) => cause,
-            CreatePlatformApplicationError::InvalidParameter(ref cause) => cause,
+            CreatePlatformApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformApplicationError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformApplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePlatformApplicationError {}
 /// Errors returned by CreatePlatformEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreatePlatformEndpointError {
@@ -2657,19 +2649,15 @@ impl CreatePlatformEndpointError {
 }
 impl fmt::Display for CreatePlatformEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePlatformEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePlatformEndpointError::AuthorizationError(ref cause) => cause,
-            CreatePlatformEndpointError::InternalError(ref cause) => cause,
-            CreatePlatformEndpointError::InvalidParameter(ref cause) => cause,
-            CreatePlatformEndpointError::NotFound(ref cause) => cause,
+            CreatePlatformEndpointError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformEndpointError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformEndpointError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreatePlatformEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePlatformEndpointError {}
 /// Errors returned by CreateTopic
 #[derive(Debug, PartialEq)]
 pub enum CreateTopicError {
@@ -2763,24 +2751,20 @@ impl CreateTopicError {
 }
 impl fmt::Display for CreateTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTopicError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTopicError::AuthorizationError(ref cause) => cause,
-            CreateTopicError::ConcurrentAccess(ref cause) => cause,
-            CreateTopicError::InternalError(ref cause) => cause,
-            CreateTopicError::InvalidParameter(ref cause) => cause,
-            CreateTopicError::InvalidSecurity(ref cause) => cause,
-            CreateTopicError::StaleTag(ref cause) => cause,
-            CreateTopicError::TagLimitExceeded(ref cause) => cause,
-            CreateTopicError::TagPolicy(ref cause) => cause,
-            CreateTopicError::TopicLimitExceeded(ref cause) => cause,
+            CreateTopicError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::StaleTag(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::TopicLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTopicError {}
 /// Errors returned by DeleteEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointError {
@@ -2832,18 +2816,14 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEndpointError::AuthorizationError(ref cause) => cause,
-            DeleteEndpointError::InternalError(ref cause) => cause,
-            DeleteEndpointError::InvalidParameter(ref cause) => cause,
+            DeleteEndpointError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEndpointError {}
 /// Errors returned by DeletePlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum DeletePlatformApplicationError {
@@ -2897,18 +2877,14 @@ impl DeletePlatformApplicationError {
 }
 impl fmt::Display for DeletePlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePlatformApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePlatformApplicationError::AuthorizationError(ref cause) => cause,
-            DeletePlatformApplicationError::InternalError(ref cause) => cause,
-            DeletePlatformApplicationError::InvalidParameter(ref cause) => cause,
+            DeletePlatformApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeletePlatformApplicationError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeletePlatformApplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePlatformApplicationError {}
 /// Errors returned by DeleteTopic
 #[derive(Debug, PartialEq)]
 pub enum DeleteTopicError {
@@ -2988,22 +2964,18 @@ impl DeleteTopicError {
 }
 impl fmt::Display for DeleteTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTopicError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTopicError::AuthorizationError(ref cause) => cause,
-            DeleteTopicError::ConcurrentAccess(ref cause) => cause,
-            DeleteTopicError::InternalError(ref cause) => cause,
-            DeleteTopicError::InvalidParameter(ref cause) => cause,
-            DeleteTopicError::NotFound(ref cause) => cause,
-            DeleteTopicError::StaleTag(ref cause) => cause,
-            DeleteTopicError::TagPolicy(ref cause) => cause,
+            DeleteTopicError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::StaleTag(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTopicError {}
 /// Errors returned by GetEndpointAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetEndpointAttributesError {
@@ -3062,19 +3034,15 @@ impl GetEndpointAttributesError {
 }
 impl fmt::Display for GetEndpointAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEndpointAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetEndpointAttributesError::AuthorizationError(ref cause) => cause,
-            GetEndpointAttributesError::InternalError(ref cause) => cause,
-            GetEndpointAttributesError::InvalidParameter(ref cause) => cause,
-            GetEndpointAttributesError::NotFound(ref cause) => cause,
+            GetEndpointAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetEndpointAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetEndpointAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetEndpointAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEndpointAttributesError {}
 /// Errors returned by GetPlatformApplicationAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetPlatformApplicationAttributesError {
@@ -3141,19 +3109,21 @@ impl GetPlatformApplicationAttributesError {
 }
 impl fmt::Display for GetPlatformApplicationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPlatformApplicationAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
-            GetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
-            GetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
-            GetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
+            GetPlatformApplicationAttributesError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPlatformApplicationAttributesError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPlatformApplicationAttributesError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPlatformApplicationAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPlatformApplicationAttributesError {}
 /// Errors returned by GetSMSAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetSMSAttributesError {
@@ -3212,19 +3182,15 @@ impl GetSMSAttributesError {
 }
 impl fmt::Display for GetSMSAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSMSAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetSMSAttributesError::AuthorizationError(ref cause) => cause,
-            GetSMSAttributesError::InternalError(ref cause) => cause,
-            GetSMSAttributesError::InvalidParameter(ref cause) => cause,
-            GetSMSAttributesError::Throttled(ref cause) => cause,
+            GetSMSAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetSMSAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetSMSAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetSMSAttributesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSMSAttributesError {}
 /// Errors returned by GetSubscriptionAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetSubscriptionAttributesError {
@@ -3285,19 +3251,15 @@ impl GetSubscriptionAttributesError {
 }
 impl fmt::Display for GetSubscriptionAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSubscriptionAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
-            GetSubscriptionAttributesError::InternalError(ref cause) => cause,
-            GetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
-            GetSubscriptionAttributesError::NotFound(ref cause) => cause,
+            GetSubscriptionAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetSubscriptionAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetSubscriptionAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetSubscriptionAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSubscriptionAttributesError {}
 /// Errors returned by GetTopicAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetTopicAttributesError {
@@ -3363,20 +3325,16 @@ impl GetTopicAttributesError {
 }
 impl fmt::Display for GetTopicAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTopicAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetTopicAttributesError::AuthorizationError(ref cause) => cause,
-            GetTopicAttributesError::InternalError(ref cause) => cause,
-            GetTopicAttributesError::InvalidParameter(ref cause) => cause,
-            GetTopicAttributesError::InvalidSecurity(ref cause) => cause,
-            GetTopicAttributesError::NotFound(ref cause) => cause,
+            GetTopicAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTopicAttributesError {}
 /// Errors returned by ListEndpointsByPlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointsByPlatformApplicationError {
@@ -3443,19 +3401,21 @@ impl ListEndpointsByPlatformApplicationError {
 }
 impl fmt::Display for ListEndpointsByPlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEndpointsByPlatformApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            ListEndpointsByPlatformApplicationError::AuthorizationError(ref cause) => cause,
-            ListEndpointsByPlatformApplicationError::InternalError(ref cause) => cause,
-            ListEndpointsByPlatformApplicationError::InvalidParameter(ref cause) => cause,
-            ListEndpointsByPlatformApplicationError::NotFound(ref cause) => cause,
+            ListEndpointsByPlatformApplicationError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListEndpointsByPlatformApplicationError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListEndpointsByPlatformApplicationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListEndpointsByPlatformApplicationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEndpointsByPlatformApplicationError {}
 /// Errors returned by ListPhoneNumbersOptedOut
 #[derive(Debug, PartialEq)]
 pub enum ListPhoneNumbersOptedOutError {
@@ -3514,19 +3474,15 @@ impl ListPhoneNumbersOptedOutError {
 }
 impl fmt::Display for ListPhoneNumbersOptedOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPhoneNumbersOptedOutError {
-    fn description(&self) -> &str {
         match *self {
-            ListPhoneNumbersOptedOutError::AuthorizationError(ref cause) => cause,
-            ListPhoneNumbersOptedOutError::InternalError(ref cause) => cause,
-            ListPhoneNumbersOptedOutError::InvalidParameter(ref cause) => cause,
-            ListPhoneNumbersOptedOutError::Throttled(ref cause) => cause,
+            ListPhoneNumbersOptedOutError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersOptedOutError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersOptedOutError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersOptedOutError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPhoneNumbersOptedOutError {}
 /// Errors returned by ListPlatformApplications
 #[derive(Debug, PartialEq)]
 pub enum ListPlatformApplicationsError {
@@ -3578,18 +3534,14 @@ impl ListPlatformApplicationsError {
 }
 impl fmt::Display for ListPlatformApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPlatformApplicationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPlatformApplicationsError::AuthorizationError(ref cause) => cause,
-            ListPlatformApplicationsError::InternalError(ref cause) => cause,
-            ListPlatformApplicationsError::InvalidParameter(ref cause) => cause,
+            ListPlatformApplicationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListPlatformApplicationsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListPlatformApplicationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPlatformApplicationsError {}
 /// Errors returned by ListSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionsError {
@@ -3641,18 +3593,14 @@ impl ListSubscriptionsError {
 }
 impl fmt::Display for ListSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscriptionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSubscriptionsError::AuthorizationError(ref cause) => cause,
-            ListSubscriptionsError::InternalError(ref cause) => cause,
-            ListSubscriptionsError::InvalidParameter(ref cause) => cause,
+            ListSubscriptionsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSubscriptionsError {}
 /// Errors returned by ListSubscriptionsByTopic
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionsByTopicError {
@@ -3711,19 +3659,15 @@ impl ListSubscriptionsByTopicError {
 }
 impl fmt::Display for ListSubscriptionsByTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscriptionsByTopicError {
-    fn description(&self) -> &str {
         match *self {
-            ListSubscriptionsByTopicError::AuthorizationError(ref cause) => cause,
-            ListSubscriptionsByTopicError::InternalError(ref cause) => cause,
-            ListSubscriptionsByTopicError::InvalidParameter(ref cause) => cause,
-            ListSubscriptionsByTopicError::NotFound(ref cause) => cause,
+            ListSubscriptionsByTopicError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsByTopicError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsByTopicError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsByTopicError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSubscriptionsByTopicError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -3789,20 +3733,16 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AuthorizationError(ref cause) => cause,
-            ListTagsForResourceError::ConcurrentAccess(ref cause) => cause,
-            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::TagPolicy(ref cause) => cause,
+            ListTagsForResourceError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTopics
 #[derive(Debug, PartialEq)]
 pub enum ListTopicsError {
@@ -3854,18 +3794,14 @@ impl ListTopicsError {
 }
 impl fmt::Display for ListTopicsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTopicsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTopicsError::AuthorizationError(ref cause) => cause,
-            ListTopicsError::InternalError(ref cause) => cause,
-            ListTopicsError::InvalidParameter(ref cause) => cause,
+            ListTopicsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListTopicsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListTopicsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTopicsError {}
 /// Errors returned by OptInPhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum OptInPhoneNumberError {
@@ -3924,19 +3860,15 @@ impl OptInPhoneNumberError {
 }
 impl fmt::Display for OptInPhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for OptInPhoneNumberError {
-    fn description(&self) -> &str {
         match *self {
-            OptInPhoneNumberError::AuthorizationError(ref cause) => cause,
-            OptInPhoneNumberError::InternalError(ref cause) => cause,
-            OptInPhoneNumberError::InvalidParameter(ref cause) => cause,
-            OptInPhoneNumberError::Throttled(ref cause) => cause,
+            OptInPhoneNumberError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            OptInPhoneNumberError::InternalError(ref cause) => write!(f, "{}", cause),
+            OptInPhoneNumberError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            OptInPhoneNumberError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for OptInPhoneNumberError {}
 /// Errors returned by Publish
 #[derive(Debug, PartialEq)]
 pub enum PublishError {
@@ -4063,29 +3995,25 @@ impl PublishError {
 }
 impl fmt::Display for PublishError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PublishError {
-    fn description(&self) -> &str {
         match *self {
-            PublishError::AuthorizationError(ref cause) => cause,
-            PublishError::EndpointDisabled(ref cause) => cause,
-            PublishError::InternalError(ref cause) => cause,
-            PublishError::InvalidParameter(ref cause) => cause,
-            PublishError::InvalidParameterValue(ref cause) => cause,
-            PublishError::InvalidSecurity(ref cause) => cause,
-            PublishError::KMSAccessDenied(ref cause) => cause,
-            PublishError::KMSDisabled(ref cause) => cause,
-            PublishError::KMSInvalidState(ref cause) => cause,
-            PublishError::KMSNotFound(ref cause) => cause,
-            PublishError::KMSOptInRequired(ref cause) => cause,
-            PublishError::KMSThrottling(ref cause) => cause,
-            PublishError::NotFound(ref cause) => cause,
-            PublishError::PlatformApplicationDisabled(ref cause) => cause,
+            PublishError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            PublishError::EndpointDisabled(ref cause) => write!(f, "{}", cause),
+            PublishError::InternalError(ref cause) => write!(f, "{}", cause),
+            PublishError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PublishError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PublishError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSAccessDenied(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSDisabled(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSNotFound(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSOptInRequired(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSThrottling(ref cause) => write!(f, "{}", cause),
+            PublishError::NotFound(ref cause) => write!(f, "{}", cause),
+            PublishError::PlatformApplicationDisabled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PublishError {}
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {
@@ -4144,19 +4072,15 @@ impl RemovePermissionError {
 }
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemovePermissionError {
-    fn description(&self) -> &str {
         match *self {
-            RemovePermissionError::AuthorizationError(ref cause) => cause,
-            RemovePermissionError::InternalError(ref cause) => cause,
-            RemovePermissionError::InvalidParameter(ref cause) => cause,
-            RemovePermissionError::NotFound(ref cause) => cause,
+            RemovePermissionError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::InternalError(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemovePermissionError {}
 /// Errors returned by SetEndpointAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetEndpointAttributesError {
@@ -4215,19 +4139,15 @@ impl SetEndpointAttributesError {
 }
 impl fmt::Display for SetEndpointAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetEndpointAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetEndpointAttributesError::AuthorizationError(ref cause) => cause,
-            SetEndpointAttributesError::InternalError(ref cause) => cause,
-            SetEndpointAttributesError::InvalidParameter(ref cause) => cause,
-            SetEndpointAttributesError::NotFound(ref cause) => cause,
+            SetEndpointAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetEndpointAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetEndpointAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetEndpointAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetEndpointAttributesError {}
 /// Errors returned by SetPlatformApplicationAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetPlatformApplicationAttributesError {
@@ -4294,19 +4214,21 @@ impl SetPlatformApplicationAttributesError {
 }
 impl fmt::Display for SetPlatformApplicationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetPlatformApplicationAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
-            SetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
-            SetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
-            SetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
+            SetPlatformApplicationAttributesError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetPlatformApplicationAttributesError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetPlatformApplicationAttributesError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetPlatformApplicationAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetPlatformApplicationAttributesError {}
 /// Errors returned by SetSMSAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetSMSAttributesError {
@@ -4365,19 +4287,15 @@ impl SetSMSAttributesError {
 }
 impl fmt::Display for SetSMSAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSMSAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetSMSAttributesError::AuthorizationError(ref cause) => cause,
-            SetSMSAttributesError::InternalError(ref cause) => cause,
-            SetSMSAttributesError::InvalidParameter(ref cause) => cause,
-            SetSMSAttributesError::Throttled(ref cause) => cause,
+            SetSMSAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetSMSAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetSMSAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetSMSAttributesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSMSAttributesError {}
 /// Errors returned by SetSubscriptionAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetSubscriptionAttributesError {
@@ -4447,20 +4365,18 @@ impl SetSubscriptionAttributesError {
 }
 impl fmt::Display for SetSubscriptionAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSubscriptionAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
-            SetSubscriptionAttributesError::FilterPolicyLimitExceeded(ref cause) => cause,
-            SetSubscriptionAttributesError::InternalError(ref cause) => cause,
-            SetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
-            SetSubscriptionAttributesError::NotFound(ref cause) => cause,
+            SetSubscriptionAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetSubscriptionAttributesError::FilterPolicyLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetSubscriptionAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetSubscriptionAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetSubscriptionAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSubscriptionAttributesError {}
 /// Errors returned by SetTopicAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetTopicAttributesError {
@@ -4526,20 +4442,16 @@ impl SetTopicAttributesError {
 }
 impl fmt::Display for SetTopicAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetTopicAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetTopicAttributesError::AuthorizationError(ref cause) => cause,
-            SetTopicAttributesError::InternalError(ref cause) => cause,
-            SetTopicAttributesError::InvalidParameter(ref cause) => cause,
-            SetTopicAttributesError::InvalidSecurity(ref cause) => cause,
-            SetTopicAttributesError::NotFound(ref cause) => cause,
+            SetTopicAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetTopicAttributesError {}
 /// Errors returned by Subscribe
 #[derive(Debug, PartialEq)]
 pub enum SubscribeError {
@@ -4617,22 +4529,18 @@ impl SubscribeError {
 }
 impl fmt::Display for SubscribeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SubscribeError {
-    fn description(&self) -> &str {
         match *self {
-            SubscribeError::AuthorizationError(ref cause) => cause,
-            SubscribeError::FilterPolicyLimitExceeded(ref cause) => cause,
-            SubscribeError::InternalError(ref cause) => cause,
-            SubscribeError::InvalidParameter(ref cause) => cause,
-            SubscribeError::InvalidSecurity(ref cause) => cause,
-            SubscribeError::NotFound(ref cause) => cause,
-            SubscribeError::SubscriptionLimitExceeded(ref cause) => cause,
+            SubscribeError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SubscribeError::FilterPolicyLimitExceeded(ref cause) => write!(f, "{}", cause),
+            SubscribeError::InternalError(ref cause) => write!(f, "{}", cause),
+            SubscribeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SubscribeError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            SubscribeError::NotFound(ref cause) => write!(f, "{}", cause),
+            SubscribeError::SubscriptionLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SubscribeError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4712,22 +4620,18 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AuthorizationError(ref cause) => cause,
-            TagResourceError::ConcurrentAccess(ref cause) => cause,
-            TagResourceError::InvalidParameter(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::StaleTag(ref cause) => cause,
-            TagResourceError::TagLimitExceeded(ref cause) => cause,
-            TagResourceError::TagPolicy(ref cause) => cause,
+            TagResourceError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::StaleTag(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by Unsubscribe
 #[derive(Debug, PartialEq)]
 pub enum UnsubscribeError {
@@ -4793,20 +4697,16 @@ impl UnsubscribeError {
 }
 impl fmt::Display for UnsubscribeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnsubscribeError {
-    fn description(&self) -> &str {
         match *self {
-            UnsubscribeError::AuthorizationError(ref cause) => cause,
-            UnsubscribeError::InternalError(ref cause) => cause,
-            UnsubscribeError::InvalidParameter(ref cause) => cause,
-            UnsubscribeError::InvalidSecurity(ref cause) => cause,
-            UnsubscribeError::NotFound(ref cause) => cause,
+            UnsubscribeError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::InternalError(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UnsubscribeError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4886,22 +4786,18 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AuthorizationError(ref cause) => cause,
-            UntagResourceError::ConcurrentAccess(ref cause) => cause,
-            UntagResourceError::InvalidParameter(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::StaleTag(ref cause) => cause,
-            UntagResourceError::TagLimitExceeded(ref cause) => cause,
-            UntagResourceError::TagPolicy(ref cause) => cause,
+            UntagResourceError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::StaleTag(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
 pub trait Sns {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
@@ -4919,13 +4815,13 @@ pub trait Sns {
         input: ConfirmSubscriptionInput,
     ) -> RusotoFuture<ConfirmSubscriptionResponse, ConfirmSubscriptionError>;
 
-    /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and FCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
+    /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and FCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For FCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For FCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action.</p>
     fn create_platform_application(
         &self,
         input: CreatePlatformApplicationInput,
     ) -> RusotoFuture<CreatePlatformApplicationResponse, CreatePlatformApplicationError>;
 
-    /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
+    /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as FCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
     fn create_platform_endpoint(
         &self,
         input: CreatePlatformEndpointInput,
@@ -4940,7 +4836,7 @@ pub trait Sns {
     /// <p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>
     fn delete_endpoint(&self, input: DeleteEndpointInput) -> RusotoFuture<(), DeleteEndpointError>;
 
-    /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and FCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn delete_platform_application(
         &self,
         input: DeletePlatformApplicationInput,
@@ -4949,13 +4845,13 @@ pub trait Sns {
     /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
     fn delete_topic(&self, input: DeleteTopicInput) -> RusotoFuture<(), DeleteTopicError>;
 
-    /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as FCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_endpoint_attributes(
         &self,
         input: GetEndpointAttributesInput,
     ) -> RusotoFuture<GetEndpointAttributesResponse, GetEndpointAttributesError>;
 
-    /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and FCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_platform_application_attributes(
         &self,
         input: GetPlatformApplicationAttributesInput,
@@ -4979,7 +4875,7 @@ pub trait Sns {
         input: GetTopicAttributesInput,
     ) -> RusotoFuture<GetTopicAttributesResponse, GetTopicAttributesError>;
 
-    /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 30 transactions per second (TPS).</p>
+    /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as FCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 30 transactions per second (TPS).</p>
     fn list_endpoints_by_platform_application(
         &self,
         input: ListEndpointsByPlatformApplicationInput,
@@ -4994,7 +4890,7 @@ pub trait Sns {
         input: ListPhoneNumbersOptedOutInput,
     ) -> RusotoFuture<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError>;
 
-    /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
+    /// <p>Lists the platform application objects for the supported push notification services, such as APNS and FCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
     fn list_platform_applications(
         &self,
         input: ListPlatformApplicationsInput,
@@ -5039,13 +4935,13 @@ pub trait Sns {
         input: RemovePermissionInput,
     ) -> RusotoFuture<(), RemovePermissionError>;
 
-    /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as FCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn set_endpoint_attributes(
         &self,
         input: SetEndpointAttributesInput,
     ) -> RusotoFuture<(), SetEndpointAttributesError>;
 
-    /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
+    /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and FCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
     fn set_platform_application_attributes(
         &self,
         input: SetPlatformApplicationAttributesInput,
@@ -5072,7 +4968,7 @@ pub trait Sns {
     /// <p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
     fn subscribe(&self, input: SubscribeInput) -> RusotoFuture<SubscribeResponse, SubscribeError>;
 
-    /// <p>Add tags to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>When you use topic tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a topic isn't recommended.</p> </li> <li> <p>Tags don't have any semantic meaning. Amazon SNS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> <li> <p>Tagging actions are limited to 10 TPS per AWS account. If your application requires a higher throughput, file a <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=technical">technical support request</a>.</p> </li> </ul> <p>For a full list of tag restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-limits.html#limits-topics">Limits Related to Topics</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    /// <p><p>Add tags to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>When you use topic tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a topic isn&#39;t recommended.</p> </li> <li> <p>Tags don&#39;t have any semantic meaning. Amazon SNS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> <li> <p>Tagging actions are limited to 10 TPS per AWS account, per AWS region. If your application requires a higher throughput, file a <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=technical">technical support request</a>.</p> </li> </ul></p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -5121,6 +5017,14 @@ impl SnsClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> SnsClient {
         SnsClient { client, region }
+    }
+}
+
+impl fmt::Debug for SnsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SnsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -5248,7 +5152,7 @@ impl Sns for SnsClient {
         })
     }
 
-    /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and FCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
+    /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and FCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For FCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For FCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action.</p>
     fn create_platform_application(
         &self,
         input: CreatePlatformApplicationInput,
@@ -5296,7 +5200,7 @@ impl Sns for SnsClient {
         })
     }
 
-    /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
+    /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as FCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
     fn create_platform_endpoint(
         &self,
         input: CreatePlatformEndpointInput,
@@ -5420,7 +5324,7 @@ impl Sns for SnsClient {
         })
     }
 
-    /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and FCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn delete_platform_application(
         &self,
         input: DeletePlatformApplicationInput,
@@ -5470,7 +5374,7 @@ impl Sns for SnsClient {
         })
     }
 
-    /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as FCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_endpoint_attributes(
         &self,
         input: GetEndpointAttributesInput,
@@ -5518,7 +5422,7 @@ impl Sns for SnsClient {
         })
     }
 
-    /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and FCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_platform_application_attributes(
         &self,
         input: GetPlatformApplicationAttributesInput,
@@ -5719,7 +5623,7 @@ impl Sns for SnsClient {
         })
     }
 
-    /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 30 transactions per second (TPS).</p>
+    /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as FCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 30 transactions per second (TPS).</p>
     fn list_endpoints_by_platform_application(
         &self,
         input: ListEndpointsByPlatformApplicationInput,
@@ -5820,7 +5724,7 @@ impl Sns for SnsClient {
         })
     }
 
-    /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
+    /// <p>Lists the platform application objects for the supported push notification services, such as APNS and FCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
     fn list_platform_applications(
         &self,
         input: ListPlatformApplicationsInput,
@@ -6192,7 +6096,7 @@ impl Sns for SnsClient {
         })
     }
 
-    /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
+    /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as FCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn set_endpoint_attributes(
         &self,
         input: SetEndpointAttributesInput,
@@ -6217,7 +6121,7 @@ impl Sns for SnsClient {
         })
     }
 
-    /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
+    /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and FCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
     fn set_platform_application_attributes(
         &self,
         input: SetPlatformApplicationAttributesInput,
@@ -6394,7 +6298,7 @@ impl Sns for SnsClient {
         })
     }
 
-    /// <p>Add tags to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>When you use topic tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a topic isn't recommended.</p> </li> <li> <p>Tags don't have any semantic meaning. Amazon SNS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> <li> <p>Tagging actions are limited to 10 TPS per AWS account. If your application requires a higher throughput, file a <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=technical">technical support request</a>.</p> </li> </ul> <p>For a full list of tag restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-limits.html#limits-topics">Limits Related to Topics</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    /// <p><p>Add tags to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>When you use topic tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a topic isn&#39;t recommended.</p> </li> <li> <p>Tags don&#39;t have any semantic meaning. Amazon SNS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> <li> <p>Tagging actions are limited to 10 TPS per AWS account, per AWS region. If your application requires a higher throughput, file a <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=technical">technical support request</a>.</p> </li> </ul></p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,

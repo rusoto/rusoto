@@ -5,7 +5,7 @@ jobs:
 - job: 'unit_and_integration_tests_linux'
   displayName: 'Unit and integration tests on Linux'
   pool:
-    vmImage: 'Ubuntu-16.04'
+    vmImage: 'Ubuntu-18.04'
 
   steps:
     - checkout: self
@@ -14,7 +14,13 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      displayName: 'Install Rust'
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install stable
+        rustup default stable
+      displayName: 'Install Rust stable'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: make unit_test
       displayName: 'Run unit tests'
     - script: make check_integration_test
@@ -25,7 +31,7 @@ jobs:
 - job: 'rustls_unit_tests_linux'
   displayName: 'Rustls unit tests on Linux'
   pool:
-    vmImage: 'Ubuntu-16.04'
+    vmImage: 'Ubuntu-18.04'
 
   steps:
     - checkout: self
@@ -34,14 +40,20 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      displayName: 'Install Rust'
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install stable
+        rustup default stable
+      displayName: 'Install Rust stable'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: make rustls_unit_test
       displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_linux_beta'
   displayName: 'Unit and integration tests on Linux (beta channel)'
   pool:
-    vmImage: 'Ubuntu-16.04'
+    vmImage: 'Ubuntu-18.04'
 
   steps:
     - checkout: self
@@ -55,13 +67,15 @@ jobs:
         rustup install beta
         rustup default beta
       displayName: 'Install Rust beta'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: RUST_VERSION=beta make unit_test
       displayName: 'Run unit tests'
 
 - job: 'rustls_unit_tests_linux_beta'
   displayName: 'Rustls unit tests on Linux (beta channel)'
   pool:
-    vmImage: 'Ubuntu-16.04'
+    vmImage: 'Ubuntu-18.04'
 
   steps:
     - checkout: self
@@ -75,13 +89,15 @@ jobs:
         rustup install beta
         rustup default beta
       displayName: 'Install Rust beta'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: RUST_VERSION=beta make rustls_unit_test
       displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_linux_nightly'
   displayName: 'Unit and integration tests on Linux (nightly channel)'
   pool:
-    vmImage: 'Ubuntu-16.04'
+    vmImage: 'Ubuntu-18.04'
 
   steps:
     - checkout: self
@@ -94,8 +110,10 @@ jobs:
     - script: |
         rustup install nightly
         rustup default nightly
-      displayName: 'Install Rust beta'
-    - script: RUST_VERSION=nightly make unit_test
+      displayName: 'Install Rust nightly'
+    - script: rustc --version
+      displayName: 'print rust version'
+    - script: RUST_VERSION=nightly make unit_test_no_doctests
       displayName: 'Run unit tests'
       continueOnError: true
     - script: RUST_VERSION=nightly make check_integration_test
@@ -105,7 +123,7 @@ jobs:
 - job: 'rustls_unit_tests_linux_nightly'
   displayName: 'Rustls unit tests on Linux (nightly channel)'
   pool:
-    vmImage: 'Ubuntu-16.04'
+    vmImage: 'Ubuntu-18.04'
 
   steps:
     - checkout: self
@@ -118,15 +136,17 @@ jobs:
     - script: |
         rustup install nightly
         rustup default nightly
-      displayName: 'Install Rust beta'
-    - script:  RUST_VERSION=nightly make rustls_unit_test
+      displayName: 'Install Rust nightly'
+    - script: rustc --version
+      displayName: 'print rust version'
+    - script:  RUST_VERSION=nightly make rustls_unit_test_no_doctests
       displayName: 'Run unit tests with rustls'
       continueOnError: true
 
 - job: 'unit_and_integration_tests_osx'
   displayName: 'Unit and integration tests on OSX'
   pool:
-    vmImage: 'macos-10.13'
+    vmImage: 'macos-10.14'
 
   steps:
     - checkout: self
@@ -136,6 +156,8 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: make unit_test
       displayName: 'Run unit tests'
     - script: make check_integration_test
@@ -144,7 +166,7 @@ jobs:
 - job: 'rustls_unit_tests_osx'
   displayName: 'Unit and integration tests on OSX'
   pool:
-    vmImage: 'macos-10.13'
+    vmImage: 'macos-10.14'
 
   steps:
     - checkout: self
@@ -154,13 +176,15 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: make rustls_unit_test
       displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_osx_beta'
   displayName: 'Unit and integration tests on OSX (beta channel)'
   pool:
-    vmImage: 'macos-10.13'
+    vmImage: 'macos-10.14'
 
   steps:
     - checkout: self
@@ -170,6 +194,8 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain beta
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: RUST_VERSION=beta make unit_test
       displayName: 'Run unit tests'
     - script: RUST_VERSION=beta make check_integration_test
@@ -178,7 +204,7 @@ jobs:
 - job: 'rustls_unit_tests_osx_beta'
   displayName: 'Rustls unit tests on OSX (beta channel)'
   pool:
-    vmImage: 'macos-10.13'
+    vmImage: 'macos-10.14'
 
   steps:
     - checkout: self
@@ -188,13 +214,15 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain beta
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: RUST_VERSION=beta make rustls_unit_test
       displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_osx_nightly'
   displayName: 'Unit and integration tests on OSX (nightly channel)'
   pool:
-    vmImage: 'macos-10.13'
+    vmImage: 'macos-10.14'
 
   steps:
     - checkout: self
@@ -204,7 +232,9 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
-    - script: RUST_VERSION=nightly make unit_test
+    - script: rustc --version
+      displayName: 'print rust version'
+    - script: RUST_VERSION=nightly make unit_test_no_doctests
       displayName: 'Run unit tests'
       continueOnError: true
     - script: RUST_VERSION=nightly make check_integration_test
@@ -214,7 +244,7 @@ jobs:
 - job: 'rustls_unit_tests_osx_nightly'
   displayName: 'Rustls unit tests on OSX (nightly channel)'
   pool:
-    vmImage: 'macos-10.13'
+    vmImage: 'macos-10.14'
 
   steps:
     - checkout: self
@@ -224,34 +254,16 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
-    - script: RUST_VERSION=nightly make rustls_unit_test
+    - script: rustc --version
+      displayName: 'print rust version'
+    - script: RUST_VERSION=nightly make rustls_unit_test_no_doctests
       displayName: 'Run unit tests with rustls'
       continueOnError: true
-
-- job: 'crate_gen_linux'
-  displayName: 'Crate generation on Linux'
-  pool:
-    vmImage: 'Ubuntu-16.04'
-
-  steps:
-    - checkout: self
-      fetchDepth: 5
-    - script: |
-        set -e
-        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
-        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      displayName: 'Install Rust'
-    - script: rustup component add --toolchain stable rustfmt
-      displayName: 'Install rustfmt'
-    - script: git submodule update --init --recursive
-      displayName: 'Fetch botocore sources'
-    - script: make generate
-      displayName: 'Generate crates from botocore'
 
 - job: 'crate_gen_osx'
   displayName: 'Crate generation on OSX'
   pool:
-    vmImage: 'macos-10.13'
+    vmImage: 'macos-10.14'
 
   steps:
     - checkout: self
@@ -261,6 +273,8 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: rustup component add --toolchain stable rustfmt
       displayName: 'Install rustfmt'
     - script: git submodule update --init --recursive
@@ -282,6 +296,8 @@ jobs:
         set PATH=%PATH%;%USERPROFILE%\.cargo\bin
         echo "##vso[task.setvariable variable=PATH;]%PATH%;%USERPROFILE%\.cargo\bin"
       displayName: 'Install Rust'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: rustup component add --toolchain stable rustfmt
       displayName: 'Install rustfmt'
     - script: git submodule update --init --recursive
@@ -292,7 +308,7 @@ jobs:
 - job: 'skeptic_linux'
   displayName: 'Skeptic tests on Linux'
   pool:
-    vmImage: 'Ubuntu-16.04'
+    vmImage: 'Ubuntu-18.04'
 
   steps:
     - checkout: self
@@ -301,6 +317,12 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      displayName: 'Install Rust'
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install stable
+        rustup default stable
+      displayName: 'Install Rust stable'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: make skeptical
       displayName: 'Run skeptic tests'

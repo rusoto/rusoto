@@ -20,6 +20,7 @@ use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -137,6 +138,10 @@ pub struct GetSessionRequest {
     /// <p>The name of the bot that contains the session data.</p>
     #[serde(rename = "botName")]
     pub bot_name: String,
+    /// <p>A string used to filter the intents returned in the <code>recentIntentSummaryView</code> structure. </p> <p>When you specify a filter, only intents with their <code>checkpointLabel</code> field set to that string are returned.</p>
+    #[serde(rename = "checkpointLabelFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub checkpoint_label_filter: Option<String>,
     /// <p>The ID of the client application user. Amazon Lex uses this to identify a user's conversation with your bot. </p>
     #[serde(rename = "userId")]
     pub user_id: String,
@@ -149,7 +154,7 @@ pub struct GetSessionResponse {
     #[serde(rename = "dialogAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dialog_action: Option<DialogAction>,
-    /// <p>An array of information about the intents used in the session. The array can contain a maximum of three summaries. If more than three intents are used in the session, the <code>recentIntentSummaryView</code> operation contains information about the last three intents used.</p>
+    /// <p>An array of information about the intents used in the session. The array can contain a maximum of three summaries. If more than three intents are used in the session, the <code>recentIntentSummaryView</code> operation contains information about the last three intents used.</p> <p>If you set the <code>checkpointLabelFilter</code> parameter in the request, the array contains only the intents with the specified label.</p>
     #[serde(rename = "recentIntentSummaryView")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recent_intent_summary_view: Option<Vec<IntentSummary>>,
@@ -164,9 +169,12 @@ pub struct GetSessionResponse {
 }
 
 /// <p>Provides information about the state of an intent. You can use this information to get the current state of an intent so that you can process the intent, or so that you can return the intent to its previous state.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IntentSummary {
+    /// <p>A user-defined label that identifies a particular intent. You can use this label to return to a previous intent. </p> <p>Use the <code>checkpointLabelFilter</code> parameter of the <code>GetSessionRequest</code> operation to filter the intents returned by the operation to those with only the specified label.</p>
+    #[serde(rename = "checkpointLabel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub checkpoint_label: Option<String>,
     /// <p><p>The status of the intent after the user responds to the confirmation prompt. If the user confirms the intent, Amazon Lex sets this field to <code>Confirmed</code>. If the user denies the intent, Amazon Lex sets this value to <code>Denied</code>. The possible values are:</p> <ul> <li> <p> <code>Confirmed</code> - The user has responded &quot;Yes&quot; to the confirmation prompt, confirming that the intent is complete and that it is ready to be fulfilled.</p> </li> <li> <p> <code>Denied</code> - The user has responded &quot;No&quot; to the confirmation prompt.</p> </li> <li> <p> <code>None</code> - The user has never been prompted for confirmation; or, the user was prompted but did not confirm or deny the prompt.</p> </li> </ul></p>
     #[serde(rename = "confirmationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -245,8 +253,12 @@ pub struct PostContentResponse {
     pub message: Option<String>,
     /// <p><p>The format of the response message. One of the following values:</p> <ul> <li> <p> <code>PlainText</code> - The message contains plain UTF-8 text.</p> </li> <li> <p> <code>CustomPayload</code> - The message is a custom format for the client.</p> </li> <li> <p> <code>SSML</code> - The message contains text formatted for voice output.</p> </li> <li> <p> <code>Composite</code> - The message contains an escaped JSON object containing one or more messages from the groups that messages were assigned to when the intent was created.</p> </li> </ul></p>
     pub message_format: Option<String>,
+    /// <p>The sentiment expressed in and utterance.</p> <p>When the bot is configured to send utterances to Amazon Comprehend for sentiment analysis, this field contains the result of the analysis.</p>
+    pub sentiment_response: Option<String>,
     /// <p> Map of key/value pairs representing the session-specific context information. </p>
     pub session_attributes: Option<String>,
+    /// <p>The unique identifier for the session.</p>
+    pub session_id: Option<String>,
     /// <p> If the <code>dialogState</code> value is <code>ElicitSlot</code>, returns the name of the slot for which Amazon Lex is eliciting a value. </p>
     pub slot_to_elicit: Option<String>,
     /// <p>Map of zero or more intent slots (name/value pairs) Amazon Lex detected from the user input during the conversation. The field is base-64 encoded.</p> <p>Amazon Lex creates a resolution list containing likely values for a slot. The value that it returns is determined by the <code>valueSelectionStrategy</code> selected when the slot type was created or updated. If <code>valueSelectionStrategy</code> is set to <code>ORIGINAL_VALUE</code>, the value provided by the user is returned, if the user value is similar to the slot values. If <code>valueSelectionStrategy</code> is set to <code>TOP_RESOLUTION</code> Amazon Lex returns the first value in the resolution list or, if there is no resolution list, null. If you don't specify a <code>valueSelectionStrategy</code>, the default is <code>ORIGINAL_VALUE</code>.</p>
@@ -301,10 +313,18 @@ pub struct PostTextResponse {
     #[serde(rename = "responseCard")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_card: Option<ResponseCard>,
+    /// <p>The sentiment expressed in and utterance.</p> <p>When the bot is configured to send utterances to Amazon Comprehend for sentiment analysis, this field contains the result of the analysis.</p>
+    #[serde(rename = "sentimentResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sentiment_response: Option<SentimentResponse>,
     /// <p>A map of key-value pairs representing the session-specific context information.</p>
     #[serde(rename = "sessionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A unique identifier for the session.</p>
+    #[serde(rename = "sessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_id: Option<String>,
     /// <p>If the <code>dialogState</code> value is <code>ElicitSlot</code>, returns the name of the slot for which Amazon Lex is eliciting a value. </p>
     #[serde(rename = "slotToElicit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -332,6 +352,10 @@ pub struct PutSessionRequest {
     #[serde(rename = "dialogAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dialog_action: Option<DialogAction>,
+    /// <p>A summary of the recent intents for the bot. You can use the intent summary view to set a checkpoint label on an intent and modify attributes of intents. You can also use it to remove or add intent summary objects to the list.</p> <p>An intent that you modify or add to the list must make sense for the bot. For example, the intent name must be valid for the bot. You must provide valid values for:</p> <ul> <li> <p> <code>intentName</code> </p> </li> <li> <p>slot names</p> </li> <li> <p> <code>slotToElict</code> </p> </li> </ul> <p>If you send the <code>recentIntentSummaryView</code> parameter in a <code>PutSession</code> request, the contents of the new summary view replaces the old summary view. For example, if a <code>GetSession</code> request returns three intents in the summary view and you call <code>PutSession</code> with one intent in the summary view, the next call to <code>GetSession</code> will only return one intent.</p>
+    #[serde(rename = "recentIntentSummaryView")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recent_intent_summary_view: Option<Vec<IntentSummary>>,
     /// <p>Map of key/value pairs representing the session-specific context information. It contains application information passed between Amazon Lex and a client application.</p>
     #[serde(rename = "sessionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -383,6 +407,20 @@ pub struct ResponseCard {
     pub version: Option<String>,
 }
 
+/// <p>The sentiment expressed in an utterance.</p> <p>When the bot is configured to send utterances to Amazon Comprehend for sentiment analysis, this field structure contains the result of the analysis.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SentimentResponse {
+    /// <p>The inferred sentiment that Amazon Comprehend has the highest confidence in.</p>
+    #[serde(rename = "sentimentLabel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sentiment_label: Option<String>,
+    /// <p>The likelihood that the sentiment was correctly inferred.</p>
+    #[serde(rename = "sentimentScore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sentiment_score: Option<String>,
+}
+
 /// Errors returned by DeleteSession
 #[derive(Debug, PartialEq)]
 pub enum DeleteSessionError {
@@ -426,20 +464,16 @@ impl DeleteSessionError {
 }
 impl fmt::Display for DeleteSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSessionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSessionError::BadRequest(ref cause) => cause,
-            DeleteSessionError::Conflict(ref cause) => cause,
-            DeleteSessionError::InternalFailure(ref cause) => cause,
-            DeleteSessionError::LimitExceeded(ref cause) => cause,
-            DeleteSessionError::NotFound(ref cause) => cause,
+            DeleteSessionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteSessionError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteSessionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteSessionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSessionError {}
 /// Errors returned by GetSession
 #[derive(Debug, PartialEq)]
 pub enum GetSessionError {
@@ -478,19 +512,15 @@ impl GetSessionError {
 }
 impl fmt::Display for GetSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSessionError {
-    fn description(&self) -> &str {
         match *self {
-            GetSessionError::BadRequest(ref cause) => cause,
-            GetSessionError::InternalFailure(ref cause) => cause,
-            GetSessionError::LimitExceeded(ref cause) => cause,
-            GetSessionError::NotFound(ref cause) => cause,
+            GetSessionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetSessionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetSessionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSessionError {}
 /// Errors returned by PostContent
 #[derive(Debug, PartialEq)]
 pub enum PostContentError {
@@ -564,26 +594,22 @@ impl PostContentError {
 }
 impl fmt::Display for PostContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PostContentError {
-    fn description(&self) -> &str {
         match *self {
-            PostContentError::BadGateway(ref cause) => cause,
-            PostContentError::BadRequest(ref cause) => cause,
-            PostContentError::Conflict(ref cause) => cause,
-            PostContentError::DependencyFailed(ref cause) => cause,
-            PostContentError::InternalFailure(ref cause) => cause,
-            PostContentError::LimitExceeded(ref cause) => cause,
-            PostContentError::LoopDetected(ref cause) => cause,
-            PostContentError::NotAcceptable(ref cause) => cause,
-            PostContentError::NotFound(ref cause) => cause,
-            PostContentError::RequestTimeout(ref cause) => cause,
-            PostContentError::UnsupportedMediaType(ref cause) => cause,
+            PostContentError::BadGateway(ref cause) => write!(f, "{}", cause),
+            PostContentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PostContentError::Conflict(ref cause) => write!(f, "{}", cause),
+            PostContentError::DependencyFailed(ref cause) => write!(f, "{}", cause),
+            PostContentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            PostContentError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PostContentError::LoopDetected(ref cause) => write!(f, "{}", cause),
+            PostContentError::NotAcceptable(ref cause) => write!(f, "{}", cause),
+            PostContentError::NotFound(ref cause) => write!(f, "{}", cause),
+            PostContentError::RequestTimeout(ref cause) => write!(f, "{}", cause),
+            PostContentError::UnsupportedMediaType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PostContentError {}
 /// Errors returned by PostText
 #[derive(Debug, PartialEq)]
 pub enum PostTextError {
@@ -642,23 +668,19 @@ impl PostTextError {
 }
 impl fmt::Display for PostTextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PostTextError {
-    fn description(&self) -> &str {
         match *self {
-            PostTextError::BadGateway(ref cause) => cause,
-            PostTextError::BadRequest(ref cause) => cause,
-            PostTextError::Conflict(ref cause) => cause,
-            PostTextError::DependencyFailed(ref cause) => cause,
-            PostTextError::InternalFailure(ref cause) => cause,
-            PostTextError::LimitExceeded(ref cause) => cause,
-            PostTextError::LoopDetected(ref cause) => cause,
-            PostTextError::NotFound(ref cause) => cause,
+            PostTextError::BadGateway(ref cause) => write!(f, "{}", cause),
+            PostTextError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PostTextError::Conflict(ref cause) => write!(f, "{}", cause),
+            PostTextError::DependencyFailed(ref cause) => write!(f, "{}", cause),
+            PostTextError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            PostTextError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PostTextError::LoopDetected(ref cause) => write!(f, "{}", cause),
+            PostTextError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PostTextError {}
 /// Errors returned by PutSession
 #[derive(Debug, PartialEq)]
 pub enum PutSessionError {
@@ -717,23 +739,19 @@ impl PutSessionError {
 }
 impl fmt::Display for PutSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutSessionError {
-    fn description(&self) -> &str {
         match *self {
-            PutSessionError::BadGateway(ref cause) => cause,
-            PutSessionError::BadRequest(ref cause) => cause,
-            PutSessionError::Conflict(ref cause) => cause,
-            PutSessionError::DependencyFailed(ref cause) => cause,
-            PutSessionError::InternalFailure(ref cause) => cause,
-            PutSessionError::LimitExceeded(ref cause) => cause,
-            PutSessionError::NotAcceptable(ref cause) => cause,
-            PutSessionError::NotFound(ref cause) => cause,
+            PutSessionError::BadGateway(ref cause) => write!(f, "{}", cause),
+            PutSessionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutSessionError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutSessionError::DependencyFailed(ref cause) => write!(f, "{}", cause),
+            PutSessionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            PutSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutSessionError::NotAcceptable(ref cause) => write!(f, "{}", cause),
+            PutSessionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutSessionError {}
 /// Trait representing the capabilities of the Amazon Lex Runtime Service API. Amazon Lex Runtime Service clients implement this trait.
 pub trait LexRuntime {
     /// <p>Removes session information for a specified bot, alias, and user ID. </p>
@@ -754,7 +772,7 @@ pub trait LexRuntime {
         input: PostContentRequest,
     ) -> RusotoFuture<PostContentResponse, PostContentError>;
 
-    /// <p>Sends user input (text or SSML) to Amazon Lex. Client applications can use this API to send requests to Amazon Lex at runtime. Amazon Lex then interprets the user input using the machine learning model it built for the bot. </p> <p> In response, Amazon Lex returns the next <code>message</code> to convey to the user an optional <code>responseCard</code> to display. Consider the following example messages: </p> <ul> <li> <p> For a user input "I would like a pizza", Amazon Lex might return a response with a message eliciting slot data (for example, PizzaSize): "What size pizza would you like?" </p> </li> <li> <p> After the user provides all of the pizza order information, Amazon Lex might return a response with a message to obtain user confirmation "Proceed with the pizza order?". </p> </li> <li> <p> After the user replies to a confirmation prompt with a "yes", Amazon Lex might return a conclusion statement: "Thank you, your cheese pizza has been ordered.". </p> </li> </ul> <p> Not all Amazon Lex messages require a user response. For example, a conclusion statement does not require a response. Some messages require only a "yes" or "no" user response. In addition to the <code>message</code>, Amazon Lex provides additional context about the message in the response that you might use to enhance client behavior, for example, to display the appropriate client user interface. These are the <code>slotToElicit</code>, <code>dialogState</code>, <code>intentName</code>, and <code>slots</code> fields in the response. Consider the following examples: </p> <ul> <li> <p>If the message is to elicit slot data, Amazon Lex returns the following context information:</p> <ul> <li> <p> <code>dialogState</code> set to ElicitSlot </p> </li> <li> <p> <code>intentName</code> set to the intent name in the current context </p> </li> <li> <p> <code>slotToElicit</code> set to the slot name for which the <code>message</code> is eliciting information </p> </li> <li> <p> <code>slots</code> set to a map of slots, configured for the intent, with currently known values </p> </li> </ul> </li> <li> <p> If the message is a confirmation prompt, the <code>dialogState</code> is set to ConfirmIntent and <code>SlotToElicit</code> is set to null. </p> </li> <li> <p>If the message is a clarification prompt (configured for the intent) that indicates that user intent is not understood, the <code>dialogState</code> is set to ElicitIntent and <code>slotToElicit</code> is set to null. </p> </li> </ul> <p> In addition, Amazon Lex also returns your application-specific <code>sessionAttributes</code>. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html">Managing Conversation Context</a>. </p>
+    /// <p>Sends user input to Amazon Lex. Client applications can use this API to send requests to Amazon Lex at runtime. Amazon Lex then interprets the user input using the machine learning model it built for the bot. </p> <p> In response, Amazon Lex returns the next <code>message</code> to convey to the user an optional <code>responseCard</code> to display. Consider the following example messages: </p> <ul> <li> <p> For a user input "I would like a pizza", Amazon Lex might return a response with a message eliciting slot data (for example, PizzaSize): "What size pizza would you like?" </p> </li> <li> <p> After the user provides all of the pizza order information, Amazon Lex might return a response with a message to obtain user confirmation "Proceed with the pizza order?". </p> </li> <li> <p> After the user replies to a confirmation prompt with a "yes", Amazon Lex might return a conclusion statement: "Thank you, your cheese pizza has been ordered.". </p> </li> </ul> <p> Not all Amazon Lex messages require a user response. For example, a conclusion statement does not require a response. Some messages require only a "yes" or "no" user response. In addition to the <code>message</code>, Amazon Lex provides additional context about the message in the response that you might use to enhance client behavior, for example, to display the appropriate client user interface. These are the <code>slotToElicit</code>, <code>dialogState</code>, <code>intentName</code>, and <code>slots</code> fields in the response. Consider the following examples: </p> <ul> <li> <p>If the message is to elicit slot data, Amazon Lex returns the following context information:</p> <ul> <li> <p> <code>dialogState</code> set to ElicitSlot </p> </li> <li> <p> <code>intentName</code> set to the intent name in the current context </p> </li> <li> <p> <code>slotToElicit</code> set to the slot name for which the <code>message</code> is eliciting information </p> </li> <li> <p> <code>slots</code> set to a map of slots, configured for the intent, with currently known values </p> </li> </ul> </li> <li> <p> If the message is a confirmation prompt, the <code>dialogState</code> is set to ConfirmIntent and <code>SlotToElicit</code> is set to null. </p> </li> <li> <p>If the message is a clarification prompt (configured for the intent) that indicates that user intent is not understood, the <code>dialogState</code> is set to ElicitIntent and <code>slotToElicit</code> is set to null. </p> </li> </ul> <p> In addition, Amazon Lex also returns your application-specific <code>sessionAttributes</code>. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html">Managing Conversation Context</a>. </p>
     fn post_text(&self, input: PostTextRequest) -> RusotoFuture<PostTextResponse, PostTextError>;
 
     /// <p>Creates a new session or modifies an existing session with an Amazon Lex bot. Use this operation to enable your application to set the state of the bot.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/how-session-api.html">Managing Sessions</a>.</p>
@@ -797,6 +815,14 @@ impl LexRuntimeClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> LexRuntimeClient {
         LexRuntimeClient { client, region }
+    }
+}
+
+impl fmt::Debug for LexRuntimeClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("LexRuntimeClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -843,7 +869,7 @@ impl LexRuntime for LexRuntimeClient {
         input: GetSessionRequest,
     ) -> RusotoFuture<GetSessionResponse, GetSessionError> {
         let request_uri = format!(
-            "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/session",
+            "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/session/",
             bot_alias = input.bot_alias,
             bot_name = input.bot_name,
             user_id = input.user_id
@@ -853,6 +879,12 @@ impl LexRuntime for LexRuntimeClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("runtime.lex".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.checkpoint_label_filter {
+            params.put("checkpointLabelFilter", x);
+        }
+        request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -943,11 +975,19 @@ impl LexRuntime for LexRuntimeClient {
                         let value = message_format.to_owned();
                         result.message_format = Some(value)
                     };
+                    if let Some(sentiment_response) = response.headers.get("x-amz-lex-sentiment") {
+                        let value = sentiment_response.to_owned();
+                        result.sentiment_response = Some(value)
+                    };
                     if let Some(session_attributes) =
                         response.headers.get("x-amz-lex-session-attributes")
                     {
                         let value = session_attributes.to_owned();
                         result.session_attributes = Some(value)
+                    };
+                    if let Some(session_id) = response.headers.get("x-amz-lex-session-id") {
+                        let value = session_id.to_owned();
+                        result.session_id = Some(value)
                     };
                     if let Some(slot_to_elicit) = response.headers.get("x-amz-lex-slot-to-elicit") {
                         let value = slot_to_elicit.to_owned();
@@ -971,7 +1011,7 @@ impl LexRuntime for LexRuntimeClient {
         })
     }
 
-    /// <p>Sends user input (text or SSML) to Amazon Lex. Client applications can use this API to send requests to Amazon Lex at runtime. Amazon Lex then interprets the user input using the machine learning model it built for the bot. </p> <p> In response, Amazon Lex returns the next <code>message</code> to convey to the user an optional <code>responseCard</code> to display. Consider the following example messages: </p> <ul> <li> <p> For a user input "I would like a pizza", Amazon Lex might return a response with a message eliciting slot data (for example, PizzaSize): "What size pizza would you like?" </p> </li> <li> <p> After the user provides all of the pizza order information, Amazon Lex might return a response with a message to obtain user confirmation "Proceed with the pizza order?". </p> </li> <li> <p> After the user replies to a confirmation prompt with a "yes", Amazon Lex might return a conclusion statement: "Thank you, your cheese pizza has been ordered.". </p> </li> </ul> <p> Not all Amazon Lex messages require a user response. For example, a conclusion statement does not require a response. Some messages require only a "yes" or "no" user response. In addition to the <code>message</code>, Amazon Lex provides additional context about the message in the response that you might use to enhance client behavior, for example, to display the appropriate client user interface. These are the <code>slotToElicit</code>, <code>dialogState</code>, <code>intentName</code>, and <code>slots</code> fields in the response. Consider the following examples: </p> <ul> <li> <p>If the message is to elicit slot data, Amazon Lex returns the following context information:</p> <ul> <li> <p> <code>dialogState</code> set to ElicitSlot </p> </li> <li> <p> <code>intentName</code> set to the intent name in the current context </p> </li> <li> <p> <code>slotToElicit</code> set to the slot name for which the <code>message</code> is eliciting information </p> </li> <li> <p> <code>slots</code> set to a map of slots, configured for the intent, with currently known values </p> </li> </ul> </li> <li> <p> If the message is a confirmation prompt, the <code>dialogState</code> is set to ConfirmIntent and <code>SlotToElicit</code> is set to null. </p> </li> <li> <p>If the message is a clarification prompt (configured for the intent) that indicates that user intent is not understood, the <code>dialogState</code> is set to ElicitIntent and <code>slotToElicit</code> is set to null. </p> </li> </ul> <p> In addition, Amazon Lex also returns your application-specific <code>sessionAttributes</code>. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html">Managing Conversation Context</a>. </p>
+    /// <p>Sends user input to Amazon Lex. Client applications can use this API to send requests to Amazon Lex at runtime. Amazon Lex then interprets the user input using the machine learning model it built for the bot. </p> <p> In response, Amazon Lex returns the next <code>message</code> to convey to the user an optional <code>responseCard</code> to display. Consider the following example messages: </p> <ul> <li> <p> For a user input "I would like a pizza", Amazon Lex might return a response with a message eliciting slot data (for example, PizzaSize): "What size pizza would you like?" </p> </li> <li> <p> After the user provides all of the pizza order information, Amazon Lex might return a response with a message to obtain user confirmation "Proceed with the pizza order?". </p> </li> <li> <p> After the user replies to a confirmation prompt with a "yes", Amazon Lex might return a conclusion statement: "Thank you, your cheese pizza has been ordered.". </p> </li> </ul> <p> Not all Amazon Lex messages require a user response. For example, a conclusion statement does not require a response. Some messages require only a "yes" or "no" user response. In addition to the <code>message</code>, Amazon Lex provides additional context about the message in the response that you might use to enhance client behavior, for example, to display the appropriate client user interface. These are the <code>slotToElicit</code>, <code>dialogState</code>, <code>intentName</code>, and <code>slots</code> fields in the response. Consider the following examples: </p> <ul> <li> <p>If the message is to elicit slot data, Amazon Lex returns the following context information:</p> <ul> <li> <p> <code>dialogState</code> set to ElicitSlot </p> </li> <li> <p> <code>intentName</code> set to the intent name in the current context </p> </li> <li> <p> <code>slotToElicit</code> set to the slot name for which the <code>message</code> is eliciting information </p> </li> <li> <p> <code>slots</code> set to a map of slots, configured for the intent, with currently known values </p> </li> </ul> </li> <li> <p> If the message is a confirmation prompt, the <code>dialogState</code> is set to ConfirmIntent and <code>SlotToElicit</code> is set to null. </p> </li> <li> <p>If the message is a clarification prompt (configured for the intent) that indicates that user intent is not understood, the <code>dialogState</code> is set to ElicitIntent and <code>slotToElicit</code> is set to null. </p> </li> </ul> <p> In addition, Amazon Lex also returns your application-specific <code>sessionAttributes</code>. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html">Managing Conversation Context</a>. </p>
     fn post_text(&self, input: PostTextRequest) -> RusotoFuture<PostTextResponse, PostTextError> {
         let request_uri = format!(
             "/bot/{bot_name}/alias/{bot_alias}/user/{user_id}/text",

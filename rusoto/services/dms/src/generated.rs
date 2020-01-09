@@ -186,7 +186,7 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value.</p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
+    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible settings include the following:</p> <ul> <li> <p> <code>ServiceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>BucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>CompressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value.</p> </li> </ul> <p>Shorthand syntax for these settings is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these settings is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
@@ -419,7 +419,7 @@ pub struct CreateReplicationSubnetGroupResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationTaskMessage {
-    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
+    /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_position: Option<String>,
@@ -484,6 +484,28 @@ pub struct DeleteCertificateResponse {
     #[serde(rename = "Certificate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<Certificate>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteConnectionMessage {
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
+    pub endpoint_arn: String,
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
+    pub replication_instance_arn: String,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteConnectionResponse {
+    /// <p>The connection that is being deleted.</p>
+    #[serde(rename = "Connection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection: Option<Connection>,
 }
 
 /// <p><p/></p>
@@ -589,7 +611,7 @@ pub struct DescribeAccountAttributesResponse {
     #[serde(rename = "AccountQuotas")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_quotas: Option<Vec<AccountQuota>>,
-    /// <p><p>A unique AWS DMS identifier for an account in a particular AWS Region. The value of this identifier has the following format: <code>c99999999999</code>. DMS uses this identifier to name artifacts. For example, DMS uses this identifier to name the default Amazon S3 bucket for storing task assessment reports in a given AWS Region. The format of this S3 bucket name is the following: <code>dms-<i>AccountNumber</i>-<i>UniqueAccountIdentifier</i>.</code> Here is an example name for this default S3 bucket: <code>dms-111122223333-c44445555666</code>.</p> <note> <p>AWS DMS supports <code>UniqueAccountIdentifier</code> in versions 3.1.4 and later.</p> </note></p>
+    /// <p><p>A unique AWS DMS identifier for an account in a particular AWS Region. The value of this identifier has the following format: <code>c99999999999</code>. DMS uses this identifier to name artifacts. For example, DMS uses this identifier to name the default Amazon S3 bucket for storing task assessment reports in a given AWS Region. The format of this S3 bucket name is the following: <code>dms-<i>AccountNumber</i>-<i>UniqueAccountIdentifier</i>.</code> Here is an example name for this default S3 bucket: <code>dms-111122223333-c44445555666</code>.</p> <note> <p>AWS DMS supports the <code>UniqueAccountIdentifier</code> parameter in versions 3.1.4 and later.</p> </note></p>
     #[serde(rename = "UniqueAccountIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unique_account_identifier: Option<String>,
@@ -1211,7 +1233,7 @@ pub struct Endpoint {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value.</p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
+    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible settings include the following:</p> <ul> <li> <p> <code>ServiceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>BucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>CompressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value.</p> </li> </ul> <p>Shorthand syntax for these settings is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these settings is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
@@ -1687,7 +1709,7 @@ pub struct ModifyReplicationSubnetGroupResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationTaskMessage {
-    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
+    /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_position: Option<String>,
@@ -1733,11 +1755,11 @@ pub struct ModifyReplicationTaskResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MongoDbSettings {
-    /// <p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This attribute is not used when authType=No.</p>
+    /// <p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This setting is not used when authType=No.</p>
     #[serde(rename = "AuthMechanism")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_mechanism: Option<String>,
-    /// <p> The MongoDB database name. This attribute is not used when <code>authType=NO</code>. </p> <p>The default is admin.</p>
+    /// <p> The MongoDB database name. This setting is not used when <code>authType=NO</code>. </p> <p>The default is admin.</p>
     #[serde(rename = "AuthSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_source: Option<String>,
@@ -1749,11 +1771,11 @@ pub struct MongoDbSettings {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p> Indicates the number of documents to preview to determine the document organization. Use this attribute when <code>NestingLevel</code> is set to ONE. </p> <p>Must be a positive value greater than 0. Default value is 1000.</p>
+    /// <p> Indicates the number of documents to preview to determine the document organization. Use this setting when <code>NestingLevel</code> is set to ONE. </p> <p>Must be a positive value greater than 0. Default value is 1000.</p>
     #[serde(rename = "DocsToInvestigate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub docs_to_investigate: Option<String>,
-    /// <p> Specifies the document ID. Use this attribute when <code>NestingLevel</code> is set to NONE. </p> <p>Default value is false. </p>
+    /// <p> Specifies the document ID. Use this setting when <code>NestingLevel</code> is set to NONE. </p> <p>Default value is false. </p>
     #[serde(rename = "ExtractDocId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extract_doc_id: Option<String>,
@@ -1811,7 +1833,7 @@ pub struct OrderableReplicationInstance {
     #[serde(rename = "MinAllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_allocated_storage: Option<i64>,
-    /// <p><p>The value returned when the specified <code>EngineVersion</code> of the replication instance is in Beta or test mode. This indicates some features might not work as expected.</p> <note> <p>AWS DMS supports <code>ReleaseStatus</code> in versions 3.1.4 and later.</p> </note></p>
+    /// <p><p>The value returned when the specified <code>EngineVersion</code> of the replication instance is in Beta or test mode. This indicates some features might not work as expected.</p> <note> <p>AWS DMS supports the <code>ReleaseStatus</code> parameter in versions 3.1.4 and later.</p> </note></p>
     #[serde(rename = "ReleaseStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub release_status: Option<String>,
@@ -2342,10 +2364,30 @@ pub struct ReplicationTaskStats {
     #[serde(rename = "ElapsedTimeMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elapsed_time_millis: Option<i64>,
+    /// <p>The date the replication task was started either with a fresh start or a target reload.</p>
+    #[serde(rename = "FreshStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fresh_start_date: Option<f64>,
+    /// <p>The date the replication task full load was completed.</p>
+    #[serde(rename = "FullLoadFinishDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub full_load_finish_date: Option<f64>,
     /// <p>The percent complete for the full load migration task.</p>
     #[serde(rename = "FullLoadProgressPercent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_progress_percent: Option<i64>,
+    /// <p>The date the the replication task full load was started.</p>
+    #[serde(rename = "FullLoadStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub full_load_start_date: Option<f64>,
+    /// <p>The date the replication task was started either with a fresh start or a resume. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/APIReference/API_StartReplicationTask.html#DMS-StartReplicationTask-request-StartReplicationTaskType">StartReplicationTaskType</a>.</p>
+    #[serde(rename = "StartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<f64>,
+    /// <p>The date the replication task was stopped.</p>
+    #[serde(rename = "StopDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stop_date: Option<f64>,
     /// <p>The number of errors that have occurred during this task.</p>
     #[serde(rename = "TablesErrored")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2389,7 +2431,7 @@ pub struct S3Settings {
     #[serde(rename = "BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_name: Option<String>,
-    /// <p><p>A value that enables a change data capture (CDC) load to write only INSERT operations to .csv or columnar storage (.parquet) output files. By default (the <code>false</code> setting), the first field in a .csv or .parquet record contains the letter I (INSERT), U (UPDATE), or D (DELETE). These values indicate whether the row was inserted, updated, or deleted at the source database for a CDC load to the target.</p> <p>If <code>cdcInsertsOnly</code> is set to <code>true</code> or <code>y</code>, only INSERTs from the source database are migrated to the .csv or .parquet file. For .csv format only, how these INSERTs are recorded depends on the value of <code>IncludeOpForFullLoad</code>. If <code>IncludeOpForFullLoad</code> is set to <code>true</code>, the first field of every CDC record is set to I to indicate the INSERT operation at the source. If <code>IncludeOpForFullLoad</code> is set to <code>false</code>, every CDC record is written without a first field to indicate the INSERT operation at the source. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> <note> <p>AWS DMS supports this interaction between <code>CdcInsertsOnly</code> and <code>IncludeOpForFullLoad</code> in versions 3.1.4 and later. </p> </note></p>
+    /// <p><p>A value that enables a change data capture (CDC) load to write only INSERT operations to .csv or columnar storage (.parquet) output files. By default (the <code>false</code> setting), the first field in a .csv or .parquet record contains the letter I (INSERT), U (UPDATE), or D (DELETE). These values indicate whether the row was inserted, updated, or deleted at the source database for a CDC load to the target.</p> <p>If <code>CdcInsertsOnly</code> is set to <code>true</code> or <code>y</code>, only INSERTs from the source database are migrated to the .csv or .parquet file. For .csv format only, how these INSERTs are recorded depends on the value of <code>IncludeOpForFullLoad</code>. If <code>IncludeOpForFullLoad</code> is set to <code>true</code>, the first field of every CDC record is set to I to indicate the INSERT operation at the source. If <code>IncludeOpForFullLoad</code> is set to <code>false</code>, every CDC record is written without a first field to indicate the INSERT operation at the source. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> <note> <p>AWS DMS supports this interaction between the <code>CdcInsertsOnly</code> and <code>IncludeOpForFullLoad</code> parameters in versions 3.1.4 and later. </p> </note></p>
     #[serde(rename = "CdcInsertsOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_inserts_only: Option<bool>,
@@ -2433,10 +2475,14 @@ pub struct S3Settings {
     #[serde(rename = "ExternalTableDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_table_definition: Option<String>,
-    /// <p><p>A value that enables a full load to write INSERT operations to the comma-separated value (.csv) output files only to indicate how the rows were added to the source database.</p> <note> <p>AWS DMS supports <code>IncludeOpForFullLoad</code> in versions 3.1.4 and later.</p> </note> <p>For full load, records can only be inserted. By default (the <code>false</code> setting), no information is recorded in these output files for a full load to indicate that the rows were inserted at the source database. If <code>IncludeOpForFullLoad</code> is set to <code>true</code> or <code>y</code>, the INSERT is recorded as an I annotation in the first field of the .csv file. This allows the format of your target records from a full load to be consistent with the target records from a CDC load.</p> <note> <p>This setting works together with <code>CdcInsertsOnly</code> for output to .csv files only. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> </note></p>
+    /// <p><p>A value that enables a full load to write INSERT operations to the comma-separated value (.csv) output files only to indicate how the rows were added to the source database.</p> <note> <p>AWS DMS supports the <code>IncludeOpForFullLoad</code> parameter in versions 3.1.4 and later.</p> </note> <p>For full load, records can only be inserted. By default (the <code>false</code> setting), no information is recorded in these output files for a full load to indicate that the rows were inserted at the source database. If <code>IncludeOpForFullLoad</code> is set to <code>true</code> or <code>y</code>, the INSERT is recorded as an I annotation in the first field of the .csv file. This allows the format of your target records from a full load to be consistent with the target records from a CDC load.</p> <note> <p>This setting works together with the <code>CdcInsertsOnly</code> parameter for output to .csv files only. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> </note></p>
     #[serde(rename = "IncludeOpForFullLoad")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_op_for_full_load: Option<bool>,
+    /// <p><p>A value that specifies the precision of any <code>TIMESTAMP</code> column values that are written to an Amazon S3 object file in .parquet format.</p> <note> <p>AWS DMS supports the <code>ParquetTimestampInMillisecond</code> parameter in versions 3.1.4 and later.</p> </note> <p>When <code>ParquetTimestampInMillisecond</code> is set to <code>true</code> or <code>y</code>, AWS DMS writes all <code>TIMESTAMP</code> columns in a .parquet formatted file with millisecond precision. Otherwise, DMS writes them with microsecond precision.</p> <p>Currently, Amazon Athena and AWS Glue can handle only millisecond precision for <code>TIMESTAMP</code> values. Set this parameter to <code>true</code> for S3 endpoint object files that are .parquet formatted only if you plan to query or process the data with Athena or AWS Glue.</p> <note> <p>AWS DMS writes any <code>TIMESTAMP</code> column values written to an S3 file in .csv format with microsecond precision.</p> <p>Setting <code>ParquetTimestampInMillisecond</code> has no effect on the string format of the timestamp column value that is inserted by setting the <code>TimestampColumnName</code> parameter.</p> </note></p>
+    #[serde(rename = "ParquetTimestampInMillisecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parquet_timestamp_in_millisecond: Option<bool>,
     /// <p>The version of the Apache Parquet format that you want to use: <code>parquet_1_0</code> (the default) or <code>parquet_2_0</code>.</p>
     #[serde(rename = "ParquetVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2453,7 +2499,7 @@ pub struct S3Settings {
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>A value that includes a timestamp column in the Amazon S3 target endpoint data. AWS DMS includes an additional column in the migrated data when you set <code>timestampColumnName</code> to a non-blank value. </p> <note> <p>AWS DMS supports <code>TimestampColumnName</code> in versions 3.1.4 and later.</p> </note> <p>For a full load, each row of the timestamp column contains a timestamp for when the data was transferred from the source to the target by DMS. For a CDC load, each row of the timestamp column contains the timestamp for the commit of that row in the source database. The format for the timestamp column value is <code>yyyy-MM-dd HH:mm:ss.SSSSSS</code>. For CDC, the microsecond precision depends on the commit timestamp supported by DMS for the source database. When the <code>AddColumnName</code> setting is set to <code>true</code>, DMS also includes the name for the timestamp column that you set as the nonblank value of <code>timestampColumnName</code>.</p>
+    /// <p>A value that when nonblank causes AWS DMS to add a column with timestamp information to the endpoint data for an Amazon S3 target.</p> <note> <p>AWS DMS supports the <code>TimestampColumnName</code> parameter in versions 3.1.4 and later.</p> </note> <p>DMS includes an additional <code>STRING</code> column in the .csv or .parquet object files of your migrated data when you set <code>TimestampColumnName</code> to a nonblank value.</p> <p>For a full load, each row of this timestamp column contains a timestamp for when the data was transferred from the source to the target by DMS. </p> <p>For a change data capture (CDC) load, each row of the timestamp column contains the timestamp for the commit of that row in the source database.</p> <p>The string format for this timestamp column value is <code>yyyy-MM-dd HH:mm:ss.SSSSSS</code>. By default, the precision of this value is in microseconds. For a CDC load, the rounding of the precision depends on the commit timestamp supported by DMS for the source database.</p> <p>When the <code>AddColumnName</code> parameter is set to <code>true</code>, DMS also includes a name for the timestamp column that you set with <code>TimestampColumnName</code>.</p>
     #[serde(rename = "TimestampColumnName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp_column_name: Option<String>,
@@ -2482,7 +2528,7 @@ pub struct StartReplicationTaskAssessmentResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReplicationTaskMessage {
-    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
+    /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_position: Option<String>,
@@ -2729,16 +2775,12 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToResourceError::ResourceNotFoundFault(ref cause) => cause,
+            AddTagsToResourceError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToResourceError {}
 /// Errors returned by ApplyPendingMaintenanceAction
 #[derive(Debug, PartialEq)]
 pub enum ApplyPendingMaintenanceActionError {
@@ -2766,16 +2808,14 @@ impl ApplyPendingMaintenanceActionError {
 }
 impl fmt::Display for ApplyPendingMaintenanceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApplyPendingMaintenanceActionError {
-    fn description(&self) -> &str {
         match *self {
-            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => cause,
+            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ApplyPendingMaintenanceActionError {}
 /// Errors returned by CreateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointError {
@@ -2834,21 +2874,17 @@ impl CreateEndpointError {
 }
 impl fmt::Display for CreateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEndpointError::AccessDeniedFault(ref cause) => cause,
-            CreateEndpointError::InvalidResourceStateFault(ref cause) => cause,
-            CreateEndpointError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CreateEndpointError::ResourceAlreadyExistsFault(ref cause) => cause,
-            CreateEndpointError::ResourceNotFoundFault(ref cause) => cause,
-            CreateEndpointError::ResourceQuotaExceededFault(ref cause) => cause,
+            CreateEndpointError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEndpointError {}
 /// Errors returned by CreateEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSubscriptionError {
@@ -2937,25 +2973,29 @@ impl CreateEventSubscriptionError {
 }
 impl fmt::Display for CreateEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEventSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEventSubscriptionError::KMSAccessDeniedFault(ref cause) => cause,
-            CreateEventSubscriptionError::KMSDisabledFault(ref cause) => cause,
-            CreateEventSubscriptionError::KMSInvalidStateFault(ref cause) => cause,
-            CreateEventSubscriptionError::KMSNotFoundFault(ref cause) => cause,
-            CreateEventSubscriptionError::KMSThrottlingFault(ref cause) => cause,
-            CreateEventSubscriptionError::ResourceAlreadyExistsFault(ref cause) => cause,
-            CreateEventSubscriptionError::ResourceNotFoundFault(ref cause) => cause,
-            CreateEventSubscriptionError::ResourceQuotaExceededFault(ref cause) => cause,
-            CreateEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,
-            CreateEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => cause,
+            CreateEventSubscriptionError::KMSAccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::KMSDisabledFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::KMSInvalidStateFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::KMSNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::KMSThrottlingFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SNSInvalidTopicFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateEventSubscriptionError {}
 /// Errors returned by CreateReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationInstanceError {
@@ -3046,27 +3086,37 @@ impl CreateReplicationInstanceError {
 }
 impl fmt::Display for CreateReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReplicationInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReplicationInstanceError::AccessDeniedFault(ref cause) => cause,
-            CreateReplicationInstanceError::InsufficientResourceCapacityFault(ref cause) => cause,
-            CreateReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
-            CreateReplicationInstanceError::InvalidSubnet(ref cause) => cause,
-            CreateReplicationInstanceError::KMSKeyNotAccessibleFault(ref cause) => cause,
+            CreateReplicationInstanceError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            CreateReplicationInstanceError::InsufficientResourceCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationInstanceError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationInstanceError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateReplicationInstanceError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateReplicationInstanceError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
                 ref cause,
-            ) => cause,
-            CreateReplicationInstanceError::ResourceAlreadyExistsFault(ref cause) => cause,
-            CreateReplicationInstanceError::ResourceNotFoundFault(ref cause) => cause,
-            CreateReplicationInstanceError::ResourceQuotaExceededFault(ref cause) => cause,
-            CreateReplicationInstanceError::StorageQuotaExceededFault(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            CreateReplicationInstanceError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationInstanceError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationInstanceError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationInstanceError::StorageQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateReplicationInstanceError {}
 /// Errors returned by CreateReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationSubnetGroupError {
@@ -3129,23 +3179,27 @@ impl CreateReplicationSubnetGroupError {
 }
 impl fmt::Display for CreateReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReplicationSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReplicationSubnetGroupError::AccessDeniedFault(ref cause) => cause,
-            CreateReplicationSubnetGroupError::InvalidSubnet(ref cause) => cause,
+            CreateReplicationSubnetGroupError::AccessDeniedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
             CreateReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
                 ref cause,
-            ) => cause,
-            CreateReplicationSubnetGroupError::ResourceAlreadyExistsFault(ref cause) => cause,
-            CreateReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => cause,
-            CreateReplicationSubnetGroupError::ResourceQuotaExceededFault(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            CreateReplicationSubnetGroupError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationSubnetGroupError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateReplicationSubnetGroupError {}
 /// Errors returned by CreateReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationTaskError {
@@ -3206,21 +3260,25 @@ impl CreateReplicationTaskError {
 }
 impl fmt::Display for CreateReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReplicationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReplicationTaskError::AccessDeniedFault(ref cause) => cause,
-            CreateReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
-            CreateReplicationTaskError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CreateReplicationTaskError::ResourceAlreadyExistsFault(ref cause) => cause,
-            CreateReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
-            CreateReplicationTaskError::ResourceQuotaExceededFault(ref cause) => cause,
+            CreateReplicationTaskError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            CreateReplicationTaskError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationTaskError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationTaskError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateReplicationTaskError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateReplicationTaskError {}
 /// Errors returned by DeleteCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCertificateError {
@@ -3253,17 +3311,58 @@ impl DeleteCertificateError {
 }
 impl fmt::Display for DeleteCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCertificateError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteCertificateError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteCertificateError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCertificateError {}
+/// Errors returned by DeleteConnection
+#[derive(Debug, PartialEq)]
+pub enum DeleteConnectionError {
+    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
+    AccessDeniedFault(String),
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
+    InvalidResourceStateFault(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFoundFault(String),
+}
+
+impl DeleteConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedFault" => {
+                    return RusotoError::Service(DeleteConnectionError::AccessDeniedFault(err.msg))
+                }
+                "InvalidResourceStateFault" => {
+                    return RusotoError::Service(DeleteConnectionError::InvalidResourceStateFault(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundFault" => {
+                    return RusotoError::Service(DeleteConnectionError::ResourceNotFoundFault(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteConnectionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteConnectionError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteConnectionError {}
 /// Errors returned by DeleteEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointError {
@@ -3296,17 +3395,13 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEndpointError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteEndpointError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteEndpointError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEndpointError {}
 /// Errors returned by DeleteEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSubscriptionError {
@@ -3339,17 +3434,17 @@ impl DeleteEventSubscriptionError {
 }
 impl fmt::Display for DeleteEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEventSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEventSubscriptionError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteEventSubscriptionError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteEventSubscriptionError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteEventSubscriptionError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteEventSubscriptionError {}
 /// Errors returned by DeleteReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationInstanceError {
@@ -3382,17 +3477,17 @@ impl DeleteReplicationInstanceError {
 }
 impl fmt::Display for DeleteReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReplicationInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteReplicationInstanceError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteReplicationInstanceError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationInstanceError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteReplicationInstanceError {}
 /// Errors returned by DeleteReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationSubnetGroupError {
@@ -3427,17 +3522,17 @@ impl DeleteReplicationSubnetGroupError {
 }
 impl fmt::Display for DeleteReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReplicationSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReplicationSubnetGroupError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteReplicationSubnetGroupError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteReplicationSubnetGroupError {}
 /// Errors returned by DeleteReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationTaskError {
@@ -3470,17 +3565,15 @@ impl DeleteReplicationTaskError {
 }
 impl fmt::Display for DeleteReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReplicationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteReplicationTaskError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteReplicationTaskError {}
 /// Errors returned by DescribeAccountAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountAttributesError {}
@@ -3498,14 +3591,10 @@ impl DescribeAccountAttributesError {
 }
 impl fmt::Display for DescribeAccountAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountAttributesError {}
 /// Errors returned by DescribeCertificates
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificatesError {
@@ -3531,16 +3620,12 @@ impl DescribeCertificatesError {
 }
 impl fmt::Display for DescribeCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCertificatesError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeCertificatesError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCertificatesError {}
 /// Errors returned by DescribeConnections
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionsError {
@@ -3566,16 +3651,12 @@ impl DescribeConnectionsError {
 }
 impl fmt::Display for DescribeConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConnectionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConnectionsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeConnectionsError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConnectionsError {}
 /// Errors returned by DescribeEndpointTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointTypesError {}
@@ -3593,14 +3674,10 @@ impl DescribeEndpointTypesError {
 }
 impl fmt::Display for DescribeEndpointTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointTypesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEndpointTypesError {}
 /// Errors returned by DescribeEndpoints
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointsError {
@@ -3626,16 +3703,12 @@ impl DescribeEndpointsError {
 }
 impl fmt::Display for DescribeEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEndpointsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeEndpointsError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEndpointsError {}
 /// Errors returned by DescribeEventCategories
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventCategoriesError {}
@@ -3653,14 +3726,10 @@ impl DescribeEventCategoriesError {
 }
 impl fmt::Display for DescribeEventCategoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventCategoriesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventCategoriesError {}
 /// Errors returned by DescribeEventSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventSubscriptionsError {
@@ -3688,16 +3757,14 @@ impl DescribeEventSubscriptionsError {
 }
 impl fmt::Display for DescribeEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventSubscriptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventSubscriptionsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeEventSubscriptionsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEventSubscriptionsError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {}
@@ -3715,14 +3782,10 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventsError {}
 /// Errors returned by DescribeOrderableReplicationInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrderableReplicationInstancesError {}
@@ -3742,14 +3805,10 @@ impl DescribeOrderableReplicationInstancesError {
 }
 impl fmt::Display for DescribeOrderableReplicationInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrderableReplicationInstancesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeOrderableReplicationInstancesError {}
 /// Errors returned by DescribePendingMaintenanceActions
 #[derive(Debug, PartialEq)]
 pub enum DescribePendingMaintenanceActionsError {
@@ -3777,16 +3836,14 @@ impl DescribePendingMaintenanceActionsError {
 }
 impl fmt::Display for DescribePendingMaintenanceActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePendingMaintenanceActionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribePendingMaintenanceActionsError {}
 /// Errors returned by DescribeRefreshSchemasStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeRefreshSchemasStatusError {
@@ -3821,17 +3878,17 @@ impl DescribeRefreshSchemasStatusError {
 }
 impl fmt::Display for DescribeRefreshSchemasStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRefreshSchemasStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRefreshSchemasStatusError::InvalidResourceStateFault(ref cause) => cause,
-            DescribeRefreshSchemasStatusError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeRefreshSchemasStatusError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRefreshSchemasStatusError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeRefreshSchemasStatusError {}
 /// Errors returned by DescribeReplicationInstanceTaskLogs
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationInstanceTaskLogsError {
@@ -3868,17 +3925,17 @@ impl DescribeReplicationInstanceTaskLogsError {
 }
 impl fmt::Display for DescribeReplicationInstanceTaskLogsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationInstanceTaskLogsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReplicationInstanceTaskLogsError::InvalidResourceStateFault(ref cause) => cause,
-            DescribeReplicationInstanceTaskLogsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeReplicationInstanceTaskLogsError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeReplicationInstanceTaskLogsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReplicationInstanceTaskLogsError {}
 /// Errors returned by DescribeReplicationInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationInstancesError {
@@ -3906,16 +3963,14 @@ impl DescribeReplicationInstancesError {
 }
 impl fmt::Display for DescribeReplicationInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReplicationInstancesError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeReplicationInstancesError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReplicationInstancesError {}
 /// Errors returned by DescribeReplicationSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationSubnetGroupsError {
@@ -3943,16 +3998,14 @@ impl DescribeReplicationSubnetGroupsError {
 }
 impl fmt::Display for DescribeReplicationSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationSubnetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReplicationSubnetGroupsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeReplicationSubnetGroupsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReplicationSubnetGroupsError {}
 /// Errors returned by DescribeReplicationTaskAssessmentResults
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationTaskAssessmentResultsError {
@@ -3982,18 +4035,14 @@ impl DescribeReplicationTaskAssessmentResultsError {
 }
 impl fmt::Display for DescribeReplicationTaskAssessmentResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationTaskAssessmentResultsError {
-    fn description(&self) -> &str {
         match *self {
             DescribeReplicationTaskAssessmentResultsError::ResourceNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeReplicationTaskAssessmentResultsError {}
 /// Errors returned by DescribeReplicationTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationTasksError {
@@ -4019,16 +4068,14 @@ impl DescribeReplicationTasksError {
 }
 impl fmt::Display for DescribeReplicationTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationTasksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReplicationTasksError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeReplicationTasksError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReplicationTasksError {}
 /// Errors returned by DescribeSchemas
 #[derive(Debug, PartialEq)]
 pub enum DescribeSchemasError {
@@ -4061,17 +4108,13 @@ impl DescribeSchemasError {
 }
 impl fmt::Display for DescribeSchemasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSchemasError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSchemasError::InvalidResourceStateFault(ref cause) => cause,
-            DescribeSchemasError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeSchemasError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            DescribeSchemasError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSchemasError {}
 /// Errors returned by DescribeTableStatistics
 #[derive(Debug, PartialEq)]
 pub enum DescribeTableStatisticsError {
@@ -4104,17 +4147,17 @@ impl DescribeTableStatisticsError {
 }
 impl fmt::Display for DescribeTableStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTableStatisticsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTableStatisticsError::InvalidResourceStateFault(ref cause) => cause,
-            DescribeTableStatisticsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeTableStatisticsError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeTableStatisticsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTableStatisticsError {}
 /// Errors returned by ImportCertificate
 #[derive(Debug, PartialEq)]
 pub enum ImportCertificateError {
@@ -4154,18 +4197,14 @@ impl ImportCertificateError {
 }
 impl fmt::Display for ImportCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            ImportCertificateError::InvalidCertificateFault(ref cause) => cause,
-            ImportCertificateError::ResourceAlreadyExistsFault(ref cause) => cause,
-            ImportCertificateError::ResourceQuotaExceededFault(ref cause) => cause,
+            ImportCertificateError::InvalidCertificateFault(ref cause) => write!(f, "{}", cause),
+            ImportCertificateError::ResourceAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            ImportCertificateError::ResourceQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportCertificateError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -4191,16 +4230,12 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::ResourceNotFoundFault(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ModifyEndpoint
 #[derive(Debug, PartialEq)]
 pub enum ModifyEndpointError {
@@ -4252,20 +4287,16 @@ impl ModifyEndpointError {
 }
 impl fmt::Display for ModifyEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyEndpointError::AccessDeniedFault(ref cause) => cause,
-            ModifyEndpointError::InvalidResourceStateFault(ref cause) => cause,
-            ModifyEndpointError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            ModifyEndpointError::ResourceAlreadyExistsFault(ref cause) => cause,
-            ModifyEndpointError::ResourceNotFoundFault(ref cause) => cause,
+            ModifyEndpointError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            ModifyEndpointError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyEndpointError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            ModifyEndpointError::ResourceAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            ModifyEndpointError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyEndpointError {}
 /// Errors returned by ModifyEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum ModifyEventSubscriptionError {
@@ -4347,24 +4378,26 @@ impl ModifyEventSubscriptionError {
 }
 impl fmt::Display for ModifyEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyEventSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyEventSubscriptionError::KMSAccessDeniedFault(ref cause) => cause,
-            ModifyEventSubscriptionError::KMSDisabledFault(ref cause) => cause,
-            ModifyEventSubscriptionError::KMSInvalidStateFault(ref cause) => cause,
-            ModifyEventSubscriptionError::KMSNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::KMSThrottlingFault(ref cause) => cause,
-            ModifyEventSubscriptionError::ResourceNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::ResourceQuotaExceededFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => cause,
+            ModifyEventSubscriptionError::KMSAccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::KMSDisabledFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::KMSInvalidStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::KMSNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::KMSThrottlingFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SNSInvalidTopicFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyEventSubscriptionError {}
 /// Errors returned by ModifyReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationInstanceError {
@@ -4432,22 +4465,30 @@ impl ModifyReplicationInstanceError {
 }
 impl fmt::Display for ModifyReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyReplicationInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyReplicationInstanceError::AccessDeniedFault(ref cause) => cause,
-            ModifyReplicationInstanceError::InsufficientResourceCapacityFault(ref cause) => cause,
-            ModifyReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
-            ModifyReplicationInstanceError::ResourceAlreadyExistsFault(ref cause) => cause,
-            ModifyReplicationInstanceError::ResourceNotFoundFault(ref cause) => cause,
-            ModifyReplicationInstanceError::StorageQuotaExceededFault(ref cause) => cause,
-            ModifyReplicationInstanceError::UpgradeDependencyFailureFault(ref cause) => cause,
+            ModifyReplicationInstanceError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            ModifyReplicationInstanceError::InsufficientResourceCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationInstanceError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationInstanceError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationInstanceError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationInstanceError::StorageQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationInstanceError::UpgradeDependencyFailureFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyReplicationInstanceError {}
 /// Errors returned by ModifyReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationSubnetGroupError {
@@ -4510,23 +4551,27 @@ impl ModifyReplicationSubnetGroupError {
 }
 impl fmt::Display for ModifyReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyReplicationSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyReplicationSubnetGroupError::AccessDeniedFault(ref cause) => cause,
-            ModifyReplicationSubnetGroupError::InvalidSubnet(ref cause) => cause,
+            ModifyReplicationSubnetGroupError::AccessDeniedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
             ModifyReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
                 ref cause,
-            ) => cause,
-            ModifyReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => cause,
-            ModifyReplicationSubnetGroupError::ResourceQuotaExceededFault(ref cause) => cause,
-            ModifyReplicationSubnetGroupError::SubnetAlreadyInUse(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            ModifyReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationSubnetGroupError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationSubnetGroupError::SubnetAlreadyInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyReplicationSubnetGroupError {}
 /// Errors returned by ModifyReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationTaskError {
@@ -4573,19 +4618,21 @@ impl ModifyReplicationTaskError {
 }
 impl fmt::Display for ModifyReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyReplicationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
-            ModifyReplicationTaskError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            ModifyReplicationTaskError::ResourceAlreadyExistsFault(ref cause) => cause,
-            ModifyReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
+            ModifyReplicationTaskError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationTaskError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationTaskError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyReplicationTaskError {}
 /// Errors returned by RebootReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum RebootReplicationInstanceError {
@@ -4618,17 +4665,17 @@ impl RebootReplicationInstanceError {
 }
 impl fmt::Display for RebootReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootReplicationInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RebootReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
-            RebootReplicationInstanceError::ResourceNotFoundFault(ref cause) => cause,
+            RebootReplicationInstanceError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RebootReplicationInstanceError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RebootReplicationInstanceError {}
 /// Errors returned by RefreshSchemas
 #[derive(Debug, PartialEq)]
 pub enum RefreshSchemasError {
@@ -4675,19 +4722,15 @@ impl RefreshSchemasError {
 }
 impl fmt::Display for RefreshSchemasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RefreshSchemasError {
-    fn description(&self) -> &str {
         match *self {
-            RefreshSchemasError::InvalidResourceStateFault(ref cause) => cause,
-            RefreshSchemasError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            RefreshSchemasError::ResourceNotFoundFault(ref cause) => cause,
-            RefreshSchemasError::ResourceQuotaExceededFault(ref cause) => cause,
+            RefreshSchemasError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            RefreshSchemasError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            RefreshSchemasError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RefreshSchemasError::ResourceQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RefreshSchemasError {}
 /// Errors returned by ReloadTables
 #[derive(Debug, PartialEq)]
 pub enum ReloadTablesError {
@@ -4718,17 +4761,13 @@ impl ReloadTablesError {
 }
 impl fmt::Display for ReloadTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReloadTablesError {
-    fn description(&self) -> &str {
         match *self {
-            ReloadTablesError::InvalidResourceStateFault(ref cause) => cause,
-            ReloadTablesError::ResourceNotFoundFault(ref cause) => cause,
+            ReloadTablesError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            ReloadTablesError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReloadTablesError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -4754,16 +4793,12 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromResourceError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromResourceError::ResourceNotFoundFault(ref cause) => cause,
+            RemoveTagsFromResourceError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsFromResourceError {}
 /// Errors returned by StartReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum StartReplicationTaskError {
@@ -4803,18 +4838,16 @@ impl StartReplicationTaskError {
 }
 impl fmt::Display for StartReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartReplicationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StartReplicationTaskError::AccessDeniedFault(ref cause) => cause,
-            StartReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
-            StartReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
+            StartReplicationTaskError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            StartReplicationTaskError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartReplicationTaskError {}
 /// Errors returned by StartReplicationTaskAssessment
 #[derive(Debug, PartialEq)]
 pub enum StartReplicationTaskAssessmentError {
@@ -4849,17 +4882,17 @@ impl StartReplicationTaskAssessmentError {
 }
 impl fmt::Display for StartReplicationTaskAssessmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartReplicationTaskAssessmentError {
-    fn description(&self) -> &str {
         match *self {
-            StartReplicationTaskAssessmentError::InvalidResourceStateFault(ref cause) => cause,
-            StartReplicationTaskAssessmentError::ResourceNotFoundFault(ref cause) => cause,
+            StartReplicationTaskAssessmentError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartReplicationTaskAssessmentError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartReplicationTaskAssessmentError {}
 /// Errors returned by StopReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum StopReplicationTaskError {
@@ -4892,17 +4925,15 @@ impl StopReplicationTaskError {
 }
 impl fmt::Display for StopReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopReplicationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StopReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
-            StopReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
+            StopReplicationTaskError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopReplicationTaskError {}
 /// Errors returned by TestConnection
 #[derive(Debug, PartialEq)]
 pub enum TestConnectionError {
@@ -4949,19 +4980,15 @@ impl TestConnectionError {
 }
 impl fmt::Display for TestConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            TestConnectionError::InvalidResourceStateFault(ref cause) => cause,
-            TestConnectionError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            TestConnectionError::ResourceNotFoundFault(ref cause) => cause,
-            TestConnectionError::ResourceQuotaExceededFault(ref cause) => cause,
+            TestConnectionError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            TestConnectionError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            TestConnectionError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            TestConnectionError::ResourceQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestConnectionError {}
 /// Trait representing the capabilities of the AWS Database Migration Service API. AWS Database Migration Service clients implement this trait.
 pub trait DatabaseMigrationService {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
@@ -4988,7 +5015,7 @@ pub trait DatabaseMigrationService {
         input: CreateEventSubscriptionMessage,
     ) -> RusotoFuture<CreateEventSubscriptionResponse, CreateEventSubscriptionError>;
 
-    /// <p>Creates the replication instance using the specified parameters.</p>
+    /// <p>Creates the replication instance using the specified parameters.</p> <p>AWS DMS requires that your account have certain roles with appropriate permissions before you can create a replication instance. For information on the required roles, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.APIRole.html">Creating the IAM Roles to Use With the AWS CLI and AWS DMS API</a>. For information on the required permissions, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.IAMPermissions.html">IAM Permissions Needed to Use AWS DMS</a>.</p>
     fn create_replication_instance(
         &self,
         input: CreateReplicationInstanceMessage,
@@ -5011,6 +5038,12 @@ pub trait DatabaseMigrationService {
         &self,
         input: DeleteCertificateMessage,
     ) -> RusotoFuture<DeleteCertificateResponse, DeleteCertificateError>;
+
+    /// <p>Deletes the connection between a replication instance and an endpoint.</p>
+    fn delete_connection(
+        &self,
+        input: DeleteConnectionMessage,
+    ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError>;
 
     /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
     fn delete_endpoint(
@@ -5291,6 +5324,14 @@ impl DatabaseMigrationServiceClient {
     }
 }
 
+impl fmt::Debug for DatabaseMigrationServiceClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DatabaseMigrationServiceClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl DatabaseMigrationService for DatabaseMigrationServiceClient {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(
@@ -5406,7 +5447,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p>Creates the replication instance using the specified parameters.</p>
+    /// <p>Creates the replication instance using the specified parameters.</p> <p>AWS DMS requires that your account have certain roles with appropriate permissions before you can create a replication instance. For information on the required roles, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.APIRole.html">Creating the IAM Roles to Use With the AWS CLI and AWS DMS API</a>. For information on the required permissions, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.IAMPermissions.html">IAM Permissions Needed to Use AWS DMS</a>.</p>
     fn create_replication_instance(
         &self,
         input: CreateReplicationInstanceMessage,
@@ -5516,6 +5557,35 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteCertificateError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes the connection between a replication instance and an endpoint.</p>
+    fn delete_connection(
+        &self,
+        input: DeleteConnectionMessage,
+    ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError> {
+        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteConnection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteConnectionResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteConnectionError::from_response(response))),
                 )
             }
         })

@@ -102,6 +102,18 @@ pub struct App {
     pub update_time: f64,
 }
 
+/// <p> Structure for artifact. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Artifact {
+    /// <p> File name for the artifact. </p>
+    #[serde(rename = "artifactFileName")]
+    pub artifact_file_name: String,
+    /// <p> Unique Id for a artifact. </p>
+    #[serde(rename = "artifactId")]
+    pub artifact_id: String,
+}
+
 /// <p> Structure with auto branch creation config. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AutoBranchCreationConfig {
@@ -121,6 +133,10 @@ pub struct AutoBranchCreationConfig {
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_basic_auth: Option<bool>,
+    /// <p> Enables Pull Request Preview for auto created branch. </p>
+    #[serde(rename = "enablePullRequestPreview")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_pull_request_preview: Option<bool>,
     /// <p> Environment Variables for the auto created branch. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -129,10 +145,40 @@ pub struct AutoBranchCreationConfig {
     #[serde(rename = "framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
+    /// <p> The Amplify Environment name for the pull request. </p>
+    #[serde(rename = "pullRequestEnvironmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_environment_name: Option<String>,
     /// <p> Stage for the auto created branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<String>,
+}
+
+/// <p> Backend environment for an Amplify App. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BackendEnvironment {
+    /// <p> Arn for a backend environment, part of an Amplify App. </p>
+    #[serde(rename = "backendEnvironmentArn")]
+    pub backend_environment_arn: String,
+    /// <p> Creation date and time for a backend environment, part of an Amplify App. </p>
+    #[serde(rename = "createTime")]
+    pub create_time: f64,
+    /// <p> Name of deployment artifacts. </p>
+    #[serde(rename = "deploymentArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_artifacts: Option<String>,
+    /// <p> Name for a backend environment, part of an Amplify App. </p>
+    #[serde(rename = "environmentName")]
+    pub environment_name: String,
+    /// <p> CloudFormation stack name of backend environment. </p>
+    #[serde(rename = "stackName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_name: Option<String>,
+    /// <p> Last updated date and time for a backend environment, part of an Amplify App. </p>
+    #[serde(rename = "updateTime")]
+    pub update_time: f64,
 }
 
 /// <p> Branch for an Amplify App, which maps to a 3rd party repository branch. </p>
@@ -146,6 +192,10 @@ pub struct Branch {
     #[serde(rename = "associatedResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub associated_resources: Option<Vec<String>>,
+    /// <p> ARN for a Backend Environment, part of an Amplify App. </p>
+    #[serde(rename = "backendEnvironmentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backend_environment_arn: Option<String>,
     /// <p> Basic Authorization credentials for a branch, part of an Amplify App. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -169,6 +219,10 @@ pub struct Branch {
     /// <p> Description for a branch, part of an Amplify App. </p>
     #[serde(rename = "description")]
     pub description: String,
+    /// <p> The destination branch if the branch is a pull request branch. </p>
+    #[serde(rename = "destinationBranch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_branch: Option<String>,
     /// <p> Display name for a branch, will use as the default domain prefix. </p>
     #[serde(rename = "displayName")]
     pub display_name: String,
@@ -181,12 +235,23 @@ pub struct Branch {
     /// <p> Enables notifications for a branch, part of an Amplify App. </p>
     #[serde(rename = "enableNotification")]
     pub enable_notification: bool,
+    /// <p> Enables Pull Request Preview for this branch. </p>
+    #[serde(rename = "enablePullRequestPreview")]
+    pub enable_pull_request_preview: bool,
     /// <p> Environment Variables specific to a branch, part of an Amplify App. </p>
     #[serde(rename = "environmentVariables")]
     pub environment_variables: ::std::collections::HashMap<String, String>,
     /// <p> Framework for a branch, part of an Amplify App. </p>
     #[serde(rename = "framework")]
     pub framework: String,
+    /// <p> The Amplify Environment name for the pull request. </p>
+    #[serde(rename = "pullRequestEnvironmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_environment_name: Option<String>,
+    /// <p> The source branch if the branch is a pull request branch. </p>
+    #[serde(rename = "sourceBranch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_branch: Option<String>,
     /// <p> Stage for a branch, part of an Amplify App. </p>
     #[serde(rename = "stage")]
     pub stage: String,
@@ -289,6 +354,35 @@ pub struct CreateAppResult {
     pub app: App,
 }
 
+/// <p> Request structure for a backend environment create request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateBackendEnvironmentRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name of deployment artifacts. </p>
+    #[serde(rename = "deploymentArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_artifacts: Option<String>,
+    /// <p> Name for the backend environment. </p>
+    #[serde(rename = "environmentName")]
+    pub environment_name: String,
+    /// <p> CloudFormation stack name of backend environment. </p>
+    #[serde(rename = "stackName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_name: Option<String>,
+}
+
+/// <p> Result structure for create backend environment. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateBackendEnvironmentResult {
+    /// <p> Backend environment structure for an amplify App. </p>
+    #[serde(rename = "backendEnvironment")]
+    pub backend_environment: BackendEnvironment,
+}
+
 /// <p> Request structure for a branch create request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -296,6 +390,10 @@ pub struct CreateBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
+    /// <p> ARN for a Backend Environment, part of an Amplify App. </p>
+    #[serde(rename = "backendEnvironmentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backend_environment_arn: Option<String>,
     /// <p> Basic Authorization credentials for the branch. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -327,6 +425,10 @@ pub struct CreateBranchRequest {
     #[serde(rename = "enableNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
+    /// <p> Enables Pull Request Preview for this branch. </p>
+    #[serde(rename = "enablePullRequestPreview")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_pull_request_preview: Option<bool>,
     /// <p> Environment Variables for the branch. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -335,6 +437,10 @@ pub struct CreateBranchRequest {
     #[serde(rename = "framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
+    /// <p> The Amplify Environment name for the pull request. </p>
+    #[serde(rename = "pullRequestEnvironmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_environment_name: Option<String>,
     /// <p> Stage for the branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -400,7 +506,7 @@ pub struct CreateDomainAssociationRequest {
     /// <p> Domain name for the Domain Association. </p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p> Enables automated creation of Subdomains for branches. </p>
+    /// <p> Enables automated creation of Subdomains for branches. (Currently not supported) </p>
     #[serde(rename = "enableAutoSubDomain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_sub_domain: Option<bool>,
@@ -477,6 +583,27 @@ pub struct DeleteAppRequest {
 pub struct DeleteAppResult {
     #[serde(rename = "app")]
     pub app: App,
+}
+
+/// <p> Request structure for delete backend environment request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteBackendEnvironmentRequest {
+    /// <p> Unique Id of an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name of a backend environment of an Amplify App. </p>
+    #[serde(rename = "environmentName")]
+    pub environment_name: String,
+}
+
+/// <p> Result structure of a delete backend environment result. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteBackendEnvironmentResult {
+    /// <p> Backend environment structure for an Amplify App. </p>
+    #[serde(rename = "backendEnvironment")]
+    pub backend_environment: BackendEnvironment,
 }
 
 /// <p> Request structure for delete branch request. </p>
@@ -577,7 +704,7 @@ pub struct DomainAssociation {
     /// <p> Status fo the Domain Association. </p>
     #[serde(rename = "domainStatus")]
     pub domain_status: String,
-    /// <p> Enables automated creation of Subdomains for branches. </p>
+    /// <p> Enables automated creation of Subdomains for branches. (Currently not supported) </p>
     #[serde(rename = "enableAutoSubDomain")]
     pub enable_auto_sub_domain: bool,
     /// <p> Reason for the current status of the Domain Association. </p>
@@ -586,6 +713,36 @@ pub struct DomainAssociation {
     /// <p> Subdomains for the Domain Association. </p>
     #[serde(rename = "subDomains")]
     pub sub_domains: Vec<SubDomain>,
+}
+
+/// <p> Request structure for the generate access logs request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GenerateAccessLogsRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name of the domain. </p>
+    #[serde(rename = "domainName")]
+    pub domain_name: String,
+    /// <p> The time at which the logs should end, inclusive. </p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p> The time at which the logs should start, inclusive. </p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+}
+
+/// <p> Result structure for the generate access logs request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GenerateAccessLogsResult {
+    /// <p> Pre-signed URL for the requested access logs. </p>
+    #[serde(rename = "logUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_url: Option<String>,
 }
 
 /// <p> Request structure for get App request. </p>
@@ -604,7 +761,49 @@ pub struct GetAppResult {
     pub app: App,
 }
 
-/// <p> Result structure for get branch request. </p>
+/// <p> Request structure for the get artifact request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetArtifactUrlRequest {
+    /// <p> Unique Id for a artifact. </p>
+    #[serde(rename = "artifactId")]
+    pub artifact_id: String,
+}
+
+/// <p> Result structure for the get artifact request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetArtifactUrlResult {
+    /// <p> Unique Id for a artifact. </p>
+    #[serde(rename = "artifactId")]
+    pub artifact_id: String,
+    /// <p> Presigned url for the artifact. </p>
+    #[serde(rename = "artifactUrl")]
+    pub artifact_url: String,
+}
+
+/// <p> Request structure for get backend environment request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetBackendEnvironmentRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name for the backend environment. </p>
+    #[serde(rename = "environmentName")]
+    pub environment_name: String,
+}
+
+/// <p> Result structure for get backend environment result. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetBackendEnvironmentResult {
+    /// <p> Backend environment structure for an an Amplify App. </p>
+    #[serde(rename = "backendEnvironment")]
+    pub backend_environment: BackendEnvironment,
+}
+
+/// <p> Request structure for get branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBranchRequest {
@@ -752,6 +951,76 @@ pub struct ListAppsResult {
     #[serde(rename = "apps")]
     pub apps: Vec<App>,
     /// <p> Pagination token. Set to null to start listing Apps from start. If non-null pagination token is returned in a result, then pass its value in here to list more projects. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Request structure for the list artifacts request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListArtifactsRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name for a branch, part of an Amplify App. </p>
+    #[serde(rename = "branchName")]
+    pub branch_name: String,
+    /// <p> Unique Id for an Job. </p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+    /// <p> Maximum number of records to list in a single response. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> Pagination token. Set to null to start listing artifacts from start. If non-null pagination token is returned in a result, then pass its value in here to list more artifacts. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Result structure for the list artifacts request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListArtifactsResult {
+    /// <p> List of artifacts. </p>
+    #[serde(rename = "artifacts")]
+    pub artifacts: Vec<Artifact>,
+    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Request structure for list backend environments request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListBackendEnvironmentsRequest {
+    /// <p> Unique Id for an amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name of the backend environment </p>
+    #[serde(rename = "environmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_name: Option<String>,
+    /// <p> Maximum number of records to list in a single response. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> Pagination token. Set to null to start listing backen environments from start. If a non-null pagination token is returned in a result, then pass its value in here to list more backend environments. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Result structure for list backend environments result. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListBackendEnvironmentsResult {
+    /// <p> List of backend environments for an Amplify App. </p>
+    #[serde(rename = "backendEnvironments")]
+    pub backend_environments: Vec<BackendEnvironment>,
+    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1030,6 +1299,14 @@ pub struct Step {
     /// <p> Name of the execution step. </p>
     #[serde(rename = "stepName")]
     pub step_name: String,
+    /// <p> URL to the test artifact for the execution step. </p>
+    #[serde(rename = "testArtifactsUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_artifacts_url: Option<String>,
+    /// <p> URL to the test config for the execution step. </p>
+    #[serde(rename = "testConfigUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_config_url: Option<String>,
 }
 
 /// <p> Request structure for stop job request. </p>
@@ -1120,10 +1397,14 @@ pub struct UntagResourceResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
+    /// <p> Personal Access token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. Token is not stored. </p>
+    #[serde(rename = "accessToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token: Option<String>,
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Automated branch creation config for the Amplify App. </p>
+    /// <p> Automated branch creation branchConfig for the Amplify App. </p>
     #[serde(rename = "autoBranchCreationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_config: Option<AutoBranchCreationConfig>,
@@ -1171,10 +1452,18 @@ pub struct UpdateAppRequest {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p> OAuth token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. OAuth token is not stored. </p>
+    #[serde(rename = "oauthToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub oauth_token: Option<String>,
     /// <p> Platform for an Amplify App. </p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
+    /// <p> Repository for an Amplify App </p>
+    #[serde(rename = "repository")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository: Option<String>,
 }
 
 /// <p> Result structure for an Amplify App update request. </p>
@@ -1193,6 +1482,10 @@ pub struct UpdateBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
+    /// <p> ARN for a Backend Environment, part of an Amplify App. </p>
+    #[serde(rename = "backendEnvironmentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backend_environment_arn: Option<String>,
     /// <p> Basic Authorization credentials for the branch. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1224,6 +1517,10 @@ pub struct UpdateBranchRequest {
     #[serde(rename = "enableNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
+    /// <p> Enables Pull Request Preview for this branch. </p>
+    #[serde(rename = "enablePullRequestPreview")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_pull_request_preview: Option<bool>,
     /// <p> Environment Variables for the branch. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1232,6 +1529,10 @@ pub struct UpdateBranchRequest {
     #[serde(rename = "framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
+    /// <p> The Amplify Environment name for the pull request. </p>
+    #[serde(rename = "pullRequestEnvironmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_environment_name: Option<String>,
     /// <p> Stage for the branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1261,7 +1562,7 @@ pub struct UpdateDomainAssociationRequest {
     /// <p> Name of the domain. </p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p> Enables automated creation of Subdomains for branches. </p>
+    /// <p> Enables automated creation of Subdomains for branches. (Currently not supported) </p>
     #[serde(rename = "enableAutoSubDomain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_sub_domain: Option<bool>,
@@ -1375,20 +1676,75 @@ impl CreateAppError {
 }
 impl fmt::Display for CreateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAppError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAppError::BadRequest(ref cause) => cause,
-            CreateAppError::DependentServiceFailure(ref cause) => cause,
-            CreateAppError::InternalFailure(ref cause) => cause,
-            CreateAppError::LimitExceeded(ref cause) => cause,
-            CreateAppError::Unauthorized(ref cause) => cause,
+            CreateAppError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateAppError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateAppError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateAppError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAppError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAppError {}
+/// Errors returned by CreateBackendEnvironment
+#[derive(Debug, PartialEq)]
+pub enum CreateBackendEnvironmentError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl CreateBackendEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBackendEnvironmentError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateBackendEnvironmentError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateBackendEnvironmentError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateBackendEnvironmentError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateBackendEnvironmentError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(CreateBackendEnvironmentError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateBackendEnvironmentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateBackendEnvironmentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateBackendEnvironmentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateBackendEnvironmentError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBackendEnvironmentError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateBackendEnvironmentError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateBackendEnvironmentError {}
 /// Errors returned by CreateBranch
 #[derive(Debug, PartialEq)]
 pub enum CreateBranchError {
@@ -1439,21 +1795,17 @@ impl CreateBranchError {
 }
 impl fmt::Display for CreateBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBranchError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBranchError::BadRequest(ref cause) => cause,
-            CreateBranchError::DependentServiceFailure(ref cause) => cause,
-            CreateBranchError::InternalFailure(ref cause) => cause,
-            CreateBranchError::LimitExceeded(ref cause) => cause,
-            CreateBranchError::NotFound(ref cause) => cause,
-            CreateBranchError::Unauthorized(ref cause) => cause,
+            CreateBranchError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateBranchError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBranchError {}
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
@@ -1492,19 +1844,15 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDeploymentError::BadRequest(ref cause) => cause,
-            CreateDeploymentError::InternalFailure(ref cause) => cause,
-            CreateDeploymentError::LimitExceeded(ref cause) => cause,
-            CreateDeploymentError::Unauthorized(ref cause) => cause,
+            CreateDeploymentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDeploymentError {}
 /// Errors returned by CreateDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainAssociationError {
@@ -1561,21 +1909,19 @@ impl CreateDomainAssociationError {
 }
 impl fmt::Display for CreateDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainAssociationError::BadRequest(ref cause) => cause,
-            CreateDomainAssociationError::DependentServiceFailure(ref cause) => cause,
-            CreateDomainAssociationError::InternalFailure(ref cause) => cause,
-            CreateDomainAssociationError::LimitExceeded(ref cause) => cause,
-            CreateDomainAssociationError::NotFound(ref cause) => cause,
-            CreateDomainAssociationError::Unauthorized(ref cause) => cause,
+            CreateDomainAssociationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateDomainAssociationError::DependentServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDomainAssociationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDomainAssociationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDomainAssociationError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDomainAssociationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainAssociationError {}
 /// Errors returned by CreateWebhook
 #[derive(Debug, PartialEq)]
 pub enum CreateWebhookError {
@@ -1626,21 +1972,17 @@ impl CreateWebhookError {
 }
 impl fmt::Display for CreateWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWebhookError::BadRequest(ref cause) => cause,
-            CreateWebhookError::DependentServiceFailure(ref cause) => cause,
-            CreateWebhookError::InternalFailure(ref cause) => cause,
-            CreateWebhookError::LimitExceeded(ref cause) => cause,
-            CreateWebhookError::NotFound(ref cause) => cause,
-            CreateWebhookError::Unauthorized(ref cause) => cause,
+            CreateWebhookError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWebhookError {}
 /// Errors returned by DeleteApp
 #[derive(Debug, PartialEq)]
 pub enum DeleteAppError {
@@ -1684,20 +2026,77 @@ impl DeleteAppError {
 }
 impl fmt::Display for DeleteAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAppError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAppError::BadRequest(ref cause) => cause,
-            DeleteAppError::DependentServiceFailure(ref cause) => cause,
-            DeleteAppError::InternalFailure(ref cause) => cause,
-            DeleteAppError::NotFound(ref cause) => cause,
-            DeleteAppError::Unauthorized(ref cause) => cause,
+            DeleteAppError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAppError {}
+/// Errors returned by DeleteBackendEnvironment
+#[derive(Debug, PartialEq)]
+pub enum DeleteBackendEnvironmentError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    DependentServiceFailure(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl DeleteBackendEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackendEnvironmentError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteBackendEnvironmentError::BadRequest(err.msg))
+                }
+                "DependentServiceFailureException" => {
+                    return RusotoError::Service(
+                        DeleteBackendEnvironmentError::DependentServiceFailure(err.msg),
+                    )
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteBackendEnvironmentError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteBackendEnvironmentError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DeleteBackendEnvironmentError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteBackendEnvironmentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteBackendEnvironmentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBackendEnvironmentError::DependentServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteBackendEnvironmentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteBackendEnvironmentError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBackendEnvironmentError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteBackendEnvironmentError {}
 /// Errors returned by DeleteBranch
 #[derive(Debug, PartialEq)]
 pub enum DeleteBranchError {
@@ -1743,20 +2142,16 @@ impl DeleteBranchError {
 }
 impl fmt::Display for DeleteBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBranchError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBranchError::BadRequest(ref cause) => cause,
-            DeleteBranchError::DependentServiceFailure(ref cause) => cause,
-            DeleteBranchError::InternalFailure(ref cause) => cause,
-            DeleteBranchError::NotFound(ref cause) => cause,
-            DeleteBranchError::Unauthorized(ref cause) => cause,
+            DeleteBranchError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBranchError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBranchError {}
 /// Errors returned by DeleteDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainAssociationError {
@@ -1806,20 +2201,18 @@ impl DeleteDomainAssociationError {
 }
 impl fmt::Display for DeleteDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainAssociationError::BadRequest(ref cause) => cause,
-            DeleteDomainAssociationError::DependentServiceFailure(ref cause) => cause,
-            DeleteDomainAssociationError::InternalFailure(ref cause) => cause,
-            DeleteDomainAssociationError::NotFound(ref cause) => cause,
-            DeleteDomainAssociationError::Unauthorized(ref cause) => cause,
+            DeleteDomainAssociationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDomainAssociationError::DependentServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDomainAssociationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDomainAssociationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDomainAssociationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainAssociationError {}
 /// Errors returned by DeleteJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobError {
@@ -1863,20 +2256,16 @@ impl DeleteJobError {
 }
 impl fmt::Display for DeleteJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteJobError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteJobError::BadRequest(ref cause) => cause,
-            DeleteJobError::InternalFailure(ref cause) => cause,
-            DeleteJobError::LimitExceeded(ref cause) => cause,
-            DeleteJobError::NotFound(ref cause) => cause,
-            DeleteJobError::Unauthorized(ref cause) => cause,
+            DeleteJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteJobError {}
 /// Errors returned by DeleteWebhook
 #[derive(Debug, PartialEq)]
 pub enum DeleteWebhookError {
@@ -1920,20 +2309,63 @@ impl DeleteWebhookError {
 }
 impl fmt::Display for DeleteWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWebhookError::BadRequest(ref cause) => cause,
-            DeleteWebhookError::InternalFailure(ref cause) => cause,
-            DeleteWebhookError::LimitExceeded(ref cause) => cause,
-            DeleteWebhookError::NotFound(ref cause) => cause,
-            DeleteWebhookError::Unauthorized(ref cause) => cause,
+            DeleteWebhookError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteWebhookError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteWebhookError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteWebhookError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteWebhookError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWebhookError {}
+/// Errors returned by GenerateAccessLogs
+#[derive(Debug, PartialEq)]
+pub enum GenerateAccessLogsError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl GenerateAccessLogsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateAccessLogsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GenerateAccessLogsError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GenerateAccessLogsError::InternalFailure(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GenerateAccessLogsError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GenerateAccessLogsError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GenerateAccessLogsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GenerateAccessLogsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GenerateAccessLogsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GenerateAccessLogsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GenerateAccessLogsError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GenerateAccessLogsError {}
 /// Errors returned by GetApp
 #[derive(Debug, PartialEq)]
 pub enum GetAppError {
@@ -1970,19 +2402,117 @@ impl GetAppError {
 }
 impl fmt::Display for GetAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAppError {
-    fn description(&self) -> &str {
         match *self {
-            GetAppError::BadRequest(ref cause) => cause,
-            GetAppError::InternalFailure(ref cause) => cause,
-            GetAppError::NotFound(ref cause) => cause,
-            GetAppError::Unauthorized(ref cause) => cause,
+            GetAppError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetAppError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetAppError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAppError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAppError {}
+/// Errors returned by GetArtifactUrl
+#[derive(Debug, PartialEq)]
+pub enum GetArtifactUrlError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl GetArtifactUrlError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetArtifactUrlError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetArtifactUrlError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetArtifactUrlError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetArtifactUrlError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetArtifactUrlError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetArtifactUrlError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetArtifactUrlError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetArtifactUrlError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetArtifactUrlError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetArtifactUrlError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetArtifactUrlError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetArtifactUrlError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetArtifactUrlError {}
+/// Errors returned by GetBackendEnvironment
+#[derive(Debug, PartialEq)]
+pub enum GetBackendEnvironmentError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl GetBackendEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBackendEnvironmentError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetBackendEnvironmentError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetBackendEnvironmentError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetBackendEnvironmentError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetBackendEnvironmentError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetBackendEnvironmentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetBackendEnvironmentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetBackendEnvironmentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetBackendEnvironmentError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBackendEnvironmentError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetBackendEnvironmentError {}
 /// Errors returned by GetBranch
 #[derive(Debug, PartialEq)]
 pub enum GetBranchError {
@@ -2021,19 +2551,15 @@ impl GetBranchError {
 }
 impl fmt::Display for GetBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBranchError {
-    fn description(&self) -> &str {
         match *self {
-            GetBranchError::BadRequest(ref cause) => cause,
-            GetBranchError::InternalFailure(ref cause) => cause,
-            GetBranchError::NotFound(ref cause) => cause,
-            GetBranchError::Unauthorized(ref cause) => cause,
+            GetBranchError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetBranchError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetBranchError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBranchError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBranchError {}
 /// Errors returned by GetDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum GetDomainAssociationError {
@@ -2074,19 +2600,15 @@ impl GetDomainAssociationError {
 }
 impl fmt::Display for GetDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDomainAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            GetDomainAssociationError::BadRequest(ref cause) => cause,
-            GetDomainAssociationError::InternalFailure(ref cause) => cause,
-            GetDomainAssociationError::NotFound(ref cause) => cause,
-            GetDomainAssociationError::Unauthorized(ref cause) => cause,
+            GetDomainAssociationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetDomainAssociationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetDomainAssociationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDomainAssociationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDomainAssociationError {}
 /// Errors returned by GetJob
 #[derive(Debug, PartialEq)]
 pub enum GetJobError {
@@ -2128,20 +2650,16 @@ impl GetJobError {
 }
 impl fmt::Display for GetJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobError::BadRequest(ref cause) => cause,
-            GetJobError::InternalFailure(ref cause) => cause,
-            GetJobError::LimitExceeded(ref cause) => cause,
-            GetJobError::NotFound(ref cause) => cause,
-            GetJobError::Unauthorized(ref cause) => cause,
+            GetJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetJobError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobError {}
 /// Errors returned by GetWebhook
 #[derive(Debug, PartialEq)]
 pub enum GetWebhookError {
@@ -2185,20 +2703,16 @@ impl GetWebhookError {
 }
 impl fmt::Display for GetWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            GetWebhookError::BadRequest(ref cause) => cause,
-            GetWebhookError::InternalFailure(ref cause) => cause,
-            GetWebhookError::LimitExceeded(ref cause) => cause,
-            GetWebhookError::NotFound(ref cause) => cause,
-            GetWebhookError::Unauthorized(ref cause) => cause,
+            GetWebhookError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetWebhookError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetWebhookError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetWebhookError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetWebhookError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetWebhookError {}
 /// Errors returned by ListApps
 #[derive(Debug, PartialEq)]
 pub enum ListAppsError {
@@ -2232,18 +2746,106 @@ impl ListAppsError {
 }
 impl fmt::Display for ListAppsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAppsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAppsError::BadRequest(ref cause) => cause,
-            ListAppsError::InternalFailure(ref cause) => cause,
-            ListAppsError::Unauthorized(ref cause) => cause,
+            ListAppsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListAppsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListAppsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAppsError {}
+/// Errors returned by ListArtifacts
+#[derive(Debug, PartialEq)]
+pub enum ListArtifactsError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl ListArtifactsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArtifactsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListArtifactsError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListArtifactsError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListArtifactsError::LimitExceeded(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListArtifactsError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListArtifactsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListArtifactsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListArtifactsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListArtifactsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListArtifactsError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListArtifactsError {}
+/// Errors returned by ListBackendEnvironments
+#[derive(Debug, PartialEq)]
+pub enum ListBackendEnvironmentsError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl ListBackendEnvironmentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackendEnvironmentsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListBackendEnvironmentsError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListBackendEnvironmentsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListBackendEnvironmentsError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListBackendEnvironmentsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListBackendEnvironmentsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListBackendEnvironmentsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListBackendEnvironmentsError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListBackendEnvironmentsError {}
 /// Errors returned by ListBranches
 #[derive(Debug, PartialEq)]
 pub enum ListBranchesError {
@@ -2277,18 +2879,14 @@ impl ListBranchesError {
 }
 impl fmt::Display for ListBranchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBranchesError {
-    fn description(&self) -> &str {
         match *self {
-            ListBranchesError::BadRequest(ref cause) => cause,
-            ListBranchesError::InternalFailure(ref cause) => cause,
-            ListBranchesError::Unauthorized(ref cause) => cause,
+            ListBranchesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListBranchesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBranchesError {}
 /// Errors returned by ListDomainAssociations
 #[derive(Debug, PartialEq)]
 pub enum ListDomainAssociationsError {
@@ -2324,18 +2922,14 @@ impl ListDomainAssociationsError {
 }
 impl fmt::Display for ListDomainAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainAssociationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDomainAssociationsError::BadRequest(ref cause) => cause,
-            ListDomainAssociationsError::InternalFailure(ref cause) => cause,
-            ListDomainAssociationsError::Unauthorized(ref cause) => cause,
+            ListDomainAssociationsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListDomainAssociationsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListDomainAssociationsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDomainAssociationsError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -2374,19 +2968,15 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsError::BadRequest(ref cause) => cause,
-            ListJobsError::InternalFailure(ref cause) => cause,
-            ListJobsError::LimitExceeded(ref cause) => cause,
-            ListJobsError::Unauthorized(ref cause) => cause,
+            ListJobsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListJobsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListJobsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListJobsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2422,18 +3012,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::InternalFailure(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListWebhooks
 #[derive(Debug, PartialEq)]
 pub enum ListWebhooksError {
@@ -2472,19 +3058,15 @@ impl ListWebhooksError {
 }
 impl fmt::Display for ListWebhooksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWebhooksError {
-    fn description(&self) -> &str {
         match *self {
-            ListWebhooksError::BadRequest(ref cause) => cause,
-            ListWebhooksError::InternalFailure(ref cause) => cause,
-            ListWebhooksError::LimitExceeded(ref cause) => cause,
-            ListWebhooksError::Unauthorized(ref cause) => cause,
+            ListWebhooksError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListWebhooksError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListWebhooksError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListWebhooksError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListWebhooksError {}
 /// Errors returned by StartDeployment
 #[derive(Debug, PartialEq)]
 pub enum StartDeploymentError {
@@ -2528,20 +3110,16 @@ impl StartDeploymentError {
 }
 impl fmt::Display for StartDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDeploymentError {
-    fn description(&self) -> &str {
         match *self {
-            StartDeploymentError::BadRequest(ref cause) => cause,
-            StartDeploymentError::InternalFailure(ref cause) => cause,
-            StartDeploymentError::LimitExceeded(ref cause) => cause,
-            StartDeploymentError::NotFound(ref cause) => cause,
-            StartDeploymentError::Unauthorized(ref cause) => cause,
+            StartDeploymentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StartDeploymentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StartDeploymentError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartDeploymentError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartDeploymentError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartDeploymentError {}
 /// Errors returned by StartJob
 #[derive(Debug, PartialEq)]
 pub enum StartJobError {
@@ -2585,20 +3163,16 @@ impl StartJobError {
 }
 impl fmt::Display for StartJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartJobError::BadRequest(ref cause) => cause,
-            StartJobError::InternalFailure(ref cause) => cause,
-            StartJobError::LimitExceeded(ref cause) => cause,
-            StartJobError::NotFound(ref cause) => cause,
-            StartJobError::Unauthorized(ref cause) => cause,
+            StartJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StartJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StartJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartJobError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartJobError {}
 /// Errors returned by StopJob
 #[derive(Debug, PartialEq)]
 pub enum StopJobError {
@@ -2642,20 +3216,16 @@ impl StopJobError {
 }
 impl fmt::Display for StopJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopJobError::BadRequest(ref cause) => cause,
-            StopJobError::InternalFailure(ref cause) => cause,
-            StopJobError::LimitExceeded(ref cause) => cause,
-            StopJobError::NotFound(ref cause) => cause,
-            StopJobError::Unauthorized(ref cause) => cause,
+            StopJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StopJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StopJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StopJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopJobError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopJobError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2689,18 +3259,14 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::InternalFailure(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -2734,18 +3300,14 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::InternalFailure(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateApp
 #[derive(Debug, PartialEq)]
 pub enum UpdateAppError {
@@ -2784,19 +3346,15 @@ impl UpdateAppError {
 }
 impl fmt::Display for UpdateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAppError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAppError::BadRequest(ref cause) => cause,
-            UpdateAppError::InternalFailure(ref cause) => cause,
-            UpdateAppError::NotFound(ref cause) => cause,
-            UpdateAppError::Unauthorized(ref cause) => cause,
+            UpdateAppError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAppError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAppError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAppError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAppError {}
 /// Errors returned by UpdateBranch
 #[derive(Debug, PartialEq)]
 pub enum UpdateBranchError {
@@ -2842,20 +3400,16 @@ impl UpdateBranchError {
 }
 impl fmt::Display for UpdateBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBranchError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBranchError::BadRequest(ref cause) => cause,
-            UpdateBranchError::DependentServiceFailure(ref cause) => cause,
-            UpdateBranchError::InternalFailure(ref cause) => cause,
-            UpdateBranchError::NotFound(ref cause) => cause,
-            UpdateBranchError::Unauthorized(ref cause) => cause,
+            UpdateBranchError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateBranchError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateBranchError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateBranchError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateBranchError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBranchError {}
 /// Errors returned by UpdateDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainAssociationError {
@@ -2905,20 +3459,18 @@ impl UpdateDomainAssociationError {
 }
 impl fmt::Display for UpdateDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainAssociationError::BadRequest(ref cause) => cause,
-            UpdateDomainAssociationError::DependentServiceFailure(ref cause) => cause,
-            UpdateDomainAssociationError::InternalFailure(ref cause) => cause,
-            UpdateDomainAssociationError::NotFound(ref cause) => cause,
-            UpdateDomainAssociationError::Unauthorized(ref cause) => cause,
+            UpdateDomainAssociationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDomainAssociationError::DependentServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDomainAssociationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDomainAssociationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDomainAssociationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainAssociationError {}
 /// Errors returned by UpdateWebhook
 #[derive(Debug, PartialEq)]
 pub enum UpdateWebhookError {
@@ -2964,24 +3516,26 @@ impl UpdateWebhookError {
 }
 impl fmt::Display for UpdateWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateWebhookError::BadRequest(ref cause) => cause,
-            UpdateWebhookError::DependentServiceFailure(ref cause) => cause,
-            UpdateWebhookError::InternalFailure(ref cause) => cause,
-            UpdateWebhookError::NotFound(ref cause) => cause,
-            UpdateWebhookError::Unauthorized(ref cause) => cause,
+            UpdateWebhookError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateWebhookError::DependentServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateWebhookError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateWebhookError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateWebhookError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateWebhookError {}
 /// Trait representing the capabilities of the Amplify API. Amplify clients implement this trait.
 pub trait Amplify {
     /// <p> Creates a new Amplify App. </p>
     fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError>;
+
+    /// <p> Creates a new backend environment for an Amplify App. </p>
+    fn create_backend_environment(
+        &self,
+        input: CreateBackendEnvironmentRequest,
+    ) -> RusotoFuture<CreateBackendEnvironmentResult, CreateBackendEnvironmentError>;
 
     /// <p> Creates a new Branch for an Amplify App. </p>
     fn create_branch(
@@ -3010,6 +3564,12 @@ pub trait Amplify {
     /// <p> Delete an existing Amplify App by appId. </p>
     fn delete_app(&self, input: DeleteAppRequest) -> RusotoFuture<DeleteAppResult, DeleteAppError>;
 
+    /// <p> Delete backend environment for an Amplify App. </p>
+    fn delete_backend_environment(
+        &self,
+        input: DeleteBackendEnvironmentRequest,
+    ) -> RusotoFuture<DeleteBackendEnvironmentResult, DeleteBackendEnvironmentError>;
+
     /// <p> Deletes a branch for an Amplify App. </p>
     fn delete_branch(
         &self,
@@ -3031,8 +3591,26 @@ pub trait Amplify {
         input: DeleteWebhookRequest,
     ) -> RusotoFuture<DeleteWebhookResult, DeleteWebhookError>;
 
+    /// <p> Retrieve website access logs for a specific time range via a pre-signed URL. </p>
+    fn generate_access_logs(
+        &self,
+        input: GenerateAccessLogsRequest,
+    ) -> RusotoFuture<GenerateAccessLogsResult, GenerateAccessLogsError>;
+
     /// <p> Retrieves an existing Amplify App by appId. </p>
     fn get_app(&self, input: GetAppRequest) -> RusotoFuture<GetAppResult, GetAppError>;
+
+    /// <p> Retrieves artifact info that corresponds to a artifactId. </p>
+    fn get_artifact_url(
+        &self,
+        input: GetArtifactUrlRequest,
+    ) -> RusotoFuture<GetArtifactUrlResult, GetArtifactUrlError>;
+
+    /// <p> Retrieves a backend environment for an Amplify App. </p>
+    fn get_backend_environment(
+        &self,
+        input: GetBackendEnvironmentRequest,
+    ) -> RusotoFuture<GetBackendEnvironmentResult, GetBackendEnvironmentError>;
 
     /// <p> Retrieves a branch for an Amplify App. </p>
     fn get_branch(&self, input: GetBranchRequest) -> RusotoFuture<GetBranchResult, GetBranchError>;
@@ -3054,6 +3632,18 @@ pub trait Amplify {
 
     /// <p> Lists existing Amplify Apps. </p>
     fn list_apps(&self, input: ListAppsRequest) -> RusotoFuture<ListAppsResult, ListAppsError>;
+
+    /// <p> List artifacts with an app, a branch, a job and an artifact type. </p>
+    fn list_artifacts(
+        &self,
+        input: ListArtifactsRequest,
+    ) -> RusotoFuture<ListArtifactsResult, ListArtifactsError>;
+
+    /// <p> Lists backend environments for an Amplify App. </p>
+    fn list_backend_environments(
+        &self,
+        input: ListBackendEnvironmentsRequest,
+    ) -> RusotoFuture<ListBackendEnvironmentsResult, ListBackendEnvironmentsError>;
 
     /// <p> Lists branches for an Amplify App. </p>
     fn list_branches(
@@ -3164,6 +3754,14 @@ impl AmplifyClient {
     }
 }
 
+impl fmt::Debug for AmplifyClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AmplifyClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Amplify for AmplifyClient {
     /// <p> Creates a new Amplify App. </p>
     fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError> {
@@ -3190,6 +3788,35 @@ impl Amplify for AmplifyClient {
                         .from_err()
                         .and_then(|response| Err(CreateAppError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p> Creates a new backend environment for an Amplify App. </p>
+    fn create_backend_environment(
+        &self,
+        input: CreateBackendEnvironmentRequest,
+    ) -> RusotoFuture<CreateBackendEnvironmentResult, CreateBackendEnvironmentError> {
+        let request_uri = format!("/apps/{app_id}/backendenvironments", app_id = input.app_id);
+
+        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateBackendEnvironmentResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateBackendEnvironmentError::from_response(response))
+                }))
             }
         })
     }
@@ -3349,6 +3976,36 @@ impl Amplify for AmplifyClient {
         })
     }
 
+    /// <p> Delete backend environment for an Amplify App. </p>
+    fn delete_backend_environment(
+        &self,
+        input: DeleteBackendEnvironmentRequest,
+    ) -> RusotoFuture<DeleteBackendEnvironmentResult, DeleteBackendEnvironmentError> {
+        let request_uri = format!(
+            "/apps/{app_id}/backendenvironments/{environment_name}",
+            app_id = input.app_id,
+            environment_name = input.environment_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteBackendEnvironmentResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteBackendEnvironmentError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p> Deletes a branch for an Amplify App. </p>
     fn delete_branch(
         &self,
@@ -3472,6 +4129,38 @@ impl Amplify for AmplifyClient {
         })
     }
 
+    /// <p> Retrieve website access logs for a specific time range via a pre-signed URL. </p>
+    fn generate_access_logs(
+        &self,
+        input: GenerateAccessLogsRequest,
+    ) -> RusotoFuture<GenerateAccessLogsResult, GenerateAccessLogsError> {
+        let request_uri = format!("/apps/{app_id}/accesslogs", app_id = input.app_id);
+
+        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GenerateAccessLogsResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GenerateAccessLogsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p> Retrieves an existing Amplify App by appId. </p>
     fn get_app(&self, input: GetAppRequest) -> RusotoFuture<GetAppResult, GetAppError> {
         let request_uri = format!("/apps/{app_id}", app_id = input.app_id);
@@ -3493,6 +4182,67 @@ impl Amplify for AmplifyClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetAppError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Retrieves artifact info that corresponds to a artifactId. </p>
+    fn get_artifact_url(
+        &self,
+        input: GetArtifactUrlRequest,
+    ) -> RusotoFuture<GetArtifactUrlResult, GetArtifactUrlError> {
+        let request_uri = format!("/artifacts/{artifact_id}", artifact_id = input.artifact_id);
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetArtifactUrlResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetArtifactUrlError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Retrieves a backend environment for an Amplify App. </p>
+    fn get_backend_environment(
+        &self,
+        input: GetBackendEnvironmentRequest,
+    ) -> RusotoFuture<GetBackendEnvironmentResult, GetBackendEnvironmentError> {
+        let request_uri = format!(
+            "/apps/{app_id}/backendenvironments/{environment_name}",
+            app_id = input.app_id,
+            environment_name = input.environment_name
+        );
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetBackendEnvironmentResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetBackendEnvironmentError::from_response(response))
+                    }),
                 )
             }
         })
@@ -3651,6 +4401,87 @@ impl Amplify for AmplifyClient {
                         .from_err()
                         .and_then(|response| Err(ListAppsError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p> List artifacts with an app, a branch, a job and an artifact type. </p>
+    fn list_artifacts(
+        &self,
+        input: ListArtifactsRequest,
+    ) -> RusotoFuture<ListArtifactsResult, ListArtifactsError> {
+        let request_uri = format!(
+            "/apps/{app_id}/branches/{branch_name}/jobs/{job_id}/artifacts",
+            app_id = input.app_id,
+            branch_name = input.branch_name,
+            job_id = input.job_id
+        );
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListArtifactsResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListArtifactsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Lists backend environments for an Amplify App. </p>
+    fn list_backend_environments(
+        &self,
+        input: ListBackendEnvironmentsRequest,
+    ) -> RusotoFuture<ListBackendEnvironmentsResult, ListBackendEnvironmentsError> {
+        let request_uri = format!("/apps/{app_id}/backendenvironments", app_id = input.app_id);
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListBackendEnvironmentsResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListBackendEnvironmentsError::from_response(response))
+                }))
             }
         })
     }

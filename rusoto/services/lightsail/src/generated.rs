@@ -23,6 +23,41 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
+/// <p>Describes an add-on that is enabled for an Amazon Lightsail resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddOn {
+    /// <p>The name of the add-on.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The next daily time an automatic snapshot will be created.</p> <p>The time shown is in <code>HH:00</code> format, and in Coordinated Universal Time (UTC).</p> <p>The snapshot is automatically created between the time shown and up to 45 minutes after.</p>
+    #[serde(rename = "nextSnapshotTimeOfDay")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_snapshot_time_of_day: Option<String>,
+    /// <p>The daily time when an automatic snapshot is created.</p> <p>The time shown is in <code>HH:00</code> format, and in Coordinated Universal Time (UTC).</p> <p>The snapshot is automatically created between the time shown and up to 45 minutes after.</p>
+    #[serde(rename = "snapshotTimeOfDay")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_time_of_day: Option<String>,
+    /// <p>The status of the add-on.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p><p>Describes a request to enable, modify, or disable an add-on for an Amazon Lightsail resource.</p> <note> <p>An additional cost may be associated with enabling add-ons. For more information, see the <a href="https://aws.amazon.com/lightsail/pricing/">Lightsail pricing page</a>.</p> </note></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AddOnRequest {
+    /// <p>The add-on type.</p>
+    #[serde(rename = "addOnType")]
+    pub add_on_type: String,
+    /// <p>An object that represents additional parameters when enabling or modifying the automatic snapshot add-on.</p>
+    #[serde(rename = "autoSnapshotAddOnRequest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_snapshot_add_on_request: Option<AutoSnapshotAddOnRequest>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateStaticIpRequest {
@@ -121,6 +156,52 @@ pub struct AttachStaticIpResult {
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
+}
+
+/// <p>Describes a block storage disk that is attached to an instance, and is included in an automatic snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AttachedDisk {
+    /// <p>The path of the disk (e.g., <code>/dev/xvdf</code>).</p>
+    #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The size of the disk in GB.</p>
+    #[serde(rename = "sizeInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size_in_gb: Option<i64>,
+}
+
+/// <p><p>Describes a request to enable or modify the automatic snapshot add-on for an Amazon Lightsail instance or disk.</p> <p>When you modify the automatic snapshot time for a resource, it is typically effective immediately except under the following conditions:</p> <ul> <li> <p>If an automatic snapshot has been created for the current day, and you change the snapshot time to a later time of day, then the new snapshot time will be effective the following day. This ensures that two snapshots are not created for the current day.</p> </li> <li> <p>If an automatic snapshot has not yet been created for the current day, and you change the snapshot time to an earlier time of day, then the new snapshot time will be effective the following day and a snapshot is automatically created at the previously set time for the current day. This ensures that a snapshot is created for the current day.</p> </li> <li> <p>If an automatic snapshot has not yet been created for the current day, and you change the snapshot time to a time that is within 30 minutes from your current time, then the new snapshot time will be effective the following day and a snapshot is automatically created at the previously set time for the current day. This ensures that a snapshot is created for the current day, because 30 minutes is required between your current time and the new snapshot time that you specify.</p> </li> <li> <p>If an automatic snapshot is scheduled to be created within 30 minutes from your current time and you change the snapshot time, then the new snapshot time will be effective the following day and a snapshot is automatically created at the previously set time for the current day. This ensures that a snapshot is created for the current day, because 30 minutes is required between your current time and the new snapshot time that you specify.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AutoSnapshotAddOnRequest {
+    /// <p><p>The daily time when an automatic snapshot will be created.</p> <p>Constraints:</p> <ul> <li> <p>Must be in <code>HH:00</code> format, and in an hourly increment.</p> </li> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>The snapshot will be automatically created between the time specified and up to 45 minutes after.</p> </li> </ul></p>
+    #[serde(rename = "snapshotTimeOfDay")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_time_of_day: Option<String>,
+}
+
+/// <p>Describes an automatic snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AutoSnapshotDetails {
+    /// <p>The timestamp when the automatic snapshot was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The date of the automatic snapshot in <code>YYYY-MM-DD</code> format.</p>
+    #[serde(rename = "date")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date: Option<String>,
+    /// <p>An array of objects that describe the block storage disks attached to the instance when the automatic snapshot was created.</p>
+    #[serde(rename = "fromAttachedDisks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_attached_disks: Option<Vec<AttachedDisk>>,
+    /// <p>The status of the automatic snapshot.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>Describes an Availability Zone.</p>
@@ -320,15 +401,28 @@ pub struct CloudFormationStackRecordSourceInfo {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopySnapshotRequest {
-    /// <p>The AWS Region where the source snapshot is located.</p>
+    /// <p><p>The date of the automatic snapshot to copy for the new manual snapshot.</p> <p>Use the <code>get auto snapshots</code> operation to identify the dates of the available automatic snapshots.</p> <p>Constraints:</p> <ul> <li> <p>Must be specified in <code>YYYY-MM-DD</code> format.</p> </li> <li> <p>This parameter cannot be defined together with the <code>use latest restorable auto snapshot</code> parameter. The <code>restore date</code> and <code>use latest restorable auto snapshot</code> parameters are mutually exclusive.</p> </li> </ul> <note> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    #[serde(rename = "restoreDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_date: Option<String>,
+    /// <p>The AWS Region where the source manual or automatic snapshot is located.</p>
     #[serde(rename = "sourceRegion")]
     pub source_region: String,
-    /// <p>The name of the source instance or disk snapshot to be copied.</p>
+    /// <p><p>The name of the source resource from which the automatic snapshot was created.</p> <note> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    #[serde(rename = "sourceResourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_resource_name: Option<String>,
+    /// <p><p>The name of the source instance or disk snapshot to be copied.</p> <note> <p>Define this parameter only when copying a manual snapshot as another manual snapshot.</p> </note></p>
     #[serde(rename = "sourceSnapshotName")]
-    pub source_snapshot_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_snapshot_name: Option<String>,
     /// <p>The name of the new instance or disk snapshot to be created as a copy.</p>
     #[serde(rename = "targetSnapshotName")]
     pub target_snapshot_name: String,
+    /// <p><p>A Boolean value to indicate whether to use the latest available automatic snapshot.</p> <p>This parameter cannot be defined together with the <code>restore date</code> parameter. The <code>use latest restorable auto snapshot</code> and <code>restore date</code> parameters are mutually exclusive.</p> <note> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    #[serde(rename = "useLatestRestorableAutoSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_latest_restorable_auto_snapshot: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -360,22 +454,39 @@ pub struct CreateCloudFormationStackResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskFromSnapshotRequest {
+    /// <p>An array of objects that represent the add-ons to enable for the new disk.</p>
+    #[serde(rename = "addOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add_ons: Option<Vec<AddOnRequest>>,
     /// <p>The Availability Zone where you want to create the disk (e.g., <code>us-east-2a</code>). Choose the same Availability Zone as the Lightsail instance where you want to create the disk.</p> <p>Use the GetRegions operation to list the Availability Zones where Lightsail is currently available.</p>
     #[serde(rename = "availabilityZone")]
     pub availability_zone: String,
     /// <p>The unique Lightsail disk name (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
     pub disk_name: String,
-    /// <p>The name of the disk snapshot (e.g., <code>my-snapshot</code>) from which to create the new storage disk.</p>
+    /// <p>The name of the disk snapshot (e.g., <code>my-snapshot</code>) from which to create the new storage disk.</p> <p>This parameter cannot be defined together with the <code>source disk name</code> parameter. The <code>disk snapshot name</code> and <code>source disk name</code> parameters are mutually exclusive.</p>
     #[serde(rename = "diskSnapshotName")]
-    pub disk_snapshot_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_snapshot_name: Option<String>,
+    /// <p><p>The date of the automatic snapshot to use for the new disk.</p> <p>Use the <code>get auto snapshots</code> operation to identify the dates of the available automatic snapshots.</p> <p>Constraints:</p> <ul> <li> <p>Must be specified in <code>YYYY-MM-DD</code> format.</p> </li> <li> <p>This parameter cannot be defined together with the <code>use latest restorable auto snapshot</code> parameter. The <code>restore date</code> and <code>use latest restorable auto snapshot</code> parameters are mutually exclusive.</p> </li> </ul> <note> <p>Define this parameter only when creating a new disk from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    #[serde(rename = "restoreDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_date: Option<String>,
     /// <p>The size of the disk in GB (e.g., <code>32</code>).</p>
     #[serde(rename = "sizeInGb")]
     pub size_in_gb: i64,
+    /// <p><p>The name of the source disk from which the source automatic snapshot was created.</p> <p>This parameter cannot be defined together with the <code>disk snapshot name</code> parameter. The <code>source disk name</code> and <code>disk snapshot name</code> parameters are mutually exclusive.</p> <note> <p>Define this parameter only when creating a new disk from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    #[serde(rename = "sourceDiskName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_disk_name: Option<String>,
     /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    /// <p><p>A Boolean value to indicate whether to use the latest available automatic snapshot.</p> <p>This parameter cannot be defined together with the <code>restore date</code> parameter. The <code>use latest restorable auto snapshot</code> and <code>restore date</code> parameters are mutually exclusive.</p> <note> <p>Define this parameter only when creating a new disk from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    #[serde(rename = "useLatestRestorableAutoSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_latest_restorable_auto_snapshot: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -390,7 +501,11 @@ pub struct CreateDiskFromSnapshotResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskRequest {
-    /// <p>The Availability Zone where you want to create the disk (e.g., <code>us-east-2a</code>). Choose the same Availability Zone as the Lightsail instance where you want to create the disk.</p> <p>Use the GetRegions operation to list the Availability Zones where Lightsail is currently available.</p>
+    /// <p>An array of objects that represent the add-ons to enable for the new disk.</p>
+    #[serde(rename = "addOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add_ons: Option<Vec<AddOnRequest>>,
+    /// <p>The Availability Zone where you want to create the disk (e.g., <code>us-east-2a</code>). Use the same Availability Zone as the Lightsail instance to which you want to attach the disk.</p> <p>Use the <code>get regions</code> operation to list the Availability Zones where Lightsail is currently available.</p>
     #[serde(rename = "availabilityZone")]
     pub availability_zone: String,
     /// <p>The unique Lightsail disk name (e.g., <code>my-disk</code>).</p>
@@ -511,6 +626,10 @@ pub struct CreateInstanceSnapshotResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstancesFromSnapshotRequest {
+    /// <p>An array of objects representing the add-ons to enable for the new instance.</p>
+    #[serde(rename = "addOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add_ons: Option<Vec<AddOnRequest>>,
     /// <p>An object containing information about one or more disk mappings.</p>
     #[serde(rename = "attachedDiskMapping")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -524,17 +643,30 @@ pub struct CreateInstancesFromSnapshotRequest {
     /// <p>The names for your new instances.</p>
     #[serde(rename = "instanceNames")]
     pub instance_names: Vec<String>,
-    /// <p>The name of the instance snapshot on which you are basing your new instances. Use the get instance snapshots operation to return information about your existing snapshots.</p>
+    /// <p>The name of the instance snapshot on which you are basing your new instances. Use the get instance snapshots operation to return information about your existing snapshots.</p> <p>This parameter cannot be defined together with the <code>source instance name</code> parameter. The <code>instance snapshot name</code> and <code>source instance name</code> parameters are mutually exclusive.</p>
     #[serde(rename = "instanceSnapshotName")]
-    pub instance_snapshot_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_snapshot_name: Option<String>,
     /// <p>The name for your key pair.</p>
     #[serde(rename = "keyPairName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair_name: Option<String>,
+    /// <p><p>The date of the automatic snapshot to use for the new instance.</p> <p>Use the <code>get auto snapshots</code> operation to identify the dates of the available automatic snapshots.</p> <p>Constraints:</p> <ul> <li> <p>Must be specified in <code>YYYY-MM-DD</code> format.</p> </li> <li> <p>This parameter cannot be defined together with the <code>use latest restorable auto snapshot</code> parameter. The <code>restore date</code> and <code>use latest restorable auto snapshot</code> parameters are mutually exclusive.</p> </li> </ul> <note> <p>Define this parameter only when creating a new instance from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    #[serde(rename = "restoreDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_date: Option<String>,
+    /// <p><p>The name of the source instance from which the source automatic snapshot was created.</p> <p>This parameter cannot be defined together with the <code>instance snapshot name</code> parameter. The <code>source instance name</code> and <code>instance snapshot name</code> parameters are mutually exclusive.</p> <note> <p>Define this parameter only when creating a new instance from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    #[serde(rename = "sourceInstanceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_instance_name: Option<String>,
     /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    /// <p><p>A Boolean value to indicate whether to use the latest available automatic snapshot.</p> <p>This parameter cannot be defined together with the <code>restore date</code> parameter. The <code>use latest restorable auto snapshot</code> and <code>restore date</code> parameters are mutually exclusive.</p> <note> <p>Define this parameter only when creating a new instance from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    #[serde(rename = "useLatestRestorableAutoSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_latest_restorable_auto_snapshot: Option<bool>,
     /// <p><p>You can create a launch script that configures a server with additional user data. For example, <code>apt-get -y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="https://lightsail.aws.amazon.com/ls/docs/getting-started/article/compare-options-choose-lightsail-instance-image">Dev Guide</a>.</p> </note></p>
     #[serde(rename = "userData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -553,10 +685,14 @@ pub struct CreateInstancesFromSnapshotResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstancesRequest {
+    /// <p>An array of objects representing the add-ons to enable for the new instance.</p>
+    #[serde(rename = "addOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add_ons: Option<Vec<AddOnRequest>>,
     /// <p>The Availability Zone in which to create your instance. Use the following format: <code>us-east-2a</code> (case sensitive). You can get a list of Availability Zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include Availability Zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
     pub availability_zone: String,
-    /// <p>The ID for a virtual private server image (e.g., <code>app_wordpress_4_4</code> or <code>app_lamp_7_0</code>). Use the get blueprints operation to return a list of available images (or <i>blueprints</i>).</p>
+    /// <p><p>The ID for a virtual private server image (e.g., <code>app<em>wordpress</em>4<em>4</code> or <code>app</em>lamp<em>7</em>0</code>). Use the <code>get blueprints</code> operation to return a list of available images (or <i>blueprints</i>).</p> <note> <p>Use active blueprints when creating new instances. Inactive blueprints are listed to support customers with existing instances and are not necessarily available to create new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases.</p> </note></p>
     #[serde(rename = "blueprintId")]
     pub blueprint_id: String,
     /// <p>The bundle of specification information for your virtual private server (or <i>instance</i>), including the pricing plan (e.g., <code>micro_1_0</code>).</p>
@@ -714,7 +850,7 @@ pub struct CreateRelationalDatabaseFromSnapshotRequest {
     #[serde(rename = "relationalDatabaseSnapshotName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub relational_database_snapshot_name: Option<String>,
-    /// <p><p>The date and time to restore your database from.</p> <p>Constraints:</p> <ul> <li> <p>Must be before the latest restorable time for the database.</p> </li> <li> <p>Cannot be specified if the <code>use latest restorable time</code> parameter is <code>true</code>.</p> </li> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a restore time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the restore time.</p> </li> </ul></p>
+    /// <p><p>The date and time to restore your database from.</p> <p>Constraints:</p> <ul> <li> <p>Must be before the latest restorable time for the database.</p> </li> <li> <p>Cannot be specified if the <code>use latest restorable time</code> parameter is <code>true</code>.</p> </li> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a restore time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the restore time.</p> </li> </ul></p>
     #[serde(rename = "restoreTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restore_time: Option<f64>,
@@ -758,11 +894,11 @@ pub struct CreateRelationalDatabaseRequest {
     /// <p><p>The master user name for your new database.</p> <p>Constraints:</p> <ul> <li> <p>Master user name is required.</p> </li> <li> <p>Must contain from 1 to 16 alphanumeric characters.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the database engine you choose.</p> <p>For more information about reserved words in MySQL 5.6 or 5.7, see the Keywords and Reserved Words articles for <a href="https://dev.mysql.com/doc/refman/5.6/en/keywords.html">MySQL 5.6</a> or <a href="https://dev.mysql.com/doc/refman/5.7/en/keywords.html">MySQL 5.7</a> respectively.</p> </li> </ul></p>
     #[serde(rename = "masterUsername")]
     pub master_username: String,
-    /// <p><p>The daily time range during which automated backups are created for your new database if automated backups are enabled.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. For more information about the preferred backup window time blocks for each region, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.BackupWindow">Working With Backups</a> guide in the Amazon Relational Database Service (Amazon RDS) documentation.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>hh24:mi-hh24:mi</code> format.</p> <p>Example: <code>16:00-16:30</code> </p> </li> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
+    /// <p><p>The daily time range during which automated backups are created for your new database if automated backups are enabled.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. For more information about the preferred backup window time blocks for each region, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.BackupWindow">Working With Backups</a> guide in the Amazon Relational Database Service (Amazon RDS) documentation.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>hh24:mi-hh24:mi</code> format.</p> <p>Example: <code>16:00-16:30</code> </p> </li> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
     #[serde(rename = "preferredBackupWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_backup_window: Option<String>,
-    /// <p><p>The weekly time range during which system maintenance can occur on your new database.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>ddd:hh24:mi-ddd:hh24:mi</code> format.</p> </li> <li> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Example: <code>Tue:17:00-Tue:17:30</code> </p> </li> </ul></p>
+    /// <p><p>The weekly time range during which system maintenance can occur on your new database.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>ddd:hh24:mi-ddd:hh24:mi</code> format.</p> </li> <li> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Example: <code>Tue:17:00-Tue:17:30</code> </p> </li> </ul></p>
     #[serde(rename = "preferredMaintenanceWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
@@ -820,16 +956,40 @@ pub struct CreateRelationalDatabaseSnapshotResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAutoSnapshotRequest {
+    /// <p>The date of the automatic snapshot to delete in <code>YYYY-MM-DD</code> format.</p> <p>Use the <code>get auto snapshots</code> operation to get the available automatic snapshots for a resource.</p>
+    #[serde(rename = "date")]
+    pub date: String,
+    /// <p>The name of the source resource from which to delete the automatic snapshot.</p>
+    #[serde(rename = "resourceName")]
+    pub resource_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAutoSnapshotResult {
+    /// <p>An array of objects that describe the result of your request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDiskRequest {
     /// <p>The unique name of the disk you want to delete (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
     pub disk_name: String,
+    /// <p>A Boolean value to indicate whether to delete the enabled add-ons for the disk.</p>
+    #[serde(rename = "forceDeleteAddOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force_delete_add_ons: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDiskResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of your request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -892,6 +1052,10 @@ pub struct DeleteDomainResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceRequest {
+    /// <p>A Boolean value to indicate whether to delete the enabled add-ons for the disk.</p>
+    #[serde(rename = "forceDeleteAddOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force_delete_add_ons: Option<bool>,
     /// <p>The name of the instance to delete.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
@@ -1108,10 +1272,34 @@ pub struct DetachStaticIpResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-/// <p>Describes a system disk or an block storage disk.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisableAddOnRequest {
+    /// <p>The add-on type to disable.</p>
+    #[serde(rename = "addOnType")]
+    pub add_on_type: String,
+    /// <p>The name of the source resource from which to disable the add-on.</p>
+    #[serde(rename = "resourceName")]
+    pub resource_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisableAddOnResult {
+    /// <p>An array of objects that describe the result of your request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+/// <p>Describes a system disk or a block storage disk.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Disk {
+    /// <p>An array of objects representing the add-ons enabled on the disk.</p>
+    #[serde(rename = "addOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add_ons: Option<Vec<AddOn>>,
     /// <p>The Amazon Resource Name (ARN) of the disk.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1234,6 +1422,10 @@ pub struct DiskSnapshot {
     #[serde(rename = "fromInstanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_instance_name: Option<String>,
+    /// <p>A Boolean value indicating whether the snapshot was created from an automatic snapshot.</p>
+    #[serde(rename = "isFromAutoSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_from_auto_snapshot: Option<bool>,
     /// <p>The AWS Region and Availability Zone where the disk snapshot was created.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1358,6 +1550,26 @@ pub struct DownloadDefaultKeyPairResult {
     pub public_key_base_64: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EnableAddOnRequest {
+    /// <p>An array of strings representing the add-on to enable or modify.</p>
+    #[serde(rename = "addOnRequest")]
+    pub add_on_request: AddOnRequest,
+    /// <p>The name of the source resource for which to enable or modify the add-on.</p>
+    #[serde(rename = "resourceName")]
+    pub resource_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EnableAddOnResult {
+    /// <p>An array of objects that describe the result of your request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
 /// <p>Describes an export snapshot record.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1471,6 +1683,31 @@ pub struct GetActiveNamesResult {
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAutoSnapshotsRequest {
+    /// <p>The name of the source resource from which to get automatic snapshot information.</p>
+    #[serde(rename = "resourceName")]
+    pub resource_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAutoSnapshotsResult {
+    /// <p>An array of objects that describe the automatic snapshots that are available for the specified source resource.asdf</p>
+    #[serde(rename = "autoSnapshots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_snapshots: Option<Vec<AutoSnapshotDetails>>,
+    /// <p>The name of the source resource for the automatic snapshots.</p>
+    #[serde(rename = "resourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_name: Option<String>,
+    /// <p>The resource type (e.g., <code>Instance</code> or <code>Disk</code>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2154,7 +2391,7 @@ pub struct GetRelationalDatabaseEventsResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseLogEventsRequest {
-    /// <p><p>The end of the time interval from which to get log events.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
+    /// <p><p>The end of the time interval from which to get log events.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
@@ -2168,11 +2405,11 @@ pub struct GetRelationalDatabaseLogEventsRequest {
     /// <p>The name of your database for which to get log events.</p>
     #[serde(rename = "relationalDatabaseName")]
     pub relational_database_name: String,
-    /// <p>Parameter to specify if the log should start from head or tail. If <code>true</code> is specified, the log event starts from the head of the log. If <code>false</code> is specified, the log event starts from the tail of the log.</p> <p>Default: <code>false</code> </p>
+    /// <p><p>Parameter to specify if the log should start from head or tail. If <code>true</code> is specified, the log event starts from the head of the log. If <code>false</code> is specified, the log event starts from the tail of the log.</p> <note> <p>For PostgreSQL, the default value of <code>false</code> is the only option available.</p> </note></p>
     #[serde(rename = "startFromHead")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_from_head: Option<bool>,
-    /// <p><p>The start of the time interval from which to get log events.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a start time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the start time.</p> </li> </ul></p>
+    /// <p><p>The start of the time interval from which to get log events.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a start time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the start time.</p> </li> </ul></p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
@@ -2240,7 +2477,7 @@ pub struct GetRelationalDatabaseMasterUserPasswordResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseMetricDataRequest {
-    /// <p><p>The end of the time interval from which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
+    /// <p><p>The end of the time interval from which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
     #[serde(rename = "endTime")]
     pub end_time: f64,
     /// <p>The name of the metric data to return.</p>
@@ -2252,7 +2489,7 @@ pub struct GetRelationalDatabaseMetricDataRequest {
     /// <p>The name of your database from which to get metric data.</p>
     #[serde(rename = "relationalDatabaseName")]
     pub relational_database_name: String,
-    /// <p><p>The start of the time interval from which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a start time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the start time.</p> </li> </ul></p>
+    /// <p><p>The start of the time interval from which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a start time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the start time.</p> </li> </ul></p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
     /// <p>The array of statistics for your metric data request.</p>
@@ -2476,6 +2713,10 @@ pub struct ImportKeyPairResult {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Instance {
+    /// <p>An array of objects representing the add-ons enabled on the instance.</p>
+    #[serde(rename = "addOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add_ons: Option<Vec<AddOn>>,
     /// <p>The Amazon Resource Name (ARN) of the instance (e.g., <code>arn:aws:lightsail:us-east-2:123456789101:Instance/244ad76f-8aad-4741-809f-12345EXAMPLE</code>).</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2728,7 +2969,7 @@ pub struct InstancePortState {
     pub to_port: Option<i64>,
 }
 
-/// <p>Describes the snapshot of the virtual private server, or <i>instance</i>.</p>
+/// <p>Describes an instance snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceSnapshot {
@@ -2760,6 +3001,10 @@ pub struct InstanceSnapshot {
     #[serde(rename = "fromInstanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_instance_name: Option<String>,
+    /// <p>A Boolean value indicating whether the snapshot was created from an automatic snapshot.</p>
+    #[serde(rename = "isFromAutoSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_from_auto_snapshot: Option<bool>,
     /// <p>The region name and Availability Zone where you created the snapshot.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3223,7 +3468,7 @@ pub struct Operation {
     #[serde(rename = "isTerminal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_terminal: Option<bool>,
-    /// <p>The region and Availability Zone.</p>
+    /// <p>The AWS Region and Availability Zone.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<ResourceLocation>,
@@ -3918,6 +4163,10 @@ pub struct Tag {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource to which you want to add a tag.</p>
+    #[serde(rename = "resourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
     /// <p>The name of the resource to which you are adding tags.</p>
     #[serde(rename = "resourceName")]
     pub resource_name: String,
@@ -3951,6 +4200,10 @@ pub struct UnpeerVpcResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource from which you want to remove a tag.</p>
+    #[serde(rename = "resourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
     /// <p>The name of the resource from which you are removing a tag.</p>
     #[serde(rename = "resourceName")]
     pub resource_name: String,
@@ -4050,11 +4303,11 @@ pub struct UpdateRelationalDatabaseRequest {
     #[serde(rename = "masterUserPassword")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub master_user_password: Option<String>,
-    /// <p><p>The daily time range during which automated backups are created for your database if automated backups are enabled.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>hh24:mi-hh24:mi</code> format.</p> <p>Example: <code>16:00-16:30</code> </p> </li> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
+    /// <p><p>The daily time range during which automated backups are created for your database if automated backups are enabled.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>hh24:mi-hh24:mi</code> format.</p> <p>Example: <code>16:00-16:30</code> </p> </li> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
     #[serde(rename = "preferredBackupWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_backup_window: Option<String>,
-    /// <p><p>The weekly time range during which system maintenance can occur on your database.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>ddd:hh24:mi-ddd:hh24:mi</code> format.</p> </li> <li> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Example: <code>Tue:17:00-Tue:17:30</code> </p> </li> </ul></p>
+    /// <p><p>The weekly time range during which system maintenance can occur on your database.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>ddd:hh24:mi-ddd:hh24:mi</code> format.</p> </li> <li> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Example: <code>Tue:17:00-Tue:17:30</code> </p> </li> </ul></p>
     #[serde(rename = "preferredMaintenanceWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
@@ -4135,22 +4388,18 @@ impl AllocateStaticIpError {
 }
 impl fmt::Display for AllocateStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AllocateStaticIpError {
-    fn description(&self) -> &str {
         match *self {
-            AllocateStaticIpError::AccessDenied(ref cause) => cause,
-            AllocateStaticIpError::AccountSetupInProgress(ref cause) => cause,
-            AllocateStaticIpError::InvalidInput(ref cause) => cause,
-            AllocateStaticIpError::NotFound(ref cause) => cause,
-            AllocateStaticIpError::OperationFailure(ref cause) => cause,
-            AllocateStaticIpError::Service(ref cause) => cause,
-            AllocateStaticIpError::Unauthenticated(ref cause) => cause,
+            AllocateStaticIpError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::NotFound(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::Service(ref cause) => write!(f, "{}", cause),
+            AllocateStaticIpError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AllocateStaticIpError {}
 /// Errors returned by AttachDisk
 #[derive(Debug, PartialEq)]
 pub enum AttachDiskError {
@@ -4204,22 +4453,18 @@ impl AttachDiskError {
 }
 impl fmt::Display for AttachDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachDiskError {
-    fn description(&self) -> &str {
         match *self {
-            AttachDiskError::AccessDenied(ref cause) => cause,
-            AttachDiskError::AccountSetupInProgress(ref cause) => cause,
-            AttachDiskError::InvalidInput(ref cause) => cause,
-            AttachDiskError::NotFound(ref cause) => cause,
-            AttachDiskError::OperationFailure(ref cause) => cause,
-            AttachDiskError::Service(ref cause) => cause,
-            AttachDiskError::Unauthenticated(ref cause) => cause,
+            AttachDiskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::NotFound(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::Service(ref cause) => write!(f, "{}", cause),
+            AttachDiskError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachDiskError {}
 /// Errors returned by AttachInstancesToLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum AttachInstancesToLoadBalancerError {
@@ -4289,22 +4534,24 @@ impl AttachInstancesToLoadBalancerError {
 }
 impl fmt::Display for AttachInstancesToLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachInstancesToLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            AttachInstancesToLoadBalancerError::AccessDenied(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::InvalidInput(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::NotFound(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::OperationFailure(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::Service(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::Unauthenticated(ref cause) => cause,
+            AttachInstancesToLoadBalancerError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachInstancesToLoadBalancerError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachInstancesToLoadBalancerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachInstancesToLoadBalancerError::NotFound(ref cause) => write!(f, "{}", cause),
+            AttachInstancesToLoadBalancerError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachInstancesToLoadBalancerError::Service(ref cause) => write!(f, "{}", cause),
+            AttachInstancesToLoadBalancerError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AttachInstancesToLoadBalancerError {}
 /// Errors returned by AttachLoadBalancerTlsCertificate
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancerTlsCertificateError {
@@ -4374,22 +4621,28 @@ impl AttachLoadBalancerTlsCertificateError {
 }
 impl fmt::Display for AttachLoadBalancerTlsCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachLoadBalancerTlsCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            AttachLoadBalancerTlsCertificateError::AccessDenied(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::InvalidInput(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::NotFound(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::Service(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
+            AttachLoadBalancerTlsCertificateError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerTlsCertificateError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerTlsCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            AttachLoadBalancerTlsCertificateError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerTlsCertificateError::Service(ref cause) => write!(f, "{}", cause),
+            AttachLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AttachLoadBalancerTlsCertificateError {}
 /// Errors returned by AttachStaticIp
 #[derive(Debug, PartialEq)]
 pub enum AttachStaticIpError {
@@ -4445,22 +4698,18 @@ impl AttachStaticIpError {
 }
 impl fmt::Display for AttachStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachStaticIpError {
-    fn description(&self) -> &str {
         match *self {
-            AttachStaticIpError::AccessDenied(ref cause) => cause,
-            AttachStaticIpError::AccountSetupInProgress(ref cause) => cause,
-            AttachStaticIpError::InvalidInput(ref cause) => cause,
-            AttachStaticIpError::NotFound(ref cause) => cause,
-            AttachStaticIpError::OperationFailure(ref cause) => cause,
-            AttachStaticIpError::Service(ref cause) => cause,
-            AttachStaticIpError::Unauthenticated(ref cause) => cause,
+            AttachStaticIpError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::NotFound(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::Service(ref cause) => write!(f, "{}", cause),
+            AttachStaticIpError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachStaticIpError {}
 /// Errors returned by CloseInstancePublicPorts
 #[derive(Debug, PartialEq)]
 pub enum CloseInstancePublicPortsError {
@@ -4524,22 +4773,20 @@ impl CloseInstancePublicPortsError {
 }
 impl fmt::Display for CloseInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CloseInstancePublicPortsError {
-    fn description(&self) -> &str {
         match *self {
-            CloseInstancePublicPortsError::AccessDenied(ref cause) => cause,
-            CloseInstancePublicPortsError::AccountSetupInProgress(ref cause) => cause,
-            CloseInstancePublicPortsError::InvalidInput(ref cause) => cause,
-            CloseInstancePublicPortsError::NotFound(ref cause) => cause,
-            CloseInstancePublicPortsError::OperationFailure(ref cause) => cause,
-            CloseInstancePublicPortsError::Service(ref cause) => cause,
-            CloseInstancePublicPortsError::Unauthenticated(ref cause) => cause,
+            CloseInstancePublicPortsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CloseInstancePublicPortsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CloseInstancePublicPortsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CloseInstancePublicPortsError::NotFound(ref cause) => write!(f, "{}", cause),
+            CloseInstancePublicPortsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CloseInstancePublicPortsError::Service(ref cause) => write!(f, "{}", cause),
+            CloseInstancePublicPortsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CloseInstancePublicPortsError {}
 /// Errors returned by CopySnapshot
 #[derive(Debug, PartialEq)]
 pub enum CopySnapshotError {
@@ -4593,22 +4840,18 @@ impl CopySnapshotError {
 }
 impl fmt::Display for CopySnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopySnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CopySnapshotError::AccessDenied(ref cause) => cause,
-            CopySnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CopySnapshotError::InvalidInput(ref cause) => cause,
-            CopySnapshotError::NotFound(ref cause) => cause,
-            CopySnapshotError::OperationFailure(ref cause) => cause,
-            CopySnapshotError::Service(ref cause) => cause,
-            CopySnapshotError::Unauthenticated(ref cause) => cause,
+            CopySnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CopySnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CopySnapshotError {}
 /// Errors returned by CreateCloudFormationStack
 #[derive(Debug, PartialEq)]
 pub enum CreateCloudFormationStackError {
@@ -4672,22 +4915,20 @@ impl CreateCloudFormationStackError {
 }
 impl fmt::Display for CreateCloudFormationStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCloudFormationStackError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCloudFormationStackError::AccessDenied(ref cause) => cause,
-            CreateCloudFormationStackError::AccountSetupInProgress(ref cause) => cause,
-            CreateCloudFormationStackError::InvalidInput(ref cause) => cause,
-            CreateCloudFormationStackError::NotFound(ref cause) => cause,
-            CreateCloudFormationStackError::OperationFailure(ref cause) => cause,
-            CreateCloudFormationStackError::Service(ref cause) => cause,
-            CreateCloudFormationStackError::Unauthenticated(ref cause) => cause,
+            CreateCloudFormationStackError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationStackError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCloudFormationStackError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationStackError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationStackError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationStackError::Service(ref cause) => write!(f, "{}", cause),
+            CreateCloudFormationStackError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCloudFormationStackError {}
 /// Errors returned by CreateDisk
 #[derive(Debug, PartialEq)]
 pub enum CreateDiskError {
@@ -4741,22 +4982,18 @@ impl CreateDiskError {
 }
 impl fmt::Display for CreateDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDiskError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDiskError::AccessDenied(ref cause) => cause,
-            CreateDiskError::AccountSetupInProgress(ref cause) => cause,
-            CreateDiskError::InvalidInput(ref cause) => cause,
-            CreateDiskError::NotFound(ref cause) => cause,
-            CreateDiskError::OperationFailure(ref cause) => cause,
-            CreateDiskError::Service(ref cause) => cause,
-            CreateDiskError::Unauthenticated(ref cause) => cause,
+            CreateDiskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDiskError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDiskError {}
 /// Errors returned by CreateDiskFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateDiskFromSnapshotError {
@@ -4816,22 +5053,20 @@ impl CreateDiskFromSnapshotError {
 }
 impl fmt::Display for CreateDiskFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDiskFromSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDiskFromSnapshotError::AccessDenied(ref cause) => cause,
-            CreateDiskFromSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateDiskFromSnapshotError::InvalidInput(ref cause) => cause,
-            CreateDiskFromSnapshotError::NotFound(ref cause) => cause,
-            CreateDiskFromSnapshotError::OperationFailure(ref cause) => cause,
-            CreateDiskFromSnapshotError::Service(ref cause) => cause,
-            CreateDiskFromSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateDiskFromSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDiskFromSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDiskFromSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDiskFromSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDiskFromSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDiskFromSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDiskFromSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDiskFromSnapshotError {}
 /// Errors returned by CreateDiskSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateDiskSnapshotError {
@@ -4887,22 +5122,18 @@ impl CreateDiskSnapshotError {
 }
 impl fmt::Display for CreateDiskSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDiskSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDiskSnapshotError::AccessDenied(ref cause) => cause,
-            CreateDiskSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateDiskSnapshotError::InvalidInput(ref cause) => cause,
-            CreateDiskSnapshotError::NotFound(ref cause) => cause,
-            CreateDiskSnapshotError::OperationFailure(ref cause) => cause,
-            CreateDiskSnapshotError::Service(ref cause) => cause,
-            CreateDiskSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateDiskSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDiskSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDiskSnapshotError {}
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
@@ -4956,22 +5187,18 @@ impl CreateDomainError {
 }
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainError::AccessDenied(ref cause) => cause,
-            CreateDomainError::AccountSetupInProgress(ref cause) => cause,
-            CreateDomainError::InvalidInput(ref cause) => cause,
-            CreateDomainError::NotFound(ref cause) => cause,
-            CreateDomainError::OperationFailure(ref cause) => cause,
-            CreateDomainError::Service(ref cause) => cause,
-            CreateDomainError::Unauthenticated(ref cause) => cause,
+            CreateDomainError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainError {}
 /// Errors returned by CreateDomainEntry
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainEntryError {
@@ -5027,22 +5254,18 @@ impl CreateDomainEntryError {
 }
 impl fmt::Display for CreateDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainEntryError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainEntryError::AccessDenied(ref cause) => cause,
-            CreateDomainEntryError::AccountSetupInProgress(ref cause) => cause,
-            CreateDomainEntryError::InvalidInput(ref cause) => cause,
-            CreateDomainEntryError::NotFound(ref cause) => cause,
-            CreateDomainEntryError::OperationFailure(ref cause) => cause,
-            CreateDomainEntryError::Service(ref cause) => cause,
-            CreateDomainEntryError::Unauthenticated(ref cause) => cause,
+            CreateDomainEntryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDomainEntryError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainEntryError {}
 /// Errors returned by CreateInstanceSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateInstanceSnapshotError {
@@ -5102,22 +5325,20 @@ impl CreateInstanceSnapshotError {
 }
 impl fmt::Display for CreateInstanceSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInstanceSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInstanceSnapshotError::AccessDenied(ref cause) => cause,
-            CreateInstanceSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateInstanceSnapshotError::InvalidInput(ref cause) => cause,
-            CreateInstanceSnapshotError::NotFound(ref cause) => cause,
-            CreateInstanceSnapshotError::OperationFailure(ref cause) => cause,
-            CreateInstanceSnapshotError::Service(ref cause) => cause,
-            CreateInstanceSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateInstanceSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateInstanceSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateInstanceSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateInstanceSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateInstanceSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateInstanceSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateInstanceSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInstanceSnapshotError {}
 /// Errors returned by CreateInstances
 #[derive(Debug, PartialEq)]
 pub enum CreateInstancesError {
@@ -5173,22 +5394,18 @@ impl CreateInstancesError {
 }
 impl fmt::Display for CreateInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInstancesError::AccessDenied(ref cause) => cause,
-            CreateInstancesError::AccountSetupInProgress(ref cause) => cause,
-            CreateInstancesError::InvalidInput(ref cause) => cause,
-            CreateInstancesError::NotFound(ref cause) => cause,
-            CreateInstancesError::OperationFailure(ref cause) => cause,
-            CreateInstancesError::Service(ref cause) => cause,
-            CreateInstancesError::Unauthenticated(ref cause) => cause,
+            CreateInstancesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::Service(ref cause) => write!(f, "{}", cause),
+            CreateInstancesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInstancesError {}
 /// Errors returned by CreateInstancesFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateInstancesFromSnapshotError {
@@ -5256,22 +5473,20 @@ impl CreateInstancesFromSnapshotError {
 }
 impl fmt::Display for CreateInstancesFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInstancesFromSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInstancesFromSnapshotError::AccessDenied(ref cause) => cause,
-            CreateInstancesFromSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateInstancesFromSnapshotError::InvalidInput(ref cause) => cause,
-            CreateInstancesFromSnapshotError::NotFound(ref cause) => cause,
-            CreateInstancesFromSnapshotError::OperationFailure(ref cause) => cause,
-            CreateInstancesFromSnapshotError::Service(ref cause) => cause,
-            CreateInstancesFromSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateInstancesFromSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateInstancesFromSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateInstancesFromSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateInstancesFromSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateInstancesFromSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateInstancesFromSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateInstancesFromSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInstancesFromSnapshotError {}
 /// Errors returned by CreateKeyPair
 #[derive(Debug, PartialEq)]
 pub enum CreateKeyPairError {
@@ -5327,22 +5542,18 @@ impl CreateKeyPairError {
 }
 impl fmt::Display for CreateKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            CreateKeyPairError::AccessDenied(ref cause) => cause,
-            CreateKeyPairError::AccountSetupInProgress(ref cause) => cause,
-            CreateKeyPairError::InvalidInput(ref cause) => cause,
-            CreateKeyPairError::NotFound(ref cause) => cause,
-            CreateKeyPairError::OperationFailure(ref cause) => cause,
-            CreateKeyPairError::Service(ref cause) => cause,
-            CreateKeyPairError::Unauthenticated(ref cause) => cause,
+            CreateKeyPairError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::Service(ref cause) => write!(f, "{}", cause),
+            CreateKeyPairError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateKeyPairError {}
 /// Errors returned by CreateLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerError {
@@ -5398,22 +5609,18 @@ impl CreateLoadBalancerError {
 }
 impl fmt::Display for CreateLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerError::AccessDenied(ref cause) => cause,
-            CreateLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
-            CreateLoadBalancerError::InvalidInput(ref cause) => cause,
-            CreateLoadBalancerError::NotFound(ref cause) => cause,
-            CreateLoadBalancerError::OperationFailure(ref cause) => cause,
-            CreateLoadBalancerError::Service(ref cause) => cause,
-            CreateLoadBalancerError::Unauthenticated(ref cause) => cause,
+            CreateLoadBalancerError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::Service(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoadBalancerError {}
 /// Errors returned by CreateLoadBalancerTlsCertificate
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerTlsCertificateError {
@@ -5483,22 +5690,28 @@ impl CreateLoadBalancerTlsCertificateError {
 }
 impl fmt::Display for CreateLoadBalancerTlsCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerTlsCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerTlsCertificateError::AccessDenied(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::InvalidInput(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::NotFound(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::Service(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
+            CreateLoadBalancerTlsCertificateError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerTlsCertificateError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerTlsCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerTlsCertificateError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerTlsCertificateError::Service(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateLoadBalancerTlsCertificateError {}
 /// Errors returned by CreateRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum CreateRelationalDatabaseError {
@@ -5562,22 +5775,20 @@ impl CreateRelationalDatabaseError {
 }
 impl fmt::Display for CreateRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            CreateRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            CreateRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            CreateRelationalDatabaseError::NotFound(ref cause) => cause,
-            CreateRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            CreateRelationalDatabaseError::Service(ref cause) => cause,
-            CreateRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            CreateRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRelationalDatabaseError {}
 /// Errors returned by CreateRelationalDatabaseFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateRelationalDatabaseFromSnapshotError {
@@ -5647,22 +5858,30 @@ impl CreateRelationalDatabaseFromSnapshotError {
 }
 impl fmt::Display for CreateRelationalDatabaseFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRelationalDatabaseFromSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRelationalDatabaseFromSnapshotError::AccessDenied(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::InvalidInput(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::NotFound(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::OperationFailure(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::Service(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseFromSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseFromSnapshotError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseFromSnapshotError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseFromSnapshotError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseFromSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseFromSnapshotError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateRelationalDatabaseFromSnapshotError {}
 /// Errors returned by CreateRelationalDatabaseSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateRelationalDatabaseSnapshotError {
@@ -5732,22 +5951,87 @@ impl CreateRelationalDatabaseSnapshotError {
 }
 impl fmt::Display for CreateRelationalDatabaseSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRelationalDatabaseSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRelationalDatabaseSnapshotError::AccessDenied(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::InvalidInput(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::NotFound(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::Service(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseSnapshotError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseSnapshotError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRelationalDatabaseSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            CreateRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateRelationalDatabaseSnapshotError {}
+/// Errors returned by DeleteAutoSnapshot
+#[derive(Debug, PartialEq)]
+pub enum DeleteAutoSnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl DeleteAutoSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAutoSnapshotError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteAutoSnapshotError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteAutoSnapshotError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteAutoSnapshotError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(DeleteAutoSnapshotError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteAutoSnapshotError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(DeleteAutoSnapshotError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteAutoSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAutoSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteAutoSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteAutoSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAutoSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAutoSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteAutoSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAutoSnapshotError {}
 /// Errors returned by DeleteDisk
 #[derive(Debug, PartialEq)]
 pub enum DeleteDiskError {
@@ -5801,22 +6085,18 @@ impl DeleteDiskError {
 }
 impl fmt::Display for DeleteDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDiskError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDiskError::AccessDenied(ref cause) => cause,
-            DeleteDiskError::AccountSetupInProgress(ref cause) => cause,
-            DeleteDiskError::InvalidInput(ref cause) => cause,
-            DeleteDiskError::NotFound(ref cause) => cause,
-            DeleteDiskError::OperationFailure(ref cause) => cause,
-            DeleteDiskError::Service(ref cause) => cause,
-            DeleteDiskError::Unauthenticated(ref cause) => cause,
+            DeleteDiskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteDiskError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDiskError {}
 /// Errors returned by DeleteDiskSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteDiskSnapshotError {
@@ -5872,22 +6152,18 @@ impl DeleteDiskSnapshotError {
 }
 impl fmt::Display for DeleteDiskSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDiskSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDiskSnapshotError::AccessDenied(ref cause) => cause,
-            DeleteDiskSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            DeleteDiskSnapshotError::InvalidInput(ref cause) => cause,
-            DeleteDiskSnapshotError::NotFound(ref cause) => cause,
-            DeleteDiskSnapshotError::OperationFailure(ref cause) => cause,
-            DeleteDiskSnapshotError::Service(ref cause) => cause,
-            DeleteDiskSnapshotError::Unauthenticated(ref cause) => cause,
+            DeleteDiskSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteDiskSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDiskSnapshotError {}
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
@@ -5941,22 +6217,18 @@ impl DeleteDomainError {
 }
 impl fmt::Display for DeleteDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainError::AccessDenied(ref cause) => cause,
-            DeleteDomainError::AccountSetupInProgress(ref cause) => cause,
-            DeleteDomainError::InvalidInput(ref cause) => cause,
-            DeleteDomainError::NotFound(ref cause) => cause,
-            DeleteDomainError::OperationFailure(ref cause) => cause,
-            DeleteDomainError::Service(ref cause) => cause,
-            DeleteDomainError::Unauthenticated(ref cause) => cause,
+            DeleteDomainError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainError {}
 /// Errors returned by DeleteDomainEntry
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainEntryError {
@@ -6012,22 +6284,18 @@ impl DeleteDomainEntryError {
 }
 impl fmt::Display for DeleteDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainEntryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainEntryError::AccessDenied(ref cause) => cause,
-            DeleteDomainEntryError::AccountSetupInProgress(ref cause) => cause,
-            DeleteDomainEntryError::InvalidInput(ref cause) => cause,
-            DeleteDomainEntryError::NotFound(ref cause) => cause,
-            DeleteDomainEntryError::OperationFailure(ref cause) => cause,
-            DeleteDomainEntryError::Service(ref cause) => cause,
-            DeleteDomainEntryError::Unauthenticated(ref cause) => cause,
+            DeleteDomainEntryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteDomainEntryError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainEntryError {}
 /// Errors returned by DeleteInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceError {
@@ -6083,22 +6351,18 @@ impl DeleteInstanceError {
 }
 impl fmt::Display for DeleteInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInstanceError::AccessDenied(ref cause) => cause,
-            DeleteInstanceError::AccountSetupInProgress(ref cause) => cause,
-            DeleteInstanceError::InvalidInput(ref cause) => cause,
-            DeleteInstanceError::NotFound(ref cause) => cause,
-            DeleteInstanceError::OperationFailure(ref cause) => cause,
-            DeleteInstanceError::Service(ref cause) => cause,
-            DeleteInstanceError::Unauthenticated(ref cause) => cause,
+            DeleteInstanceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInstanceError {}
 /// Errors returned by DeleteInstanceSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceSnapshotError {
@@ -6158,22 +6422,20 @@ impl DeleteInstanceSnapshotError {
 }
 impl fmt::Display for DeleteInstanceSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInstanceSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInstanceSnapshotError::AccessDenied(ref cause) => cause,
-            DeleteInstanceSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            DeleteInstanceSnapshotError::InvalidInput(ref cause) => cause,
-            DeleteInstanceSnapshotError::NotFound(ref cause) => cause,
-            DeleteInstanceSnapshotError::OperationFailure(ref cause) => cause,
-            DeleteInstanceSnapshotError::Service(ref cause) => cause,
-            DeleteInstanceSnapshotError::Unauthenticated(ref cause) => cause,
+            DeleteInstanceSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteInstanceSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInstanceSnapshotError {}
 /// Errors returned by DeleteKeyPair
 #[derive(Debug, PartialEq)]
 pub enum DeleteKeyPairError {
@@ -6229,22 +6491,18 @@ impl DeleteKeyPairError {
 }
 impl fmt::Display for DeleteKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteKeyPairError::AccessDenied(ref cause) => cause,
-            DeleteKeyPairError::AccountSetupInProgress(ref cause) => cause,
-            DeleteKeyPairError::InvalidInput(ref cause) => cause,
-            DeleteKeyPairError::NotFound(ref cause) => cause,
-            DeleteKeyPairError::OperationFailure(ref cause) => cause,
-            DeleteKeyPairError::Service(ref cause) => cause,
-            DeleteKeyPairError::Unauthenticated(ref cause) => cause,
+            DeleteKeyPairError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteKeyPairError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteKeyPairError {}
 /// Errors returned by DeleteKnownHostKeys
 #[derive(Debug, PartialEq)]
 pub enum DeleteKnownHostKeysError {
@@ -6302,22 +6560,18 @@ impl DeleteKnownHostKeysError {
 }
 impl fmt::Display for DeleteKnownHostKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteKnownHostKeysError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteKnownHostKeysError::AccessDenied(ref cause) => cause,
-            DeleteKnownHostKeysError::AccountSetupInProgress(ref cause) => cause,
-            DeleteKnownHostKeysError::InvalidInput(ref cause) => cause,
-            DeleteKnownHostKeysError::NotFound(ref cause) => cause,
-            DeleteKnownHostKeysError::OperationFailure(ref cause) => cause,
-            DeleteKnownHostKeysError::Service(ref cause) => cause,
-            DeleteKnownHostKeysError::Unauthenticated(ref cause) => cause,
+            DeleteKnownHostKeysError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteKnownHostKeysError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteKnownHostKeysError {}
 /// Errors returned by DeleteLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerError {
@@ -6373,22 +6627,18 @@ impl DeleteLoadBalancerError {
 }
 impl fmt::Display for DeleteLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoadBalancerError::AccessDenied(ref cause) => cause,
-            DeleteLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
-            DeleteLoadBalancerError::InvalidInput(ref cause) => cause,
-            DeleteLoadBalancerError::NotFound(ref cause) => cause,
-            DeleteLoadBalancerError::OperationFailure(ref cause) => cause,
-            DeleteLoadBalancerError::Service(ref cause) => cause,
-            DeleteLoadBalancerError::Unauthenticated(ref cause) => cause,
+            DeleteLoadBalancerError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLoadBalancerError {}
 /// Errors returned by DeleteLoadBalancerTlsCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerTlsCertificateError {
@@ -6458,22 +6708,28 @@ impl DeleteLoadBalancerTlsCertificateError {
 }
 impl fmt::Display for DeleteLoadBalancerTlsCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerTlsCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoadBalancerTlsCertificateError::AccessDenied(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::InvalidInput(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::NotFound(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::Service(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
+            DeleteLoadBalancerTlsCertificateError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoadBalancerTlsCertificateError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoadBalancerTlsCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerTlsCertificateError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoadBalancerTlsCertificateError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteLoadBalancerTlsCertificateError {}
 /// Errors returned by DeleteRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum DeleteRelationalDatabaseError {
@@ -6537,22 +6793,20 @@ impl DeleteRelationalDatabaseError {
 }
 impl fmt::Display for DeleteRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            DeleteRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            DeleteRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            DeleteRelationalDatabaseError::NotFound(ref cause) => cause,
-            DeleteRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            DeleteRelationalDatabaseError::Service(ref cause) => cause,
-            DeleteRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            DeleteRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRelationalDatabaseError {}
 /// Errors returned by DeleteRelationalDatabaseSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteRelationalDatabaseSnapshotError {
@@ -6622,22 +6876,28 @@ impl DeleteRelationalDatabaseSnapshotError {
 }
 impl fmt::Display for DeleteRelationalDatabaseSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRelationalDatabaseSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRelationalDatabaseSnapshotError::AccessDenied(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::InvalidInput(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::NotFound(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::Service(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRelationalDatabaseSnapshotError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRelationalDatabaseSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseSnapshotError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRelationalDatabaseSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRelationalDatabaseSnapshotError {}
 /// Errors returned by DetachDisk
 #[derive(Debug, PartialEq)]
 pub enum DetachDiskError {
@@ -6691,22 +6951,18 @@ impl DetachDiskError {
 }
 impl fmt::Display for DetachDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachDiskError {
-    fn description(&self) -> &str {
         match *self {
-            DetachDiskError::AccessDenied(ref cause) => cause,
-            DetachDiskError::AccountSetupInProgress(ref cause) => cause,
-            DetachDiskError::InvalidInput(ref cause) => cause,
-            DetachDiskError::NotFound(ref cause) => cause,
-            DetachDiskError::OperationFailure(ref cause) => cause,
-            DetachDiskError::Service(ref cause) => cause,
-            DetachDiskError::Unauthenticated(ref cause) => cause,
+            DetachDiskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::NotFound(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::Service(ref cause) => write!(f, "{}", cause),
+            DetachDiskError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachDiskError {}
 /// Errors returned by DetachInstancesFromLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DetachInstancesFromLoadBalancerError {
@@ -6776,22 +7032,24 @@ impl DetachInstancesFromLoadBalancerError {
 }
 impl fmt::Display for DetachInstancesFromLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachInstancesFromLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DetachInstancesFromLoadBalancerError::AccessDenied(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::InvalidInput(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::NotFound(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::OperationFailure(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::Service(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::Unauthenticated(ref cause) => cause,
+            DetachInstancesFromLoadBalancerError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachInstancesFromLoadBalancerError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetachInstancesFromLoadBalancerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachInstancesFromLoadBalancerError::NotFound(ref cause) => write!(f, "{}", cause),
+            DetachInstancesFromLoadBalancerError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetachInstancesFromLoadBalancerError::Service(ref cause) => write!(f, "{}", cause),
+            DetachInstancesFromLoadBalancerError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DetachInstancesFromLoadBalancerError {}
 /// Errors returned by DetachStaticIp
 #[derive(Debug, PartialEq)]
 pub enum DetachStaticIpError {
@@ -6847,22 +7105,77 @@ impl DetachStaticIpError {
 }
 impl fmt::Display for DetachStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachStaticIpError {
-    fn description(&self) -> &str {
         match *self {
-            DetachStaticIpError::AccessDenied(ref cause) => cause,
-            DetachStaticIpError::AccountSetupInProgress(ref cause) => cause,
-            DetachStaticIpError::InvalidInput(ref cause) => cause,
-            DetachStaticIpError::NotFound(ref cause) => cause,
-            DetachStaticIpError::OperationFailure(ref cause) => cause,
-            DetachStaticIpError::Service(ref cause) => cause,
-            DetachStaticIpError::Unauthenticated(ref cause) => cause,
+            DetachStaticIpError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::NotFound(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::Service(ref cause) => write!(f, "{}", cause),
+            DetachStaticIpError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachStaticIpError {}
+/// Errors returned by DisableAddOn
+#[derive(Debug, PartialEq)]
+pub enum DisableAddOnError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl DisableAddOnError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableAddOnError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DisableAddOnError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DisableAddOnError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DisableAddOnError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(DisableAddOnError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DisableAddOnError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(DisableAddOnError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DisableAddOnError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisableAddOnError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisableAddOnError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisableAddOnError::NotFound(ref cause) => write!(f, "{}", cause),
+            DisableAddOnError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DisableAddOnError::Service(ref cause) => write!(f, "{}", cause),
+            DisableAddOnError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisableAddOnError {}
 /// Errors returned by DownloadDefaultKeyPair
 #[derive(Debug, PartialEq)]
 pub enum DownloadDefaultKeyPairError {
@@ -6922,22 +7235,79 @@ impl DownloadDefaultKeyPairError {
 }
 impl fmt::Display for DownloadDefaultKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DownloadDefaultKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            DownloadDefaultKeyPairError::AccessDenied(ref cause) => cause,
-            DownloadDefaultKeyPairError::AccountSetupInProgress(ref cause) => cause,
-            DownloadDefaultKeyPairError::InvalidInput(ref cause) => cause,
-            DownloadDefaultKeyPairError::NotFound(ref cause) => cause,
-            DownloadDefaultKeyPairError::OperationFailure(ref cause) => cause,
-            DownloadDefaultKeyPairError::Service(ref cause) => cause,
-            DownloadDefaultKeyPairError::Unauthenticated(ref cause) => cause,
+            DownloadDefaultKeyPairError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DownloadDefaultKeyPairError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DownloadDefaultKeyPairError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DownloadDefaultKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
+            DownloadDefaultKeyPairError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DownloadDefaultKeyPairError::Service(ref cause) => write!(f, "{}", cause),
+            DownloadDefaultKeyPairError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DownloadDefaultKeyPairError {}
+/// Errors returned by EnableAddOn
+#[derive(Debug, PartialEq)]
+pub enum EnableAddOnError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl EnableAddOnError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableAddOnError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(EnableAddOnError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(EnableAddOnError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(EnableAddOnError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(EnableAddOnError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(EnableAddOnError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(EnableAddOnError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for EnableAddOnError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            EnableAddOnError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            EnableAddOnError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            EnableAddOnError::NotFound(ref cause) => write!(f, "{}", cause),
+            EnableAddOnError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            EnableAddOnError::Service(ref cause) => write!(f, "{}", cause),
+            EnableAddOnError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for EnableAddOnError {}
 /// Errors returned by ExportSnapshot
 #[derive(Debug, PartialEq)]
 pub enum ExportSnapshotError {
@@ -6993,22 +7363,18 @@ impl ExportSnapshotError {
 }
 impl fmt::Display for ExportSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExportSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            ExportSnapshotError::AccessDenied(ref cause) => cause,
-            ExportSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            ExportSnapshotError::InvalidInput(ref cause) => cause,
-            ExportSnapshotError::NotFound(ref cause) => cause,
-            ExportSnapshotError::OperationFailure(ref cause) => cause,
-            ExportSnapshotError::Service(ref cause) => cause,
-            ExportSnapshotError::Unauthenticated(ref cause) => cause,
+            ExportSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            ExportSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExportSnapshotError {}
 /// Errors returned by GetActiveNames
 #[derive(Debug, PartialEq)]
 pub enum GetActiveNamesError {
@@ -7064,22 +7430,77 @@ impl GetActiveNamesError {
 }
 impl fmt::Display for GetActiveNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetActiveNamesError {
-    fn description(&self) -> &str {
         match *self {
-            GetActiveNamesError::AccessDenied(ref cause) => cause,
-            GetActiveNamesError::AccountSetupInProgress(ref cause) => cause,
-            GetActiveNamesError::InvalidInput(ref cause) => cause,
-            GetActiveNamesError::NotFound(ref cause) => cause,
-            GetActiveNamesError::OperationFailure(ref cause) => cause,
-            GetActiveNamesError::Service(ref cause) => cause,
-            GetActiveNamesError::Unauthenticated(ref cause) => cause,
+            GetActiveNamesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::Service(ref cause) => write!(f, "{}", cause),
+            GetActiveNamesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetActiveNamesError {}
+/// Errors returned by GetAutoSnapshots
+#[derive(Debug, PartialEq)]
+pub enum GetAutoSnapshotsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl GetAutoSnapshotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAutoSnapshotsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetAutoSnapshotsError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetAutoSnapshotsError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetAutoSnapshotsError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(GetAutoSnapshotsError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetAutoSnapshotsError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetAutoSnapshotsError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetAutoSnapshotsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAutoSnapshotsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetAutoSnapshotsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetAutoSnapshotsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAutoSnapshotsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetAutoSnapshotsError::Service(ref cause) => write!(f, "{}", cause),
+            GetAutoSnapshotsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAutoSnapshotsError {}
 /// Errors returned by GetBlueprints
 #[derive(Debug, PartialEq)]
 pub enum GetBlueprintsError {
@@ -7135,22 +7556,18 @@ impl GetBlueprintsError {
 }
 impl fmt::Display for GetBlueprintsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBlueprintsError {
-    fn description(&self) -> &str {
         match *self {
-            GetBlueprintsError::AccessDenied(ref cause) => cause,
-            GetBlueprintsError::AccountSetupInProgress(ref cause) => cause,
-            GetBlueprintsError::InvalidInput(ref cause) => cause,
-            GetBlueprintsError::NotFound(ref cause) => cause,
-            GetBlueprintsError::OperationFailure(ref cause) => cause,
-            GetBlueprintsError::Service(ref cause) => cause,
-            GetBlueprintsError::Unauthenticated(ref cause) => cause,
+            GetBlueprintsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::Service(ref cause) => write!(f, "{}", cause),
+            GetBlueprintsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBlueprintsError {}
 /// Errors returned by GetBundles
 #[derive(Debug, PartialEq)]
 pub enum GetBundlesError {
@@ -7204,22 +7621,18 @@ impl GetBundlesError {
 }
 impl fmt::Display for GetBundlesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBundlesError {
-    fn description(&self) -> &str {
         match *self {
-            GetBundlesError::AccessDenied(ref cause) => cause,
-            GetBundlesError::AccountSetupInProgress(ref cause) => cause,
-            GetBundlesError::InvalidInput(ref cause) => cause,
-            GetBundlesError::NotFound(ref cause) => cause,
-            GetBundlesError::OperationFailure(ref cause) => cause,
-            GetBundlesError::Service(ref cause) => cause,
-            GetBundlesError::Unauthenticated(ref cause) => cause,
+            GetBundlesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::Service(ref cause) => write!(f, "{}", cause),
+            GetBundlesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBundlesError {}
 /// Errors returned by GetCloudFormationStackRecords
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFormationStackRecordsError {
@@ -7289,22 +7702,24 @@ impl GetCloudFormationStackRecordsError {
 }
 impl fmt::Display for GetCloudFormationStackRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCloudFormationStackRecordsError {
-    fn description(&self) -> &str {
         match *self {
-            GetCloudFormationStackRecordsError::AccessDenied(ref cause) => cause,
-            GetCloudFormationStackRecordsError::AccountSetupInProgress(ref cause) => cause,
-            GetCloudFormationStackRecordsError::InvalidInput(ref cause) => cause,
-            GetCloudFormationStackRecordsError::NotFound(ref cause) => cause,
-            GetCloudFormationStackRecordsError::OperationFailure(ref cause) => cause,
-            GetCloudFormationStackRecordsError::Service(ref cause) => cause,
-            GetCloudFormationStackRecordsError::Unauthenticated(ref cause) => cause,
+            GetCloudFormationStackRecordsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationStackRecordsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCloudFormationStackRecordsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationStackRecordsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationStackRecordsError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCloudFormationStackRecordsError::Service(ref cause) => write!(f, "{}", cause),
+            GetCloudFormationStackRecordsError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetCloudFormationStackRecordsError {}
 /// Errors returned by GetDisk
 #[derive(Debug, PartialEq)]
 pub enum GetDiskError {
@@ -7356,22 +7771,18 @@ impl GetDiskError {
 }
 impl fmt::Display for GetDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDiskError {
-    fn description(&self) -> &str {
         match *self {
-            GetDiskError::AccessDenied(ref cause) => cause,
-            GetDiskError::AccountSetupInProgress(ref cause) => cause,
-            GetDiskError::InvalidInput(ref cause) => cause,
-            GetDiskError::NotFound(ref cause) => cause,
-            GetDiskError::OperationFailure(ref cause) => cause,
-            GetDiskError::Service(ref cause) => cause,
-            GetDiskError::Unauthenticated(ref cause) => cause,
+            GetDiskError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDiskError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDiskError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDiskError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDiskError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDiskError::Service(ref cause) => write!(f, "{}", cause),
+            GetDiskError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDiskError {}
 /// Errors returned by GetDiskSnapshot
 #[derive(Debug, PartialEq)]
 pub enum GetDiskSnapshotError {
@@ -7427,22 +7838,18 @@ impl GetDiskSnapshotError {
 }
 impl fmt::Display for GetDiskSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDiskSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            GetDiskSnapshotError::AccessDenied(ref cause) => cause,
-            GetDiskSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            GetDiskSnapshotError::InvalidInput(ref cause) => cause,
-            GetDiskSnapshotError::NotFound(ref cause) => cause,
-            GetDiskSnapshotError::OperationFailure(ref cause) => cause,
-            GetDiskSnapshotError::Service(ref cause) => cause,
-            GetDiskSnapshotError::Unauthenticated(ref cause) => cause,
+            GetDiskSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDiskSnapshotError {}
 /// Errors returned by GetDiskSnapshots
 #[derive(Debug, PartialEq)]
 pub enum GetDiskSnapshotsError {
@@ -7498,22 +7905,18 @@ impl GetDiskSnapshotsError {
 }
 impl fmt::Display for GetDiskSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDiskSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDiskSnapshotsError::AccessDenied(ref cause) => cause,
-            GetDiskSnapshotsError::AccountSetupInProgress(ref cause) => cause,
-            GetDiskSnapshotsError::InvalidInput(ref cause) => cause,
-            GetDiskSnapshotsError::NotFound(ref cause) => cause,
-            GetDiskSnapshotsError::OperationFailure(ref cause) => cause,
-            GetDiskSnapshotsError::Service(ref cause) => cause,
-            GetDiskSnapshotsError::Unauthenticated(ref cause) => cause,
+            GetDiskSnapshotsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::Service(ref cause) => write!(f, "{}", cause),
+            GetDiskSnapshotsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDiskSnapshotsError {}
 /// Errors returned by GetDisks
 #[derive(Debug, PartialEq)]
 pub enum GetDisksError {
@@ -7565,22 +7968,18 @@ impl GetDisksError {
 }
 impl fmt::Display for GetDisksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDisksError {
-    fn description(&self) -> &str {
         match *self {
-            GetDisksError::AccessDenied(ref cause) => cause,
-            GetDisksError::AccountSetupInProgress(ref cause) => cause,
-            GetDisksError::InvalidInput(ref cause) => cause,
-            GetDisksError::NotFound(ref cause) => cause,
-            GetDisksError::OperationFailure(ref cause) => cause,
-            GetDisksError::Service(ref cause) => cause,
-            GetDisksError::Unauthenticated(ref cause) => cause,
+            GetDisksError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDisksError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDisksError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDisksError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDisksError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDisksError::Service(ref cause) => write!(f, "{}", cause),
+            GetDisksError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDisksError {}
 /// Errors returned by GetDomain
 #[derive(Debug, PartialEq)]
 pub enum GetDomainError {
@@ -7634,22 +8033,18 @@ impl GetDomainError {
 }
 impl fmt::Display for GetDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDomainError {
-    fn description(&self) -> &str {
         match *self {
-            GetDomainError::AccessDenied(ref cause) => cause,
-            GetDomainError::AccountSetupInProgress(ref cause) => cause,
-            GetDomainError::InvalidInput(ref cause) => cause,
-            GetDomainError::NotFound(ref cause) => cause,
-            GetDomainError::OperationFailure(ref cause) => cause,
-            GetDomainError::Service(ref cause) => cause,
-            GetDomainError::Unauthenticated(ref cause) => cause,
+            GetDomainError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDomainError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDomainError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDomainError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDomainError::Service(ref cause) => write!(f, "{}", cause),
+            GetDomainError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDomainError {}
 /// Errors returned by GetDomains
 #[derive(Debug, PartialEq)]
 pub enum GetDomainsError {
@@ -7703,22 +8098,18 @@ impl GetDomainsError {
 }
 impl fmt::Display for GetDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDomainsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDomainsError::AccessDenied(ref cause) => cause,
-            GetDomainsError::AccountSetupInProgress(ref cause) => cause,
-            GetDomainsError::InvalidInput(ref cause) => cause,
-            GetDomainsError::NotFound(ref cause) => cause,
-            GetDomainsError::OperationFailure(ref cause) => cause,
-            GetDomainsError::Service(ref cause) => cause,
-            GetDomainsError::Unauthenticated(ref cause) => cause,
+            GetDomainsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::Service(ref cause) => write!(f, "{}", cause),
+            GetDomainsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDomainsError {}
 /// Errors returned by GetExportSnapshotRecords
 #[derive(Debug, PartialEq)]
 pub enum GetExportSnapshotRecordsError {
@@ -7782,22 +8173,20 @@ impl GetExportSnapshotRecordsError {
 }
 impl fmt::Display for GetExportSnapshotRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetExportSnapshotRecordsError {
-    fn description(&self) -> &str {
         match *self {
-            GetExportSnapshotRecordsError::AccessDenied(ref cause) => cause,
-            GetExportSnapshotRecordsError::AccountSetupInProgress(ref cause) => cause,
-            GetExportSnapshotRecordsError::InvalidInput(ref cause) => cause,
-            GetExportSnapshotRecordsError::NotFound(ref cause) => cause,
-            GetExportSnapshotRecordsError::OperationFailure(ref cause) => cause,
-            GetExportSnapshotRecordsError::Service(ref cause) => cause,
-            GetExportSnapshotRecordsError::Unauthenticated(ref cause) => cause,
+            GetExportSnapshotRecordsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetExportSnapshotRecordsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetExportSnapshotRecordsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetExportSnapshotRecordsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetExportSnapshotRecordsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetExportSnapshotRecordsError::Service(ref cause) => write!(f, "{}", cause),
+            GetExportSnapshotRecordsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetExportSnapshotRecordsError {}
 /// Errors returned by GetInstance
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceError {
@@ -7851,22 +8240,18 @@ impl GetInstanceError {
 }
 impl fmt::Display for GetInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceError::AccessDenied(ref cause) => cause,
-            GetInstanceError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceError::InvalidInput(ref cause) => cause,
-            GetInstanceError::NotFound(ref cause) => cause,
-            GetInstanceError::OperationFailure(ref cause) => cause,
-            GetInstanceError::Service(ref cause) => cause,
-            GetInstanceError::Unauthenticated(ref cause) => cause,
+            GetInstanceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceError {}
 /// Errors returned by GetInstanceAccessDetails
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceAccessDetailsError {
@@ -7930,22 +8315,20 @@ impl GetInstanceAccessDetailsError {
 }
 impl fmt::Display for GetInstanceAccessDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceAccessDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceAccessDetailsError::AccessDenied(ref cause) => cause,
-            GetInstanceAccessDetailsError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceAccessDetailsError::InvalidInput(ref cause) => cause,
-            GetInstanceAccessDetailsError::NotFound(ref cause) => cause,
-            GetInstanceAccessDetailsError::OperationFailure(ref cause) => cause,
-            GetInstanceAccessDetailsError::Service(ref cause) => cause,
-            GetInstanceAccessDetailsError::Unauthenticated(ref cause) => cause,
+            GetInstanceAccessDetailsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessDetailsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetInstanceAccessDetailsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessDetailsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessDetailsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessDetailsError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceAccessDetailsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceAccessDetailsError {}
 /// Errors returned by GetInstanceMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceMetricDataError {
@@ -8005,22 +8388,18 @@ impl GetInstanceMetricDataError {
 }
 impl fmt::Display for GetInstanceMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceMetricDataError::AccessDenied(ref cause) => cause,
-            GetInstanceMetricDataError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceMetricDataError::InvalidInput(ref cause) => cause,
-            GetInstanceMetricDataError::NotFound(ref cause) => cause,
-            GetInstanceMetricDataError::OperationFailure(ref cause) => cause,
-            GetInstanceMetricDataError::Service(ref cause) => cause,
-            GetInstanceMetricDataError::Unauthenticated(ref cause) => cause,
+            GetInstanceMetricDataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceMetricDataError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceMetricDataError {}
 /// Errors returned by GetInstancePortStates
 #[derive(Debug, PartialEq)]
 pub enum GetInstancePortStatesError {
@@ -8080,22 +8459,18 @@ impl GetInstancePortStatesError {
 }
 impl fmt::Display for GetInstancePortStatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstancePortStatesError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstancePortStatesError::AccessDenied(ref cause) => cause,
-            GetInstancePortStatesError::AccountSetupInProgress(ref cause) => cause,
-            GetInstancePortStatesError::InvalidInput(ref cause) => cause,
-            GetInstancePortStatesError::NotFound(ref cause) => cause,
-            GetInstancePortStatesError::OperationFailure(ref cause) => cause,
-            GetInstancePortStatesError::Service(ref cause) => cause,
-            GetInstancePortStatesError::Unauthenticated(ref cause) => cause,
+            GetInstancePortStatesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstancePortStatesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstancePortStatesError {}
 /// Errors returned by GetInstanceSnapshot
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceSnapshotError {
@@ -8153,22 +8528,18 @@ impl GetInstanceSnapshotError {
 }
 impl fmt::Display for GetInstanceSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceSnapshotError::AccessDenied(ref cause) => cause,
-            GetInstanceSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceSnapshotError::InvalidInput(ref cause) => cause,
-            GetInstanceSnapshotError::NotFound(ref cause) => cause,
-            GetInstanceSnapshotError::OperationFailure(ref cause) => cause,
-            GetInstanceSnapshotError::Service(ref cause) => cause,
-            GetInstanceSnapshotError::Unauthenticated(ref cause) => cause,
+            GetInstanceSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceSnapshotError {}
 /// Errors returned by GetInstanceSnapshots
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceSnapshotsError {
@@ -8228,22 +8599,18 @@ impl GetInstanceSnapshotsError {
 }
 impl fmt::Display for GetInstanceSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceSnapshotsError::AccessDenied(ref cause) => cause,
-            GetInstanceSnapshotsError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceSnapshotsError::InvalidInput(ref cause) => cause,
-            GetInstanceSnapshotsError::NotFound(ref cause) => cause,
-            GetInstanceSnapshotsError::OperationFailure(ref cause) => cause,
-            GetInstanceSnapshotsError::Service(ref cause) => cause,
-            GetInstanceSnapshotsError::Unauthenticated(ref cause) => cause,
+            GetInstanceSnapshotsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceSnapshotsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceSnapshotsError {}
 /// Errors returned by GetInstanceState
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceStateError {
@@ -8299,22 +8666,18 @@ impl GetInstanceStateError {
 }
 impl fmt::Display for GetInstanceStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceStateError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceStateError::AccessDenied(ref cause) => cause,
-            GetInstanceStateError::AccountSetupInProgress(ref cause) => cause,
-            GetInstanceStateError::InvalidInput(ref cause) => cause,
-            GetInstanceStateError::NotFound(ref cause) => cause,
-            GetInstanceStateError::OperationFailure(ref cause) => cause,
-            GetInstanceStateError::Service(ref cause) => cause,
-            GetInstanceStateError::Unauthenticated(ref cause) => cause,
+            GetInstanceStateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstanceStateError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceStateError {}
 /// Errors returned by GetInstances
 #[derive(Debug, PartialEq)]
 pub enum GetInstancesError {
@@ -8368,22 +8731,18 @@ impl GetInstancesError {
 }
 impl fmt::Display for GetInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstancesError::AccessDenied(ref cause) => cause,
-            GetInstancesError::AccountSetupInProgress(ref cause) => cause,
-            GetInstancesError::InvalidInput(ref cause) => cause,
-            GetInstancesError::NotFound(ref cause) => cause,
-            GetInstancesError::OperationFailure(ref cause) => cause,
-            GetInstancesError::Service(ref cause) => cause,
-            GetInstancesError::Unauthenticated(ref cause) => cause,
+            GetInstancesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::Service(ref cause) => write!(f, "{}", cause),
+            GetInstancesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstancesError {}
 /// Errors returned by GetKeyPair
 #[derive(Debug, PartialEq)]
 pub enum GetKeyPairError {
@@ -8437,22 +8796,18 @@ impl GetKeyPairError {
 }
 impl fmt::Display for GetKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            GetKeyPairError::AccessDenied(ref cause) => cause,
-            GetKeyPairError::AccountSetupInProgress(ref cause) => cause,
-            GetKeyPairError::InvalidInput(ref cause) => cause,
-            GetKeyPairError::NotFound(ref cause) => cause,
-            GetKeyPairError::OperationFailure(ref cause) => cause,
-            GetKeyPairError::Service(ref cause) => cause,
-            GetKeyPairError::Unauthenticated(ref cause) => cause,
+            GetKeyPairError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::Service(ref cause) => write!(f, "{}", cause),
+            GetKeyPairError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetKeyPairError {}
 /// Errors returned by GetKeyPairs
 #[derive(Debug, PartialEq)]
 pub enum GetKeyPairsError {
@@ -8506,22 +8861,18 @@ impl GetKeyPairsError {
 }
 impl fmt::Display for GetKeyPairsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetKeyPairsError {
-    fn description(&self) -> &str {
         match *self {
-            GetKeyPairsError::AccessDenied(ref cause) => cause,
-            GetKeyPairsError::AccountSetupInProgress(ref cause) => cause,
-            GetKeyPairsError::InvalidInput(ref cause) => cause,
-            GetKeyPairsError::NotFound(ref cause) => cause,
-            GetKeyPairsError::OperationFailure(ref cause) => cause,
-            GetKeyPairsError::Service(ref cause) => cause,
-            GetKeyPairsError::Unauthenticated(ref cause) => cause,
+            GetKeyPairsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::Service(ref cause) => write!(f, "{}", cause),
+            GetKeyPairsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetKeyPairsError {}
 /// Errors returned by GetLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum GetLoadBalancerError {
@@ -8577,22 +8928,18 @@ impl GetLoadBalancerError {
 }
 impl fmt::Display for GetLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoadBalancerError::AccessDenied(ref cause) => cause,
-            GetLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
-            GetLoadBalancerError::InvalidInput(ref cause) => cause,
-            GetLoadBalancerError::NotFound(ref cause) => cause,
-            GetLoadBalancerError::OperationFailure(ref cause) => cause,
-            GetLoadBalancerError::Service(ref cause) => cause,
-            GetLoadBalancerError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancerError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::Service(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoadBalancerError {}
 /// Errors returned by GetLoadBalancerMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetLoadBalancerMetricDataError {
@@ -8656,22 +9003,20 @@ impl GetLoadBalancerMetricDataError {
 }
 impl fmt::Display for GetLoadBalancerMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoadBalancerMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoadBalancerMetricDataError::AccessDenied(ref cause) => cause,
-            GetLoadBalancerMetricDataError::AccountSetupInProgress(ref cause) => cause,
-            GetLoadBalancerMetricDataError::InvalidInput(ref cause) => cause,
-            GetLoadBalancerMetricDataError::NotFound(ref cause) => cause,
-            GetLoadBalancerMetricDataError::OperationFailure(ref cause) => cause,
-            GetLoadBalancerMetricDataError::Service(ref cause) => cause,
-            GetLoadBalancerMetricDataError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancerMetricDataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerMetricDataError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLoadBalancerMetricDataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerMetricDataError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerMetricDataError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerMetricDataError::Service(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerMetricDataError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoadBalancerMetricDataError {}
 /// Errors returned by GetLoadBalancerTlsCertificates
 #[derive(Debug, PartialEq)]
 pub enum GetLoadBalancerTlsCertificatesError {
@@ -8741,22 +9086,24 @@ impl GetLoadBalancerTlsCertificatesError {
 }
 impl fmt::Display for GetLoadBalancerTlsCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoadBalancerTlsCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoadBalancerTlsCertificatesError::AccessDenied(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::InvalidInput(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::NotFound(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::OperationFailure(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::Service(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancerTlsCertificatesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLoadBalancerTlsCertificatesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerTlsCertificatesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerTlsCertificatesError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLoadBalancerTlsCertificatesError::Service(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancerTlsCertificatesError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetLoadBalancerTlsCertificatesError {}
 /// Errors returned by GetLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum GetLoadBalancersError {
@@ -8812,22 +9159,18 @@ impl GetLoadBalancersError {
 }
 impl fmt::Display for GetLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoadBalancersError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoadBalancersError::AccessDenied(ref cause) => cause,
-            GetLoadBalancersError::AccountSetupInProgress(ref cause) => cause,
-            GetLoadBalancersError::InvalidInput(ref cause) => cause,
-            GetLoadBalancersError::NotFound(ref cause) => cause,
-            GetLoadBalancersError::OperationFailure(ref cause) => cause,
-            GetLoadBalancersError::Service(ref cause) => cause,
-            GetLoadBalancersError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancersError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::Service(ref cause) => write!(f, "{}", cause),
+            GetLoadBalancersError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoadBalancersError {}
 /// Errors returned by GetOperation
 #[derive(Debug, PartialEq)]
 pub enum GetOperationError {
@@ -8881,22 +9224,18 @@ impl GetOperationError {
 }
 impl fmt::Display for GetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOperationError {
-    fn description(&self) -> &str {
         match *self {
-            GetOperationError::AccessDenied(ref cause) => cause,
-            GetOperationError::AccountSetupInProgress(ref cause) => cause,
-            GetOperationError::InvalidInput(ref cause) => cause,
-            GetOperationError::NotFound(ref cause) => cause,
-            GetOperationError::OperationFailure(ref cause) => cause,
-            GetOperationError::Service(ref cause) => cause,
-            GetOperationError::Unauthenticated(ref cause) => cause,
+            GetOperationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetOperationError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetOperationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetOperationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetOperationError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetOperationError::Service(ref cause) => write!(f, "{}", cause),
+            GetOperationError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOperationError {}
 /// Errors returned by GetOperations
 #[derive(Debug, PartialEq)]
 pub enum GetOperationsError {
@@ -8952,22 +9291,18 @@ impl GetOperationsError {
 }
 impl fmt::Display for GetOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOperationsError {
-    fn description(&self) -> &str {
         match *self {
-            GetOperationsError::AccessDenied(ref cause) => cause,
-            GetOperationsError::AccountSetupInProgress(ref cause) => cause,
-            GetOperationsError::InvalidInput(ref cause) => cause,
-            GetOperationsError::NotFound(ref cause) => cause,
-            GetOperationsError::OperationFailure(ref cause) => cause,
-            GetOperationsError::Service(ref cause) => cause,
-            GetOperationsError::Unauthenticated(ref cause) => cause,
+            GetOperationsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::Service(ref cause) => write!(f, "{}", cause),
+            GetOperationsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOperationsError {}
 /// Errors returned by GetOperationsForResource
 #[derive(Debug, PartialEq)]
 pub enum GetOperationsForResourceError {
@@ -9031,22 +9366,20 @@ impl GetOperationsForResourceError {
 }
 impl fmt::Display for GetOperationsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOperationsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            GetOperationsForResourceError::AccessDenied(ref cause) => cause,
-            GetOperationsForResourceError::AccountSetupInProgress(ref cause) => cause,
-            GetOperationsForResourceError::InvalidInput(ref cause) => cause,
-            GetOperationsForResourceError::NotFound(ref cause) => cause,
-            GetOperationsForResourceError::OperationFailure(ref cause) => cause,
-            GetOperationsForResourceError::Service(ref cause) => cause,
-            GetOperationsForResourceError::Unauthenticated(ref cause) => cause,
+            GetOperationsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetOperationsForResourceError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetOperationsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetOperationsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetOperationsForResourceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetOperationsForResourceError::Service(ref cause) => write!(f, "{}", cause),
+            GetOperationsForResourceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOperationsForResourceError {}
 /// Errors returned by GetRegions
 #[derive(Debug, PartialEq)]
 pub enum GetRegionsError {
@@ -9100,22 +9433,18 @@ impl GetRegionsError {
 }
 impl fmt::Display for GetRegionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRegionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRegionsError::AccessDenied(ref cause) => cause,
-            GetRegionsError::AccountSetupInProgress(ref cause) => cause,
-            GetRegionsError::InvalidInput(ref cause) => cause,
-            GetRegionsError::NotFound(ref cause) => cause,
-            GetRegionsError::OperationFailure(ref cause) => cause,
-            GetRegionsError::Service(ref cause) => cause,
-            GetRegionsError::Unauthenticated(ref cause) => cause,
+            GetRegionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRegionsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRegionsError {}
 /// Errors returned by GetRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseError {
@@ -9175,22 +9504,18 @@ impl GetRelationalDatabaseError {
 }
 impl fmt::Display for GetRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseError::Service(ref cause) => cause,
-            GetRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRelationalDatabaseError {}
 /// Errors returned by GetRelationalDatabaseBlueprints
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseBlueprintsError {
@@ -9260,22 +9585,24 @@ impl GetRelationalDatabaseBlueprintsError {
 }
 impl fmt::Display for GetRelationalDatabaseBlueprintsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseBlueprintsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseBlueprintsError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::Service(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBlueprintsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseBlueprintsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBlueprintsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBlueprintsError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseBlueprintsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBlueprintsError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseBlueprintsError {}
 /// Errors returned by GetRelationalDatabaseBundles
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseBundlesError {
@@ -9345,22 +9672,22 @@ impl GetRelationalDatabaseBundlesError {
 }
 impl fmt::Display for GetRelationalDatabaseBundlesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseBundlesError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseBundlesError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::Service(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBundlesError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseBundlesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBundlesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBundlesError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseBundlesError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseBundlesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRelationalDatabaseBundlesError {}
 /// Errors returned by GetRelationalDatabaseEvents
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseEventsError {
@@ -9428,22 +9755,20 @@ impl GetRelationalDatabaseEventsError {
 }
 impl fmt::Display for GetRelationalDatabaseEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseEventsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseEventsError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseEventsError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseEventsError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseEventsError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseEventsError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseEventsError::Service(ref cause) => cause,
-            GetRelationalDatabaseEventsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseEventsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseEventsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseEventsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseEventsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseEventsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseEventsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseEventsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRelationalDatabaseEventsError {}
 /// Errors returned by GetRelationalDatabaseLogEvents
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseLogEventsError {
@@ -9513,22 +9838,24 @@ impl GetRelationalDatabaseLogEventsError {
 }
 impl fmt::Display for GetRelationalDatabaseLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseLogEventsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseLogEventsError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::Service(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogEventsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseLogEventsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogEventsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogEventsError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseLogEventsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogEventsError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseLogEventsError {}
 /// Errors returned by GetRelationalDatabaseLogStreams
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseLogStreamsError {
@@ -9598,22 +9925,24 @@ impl GetRelationalDatabaseLogStreamsError {
 }
 impl fmt::Display for GetRelationalDatabaseLogStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseLogStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseLogStreamsError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::Service(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogStreamsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseLogStreamsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogStreamsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogStreamsError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseLogStreamsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseLogStreamsError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseLogStreamsError {}
 /// Errors returned by GetRelationalDatabaseMasterUserPassword
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseMasterUserPasswordError {
@@ -9685,24 +10014,32 @@ impl GetRelationalDatabaseMasterUserPasswordError {
 }
 impl fmt::Display for GetRelationalDatabaseMasterUserPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseMasterUserPasswordError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseMasterUserPasswordError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::AccountSetupInProgress(ref cause) => {
-                cause
+            GetRelationalDatabaseMasterUserPasswordError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
             }
-            GetRelationalDatabaseMasterUserPasswordError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::Service(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseMasterUserPasswordError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMasterUserPasswordError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMasterUserPasswordError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMasterUserPasswordError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMasterUserPasswordError::Service(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseMasterUserPasswordError {}
 /// Errors returned by GetRelationalDatabaseMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseMetricDataError {
@@ -9772,22 +10109,24 @@ impl GetRelationalDatabaseMetricDataError {
 }
 impl fmt::Display for GetRelationalDatabaseMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseMetricDataError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::Service(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseMetricDataError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMetricDataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseMetricDataError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseMetricDataError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseMetricDataError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseMetricDataError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseMetricDataError {}
 /// Errors returned by GetRelationalDatabaseParameters
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseParametersError {
@@ -9857,22 +10196,24 @@ impl GetRelationalDatabaseParametersError {
 }
 impl fmt::Display for GetRelationalDatabaseParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseParametersError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseParametersError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseParametersError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseParametersError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseParametersError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseParametersError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseParametersError::Service(ref cause) => cause,
-            GetRelationalDatabaseParametersError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseParametersError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseParametersError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseParametersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseParametersError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseParametersError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseParametersError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseParametersError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseParametersError {}
 /// Errors returned by GetRelationalDatabaseSnapshot
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseSnapshotError {
@@ -9942,22 +10283,24 @@ impl GetRelationalDatabaseSnapshotError {
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseSnapshotError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::Service(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseSnapshotError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseSnapshotError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseSnapshotError {}
 /// Errors returned by GetRelationalDatabaseSnapshots
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabaseSnapshotsError {
@@ -10027,22 +10370,24 @@ impl GetRelationalDatabaseSnapshotsError {
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabaseSnapshotsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabaseSnapshotsError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::NotFound(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::Service(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseSnapshotsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotsError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabaseSnapshotsError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabaseSnapshotsError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRelationalDatabaseSnapshotsError {}
 /// Errors returned by GetRelationalDatabases
 #[derive(Debug, PartialEq)]
 pub enum GetRelationalDatabasesError {
@@ -10102,22 +10447,20 @@ impl GetRelationalDatabasesError {
 }
 impl fmt::Display for GetRelationalDatabasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRelationalDatabasesError {
-    fn description(&self) -> &str {
         match *self {
-            GetRelationalDatabasesError::AccessDenied(ref cause) => cause,
-            GetRelationalDatabasesError::AccountSetupInProgress(ref cause) => cause,
-            GetRelationalDatabasesError::InvalidInput(ref cause) => cause,
-            GetRelationalDatabasesError::NotFound(ref cause) => cause,
-            GetRelationalDatabasesError::OperationFailure(ref cause) => cause,
-            GetRelationalDatabasesError::Service(ref cause) => cause,
-            GetRelationalDatabasesError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabasesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabasesError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRelationalDatabasesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabasesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabasesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabasesError::Service(ref cause) => write!(f, "{}", cause),
+            GetRelationalDatabasesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRelationalDatabasesError {}
 /// Errors returned by GetStaticIp
 #[derive(Debug, PartialEq)]
 pub enum GetStaticIpError {
@@ -10171,22 +10514,18 @@ impl GetStaticIpError {
 }
 impl fmt::Display for GetStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStaticIpError {
-    fn description(&self) -> &str {
         match *self {
-            GetStaticIpError::AccessDenied(ref cause) => cause,
-            GetStaticIpError::AccountSetupInProgress(ref cause) => cause,
-            GetStaticIpError::InvalidInput(ref cause) => cause,
-            GetStaticIpError::NotFound(ref cause) => cause,
-            GetStaticIpError::OperationFailure(ref cause) => cause,
-            GetStaticIpError::Service(ref cause) => cause,
-            GetStaticIpError::Unauthenticated(ref cause) => cause,
+            GetStaticIpError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::Service(ref cause) => write!(f, "{}", cause),
+            GetStaticIpError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetStaticIpError {}
 /// Errors returned by GetStaticIps
 #[derive(Debug, PartialEq)]
 pub enum GetStaticIpsError {
@@ -10240,22 +10579,18 @@ impl GetStaticIpsError {
 }
 impl fmt::Display for GetStaticIpsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStaticIpsError {
-    fn description(&self) -> &str {
         match *self {
-            GetStaticIpsError::AccessDenied(ref cause) => cause,
-            GetStaticIpsError::AccountSetupInProgress(ref cause) => cause,
-            GetStaticIpsError::InvalidInput(ref cause) => cause,
-            GetStaticIpsError::NotFound(ref cause) => cause,
-            GetStaticIpsError::OperationFailure(ref cause) => cause,
-            GetStaticIpsError::Service(ref cause) => cause,
-            GetStaticIpsError::Unauthenticated(ref cause) => cause,
+            GetStaticIpsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::Service(ref cause) => write!(f, "{}", cause),
+            GetStaticIpsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetStaticIpsError {}
 /// Errors returned by ImportKeyPair
 #[derive(Debug, PartialEq)]
 pub enum ImportKeyPairError {
@@ -10311,22 +10646,18 @@ impl ImportKeyPairError {
 }
 impl fmt::Display for ImportKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportKeyPairError {
-    fn description(&self) -> &str {
         match *self {
-            ImportKeyPairError::AccessDenied(ref cause) => cause,
-            ImportKeyPairError::AccountSetupInProgress(ref cause) => cause,
-            ImportKeyPairError::InvalidInput(ref cause) => cause,
-            ImportKeyPairError::NotFound(ref cause) => cause,
-            ImportKeyPairError::OperationFailure(ref cause) => cause,
-            ImportKeyPairError::Service(ref cause) => cause,
-            ImportKeyPairError::Unauthenticated(ref cause) => cause,
+            ImportKeyPairError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::NotFound(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::Service(ref cause) => write!(f, "{}", cause),
+            ImportKeyPairError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportKeyPairError {}
 /// Errors returned by IsVpcPeered
 #[derive(Debug, PartialEq)]
 pub enum IsVpcPeeredError {
@@ -10380,22 +10711,18 @@ impl IsVpcPeeredError {
 }
 impl fmt::Display for IsVpcPeeredError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for IsVpcPeeredError {
-    fn description(&self) -> &str {
         match *self {
-            IsVpcPeeredError::AccessDenied(ref cause) => cause,
-            IsVpcPeeredError::AccountSetupInProgress(ref cause) => cause,
-            IsVpcPeeredError::InvalidInput(ref cause) => cause,
-            IsVpcPeeredError::NotFound(ref cause) => cause,
-            IsVpcPeeredError::OperationFailure(ref cause) => cause,
-            IsVpcPeeredError::Service(ref cause) => cause,
-            IsVpcPeeredError::Unauthenticated(ref cause) => cause,
+            IsVpcPeeredError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::NotFound(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::Service(ref cause) => write!(f, "{}", cause),
+            IsVpcPeeredError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for IsVpcPeeredError {}
 /// Errors returned by OpenInstancePublicPorts
 #[derive(Debug, PartialEq)]
 pub enum OpenInstancePublicPortsError {
@@ -10459,22 +10786,20 @@ impl OpenInstancePublicPortsError {
 }
 impl fmt::Display for OpenInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for OpenInstancePublicPortsError {
-    fn description(&self) -> &str {
         match *self {
-            OpenInstancePublicPortsError::AccessDenied(ref cause) => cause,
-            OpenInstancePublicPortsError::AccountSetupInProgress(ref cause) => cause,
-            OpenInstancePublicPortsError::InvalidInput(ref cause) => cause,
-            OpenInstancePublicPortsError::NotFound(ref cause) => cause,
-            OpenInstancePublicPortsError::OperationFailure(ref cause) => cause,
-            OpenInstancePublicPortsError::Service(ref cause) => cause,
-            OpenInstancePublicPortsError::Unauthenticated(ref cause) => cause,
+            OpenInstancePublicPortsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            OpenInstancePublicPortsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            OpenInstancePublicPortsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            OpenInstancePublicPortsError::NotFound(ref cause) => write!(f, "{}", cause),
+            OpenInstancePublicPortsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            OpenInstancePublicPortsError::Service(ref cause) => write!(f, "{}", cause),
+            OpenInstancePublicPortsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for OpenInstancePublicPortsError {}
 /// Errors returned by PeerVpc
 #[derive(Debug, PartialEq)]
 pub enum PeerVpcError {
@@ -10526,22 +10851,18 @@ impl PeerVpcError {
 }
 impl fmt::Display for PeerVpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PeerVpcError {
-    fn description(&self) -> &str {
         match *self {
-            PeerVpcError::AccessDenied(ref cause) => cause,
-            PeerVpcError::AccountSetupInProgress(ref cause) => cause,
-            PeerVpcError::InvalidInput(ref cause) => cause,
-            PeerVpcError::NotFound(ref cause) => cause,
-            PeerVpcError::OperationFailure(ref cause) => cause,
-            PeerVpcError::Service(ref cause) => cause,
-            PeerVpcError::Unauthenticated(ref cause) => cause,
+            PeerVpcError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::NotFound(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::Service(ref cause) => write!(f, "{}", cause),
+            PeerVpcError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PeerVpcError {}
 /// Errors returned by PutInstancePublicPorts
 #[derive(Debug, PartialEq)]
 pub enum PutInstancePublicPortsError {
@@ -10601,22 +10922,20 @@ impl PutInstancePublicPortsError {
 }
 impl fmt::Display for PutInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutInstancePublicPortsError {
-    fn description(&self) -> &str {
         match *self {
-            PutInstancePublicPortsError::AccessDenied(ref cause) => cause,
-            PutInstancePublicPortsError::AccountSetupInProgress(ref cause) => cause,
-            PutInstancePublicPortsError::InvalidInput(ref cause) => cause,
-            PutInstancePublicPortsError::NotFound(ref cause) => cause,
-            PutInstancePublicPortsError::OperationFailure(ref cause) => cause,
-            PutInstancePublicPortsError::Service(ref cause) => cause,
-            PutInstancePublicPortsError::Unauthenticated(ref cause) => cause,
+            PutInstancePublicPortsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutInstancePublicPortsError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutInstancePublicPortsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutInstancePublicPortsError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutInstancePublicPortsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            PutInstancePublicPortsError::Service(ref cause) => write!(f, "{}", cause),
+            PutInstancePublicPortsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutInstancePublicPortsError {}
 /// Errors returned by RebootInstance
 #[derive(Debug, PartialEq)]
 pub enum RebootInstanceError {
@@ -10672,22 +10991,18 @@ impl RebootInstanceError {
 }
 impl fmt::Display for RebootInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RebootInstanceError::AccessDenied(ref cause) => cause,
-            RebootInstanceError::AccountSetupInProgress(ref cause) => cause,
-            RebootInstanceError::InvalidInput(ref cause) => cause,
-            RebootInstanceError::NotFound(ref cause) => cause,
-            RebootInstanceError::OperationFailure(ref cause) => cause,
-            RebootInstanceError::Service(ref cause) => cause,
-            RebootInstanceError::Unauthenticated(ref cause) => cause,
+            RebootInstanceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::Service(ref cause) => write!(f, "{}", cause),
+            RebootInstanceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebootInstanceError {}
 /// Errors returned by RebootRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum RebootRelationalDatabaseError {
@@ -10751,22 +11066,20 @@ impl RebootRelationalDatabaseError {
 }
 impl fmt::Display for RebootRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            RebootRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            RebootRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            RebootRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            RebootRelationalDatabaseError::NotFound(ref cause) => cause,
-            RebootRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            RebootRelationalDatabaseError::Service(ref cause) => cause,
-            RebootRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            RebootRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RebootRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RebootRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RebootRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            RebootRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            RebootRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            RebootRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebootRelationalDatabaseError {}
 /// Errors returned by ReleaseStaticIp
 #[derive(Debug, PartialEq)]
 pub enum ReleaseStaticIpError {
@@ -10822,22 +11135,18 @@ impl ReleaseStaticIpError {
 }
 impl fmt::Display for ReleaseStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReleaseStaticIpError {
-    fn description(&self) -> &str {
         match *self {
-            ReleaseStaticIpError::AccessDenied(ref cause) => cause,
-            ReleaseStaticIpError::AccountSetupInProgress(ref cause) => cause,
-            ReleaseStaticIpError::InvalidInput(ref cause) => cause,
-            ReleaseStaticIpError::NotFound(ref cause) => cause,
-            ReleaseStaticIpError::OperationFailure(ref cause) => cause,
-            ReleaseStaticIpError::Service(ref cause) => cause,
-            ReleaseStaticIpError::Unauthenticated(ref cause) => cause,
+            ReleaseStaticIpError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::NotFound(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::Service(ref cause) => write!(f, "{}", cause),
+            ReleaseStaticIpError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReleaseStaticIpError {}
 /// Errors returned by StartInstance
 #[derive(Debug, PartialEq)]
 pub enum StartInstanceError {
@@ -10893,22 +11202,18 @@ impl StartInstanceError {
 }
 impl fmt::Display for StartInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            StartInstanceError::AccessDenied(ref cause) => cause,
-            StartInstanceError::AccountSetupInProgress(ref cause) => cause,
-            StartInstanceError::InvalidInput(ref cause) => cause,
-            StartInstanceError::NotFound(ref cause) => cause,
-            StartInstanceError::OperationFailure(ref cause) => cause,
-            StartInstanceError::Service(ref cause) => cause,
-            StartInstanceError::Unauthenticated(ref cause) => cause,
+            StartInstanceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::Service(ref cause) => write!(f, "{}", cause),
+            StartInstanceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartInstanceError {}
 /// Errors returned by StartRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum StartRelationalDatabaseError {
@@ -10972,22 +11277,20 @@ impl StartRelationalDatabaseError {
 }
 impl fmt::Display for StartRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            StartRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            StartRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            StartRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            StartRelationalDatabaseError::NotFound(ref cause) => cause,
-            StartRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            StartRelationalDatabaseError::Service(ref cause) => cause,
-            StartRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            StartRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            StartRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            StartRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartRelationalDatabaseError {}
 /// Errors returned by StopInstance
 #[derive(Debug, PartialEq)]
 pub enum StopInstanceError {
@@ -11041,22 +11344,18 @@ impl StopInstanceError {
 }
 impl fmt::Display for StopInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            StopInstanceError::AccessDenied(ref cause) => cause,
-            StopInstanceError::AccountSetupInProgress(ref cause) => cause,
-            StopInstanceError::InvalidInput(ref cause) => cause,
-            StopInstanceError::NotFound(ref cause) => cause,
-            StopInstanceError::OperationFailure(ref cause) => cause,
-            StopInstanceError::Service(ref cause) => cause,
-            StopInstanceError::Unauthenticated(ref cause) => cause,
+            StopInstanceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::Service(ref cause) => write!(f, "{}", cause),
+            StopInstanceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopInstanceError {}
 /// Errors returned by StopRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum StopRelationalDatabaseError {
@@ -11116,22 +11415,20 @@ impl StopRelationalDatabaseError {
 }
 impl fmt::Display for StopRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            StopRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            StopRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            StopRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            StopRelationalDatabaseError::NotFound(ref cause) => cause,
-            StopRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            StopRelationalDatabaseError::Service(ref cause) => cause,
-            StopRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            StopRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StopRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            StopRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            StopRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopRelationalDatabaseError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -11185,22 +11482,18 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AccessDenied(ref cause) => cause,
-            TagResourceError::AccountSetupInProgress(ref cause) => cause,
-            TagResourceError::InvalidInput(ref cause) => cause,
-            TagResourceError::NotFound(ref cause) => cause,
-            TagResourceError::OperationFailure(ref cause) => cause,
-            TagResourceError::Service(ref cause) => cause,
-            TagResourceError::Unauthenticated(ref cause) => cause,
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Service(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UnpeerVpc
 #[derive(Debug, PartialEq)]
 pub enum UnpeerVpcError {
@@ -11254,22 +11547,18 @@ impl UnpeerVpcError {
 }
 impl fmt::Display for UnpeerVpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnpeerVpcError {
-    fn description(&self) -> &str {
         match *self {
-            UnpeerVpcError::AccessDenied(ref cause) => cause,
-            UnpeerVpcError::AccountSetupInProgress(ref cause) => cause,
-            UnpeerVpcError::InvalidInput(ref cause) => cause,
-            UnpeerVpcError::NotFound(ref cause) => cause,
-            UnpeerVpcError::OperationFailure(ref cause) => cause,
-            UnpeerVpcError::Service(ref cause) => cause,
-            UnpeerVpcError::Unauthenticated(ref cause) => cause,
+            UnpeerVpcError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::NotFound(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::Service(ref cause) => write!(f, "{}", cause),
+            UnpeerVpcError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UnpeerVpcError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -11325,22 +11614,18 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AccessDenied(ref cause) => cause,
-            UntagResourceError::AccountSetupInProgress(ref cause) => cause,
-            UntagResourceError::InvalidInput(ref cause) => cause,
-            UntagResourceError::NotFound(ref cause) => cause,
-            UntagResourceError::OperationFailure(ref cause) => cause,
-            UntagResourceError::Service(ref cause) => cause,
-            UntagResourceError::Unauthenticated(ref cause) => cause,
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Service(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateDomainEntry
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainEntryError {
@@ -11396,22 +11681,18 @@ impl UpdateDomainEntryError {
 }
 impl fmt::Display for UpdateDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainEntryError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainEntryError::AccessDenied(ref cause) => cause,
-            UpdateDomainEntryError::AccountSetupInProgress(ref cause) => cause,
-            UpdateDomainEntryError::InvalidInput(ref cause) => cause,
-            UpdateDomainEntryError::NotFound(ref cause) => cause,
-            UpdateDomainEntryError::OperationFailure(ref cause) => cause,
-            UpdateDomainEntryError::Service(ref cause) => cause,
-            UpdateDomainEntryError::Unauthenticated(ref cause) => cause,
+            UpdateDomainEntryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::AccountSetupInProgress(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEntryError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainEntryError {}
 /// Errors returned by UpdateLoadBalancerAttribute
 #[derive(Debug, PartialEq)]
 pub enum UpdateLoadBalancerAttributeError {
@@ -11479,22 +11760,20 @@ impl UpdateLoadBalancerAttributeError {
 }
 impl fmt::Display for UpdateLoadBalancerAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLoadBalancerAttributeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLoadBalancerAttributeError::AccessDenied(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::AccountSetupInProgress(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::InvalidInput(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::NotFound(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::OperationFailure(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::Service(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::Unauthenticated(ref cause) => cause,
+            UpdateLoadBalancerAttributeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateLoadBalancerAttributeError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLoadBalancerAttributeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateLoadBalancerAttributeError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateLoadBalancerAttributeError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UpdateLoadBalancerAttributeError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateLoadBalancerAttributeError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateLoadBalancerAttributeError {}
 /// Errors returned by UpdateRelationalDatabase
 #[derive(Debug, PartialEq)]
 pub enum UpdateRelationalDatabaseError {
@@ -11558,22 +11837,20 @@ impl UpdateRelationalDatabaseError {
 }
 impl fmt::Display for UpdateRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRelationalDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRelationalDatabaseError::AccessDenied(ref cause) => cause,
-            UpdateRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
-            UpdateRelationalDatabaseError::InvalidInput(ref cause) => cause,
-            UpdateRelationalDatabaseError::NotFound(ref cause) => cause,
-            UpdateRelationalDatabaseError::OperationFailure(ref cause) => cause,
-            UpdateRelationalDatabaseError::Service(ref cause) => cause,
-            UpdateRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            UpdateRelationalDatabaseError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRelationalDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseError::Unauthenticated(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRelationalDatabaseError {}
 /// Errors returned by UpdateRelationalDatabaseParameters
 #[derive(Debug, PartialEq)]
 pub enum UpdateRelationalDatabaseParametersError {
@@ -11643,22 +11920,28 @@ impl UpdateRelationalDatabaseParametersError {
 }
 impl fmt::Display for UpdateRelationalDatabaseParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRelationalDatabaseParametersError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRelationalDatabaseParametersError::AccessDenied(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::AccountSetupInProgress(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::InvalidInput(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::NotFound(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::OperationFailure(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::Service(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::Unauthenticated(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRelationalDatabaseParametersError::AccountSetupInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRelationalDatabaseParametersError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRelationalDatabaseParametersError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseParametersError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRelationalDatabaseParametersError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateRelationalDatabaseParametersError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateRelationalDatabaseParametersError {}
 /// Trait representing the capabilities of the Amazon Lightsail API. Amazon Lightsail clients implement this trait.
 pub trait Lightsail {
     /// <p>Allocates a static IP address.</p>
@@ -11667,19 +11950,19 @@ pub trait Lightsail {
         input: AllocateStaticIpRequest,
     ) -> RusotoFuture<AllocateStaticIpResult, AllocateStaticIpError>;
 
-    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_disk(
         &self,
         input: AttachDiskRequest,
     ) -> RusotoFuture<AttachDiskResult, AttachDiskError>;
 
-    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p> <p>The <code>attach instances to load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p> <p>The <code>attach instances to load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_instances_to_load_balancer(
         &self,
         input: AttachInstancesToLoadBalancerRequest,
     ) -> RusotoFuture<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError>;
 
-    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>attach load balancer tls certificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_load_balancer_tls_certificate(
         &self,
         input: AttachLoadBalancerTlsCertificateRequest,
@@ -11691,13 +11974,13 @@ pub trait Lightsail {
         input: AttachStaticIpRequest,
     ) -> RusotoFuture<AttachStaticIpResult, AttachStaticIpError>;
 
-    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn close_instance_public_ports(
         &self,
         input: CloseInstancePublicPortsRequest,
     ) -> RusotoFuture<CloseInstancePublicPortsResult, CloseInstancePublicPortsError>;
 
-    /// <p>Copies an instance or disk snapshot from one AWS Region to another in Amazon Lightsail.</p>
+    /// <p><p>Copies a manual instance or disk snapshot as another manual snapshot, or copies an automatic instance or disk snapshot as a manual snapshot. This operation can also be used to copy a manual or automatic snapshot of an instance or a disk from one AWS Region to another in Amazon Lightsail.</p> <p>When copying a <i>manual snapshot</i>, be sure to define the <code>source region</code>, <code>source snapshot name</code>, and <code>target snapshot name</code> parameters.</p> <p>When copying an <i>automatic snapshot</i>, be sure to define the <code>source region</code>, <code>source resource name</code>, <code>target snapshot name</code>, and either the <code>restore date</code> or the <code>use latest restorable auto snapshot</code> parameters.</p> <note> <p>Database snapshots cannot be copied at this time.</p> </note></p>
     fn copy_snapshot(
         &self,
         input: CopySnapshotRequest,
@@ -11709,13 +11992,13 @@ pub trait Lightsail {
         input: CreateCloudFormationStackRequest,
     ) -> RusotoFuture<CreateCloudFormationStackResult, CreateCloudFormationStackError>;
 
-    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates a block storage disk that can be attached to an Amazon Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>).</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk(
         &self,
         input: CreateDiskRequest,
     ) -> RusotoFuture<CreateDiskResult, CreateDiskError>;
 
-    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates a block storage disk from a manual or automatic snapshot of a disk. The resulting disk can be attached to an Amazon Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>).</p> <p>The <code>create disk from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>disk snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk_from_snapshot(
         &self,
         input: CreateDiskFromSnapshotRequest,
@@ -11733,7 +12016,7 @@ pub trait Lightsail {
         input: CreateDomainRequest,
     ) -> RusotoFuture<CreateDomainResult, CreateDomainError>;
 
-    /// <p>Creates one of the following entry records associated with the domain: Address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates one of the following entry records associated with the domain: Address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_domain_entry(
         &self,
         input: CreateDomainEntryRequest,
@@ -11745,13 +12028,13 @@ pub trait Lightsail {
         input: CreateInstanceSnapshotRequest,
     ) -> RusotoFuture<CreateInstanceSnapshotResult, CreateInstanceSnapshotError>;
 
-    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>. Create instances using active blueprints. Inactive blueprints are listed to support customers with existing instances but are not necessarily available for launch of new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases. Use the get blueprints operation to return a list of available blueprints.</p> <p>The <code>create instances</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates one or more Amazon Lightsail instances.</p> <p>The <code>create instances</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instances(
         &self,
         input: CreateInstancesRequest,
     ) -> RusotoFuture<CreateInstancesResult, CreateInstancesError>;
 
-    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p> <p>The <code>create instances from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates one or more new instances from a manual or automatic snapshot of an instance.</p> <p>The <code>create instances from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>instance snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instances_from_snapshot(
         &self,
         input: CreateInstancesFromSnapshotRequest,
@@ -11769,7 +12052,7 @@ pub trait Lightsail {
         input: CreateLoadBalancerRequest,
     ) -> RusotoFuture<CreateLoadBalancerResult, CreateLoadBalancerError>;
 
-    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_load_balancer_tls_certificate(
         &self,
         input: CreateLoadBalancerTlsCertificateRequest,
@@ -11796,43 +12079,49 @@ pub trait Lightsail {
         input: CreateRelationalDatabaseSnapshotRequest,
     ) -> RusotoFuture<CreateRelationalDatabaseSnapshotResult, CreateRelationalDatabaseSnapshotError>;
 
-    /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes an automatic snapshot for an instance or disk.</p>
+    fn delete_auto_snapshot(
+        &self,
+        input: DeleteAutoSnapshotRequest,
+    ) -> RusotoFuture<DeleteAutoSnapshotResult, DeleteAutoSnapshotError>;
+
+    /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_disk(
         &self,
         input: DeleteDiskRequest,
     ) -> RusotoFuture<DeleteDiskResult, DeleteDiskError>;
 
-    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p> <p>The <code>delete disk snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p> <p>The <code>delete disk snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_disk_snapshot(
         &self,
         input: DeleteDiskSnapshotRequest,
     ) -> RusotoFuture<DeleteDiskSnapshotResult, DeleteDiskSnapshotError>;
 
-    /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_domain(
         &self,
         input: DeleteDomainRequest,
     ) -> RusotoFuture<DeleteDomainResult, DeleteDomainError>;
 
-    /// <p>Deletes a specific domain entry.</p> <p>The <code>delete domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes a specific domain entry.</p> <p>The <code>delete domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_domain_entry(
         &self,
         input: DeleteDomainEntryRequest,
     ) -> RusotoFuture<DeleteDomainEntryResult, DeleteDomainEntryError>;
 
-    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p> <p>The <code>delete instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes an Amazon Lightsail instance.</p> <p>The <code>delete instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_instance(
         &self,
         input: DeleteInstanceRequest,
     ) -> RusotoFuture<DeleteInstanceResult, DeleteInstanceError>;
 
-    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p> <p>The <code>delete instance snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p> <p>The <code>delete instance snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_instance_snapshot(
         &self,
         input: DeleteInstanceSnapshotRequest,
     ) -> RusotoFuture<DeleteInstanceSnapshotResult, DeleteInstanceSnapshotError>;
 
-    /// <p>Deletes a specific SSH key pair.</p> <p>The <code>delete key pair</code> operation supports tag-based access control via resource tags applied to the resource identified by keyPairName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes a specific SSH key pair.</p> <p>The <code>delete key pair</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>key pair name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_key_pair(
         &self,
         input: DeleteKeyPairRequest,
@@ -11844,13 +12133,13 @@ pub trait Lightsail {
         input: DeleteKnownHostKeysRequest,
     ) -> RusotoFuture<DeleteKnownHostKeysResult, DeleteKnownHostKeysError>;
 
-    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer(
         &self,
         input: DeleteLoadBalancerRequest,
     ) -> RusotoFuture<DeleteLoadBalancerResult, DeleteLoadBalancerError>;
 
-    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer_tls_certificate(
         &self,
         input: DeleteLoadBalancerTlsCertificateRequest,
@@ -11868,13 +12157,13 @@ pub trait Lightsail {
         input: DeleteRelationalDatabaseSnapshotRequest,
     ) -> RusotoFuture<DeleteRelationalDatabaseSnapshotResult, DeleteRelationalDatabaseSnapshotError>;
 
-    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn detach_disk(
         &self,
         input: DetachDiskRequest,
     ) -> RusotoFuture<DetachDiskResult, DetachDiskError>;
 
-    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p> <p>The <code>detach instances from load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p> <p>The <code>detach instances from load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn detach_instances_from_load_balancer(
         &self,
         input: DetachInstancesFromLoadBalancerRequest,
@@ -11886,12 +12175,24 @@ pub trait Lightsail {
         input: DetachStaticIpRequest,
     ) -> RusotoFuture<DetachStaticIpResult, DetachStaticIpError>;
 
+    /// <p>Disables an add-on for an Amazon Lightsail resource. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
+    fn disable_add_on(
+        &self,
+        input: DisableAddOnRequest,
+    ) -> RusotoFuture<DisableAddOnResult, DisableAddOnError>;
+
     /// <p>Downloads the default SSH key pair from the user's account.</p>
     fn download_default_key_pair(
         &self,
     ) -> RusotoFuture<DownloadDefaultKeyPairResult, DownloadDefaultKeyPairError>;
 
-    /// <p><p>Exports an Amazon Lightsail instance or block storage disk snapshot to Amazon Elastic Compute Cloud (Amazon EC2). This operation results in an export snapshot record that can be used with the <code>create cloud formation stack</code> operation to create new Amazon EC2 instances.</p> <p>Exported instance snapshots appear in Amazon EC2 as Amazon Machine Images (AMIs), and the instance system disk appears as an Amazon Elastic Block Store (Amazon EBS) volume. Exported disk snapshots appear in Amazon EC2 as Amazon EBS volumes. Snapshots are exported to the same Amazon Web Services Region in Amazon EC2 as the source Lightsail snapshot.</p> <p/> <p>The <code>export snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by sourceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p> <note> <p>Use the <code>get instance snapshots</code> or <code>get disk snapshots</code> operations to get a list of snapshots that you can export to Amazon EC2.</p> </note></p>
+    /// <p>Enables or modifies an add-on for an Amazon Lightsail resource. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
+    fn enable_add_on(
+        &self,
+        input: EnableAddOnRequest,
+    ) -> RusotoFuture<EnableAddOnResult, EnableAddOnError>;
+
+    /// <p><p>Exports an Amazon Lightsail instance or block storage disk snapshot to Amazon Elastic Compute Cloud (Amazon EC2). This operation results in an export snapshot record that can be used with the <code>create cloud formation stack</code> operation to create new Amazon EC2 instances.</p> <p>Exported instance snapshots appear in Amazon EC2 as Amazon Machine Images (AMIs), and the instance system disk appears as an Amazon Elastic Block Store (Amazon EBS) volume. Exported disk snapshots appear in Amazon EC2 as Amazon EBS volumes. Snapshots are exported to the same Amazon Web Services Region in Amazon EC2 as the source Lightsail snapshot.</p> <p/> <p>The <code>export snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>source snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p> <note> <p>Use the <code>get instance snapshots</code> or <code>get disk snapshots</code> operations to get a list of snapshots that you can export to Amazon EC2.</p> </note></p>
     fn export_snapshot(
         &self,
         input: ExportSnapshotRequest,
@@ -11903,7 +12204,13 @@ pub trait Lightsail {
         input: GetActiveNamesRequest,
     ) -> RusotoFuture<GetActiveNamesResult, GetActiveNamesError>;
 
-    /// <p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>
+    /// <p>Returns the available automatic snapshots for the specified resource name. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
+    fn get_auto_snapshots(
+        &self,
+        input: GetAutoSnapshotsRequest,
+    ) -> RusotoFuture<GetAutoSnapshotsResult, GetAutoSnapshotsError>;
+
+    /// <p><p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new instance already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p> <note> <p>Use active blueprints when creating new instances. Inactive blueprints are listed to support customers with existing instances and are not necessarily available to create new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases.</p> </note></p>
     fn get_blueprints(
         &self,
         input: GetBlueprintsRequest,
@@ -11960,7 +12267,7 @@ pub trait Lightsail {
         input: GetInstanceRequest,
     ) -> RusotoFuture<GetInstanceResult, GetInstanceError>;
 
-    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p> <p>The <code>get instance access details</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p> <p>The <code>get instance access details</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn get_instance_access_details(
         &self,
         input: GetInstanceAccessDetailsRequest,
@@ -12098,7 +12405,7 @@ pub trait Lightsail {
         input: GetRelationalDatabaseLogStreamsRequest,
     ) -> RusotoFuture<GetRelationalDatabaseLogStreamsResult, GetRelationalDatabaseLogStreamsError>;
 
-    /// <p>Returns the current, previous, or pending versions of the master user password for a Lightsail database.</p> <p>The <code>asdf</code> operation GetRelationalDatabaseMasterUserPassword supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName.</p>
+    /// <p>Returns the current, previous, or pending versions of the master user password for a Lightsail database.</p> <p>The <code>GetRelationalDatabaseMasterUserPassword</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName.</p>
     fn get_relational_database_master_user_password(
         &self,
         input: GetRelationalDatabaseMasterUserPasswordRequest,
@@ -12158,7 +12465,7 @@ pub trait Lightsail {
     /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
     fn is_vpc_peered(&self) -> RusotoFuture<IsVpcPeeredResult, IsVpcPeeredError>;
 
-    /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn open_instance_public_ports(
         &self,
         input: OpenInstancePublicPortsRequest,
@@ -12167,13 +12474,13 @@ pub trait Lightsail {
     /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
     fn peer_vpc(&self) -> RusotoFuture<PeerVpcResult, PeerVpcError>;
 
-    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn put_instance_public_ports(
         &self,
         input: PutInstancePublicPortsRequest,
     ) -> RusotoFuture<PutInstancePublicPortsResult, PutInstancePublicPortsError>;
 
-    /// <p>Restarts a specific instance.</p> <p>The <code>reboot instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Restarts a specific instance.</p> <p>The <code>reboot instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn reboot_instance(
         &self,
         input: RebootInstanceRequest,
@@ -12191,7 +12498,7 @@ pub trait Lightsail {
         input: ReleaseStaticIpRequest,
     ) -> RusotoFuture<ReleaseStaticIpResult, ReleaseStaticIpError>;
 
-    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn start_instance(
         &self,
         input: StartInstanceRequest,
@@ -12203,7 +12510,7 @@ pub trait Lightsail {
         input: StartRelationalDatabaseRequest,
     ) -> RusotoFuture<StartRelationalDatabaseResult, StartRelationalDatabaseError>;
 
-    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>stop instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>stop instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn stop_instance(
         &self,
         input: StopInstanceRequest,
@@ -12215,7 +12522,7 @@ pub trait Lightsail {
         input: StopRelationalDatabaseRequest,
     ) -> RusotoFuture<StopRelationalDatabaseResult, StopRelationalDatabaseError>;
 
-    /// <p>Adds one or more tags to the specified Amazon Lightsail resource. Each resource can have a maximum of 50 tags. Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p> <p>The <code>tag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Adds one or more tags to the specified Amazon Lightsail resource. Each resource can have a maximum of 50 tags. Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p> <p>The <code>tag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>resource name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -12224,19 +12531,19 @@ pub trait Lightsail {
     /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
     fn unpeer_vpc(&self) -> RusotoFuture<UnpeerVpcResult, UnpeerVpcError>;
 
-    /// <p>Deletes the specified set of tag keys and their values from the specified Amazon Lightsail resource.</p> <p>The <code>untag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes the specified set of tag keys and their values from the specified Amazon Lightsail resource.</p> <p>The <code>untag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>resource name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResult, UntagResourceError>;
 
-    /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_domain_entry(
         &self,
         input: UpdateDomainEntryRequest,
     ) -> RusotoFuture<UpdateDomainEntryResult, UpdateDomainEntryError>;
 
-    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p> <p>The <code>update load balancer attribute</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p> <p>The <code>update load balancer attribute</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_load_balancer_attribute(
         &self,
         input: UpdateLoadBalancerAttributeRequest,
@@ -12294,6 +12601,14 @@ impl LightsailClient {
     }
 }
 
+impl fmt::Debug for LightsailClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("LightsailClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Lightsail for LightsailClient {
     /// <p>Allocates a static IP address.</p>
     fn allocate_static_ip(
@@ -12324,7 +12639,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_disk(
         &self,
         input: AttachDiskRequest,
@@ -12353,7 +12668,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p> <p>The <code>attach instances to load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p> <p>The <code>attach instances to load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_instances_to_load_balancer(
         &self,
         input: AttachInstancesToLoadBalancerRequest,
@@ -12382,7 +12697,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>attach load balancer tls certificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_load_balancer_tls_certificate(
         &self,
         input: AttachLoadBalancerTlsCertificateRequest,
@@ -12443,7 +12758,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn close_instance_public_ports(
         &self,
         input: CloseInstancePublicPortsRequest,
@@ -12472,7 +12787,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Copies an instance or disk snapshot from one AWS Region to another in Amazon Lightsail.</p>
+    /// <p><p>Copies a manual instance or disk snapshot as another manual snapshot, or copies an automatic instance or disk snapshot as a manual snapshot. This operation can also be used to copy a manual or automatic snapshot of an instance or a disk from one AWS Region to another in Amazon Lightsail.</p> <p>When copying a <i>manual snapshot</i>, be sure to define the <code>source region</code>, <code>source snapshot name</code>, and <code>target snapshot name</code> parameters.</p> <p>When copying an <i>automatic snapshot</i>, be sure to define the <code>source region</code>, <code>source resource name</code>, <code>target snapshot name</code>, and either the <code>restore date</code> or the <code>use latest restorable auto snapshot</code> parameters.</p> <note> <p>Database snapshots cannot be copied at this time.</p> </note></p>
     fn copy_snapshot(
         &self,
         input: CopySnapshotRequest,
@@ -12530,7 +12845,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates a block storage disk that can be attached to an Amazon Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>).</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk(
         &self,
         input: CreateDiskRequest,
@@ -12559,7 +12874,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates a block storage disk from a manual or automatic snapshot of a disk. The resulting disk can be attached to an Amazon Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>).</p> <p>The <code>create disk from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>disk snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk_from_snapshot(
         &self,
         input: CreateDiskFromSnapshotRequest,
@@ -12645,7 +12960,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates one of the following entry records associated with the domain: Address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates one of the following entry records associated with the domain: Address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_domain_entry(
         &self,
         input: CreateDomainEntryRequest,
@@ -12702,7 +13017,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>. Create instances using active blueprints. Inactive blueprints are listed to support customers with existing instances but are not necessarily available for launch of new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases. Use the get blueprints operation to return a list of available blueprints.</p> <p>The <code>create instances</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates one or more Amazon Lightsail instances.</p> <p>The <code>create instances</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instances(
         &self,
         input: CreateInstancesRequest,
@@ -12731,7 +13046,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p> <p>The <code>create instances from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates one or more new instances from a manual or automatic snapshot of an instance.</p> <p>The <code>create instances from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>instance snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instances_from_snapshot(
         &self,
         input: CreateInstancesFromSnapshotRequest,
@@ -12818,7 +13133,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_load_balancer_tls_certificate(
         &self,
         input: CreateLoadBalancerTlsCertificateRequest,
@@ -12945,7 +13260,36 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes an automatic snapshot for an instance or disk.</p>
+    fn delete_auto_snapshot(
+        &self,
+        input: DeleteAutoSnapshotRequest,
+    ) -> RusotoFuture<DeleteAutoSnapshotResult, DeleteAutoSnapshotError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.DeleteAutoSnapshot");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteAutoSnapshotResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteAutoSnapshotError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_disk(
         &self,
         input: DeleteDiskRequest,
@@ -12974,7 +13318,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p> <p>The <code>delete disk snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p> <p>The <code>delete disk snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_disk_snapshot(
         &self,
         input: DeleteDiskSnapshotRequest,
@@ -13003,7 +13347,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_domain(
         &self,
         input: DeleteDomainRequest,
@@ -13032,7 +13376,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes a specific domain entry.</p> <p>The <code>delete domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes a specific domain entry.</p> <p>The <code>delete domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_domain_entry(
         &self,
         input: DeleteDomainEntryRequest,
@@ -13061,7 +13405,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p> <p>The <code>delete instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes an Amazon Lightsail instance.</p> <p>The <code>delete instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_instance(
         &self,
         input: DeleteInstanceRequest,
@@ -13090,7 +13434,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p> <p>The <code>delete instance snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p> <p>The <code>delete instance snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_instance_snapshot(
         &self,
         input: DeleteInstanceSnapshotRequest,
@@ -13118,7 +13462,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes a specific SSH key pair.</p> <p>The <code>delete key pair</code> operation supports tag-based access control via resource tags applied to the resource identified by keyPairName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes a specific SSH key pair.</p> <p>The <code>delete key pair</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>key pair name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_key_pair(
         &self,
         input: DeleteKeyPairRequest,
@@ -13175,7 +13519,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer(
         &self,
         input: DeleteLoadBalancerRequest,
@@ -13204,7 +13548,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer_tls_certificate(
         &self,
         input: DeleteLoadBalancerTlsCertificateRequest,
@@ -13297,7 +13641,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn detach_disk(
         &self,
         input: DetachDiskRequest,
@@ -13326,7 +13670,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p> <p>The <code>detach instances from load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p> <p>The <code>detach instances from load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn detach_instances_from_load_balancer(
         &self,
         input: DetachInstancesFromLoadBalancerRequest,
@@ -13387,6 +13731,35 @@ impl Lightsail for LightsailClient {
         })
     }
 
+    /// <p>Disables an add-on for an Amazon Lightsail resource. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
+    fn disable_add_on(
+        &self,
+        input: DisableAddOnRequest,
+    ) -> RusotoFuture<DisableAddOnResult, DisableAddOnError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.DisableAddOn");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisableAddOnResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DisableAddOnError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Downloads the default SSH key pair from the user's account.</p>
     fn download_default_key_pair(
         &self,
@@ -13413,7 +13786,36 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p><p>Exports an Amazon Lightsail instance or block storage disk snapshot to Amazon Elastic Compute Cloud (Amazon EC2). This operation results in an export snapshot record that can be used with the <code>create cloud formation stack</code> operation to create new Amazon EC2 instances.</p> <p>Exported instance snapshots appear in Amazon EC2 as Amazon Machine Images (AMIs), and the instance system disk appears as an Amazon Elastic Block Store (Amazon EBS) volume. Exported disk snapshots appear in Amazon EC2 as Amazon EBS volumes. Snapshots are exported to the same Amazon Web Services Region in Amazon EC2 as the source Lightsail snapshot.</p> <p/> <p>The <code>export snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by sourceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p> <note> <p>Use the <code>get instance snapshots</code> or <code>get disk snapshots</code> operations to get a list of snapshots that you can export to Amazon EC2.</p> </note></p>
+    /// <p>Enables or modifies an add-on for an Amazon Lightsail resource. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
+    fn enable_add_on(
+        &self,
+        input: EnableAddOnRequest,
+    ) -> RusotoFuture<EnableAddOnResult, EnableAddOnError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.EnableAddOn");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<EnableAddOnResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnableAddOnError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p><p>Exports an Amazon Lightsail instance or block storage disk snapshot to Amazon Elastic Compute Cloud (Amazon EC2). This operation results in an export snapshot record that can be used with the <code>create cloud formation stack</code> operation to create new Amazon EC2 instances.</p> <p>Exported instance snapshots appear in Amazon EC2 as Amazon Machine Images (AMIs), and the instance system disk appears as an Amazon Elastic Block Store (Amazon EBS) volume. Exported disk snapshots appear in Amazon EC2 as Amazon EBS volumes. Snapshots are exported to the same Amazon Web Services Region in Amazon EC2 as the source Lightsail snapshot.</p> <p/> <p>The <code>export snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>source snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p> <note> <p>Use the <code>get instance snapshots</code> or <code>get disk snapshots</code> operations to get a list of snapshots that you can export to Amazon EC2.</p> </note></p>
     fn export_snapshot(
         &self,
         input: ExportSnapshotRequest,
@@ -13471,7 +13873,36 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>
+    /// <p>Returns the available automatic snapshots for the specified resource name. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
+    fn get_auto_snapshots(
+        &self,
+        input: GetAutoSnapshotsRequest,
+    ) -> RusotoFuture<GetAutoSnapshotsResult, GetAutoSnapshotsError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetAutoSnapshots");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetAutoSnapshotsResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetAutoSnapshotsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p><p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new instance already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p> <note> <p>Use active blueprints when creating new instances. Inactive blueprints are listed to support customers with existing instances and are not necessarily available to create new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases.</p> </note></p>
     fn get_blueprints(
         &self,
         input: GetBlueprintsRequest,
@@ -13778,7 +14209,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p> <p>The <code>get instance access details</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p> <p>The <code>get instance access details</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn get_instance_access_details(
         &self,
         input: GetInstanceAccessDetailsRequest,
@@ -14448,7 +14879,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Returns the current, previous, or pending versions of the master user password for a Lightsail database.</p> <p>The <code>asdf</code> operation GetRelationalDatabaseMasterUserPassword supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName.</p>
+    /// <p>Returns the current, previous, or pending versions of the master user password for a Lightsail database.</p> <p>The <code>GetRelationalDatabaseMasterUserPassword</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName.</p>
     fn get_relational_database_master_user_password(
         &self,
         input: GetRelationalDatabaseMasterUserPasswordRequest,
@@ -14745,7 +15176,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn open_instance_public_ports(
         &self,
         input: OpenInstancePublicPortsRequest,
@@ -14795,7 +15226,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn put_instance_public_ports(
         &self,
         input: PutInstancePublicPortsRequest,
@@ -14823,7 +15254,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Restarts a specific instance.</p> <p>The <code>reboot instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Restarts a specific instance.</p> <p>The <code>reboot instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn reboot_instance(
         &self,
         input: RebootInstanceRequest,
@@ -14910,7 +15341,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn start_instance(
         &self,
         input: StartInstanceRequest,
@@ -14965,7 +15396,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>stop instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>stop instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn stop_instance(
         &self,
         input: StopInstanceRequest,
@@ -15022,7 +15453,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Adds one or more tags to the specified Amazon Lightsail resource. Each resource can have a maximum of 50 tags. Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p> <p>The <code>tag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Adds one or more tags to the specified Amazon Lightsail resource. Each resource can have a maximum of 50 tags. Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p> <p>The <code>tag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>resource name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -15075,7 +15506,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes the specified set of tag keys and their values from the specified Amazon Lightsail resource.</p> <p>The <code>untag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes the specified set of tag keys and their values from the specified Amazon Lightsail resource.</p> <p>The <code>untag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>resource name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -15104,7 +15535,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_domain_entry(
         &self,
         input: UpdateDomainEntryRequest,
@@ -15133,7 +15564,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p> <p>The <code>update load balancer attribute</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p> <p>The <code>update load balancer attribute</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_load_balancer_attribute(
         &self,
         input: UpdateLoadBalancerAttributeRequest,

@@ -510,7 +510,7 @@ pub struct BurnInDestinationSettings {
     pub y_position: Option<i64>,
 }
 
-/// <p>Output groups for this Live Event. Output groups contain information about where streams should be distributed.</p>
+/// <p>Caption Description</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptionDescription {
     /// <p>Specifies which input caption selector to use as a caption source when generating output captions. This field should match a captionSelector name.</p>
@@ -899,6 +899,68 @@ pub struct CreateInputSecurityGroupResponse {
     pub security_group: Option<InputSecurityGroup>,
 }
 
+/// <p>A request to create a program in a multiplex.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateMultiplexProgramRequest {
+    /// <p>ID of the multiplex where the program is to be created.</p>
+    #[serde(rename = "MultiplexId")]
+    pub multiplex_id: String,
+    /// <p>The settings for this multiplex program.</p>
+    #[serde(rename = "MultiplexProgramSettings")]
+    pub multiplex_program_settings: MultiplexProgramSettings,
+    /// <p>Name of multiplex program.</p>
+    #[serde(rename = "ProgramName")]
+    pub program_name: String,
+    /// <p>Unique request ID. This prevents retries from creating multiple
+    /// resources.</p>
+    #[serde(rename = "RequestId")]
+    pub request_id: String,
+}
+
+/// <p>Placeholder documentation for CreateMultiplexProgramResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateMultiplexProgramResponse {
+    /// <p>The newly created multiplex program.</p>
+    #[serde(rename = "MultiplexProgram")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_program: Option<MultiplexProgram>,
+}
+
+/// <p>A request to create a multiplex.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateMultiplexRequest {
+    /// <p>A list of availability zones for the multiplex. You must specify exactly two.</p>
+    #[serde(rename = "AvailabilityZones")]
+    pub availability_zones: Vec<String>,
+    /// <p>Configuration for a multiplex event.</p>
+    #[serde(rename = "MultiplexSettings")]
+    pub multiplex_settings: MultiplexSettings,
+    /// <p>Name of multiplex.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>Unique request ID. This prevents retries from creating multiple
+    /// resources.</p>
+    #[serde(rename = "RequestId")]
+    pub request_id: String,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Placeholder documentation for CreateMultiplexResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateMultiplexResponse {
+    /// <p>The newly created multiplex.</p>
+    #[serde(rename = "Multiplex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex: Option<Multiplex>,
+}
+
 /// <p>Placeholder documentation for CreateTagsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1011,6 +1073,95 @@ pub struct DeleteInputSecurityGroupRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInputSecurityGroupResponse {}
+
+/// <p>Placeholder documentation for DeleteMultiplexProgramRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteMultiplexProgramRequest {
+    /// <p>The ID of the multiplex that the program belongs to.</p>
+    #[serde(rename = "MultiplexId")]
+    pub multiplex_id: String,
+    /// <p>The multiplex program name.</p>
+    #[serde(rename = "ProgramName")]
+    pub program_name: String,
+}
+
+/// <p>Placeholder documentation for DeleteMultiplexProgramResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteMultiplexProgramResponse {
+    /// <p>The MediaLive channel associated with the program.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    /// <p>The settings for this multiplex program.</p>
+    #[serde(rename = "MultiplexProgramSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_program_settings: Option<MultiplexProgramSettings>,
+    /// <p>The packet identifier map for this multiplex program.</p>
+    #[serde(rename = "PacketIdentifiersMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub packet_identifiers_map: Option<MultiplexProgramPacketIdentifiersMap>,
+    /// <p>The name of the multiplex program.</p>
+    #[serde(rename = "ProgramName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_name: Option<String>,
+}
+
+/// <p>Placeholder documentation for DeleteMultiplexRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteMultiplexRequest {
+    /// <p>The ID of the multiplex.</p>
+    #[serde(rename = "MultiplexId")]
+    pub multiplex_id: String,
+}
+
+/// <p>Placeholder documentation for DeleteMultiplexResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteMultiplexResponse {
+    /// <p>The unique arn of the multiplex.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A list of availability zones for the multiplex.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>A list of the multiplex output destinations.</p>
+    #[serde(rename = "Destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destinations: Option<Vec<MultiplexOutputDestination>>,
+    /// <p>The unique id of the multiplex.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Configuration for a multiplex event.</p>
+    #[serde(rename = "MultiplexSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_settings: Option<MultiplexSettings>,
+    /// <p>The name of the multiplex.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The number of currently healthy pipelines.</p>
+    #[serde(rename = "PipelinesRunningCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipelines_running_count: Option<i64>,
+    /// <p>The number of programs in the multiplex.</p>
+    #[serde(rename = "ProgramCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_count: Option<i64>,
+    /// <p>The current state of the multiplex.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
 
 /// <p>Placeholder documentation for DeleteReservationRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1306,6 +1457,95 @@ pub struct DescribeInputSecurityGroupResponse {
     #[serde(rename = "WhitelistRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub whitelist_rules: Option<Vec<InputWhitelistRule>>,
+}
+
+/// <p>Placeholder documentation for DescribeMultiplexProgramRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeMultiplexProgramRequest {
+    /// <p>The ID of the multiplex that the program belongs to.</p>
+    #[serde(rename = "MultiplexId")]
+    pub multiplex_id: String,
+    /// <p>The name of the program.</p>
+    #[serde(rename = "ProgramName")]
+    pub program_name: String,
+}
+
+/// <p>Placeholder documentation for DescribeMultiplexProgramResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeMultiplexProgramResponse {
+    /// <p>The MediaLive channel associated with the program.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    /// <p>The settings for this multiplex program.</p>
+    #[serde(rename = "MultiplexProgramSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_program_settings: Option<MultiplexProgramSettings>,
+    /// <p>The packet identifier map for this multiplex program.</p>
+    #[serde(rename = "PacketIdentifiersMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub packet_identifiers_map: Option<MultiplexProgramPacketIdentifiersMap>,
+    /// <p>The name of the multiplex program.</p>
+    #[serde(rename = "ProgramName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_name: Option<String>,
+}
+
+/// <p>Placeholder documentation for DescribeMultiplexRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeMultiplexRequest {
+    /// <p>The ID of the multiplex.</p>
+    #[serde(rename = "MultiplexId")]
+    pub multiplex_id: String,
+}
+
+/// <p>Placeholder documentation for DescribeMultiplexResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeMultiplexResponse {
+    /// <p>The unique arn of the multiplex.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A list of availability zones for the multiplex.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>A list of the multiplex output destinations.</p>
+    #[serde(rename = "Destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destinations: Option<Vec<MultiplexOutputDestination>>,
+    /// <p>The unique id of the multiplex.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Configuration for a multiplex event.</p>
+    #[serde(rename = "MultiplexSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_settings: Option<MultiplexSettings>,
+    /// <p>The name of the multiplex.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The number of currently healthy pipelines.</p>
+    #[serde(rename = "PipelinesRunningCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipelines_running_count: Option<i64>,
+    /// <p>The number of programs in the multiplex.</p>
+    #[serde(rename = "ProgramCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_count: Option<i64>,
+    /// <p>The current state of the multiplex.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Placeholder documentation for DescribeOfferingRequest</p>
@@ -1749,6 +1989,10 @@ pub struct EncoderSettings {
     #[serde(rename = "GlobalConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_configuration: Option<GlobalConfiguration>,
+    /// <p>Nielsen configuration settings.</p>
+    #[serde(rename = "NielsenConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nielsen_configuration: Option<NielsenConfiguration>,
     #[serde(rename = "OutputGroups")]
     pub output_groups: Vec<OutputGroup>,
     /// <p>Contains settings used to acquire and adjust timecode information from inputs.</p>
@@ -1814,7 +2058,7 @@ pub struct FrameCaptureOutputSettings {
 /// <p>Frame Capture Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameCaptureSettings {
-    /// <p>The frequency, in seconds, for capturing frames for inclusion in the output.  For example, &quot;10&quot; means capture a frame every 10 seconds.</p>
+    /// <p>The frequency at which to capture frames for inclusion in the output. May be specified in either seconds or milliseconds, as specified by captureIntervalUnits.</p>
     #[serde(rename = "CaptureInterval")]
     pub capture_interval: i64,
 }
@@ -1932,7 +2176,9 @@ pub struct H264Settings {
     #[serde(rename = "GopNumBFrames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gop_num_b_frames: Option<i64>,
-    /// <p>GOP size (keyframe interval) in units of either frames or seconds per gopSizeUnits. Must be greater than zero.</p>
+    /// <p>GOP size (keyframe interval) in units of either frames or seconds per gopSizeUnits.
+    /// If gopSizeUnits is frames, gopSize must be an integer and must be greater than or equal to 1.
+    /// If gopSizeUnits is seconds, gopSize must be greater than 0, but need not be an integer.</p>
     #[serde(rename = "GopSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gop_size: Option<f64>,
@@ -1954,7 +2200,7 @@ pub struct H264Settings {
     #[serde(rename = "MaxBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_bitrate: Option<i64>,
-    /// <p>Only meaningful if sceneChangeDetect is set to enabled.  Enforces separation between repeated (cadence) I-frames and I-frames inserted by Scene Change Detection. If a scene change I-frame is within I-interval frames of a cadence I-frame, the GOP is shrunk and/or stretched to the scene change I-frame. GOP stretch requires enabling lookahead as well as setting I-interval. The normal cadence resumes for the next GOP. Note: Maximum GOP stretch = GOP size + Min-I-interval - 1</p>
+    /// <p>Only meaningful if sceneChangeDetect is set to enabled.  Defaults to 5 if multiplex rate control is used.  Enforces separation between repeated (cadence) I-frames and I-frames inserted by Scene Change Detection. If a scene change I-frame is within I-interval frames of a cadence I-frame, the GOP is shrunk and/or stretched to the scene change I-frame. GOP stretch requires enabling lookahead as well as setting I-interval. The normal cadence resumes for the next GOP. Note: Maximum GOP stretch = GOP size + Min-I-interval - 1</p>
     #[serde(rename = "MinIInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_i_interval: Option<i64>,
@@ -2110,7 +2356,9 @@ pub struct H265Settings {
     #[serde(rename = "GopClosedCadence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gop_closed_cadence: Option<i64>,
-    /// <p>GOP size (keyframe interval) in units of either frames or seconds per gopSizeUnits. Must be greater than zero.</p>
+    /// <p>GOP size (keyframe interval) in units of either frames or seconds per gopSizeUnits.
+    /// If gopSizeUnits is frames, gopSize must be an integer and must be greater than or equal to 1.
+    /// If gopSizeUnits is seconds, gopSize must be greater than 0, but need not be an integer.</p>
     #[serde(rename = "GopSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gop_size: Option<f64>,
@@ -2130,7 +2378,7 @@ pub struct H265Settings {
     #[serde(rename = "MaxBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_bitrate: Option<i64>,
-    /// <p>Only meaningful if sceneChangeDetect is set to enabled.  Enforces separation between repeated (cadence) I-frames and I-frames inserted by Scene Change Detection. If a scene change I-frame is within I-interval frames of a cadence I-frame, the GOP is shrunk and/or stretched to the scene change I-frame. GOP stretch requires enabling lookahead as well as setting I-interval. The normal cadence resumes for the next GOP. Note: Maximum GOP stretch = GOP size + Min-I-interval - 1</p>
+    /// <p>Only meaningful if sceneChangeDetect is set to enabled.  Defaults to 5 if multiplex rate control is used.  Enforces separation between repeated (cadence) I-frames and I-frames inserted by Scene Change Detection. If a scene change I-frame is within I-interval frames of a cadence I-frame, the GOP is shrunk and/or stretched to the scene change I-frame. GOP stretch requires enabling lookahead as well as setting I-interval. The normal cadence resumes for the next GOP. Note: Maximum GOP stretch = GOP size + Min-I-interval - 1</p>
     #[serde(rename = "MinIInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_i_interval: Option<i64>,
@@ -3012,6 +3260,65 @@ pub struct ListInputsResponse {
     pub next_token: Option<String>,
 }
 
+/// <p>Placeholder documentation for ListMultiplexProgramsRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListMultiplexProgramsRequest {
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The ID of the multiplex that the programs belong to.</p>
+    #[serde(rename = "MultiplexId")]
+    pub multiplex_id: String,
+    /// <p>The token to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Placeholder documentation for ListMultiplexProgramsResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListMultiplexProgramsResponse {
+    /// <p>List of multiplex programs.</p>
+    #[serde(rename = "MultiplexPrograms")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_programs: Option<Vec<MultiplexProgramSummary>>,
+    /// <p>Token for the next ListMultiplexProgram request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Placeholder documentation for ListMultiplexesRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListMultiplexesRequest {
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Placeholder documentation for ListMultiplexesResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListMultiplexesResponse {
+    /// <p>List of multiplexes.</p>
+    #[serde(rename = "Multiplexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplexes: Option<Vec<MultiplexSummary>>,
+    /// <p>Token for the next ListMultiplexes request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>Placeholder documentation for ListOfferingsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3028,6 +3335,10 @@ pub struct ListOfferingsRequest {
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec: Option<String>,
+    /// <p>Filter by offering duration, e.g. &#39;12&#39;</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration: Option<String>,
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -3042,11 +3353,11 @@ pub struct ListOfferingsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Filter by resolution, &#39;SD&#39;, &#39;HD&#39;, or &#39;UHD&#39;</p>
+    /// <p>Filter by resolution, &#39;SD&#39;, &#39;HD&#39;, &#39;FHD&#39;, or &#39;UHD&#39;</p>
     #[serde(rename = "Resolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolution: Option<String>,
-    /// <p>Filter by resource type, &#39;INPUT&#39;, &#39;OUTPUT&#39;, or &#39;CHANNEL&#39;</p>
+    /// <p>Filter by resource type, &#39;INPUT&#39;, &#39;OUTPUT&#39;, &#39;MULTIPLEX&#39;, or &#39;CHANNEL&#39;</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -3100,11 +3411,11 @@ pub struct ListReservationsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Filter by resolution, &#39;SD&#39;, &#39;HD&#39;, or &#39;UHD&#39;</p>
+    /// <p>Filter by resolution, &#39;SD&#39;, &#39;HD&#39;, &#39;FHD&#39;, or &#39;UHD&#39;</p>
     #[serde(rename = "Resolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolution: Option<String>,
-    /// <p>Filter by resource type, &#39;INPUT&#39;, &#39;OUTPUT&#39;, or &#39;CHANNEL&#39;</p>
+    /// <p>Filter by resource type, &#39;INPUT&#39;, &#39;OUTPUT&#39;, &#39;MULTIPLEX&#39;, or &#39;CHANNEL&#39;</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -3260,6 +3571,10 @@ pub struct M2tsSettings {
     #[serde(rename = "KlvDataPids")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub klv_data_pids: Option<String>,
+    /// <p>If set to passthrough, Nielsen inaudible tones for media tracking will be detected in the input audio and an equivalent ID3 tag will be inserted in the output.</p>
+    #[serde(rename = "NielsenId3Behavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nielsen_id_3_behavior: Option<String>,
     /// <p>Value in bits per second of extra null packets to insert into the transport stream. This can be used if a downstream encryption system requires periodic null packets.</p>
     #[serde(rename = "NullPacketBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3357,6 +3672,10 @@ pub struct M3u8Settings {
     #[serde(rename = "EcmPid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ecm_pid: Option<String>,
+    /// <p>If set to passthrough, Nielsen inaudible tones for media tracking will be detected in the input audio and an equivalent ID3 tag will be inserted in the output.</p>
+    #[serde(rename = "NielsenId3Behavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nielsen_id_3_behavior: Option<String>,
     /// <p>The number of milliseconds between instances of this table in the output transport stream. A value of &quot;0&quot; writes out the PMT once per segment file.</p>
     #[serde(rename = "PatInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3572,6 +3891,314 @@ pub struct MsSmoothOutputSettings {
     pub name_modifier: Option<String>,
 }
 
+/// <p>The multiplex object.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Multiplex {
+    /// <p>The unique arn of the multiplex.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A list of availability zones for the multiplex.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>A list of the multiplex output destinations.</p>
+    #[serde(rename = "Destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destinations: Option<Vec<MultiplexOutputDestination>>,
+    /// <p>The unique id of the multiplex.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Configuration for a multiplex event.</p>
+    #[serde(rename = "MultiplexSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_settings: Option<MultiplexSettings>,
+    /// <p>The name of the multiplex.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The number of currently healthy pipelines.</p>
+    #[serde(rename = "PipelinesRunningCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipelines_running_count: Option<i64>,
+    /// <p>The number of programs in the multiplex.</p>
+    #[serde(rename = "ProgramCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_count: Option<i64>,
+    /// <p>The current state of the multiplex.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Multiplex Group Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MultiplexGroupSettings {}
+
+/// <p>Multiplex MediaConnect output destination settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MultiplexMediaConnectOutputDestinationSettings {
+    /// <p>The MediaConnect entitlement ARN available as a Flow source.</p>
+    #[serde(rename = "EntitlementArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entitlement_arn: Option<String>,
+}
+
+/// <p>Multiplex output destination settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MultiplexOutputDestination {
+    /// <p>Multiplex MediaConnect output destination settings.</p>
+    #[serde(rename = "MediaConnectSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_connect_settings: Option<MultiplexMediaConnectOutputDestinationSettings>,
+}
+
+/// <p>Multiplex Output Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MultiplexOutputSettings {
+    /// <p>Destination is a Multiplex.</p>
+    #[serde(rename = "Destination")]
+    pub destination: OutputLocationRef,
+}
+
+/// <p>The multiplex program object.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MultiplexProgram {
+    /// <p>The MediaLive channel associated with the program.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    /// <p>The settings for this multiplex program.</p>
+    #[serde(rename = "MultiplexProgramSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_program_settings: Option<MultiplexProgramSettings>,
+    /// <p>The packet identifier map for this multiplex program.</p>
+    #[serde(rename = "PacketIdentifiersMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub packet_identifiers_map: Option<MultiplexProgramPacketIdentifiersMap>,
+    /// <p>The name of the multiplex program.</p>
+    #[serde(rename = "ProgramName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_name: Option<String>,
+}
+
+/// <p>Multiplex Program Input Destination Settings for outputting a Channel to a Multiplex</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MultiplexProgramChannelDestinationSettings {
+    /// <p>The ID of the Multiplex that the encoder is providing output to. You do not need to specify the individual inputs to the Multiplex; MediaLive will handle the connection of the two MediaLive pipelines to the two Multiplex instances.
+    /// The Multiplex must be in the same region as the Channel.</p>
+    #[serde(rename = "MultiplexId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_id: Option<String>,
+    /// <p>The program name of the Multiplex program that the encoder is providing output to.</p>
+    #[serde(rename = "ProgramName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_name: Option<String>,
+}
+
+/// <p>Packet identifiers map for a given Multiplex program.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MultiplexProgramPacketIdentifiersMap {
+    #[serde(rename = "AudioPids")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_pids: Option<Vec<i64>>,
+    #[serde(rename = "DvbSubPids")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dvb_sub_pids: Option<Vec<i64>>,
+    #[serde(rename = "DvbTeletextPid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dvb_teletext_pid: Option<i64>,
+    #[serde(rename = "EtvPlatformPid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub etv_platform_pid: Option<i64>,
+    #[serde(rename = "EtvSignalPid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub etv_signal_pid: Option<i64>,
+    #[serde(rename = "KlvDataPids")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub klv_data_pids: Option<Vec<i64>>,
+    #[serde(rename = "PcrPid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pcr_pid: Option<i64>,
+    #[serde(rename = "PmtPid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pmt_pid: Option<i64>,
+    #[serde(rename = "PrivateMetadataPid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_metadata_pid: Option<i64>,
+    #[serde(rename = "Scte27Pids")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scte_27_pids: Option<Vec<i64>>,
+    #[serde(rename = "Scte35Pid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scte_35_pid: Option<i64>,
+    #[serde(rename = "TimedMetadataPid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timed_metadata_pid: Option<i64>,
+    #[serde(rename = "VideoPid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_pid: Option<i64>,
+}
+
+/// <p>Transport stream service descriptor configuration for the Multiplex program.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MultiplexProgramServiceDescriptor {
+    /// <p>Name of the provider.</p>
+    #[serde(rename = "ProviderName")]
+    pub provider_name: String,
+    /// <p>Name of the service.</p>
+    #[serde(rename = "ServiceName")]
+    pub service_name: String,
+}
+
+/// <p>Multiplex Program settings configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MultiplexProgramSettings {
+    /// <p>Unique program number.</p>
+    #[serde(rename = "ProgramNumber")]
+    pub program_number: i64,
+    /// <p>Transport stream service descriptor configuration for the Multiplex program.</p>
+    #[serde(rename = "ServiceDescriptor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_descriptor: Option<MultiplexProgramServiceDescriptor>,
+    /// <p>Program video settings configuration.</p>
+    #[serde(rename = "VideoSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_settings: Option<MultiplexVideoSettings>,
+}
+
+/// <p>Placeholder documentation for MultiplexProgramSummary</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MultiplexProgramSummary {
+    /// <p>The MediaLive Channel associated with the program.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    /// <p>The name of the multiplex program.</p>
+    #[serde(rename = "ProgramName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_name: Option<String>,
+}
+
+/// <p>Contains configuration for a Multiplex event</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MultiplexSettings {
+    /// <p>Maximum video buffer delay in milliseconds.</p>
+    #[serde(rename = "MaximumVideoBufferDelayMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_video_buffer_delay_milliseconds: Option<i64>,
+    /// <p>Transport stream bit rate.</p>
+    #[serde(rename = "TransportStreamBitrate")]
+    pub transport_stream_bitrate: i64,
+    /// <p>Transport stream ID.</p>
+    #[serde(rename = "TransportStreamId")]
+    pub transport_stream_id: i64,
+    /// <p>Transport stream reserved bit rate.</p>
+    #[serde(rename = "TransportStreamReservedBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transport_stream_reserved_bitrate: Option<i64>,
+}
+
+/// <p>Contains summary configuration for a Multiplex event.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MultiplexSettingsSummary {
+    /// <p>Transport stream bit rate.</p>
+    #[serde(rename = "TransportStreamBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transport_stream_bitrate: Option<i64>,
+}
+
+/// <p>Statmux rate control settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MultiplexStatmuxVideoSettings {
+    /// <p>Maximum statmux bitrate.</p>
+    #[serde(rename = "MaximumBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_bitrate: Option<i64>,
+    /// <p>Minimum statmux bitrate.</p>
+    #[serde(rename = "MinimumBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_bitrate: Option<i64>,
+}
+
+/// <p>Placeholder documentation for MultiplexSummary</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MultiplexSummary {
+    /// <p>The unique arn of the multiplex.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A list of availability zones for the multiplex.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>The unique id of the multiplex.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Configuration for a multiplex event.</p>
+    #[serde(rename = "MultiplexSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_settings: Option<MultiplexSettingsSummary>,
+    /// <p>The name of the multiplex.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The number of currently healthy pipelines.</p>
+    #[serde(rename = "PipelinesRunningCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipelines_running_count: Option<i64>,
+    /// <p>The number of programs in the multiplex.</p>
+    #[serde(rename = "ProgramCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_count: Option<i64>,
+    /// <p>The current state of the multiplex.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Placeholder documentation for MultiplexValidationError</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MultiplexValidationError {
+    /// <p>Path to the source of the error.</p>
+    pub element_path: Option<String>,
+    /// <p>The error message.</p>
+    pub error_message: Option<String>,
+}
+
+/// <p>The video configuration for each program in a multiplex.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MultiplexVideoSettings {
+    /// <p>The constant bitrate configuration for the video encode.
+    /// When this field is defined, StatmuxSettings must be undefined.</p>
+    #[serde(rename = "ConstantBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constant_bitrate: Option<i64>,
+    /// <p>Statmux rate control settings.
+    /// When this field is defined, ConstantBitrate must be undefined.</p>
+    #[serde(rename = "StatmuxSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statmux_settings: Option<MultiplexStatmuxVideoSettings>,
+}
+
 /// <p>Network source to transcode. Must be accessible to the Elemental Live node that is running the live event through a network connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NetworkInputSettings {
@@ -3583,6 +4210,19 @@ pub struct NetworkInputSettings {
     #[serde(rename = "ServerValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_validation: Option<String>,
+}
+
+/// <p>Nielsen Configuration</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NielsenConfiguration {
+    /// <p>Enter the Distributor ID assigned to your organization by Nielsen.</p>
+    #[serde(rename = "DistributorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distributor_id: Option<String>,
+    /// <p>Enables Nielsen PCM to ID3 tagging</p>
+    #[serde(rename = "NielsenPcmToId3Tagging")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nielsen_pcm_to_id_3_tagging: Option<String>,
 }
 
 /// <p>Reserved resources available for purchase</p>
@@ -3670,6 +4310,10 @@ pub struct OutputDestination {
     #[serde(rename = "MediaPackageSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_package_settings: Option<Vec<MediaPackageOutputDestinationSettings>>,
+    /// <p>Destination settings for a Multiplex output; one destination for both encoders.</p>
+    #[serde(rename = "MultiplexSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_settings: Option<MultiplexProgramChannelDestinationSettings>,
     /// <p>Destination settings for a standard output; one destination for each redundant encoder.</p>
     #[serde(rename = "Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3729,6 +4373,9 @@ pub struct OutputGroupSettings {
     #[serde(rename = "MsSmoothGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ms_smooth_group_settings: Option<MsSmoothGroupSettings>,
+    #[serde(rename = "MultiplexGroupSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_group_settings: Option<MultiplexGroupSettings>,
     #[serde(rename = "RtmpGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rtmp_group_settings: Option<RtmpGroupSettings>,
@@ -3763,6 +4410,9 @@ pub struct OutputSettings {
     #[serde(rename = "MsSmoothOutputSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ms_smooth_output_settings: Option<MsSmoothOutputSettings>,
+    #[serde(rename = "MultiplexOutputSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_output_settings: Option<MultiplexOutputSettings>,
     #[serde(rename = "RtmpOutputSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rtmp_output_settings: Option<RtmpOutputSettings>,
@@ -3973,7 +4623,7 @@ pub struct ReservationResourceSpecification {
     #[serde(rename = "Resolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolution: Option<String>,
-    /// <p>Resource type, &#39;INPUT&#39;, &#39;OUTPUT&#39;, or &#39;CHANNEL&#39;</p>
+    /// <p>Resource type, &#39;INPUT&#39;, &#39;OUTPUT&#39;, &#39;MULTIPLEX&#39;, or &#39;CHANNEL&#39;</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -4379,6 +5029,61 @@ pub struct StartChannelResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Placeholder documentation for StartMultiplexRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartMultiplexRequest {
+    /// <p>The ID of the multiplex.</p>
+    #[serde(rename = "MultiplexId")]
+    pub multiplex_id: String,
+}
+
+/// <p>Placeholder documentation for StartMultiplexResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartMultiplexResponse {
+    /// <p>The unique arn of the multiplex.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A list of availability zones for the multiplex.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>A list of the multiplex output destinations.</p>
+    #[serde(rename = "Destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destinations: Option<Vec<MultiplexOutputDestination>>,
+    /// <p>The unique id of the multiplex.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Configuration for a multiplex event.</p>
+    #[serde(rename = "MultiplexSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_settings: Option<MultiplexSettings>,
+    /// <p>The name of the multiplex.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The number of currently healthy pipelines.</p>
+    #[serde(rename = "PipelinesRunningCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipelines_running_count: Option<i64>,
+    /// <p>The number of programs in the multiplex.</p>
+    #[serde(rename = "ProgramCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_count: Option<i64>,
+    /// <p>The current state of the multiplex.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Settings to identify the start of the clip.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartTimecode {
@@ -4522,6 +5227,61 @@ pub struct StopChannelResponse {
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Placeholder documentation for StopMultiplexRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopMultiplexRequest {
+    /// <p>The ID of the multiplex.</p>
+    #[serde(rename = "MultiplexId")]
+    pub multiplex_id: String,
+}
+
+/// <p>Placeholder documentation for StopMultiplexResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopMultiplexResponse {
+    /// <p>The unique arn of the multiplex.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A list of availability zones for the multiplex.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>A list of the multiplex output destinations.</p>
+    #[serde(rename = "Destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destinations: Option<Vec<MultiplexOutputDestination>>,
+    /// <p>The unique id of the multiplex.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Configuration for a multiplex event.</p>
+    #[serde(rename = "MultiplexSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_settings: Option<MultiplexSettings>,
+    /// <p>The name of the multiplex.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The number of currently healthy pipelines.</p>
+    #[serde(rename = "PipelinesRunningCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipelines_running_count: Option<i64>,
+    /// <p>The number of programs in the multiplex.</p>
+    #[serde(rename = "ProgramCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program_count: Option<i64>,
+    /// <p>The current state of the multiplex.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -4766,6 +5526,59 @@ pub struct UpdateInputSecurityGroupResponse {
     pub security_group: Option<InputSecurityGroup>,
 }
 
+/// <p>A request to update a program in a multiplex.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateMultiplexProgramRequest {
+    /// <p>The ID of the multiplex of the program to update.</p>
+    #[serde(rename = "MultiplexId")]
+    pub multiplex_id: String,
+    /// <p>The new settings for a multiplex program.</p>
+    #[serde(rename = "MultiplexProgramSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_program_settings: Option<MultiplexProgramSettings>,
+    /// <p>The name of the program to update.</p>
+    #[serde(rename = "ProgramName")]
+    pub program_name: String,
+}
+
+/// <p>Placeholder documentation for UpdateMultiplexProgramResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateMultiplexProgramResponse {
+    /// <p>The updated multiplex program.</p>
+    #[serde(rename = "MultiplexProgram")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_program: Option<MultiplexProgram>,
+}
+
+/// <p>A request to update a multiplex.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateMultiplexRequest {
+    /// <p>ID of the multiplex to update.</p>
+    #[serde(rename = "MultiplexId")]
+    pub multiplex_id: String,
+    /// <p>The new settings for a multiplex.</p>
+    #[serde(rename = "MultiplexSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_settings: Option<MultiplexSettings>,
+    /// <p>Name of the multiplex.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Placeholder documentation for UpdateMultiplexResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateMultiplexResponse {
+    /// <p>The updated multiplex.</p>
+    #[serde(rename = "Multiplex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex: Option<Multiplex>,
+}
+
 /// <p>Request to update a reservation</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -4786,13 +5599,6 @@ pub struct UpdateReservationResponse {
     #[serde(rename = "Reservation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reservation: Option<Reservation>,
-}
-
-/// <p>Placeholder documentation for ValidationError</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ValidationError {
-    pub element_path: Option<String>,
-    pub error_message: Option<String>,
 }
 
 /// <p>Video Codec Settings</p>
@@ -4953,23 +5759,19 @@ impl BatchUpdateScheduleError {
 }
 impl fmt::Display for BatchUpdateScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchUpdateScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            BatchUpdateScheduleError::BadGateway(ref cause) => cause,
-            BatchUpdateScheduleError::BadRequest(ref cause) => cause,
-            BatchUpdateScheduleError::Forbidden(ref cause) => cause,
-            BatchUpdateScheduleError::GatewayTimeout(ref cause) => cause,
-            BatchUpdateScheduleError::InternalServerError(ref cause) => cause,
-            BatchUpdateScheduleError::NotFound(ref cause) => cause,
-            BatchUpdateScheduleError::TooManyRequests(ref cause) => cause,
-            BatchUpdateScheduleError::UnprocessableEntity(ref cause) => cause,
+            BatchUpdateScheduleError::BadGateway(ref cause) => write!(f, "{}", cause),
+            BatchUpdateScheduleError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchUpdateScheduleError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchUpdateScheduleError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            BatchUpdateScheduleError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BatchUpdateScheduleError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchUpdateScheduleError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            BatchUpdateScheduleError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchUpdateScheduleError {}
 /// Errors returned by CreateChannel
 #[derive(Debug, PartialEq)]
 pub enum CreateChannelError {
@@ -5028,23 +5830,19 @@ impl CreateChannelError {
 }
 impl fmt::Display for CreateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateChannelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateChannelError::BadGateway(ref cause) => cause,
-            CreateChannelError::BadRequest(ref cause) => cause,
-            CreateChannelError::Conflict(ref cause) => cause,
-            CreateChannelError::Forbidden(ref cause) => cause,
-            CreateChannelError::GatewayTimeout(ref cause) => cause,
-            CreateChannelError::InternalServerError(ref cause) => cause,
-            CreateChannelError::TooManyRequests(ref cause) => cause,
-            CreateChannelError::UnprocessableEntity(ref cause) => cause,
+            CreateChannelError::BadGateway(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateChannelError {}
 /// Errors returned by CreateInput
 #[derive(Debug, PartialEq)]
 pub enum CreateInputError {
@@ -5093,21 +5891,17 @@ impl CreateInputError {
 }
 impl fmt::Display for CreateInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInputError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInputError::BadGateway(ref cause) => cause,
-            CreateInputError::BadRequest(ref cause) => cause,
-            CreateInputError::Forbidden(ref cause) => cause,
-            CreateInputError::GatewayTimeout(ref cause) => cause,
-            CreateInputError::InternalServerError(ref cause) => cause,
-            CreateInputError::TooManyRequests(ref cause) => cause,
+            CreateInputError::BadGateway(ref cause) => write!(f, "{}", cause),
+            CreateInputError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateInputError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateInputError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            CreateInputError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateInputError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInputError {}
 /// Errors returned by CreateInputSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateInputSecurityGroupError {
@@ -5162,21 +5956,167 @@ impl CreateInputSecurityGroupError {
 }
 impl fmt::Display for CreateInputSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInputSecurityGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInputSecurityGroupError::BadGateway(ref cause) => cause,
-            CreateInputSecurityGroupError::BadRequest(ref cause) => cause,
-            CreateInputSecurityGroupError::Forbidden(ref cause) => cause,
-            CreateInputSecurityGroupError::GatewayTimeout(ref cause) => cause,
-            CreateInputSecurityGroupError::InternalServerError(ref cause) => cause,
-            CreateInputSecurityGroupError::TooManyRequests(ref cause) => cause,
+            CreateInputSecurityGroupError::BadGateway(ref cause) => write!(f, "{}", cause),
+            CreateInputSecurityGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateInputSecurityGroupError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateInputSecurityGroupError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            CreateInputSecurityGroupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateInputSecurityGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInputSecurityGroupError {}
+/// Errors returned by CreateMultiplex
+#[derive(Debug, PartialEq)]
+pub enum CreateMultiplexError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+}
+
+impl CreateMultiplexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMultiplexError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(CreateMultiplexError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateMultiplexError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateMultiplexError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateMultiplexError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(CreateMultiplexError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(CreateMultiplexError::InternalServerError(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateMultiplexError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(CreateMultiplexError::UnprocessableEntity(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateMultiplexError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateMultiplexError::BadGateway(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateMultiplexError {}
+/// Errors returned by CreateMultiplexProgram
+#[derive(Debug, PartialEq)]
+pub enum CreateMultiplexProgramError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+}
+
+impl CreateMultiplexProgramError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMultiplexProgramError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(CreateMultiplexProgramError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateMultiplexProgramError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateMultiplexProgramError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateMultiplexProgramError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(CreateMultiplexProgramError::GatewayTimeout(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(CreateMultiplexProgramError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateMultiplexProgramError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(CreateMultiplexProgramError::UnprocessableEntity(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateMultiplexProgramError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateMultiplexProgramError::BadGateway(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexProgramError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexProgramError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexProgramError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexProgramError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexProgramError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexProgramError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateMultiplexProgramError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateMultiplexProgramError {}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
@@ -5215,19 +6155,15 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTagsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTagsError::BadRequest(ref cause) => cause,
-            CreateTagsError::Forbidden(ref cause) => cause,
-            CreateTagsError::InternalServerError(ref cause) => cause,
-            CreateTagsError::NotFound(ref cause) => cause,
+            CreateTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTagsError {}
 /// Errors returned by DeleteChannel
 #[derive(Debug, PartialEq)]
 pub enum DeleteChannelError {
@@ -5286,23 +6222,19 @@ impl DeleteChannelError {
 }
 impl fmt::Display for DeleteChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteChannelError::BadGateway(ref cause) => cause,
-            DeleteChannelError::BadRequest(ref cause) => cause,
-            DeleteChannelError::Conflict(ref cause) => cause,
-            DeleteChannelError::Forbidden(ref cause) => cause,
-            DeleteChannelError::GatewayTimeout(ref cause) => cause,
-            DeleteChannelError::InternalServerError(ref cause) => cause,
-            DeleteChannelError::NotFound(ref cause) => cause,
-            DeleteChannelError::TooManyRequests(ref cause) => cause,
+            DeleteChannelError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteChannelError {}
 /// Errors returned by DeleteInput
 #[derive(Debug, PartialEq)]
 pub enum DeleteInputError {
@@ -5361,23 +6293,19 @@ impl DeleteInputError {
 }
 impl fmt::Display for DeleteInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInputError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInputError::BadGateway(ref cause) => cause,
-            DeleteInputError::BadRequest(ref cause) => cause,
-            DeleteInputError::Conflict(ref cause) => cause,
-            DeleteInputError::Forbidden(ref cause) => cause,
-            DeleteInputError::GatewayTimeout(ref cause) => cause,
-            DeleteInputError::InternalServerError(ref cause) => cause,
-            DeleteInputError::NotFound(ref cause) => cause,
-            DeleteInputError::TooManyRequests(ref cause) => cause,
+            DeleteInputError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DeleteInputError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteInputError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteInputError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteInputError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteInputError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteInputError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteInputError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInputError {}
 /// Errors returned by DeleteInputSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteInputSecurityGroupError {
@@ -5437,22 +6365,166 @@ impl DeleteInputSecurityGroupError {
 }
 impl fmt::Display for DeleteInputSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInputSecurityGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInputSecurityGroupError::BadGateway(ref cause) => cause,
-            DeleteInputSecurityGroupError::BadRequest(ref cause) => cause,
-            DeleteInputSecurityGroupError::Forbidden(ref cause) => cause,
-            DeleteInputSecurityGroupError::GatewayTimeout(ref cause) => cause,
-            DeleteInputSecurityGroupError::InternalServerError(ref cause) => cause,
-            DeleteInputSecurityGroupError::NotFound(ref cause) => cause,
-            DeleteInputSecurityGroupError::TooManyRequests(ref cause) => cause,
+            DeleteInputSecurityGroupError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DeleteInputSecurityGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteInputSecurityGroupError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteInputSecurityGroupError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteInputSecurityGroupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteInputSecurityGroupError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteInputSecurityGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInputSecurityGroupError {}
+/// Errors returned by DeleteMultiplex
+#[derive(Debug, PartialEq)]
+pub enum DeleteMultiplexError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl DeleteMultiplexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMultiplexError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(DeleteMultiplexError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteMultiplexError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteMultiplexError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteMultiplexError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(DeleteMultiplexError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DeleteMultiplexError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteMultiplexError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteMultiplexError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteMultiplexError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteMultiplexError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteMultiplexError {}
+/// Errors returned by DeleteMultiplexProgram
+#[derive(Debug, PartialEq)]
+pub enum DeleteMultiplexProgramError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl DeleteMultiplexProgramError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMultiplexProgramError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(DeleteMultiplexProgramError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteMultiplexProgramError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteMultiplexProgramError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteMultiplexProgramError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(DeleteMultiplexProgramError::GatewayTimeout(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DeleteMultiplexProgramError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteMultiplexProgramError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteMultiplexProgramError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteMultiplexProgramError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteMultiplexProgramError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexProgramError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexProgramError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexProgramError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexProgramError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexProgramError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexProgramError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMultiplexProgramError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteMultiplexProgramError {}
 /// Errors returned by DeleteReservation
 #[derive(Debug, PartialEq)]
 pub enum DeleteReservationError {
@@ -5513,23 +6585,19 @@ impl DeleteReservationError {
 }
 impl fmt::Display for DeleteReservationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReservationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReservationError::BadGateway(ref cause) => cause,
-            DeleteReservationError::BadRequest(ref cause) => cause,
-            DeleteReservationError::Conflict(ref cause) => cause,
-            DeleteReservationError::Forbidden(ref cause) => cause,
-            DeleteReservationError::GatewayTimeout(ref cause) => cause,
-            DeleteReservationError::InternalServerError(ref cause) => cause,
-            DeleteReservationError::NotFound(ref cause) => cause,
-            DeleteReservationError::TooManyRequests(ref cause) => cause,
+            DeleteReservationError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DeleteReservationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteReservationError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteReservationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteReservationError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteReservationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteReservationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteReservationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteReservationError {}
 /// Errors returned by DeleteSchedule
 #[derive(Debug, PartialEq)]
 pub enum DeleteScheduleError {
@@ -5583,22 +6651,18 @@ impl DeleteScheduleError {
 }
 impl fmt::Display for DeleteScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteScheduleError::BadGateway(ref cause) => cause,
-            DeleteScheduleError::BadRequest(ref cause) => cause,
-            DeleteScheduleError::Forbidden(ref cause) => cause,
-            DeleteScheduleError::GatewayTimeout(ref cause) => cause,
-            DeleteScheduleError::InternalServerError(ref cause) => cause,
-            DeleteScheduleError::NotFound(ref cause) => cause,
-            DeleteScheduleError::TooManyRequests(ref cause) => cause,
+            DeleteScheduleError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DeleteScheduleError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteScheduleError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteScheduleError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteScheduleError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteScheduleError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteScheduleError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteScheduleError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -5637,19 +6701,15 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsError::BadRequest(ref cause) => cause,
-            DeleteTagsError::Forbidden(ref cause) => cause,
-            DeleteTagsError::InternalServerError(ref cause) => cause,
-            DeleteTagsError::NotFound(ref cause) => cause,
+            DeleteTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DescribeChannel
 #[derive(Debug, PartialEq)]
 pub enum DescribeChannelError {
@@ -5703,22 +6763,18 @@ impl DescribeChannelError {
 }
 impl fmt::Display for DescribeChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeChannelError::BadGateway(ref cause) => cause,
-            DescribeChannelError::BadRequest(ref cause) => cause,
-            DescribeChannelError::Forbidden(ref cause) => cause,
-            DescribeChannelError::GatewayTimeout(ref cause) => cause,
-            DescribeChannelError::InternalServerError(ref cause) => cause,
-            DescribeChannelError::NotFound(ref cause) => cause,
-            DescribeChannelError::TooManyRequests(ref cause) => cause,
+            DescribeChannelError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeChannelError {}
 /// Errors returned by DescribeInput
 #[derive(Debug, PartialEq)]
 pub enum DescribeInputError {
@@ -5772,22 +6828,18 @@ impl DescribeInputError {
 }
 impl fmt::Display for DescribeInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInputError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInputError::BadGateway(ref cause) => cause,
-            DescribeInputError::BadRequest(ref cause) => cause,
-            DescribeInputError::Forbidden(ref cause) => cause,
-            DescribeInputError::GatewayTimeout(ref cause) => cause,
-            DescribeInputError::InternalServerError(ref cause) => cause,
-            DescribeInputError::NotFound(ref cause) => cause,
-            DescribeInputError::TooManyRequests(ref cause) => cause,
+            DescribeInputError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DescribeInputError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeInputError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeInputError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DescribeInputError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeInputError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeInputError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInputError {}
 /// Errors returned by DescribeInputSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeInputSecurityGroupError {
@@ -5855,22 +6907,158 @@ impl DescribeInputSecurityGroupError {
 }
 impl fmt::Display for DescribeInputSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInputSecurityGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInputSecurityGroupError::BadGateway(ref cause) => cause,
-            DescribeInputSecurityGroupError::BadRequest(ref cause) => cause,
-            DescribeInputSecurityGroupError::Forbidden(ref cause) => cause,
-            DescribeInputSecurityGroupError::GatewayTimeout(ref cause) => cause,
-            DescribeInputSecurityGroupError::InternalServerError(ref cause) => cause,
-            DescribeInputSecurityGroupError::NotFound(ref cause) => cause,
-            DescribeInputSecurityGroupError::TooManyRequests(ref cause) => cause,
+            DescribeInputSecurityGroupError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DescribeInputSecurityGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeInputSecurityGroupError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeInputSecurityGroupError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DescribeInputSecurityGroupError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInputSecurityGroupError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeInputSecurityGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInputSecurityGroupError {}
+/// Errors returned by DescribeMultiplex
+#[derive(Debug, PartialEq)]
+pub enum DescribeMultiplexError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl DescribeMultiplexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMultiplexError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(DescribeMultiplexError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeMultiplexError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeMultiplexError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(DescribeMultiplexError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DescribeMultiplexError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeMultiplexError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeMultiplexError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeMultiplexError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeMultiplexError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeMultiplexError {}
+/// Errors returned by DescribeMultiplexProgram
+#[derive(Debug, PartialEq)]
+pub enum DescribeMultiplexProgramError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl DescribeMultiplexProgramError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMultiplexProgramError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(DescribeMultiplexProgramError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeMultiplexProgramError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeMultiplexProgramError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(DescribeMultiplexProgramError::GatewayTimeout(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        DescribeMultiplexProgramError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeMultiplexProgramError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeMultiplexProgramError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeMultiplexProgramError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeMultiplexProgramError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexProgramError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexProgramError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexProgramError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexProgramError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexProgramError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMultiplexProgramError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeMultiplexProgramError {}
 /// Errors returned by DescribeOffering
 #[derive(Debug, PartialEq)]
 pub enum DescribeOfferingError {
@@ -5926,22 +7114,18 @@ impl DescribeOfferingError {
 }
 impl fmt::Display for DescribeOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOfferingError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOfferingError::BadGateway(ref cause) => cause,
-            DescribeOfferingError::BadRequest(ref cause) => cause,
-            DescribeOfferingError::Forbidden(ref cause) => cause,
-            DescribeOfferingError::GatewayTimeout(ref cause) => cause,
-            DescribeOfferingError::InternalServerError(ref cause) => cause,
-            DescribeOfferingError::NotFound(ref cause) => cause,
-            DescribeOfferingError::TooManyRequests(ref cause) => cause,
+            DescribeOfferingError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DescribeOfferingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeOfferingError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeOfferingError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DescribeOfferingError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeOfferingError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeOfferingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeOfferingError {}
 /// Errors returned by DescribeReservation
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservationError {
@@ -5997,22 +7181,18 @@ impl DescribeReservationError {
 }
 impl fmt::Display for DescribeReservationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReservationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReservationError::BadGateway(ref cause) => cause,
-            DescribeReservationError::BadRequest(ref cause) => cause,
-            DescribeReservationError::Forbidden(ref cause) => cause,
-            DescribeReservationError::GatewayTimeout(ref cause) => cause,
-            DescribeReservationError::InternalServerError(ref cause) => cause,
-            DescribeReservationError::NotFound(ref cause) => cause,
-            DescribeReservationError::TooManyRequests(ref cause) => cause,
+            DescribeReservationError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DescribeReservationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeReservationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeReservationError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DescribeReservationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeReservationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeReservationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeReservationError {}
 /// Errors returned by DescribeSchedule
 #[derive(Debug, PartialEq)]
 pub enum DescribeScheduleError {
@@ -6068,22 +7248,18 @@ impl DescribeScheduleError {
 }
 impl fmt::Display for DescribeScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScheduleError::BadGateway(ref cause) => cause,
-            DescribeScheduleError::BadRequest(ref cause) => cause,
-            DescribeScheduleError::Forbidden(ref cause) => cause,
-            DescribeScheduleError::GatewayTimeout(ref cause) => cause,
-            DescribeScheduleError::InternalServerError(ref cause) => cause,
-            DescribeScheduleError::NotFound(ref cause) => cause,
-            DescribeScheduleError::TooManyRequests(ref cause) => cause,
+            DescribeScheduleError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DescribeScheduleError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeScheduleError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeScheduleError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DescribeScheduleError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeScheduleError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeScheduleError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScheduleError {}
 /// Errors returned by ListChannels
 #[derive(Debug, PartialEq)]
 pub enum ListChannelsError {
@@ -6132,21 +7308,17 @@ impl ListChannelsError {
 }
 impl fmt::Display for ListChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListChannelsError {
-    fn description(&self) -> &str {
         match *self {
-            ListChannelsError::BadGateway(ref cause) => cause,
-            ListChannelsError::BadRequest(ref cause) => cause,
-            ListChannelsError::Forbidden(ref cause) => cause,
-            ListChannelsError::GatewayTimeout(ref cause) => cause,
-            ListChannelsError::InternalServerError(ref cause) => cause,
-            ListChannelsError::TooManyRequests(ref cause) => cause,
+            ListChannelsError::BadGateway(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListChannelsError {}
 /// Errors returned by ListInputSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum ListInputSecurityGroupsError {
@@ -6201,21 +7373,17 @@ impl ListInputSecurityGroupsError {
 }
 impl fmt::Display for ListInputSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInputSecurityGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListInputSecurityGroupsError::BadGateway(ref cause) => cause,
-            ListInputSecurityGroupsError::BadRequest(ref cause) => cause,
-            ListInputSecurityGroupsError::Forbidden(ref cause) => cause,
-            ListInputSecurityGroupsError::GatewayTimeout(ref cause) => cause,
-            ListInputSecurityGroupsError::InternalServerError(ref cause) => cause,
-            ListInputSecurityGroupsError::TooManyRequests(ref cause) => cause,
+            ListInputSecurityGroupsError::BadGateway(ref cause) => write!(f, "{}", cause),
+            ListInputSecurityGroupsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListInputSecurityGroupsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListInputSecurityGroupsError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            ListInputSecurityGroupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListInputSecurityGroupsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInputSecurityGroupsError {}
 /// Errors returned by ListInputs
 #[derive(Debug, PartialEq)]
 pub enum ListInputsError {
@@ -6264,21 +7432,147 @@ impl ListInputsError {
 }
 impl fmt::Display for ListInputsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInputsError {
-    fn description(&self) -> &str {
         match *self {
-            ListInputsError::BadGateway(ref cause) => cause,
-            ListInputsError::BadRequest(ref cause) => cause,
-            ListInputsError::Forbidden(ref cause) => cause,
-            ListInputsError::GatewayTimeout(ref cause) => cause,
-            ListInputsError::InternalServerError(ref cause) => cause,
-            ListInputsError::TooManyRequests(ref cause) => cause,
+            ListInputsError::BadGateway(ref cause) => write!(f, "{}", cause),
+            ListInputsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListInputsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListInputsError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            ListInputsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListInputsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInputsError {}
+/// Errors returned by ListMultiplexPrograms
+#[derive(Debug, PartialEq)]
+pub enum ListMultiplexProgramsError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl ListMultiplexProgramsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMultiplexProgramsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(ListMultiplexProgramsError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(ListMultiplexProgramsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListMultiplexProgramsError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(ListMultiplexProgramsError::GatewayTimeout(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListMultiplexProgramsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListMultiplexProgramsError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListMultiplexProgramsError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListMultiplexProgramsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListMultiplexProgramsError::BadGateway(ref cause) => write!(f, "{}", cause),
+            ListMultiplexProgramsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListMultiplexProgramsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListMultiplexProgramsError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            ListMultiplexProgramsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListMultiplexProgramsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListMultiplexProgramsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListMultiplexProgramsError {}
+/// Errors returned by ListMultiplexes
+#[derive(Debug, PartialEq)]
+pub enum ListMultiplexesError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl ListMultiplexesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMultiplexesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(ListMultiplexesError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(ListMultiplexesError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListMultiplexesError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(ListMultiplexesError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListMultiplexesError::InternalServerError(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListMultiplexesError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListMultiplexesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListMultiplexesError::BadGateway(ref cause) => write!(f, "{}", cause),
+            ListMultiplexesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListMultiplexesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListMultiplexesError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            ListMultiplexesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListMultiplexesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListMultiplexesError {}
 /// Errors returned by ListOfferings
 #[derive(Debug, PartialEq)]
 pub enum ListOfferingsError {
@@ -6327,21 +7621,17 @@ impl ListOfferingsError {
 }
 impl fmt::Display for ListOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOfferingsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOfferingsError::BadGateway(ref cause) => cause,
-            ListOfferingsError::BadRequest(ref cause) => cause,
-            ListOfferingsError::Forbidden(ref cause) => cause,
-            ListOfferingsError::GatewayTimeout(ref cause) => cause,
-            ListOfferingsError::InternalServerError(ref cause) => cause,
-            ListOfferingsError::TooManyRequests(ref cause) => cause,
+            ListOfferingsError::BadGateway(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOfferingsError {}
 /// Errors returned by ListReservations
 #[derive(Debug, PartialEq)]
 pub enum ListReservationsError {
@@ -6392,21 +7682,17 @@ impl ListReservationsError {
 }
 impl fmt::Display for ListReservationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReservationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListReservationsError::BadGateway(ref cause) => cause,
-            ListReservationsError::BadRequest(ref cause) => cause,
-            ListReservationsError::Forbidden(ref cause) => cause,
-            ListReservationsError::GatewayTimeout(ref cause) => cause,
-            ListReservationsError::InternalServerError(ref cause) => cause,
-            ListReservationsError::TooManyRequests(ref cause) => cause,
+            ListReservationsError::BadGateway(ref cause) => write!(f, "{}", cause),
+            ListReservationsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListReservationsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListReservationsError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            ListReservationsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListReservationsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListReservationsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -6447,19 +7733,15 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::Forbidden(ref cause) => cause,
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
-            ListTagsForResourceError::NotFound(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PurchaseOffering
 #[derive(Debug, PartialEq)]
 pub enum PurchaseOfferingError {
@@ -6520,23 +7802,19 @@ impl PurchaseOfferingError {
 }
 impl fmt::Display for PurchaseOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PurchaseOfferingError {
-    fn description(&self) -> &str {
         match *self {
-            PurchaseOfferingError::BadGateway(ref cause) => cause,
-            PurchaseOfferingError::BadRequest(ref cause) => cause,
-            PurchaseOfferingError::Conflict(ref cause) => cause,
-            PurchaseOfferingError::Forbidden(ref cause) => cause,
-            PurchaseOfferingError::GatewayTimeout(ref cause) => cause,
-            PurchaseOfferingError::InternalServerError(ref cause) => cause,
-            PurchaseOfferingError::NotFound(ref cause) => cause,
-            PurchaseOfferingError::TooManyRequests(ref cause) => cause,
+            PurchaseOfferingError::BadGateway(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::Conflict(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::NotFound(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PurchaseOfferingError {}
 /// Errors returned by StartChannel
 #[derive(Debug, PartialEq)]
 pub enum StartChannelError {
@@ -6595,23 +7873,90 @@ impl StartChannelError {
 }
 impl fmt::Display for StartChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartChannelError {
-    fn description(&self) -> &str {
         match *self {
-            StartChannelError::BadGateway(ref cause) => cause,
-            StartChannelError::BadRequest(ref cause) => cause,
-            StartChannelError::Conflict(ref cause) => cause,
-            StartChannelError::Forbidden(ref cause) => cause,
-            StartChannelError::GatewayTimeout(ref cause) => cause,
-            StartChannelError::InternalServerError(ref cause) => cause,
-            StartChannelError::NotFound(ref cause) => cause,
-            StartChannelError::TooManyRequests(ref cause) => cause,
+            StartChannelError::BadGateway(ref cause) => write!(f, "{}", cause),
+            StartChannelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StartChannelError::Conflict(ref cause) => write!(f, "{}", cause),
+            StartChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            StartChannelError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            StartChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartChannelError {}
+/// Errors returned by StartMultiplex
+#[derive(Debug, PartialEq)]
+pub enum StartMultiplexError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl StartMultiplexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMultiplexError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(StartMultiplexError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(StartMultiplexError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(StartMultiplexError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(StartMultiplexError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(StartMultiplexError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(StartMultiplexError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(StartMultiplexError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(StartMultiplexError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartMultiplexError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartMultiplexError::BadGateway(ref cause) => write!(f, "{}", cause),
+            StartMultiplexError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StartMultiplexError::Conflict(ref cause) => write!(f, "{}", cause),
+            StartMultiplexError::Forbidden(ref cause) => write!(f, "{}", cause),
+            StartMultiplexError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            StartMultiplexError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartMultiplexError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartMultiplexError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartMultiplexError {}
 /// Errors returned by StopChannel
 #[derive(Debug, PartialEq)]
 pub enum StopChannelError {
@@ -6670,23 +8015,90 @@ impl StopChannelError {
 }
 impl fmt::Display for StopChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopChannelError {
-    fn description(&self) -> &str {
         match *self {
-            StopChannelError::BadGateway(ref cause) => cause,
-            StopChannelError::BadRequest(ref cause) => cause,
-            StopChannelError::Conflict(ref cause) => cause,
-            StopChannelError::Forbidden(ref cause) => cause,
-            StopChannelError::GatewayTimeout(ref cause) => cause,
-            StopChannelError::InternalServerError(ref cause) => cause,
-            StopChannelError::NotFound(ref cause) => cause,
-            StopChannelError::TooManyRequests(ref cause) => cause,
+            StopChannelError::BadGateway(ref cause) => write!(f, "{}", cause),
+            StopChannelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StopChannelError::Conflict(ref cause) => write!(f, "{}", cause),
+            StopChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            StopChannelError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            StopChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StopChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopChannelError {}
+/// Errors returned by StopMultiplex
+#[derive(Debug, PartialEq)]
+pub enum StopMultiplexError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl StopMultiplexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopMultiplexError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(StopMultiplexError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(StopMultiplexError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(StopMultiplexError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(StopMultiplexError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(StopMultiplexError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(StopMultiplexError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(StopMultiplexError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(StopMultiplexError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StopMultiplexError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopMultiplexError::BadGateway(ref cause) => write!(f, "{}", cause),
+            StopMultiplexError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StopMultiplexError::Conflict(ref cause) => write!(f, "{}", cause),
+            StopMultiplexError::Forbidden(ref cause) => write!(f, "{}", cause),
+            StopMultiplexError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            StopMultiplexError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StopMultiplexError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopMultiplexError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopMultiplexError {}
 /// Errors returned by UpdateChannel
 #[derive(Debug, PartialEq)]
 pub enum UpdateChannelError {
@@ -6740,22 +8152,18 @@ impl UpdateChannelError {
 }
 impl fmt::Display for UpdateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateChannelError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateChannelError::BadGateway(ref cause) => cause,
-            UpdateChannelError::BadRequest(ref cause) => cause,
-            UpdateChannelError::Conflict(ref cause) => cause,
-            UpdateChannelError::Forbidden(ref cause) => cause,
-            UpdateChannelError::GatewayTimeout(ref cause) => cause,
-            UpdateChannelError::InternalServerError(ref cause) => cause,
-            UpdateChannelError::UnprocessableEntity(ref cause) => cause,
+            UpdateChannelError::BadGateway(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateChannelError {}
 /// Errors returned by UpdateChannelClass
 #[derive(Debug, PartialEq)]
 pub enum UpdateChannelClassError {
@@ -6823,24 +8231,20 @@ impl UpdateChannelClassError {
 }
 impl fmt::Display for UpdateChannelClassError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateChannelClassError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateChannelClassError::BadGateway(ref cause) => cause,
-            UpdateChannelClassError::BadRequest(ref cause) => cause,
-            UpdateChannelClassError::Conflict(ref cause) => cause,
-            UpdateChannelClassError::Forbidden(ref cause) => cause,
-            UpdateChannelClassError::GatewayTimeout(ref cause) => cause,
-            UpdateChannelClassError::InternalServerError(ref cause) => cause,
-            UpdateChannelClassError::NotFound(ref cause) => cause,
-            UpdateChannelClassError::TooManyRequests(ref cause) => cause,
-            UpdateChannelClassError::UnprocessableEntity(ref cause) => cause,
+            UpdateChannelClassError::BadGateway(ref cause) => write!(f, "{}", cause),
+            UpdateChannelClassError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateChannelClassError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateChannelClassError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateChannelClassError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateChannelClassError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateChannelClassError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateChannelClassError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateChannelClassError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateChannelClassError {}
 /// Errors returned by UpdateInput
 #[derive(Debug, PartialEq)]
 pub enum UpdateInputError {
@@ -6894,22 +8298,18 @@ impl UpdateInputError {
 }
 impl fmt::Display for UpdateInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateInputError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateInputError::BadGateway(ref cause) => cause,
-            UpdateInputError::BadRequest(ref cause) => cause,
-            UpdateInputError::Conflict(ref cause) => cause,
-            UpdateInputError::Forbidden(ref cause) => cause,
-            UpdateInputError::GatewayTimeout(ref cause) => cause,
-            UpdateInputError::InternalServerError(ref cause) => cause,
-            UpdateInputError::NotFound(ref cause) => cause,
+            UpdateInputError::BadGateway(ref cause) => write!(f, "{}", cause),
+            UpdateInputError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateInputError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateInputError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateInputError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateInputError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateInputError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateInputError {}
 /// Errors returned by UpdateInputSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateInputSecurityGroupError {
@@ -6967,22 +8367,166 @@ impl UpdateInputSecurityGroupError {
 }
 impl fmt::Display for UpdateInputSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateInputSecurityGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateInputSecurityGroupError::BadGateway(ref cause) => cause,
-            UpdateInputSecurityGroupError::BadRequest(ref cause) => cause,
-            UpdateInputSecurityGroupError::Conflict(ref cause) => cause,
-            UpdateInputSecurityGroupError::Forbidden(ref cause) => cause,
-            UpdateInputSecurityGroupError::GatewayTimeout(ref cause) => cause,
-            UpdateInputSecurityGroupError::InternalServerError(ref cause) => cause,
-            UpdateInputSecurityGroupError::NotFound(ref cause) => cause,
+            UpdateInputSecurityGroupError::BadGateway(ref cause) => write!(f, "{}", cause),
+            UpdateInputSecurityGroupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateInputSecurityGroupError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateInputSecurityGroupError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateInputSecurityGroupError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateInputSecurityGroupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateInputSecurityGroupError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateInputSecurityGroupError {}
+/// Errors returned by UpdateMultiplex
+#[derive(Debug, PartialEq)]
+pub enum UpdateMultiplexError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+}
+
+impl UpdateMultiplexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMultiplexError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(UpdateMultiplexError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateMultiplexError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateMultiplexError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateMultiplexError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(UpdateMultiplexError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateMultiplexError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateMultiplexError::NotFound(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(UpdateMultiplexError::UnprocessableEntity(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateMultiplexError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateMultiplexError::BadGateway(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateMultiplexError {}
+/// Errors returned by UpdateMultiplexProgram
+#[derive(Debug, PartialEq)]
+pub enum UpdateMultiplexProgramError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+}
+
+impl UpdateMultiplexProgramError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMultiplexProgramError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(UpdateMultiplexProgramError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateMultiplexProgramError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateMultiplexProgramError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateMultiplexProgramError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(UpdateMultiplexProgramError::GatewayTimeout(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateMultiplexProgramError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateMultiplexProgramError::NotFound(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(UpdateMultiplexProgramError::UnprocessableEntity(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateMultiplexProgramError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateMultiplexProgramError::BadGateway(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexProgramError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexProgramError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexProgramError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexProgramError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexProgramError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexProgramError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMultiplexProgramError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateMultiplexProgramError {}
 /// Errors returned by UpdateReservation
 #[derive(Debug, PartialEq)]
 pub enum UpdateReservationError {
@@ -7043,23 +8587,19 @@ impl UpdateReservationError {
 }
 impl fmt::Display for UpdateReservationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateReservationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateReservationError::BadGateway(ref cause) => cause,
-            UpdateReservationError::BadRequest(ref cause) => cause,
-            UpdateReservationError::Conflict(ref cause) => cause,
-            UpdateReservationError::Forbidden(ref cause) => cause,
-            UpdateReservationError::GatewayTimeout(ref cause) => cause,
-            UpdateReservationError::InternalServerError(ref cause) => cause,
-            UpdateReservationError::NotFound(ref cause) => cause,
-            UpdateReservationError::TooManyRequests(ref cause) => cause,
+            UpdateReservationError::BadGateway(ref cause) => write!(f, "{}", cause),
+            UpdateReservationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateReservationError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateReservationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateReservationError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateReservationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateReservationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateReservationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateReservationError {}
 /// Trait representing the capabilities of the MediaLive API. MediaLive clients implement this trait.
 pub trait MediaLive {
     /// <p>Update a channel schedule</p>
@@ -7086,6 +8626,18 @@ pub trait MediaLive {
         input: CreateInputSecurityGroupRequest,
     ) -> RusotoFuture<CreateInputSecurityGroupResponse, CreateInputSecurityGroupError>;
 
+    /// <p>Create a new multiplex.</p>
+    fn create_multiplex(
+        &self,
+        input: CreateMultiplexRequest,
+    ) -> RusotoFuture<CreateMultiplexResponse, CreateMultiplexError>;
+
+    /// <p>Create a new program in the multiplex.</p>
+    fn create_multiplex_program(
+        &self,
+        input: CreateMultiplexProgramRequest,
+    ) -> RusotoFuture<CreateMultiplexProgramResponse, CreateMultiplexProgramError>;
+
     /// <p>Create tags for a resource</p>
     fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError>;
 
@@ -7106,6 +8658,18 @@ pub trait MediaLive {
         &self,
         input: DeleteInputSecurityGroupRequest,
     ) -> RusotoFuture<DeleteInputSecurityGroupResponse, DeleteInputSecurityGroupError>;
+
+    /// <p>Delete a multiplex. The multiplex must be idle.</p>
+    fn delete_multiplex(
+        &self,
+        input: DeleteMultiplexRequest,
+    ) -> RusotoFuture<DeleteMultiplexResponse, DeleteMultiplexError>;
+
+    /// <p>Delete a program from a multiplex.</p>
+    fn delete_multiplex_program(
+        &self,
+        input: DeleteMultiplexProgramRequest,
+    ) -> RusotoFuture<DeleteMultiplexProgramResponse, DeleteMultiplexProgramError>;
 
     /// <p>Delete an expired reservation.</p>
     fn delete_reservation(
@@ -7139,6 +8703,18 @@ pub trait MediaLive {
         &self,
         input: DescribeInputSecurityGroupRequest,
     ) -> RusotoFuture<DescribeInputSecurityGroupResponse, DescribeInputSecurityGroupError>;
+
+    /// <p>Gets details about a multiplex.</p>
+    fn describe_multiplex(
+        &self,
+        input: DescribeMultiplexRequest,
+    ) -> RusotoFuture<DescribeMultiplexResponse, DescribeMultiplexError>;
+
+    /// <p>Get the details for a program in a multiplex.</p>
+    fn describe_multiplex_program(
+        &self,
+        input: DescribeMultiplexProgramRequest,
+    ) -> RusotoFuture<DescribeMultiplexProgramResponse, DescribeMultiplexProgramError>;
 
     /// <p>Get details for an offering.</p>
     fn describe_offering(
@@ -7176,6 +8752,18 @@ pub trait MediaLive {
         input: ListInputsRequest,
     ) -> RusotoFuture<ListInputsResponse, ListInputsError>;
 
+    /// <p>List the programs that currently exist for a specific multiplex.</p>
+    fn list_multiplex_programs(
+        &self,
+        input: ListMultiplexProgramsRequest,
+    ) -> RusotoFuture<ListMultiplexProgramsResponse, ListMultiplexProgramsError>;
+
+    /// <p>Retrieve a list of the existing multiplexes.</p>
+    fn list_multiplexes(
+        &self,
+        input: ListMultiplexesRequest,
+    ) -> RusotoFuture<ListMultiplexesResponse, ListMultiplexesError>;
+
     /// <p>List offerings available for purchase.</p>
     fn list_offerings(
         &self,
@@ -7206,11 +8794,23 @@ pub trait MediaLive {
         input: StartChannelRequest,
     ) -> RusotoFuture<StartChannelResponse, StartChannelError>;
 
+    /// <p>Start (run) the multiplex. Starting the multiplex does not start the channels. You must explicitly start each channel.</p>
+    fn start_multiplex(
+        &self,
+        input: StartMultiplexRequest,
+    ) -> RusotoFuture<StartMultiplexResponse, StartMultiplexError>;
+
     /// <p>Stops a running channel</p>
     fn stop_channel(
         &self,
         input: StopChannelRequest,
     ) -> RusotoFuture<StopChannelResponse, StopChannelError>;
+
+    /// <p>Stops a running multiplex. If the multiplex isn&#39;t running, this action has no effect.</p>
+    fn stop_multiplex(
+        &self,
+        input: StopMultiplexRequest,
+    ) -> RusotoFuture<StopMultiplexResponse, StopMultiplexError>;
 
     /// <p>Updates a channel.</p>
     fn update_channel(
@@ -7235,6 +8835,18 @@ pub trait MediaLive {
         &self,
         input: UpdateInputSecurityGroupRequest,
     ) -> RusotoFuture<UpdateInputSecurityGroupResponse, UpdateInputSecurityGroupError>;
+
+    /// <p>Updates a multiplex.</p>
+    fn update_multiplex(
+        &self,
+        input: UpdateMultiplexRequest,
+    ) -> RusotoFuture<UpdateMultiplexResponse, UpdateMultiplexError>;
+
+    /// <p>Update a program in a multiplex.</p>
+    fn update_multiplex_program(
+        &self,
+        input: UpdateMultiplexProgramRequest,
+    ) -> RusotoFuture<UpdateMultiplexProgramResponse, UpdateMultiplexProgramError>;
 
     /// <p>Update reservation.</p>
     fn update_reservation(
@@ -7276,6 +8888,14 @@ impl MediaLiveClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> MediaLiveClient {
         MediaLiveClient { client, region }
+    }
+}
+
+impl fmt::Debug for MediaLiveClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MediaLiveClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -7407,6 +9027,72 @@ impl MediaLive for MediaLiveClient {
         })
     }
 
+    /// <p>Create a new multiplex.</p>
+    fn create_multiplex(
+        &self,
+        input: CreateMultiplexRequest,
+    ) -> RusotoFuture<CreateMultiplexResponse, CreateMultiplexError> {
+        let request_uri = "/prod/multiplexes";
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 201 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateMultiplexResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateMultiplexError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Create a new program in the multiplex.</p>
+    fn create_multiplex_program(
+        &self,
+        input: CreateMultiplexProgramRequest,
+    ) -> RusotoFuture<CreateMultiplexProgramResponse, CreateMultiplexProgramError> {
+        let request_uri = format!(
+            "/prod/multiplexes/{multiplex_id}/programs",
+            multiplex_id = input.multiplex_id
+        );
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 201 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateMultiplexProgramResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateMultiplexProgramError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Create tags for a resource</p>
     fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError> {
         let request_uri = format!(
@@ -7521,6 +9207,70 @@ impl MediaLive for MediaLiveClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteInputSecurityGroupError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Delete a multiplex. The multiplex must be idle.</p>
+    fn delete_multiplex(
+        &self,
+        input: DeleteMultiplexRequest,
+    ) -> RusotoFuture<DeleteMultiplexResponse, DeleteMultiplexError> {
+        let request_uri = format!(
+            "/prod/multiplexes/{multiplex_id}",
+            multiplex_id = input.multiplex_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 202 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteMultiplexResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteMultiplexError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Delete a program from a multiplex.</p>
+    fn delete_multiplex_program(
+        &self,
+        input: DeleteMultiplexProgramRequest,
+    ) -> RusotoFuture<DeleteMultiplexProgramResponse, DeleteMultiplexProgramError> {
+        let request_uri = format!(
+            "/prod/multiplexes/{multiplex_id}/programs/{program_name}",
+            multiplex_id = input.multiplex_id,
+            program_name = input.program_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteMultiplexProgramResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteMultiplexProgramError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -7705,6 +9455,68 @@ impl MediaLive for MediaLiveClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInputSecurityGroupError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets details about a multiplex.</p>
+    fn describe_multiplex(
+        &self,
+        input: DescribeMultiplexRequest,
+    ) -> RusotoFuture<DescribeMultiplexResponse, DescribeMultiplexError> {
+        let request_uri = format!(
+            "/prod/multiplexes/{multiplex_id}",
+            multiplex_id = input.multiplex_id
+        );
+
+        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeMultiplexResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeMultiplexError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Get the details for a program in a multiplex.</p>
+    fn describe_multiplex_program(
+        &self,
+        input: DescribeMultiplexProgramRequest,
+    ) -> RusotoFuture<DescribeMultiplexProgramResponse, DescribeMultiplexProgramError> {
+        let request_uri = format!(
+            "/prod/multiplexes/{multiplex_id}/programs/{program_name}",
+            multiplex_id = input.multiplex_id,
+            program_name = input.program_name
+        );
+
+        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeMultiplexProgramResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeMultiplexProgramError::from_response(response))
                 }))
             }
         })
@@ -7925,6 +9737,84 @@ impl MediaLive for MediaLiveClient {
         })
     }
 
+    /// <p>List the programs that currently exist for a specific multiplex.</p>
+    fn list_multiplex_programs(
+        &self,
+        input: ListMultiplexProgramsRequest,
+    ) -> RusotoFuture<ListMultiplexProgramsResponse, ListMultiplexProgramsError> {
+        let request_uri = format!(
+            "/prod/multiplexes/{multiplex_id}/programs",
+            multiplex_id = input.multiplex_id
+        );
+
+        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListMultiplexProgramsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListMultiplexProgramsError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieve a list of the existing multiplexes.</p>
+    fn list_multiplexes(
+        &self,
+        input: ListMultiplexesRequest,
+    ) -> RusotoFuture<ListMultiplexesResponse, ListMultiplexesError> {
+        let request_uri = "/prod/multiplexes";
+
+        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListMultiplexesResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListMultiplexesError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>List offerings available for purchase.</p>
     fn list_offerings(
         &self,
@@ -7944,6 +9834,9 @@ impl MediaLive for MediaLiveClient {
         }
         if let Some(ref x) = input.codec {
             params.put("codec", x);
+        }
+        if let Some(ref x) = input.duration {
+            params.put("duration", x);
         }
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
@@ -8150,6 +10043,38 @@ impl MediaLive for MediaLiveClient {
         })
     }
 
+    /// <p>Start (run) the multiplex. Starting the multiplex does not start the channels. You must explicitly start each channel.</p>
+    fn start_multiplex(
+        &self,
+        input: StartMultiplexRequest,
+    ) -> RusotoFuture<StartMultiplexResponse, StartMultiplexError> {
+        let request_uri = format!(
+            "/prod/multiplexes/{multiplex_id}/start",
+            multiplex_id = input.multiplex_id
+        );
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 202 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartMultiplexResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartMultiplexError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Stops a running channel</p>
     fn stop_channel(
         &self,
@@ -8177,6 +10102,38 @@ impl MediaLive for MediaLiveClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(StopChannelError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Stops a running multiplex. If the multiplex isn&#39;t running, this action has no effect.</p>
+    fn stop_multiplex(
+        &self,
+        input: StopMultiplexRequest,
+    ) -> RusotoFuture<StopMultiplexResponse, StopMultiplexError> {
+        let request_uri = format!(
+            "/prod/multiplexes/{multiplex_id}/stop",
+            multiplex_id = input.multiplex_id
+        );
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 202 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopMultiplexResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopMultiplexError::from_response(response))),
                 )
             }
         })
@@ -8309,6 +10266,76 @@ impl MediaLive for MediaLiveClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateInputSecurityGroupError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Updates a multiplex.</p>
+    fn update_multiplex(
+        &self,
+        input: UpdateMultiplexRequest,
+    ) -> RusotoFuture<UpdateMultiplexResponse, UpdateMultiplexError> {
+        let request_uri = format!(
+            "/prod/multiplexes/{multiplex_id}",
+            multiplex_id = input.multiplex_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateMultiplexResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateMultiplexError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Update a program in a multiplex.</p>
+    fn update_multiplex_program(
+        &self,
+        input: UpdateMultiplexProgramRequest,
+    ) -> RusotoFuture<UpdateMultiplexProgramResponse, UpdateMultiplexProgramError> {
+        let request_uri = format!(
+            "/prod/multiplexes/{multiplex_id}/programs/{program_name}",
+            multiplex_id = input.multiplex_id,
+            program_name = input.program_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateMultiplexProgramResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateMultiplexProgramError::from_response(response))
+                    }),
+                )
             }
         })
     }

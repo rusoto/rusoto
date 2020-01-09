@@ -810,21 +810,19 @@ impl AssociateTeamMemberError {
 }
 impl fmt::Display for AssociateTeamMemberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateTeamMemberError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateTeamMemberError::ConcurrentModification(ref cause) => cause,
-            AssociateTeamMemberError::InvalidServiceRole(ref cause) => cause,
-            AssociateTeamMemberError::LimitExceeded(ref cause) => cause,
-            AssociateTeamMemberError::ProjectConfiguration(ref cause) => cause,
-            AssociateTeamMemberError::ProjectNotFound(ref cause) => cause,
-            AssociateTeamMemberError::TeamMemberAlreadyAssociated(ref cause) => cause,
+            AssociateTeamMemberError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            AssociateTeamMemberError::InvalidServiceRole(ref cause) => write!(f, "{}", cause),
+            AssociateTeamMemberError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateTeamMemberError::ProjectConfiguration(ref cause) => write!(f, "{}", cause),
+            AssociateTeamMemberError::ProjectNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateTeamMemberError::TeamMemberAlreadyAssociated(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateTeamMemberError {}
 /// Errors returned by CreateProject
 #[derive(Debug, PartialEq)]
 pub enum CreateProjectError {
@@ -875,21 +873,17 @@ impl CreateProjectError {
 }
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProjectError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProjectError::ConcurrentModification(ref cause) => cause,
-            CreateProjectError::InvalidServiceRole(ref cause) => cause,
-            CreateProjectError::LimitExceeded(ref cause) => cause,
-            CreateProjectError::ProjectAlreadyExists(ref cause) => cause,
-            CreateProjectError::ProjectConfiguration(ref cause) => cause,
-            CreateProjectError::ProjectCreationFailed(ref cause) => cause,
+            CreateProjectError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::InvalidServiceRole(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::ProjectAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::ProjectConfiguration(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::ProjectCreationFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateProjectError {}
 /// Errors returned by CreateUserProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateUserProfileError {
@@ -915,16 +909,12 @@ impl CreateUserProfileError {
 }
 impl fmt::Display for CreateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserProfileError::UserProfileAlreadyExists(ref cause) => cause,
+            CreateUserProfileError::UserProfileAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserProfileError {}
 /// Errors returned by DeleteProject
 #[derive(Debug, PartialEq)]
 pub enum DeleteProjectError {
@@ -955,17 +945,13 @@ impl DeleteProjectError {
 }
 impl fmt::Display for DeleteProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProjectError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteProjectError::ConcurrentModification(ref cause) => cause,
-            DeleteProjectError::InvalidServiceRole(ref cause) => cause,
+            DeleteProjectError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::InvalidServiceRole(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteProjectError {}
 /// Errors returned by DeleteUserProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserProfileError {}
@@ -983,14 +969,10 @@ impl DeleteUserProfileError {
 }
 impl fmt::Display for DeleteUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserProfileError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteUserProfileError {}
 /// Errors returned by DescribeProject
 #[derive(Debug, PartialEq)]
 pub enum DescribeProjectError {
@@ -1033,19 +1015,15 @@ impl DescribeProjectError {
 }
 impl fmt::Display for DescribeProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeProjectError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeProjectError::ConcurrentModification(ref cause) => cause,
-            DescribeProjectError::InvalidServiceRole(ref cause) => cause,
-            DescribeProjectError::ProjectConfiguration(ref cause) => cause,
-            DescribeProjectError::ProjectNotFound(ref cause) => cause,
+            DescribeProjectError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DescribeProjectError::InvalidServiceRole(ref cause) => write!(f, "{}", cause),
+            DescribeProjectError::ProjectConfiguration(ref cause) => write!(f, "{}", cause),
+            DescribeProjectError::ProjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeProjectError {}
 /// Errors returned by DescribeUserProfile
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserProfileError {
@@ -1071,16 +1049,12 @@ impl DescribeUserProfileError {
 }
 impl fmt::Display for DescribeUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserProfileError::UserProfileNotFound(ref cause) => cause,
+            DescribeUserProfileError::UserProfileNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserProfileError {}
 /// Errors returned by DisassociateTeamMember
 #[derive(Debug, PartialEq)]
 pub enum DisassociateTeamMemberError {
@@ -1120,18 +1094,16 @@ impl DisassociateTeamMemberError {
 }
 impl fmt::Display for DisassociateTeamMemberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateTeamMemberError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateTeamMemberError::ConcurrentModification(ref cause) => cause,
-            DisassociateTeamMemberError::InvalidServiceRole(ref cause) => cause,
-            DisassociateTeamMemberError::ProjectNotFound(ref cause) => cause,
+            DisassociateTeamMemberError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateTeamMemberError::InvalidServiceRole(ref cause) => write!(f, "{}", cause),
+            DisassociateTeamMemberError::ProjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateTeamMemberError {}
 /// Errors returned by ListProjects
 #[derive(Debug, PartialEq)]
 pub enum ListProjectsError {
@@ -1155,16 +1127,12 @@ impl ListProjectsError {
 }
 impl fmt::Display for ListProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProjectsError {
-    fn description(&self) -> &str {
         match *self {
-            ListProjectsError::InvalidNextToken(ref cause) => cause,
+            ListProjectsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListProjectsError {}
 /// Errors returned by ListResources
 #[derive(Debug, PartialEq)]
 pub enum ListResourcesError {
@@ -1193,17 +1161,13 @@ impl ListResourcesError {
 }
 impl fmt::Display for ListResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourcesError::InvalidNextToken(ref cause) => cause,
-            ListResourcesError::ProjectNotFound(ref cause) => cause,
+            ListResourcesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListResourcesError::ProjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourcesError {}
 /// Errors returned by ListTagsForProject
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForProjectError {
@@ -1232,17 +1196,13 @@ impl ListTagsForProjectError {
 }
 impl fmt::Display for ListTagsForProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForProjectError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForProjectError::InvalidNextToken(ref cause) => cause,
-            ListTagsForProjectError::ProjectNotFound(ref cause) => cause,
+            ListTagsForProjectError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListTagsForProjectError::ProjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForProjectError {}
 /// Errors returned by ListTeamMembers
 #[derive(Debug, PartialEq)]
 pub enum ListTeamMembersError {
@@ -1271,17 +1231,13 @@ impl ListTeamMembersError {
 }
 impl fmt::Display for ListTeamMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTeamMembersError {
-    fn description(&self) -> &str {
         match *self {
-            ListTeamMembersError::InvalidNextToken(ref cause) => cause,
-            ListTeamMembersError::ProjectNotFound(ref cause) => cause,
+            ListTeamMembersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListTeamMembersError::ProjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTeamMembersError {}
 /// Errors returned by ListUserProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListUserProfilesError {
@@ -1305,16 +1261,12 @@ impl ListUserProfilesError {
 }
 impl fmt::Display for ListUserProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListUserProfilesError::InvalidNextToken(ref cause) => cause,
+            ListUserProfilesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUserProfilesError {}
 /// Errors returned by TagProject
 #[derive(Debug, PartialEq)]
 pub enum TagProjectError {
@@ -1348,18 +1300,14 @@ impl TagProjectError {
 }
 impl fmt::Display for TagProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagProjectError {
-    fn description(&self) -> &str {
         match *self {
-            TagProjectError::ConcurrentModification(ref cause) => cause,
-            TagProjectError::LimitExceeded(ref cause) => cause,
-            TagProjectError::ProjectNotFound(ref cause) => cause,
+            TagProjectError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagProjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagProjectError::ProjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagProjectError {}
 /// Errors returned by UntagProject
 #[derive(Debug, PartialEq)]
 pub enum UntagProjectError {
@@ -1393,18 +1341,14 @@ impl UntagProjectError {
 }
 impl fmt::Display for UntagProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagProjectError {
-    fn description(&self) -> &str {
         match *self {
-            UntagProjectError::ConcurrentModification(ref cause) => cause,
-            UntagProjectError::LimitExceeded(ref cause) => cause,
-            UntagProjectError::ProjectNotFound(ref cause) => cause,
+            UntagProjectError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagProjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagProjectError::ProjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagProjectError {}
 /// Errors returned by UpdateProject
 #[derive(Debug, PartialEq)]
 pub enum UpdateProjectError {
@@ -1428,16 +1372,12 @@ impl UpdateProjectError {
 }
 impl fmt::Display for UpdateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateProjectError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateProjectError::ProjectNotFound(ref cause) => cause,
+            UpdateProjectError::ProjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateProjectError {}
 /// Errors returned by UpdateTeamMember
 #[derive(Debug, PartialEq)]
 pub enum UpdateTeamMemberError {
@@ -1490,21 +1430,17 @@ impl UpdateTeamMemberError {
 }
 impl fmt::Display for UpdateTeamMemberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTeamMemberError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTeamMemberError::ConcurrentModification(ref cause) => cause,
-            UpdateTeamMemberError::InvalidServiceRole(ref cause) => cause,
-            UpdateTeamMemberError::LimitExceeded(ref cause) => cause,
-            UpdateTeamMemberError::ProjectConfiguration(ref cause) => cause,
-            UpdateTeamMemberError::ProjectNotFound(ref cause) => cause,
-            UpdateTeamMemberError::TeamMemberNotFound(ref cause) => cause,
+            UpdateTeamMemberError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateTeamMemberError::InvalidServiceRole(ref cause) => write!(f, "{}", cause),
+            UpdateTeamMemberError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateTeamMemberError::ProjectConfiguration(ref cause) => write!(f, "{}", cause),
+            UpdateTeamMemberError::ProjectNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTeamMemberError::TeamMemberNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTeamMemberError {}
 /// Errors returned by UpdateUserProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserProfileError {
@@ -1530,16 +1466,12 @@ impl UpdateUserProfileError {
 }
 impl fmt::Display for UpdateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserProfileError::UserProfileNotFound(ref cause) => cause,
+            UpdateUserProfileError::UserProfileNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserProfileError {}
 /// Trait representing the capabilities of the CodeStar API. CodeStar clients implement this trait.
 pub trait CodeStar {
     /// <p>Adds an IAM user to the team for an AWS CodeStar project.</p>
@@ -1684,6 +1616,14 @@ impl CodeStarClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> CodeStarClient {
         CodeStarClient { client, region }
+    }
+}
+
+impl fmt::Debug for CodeStarClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CodeStarClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -37,6 +37,10 @@ pub struct AddInstanceFleetInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddInstanceFleetOutput {
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>The unique identifier of the cluster.</p>
     #[serde(rename = "ClusterId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -63,6 +67,10 @@ pub struct AddInstanceGroupsInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddInstanceGroupsOutput {
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>Instance group IDs of the newly created instance groups.</p>
     #[serde(rename = "InstanceGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -260,12 +268,14 @@ pub struct CancelStepsInfo {
 pub struct CancelStepsInput {
     /// <p>The <code>ClusterID</code> for which specified steps will be canceled. Use <a>RunJobFlow</a> and <a>ListClusters</a> to get ClusterIDs. </p>
     #[serde(rename = "ClusterId")]
+    pub cluster_id: String,
+    /// <p>The option to choose for cancelling <code>RUNNING</code> steps. By default, the value is <code>SEND_INTERRUPT</code>.</p>
+    #[serde(rename = "StepCancellationOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cluster_id: Option<String>,
+    pub step_cancellation_option: Option<String>,
     /// <p>The list of <code>StepIDs</code> to cancel. Use <a>ListSteps</a> to get steps and their states for the specified cluster.</p>
     #[serde(rename = "StepIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub step_ids: Option<Vec<String>>,
+    pub step_ids: Vec<String>,
 }
 
 /// <p> The output for the <a>CancelSteps</a> operation. </p>
@@ -288,7 +298,7 @@ pub struct CloudWatchAlarmDefinition {
     #[serde(rename = "Dimensions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dimensions: Option<Vec<MetricDimension>>,
-    /// <p>The number of periods, expressed in seconds using <code>Period</code>, during which the alarm condition must exist before the alarm triggers automatic scaling activity. The default value is <code>1</code>.</p>
+    /// <p>The number of periods, in five-minute increments, during which the alarm condition must exist before the alarm triggers automatic scaling activity. The default value is <code>1</code>.</p>
     #[serde(rename = "EvaluationPeriods")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_periods: Option<i64>,
@@ -331,6 +341,10 @@ pub struct Cluster {
     #[serde(rename = "AutoTerminate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_terminate: Option<bool>,
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>Applies only to Amazon EMR releases 4.x and later. The list of Configurations supplied to the EMR cluster.</p>
     #[serde(rename = "Configurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -375,6 +389,10 @@ pub struct Cluster {
     #[serde(rename = "NormalizedInstanceHours")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub normalized_instance_hours: Option<i64>,
+    /// <p> The Amazon Resource Name (ARN) of the Outpost where the cluster is launched. </p>
+    #[serde(rename = "OutpostArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outpost_arn: Option<String>,
     /// <p>The Amazon EMR release label, which determines the version of open-source application packages installed on the cluster. Release labels are in the form <code>emr-x.x.x</code>, where x.x.x is an Amazon EMR release version such as <code>emr-5.14.0</code>. For more information about Amazon EMR release versions and included application versions and features, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/">https://docs.aws.amazon.com/emr/latest/ReleaseGuide/</a>. The release label applies only to Amazon EMR releases version 4.0 and later. Earlier versions use <code>AmiVersion</code>.</p>
     #[serde(rename = "ReleaseLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -407,6 +425,10 @@ pub struct Cluster {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<ClusterStatus>,
+    /// <p>Specifies the number of steps that can be executed concurrently.</p>
+    #[serde(rename = "StepConcurrencyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_concurrency_level: Option<i64>,
     /// <p>A list of tags associated with a cluster.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -415,7 +437,7 @@ pub struct Cluster {
     #[serde(rename = "TerminationProtected")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_protected: Option<bool>,
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Indicates whether the cluster is visible to all IAM users of the AWS account associated with the cluster. If this value is set to <code>true</code>, all IAM users of that AWS account can view and manage the cluster if they have the proper policy permissions set. If this value is <code>false</code>, only the IAM user that created the cluster can view and manage it. This value can be changed using the <a>SetVisibleToAllUsers</a> action.</p>
+    /// <p>Indicates whether the cluster is visible to all IAM users of the AWS account associated with the cluster. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If this value is <code>false</code>, only the IAM user that created the cluster can perform actions. This value can be changed on a running cluster by using the <a>SetVisibleToAllUsers</a> action. You can override the default value of <code>true</code> when you create a cluster by using the <code>VisibleToAllUsers</code> parameter of the <code>RunJobFlow</code> action.</p>
     #[serde(rename = "VisibleToAllUsers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visible_to_all_users: Option<bool>,
@@ -457,6 +479,10 @@ pub struct ClusterStatus {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClusterSummary {
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>The unique identifier for the cluster.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -469,6 +495,10 @@ pub struct ClusterSummary {
     #[serde(rename = "NormalizedInstanceHours")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub normalized_instance_hours: Option<i64>,
+    /// <p> The Amazon Resource Name (ARN) of the Outpost where the cluster is launched. </p>
+    #[serde(rename = "OutpostArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outpost_arn: Option<String>,
     /// <p>The details about the current status of the cluster.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1052,7 +1082,7 @@ pub struct InstanceGroup {
     #[serde(rename = "AutoScalingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicyDescription>,
-    /// <p>The maximum Spot price your are willing to pay for EC2 instances.</p> <p>An optional, nullable field that applies if the <code>MarketType</code> for the instance group is specified as <code>SPOT</code>. Specify the maximum spot price in USD. If the value is NULL and <code>SPOT</code> is specified, the maximum Spot price is set equal to the On-Demand price.</p>
+    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
@@ -1126,7 +1156,7 @@ pub struct InstanceGroupConfig {
     #[serde(rename = "AutoScalingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicy>,
-    /// <p>The maximum Spot price your are willing to pay for EC2 instances.</p> <p>An optional, nullable field that applies if the <code>MarketType</code> for the instance group is specified as <code>SPOT</code>. Specify the maximum spot price in USD. If the value is NULL and <code>SPOT</code> is specified, the maximum Spot price is set equal to the On-Demand price.</p>
+    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
@@ -1161,7 +1191,7 @@ pub struct InstanceGroupConfig {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceGroupDetail {
-    /// <p>The maximum Spot price your are willing to pay for EC2 instances.</p> <p>An optional, nullable field that applies if the <code>MarketType</code> for the instance group is specified as <code>SPOT</code>. Specified in USD. If the value is NULL and <code>SPOT</code> is specified, the maximum Spot price is set equal to the On-Demand price.</p>
+    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
@@ -1469,7 +1499,7 @@ pub struct JobFlowDetail {
     #[serde(rename = "SupportedProducts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_products: Option<Vec<String>>,
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Specifies whether the cluster is visible to all IAM users of the AWS account associated with the cluster. If this value is set to <code>true</code>, all IAM users of that AWS account can view and (if they have the proper policy permissions set) manage the cluster. If it is set to <code>false</code>, only the IAM user that created the cluster can view and manage it. This value can be changed using the <a>SetVisibleToAllUsers</a> action.</p>
+    /// <p>Indicates whether the cluster is visible to all IAM users of the AWS account associated with the cluster. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If this value is <code>false</code>, only the IAM user that created the cluster can perform actions. This value can be changed on a running cluster by using the <a>SetVisibleToAllUsers</a> action. You can override the default value of <code>true</code> when you create a cluster by using the <code>VisibleToAllUsers</code> parameter of the <code>RunJobFlow</code> action.</p>
     #[serde(rename = "VisibleToAllUsers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visible_to_all_users: Option<bool>,
@@ -1863,7 +1893,7 @@ pub struct ListStepsInput {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>The filter to limit the step list based on the identifier of the steps.</p>
+    /// <p>The filter to limit the step list based on the identifier of the steps. You can specify a maximum of ten Step IDs. The character constraint applies to the overall length of the array.</p>
     #[serde(rename = "StepIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_ids: Option<Vec<String>>,
@@ -1898,6 +1928,27 @@ pub struct MetricDimension {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyClusterInput {
+    /// <p>The unique identifier of the cluster.</p>
+    #[serde(rename = "ClusterId")]
+    pub cluster_id: String,
+    /// <p>The number of steps that can be executed concurrently. You can specify a maximum of 256 steps. </p>
+    #[serde(rename = "StepConcurrencyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_concurrency_level: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ModifyClusterOutput {
+    /// <p>The number of steps that can be executed concurrently.</p>
+    #[serde(rename = "StepConcurrencyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_concurrency_level: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1971,6 +2022,10 @@ pub struct PutAutoScalingPolicyOutput {
     #[serde(rename = "AutoScalingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicyDescription>,
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>Specifies the ID of a cluster. The instance group to which the automatic scaling policy is applied is within this cluster.</p>
     #[serde(rename = "ClusterId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2103,6 +2158,10 @@ pub struct RunJobFlowInput {
     #[serde(rename = "ServiceRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role: Option<String>,
+    /// <p>Specifies the number of steps that can be executed concurrently. The default value is <code>1</code>. The maximum value is <code>256</code>.</p>
+    #[serde(rename = "StepConcurrencyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_concurrency_level: Option<i64>,
     /// <p>A list of steps to run.</p>
     #[serde(rename = "Steps")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2115,7 +2174,7 @@ pub struct RunJobFlowInput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Whether the cluster is visible to all IAM users of the AWS account associated with the cluster. If this value is set to <code>true</code>, all IAM users of that AWS account can view and (if they have the proper policy permissions set) manage the cluster. If it is set to <code>false</code>, only the IAM user that created the cluster can view and manage it.</p>
+    /// <p>A value of <code>true</code> indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. This is the default. A value of <code>false</code> indicates that only the IAM user who created the cluster can perform actions.</p>
     #[serde(rename = "VisibleToAllUsers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visible_to_all_users: Option<bool>,
@@ -2125,6 +2184,10 @@ pub struct RunJobFlowInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RunJobFlowOutput {
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>An unique identifier for the job flow.</p>
     #[serde(rename = "JobFlowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2218,14 +2281,14 @@ pub struct SetTerminationProtectionInput {
     pub termination_protected: bool,
 }
 
-/// <p> <i>This member will be deprecated.</i> </p> <p>The input to the SetVisibleToAllUsers action.</p>
+/// <p>The input to the SetVisibleToAllUsers action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetVisibleToAllUsersInput {
-    /// <p>Identifiers of the job flows to receive the new visibility setting.</p>
+    /// <p>The unique identifier of the job flow (cluster).</p>
     #[serde(rename = "JobFlowIds")]
     pub job_flow_ids: Vec<String>,
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Whether the specified clusters are visible to all IAM users of the AWS account associated with the cluster. If this value is set to True, all IAM users of that AWS account can view and, if they have the proper IAM policy permissions set, manage the clusters. If it is set to False, only the IAM user that created a cluster can view and manage it.</p>
+    /// <p>A value of <code>true</code> indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. This is the default. A value of <code>false</code> indicates that only the IAM user who created the cluster can perform actions.</p>
     #[serde(rename = "VisibleToAllUsers")]
     pub visible_to_all_users: bool,
 }
@@ -2510,17 +2573,13 @@ impl AddInstanceFleetError {
 }
 impl fmt::Display for AddInstanceFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddInstanceFleetError {
-    fn description(&self) -> &str {
         match *self {
-            AddInstanceFleetError::InternalServer(ref cause) => cause,
-            AddInstanceFleetError::InvalidRequest(ref cause) => cause,
+            AddInstanceFleetError::InternalServer(ref cause) => write!(f, "{}", cause),
+            AddInstanceFleetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddInstanceFleetError {}
 /// Errors returned by AddInstanceGroups
 #[derive(Debug, PartialEq)]
 pub enum AddInstanceGroupsError {
@@ -2546,16 +2605,12 @@ impl AddInstanceGroupsError {
 }
 impl fmt::Display for AddInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddInstanceGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            AddInstanceGroupsError::InternalServerError(ref cause) => cause,
+            AddInstanceGroupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddInstanceGroupsError {}
 /// Errors returned by AddJobFlowSteps
 #[derive(Debug, PartialEq)]
 pub enum AddJobFlowStepsError {
@@ -2579,16 +2634,12 @@ impl AddJobFlowStepsError {
 }
 impl fmt::Display for AddJobFlowStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddJobFlowStepsError {
-    fn description(&self) -> &str {
         match *self {
-            AddJobFlowStepsError::InternalServerError(ref cause) => cause,
+            AddJobFlowStepsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddJobFlowStepsError {}
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
@@ -2617,17 +2668,13 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsError::InternalServer(ref cause) => cause,
-            AddTagsError::InvalidRequest(ref cause) => cause,
+            AddTagsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            AddTagsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by CancelSteps
 #[derive(Debug, PartialEq)]
 pub enum CancelStepsError {
@@ -2656,17 +2703,13 @@ impl CancelStepsError {
 }
 impl fmt::Display for CancelStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelStepsError {
-    fn description(&self) -> &str {
         match *self {
-            CancelStepsError::InternalServerError(ref cause) => cause,
-            CancelStepsError::InvalidRequest(ref cause) => cause,
+            CancelStepsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CancelStepsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelStepsError {}
 /// Errors returned by CreateSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateSecurityConfigurationError {
@@ -2701,17 +2744,13 @@ impl CreateSecurityConfigurationError {
 }
 impl fmt::Display for CreateSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSecurityConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSecurityConfigurationError::InternalServer(ref cause) => cause,
-            CreateSecurityConfigurationError::InvalidRequest(ref cause) => cause,
+            CreateSecurityConfigurationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateSecurityConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSecurityConfigurationError {}
 /// Errors returned by DeleteSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteSecurityConfigurationError {
@@ -2746,17 +2785,13 @@ impl DeleteSecurityConfigurationError {
 }
 impl fmt::Display for DeleteSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSecurityConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSecurityConfigurationError::InternalServer(ref cause) => cause,
-            DeleteSecurityConfigurationError::InvalidRequest(ref cause) => cause,
+            DeleteSecurityConfigurationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteSecurityConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSecurityConfigurationError {}
 /// Errors returned by DescribeCluster
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterError {
@@ -2785,17 +2820,13 @@ impl DescribeClusterError {
 }
 impl fmt::Display for DescribeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterError::InternalServer(ref cause) => cause,
-            DescribeClusterError::InvalidRequest(ref cause) => cause,
+            DescribeClusterError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeClusterError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClusterError {}
 /// Errors returned by DescribeJobFlows
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobFlowsError {
@@ -2821,16 +2852,12 @@ impl DescribeJobFlowsError {
 }
 impl fmt::Display for DescribeJobFlowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJobFlowsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJobFlowsError::InternalServerError(ref cause) => cause,
+            DescribeJobFlowsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJobFlowsError {}
 /// Errors returned by DescribeSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeSecurityConfigurationError {
@@ -2865,17 +2892,13 @@ impl DescribeSecurityConfigurationError {
 }
 impl fmt::Display for DescribeSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSecurityConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSecurityConfigurationError::InternalServer(ref cause) => cause,
-            DescribeSecurityConfigurationError::InvalidRequest(ref cause) => cause,
+            DescribeSecurityConfigurationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeSecurityConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSecurityConfigurationError {}
 /// Errors returned by DescribeStep
 #[derive(Debug, PartialEq)]
 pub enum DescribeStepError {
@@ -2904,17 +2927,13 @@ impl DescribeStepError {
 }
 impl fmt::Display for DescribeStepError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStepError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStepError::InternalServer(ref cause) => cause,
-            DescribeStepError::InvalidRequest(ref cause) => cause,
+            DescribeStepError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeStepError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStepError {}
 /// Errors returned by GetBlockPublicAccessConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetBlockPublicAccessConfigurationError {
@@ -2949,17 +2968,17 @@ impl GetBlockPublicAccessConfigurationError {
 }
 impl fmt::Display for GetBlockPublicAccessConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBlockPublicAccessConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetBlockPublicAccessConfigurationError::InternalServer(ref cause) => cause,
-            GetBlockPublicAccessConfigurationError::InvalidRequest(ref cause) => cause,
+            GetBlockPublicAccessConfigurationError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetBlockPublicAccessConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetBlockPublicAccessConfigurationError {}
 /// Errors returned by ListBootstrapActions
 #[derive(Debug, PartialEq)]
 pub enum ListBootstrapActionsError {
@@ -2988,17 +3007,13 @@ impl ListBootstrapActionsError {
 }
 impl fmt::Display for ListBootstrapActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBootstrapActionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBootstrapActionsError::InternalServer(ref cause) => cause,
-            ListBootstrapActionsError::InvalidRequest(ref cause) => cause,
+            ListBootstrapActionsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListBootstrapActionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBootstrapActionsError {}
 /// Errors returned by ListClusters
 #[derive(Debug, PartialEq)]
 pub enum ListClustersError {
@@ -3027,17 +3042,13 @@ impl ListClustersError {
 }
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListClustersError {
-    fn description(&self) -> &str {
         match *self {
-            ListClustersError::InternalServer(ref cause) => cause,
-            ListClustersError::InvalidRequest(ref cause) => cause,
+            ListClustersError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListClustersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListClustersError {}
 /// Errors returned by ListInstanceFleets
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceFleetsError {
@@ -3066,17 +3077,13 @@ impl ListInstanceFleetsError {
 }
 impl fmt::Display for ListInstanceFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstanceFleetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstanceFleetsError::InternalServer(ref cause) => cause,
-            ListInstanceFleetsError::InvalidRequest(ref cause) => cause,
+            ListInstanceFleetsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListInstanceFleetsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstanceFleetsError {}
 /// Errors returned by ListInstanceGroups
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceGroupsError {
@@ -3105,17 +3112,13 @@ impl ListInstanceGroupsError {
 }
 impl fmt::Display for ListInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstanceGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstanceGroupsError::InternalServer(ref cause) => cause,
-            ListInstanceGroupsError::InvalidRequest(ref cause) => cause,
+            ListInstanceGroupsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListInstanceGroupsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstanceGroupsError {}
 /// Errors returned by ListInstances
 #[derive(Debug, PartialEq)]
 pub enum ListInstancesError {
@@ -3144,17 +3147,13 @@ impl ListInstancesError {
 }
 impl fmt::Display for ListInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstancesError::InternalServer(ref cause) => cause,
-            ListInstancesError::InvalidRequest(ref cause) => cause,
+            ListInstancesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListInstancesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstancesError {}
 /// Errors returned by ListSecurityConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListSecurityConfigurationsError {
@@ -3189,17 +3188,13 @@ impl ListSecurityConfigurationsError {
 }
 impl fmt::Display for ListSecurityConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSecurityConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSecurityConfigurationsError::InternalServer(ref cause) => cause,
-            ListSecurityConfigurationsError::InvalidRequest(ref cause) => cause,
+            ListSecurityConfigurationsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListSecurityConfigurationsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSecurityConfigurationsError {}
 /// Errors returned by ListSteps
 #[derive(Debug, PartialEq)]
 pub enum ListStepsError {
@@ -3228,17 +3223,48 @@ impl ListStepsError {
 }
 impl fmt::Display for ListStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStepsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStepsError::InternalServer(ref cause) => cause,
-            ListStepsError::InvalidRequest(ref cause) => cause,
+            ListStepsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListStepsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStepsError {}
+/// Errors returned by ModifyCluster
+#[derive(Debug, PartialEq)]
+pub enum ModifyClusterError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl ModifyClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(ModifyClusterError::InternalServerError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ModifyClusterError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ModifyClusterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyClusterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ModifyClusterError {}
 /// Errors returned by ModifyInstanceFleet
 #[derive(Debug, PartialEq)]
 pub enum ModifyInstanceFleetError {
@@ -3267,17 +3293,13 @@ impl ModifyInstanceFleetError {
 }
 impl fmt::Display for ModifyInstanceFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyInstanceFleetError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyInstanceFleetError::InternalServer(ref cause) => cause,
-            ModifyInstanceFleetError::InvalidRequest(ref cause) => cause,
+            ModifyInstanceFleetError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ModifyInstanceFleetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyInstanceFleetError {}
 /// Errors returned by ModifyInstanceGroups
 #[derive(Debug, PartialEq)]
 pub enum ModifyInstanceGroupsError {
@@ -3303,16 +3325,12 @@ impl ModifyInstanceGroupsError {
 }
 impl fmt::Display for ModifyInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyInstanceGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyInstanceGroupsError::InternalServerError(ref cause) => cause,
+            ModifyInstanceGroupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyInstanceGroupsError {}
 /// Errors returned by PutAutoScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutAutoScalingPolicyError {}
@@ -3330,14 +3348,10 @@ impl PutAutoScalingPolicyError {
 }
 impl fmt::Display for PutAutoScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAutoScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutAutoScalingPolicyError {}
 /// Errors returned by PutBlockPublicAccessConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutBlockPublicAccessConfigurationError {
@@ -3372,17 +3386,17 @@ impl PutBlockPublicAccessConfigurationError {
 }
 impl fmt::Display for PutBlockPublicAccessConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBlockPublicAccessConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutBlockPublicAccessConfigurationError::InternalServer(ref cause) => cause,
-            PutBlockPublicAccessConfigurationError::InvalidRequest(ref cause) => cause,
+            PutBlockPublicAccessConfigurationError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutBlockPublicAccessConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutBlockPublicAccessConfigurationError {}
 /// Errors returned by RemoveAutoScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum RemoveAutoScalingPolicyError {}
@@ -3400,14 +3414,10 @@ impl RemoveAutoScalingPolicyError {
 }
 impl fmt::Display for RemoveAutoScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveAutoScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RemoveAutoScalingPolicyError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -3436,17 +3446,13 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsError::InternalServer(ref cause) => cause,
-            RemoveTagsError::InvalidRequest(ref cause) => cause,
+            RemoveTagsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsError {}
 /// Errors returned by RunJobFlow
 #[derive(Debug, PartialEq)]
 pub enum RunJobFlowError {
@@ -3470,16 +3476,12 @@ impl RunJobFlowError {
 }
 impl fmt::Display for RunJobFlowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RunJobFlowError {
-    fn description(&self) -> &str {
         match *self {
-            RunJobFlowError::InternalServerError(ref cause) => cause,
+            RunJobFlowError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RunJobFlowError {}
 /// Errors returned by SetTerminationProtection
 #[derive(Debug, PartialEq)]
 pub enum SetTerminationProtectionError {
@@ -3505,16 +3507,12 @@ impl SetTerminationProtectionError {
 }
 impl fmt::Display for SetTerminationProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetTerminationProtectionError {
-    fn description(&self) -> &str {
         match *self {
-            SetTerminationProtectionError::InternalServerError(ref cause) => cause,
+            SetTerminationProtectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetTerminationProtectionError {}
 /// Errors returned by SetVisibleToAllUsers
 #[derive(Debug, PartialEq)]
 pub enum SetVisibleToAllUsersError {
@@ -3540,16 +3538,12 @@ impl SetVisibleToAllUsersError {
 }
 impl fmt::Display for SetVisibleToAllUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetVisibleToAllUsersError {
-    fn description(&self) -> &str {
         match *self {
-            SetVisibleToAllUsersError::InternalServerError(ref cause) => cause,
+            SetVisibleToAllUsersError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetVisibleToAllUsersError {}
 /// Errors returned by TerminateJobFlows
 #[derive(Debug, PartialEq)]
 pub enum TerminateJobFlowsError {
@@ -3575,16 +3569,12 @@ impl TerminateJobFlowsError {
 }
 impl fmt::Display for TerminateJobFlowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TerminateJobFlowsError {
-    fn description(&self) -> &str {
         match *self {
-            TerminateJobFlowsError::InternalServerError(ref cause) => cause,
+            TerminateJobFlowsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TerminateJobFlowsError {}
 /// Trait representing the capabilities of the Amazon EMR API. Amazon EMR clients implement this trait.
 pub trait Emr {
     /// <p><p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note></p>
@@ -3691,8 +3681,14 @@ pub trait Emr {
         input: ListSecurityConfigurationsInput,
     ) -> RusotoFuture<ListSecurityConfigurationsOutput, ListSecurityConfigurationsError>;
 
-    /// <p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>
+    /// <p>Provides a list of steps for the cluster in reverse order unless you specify <code>stepIds</code> with the request of filter by <code>StepStates</code>. You can specify a maximum of ten <code>stepIDs</code>.</p>
     fn list_steps(&self, input: ListStepsInput) -> RusotoFuture<ListStepsOutput, ListStepsError>;
+
+    /// <p>Modifies the number of steps that can be executed concurrently for the cluster specified using ClusterID.</p>
+    fn modify_cluster(
+        &self,
+        input: ModifyClusterInput,
+    ) -> RusotoFuture<ModifyClusterOutput, ModifyClusterError>;
 
     /// <p><p>Modifies the target On-Demand and target Spot capacities for the instance fleet with the specified InstanceFleetID within the cluster specified using ClusterID. The call either succeeds or fails atomically.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
     fn modify_instance_fleet(
@@ -3742,7 +3738,7 @@ pub trait Emr {
         input: SetTerminationProtectionInput,
     ) -> RusotoFuture<(), SetTerminationProtectionError>;
 
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Sets whether all AWS Identity and Access Management (IAM) users under your account can access the specified clusters (job flows). This action works on running clusters. You can also set the visibility of a cluster when you launch it using the <code>VisibleToAllUsers</code> parameter of <a>RunJobFlow</a>. The SetVisibleToAllUsers action can be called only by an IAM user who created the cluster or the AWS account that owns the cluster.</p>
+    /// <p>Sets the <a>Cluster$VisibleToAllUsers</a> value, which determines whether the cluster is visible to all IAM users of the AWS account associated with the cluster. Only the IAM user who created the cluster or the AWS account root user can call this action. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If set to <code>false</code>, only the IAM user that created the cluster can perform actions. This action works on running clusters. You can override the default <code>true</code> setting when you create a cluster by using the <code>VisibleToAllUsers</code> parameter with <code>RunJobFlow</code>.</p>
     fn set_visible_to_all_users(
         &self,
         input: SetVisibleToAllUsersInput,
@@ -3788,6 +3784,14 @@ impl EmrClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> EmrClient {
         EmrClient { client, region }
+    }
+}
+
+impl fmt::Debug for EmrClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("EmrClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -4310,7 +4314,7 @@ impl Emr for EmrClient {
         })
     }
 
-    /// <p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>
+    /// <p>Provides a list of steps for the cluster in reverse order unless you specify <code>stepIds</code> with the request of filter by <code>StepStates</code>. You can specify a maximum of ten <code>stepIDs</code>.</p>
     fn list_steps(&self, input: ListStepsInput) -> RusotoFuture<ListStepsOutput, ListStepsError> {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
@@ -4330,6 +4334,35 @@ impl Emr for EmrClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListStepsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Modifies the number of steps that can be executed concurrently for the cluster specified using ClusterID.</p>
+    fn modify_cluster(
+        &self,
+        input: ModifyClusterInput,
+    ) -> RusotoFuture<ModifyClusterOutput, ModifyClusterError> {
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ElasticMapReduce.ModifyCluster");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ModifyClusterOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyClusterError::from_response(response))),
                 )
             }
         })
@@ -4552,7 +4585,7 @@ impl Emr for EmrClient {
         })
     }
 
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Sets whether all AWS Identity and Access Management (IAM) users under your account can access the specified clusters (job flows). This action works on running clusters. You can also set the visibility of a cluster when you launch it using the <code>VisibleToAllUsers</code> parameter of <a>RunJobFlow</a>. The SetVisibleToAllUsers action can be called only by an IAM user who created the cluster or the AWS account that owns the cluster.</p>
+    /// <p>Sets the <a>Cluster$VisibleToAllUsers</a> value, which determines whether the cluster is visible to all IAM users of the AWS account associated with the cluster. Only the IAM user who created the cluster or the AWS account root user can call this action. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If set to <code>false</code>, only the IAM user that created the cluster can perform actions. This action works on running clusters. You can override the default <code>true</code> setting when you create a cluster by using the <code>VisibleToAllUsers</code> parameter with <code>RunJobFlow</code>.</p>
     fn set_visible_to_all_users(
         &self,
         input: SetVisibleToAllUsersInput,

@@ -82,7 +82,7 @@ pub struct CreateContainerInput {
     /// <p>The name for the container. The name must be from 1 to 255 characters. Container names must be unique to your AWS account within a specific region. As an example, you could create a container named <code>movies</code> in every region, as long as you don’t have an existing container with that name.</p>
     #[serde(rename = "ContainerName")]
     pub container_name: String,
-    /// <p>An array of key:value pairs that you define. These values can be anything that you want. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://aws.amazon.com/documentation/mediastore/tagging">Tagging Resources in MediaStore</a>.</p>
+    /// <p>An array of key:value pairs that you define. These values can be anything that you want. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/tagging.html">Tagging Resources in MediaStore</a>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -321,13 +321,12 @@ pub struct StopAccessLoggingInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopAccessLoggingOutput {}
 
-/// <p>A collection of tags associated with a container. Each tag consists of a key:value pair, which can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://aws.amazon.com/documentation/mediastore/tagging">Tagging Resources in MediaStore</a>.</p>
+/// <p>A collection of tags associated with a container. Each tag consists of a key:value pair, which can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/tagging.html">Tagging Resources in MediaStore</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>Part of the key:value pair that defines a tag. You can use a tag key to describe a category of information, such as "customer." Tag keys are case-sensitive.</p>
     #[serde(rename = "Key")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub key: Option<String>,
+    pub key: String,
     /// <p>Part of the key:value pair that defines a tag. You can use a tag value to describe a specific value within a category, such as "companyA" or "companyB." Tag values are case-sensitive.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -397,18 +396,14 @@ impl CreateContainerError {
 }
 impl fmt::Display for CreateContainerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateContainerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateContainerError::ContainerInUse(ref cause) => cause,
-            CreateContainerError::InternalServerError(ref cause) => cause,
-            CreateContainerError::LimitExceeded(ref cause) => cause,
+            CreateContainerError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            CreateContainerError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateContainerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateContainerError {}
 /// Errors returned by DeleteContainer
 #[derive(Debug, PartialEq)]
 pub enum DeleteContainerError {
@@ -442,18 +437,14 @@ impl DeleteContainerError {
 }
 impl fmt::Display for DeleteContainerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteContainerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteContainerError::ContainerInUse(ref cause) => cause,
-            DeleteContainerError::ContainerNotFound(ref cause) => cause,
-            DeleteContainerError::InternalServerError(ref cause) => cause,
+            DeleteContainerError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            DeleteContainerError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteContainerError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteContainerError {}
 /// Errors returned by DeleteContainerPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteContainerPolicyError {
@@ -500,19 +491,15 @@ impl DeleteContainerPolicyError {
 }
 impl fmt::Display for DeleteContainerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteContainerPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteContainerPolicyError::ContainerInUse(ref cause) => cause,
-            DeleteContainerPolicyError::ContainerNotFound(ref cause) => cause,
-            DeleteContainerPolicyError::InternalServerError(ref cause) => cause,
-            DeleteContainerPolicyError::PolicyNotFound(ref cause) => cause,
+            DeleteContainerPolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            DeleteContainerPolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteContainerPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteContainerPolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteContainerPolicyError {}
 /// Errors returned by DeleteCorsPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteCorsPolicyError {
@@ -553,19 +540,15 @@ impl DeleteCorsPolicyError {
 }
 impl fmt::Display for DeleteCorsPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCorsPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCorsPolicyError::ContainerInUse(ref cause) => cause,
-            DeleteCorsPolicyError::ContainerNotFound(ref cause) => cause,
-            DeleteCorsPolicyError::CorsPolicyNotFound(ref cause) => cause,
-            DeleteCorsPolicyError::InternalServerError(ref cause) => cause,
+            DeleteCorsPolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            DeleteCorsPolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteCorsPolicyError::CorsPolicyNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteCorsPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCorsPolicyError {}
 /// Errors returned by DeleteLifecyclePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteLifecyclePolicyError {
@@ -612,19 +595,15 @@ impl DeleteLifecyclePolicyError {
 }
 impl fmt::Display for DeleteLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLifecyclePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLifecyclePolicyError::ContainerInUse(ref cause) => cause,
-            DeleteLifecyclePolicyError::ContainerNotFound(ref cause) => cause,
-            DeleteLifecyclePolicyError::InternalServerError(ref cause) => cause,
-            DeleteLifecyclePolicyError::PolicyNotFound(ref cause) => cause,
+            DeleteLifecyclePolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            DeleteLifecyclePolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLifecyclePolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteLifecyclePolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLifecyclePolicyError {}
 /// Errors returned by DescribeContainer
 #[derive(Debug, PartialEq)]
 pub enum DescribeContainerError {
@@ -655,17 +634,13 @@ impl DescribeContainerError {
 }
 impl fmt::Display for DescribeContainerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeContainerError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeContainerError::ContainerNotFound(ref cause) => cause,
-            DescribeContainerError::InternalServerError(ref cause) => cause,
+            DescribeContainerError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeContainerError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeContainerError {}
 /// Errors returned by GetContainerPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetContainerPolicyError {
@@ -708,19 +683,15 @@ impl GetContainerPolicyError {
 }
 impl fmt::Display for GetContainerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetContainerPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetContainerPolicyError::ContainerInUse(ref cause) => cause,
-            GetContainerPolicyError::ContainerNotFound(ref cause) => cause,
-            GetContainerPolicyError::InternalServerError(ref cause) => cause,
-            GetContainerPolicyError::PolicyNotFound(ref cause) => cause,
+            GetContainerPolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            GetContainerPolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            GetContainerPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetContainerPolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetContainerPolicyError {}
 /// Errors returned by GetCorsPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetCorsPolicyError {
@@ -759,19 +730,15 @@ impl GetCorsPolicyError {
 }
 impl fmt::Display for GetCorsPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCorsPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetCorsPolicyError::ContainerInUse(ref cause) => cause,
-            GetCorsPolicyError::ContainerNotFound(ref cause) => cause,
-            GetCorsPolicyError::CorsPolicyNotFound(ref cause) => cause,
-            GetCorsPolicyError::InternalServerError(ref cause) => cause,
+            GetCorsPolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            GetCorsPolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            GetCorsPolicyError::CorsPolicyNotFound(ref cause) => write!(f, "{}", cause),
+            GetCorsPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCorsPolicyError {}
 /// Errors returned by GetLifecyclePolicy
 #[derive(Debug, PartialEq)]
 pub enum GetLifecyclePolicyError {
@@ -814,19 +781,15 @@ impl GetLifecyclePolicyError {
 }
 impl fmt::Display for GetLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLifecyclePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetLifecyclePolicyError::ContainerInUse(ref cause) => cause,
-            GetLifecyclePolicyError::ContainerNotFound(ref cause) => cause,
-            GetLifecyclePolicyError::InternalServerError(ref cause) => cause,
-            GetLifecyclePolicyError::PolicyNotFound(ref cause) => cause,
+            GetLifecyclePolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            GetLifecyclePolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            GetLifecyclePolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetLifecyclePolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLifecyclePolicyError {}
 /// Errors returned by ListContainers
 #[derive(Debug, PartialEq)]
 pub enum ListContainersError {
@@ -850,16 +813,12 @@ impl ListContainersError {
 }
 impl fmt::Display for ListContainersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListContainersError {
-    fn description(&self) -> &str {
         match *self {
-            ListContainersError::InternalServerError(ref cause) => cause,
+            ListContainersError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListContainersError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -897,18 +856,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::ContainerInUse(ref cause) => cause,
-            ListTagsForResourceError::ContainerNotFound(ref cause) => cause,
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
+            ListTagsForResourceError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutContainerPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutContainerPolicyError {
@@ -946,18 +901,14 @@ impl PutContainerPolicyError {
 }
 impl fmt::Display for PutContainerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutContainerPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutContainerPolicyError::ContainerInUse(ref cause) => cause,
-            PutContainerPolicyError::ContainerNotFound(ref cause) => cause,
-            PutContainerPolicyError::InternalServerError(ref cause) => cause,
+            PutContainerPolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            PutContainerPolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            PutContainerPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutContainerPolicyError {}
 /// Errors returned by PutCorsPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutCorsPolicyError {
@@ -991,18 +942,14 @@ impl PutCorsPolicyError {
 }
 impl fmt::Display for PutCorsPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutCorsPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutCorsPolicyError::ContainerInUse(ref cause) => cause,
-            PutCorsPolicyError::ContainerNotFound(ref cause) => cause,
-            PutCorsPolicyError::InternalServerError(ref cause) => cause,
+            PutCorsPolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            PutCorsPolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            PutCorsPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutCorsPolicyError {}
 /// Errors returned by PutLifecyclePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutLifecyclePolicyError {
@@ -1040,18 +987,14 @@ impl PutLifecyclePolicyError {
 }
 impl fmt::Display for PutLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutLifecyclePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutLifecyclePolicyError::ContainerInUse(ref cause) => cause,
-            PutLifecyclePolicyError::ContainerNotFound(ref cause) => cause,
-            PutLifecyclePolicyError::InternalServerError(ref cause) => cause,
+            PutLifecyclePolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            PutLifecyclePolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            PutLifecyclePolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutLifecyclePolicyError {}
 /// Errors returned by StartAccessLogging
 #[derive(Debug, PartialEq)]
 pub enum StartAccessLoggingError {
@@ -1089,18 +1032,14 @@ impl StartAccessLoggingError {
 }
 impl fmt::Display for StartAccessLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartAccessLoggingError {
-    fn description(&self) -> &str {
         match *self {
-            StartAccessLoggingError::ContainerInUse(ref cause) => cause,
-            StartAccessLoggingError::ContainerNotFound(ref cause) => cause,
-            StartAccessLoggingError::InternalServerError(ref cause) => cause,
+            StartAccessLoggingError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            StartAccessLoggingError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            StartAccessLoggingError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartAccessLoggingError {}
 /// Errors returned by StopAccessLogging
 #[derive(Debug, PartialEq)]
 pub enum StopAccessLoggingError {
@@ -1136,18 +1075,14 @@ impl StopAccessLoggingError {
 }
 impl fmt::Display for StopAccessLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopAccessLoggingError {
-    fn description(&self) -> &str {
         match *self {
-            StopAccessLoggingError::ContainerInUse(ref cause) => cause,
-            StopAccessLoggingError::ContainerNotFound(ref cause) => cause,
-            StopAccessLoggingError::InternalServerError(ref cause) => cause,
+            StopAccessLoggingError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            StopAccessLoggingError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            StopAccessLoggingError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopAccessLoggingError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1181,18 +1116,14 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ContainerInUse(ref cause) => cause,
-            TagResourceError::ContainerNotFound(ref cause) => cause,
-            TagResourceError::InternalServerError(ref cause) => cause,
+            TagResourceError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1226,18 +1157,14 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ContainerInUse(ref cause) => cause,
-            UntagResourceError::ContainerNotFound(ref cause) => cause,
-            UntagResourceError::InternalServerError(ref cause) => cause,
+            UntagResourceError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the MediaStore API. MediaStore clients implement this trait.
 pub trait MediaStore {
     /// <p>Creates a storage container to hold objects. A container is similar to a bucket in the Amazon S3 service.</p>
@@ -1336,7 +1263,7 @@ pub trait MediaStore {
         input: StopAccessLoggingInput,
     ) -> RusotoFuture<StopAccessLoggingOutput, StopAccessLoggingError>;
 
-    /// <p>Adds tags to the specified AWS Elemental MediaStore container. Tags are key:value pairs that you can associate with AWS resources. For example, the tag key might be "customer" and the tag value might be "companyA." You can specify one or more tags to add to each container. You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://aws.amazon.com/documentation/mediastore/tagging">Tagging Resources in MediaStore</a>.</p>
+    /// <p>Adds tags to the specified AWS Elemental MediaStore container. Tags are key:value pairs that you can associate with AWS resources. For example, the tag key might be "customer" and the tag value might be "companyA." You can specify one or more tags to add to each container. You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/tagging.html">Tagging Resources in MediaStore</a>.</p>
     fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -1382,6 +1309,14 @@ impl MediaStoreClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> MediaStoreClient {
         MediaStoreClient { client, region }
+    }
+}
+
+impl fmt::Debug for MediaStoreClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MediaStoreClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
@@ -1847,7 +1782,7 @@ impl MediaStore for MediaStoreClient {
         })
     }
 
-    /// <p>Adds tags to the specified AWS Elemental MediaStore container. Tags are key:value pairs that you can associate with AWS resources. For example, the tag key might be "customer" and the tag value might be "companyA." You can specify one or more tags to add to each container. You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://aws.amazon.com/documentation/mediastore/tagging">Tagging Resources in MediaStore</a>.</p>
+    /// <p>Adds tags to the specified AWS Elemental MediaStore container. Tags are key:value pairs that you can associate with AWS resources. For example, the tag key might be "customer" and the tag value might be "companyA." You can specify one or more tags to add to each container. You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/tagging.html">Tagging Resources in MediaStore</a>.</p>
     fn tag_resource(
         &self,
         input: TagResourceInput,

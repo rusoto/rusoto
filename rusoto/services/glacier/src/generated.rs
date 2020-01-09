@@ -1369,19 +1369,15 @@ impl AbortMultipartUploadError {
 }
 impl fmt::Display for AbortMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AbortMultipartUploadError {
-    fn description(&self) -> &str {
         match *self {
-            AbortMultipartUploadError::InvalidParameterValue(ref cause) => cause,
-            AbortMultipartUploadError::MissingParameterValue(ref cause) => cause,
-            AbortMultipartUploadError::ResourceNotFound(ref cause) => cause,
-            AbortMultipartUploadError::ServiceUnavailable(ref cause) => cause,
+            AbortMultipartUploadError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            AbortMultipartUploadError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            AbortMultipartUploadError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AbortMultipartUploadError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AbortMultipartUploadError {}
 /// Errors returned by AbortVaultLock
 #[derive(Debug, PartialEq)]
 pub enum AbortVaultLockError {
@@ -1424,19 +1420,15 @@ impl AbortVaultLockError {
 }
 impl fmt::Display for AbortVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AbortVaultLockError {
-    fn description(&self) -> &str {
         match *self {
-            AbortVaultLockError::InvalidParameterValue(ref cause) => cause,
-            AbortVaultLockError::MissingParameterValue(ref cause) => cause,
-            AbortVaultLockError::ResourceNotFound(ref cause) => cause,
-            AbortVaultLockError::ServiceUnavailable(ref cause) => cause,
+            AbortVaultLockError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            AbortVaultLockError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            AbortVaultLockError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AbortVaultLockError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AbortVaultLockError {}
 /// Errors returned by AddTagsToVault
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToVaultError {
@@ -1484,20 +1476,16 @@ impl AddTagsToVaultError {
 }
 impl fmt::Display for AddTagsToVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToVaultError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToVaultError::InvalidParameterValue(ref cause) => cause,
-            AddTagsToVaultError::LimitExceeded(ref cause) => cause,
-            AddTagsToVaultError::MissingParameterValue(ref cause) => cause,
-            AddTagsToVaultError::ResourceNotFound(ref cause) => cause,
-            AddTagsToVaultError::ServiceUnavailable(ref cause) => cause,
+            AddTagsToVaultError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            AddTagsToVaultError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddTagsToVaultError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            AddTagsToVaultError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsToVaultError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToVaultError {}
 /// Errors returned by CompleteMultipartUpload
 #[derive(Debug, PartialEq)]
 pub enum CompleteMultipartUploadError {
@@ -1544,19 +1532,19 @@ impl CompleteMultipartUploadError {
 }
 impl fmt::Display for CompleteMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CompleteMultipartUploadError {
-    fn description(&self) -> &str {
         match *self {
-            CompleteMultipartUploadError::InvalidParameterValue(ref cause) => cause,
-            CompleteMultipartUploadError::MissingParameterValue(ref cause) => cause,
-            CompleteMultipartUploadError::ResourceNotFound(ref cause) => cause,
-            CompleteMultipartUploadError::ServiceUnavailable(ref cause) => cause,
+            CompleteMultipartUploadError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CompleteMultipartUploadError::MissingParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CompleteMultipartUploadError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CompleteMultipartUploadError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CompleteMultipartUploadError {}
 /// Errors returned by CompleteVaultLock
 #[derive(Debug, PartialEq)]
 pub enum CompleteVaultLockError {
@@ -1601,19 +1589,15 @@ impl CompleteVaultLockError {
 }
 impl fmt::Display for CompleteVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CompleteVaultLockError {
-    fn description(&self) -> &str {
         match *self {
-            CompleteVaultLockError::InvalidParameterValue(ref cause) => cause,
-            CompleteVaultLockError::MissingParameterValue(ref cause) => cause,
-            CompleteVaultLockError::ResourceNotFound(ref cause) => cause,
-            CompleteVaultLockError::ServiceUnavailable(ref cause) => cause,
+            CompleteVaultLockError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CompleteVaultLockError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            CompleteVaultLockError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CompleteVaultLockError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CompleteVaultLockError {}
 /// Errors returned by CreateVault
 #[derive(Debug, PartialEq)]
 pub enum CreateVaultError {
@@ -1652,19 +1636,15 @@ impl CreateVaultError {
 }
 impl fmt::Display for CreateVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVaultError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVaultError::InvalidParameterValue(ref cause) => cause,
-            CreateVaultError::LimitExceeded(ref cause) => cause,
-            CreateVaultError::MissingParameterValue(ref cause) => cause,
-            CreateVaultError::ServiceUnavailable(ref cause) => cause,
+            CreateVaultError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateVaultError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateVaultError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateVaultError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVaultError {}
 /// Errors returned by DeleteArchive
 #[derive(Debug, PartialEq)]
 pub enum DeleteArchiveError {
@@ -1703,19 +1683,15 @@ impl DeleteArchiveError {
 }
 impl fmt::Display for DeleteArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteArchiveError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteArchiveError::InvalidParameterValue(ref cause) => cause,
-            DeleteArchiveError::MissingParameterValue(ref cause) => cause,
-            DeleteArchiveError::ResourceNotFound(ref cause) => cause,
-            DeleteArchiveError::ServiceUnavailable(ref cause) => cause,
+            DeleteArchiveError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteArchiveError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteArchiveError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteArchiveError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteArchiveError {}
 /// Errors returned by DeleteVault
 #[derive(Debug, PartialEq)]
 pub enum DeleteVaultError {
@@ -1754,19 +1730,15 @@ impl DeleteVaultError {
 }
 impl fmt::Display for DeleteVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVaultError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVaultError::InvalidParameterValue(ref cause) => cause,
-            DeleteVaultError::MissingParameterValue(ref cause) => cause,
-            DeleteVaultError::ResourceNotFound(ref cause) => cause,
-            DeleteVaultError::ServiceUnavailable(ref cause) => cause,
+            DeleteVaultError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteVaultError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteVaultError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVaultError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVaultError {}
 /// Errors returned by DeleteVaultAccessPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteVaultAccessPolicyError {
@@ -1813,19 +1785,19 @@ impl DeleteVaultAccessPolicyError {
 }
 impl fmt::Display for DeleteVaultAccessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVaultAccessPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVaultAccessPolicyError::InvalidParameterValue(ref cause) => cause,
-            DeleteVaultAccessPolicyError::MissingParameterValue(ref cause) => cause,
-            DeleteVaultAccessPolicyError::ResourceNotFound(ref cause) => cause,
-            DeleteVaultAccessPolicyError::ServiceUnavailable(ref cause) => cause,
+            DeleteVaultAccessPolicyError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVaultAccessPolicyError::MissingParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVaultAccessPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVaultAccessPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVaultAccessPolicyError {}
 /// Errors returned by DeleteVaultNotifications
 #[derive(Debug, PartialEq)]
 pub enum DeleteVaultNotificationsError {
@@ -1872,19 +1844,19 @@ impl DeleteVaultNotificationsError {
 }
 impl fmt::Display for DeleteVaultNotificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVaultNotificationsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVaultNotificationsError::InvalidParameterValue(ref cause) => cause,
-            DeleteVaultNotificationsError::MissingParameterValue(ref cause) => cause,
-            DeleteVaultNotificationsError::ResourceNotFound(ref cause) => cause,
-            DeleteVaultNotificationsError::ServiceUnavailable(ref cause) => cause,
+            DeleteVaultNotificationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVaultNotificationsError::MissingParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVaultNotificationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVaultNotificationsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVaultNotificationsError {}
 /// Errors returned by DescribeJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobError {
@@ -1923,19 +1895,15 @@ impl DescribeJobError {
 }
 impl fmt::Display for DescribeJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJobError::InvalidParameterValue(ref cause) => cause,
-            DescribeJobError::MissingParameterValue(ref cause) => cause,
-            DescribeJobError::ResourceNotFound(ref cause) => cause,
-            DescribeJobError::ServiceUnavailable(ref cause) => cause,
+            DescribeJobError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeJobError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJobError {}
 /// Errors returned by DescribeVault
 #[derive(Debug, PartialEq)]
 pub enum DescribeVaultError {
@@ -1974,19 +1942,15 @@ impl DescribeVaultError {
 }
 impl fmt::Display for DescribeVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVaultError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVaultError::InvalidParameterValue(ref cause) => cause,
-            DescribeVaultError::MissingParameterValue(ref cause) => cause,
-            DescribeVaultError::ResourceNotFound(ref cause) => cause,
-            DescribeVaultError::ServiceUnavailable(ref cause) => cause,
+            DescribeVaultError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeVaultError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeVaultError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeVaultError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeVaultError {}
 /// Errors returned by GetDataRetrievalPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetDataRetrievalPolicyError {
@@ -2026,18 +1990,14 @@ impl GetDataRetrievalPolicyError {
 }
 impl fmt::Display for GetDataRetrievalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDataRetrievalPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetDataRetrievalPolicyError::InvalidParameterValue(ref cause) => cause,
-            GetDataRetrievalPolicyError::MissingParameterValue(ref cause) => cause,
-            GetDataRetrievalPolicyError::ServiceUnavailable(ref cause) => cause,
+            GetDataRetrievalPolicyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetDataRetrievalPolicyError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            GetDataRetrievalPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDataRetrievalPolicyError {}
 /// Errors returned by GetJobOutput
 #[derive(Debug, PartialEq)]
 pub enum GetJobOutputError {
@@ -2076,19 +2036,15 @@ impl GetJobOutputError {
 }
 impl fmt::Display for GetJobOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobOutputError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobOutputError::InvalidParameterValue(ref cause) => cause,
-            GetJobOutputError::MissingParameterValue(ref cause) => cause,
-            GetJobOutputError::ResourceNotFound(ref cause) => cause,
-            GetJobOutputError::ServiceUnavailable(ref cause) => cause,
+            GetJobOutputError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetJobOutputError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            GetJobOutputError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetJobOutputError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobOutputError {}
 /// Errors returned by GetVaultAccessPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetVaultAccessPolicyError {
@@ -2135,19 +2091,15 @@ impl GetVaultAccessPolicyError {
 }
 impl fmt::Display for GetVaultAccessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVaultAccessPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetVaultAccessPolicyError::InvalidParameterValue(ref cause) => cause,
-            GetVaultAccessPolicyError::MissingParameterValue(ref cause) => cause,
-            GetVaultAccessPolicyError::ResourceNotFound(ref cause) => cause,
-            GetVaultAccessPolicyError::ServiceUnavailable(ref cause) => cause,
+            GetVaultAccessPolicyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetVaultAccessPolicyError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            GetVaultAccessPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetVaultAccessPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetVaultAccessPolicyError {}
 /// Errors returned by GetVaultLock
 #[derive(Debug, PartialEq)]
 pub enum GetVaultLockError {
@@ -2186,19 +2138,15 @@ impl GetVaultLockError {
 }
 impl fmt::Display for GetVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVaultLockError {
-    fn description(&self) -> &str {
         match *self {
-            GetVaultLockError::InvalidParameterValue(ref cause) => cause,
-            GetVaultLockError::MissingParameterValue(ref cause) => cause,
-            GetVaultLockError::ResourceNotFound(ref cause) => cause,
-            GetVaultLockError::ServiceUnavailable(ref cause) => cause,
+            GetVaultLockError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetVaultLockError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            GetVaultLockError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetVaultLockError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetVaultLockError {}
 /// Errors returned by GetVaultNotifications
 #[derive(Debug, PartialEq)]
 pub enum GetVaultNotificationsError {
@@ -2245,19 +2193,15 @@ impl GetVaultNotificationsError {
 }
 impl fmt::Display for GetVaultNotificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVaultNotificationsError {
-    fn description(&self) -> &str {
         match *self {
-            GetVaultNotificationsError::InvalidParameterValue(ref cause) => cause,
-            GetVaultNotificationsError::MissingParameterValue(ref cause) => cause,
-            GetVaultNotificationsError::ResourceNotFound(ref cause) => cause,
-            GetVaultNotificationsError::ServiceUnavailable(ref cause) => cause,
+            GetVaultNotificationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetVaultNotificationsError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            GetVaultNotificationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetVaultNotificationsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetVaultNotificationsError {}
 /// Errors returned by InitiateJob
 #[derive(Debug, PartialEq)]
 pub enum InitiateJobError {
@@ -2306,21 +2250,17 @@ impl InitiateJobError {
 }
 impl fmt::Display for InitiateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InitiateJobError {
-    fn description(&self) -> &str {
         match *self {
-            InitiateJobError::InsufficientCapacity(ref cause) => cause,
-            InitiateJobError::InvalidParameterValue(ref cause) => cause,
-            InitiateJobError::MissingParameterValue(ref cause) => cause,
-            InitiateJobError::PolicyEnforced(ref cause) => cause,
-            InitiateJobError::ResourceNotFound(ref cause) => cause,
-            InitiateJobError::ServiceUnavailable(ref cause) => cause,
+            InitiateJobError::InsufficientCapacity(ref cause) => write!(f, "{}", cause),
+            InitiateJobError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            InitiateJobError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            InitiateJobError::PolicyEnforced(ref cause) => write!(f, "{}", cause),
+            InitiateJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            InitiateJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InitiateJobError {}
 /// Errors returned by InitiateMultipartUpload
 #[derive(Debug, PartialEq)]
 pub enum InitiateMultipartUploadError {
@@ -2367,19 +2307,19 @@ impl InitiateMultipartUploadError {
 }
 impl fmt::Display for InitiateMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InitiateMultipartUploadError {
-    fn description(&self) -> &str {
         match *self {
-            InitiateMultipartUploadError::InvalidParameterValue(ref cause) => cause,
-            InitiateMultipartUploadError::MissingParameterValue(ref cause) => cause,
-            InitiateMultipartUploadError::ResourceNotFound(ref cause) => cause,
-            InitiateMultipartUploadError::ServiceUnavailable(ref cause) => cause,
+            InitiateMultipartUploadError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateMultipartUploadError::MissingParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InitiateMultipartUploadError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            InitiateMultipartUploadError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InitiateMultipartUploadError {}
 /// Errors returned by InitiateVaultLock
 #[derive(Debug, PartialEq)]
 pub enum InitiateVaultLockError {
@@ -2424,19 +2364,15 @@ impl InitiateVaultLockError {
 }
 impl fmt::Display for InitiateVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InitiateVaultLockError {
-    fn description(&self) -> &str {
         match *self {
-            InitiateVaultLockError::InvalidParameterValue(ref cause) => cause,
-            InitiateVaultLockError::MissingParameterValue(ref cause) => cause,
-            InitiateVaultLockError::ResourceNotFound(ref cause) => cause,
-            InitiateVaultLockError::ServiceUnavailable(ref cause) => cause,
+            InitiateVaultLockError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            InitiateVaultLockError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            InitiateVaultLockError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            InitiateVaultLockError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InitiateVaultLockError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -2475,19 +2411,15 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsError::InvalidParameterValue(ref cause) => cause,
-            ListJobsError::MissingParameterValue(ref cause) => cause,
-            ListJobsError::ResourceNotFound(ref cause) => cause,
-            ListJobsError::ServiceUnavailable(ref cause) => cause,
+            ListJobsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListJobsError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            ListJobsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListJobsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsError {}
 /// Errors returned by ListMultipartUploads
 #[derive(Debug, PartialEq)]
 pub enum ListMultipartUploadsError {
@@ -2534,19 +2466,15 @@ impl ListMultipartUploadsError {
 }
 impl fmt::Display for ListMultipartUploadsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMultipartUploadsError {
-    fn description(&self) -> &str {
         match *self {
-            ListMultipartUploadsError::InvalidParameterValue(ref cause) => cause,
-            ListMultipartUploadsError::MissingParameterValue(ref cause) => cause,
-            ListMultipartUploadsError::ResourceNotFound(ref cause) => cause,
-            ListMultipartUploadsError::ServiceUnavailable(ref cause) => cause,
+            ListMultipartUploadsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListMultipartUploadsError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            ListMultipartUploadsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListMultipartUploadsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMultipartUploadsError {}
 /// Errors returned by ListParts
 #[derive(Debug, PartialEq)]
 pub enum ListPartsError {
@@ -2585,19 +2513,15 @@ impl ListPartsError {
 }
 impl fmt::Display for ListPartsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPartsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPartsError::InvalidParameterValue(ref cause) => cause,
-            ListPartsError::MissingParameterValue(ref cause) => cause,
-            ListPartsError::ResourceNotFound(ref cause) => cause,
-            ListPartsError::ServiceUnavailable(ref cause) => cause,
+            ListPartsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListPartsError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            ListPartsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListPartsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPartsError {}
 /// Errors returned by ListProvisionedCapacity
 #[derive(Debug, PartialEq)]
 pub enum ListProvisionedCapacityError {
@@ -2637,18 +2561,18 @@ impl ListProvisionedCapacityError {
 }
 impl fmt::Display for ListProvisionedCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProvisionedCapacityError {
-    fn description(&self) -> &str {
         match *self {
-            ListProvisionedCapacityError::InvalidParameterValue(ref cause) => cause,
-            ListProvisionedCapacityError::MissingParameterValue(ref cause) => cause,
-            ListProvisionedCapacityError::ServiceUnavailable(ref cause) => cause,
+            ListProvisionedCapacityError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListProvisionedCapacityError::MissingParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListProvisionedCapacityError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListProvisionedCapacityError {}
 /// Errors returned by ListTagsForVault
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForVaultError {
@@ -2691,19 +2615,15 @@ impl ListTagsForVaultError {
 }
 impl fmt::Display for ListTagsForVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForVaultError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForVaultError::InvalidParameterValue(ref cause) => cause,
-            ListTagsForVaultError::MissingParameterValue(ref cause) => cause,
-            ListTagsForVaultError::ResourceNotFound(ref cause) => cause,
-            ListTagsForVaultError::ServiceUnavailable(ref cause) => cause,
+            ListTagsForVaultError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListTagsForVaultError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            ListTagsForVaultError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForVaultError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForVaultError {}
 /// Errors returned by ListVaults
 #[derive(Debug, PartialEq)]
 pub enum ListVaultsError {
@@ -2742,19 +2662,15 @@ impl ListVaultsError {
 }
 impl fmt::Display for ListVaultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVaultsError {
-    fn description(&self) -> &str {
         match *self {
-            ListVaultsError::InvalidParameterValue(ref cause) => cause,
-            ListVaultsError::MissingParameterValue(ref cause) => cause,
-            ListVaultsError::ResourceNotFound(ref cause) => cause,
-            ListVaultsError::ServiceUnavailable(ref cause) => cause,
+            ListVaultsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListVaultsError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            ListVaultsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListVaultsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVaultsError {}
 /// Errors returned by PurchaseProvisionedCapacity
 #[derive(Debug, PartialEq)]
 pub enum PurchaseProvisionedCapacityError {
@@ -2803,19 +2719,21 @@ impl PurchaseProvisionedCapacityError {
 }
 impl fmt::Display for PurchaseProvisionedCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PurchaseProvisionedCapacityError {
-    fn description(&self) -> &str {
         match *self {
-            PurchaseProvisionedCapacityError::InvalidParameterValue(ref cause) => cause,
-            PurchaseProvisionedCapacityError::LimitExceeded(ref cause) => cause,
-            PurchaseProvisionedCapacityError::MissingParameterValue(ref cause) => cause,
-            PurchaseProvisionedCapacityError::ServiceUnavailable(ref cause) => cause,
+            PurchaseProvisionedCapacityError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PurchaseProvisionedCapacityError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PurchaseProvisionedCapacityError::MissingParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PurchaseProvisionedCapacityError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PurchaseProvisionedCapacityError {}
 /// Errors returned by RemoveTagsFromVault
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromVaultError {
@@ -2862,19 +2780,15 @@ impl RemoveTagsFromVaultError {
 }
 impl fmt::Display for RemoveTagsFromVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromVaultError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromVaultError::InvalidParameterValue(ref cause) => cause,
-            RemoveTagsFromVaultError::MissingParameterValue(ref cause) => cause,
-            RemoveTagsFromVaultError::ResourceNotFound(ref cause) => cause,
-            RemoveTagsFromVaultError::ServiceUnavailable(ref cause) => cause,
+            RemoveTagsFromVaultError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromVaultError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromVaultError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromVaultError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsFromVaultError {}
 /// Errors returned by SetDataRetrievalPolicy
 #[derive(Debug, PartialEq)]
 pub enum SetDataRetrievalPolicyError {
@@ -2914,18 +2828,14 @@ impl SetDataRetrievalPolicyError {
 }
 impl fmt::Display for SetDataRetrievalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetDataRetrievalPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            SetDataRetrievalPolicyError::InvalidParameterValue(ref cause) => cause,
-            SetDataRetrievalPolicyError::MissingParameterValue(ref cause) => cause,
-            SetDataRetrievalPolicyError::ServiceUnavailable(ref cause) => cause,
+            SetDataRetrievalPolicyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            SetDataRetrievalPolicyError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            SetDataRetrievalPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetDataRetrievalPolicyError {}
 /// Errors returned by SetVaultAccessPolicy
 #[derive(Debug, PartialEq)]
 pub enum SetVaultAccessPolicyError {
@@ -2972,19 +2882,15 @@ impl SetVaultAccessPolicyError {
 }
 impl fmt::Display for SetVaultAccessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetVaultAccessPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            SetVaultAccessPolicyError::InvalidParameterValue(ref cause) => cause,
-            SetVaultAccessPolicyError::MissingParameterValue(ref cause) => cause,
-            SetVaultAccessPolicyError::ResourceNotFound(ref cause) => cause,
-            SetVaultAccessPolicyError::ServiceUnavailable(ref cause) => cause,
+            SetVaultAccessPolicyError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            SetVaultAccessPolicyError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            SetVaultAccessPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetVaultAccessPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetVaultAccessPolicyError {}
 /// Errors returned by SetVaultNotifications
 #[derive(Debug, PartialEq)]
 pub enum SetVaultNotificationsError {
@@ -3031,19 +2937,15 @@ impl SetVaultNotificationsError {
 }
 impl fmt::Display for SetVaultNotificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetVaultNotificationsError {
-    fn description(&self) -> &str {
         match *self {
-            SetVaultNotificationsError::InvalidParameterValue(ref cause) => cause,
-            SetVaultNotificationsError::MissingParameterValue(ref cause) => cause,
-            SetVaultNotificationsError::ResourceNotFound(ref cause) => cause,
-            SetVaultNotificationsError::ServiceUnavailable(ref cause) => cause,
+            SetVaultNotificationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            SetVaultNotificationsError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            SetVaultNotificationsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetVaultNotificationsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetVaultNotificationsError {}
 /// Errors returned by UploadArchive
 #[derive(Debug, PartialEq)]
 pub enum UploadArchiveError {
@@ -3087,20 +2989,16 @@ impl UploadArchiveError {
 }
 impl fmt::Display for UploadArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadArchiveError {
-    fn description(&self) -> &str {
         match *self {
-            UploadArchiveError::InvalidParameterValue(ref cause) => cause,
-            UploadArchiveError::MissingParameterValue(ref cause) => cause,
-            UploadArchiveError::RequestTimeout(ref cause) => cause,
-            UploadArchiveError::ResourceNotFound(ref cause) => cause,
-            UploadArchiveError::ServiceUnavailable(ref cause) => cause,
+            UploadArchiveError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UploadArchiveError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            UploadArchiveError::RequestTimeout(ref cause) => write!(f, "{}", cause),
+            UploadArchiveError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UploadArchiveError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UploadArchiveError {}
 /// Errors returned by UploadMultipartPart
 #[derive(Debug, PartialEq)]
 pub enum UploadMultipartPartError {
@@ -3152,20 +3050,16 @@ impl UploadMultipartPartError {
 }
 impl fmt::Display for UploadMultipartPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadMultipartPartError {
-    fn description(&self) -> &str {
         match *self {
-            UploadMultipartPartError::InvalidParameterValue(ref cause) => cause,
-            UploadMultipartPartError::MissingParameterValue(ref cause) => cause,
-            UploadMultipartPartError::RequestTimeout(ref cause) => cause,
-            UploadMultipartPartError::ResourceNotFound(ref cause) => cause,
-            UploadMultipartPartError::ServiceUnavailable(ref cause) => cause,
+            UploadMultipartPartError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UploadMultipartPartError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
+            UploadMultipartPartError::RequestTimeout(ref cause) => write!(f, "{}", cause),
+            UploadMultipartPartError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UploadMultipartPartError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UploadMultipartPartError {}
 /// Trait representing the capabilities of the Amazon Glacier API. Amazon Glacier clients implement this trait.
 pub trait Glacier {
     /// <p>This operation aborts a multipart upload identified by the upload ID.</p> <p>After the Abort Multipart Upload request succeeds, you cannot upload any more parts to the multipart upload or complete the multipart upload. Aborting a completed upload fails. However, aborting an already-aborted upload will succeed, for a short time. For more information about uploading a part and completing a multipart upload, see <a>UploadMultipartPart</a> and <a>CompleteMultipartUpload</a>.</p> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon S3 Glacier</a> and <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-abort-upload.html">Abort Multipart Upload</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
@@ -3386,6 +3280,14 @@ impl GlacierClient {
 
     pub fn new_with_client(client: Client, region: region::Region) -> GlacierClient {
         GlacierClient { client, region }
+    }
+}
+
+impl fmt::Debug for GlacierClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("GlacierClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
