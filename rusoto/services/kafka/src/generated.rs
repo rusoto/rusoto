@@ -1209,22 +1209,18 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateClusterError::BadRequest(ref cause) => cause,
-            CreateClusterError::Conflict(ref cause) => cause,
-            CreateClusterError::Forbidden(ref cause) => cause,
-            CreateClusterError::InternalServerError(ref cause) => cause,
-            CreateClusterError::ServiceUnavailable(ref cause) => cause,
-            CreateClusterError::TooManyRequests(ref cause) => cause,
-            CreateClusterError::Unauthorized(ref cause) => cause,
+            CreateClusterError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateClusterError {}
 /// Errors returned by CreateConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateConfigurationError {
@@ -1289,22 +1285,18 @@ impl CreateConfigurationError {
 }
 impl fmt::Display for CreateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateConfigurationError::BadRequest(ref cause) => cause,
-            CreateConfigurationError::Conflict(ref cause) => cause,
-            CreateConfigurationError::Forbidden(ref cause) => cause,
-            CreateConfigurationError::InternalServerError(ref cause) => cause,
-            CreateConfigurationError::ServiceUnavailable(ref cause) => cause,
-            CreateConfigurationError::TooManyRequests(ref cause) => cause,
-            CreateConfigurationError::Unauthorized(ref cause) => cause,
+            CreateConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateConfigurationError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateConfigurationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateConfigurationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateConfigurationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateConfigurationError {}
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
@@ -1347,19 +1339,15 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClusterError::BadRequest(ref cause) => cause,
-            DeleteClusterError::Forbidden(ref cause) => cause,
-            DeleteClusterError::InternalServerError(ref cause) => cause,
-            DeleteClusterError::NotFound(ref cause) => cause,
+            DeleteClusterError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteClusterError {}
 /// Errors returned by DescribeCluster
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterError {
@@ -1408,20 +1396,16 @@ impl DescribeClusterError {
 }
 impl fmt::Display for DescribeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterError::BadRequest(ref cause) => cause,
-            DescribeClusterError::Forbidden(ref cause) => cause,
-            DescribeClusterError::InternalServerError(ref cause) => cause,
-            DescribeClusterError::NotFound(ref cause) => cause,
-            DescribeClusterError::Unauthorized(ref cause) => cause,
+            DescribeClusterError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeClusterError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeClusterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeClusterError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeClusterError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClusterError {}
 /// Errors returned by DescribeClusterOperation
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterOperationError {
@@ -1474,20 +1458,16 @@ impl DescribeClusterOperationError {
 }
 impl fmt::Display for DescribeClusterOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterOperationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterOperationError::BadRequest(ref cause) => cause,
-            DescribeClusterOperationError::Forbidden(ref cause) => cause,
-            DescribeClusterOperationError::InternalServerError(ref cause) => cause,
-            DescribeClusterOperationError::NotFound(ref cause) => cause,
-            DescribeClusterOperationError::Unauthorized(ref cause) => cause,
+            DescribeClusterOperationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeClusterOperationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeClusterOperationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeClusterOperationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeClusterOperationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClusterOperationError {}
 /// Errors returned by DescribeConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationError {
@@ -1546,21 +1526,17 @@ impl DescribeConfigurationError {
 }
 impl fmt::Display for DescribeConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationError::BadRequest(ref cause) => cause,
-            DescribeConfigurationError::Forbidden(ref cause) => cause,
-            DescribeConfigurationError::InternalServerError(ref cause) => cause,
-            DescribeConfigurationError::NotFound(ref cause) => cause,
-            DescribeConfigurationError::ServiceUnavailable(ref cause) => cause,
-            DescribeConfigurationError::Unauthorized(ref cause) => cause,
+            DescribeConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigurationError {}
 /// Errors returned by DescribeConfigurationRevision
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationRevisionError {
@@ -1629,21 +1605,21 @@ impl DescribeConfigurationRevisionError {
 }
 impl fmt::Display for DescribeConfigurationRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationRevisionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationRevisionError::BadRequest(ref cause) => cause,
-            DescribeConfigurationRevisionError::Forbidden(ref cause) => cause,
-            DescribeConfigurationRevisionError::InternalServerError(ref cause) => cause,
-            DescribeConfigurationRevisionError::NotFound(ref cause) => cause,
-            DescribeConfigurationRevisionError::ServiceUnavailable(ref cause) => cause,
-            DescribeConfigurationRevisionError::Unauthorized(ref cause) => cause,
+            DescribeConfigurationRevisionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationRevisionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationRevisionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigurationRevisionError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationRevisionError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigurationRevisionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigurationRevisionError {}
 /// Errors returned by GetBootstrapBrokers
 #[derive(Debug, PartialEq)]
 pub enum GetBootstrapBrokersError {
@@ -1694,20 +1670,16 @@ impl GetBootstrapBrokersError {
 }
 impl fmt::Display for GetBootstrapBrokersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBootstrapBrokersError {
-    fn description(&self) -> &str {
         match *self {
-            GetBootstrapBrokersError::BadRequest(ref cause) => cause,
-            GetBootstrapBrokersError::Conflict(ref cause) => cause,
-            GetBootstrapBrokersError::Forbidden(ref cause) => cause,
-            GetBootstrapBrokersError::InternalServerError(ref cause) => cause,
-            GetBootstrapBrokersError::Unauthorized(ref cause) => cause,
+            GetBootstrapBrokersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetBootstrapBrokersError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetBootstrapBrokersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetBootstrapBrokersError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetBootstrapBrokersError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetBootstrapBrokersError {}
 /// Errors returned by ListClusterOperations
 #[derive(Debug, PartialEq)]
 pub enum ListClusterOperationsError {
@@ -1752,19 +1724,15 @@ impl ListClusterOperationsError {
 }
 impl fmt::Display for ListClusterOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListClusterOperationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListClusterOperationsError::BadRequest(ref cause) => cause,
-            ListClusterOperationsError::Forbidden(ref cause) => cause,
-            ListClusterOperationsError::InternalServerError(ref cause) => cause,
-            ListClusterOperationsError::Unauthorized(ref cause) => cause,
+            ListClusterOperationsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListClusterOperationsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListClusterOperationsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListClusterOperationsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListClusterOperationsError {}
 /// Errors returned by ListClusters
 #[derive(Debug, PartialEq)]
 pub enum ListClustersError {
@@ -1807,19 +1775,15 @@ impl ListClustersError {
 }
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListClustersError {
-    fn description(&self) -> &str {
         match *self {
-            ListClustersError::BadRequest(ref cause) => cause,
-            ListClustersError::Forbidden(ref cause) => cause,
-            ListClustersError::InternalServerError(ref cause) => cause,
-            ListClustersError::Unauthorized(ref cause) => cause,
+            ListClustersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListClustersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListClustersError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListClustersError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListClustersError {}
 /// Errors returned by ListConfigurationRevisions
 #[derive(Debug, PartialEq)]
 pub enum ListConfigurationRevisionsError {
@@ -1886,21 +1850,21 @@ impl ListConfigurationRevisionsError {
 }
 impl fmt::Display for ListConfigurationRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListConfigurationRevisionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListConfigurationRevisionsError::BadRequest(ref cause) => cause,
-            ListConfigurationRevisionsError::Forbidden(ref cause) => cause,
-            ListConfigurationRevisionsError::InternalServerError(ref cause) => cause,
-            ListConfigurationRevisionsError::NotFound(ref cause) => cause,
-            ListConfigurationRevisionsError::ServiceUnavailable(ref cause) => cause,
-            ListConfigurationRevisionsError::Unauthorized(ref cause) => cause,
+            ListConfigurationRevisionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListConfigurationRevisionsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListConfigurationRevisionsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListConfigurationRevisionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListConfigurationRevisionsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListConfigurationRevisionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListConfigurationRevisionsError {}
 /// Errors returned by ListConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListConfigurationsError {
@@ -1953,20 +1917,16 @@ impl ListConfigurationsError {
 }
 impl fmt::Display for ListConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListConfigurationsError::BadRequest(ref cause) => cause,
-            ListConfigurationsError::Forbidden(ref cause) => cause,
-            ListConfigurationsError::InternalServerError(ref cause) => cause,
-            ListConfigurationsError::ServiceUnavailable(ref cause) => cause,
-            ListConfigurationsError::Unauthorized(ref cause) => cause,
+            ListConfigurationsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListConfigurationsError {}
 /// Errors returned by ListNodes
 #[derive(Debug, PartialEq)]
 pub enum ListNodesError {
@@ -2009,19 +1969,15 @@ impl ListNodesError {
 }
 impl fmt::Display for ListNodesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListNodesError {
-    fn description(&self) -> &str {
         match *self {
-            ListNodesError::BadRequest(ref cause) => cause,
-            ListNodesError::Forbidden(ref cause) => cause,
-            ListNodesError::InternalServerError(ref cause) => cause,
-            ListNodesError::NotFound(ref cause) => cause,
+            ListNodesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListNodesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListNodesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListNodesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListNodesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2060,18 +2016,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
-            ListTagsForResourceError::NotFound(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2108,18 +2060,14 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::InternalServerError(ref cause) => cause,
-            TagResourceError::NotFound(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -2156,18 +2104,14 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::InternalServerError(ref cause) => cause,
-            UntagResourceError::NotFound(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateBrokerCount
 #[derive(Debug, PartialEq)]
 pub enum UpdateBrokerCountError {
@@ -2220,20 +2164,16 @@ impl UpdateBrokerCountError {
 }
 impl fmt::Display for UpdateBrokerCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBrokerCountError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBrokerCountError::BadRequest(ref cause) => cause,
-            UpdateBrokerCountError::Forbidden(ref cause) => cause,
-            UpdateBrokerCountError::InternalServerError(ref cause) => cause,
-            UpdateBrokerCountError::ServiceUnavailable(ref cause) => cause,
-            UpdateBrokerCountError::Unauthorized(ref cause) => cause,
+            UpdateBrokerCountError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerCountError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerCountError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerCountError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerCountError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBrokerCountError {}
 /// Errors returned by UpdateBrokerStorage
 #[derive(Debug, PartialEq)]
 pub enum UpdateBrokerStorageError {
@@ -2286,20 +2226,16 @@ impl UpdateBrokerStorageError {
 }
 impl fmt::Display for UpdateBrokerStorageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBrokerStorageError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBrokerStorageError::BadRequest(ref cause) => cause,
-            UpdateBrokerStorageError::Forbidden(ref cause) => cause,
-            UpdateBrokerStorageError::InternalServerError(ref cause) => cause,
-            UpdateBrokerStorageError::ServiceUnavailable(ref cause) => cause,
-            UpdateBrokerStorageError::Unauthorized(ref cause) => cause,
+            UpdateBrokerStorageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerStorageError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerStorageError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerStorageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerStorageError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBrokerStorageError {}
 /// Errors returned by UpdateClusterConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterConfigurationError {
@@ -2366,21 +2302,21 @@ impl UpdateClusterConfigurationError {
 }
 impl fmt::Display for UpdateClusterConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateClusterConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateClusterConfigurationError::BadRequest(ref cause) => cause,
-            UpdateClusterConfigurationError::Forbidden(ref cause) => cause,
-            UpdateClusterConfigurationError::InternalServerError(ref cause) => cause,
-            UpdateClusterConfigurationError::NotFound(ref cause) => cause,
-            UpdateClusterConfigurationError::ServiceUnavailable(ref cause) => cause,
-            UpdateClusterConfigurationError::Unauthorized(ref cause) => cause,
+            UpdateClusterConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateClusterConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateClusterConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateClusterConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateClusterConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateClusterConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateClusterConfigurationError {}
 /// Trait representing the capabilities of the Kafka API. Kafka clients implement this trait.
 pub trait Kafka {
     /// <pre><code>        &lt;p&gt;Creates a new MSK cluster.&lt;/p&gt;

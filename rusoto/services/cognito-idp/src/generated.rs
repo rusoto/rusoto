@@ -4089,21 +4089,17 @@ impl AddCustomAttributesError {
 }
 impl fmt::Display for AddCustomAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddCustomAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            AddCustomAttributesError::InternalError(ref cause) => cause,
-            AddCustomAttributesError::InvalidParameter(ref cause) => cause,
-            AddCustomAttributesError::NotAuthorized(ref cause) => cause,
-            AddCustomAttributesError::ResourceNotFound(ref cause) => cause,
-            AddCustomAttributesError::TooManyRequests(ref cause) => cause,
-            AddCustomAttributesError::UserImportInProgress(ref cause) => cause,
+            AddCustomAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            AddCustomAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AddCustomAttributesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AddCustomAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddCustomAttributesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AddCustomAttributesError::UserImportInProgress(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddCustomAttributesError {}
 /// Errors returned by AdminAddUserToGroup
 #[derive(Debug, PartialEq)]
 pub enum AdminAddUserToGroupError {
@@ -4156,21 +4152,17 @@ impl AdminAddUserToGroupError {
 }
 impl fmt::Display for AdminAddUserToGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminAddUserToGroupError {
-    fn description(&self) -> &str {
         match *self {
-            AdminAddUserToGroupError::InternalError(ref cause) => cause,
-            AdminAddUserToGroupError::InvalidParameter(ref cause) => cause,
-            AdminAddUserToGroupError::NotAuthorized(ref cause) => cause,
-            AdminAddUserToGroupError::ResourceNotFound(ref cause) => cause,
-            AdminAddUserToGroupError::TooManyRequests(ref cause) => cause,
-            AdminAddUserToGroupError::UserNotFound(ref cause) => cause,
+            AdminAddUserToGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminAddUserToGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminAddUserToGroupError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminAddUserToGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminAddUserToGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminAddUserToGroupError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminAddUserToGroupError {}
 /// Errors returned by AdminConfirmSignUp
 #[derive(Debug, PartialEq)]
 pub enum AdminConfirmSignUpError {
@@ -4250,26 +4242,22 @@ impl AdminConfirmSignUpError {
 }
 impl fmt::Display for AdminConfirmSignUpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminConfirmSignUpError {
-    fn description(&self) -> &str {
         match *self {
-            AdminConfirmSignUpError::InternalError(ref cause) => cause,
-            AdminConfirmSignUpError::InvalidLambdaResponse(ref cause) => cause,
-            AdminConfirmSignUpError::InvalidParameter(ref cause) => cause,
-            AdminConfirmSignUpError::LimitExceeded(ref cause) => cause,
-            AdminConfirmSignUpError::NotAuthorized(ref cause) => cause,
-            AdminConfirmSignUpError::ResourceNotFound(ref cause) => cause,
-            AdminConfirmSignUpError::TooManyFailedAttempts(ref cause) => cause,
-            AdminConfirmSignUpError::TooManyRequests(ref cause) => cause,
-            AdminConfirmSignUpError::UnexpectedLambda(ref cause) => cause,
-            AdminConfirmSignUpError::UserLambdaValidation(ref cause) => cause,
-            AdminConfirmSignUpError::UserNotFound(ref cause) => cause,
+            AdminConfirmSignUpError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminConfirmSignUpError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            AdminConfirmSignUpError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminConfirmSignUpError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AdminConfirmSignUpError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminConfirmSignUpError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminConfirmSignUpError::TooManyFailedAttempts(ref cause) => write!(f, "{}", cause),
+            AdminConfirmSignUpError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminConfirmSignUpError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            AdminConfirmSignUpError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            AdminConfirmSignUpError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminConfirmSignUpError {}
 /// Errors returned by AdminCreateUser
 #[derive(Debug, PartialEq)]
 pub enum AdminCreateUserError {
@@ -4378,31 +4366,29 @@ impl AdminCreateUserError {
 }
 impl fmt::Display for AdminCreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminCreateUserError {
-    fn description(&self) -> &str {
         match *self {
-            AdminCreateUserError::CodeDeliveryFailure(ref cause) => cause,
-            AdminCreateUserError::InternalError(ref cause) => cause,
-            AdminCreateUserError::InvalidLambdaResponse(ref cause) => cause,
-            AdminCreateUserError::InvalidParameter(ref cause) => cause,
-            AdminCreateUserError::InvalidPassword(ref cause) => cause,
-            AdminCreateUserError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            AdminCreateUserError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            AdminCreateUserError::NotAuthorized(ref cause) => cause,
-            AdminCreateUserError::PreconditionNotMet(ref cause) => cause,
-            AdminCreateUserError::ResourceNotFound(ref cause) => cause,
-            AdminCreateUserError::TooManyRequests(ref cause) => cause,
-            AdminCreateUserError::UnexpectedLambda(ref cause) => cause,
-            AdminCreateUserError::UnsupportedUserState(ref cause) => cause,
-            AdminCreateUserError::UserLambdaValidation(ref cause) => cause,
-            AdminCreateUserError::UserNotFound(ref cause) => cause,
-            AdminCreateUserError::UsernameExists(ref cause) => cause,
+            AdminCreateUserError::CodeDeliveryFailure(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::InvalidSmsRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminCreateUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::UnsupportedUserState(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::UserNotFound(ref cause) => write!(f, "{}", cause),
+            AdminCreateUserError::UsernameExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminCreateUserError {}
 /// Errors returned by AdminDeleteUser
 #[derive(Debug, PartialEq)]
 pub enum AdminDeleteUserError {
@@ -4451,21 +4437,17 @@ impl AdminDeleteUserError {
 }
 impl fmt::Display for AdminDeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminDeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            AdminDeleteUserError::InternalError(ref cause) => cause,
-            AdminDeleteUserError::InvalidParameter(ref cause) => cause,
-            AdminDeleteUserError::NotAuthorized(ref cause) => cause,
-            AdminDeleteUserError::ResourceNotFound(ref cause) => cause,
-            AdminDeleteUserError::TooManyRequests(ref cause) => cause,
-            AdminDeleteUserError::UserNotFound(ref cause) => cause,
+            AdminDeleteUserError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminDeleteUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminDeleteUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminDeleteUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminDeleteUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminDeleteUserError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminDeleteUserError {}
 /// Errors returned by AdminDeleteUserAttributes
 #[derive(Debug, PartialEq)]
 pub enum AdminDeleteUserAttributesError {
@@ -4526,21 +4508,17 @@ impl AdminDeleteUserAttributesError {
 }
 impl fmt::Display for AdminDeleteUserAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminDeleteUserAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            AdminDeleteUserAttributesError::InternalError(ref cause) => cause,
-            AdminDeleteUserAttributesError::InvalidParameter(ref cause) => cause,
-            AdminDeleteUserAttributesError::NotAuthorized(ref cause) => cause,
-            AdminDeleteUserAttributesError::ResourceNotFound(ref cause) => cause,
-            AdminDeleteUserAttributesError::TooManyRequests(ref cause) => cause,
-            AdminDeleteUserAttributesError::UserNotFound(ref cause) => cause,
+            AdminDeleteUserAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminDeleteUserAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminDeleteUserAttributesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminDeleteUserAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminDeleteUserAttributesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminDeleteUserAttributesError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminDeleteUserAttributesError {}
 /// Errors returned by AdminDisableProviderForUser
 #[derive(Debug, PartialEq)]
 pub enum AdminDisableProviderForUserError {
@@ -4610,22 +4588,18 @@ impl AdminDisableProviderForUserError {
 }
 impl fmt::Display for AdminDisableProviderForUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminDisableProviderForUserError {
-    fn description(&self) -> &str {
         match *self {
-            AdminDisableProviderForUserError::AliasExists(ref cause) => cause,
-            AdminDisableProviderForUserError::InternalError(ref cause) => cause,
-            AdminDisableProviderForUserError::InvalidParameter(ref cause) => cause,
-            AdminDisableProviderForUserError::NotAuthorized(ref cause) => cause,
-            AdminDisableProviderForUserError::ResourceNotFound(ref cause) => cause,
-            AdminDisableProviderForUserError::TooManyRequests(ref cause) => cause,
-            AdminDisableProviderForUserError::UserNotFound(ref cause) => cause,
+            AdminDisableProviderForUserError::AliasExists(ref cause) => write!(f, "{}", cause),
+            AdminDisableProviderForUserError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminDisableProviderForUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminDisableProviderForUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminDisableProviderForUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminDisableProviderForUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminDisableProviderForUserError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminDisableProviderForUserError {}
 /// Errors returned by AdminDisableUser
 #[derive(Debug, PartialEq)]
 pub enum AdminDisableUserError {
@@ -4674,21 +4648,17 @@ impl AdminDisableUserError {
 }
 impl fmt::Display for AdminDisableUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminDisableUserError {
-    fn description(&self) -> &str {
         match *self {
-            AdminDisableUserError::InternalError(ref cause) => cause,
-            AdminDisableUserError::InvalidParameter(ref cause) => cause,
-            AdminDisableUserError::NotAuthorized(ref cause) => cause,
-            AdminDisableUserError::ResourceNotFound(ref cause) => cause,
-            AdminDisableUserError::TooManyRequests(ref cause) => cause,
-            AdminDisableUserError::UserNotFound(ref cause) => cause,
+            AdminDisableUserError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminDisableUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminDisableUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminDisableUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminDisableUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminDisableUserError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminDisableUserError {}
 /// Errors returned by AdminEnableUser
 #[derive(Debug, PartialEq)]
 pub enum AdminEnableUserError {
@@ -4737,21 +4707,17 @@ impl AdminEnableUserError {
 }
 impl fmt::Display for AdminEnableUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminEnableUserError {
-    fn description(&self) -> &str {
         match *self {
-            AdminEnableUserError::InternalError(ref cause) => cause,
-            AdminEnableUserError::InvalidParameter(ref cause) => cause,
-            AdminEnableUserError::NotAuthorized(ref cause) => cause,
-            AdminEnableUserError::ResourceNotFound(ref cause) => cause,
-            AdminEnableUserError::TooManyRequests(ref cause) => cause,
-            AdminEnableUserError::UserNotFound(ref cause) => cause,
+            AdminEnableUserError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminEnableUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminEnableUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminEnableUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminEnableUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminEnableUserError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminEnableUserError {}
 /// Errors returned by AdminForgetDevice
 #[derive(Debug, PartialEq)]
 pub enum AdminForgetDeviceError {
@@ -4807,22 +4773,20 @@ impl AdminForgetDeviceError {
 }
 impl fmt::Display for AdminForgetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminForgetDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            AdminForgetDeviceError::InternalError(ref cause) => cause,
-            AdminForgetDeviceError::InvalidParameter(ref cause) => cause,
-            AdminForgetDeviceError::InvalidUserPoolConfiguration(ref cause) => cause,
-            AdminForgetDeviceError::NotAuthorized(ref cause) => cause,
-            AdminForgetDeviceError::ResourceNotFound(ref cause) => cause,
-            AdminForgetDeviceError::TooManyRequests(ref cause) => cause,
-            AdminForgetDeviceError::UserNotFound(ref cause) => cause,
+            AdminForgetDeviceError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminForgetDeviceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminForgetDeviceError::InvalidUserPoolConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminForgetDeviceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminForgetDeviceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminForgetDeviceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminForgetDeviceError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminForgetDeviceError {}
 /// Errors returned by AdminGetDevice
 #[derive(Debug, PartialEq)]
 pub enum AdminGetDeviceError {
@@ -4873,21 +4837,17 @@ impl AdminGetDeviceError {
 }
 impl fmt::Display for AdminGetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminGetDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            AdminGetDeviceError::InternalError(ref cause) => cause,
-            AdminGetDeviceError::InvalidParameter(ref cause) => cause,
-            AdminGetDeviceError::InvalidUserPoolConfiguration(ref cause) => cause,
-            AdminGetDeviceError::NotAuthorized(ref cause) => cause,
-            AdminGetDeviceError::ResourceNotFound(ref cause) => cause,
-            AdminGetDeviceError::TooManyRequests(ref cause) => cause,
+            AdminGetDeviceError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminGetDeviceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminGetDeviceError::InvalidUserPoolConfiguration(ref cause) => write!(f, "{}", cause),
+            AdminGetDeviceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminGetDeviceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminGetDeviceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminGetDeviceError {}
 /// Errors returned by AdminGetUser
 #[derive(Debug, PartialEq)]
 pub enum AdminGetUserError {
@@ -4936,21 +4896,17 @@ impl AdminGetUserError {
 }
 impl fmt::Display for AdminGetUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminGetUserError {
-    fn description(&self) -> &str {
         match *self {
-            AdminGetUserError::InternalError(ref cause) => cause,
-            AdminGetUserError::InvalidParameter(ref cause) => cause,
-            AdminGetUserError::NotAuthorized(ref cause) => cause,
-            AdminGetUserError::ResourceNotFound(ref cause) => cause,
-            AdminGetUserError::TooManyRequests(ref cause) => cause,
-            AdminGetUserError::UserNotFound(ref cause) => cause,
+            AdminGetUserError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminGetUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminGetUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminGetUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminGetUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminGetUserError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminGetUserError {}
 /// Errors returned by AdminInitiateAuth
 #[derive(Debug, PartialEq)]
 pub enum AdminInitiateAuthError {
@@ -5056,30 +5012,30 @@ impl AdminInitiateAuthError {
 }
 impl fmt::Display for AdminInitiateAuthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminInitiateAuthError {
-    fn description(&self) -> &str {
         match *self {
-            AdminInitiateAuthError::InternalError(ref cause) => cause,
-            AdminInitiateAuthError::InvalidLambdaResponse(ref cause) => cause,
-            AdminInitiateAuthError::InvalidParameter(ref cause) => cause,
-            AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            AdminInitiateAuthError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            AdminInitiateAuthError::InvalidUserPoolConfiguration(ref cause) => cause,
-            AdminInitiateAuthError::MFAMethodNotFound(ref cause) => cause,
-            AdminInitiateAuthError::NotAuthorized(ref cause) => cause,
-            AdminInitiateAuthError::PasswordResetRequired(ref cause) => cause,
-            AdminInitiateAuthError::ResourceNotFound(ref cause) => cause,
-            AdminInitiateAuthError::TooManyRequests(ref cause) => cause,
-            AdminInitiateAuthError::UnexpectedLambda(ref cause) => cause,
-            AdminInitiateAuthError::UserLambdaValidation(ref cause) => cause,
-            AdminInitiateAuthError::UserNotConfirmed(ref cause) => cause,
-            AdminInitiateAuthError::UserNotFound(ref cause) => cause,
+            AdminInitiateAuthError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminInitiateAuthError::InvalidUserPoolConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminInitiateAuthError::MFAMethodNotFound(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            AdminInitiateAuthError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminInitiateAuthError {}
 /// Errors returned by AdminLinkProviderForUser
 #[derive(Debug, PartialEq)]
 pub enum AdminLinkProviderForUserError {
@@ -5147,22 +5103,18 @@ impl AdminLinkProviderForUserError {
 }
 impl fmt::Display for AdminLinkProviderForUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminLinkProviderForUserError {
-    fn description(&self) -> &str {
         match *self {
-            AdminLinkProviderForUserError::AliasExists(ref cause) => cause,
-            AdminLinkProviderForUserError::InternalError(ref cause) => cause,
-            AdminLinkProviderForUserError::InvalidParameter(ref cause) => cause,
-            AdminLinkProviderForUserError::NotAuthorized(ref cause) => cause,
-            AdminLinkProviderForUserError::ResourceNotFound(ref cause) => cause,
-            AdminLinkProviderForUserError::TooManyRequests(ref cause) => cause,
-            AdminLinkProviderForUserError::UserNotFound(ref cause) => cause,
+            AdminLinkProviderForUserError::AliasExists(ref cause) => write!(f, "{}", cause),
+            AdminLinkProviderForUserError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminLinkProviderForUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminLinkProviderForUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminLinkProviderForUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminLinkProviderForUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminLinkProviderForUserError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminLinkProviderForUserError {}
 /// Errors returned by AdminListDevices
 #[derive(Debug, PartialEq)]
 pub enum AdminListDevicesError {
@@ -5213,21 +5165,19 @@ impl AdminListDevicesError {
 }
 impl fmt::Display for AdminListDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminListDevicesError {
-    fn description(&self) -> &str {
         match *self {
-            AdminListDevicesError::InternalError(ref cause) => cause,
-            AdminListDevicesError::InvalidParameter(ref cause) => cause,
-            AdminListDevicesError::InvalidUserPoolConfiguration(ref cause) => cause,
-            AdminListDevicesError::NotAuthorized(ref cause) => cause,
-            AdminListDevicesError::ResourceNotFound(ref cause) => cause,
-            AdminListDevicesError::TooManyRequests(ref cause) => cause,
+            AdminListDevicesError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminListDevicesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminListDevicesError::InvalidUserPoolConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminListDevicesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminListDevicesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminListDevicesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminListDevicesError {}
 /// Errors returned by AdminListGroupsForUser
 #[derive(Debug, PartialEq)]
 pub enum AdminListGroupsForUserError {
@@ -5286,21 +5236,17 @@ impl AdminListGroupsForUserError {
 }
 impl fmt::Display for AdminListGroupsForUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminListGroupsForUserError {
-    fn description(&self) -> &str {
         match *self {
-            AdminListGroupsForUserError::InternalError(ref cause) => cause,
-            AdminListGroupsForUserError::InvalidParameter(ref cause) => cause,
-            AdminListGroupsForUserError::NotAuthorized(ref cause) => cause,
-            AdminListGroupsForUserError::ResourceNotFound(ref cause) => cause,
-            AdminListGroupsForUserError::TooManyRequests(ref cause) => cause,
-            AdminListGroupsForUserError::UserNotFound(ref cause) => cause,
+            AdminListGroupsForUserError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminListGroupsForUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminListGroupsForUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminListGroupsForUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminListGroupsForUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminListGroupsForUserError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminListGroupsForUserError {}
 /// Errors returned by AdminListUserAuthEvents
 #[derive(Debug, PartialEq)]
 pub enum AdminListUserAuthEventsError {
@@ -5368,22 +5314,20 @@ impl AdminListUserAuthEventsError {
 }
 impl fmt::Display for AdminListUserAuthEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminListUserAuthEventsError {
-    fn description(&self) -> &str {
         match *self {
-            AdminListUserAuthEventsError::InternalError(ref cause) => cause,
-            AdminListUserAuthEventsError::InvalidParameter(ref cause) => cause,
-            AdminListUserAuthEventsError::NotAuthorized(ref cause) => cause,
-            AdminListUserAuthEventsError::ResourceNotFound(ref cause) => cause,
-            AdminListUserAuthEventsError::TooManyRequests(ref cause) => cause,
-            AdminListUserAuthEventsError::UserNotFound(ref cause) => cause,
-            AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(ref cause) => cause,
+            AdminListUserAuthEventsError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminListUserAuthEventsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminListUserAuthEventsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminListUserAuthEventsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminListUserAuthEventsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminListUserAuthEventsError::UserNotFound(ref cause) => write!(f, "{}", cause),
+            AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AdminListUserAuthEventsError {}
 /// Errors returned by AdminRemoveUserFromGroup
 #[derive(Debug, PartialEq)]
 pub enum AdminRemoveUserFromGroupError {
@@ -5444,21 +5388,17 @@ impl AdminRemoveUserFromGroupError {
 }
 impl fmt::Display for AdminRemoveUserFromGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminRemoveUserFromGroupError {
-    fn description(&self) -> &str {
         match *self {
-            AdminRemoveUserFromGroupError::InternalError(ref cause) => cause,
-            AdminRemoveUserFromGroupError::InvalidParameter(ref cause) => cause,
-            AdminRemoveUserFromGroupError::NotAuthorized(ref cause) => cause,
-            AdminRemoveUserFromGroupError::ResourceNotFound(ref cause) => cause,
-            AdminRemoveUserFromGroupError::TooManyRequests(ref cause) => cause,
-            AdminRemoveUserFromGroupError::UserNotFound(ref cause) => cause,
+            AdminRemoveUserFromGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminRemoveUserFromGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminRemoveUserFromGroupError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminRemoveUserFromGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminRemoveUserFromGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminRemoveUserFromGroupError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminRemoveUserFromGroupError {}
 /// Errors returned by AdminResetUserPassword
 #[derive(Debug, PartialEq)]
 pub enum AdminResetUserPasswordError {
@@ -5566,28 +5506,30 @@ impl AdminResetUserPasswordError {
 }
 impl fmt::Display for AdminResetUserPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminResetUserPasswordError {
-    fn description(&self) -> &str {
         match *self {
-            AdminResetUserPasswordError::InternalError(ref cause) => cause,
-            AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
-            AdminResetUserPasswordError::InvalidLambdaResponse(ref cause) => cause,
-            AdminResetUserPasswordError::InvalidParameter(ref cause) => cause,
-            AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            AdminResetUserPasswordError::LimitExceeded(ref cause) => cause,
-            AdminResetUserPasswordError::NotAuthorized(ref cause) => cause,
-            AdminResetUserPasswordError::ResourceNotFound(ref cause) => cause,
-            AdminResetUserPasswordError::TooManyRequests(ref cause) => cause,
-            AdminResetUserPasswordError::UnexpectedLambda(ref cause) => cause,
-            AdminResetUserPasswordError::UserLambdaValidation(ref cause) => cause,
-            AdminResetUserPasswordError::UserNotFound(ref cause) => cause,
+            AdminResetUserPasswordError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminResetUserPasswordError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            AdminResetUserPasswordError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminResetUserPasswordError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AdminResetUserPasswordError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminResetUserPasswordError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminResetUserPasswordError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminResetUserPasswordError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            AdminResetUserPasswordError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            AdminResetUserPasswordError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminResetUserPasswordError {}
 /// Errors returned by AdminRespondToAuthChallenge
 #[derive(Debug, PartialEq)]
 pub enum AdminRespondToAuthChallengeError {
@@ -5748,35 +5690,47 @@ impl AdminRespondToAuthChallengeError {
 }
 impl fmt::Display for AdminRespondToAuthChallengeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminRespondToAuthChallengeError {
-    fn description(&self) -> &str {
         match *self {
-            AdminRespondToAuthChallengeError::AliasExists(ref cause) => cause,
-            AdminRespondToAuthChallengeError::CodeMismatch(ref cause) => cause,
-            AdminRespondToAuthChallengeError::ExpiredCode(ref cause) => cause,
-            AdminRespondToAuthChallengeError::InternalError(ref cause) => cause,
-            AdminRespondToAuthChallengeError::InvalidLambdaResponse(ref cause) => cause,
-            AdminRespondToAuthChallengeError::InvalidParameter(ref cause) => cause,
-            AdminRespondToAuthChallengeError::InvalidPassword(ref cause) => cause,
-            AdminRespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            AdminRespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            AdminRespondToAuthChallengeError::InvalidUserPoolConfiguration(ref cause) => cause,
-            AdminRespondToAuthChallengeError::MFAMethodNotFound(ref cause) => cause,
-            AdminRespondToAuthChallengeError::NotAuthorized(ref cause) => cause,
-            AdminRespondToAuthChallengeError::PasswordResetRequired(ref cause) => cause,
-            AdminRespondToAuthChallengeError::ResourceNotFound(ref cause) => cause,
-            AdminRespondToAuthChallengeError::SoftwareTokenMFANotFound(ref cause) => cause,
-            AdminRespondToAuthChallengeError::TooManyRequests(ref cause) => cause,
-            AdminRespondToAuthChallengeError::UnexpectedLambda(ref cause) => cause,
-            AdminRespondToAuthChallengeError::UserLambdaValidation(ref cause) => cause,
-            AdminRespondToAuthChallengeError::UserNotConfirmed(ref cause) => cause,
-            AdminRespondToAuthChallengeError::UserNotFound(ref cause) => cause,
+            AdminRespondToAuthChallengeError::AliasExists(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::CodeMismatch(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::ExpiredCode(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::InvalidLambdaResponse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminRespondToAuthChallengeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminRespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminRespondToAuthChallengeError::InvalidUserPoolConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminRespondToAuthChallengeError::MFAMethodNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminRespondToAuthChallengeError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::PasswordResetRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminRespondToAuthChallengeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::SoftwareTokenMFANotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminRespondToAuthChallengeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::UserLambdaValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminRespondToAuthChallengeError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            AdminRespondToAuthChallengeError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminRespondToAuthChallengeError {}
 /// Errors returned by AdminSetUserMFAPreference
 #[derive(Debug, PartialEq)]
 pub enum AdminSetUserMFAPreferenceError {
@@ -5844,22 +5798,20 @@ impl AdminSetUserMFAPreferenceError {
 }
 impl fmt::Display for AdminSetUserMFAPreferenceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminSetUserMFAPreferenceError {
-    fn description(&self) -> &str {
         match *self {
-            AdminSetUserMFAPreferenceError::InternalError(ref cause) => cause,
-            AdminSetUserMFAPreferenceError::InvalidParameter(ref cause) => cause,
-            AdminSetUserMFAPreferenceError::NotAuthorized(ref cause) => cause,
-            AdminSetUserMFAPreferenceError::PasswordResetRequired(ref cause) => cause,
-            AdminSetUserMFAPreferenceError::ResourceNotFound(ref cause) => cause,
-            AdminSetUserMFAPreferenceError::UserNotConfirmed(ref cause) => cause,
-            AdminSetUserMFAPreferenceError::UserNotFound(ref cause) => cause,
+            AdminSetUserMFAPreferenceError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminSetUserMFAPreferenceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminSetUserMFAPreferenceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminSetUserMFAPreferenceError::PasswordResetRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminSetUserMFAPreferenceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminSetUserMFAPreferenceError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            AdminSetUserMFAPreferenceError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminSetUserMFAPreferenceError {}
 /// Errors returned by AdminSetUserPassword
 #[derive(Debug, PartialEq)]
 pub enum AdminSetUserPasswordError {
@@ -5921,22 +5873,18 @@ impl AdminSetUserPasswordError {
 }
 impl fmt::Display for AdminSetUserPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminSetUserPasswordError {
-    fn description(&self) -> &str {
         match *self {
-            AdminSetUserPasswordError::InternalError(ref cause) => cause,
-            AdminSetUserPasswordError::InvalidParameter(ref cause) => cause,
-            AdminSetUserPasswordError::InvalidPassword(ref cause) => cause,
-            AdminSetUserPasswordError::NotAuthorized(ref cause) => cause,
-            AdminSetUserPasswordError::ResourceNotFound(ref cause) => cause,
-            AdminSetUserPasswordError::TooManyRequests(ref cause) => cause,
-            AdminSetUserPasswordError::UserNotFound(ref cause) => cause,
+            AdminSetUserPasswordError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminSetUserPasswordError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminSetUserPasswordError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            AdminSetUserPasswordError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminSetUserPasswordError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminSetUserPasswordError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminSetUserPasswordError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminSetUserPasswordError {}
 /// Errors returned by AdminSetUserSettings
 #[derive(Debug, PartialEq)]
 pub enum AdminSetUserSettingsError {
@@ -5984,20 +5932,16 @@ impl AdminSetUserSettingsError {
 }
 impl fmt::Display for AdminSetUserSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminSetUserSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            AdminSetUserSettingsError::InternalError(ref cause) => cause,
-            AdminSetUserSettingsError::InvalidParameter(ref cause) => cause,
-            AdminSetUserSettingsError::NotAuthorized(ref cause) => cause,
-            AdminSetUserSettingsError::ResourceNotFound(ref cause) => cause,
-            AdminSetUserSettingsError::UserNotFound(ref cause) => cause,
+            AdminSetUserSettingsError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminSetUserSettingsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminSetUserSettingsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminSetUserSettingsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminSetUserSettingsError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminSetUserSettingsError {}
 /// Errors returned by AdminUpdateAuthEventFeedback
 #[derive(Debug, PartialEq)]
 pub enum AdminUpdateAuthEventFeedbackError {
@@ -6067,22 +6011,24 @@ impl AdminUpdateAuthEventFeedbackError {
 }
 impl fmt::Display for AdminUpdateAuthEventFeedbackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminUpdateAuthEventFeedbackError {
-    fn description(&self) -> &str {
         match *self {
-            AdminUpdateAuthEventFeedbackError::InternalError(ref cause) => cause,
-            AdminUpdateAuthEventFeedbackError::InvalidParameter(ref cause) => cause,
-            AdminUpdateAuthEventFeedbackError::NotAuthorized(ref cause) => cause,
-            AdminUpdateAuthEventFeedbackError::ResourceNotFound(ref cause) => cause,
-            AdminUpdateAuthEventFeedbackError::TooManyRequests(ref cause) => cause,
-            AdminUpdateAuthEventFeedbackError::UserNotFound(ref cause) => cause,
-            AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(ref cause) => cause,
+            AdminUpdateAuthEventFeedbackError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminUpdateAuthEventFeedbackError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminUpdateAuthEventFeedbackError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminUpdateAuthEventFeedbackError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminUpdateAuthEventFeedbackError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminUpdateAuthEventFeedbackError::UserNotFound(ref cause) => write!(f, "{}", cause),
+            AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AdminUpdateAuthEventFeedbackError {}
 /// Errors returned by AdminUpdateDeviceStatus
 #[derive(Debug, PartialEq)]
 pub enum AdminUpdateDeviceStatusError {
@@ -6150,22 +6096,20 @@ impl AdminUpdateDeviceStatusError {
 }
 impl fmt::Display for AdminUpdateDeviceStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminUpdateDeviceStatusError {
-    fn description(&self) -> &str {
         match *self {
-            AdminUpdateDeviceStatusError::InternalError(ref cause) => cause,
-            AdminUpdateDeviceStatusError::InvalidParameter(ref cause) => cause,
-            AdminUpdateDeviceStatusError::InvalidUserPoolConfiguration(ref cause) => cause,
-            AdminUpdateDeviceStatusError::NotAuthorized(ref cause) => cause,
-            AdminUpdateDeviceStatusError::ResourceNotFound(ref cause) => cause,
-            AdminUpdateDeviceStatusError::TooManyRequests(ref cause) => cause,
-            AdminUpdateDeviceStatusError::UserNotFound(ref cause) => cause,
+            AdminUpdateDeviceStatusError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminUpdateDeviceStatusError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminUpdateDeviceStatusError::InvalidUserPoolConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminUpdateDeviceStatusError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminUpdateDeviceStatusError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminUpdateDeviceStatusError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminUpdateDeviceStatusError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminUpdateDeviceStatusError {}
 /// Errors returned by AdminUpdateUserAttributes
 #[derive(Debug, PartialEq)]
 pub enum AdminUpdateUserAttributesError {
@@ -6275,28 +6219,34 @@ impl AdminUpdateUserAttributesError {
 }
 impl fmt::Display for AdminUpdateUserAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminUpdateUserAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            AdminUpdateUserAttributesError::AliasExists(ref cause) => cause,
-            AdminUpdateUserAttributesError::InternalError(ref cause) => cause,
-            AdminUpdateUserAttributesError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
-            AdminUpdateUserAttributesError::InvalidLambdaResponse(ref cause) => cause,
-            AdminUpdateUserAttributesError::InvalidParameter(ref cause) => cause,
-            AdminUpdateUserAttributesError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            AdminUpdateUserAttributesError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            AdminUpdateUserAttributesError::NotAuthorized(ref cause) => cause,
-            AdminUpdateUserAttributesError::ResourceNotFound(ref cause) => cause,
-            AdminUpdateUserAttributesError::TooManyRequests(ref cause) => cause,
-            AdminUpdateUserAttributesError::UnexpectedLambda(ref cause) => cause,
-            AdminUpdateUserAttributesError::UserLambdaValidation(ref cause) => cause,
-            AdminUpdateUserAttributesError::UserNotFound(ref cause) => cause,
+            AdminUpdateUserAttributesError::AliasExists(ref cause) => write!(f, "{}", cause),
+            AdminUpdateUserAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminUpdateUserAttributesError::InvalidEmailRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminUpdateUserAttributesError::InvalidLambdaResponse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminUpdateUserAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminUpdateUserAttributesError::InvalidSmsRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminUpdateUserAttributesError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminUpdateUserAttributesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminUpdateUserAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminUpdateUserAttributesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminUpdateUserAttributesError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            AdminUpdateUserAttributesError::UserLambdaValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AdminUpdateUserAttributesError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminUpdateUserAttributesError {}
 /// Errors returned by AdminUserGlobalSignOut
 #[derive(Debug, PartialEq)]
 pub enum AdminUserGlobalSignOutError {
@@ -6355,21 +6305,17 @@ impl AdminUserGlobalSignOutError {
 }
 impl fmt::Display for AdminUserGlobalSignOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AdminUserGlobalSignOutError {
-    fn description(&self) -> &str {
         match *self {
-            AdminUserGlobalSignOutError::InternalError(ref cause) => cause,
-            AdminUserGlobalSignOutError::InvalidParameter(ref cause) => cause,
-            AdminUserGlobalSignOutError::NotAuthorized(ref cause) => cause,
-            AdminUserGlobalSignOutError::ResourceNotFound(ref cause) => cause,
-            AdminUserGlobalSignOutError::TooManyRequests(ref cause) => cause,
-            AdminUserGlobalSignOutError::UserNotFound(ref cause) => cause,
+            AdminUserGlobalSignOutError::InternalError(ref cause) => write!(f, "{}", cause),
+            AdminUserGlobalSignOutError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminUserGlobalSignOutError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AdminUserGlobalSignOutError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AdminUserGlobalSignOutError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AdminUserGlobalSignOutError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AdminUserGlobalSignOutError {}
 /// Errors returned by AssociateSoftwareToken
 #[derive(Debug, PartialEq)]
 pub enum AssociateSoftwareTokenError {
@@ -6423,20 +6369,18 @@ impl AssociateSoftwareTokenError {
 }
 impl fmt::Display for AssociateSoftwareTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateSoftwareTokenError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateSoftwareTokenError::InternalError(ref cause) => cause,
-            AssociateSoftwareTokenError::InvalidParameter(ref cause) => cause,
-            AssociateSoftwareTokenError::NotAuthorized(ref cause) => cause,
-            AssociateSoftwareTokenError::ResourceNotFound(ref cause) => cause,
-            AssociateSoftwareTokenError::SoftwareTokenMFANotFound(ref cause) => cause,
+            AssociateSoftwareTokenError::InternalError(ref cause) => write!(f, "{}", cause),
+            AssociateSoftwareTokenError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateSoftwareTokenError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AssociateSoftwareTokenError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateSoftwareTokenError::SoftwareTokenMFANotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateSoftwareTokenError {}
 /// Errors returned by ChangePassword
 #[derive(Debug, PartialEq)]
 pub enum ChangePasswordError {
@@ -6507,25 +6451,21 @@ impl ChangePasswordError {
 }
 impl fmt::Display for ChangePasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ChangePasswordError {
-    fn description(&self) -> &str {
         match *self {
-            ChangePasswordError::InternalError(ref cause) => cause,
-            ChangePasswordError::InvalidParameter(ref cause) => cause,
-            ChangePasswordError::InvalidPassword(ref cause) => cause,
-            ChangePasswordError::LimitExceeded(ref cause) => cause,
-            ChangePasswordError::NotAuthorized(ref cause) => cause,
-            ChangePasswordError::PasswordResetRequired(ref cause) => cause,
-            ChangePasswordError::ResourceNotFound(ref cause) => cause,
-            ChangePasswordError::TooManyRequests(ref cause) => cause,
-            ChangePasswordError::UserNotConfirmed(ref cause) => cause,
-            ChangePasswordError::UserNotFound(ref cause) => cause,
+            ChangePasswordError::InternalError(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ChangePasswordError {}
 /// Errors returned by ConfirmDevice
 #[derive(Debug, PartialEq)]
 pub enum ConfirmDeviceError {
@@ -6606,27 +6546,23 @@ impl ConfirmDeviceError {
 }
 impl fmt::Display for ConfirmDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            ConfirmDeviceError::InternalError(ref cause) => cause,
-            ConfirmDeviceError::InvalidLambdaResponse(ref cause) => cause,
-            ConfirmDeviceError::InvalidParameter(ref cause) => cause,
-            ConfirmDeviceError::InvalidPassword(ref cause) => cause,
-            ConfirmDeviceError::InvalidUserPoolConfiguration(ref cause) => cause,
-            ConfirmDeviceError::NotAuthorized(ref cause) => cause,
-            ConfirmDeviceError::PasswordResetRequired(ref cause) => cause,
-            ConfirmDeviceError::ResourceNotFound(ref cause) => cause,
-            ConfirmDeviceError::TooManyRequests(ref cause) => cause,
-            ConfirmDeviceError::UserNotConfirmed(ref cause) => cause,
-            ConfirmDeviceError::UserNotFound(ref cause) => cause,
-            ConfirmDeviceError::UsernameExists(ref cause) => cause,
+            ConfirmDeviceError::InternalError(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::InvalidUserPoolConfiguration(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::UserNotFound(ref cause) => write!(f, "{}", cause),
+            ConfirmDeviceError::UsernameExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ConfirmDeviceError {}
 /// Errors returned by ConfirmForgotPassword
 #[derive(Debug, PartialEq)]
 pub enum ConfirmForgotPasswordError {
@@ -6738,30 +6674,26 @@ impl ConfirmForgotPasswordError {
 }
 impl fmt::Display for ConfirmForgotPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmForgotPasswordError {
-    fn description(&self) -> &str {
         match *self {
-            ConfirmForgotPasswordError::CodeMismatch(ref cause) => cause,
-            ConfirmForgotPasswordError::ExpiredCode(ref cause) => cause,
-            ConfirmForgotPasswordError::InternalError(ref cause) => cause,
-            ConfirmForgotPasswordError::InvalidLambdaResponse(ref cause) => cause,
-            ConfirmForgotPasswordError::InvalidParameter(ref cause) => cause,
-            ConfirmForgotPasswordError::InvalidPassword(ref cause) => cause,
-            ConfirmForgotPasswordError::LimitExceeded(ref cause) => cause,
-            ConfirmForgotPasswordError::NotAuthorized(ref cause) => cause,
-            ConfirmForgotPasswordError::ResourceNotFound(ref cause) => cause,
-            ConfirmForgotPasswordError::TooManyFailedAttempts(ref cause) => cause,
-            ConfirmForgotPasswordError::TooManyRequests(ref cause) => cause,
-            ConfirmForgotPasswordError::UnexpectedLambda(ref cause) => cause,
-            ConfirmForgotPasswordError::UserLambdaValidation(ref cause) => cause,
-            ConfirmForgotPasswordError::UserNotConfirmed(ref cause) => cause,
-            ConfirmForgotPasswordError::UserNotFound(ref cause) => cause,
+            ConfirmForgotPasswordError::CodeMismatch(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::ExpiredCode(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::InternalError(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::TooManyFailedAttempts(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            ConfirmForgotPasswordError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ConfirmForgotPasswordError {}
 /// Errors returned by ConfirmSignUp
 #[derive(Debug, PartialEq)]
 pub enum ConfirmSignUpError {
@@ -6850,29 +6782,25 @@ impl ConfirmSignUpError {
 }
 impl fmt::Display for ConfirmSignUpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmSignUpError {
-    fn description(&self) -> &str {
         match *self {
-            ConfirmSignUpError::AliasExists(ref cause) => cause,
-            ConfirmSignUpError::CodeMismatch(ref cause) => cause,
-            ConfirmSignUpError::ExpiredCode(ref cause) => cause,
-            ConfirmSignUpError::InternalError(ref cause) => cause,
-            ConfirmSignUpError::InvalidLambdaResponse(ref cause) => cause,
-            ConfirmSignUpError::InvalidParameter(ref cause) => cause,
-            ConfirmSignUpError::LimitExceeded(ref cause) => cause,
-            ConfirmSignUpError::NotAuthorized(ref cause) => cause,
-            ConfirmSignUpError::ResourceNotFound(ref cause) => cause,
-            ConfirmSignUpError::TooManyFailedAttempts(ref cause) => cause,
-            ConfirmSignUpError::TooManyRequests(ref cause) => cause,
-            ConfirmSignUpError::UnexpectedLambda(ref cause) => cause,
-            ConfirmSignUpError::UserLambdaValidation(ref cause) => cause,
-            ConfirmSignUpError::UserNotFound(ref cause) => cause,
+            ConfirmSignUpError::AliasExists(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::CodeMismatch(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::ExpiredCode(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::InternalError(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::TooManyFailedAttempts(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            ConfirmSignUpError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ConfirmSignUpError {}
 /// Errors returned by CreateGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupError {
@@ -6926,22 +6854,18 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGroupError::GroupExists(ref cause) => cause,
-            CreateGroupError::InternalError(ref cause) => cause,
-            CreateGroupError::InvalidParameter(ref cause) => cause,
-            CreateGroupError::LimitExceeded(ref cause) => cause,
-            CreateGroupError::NotAuthorized(ref cause) => cause,
-            CreateGroupError::ResourceNotFound(ref cause) => cause,
-            CreateGroupError::TooManyRequests(ref cause) => cause,
+            CreateGroupError::GroupExists(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGroupError {}
 /// Errors returned by CreateIdentityProvider
 #[derive(Debug, PartialEq)]
 pub enum CreateIdentityProviderError {
@@ -7009,22 +6933,18 @@ impl CreateIdentityProviderError {
 }
 impl fmt::Display for CreateIdentityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateIdentityProviderError {
-    fn description(&self) -> &str {
         match *self {
-            CreateIdentityProviderError::DuplicateProvider(ref cause) => cause,
-            CreateIdentityProviderError::InternalError(ref cause) => cause,
-            CreateIdentityProviderError::InvalidParameter(ref cause) => cause,
-            CreateIdentityProviderError::LimitExceeded(ref cause) => cause,
-            CreateIdentityProviderError::NotAuthorized(ref cause) => cause,
-            CreateIdentityProviderError::ResourceNotFound(ref cause) => cause,
-            CreateIdentityProviderError::TooManyRequests(ref cause) => cause,
+            CreateIdentityProviderError::DuplicateProvider(ref cause) => write!(f, "{}", cause),
+            CreateIdentityProviderError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateIdentityProviderError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateIdentityProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateIdentityProviderError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            CreateIdentityProviderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateIdentityProviderError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateIdentityProviderError {}
 /// Errors returned by CreateResourceServer
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceServerError {
@@ -7079,21 +6999,17 @@ impl CreateResourceServerError {
 }
 impl fmt::Display for CreateResourceServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateResourceServerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateResourceServerError::InternalError(ref cause) => cause,
-            CreateResourceServerError::InvalidParameter(ref cause) => cause,
-            CreateResourceServerError::LimitExceeded(ref cause) => cause,
-            CreateResourceServerError::NotAuthorized(ref cause) => cause,
-            CreateResourceServerError::ResourceNotFound(ref cause) => cause,
-            CreateResourceServerError::TooManyRequests(ref cause) => cause,
+            CreateResourceServerError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateResourceServerError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateResourceServerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateResourceServerError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            CreateResourceServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateResourceServerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateResourceServerError {}
 /// Errors returned by CreateUserImportJob
 #[derive(Debug, PartialEq)]
 pub enum CreateUserImportJobError {
@@ -7153,22 +7069,18 @@ impl CreateUserImportJobError {
 }
 impl fmt::Display for CreateUserImportJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserImportJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserImportJobError::InternalError(ref cause) => cause,
-            CreateUserImportJobError::InvalidParameter(ref cause) => cause,
-            CreateUserImportJobError::LimitExceeded(ref cause) => cause,
-            CreateUserImportJobError::NotAuthorized(ref cause) => cause,
-            CreateUserImportJobError::PreconditionNotMet(ref cause) => cause,
-            CreateUserImportJobError::ResourceNotFound(ref cause) => cause,
-            CreateUserImportJobError::TooManyRequests(ref cause) => cause,
+            CreateUserImportJobError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateUserImportJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateUserImportJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUserImportJobError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            CreateUserImportJobError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
+            CreateUserImportJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateUserImportJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserImportJobError {}
 /// Errors returned by CreateUserPool
 #[derive(Debug, PartialEq)]
 pub enum CreateUserPoolError {
@@ -7238,24 +7150,22 @@ impl CreateUserPoolError {
 }
 impl fmt::Display for CreateUserPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserPoolError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserPoolError::InternalError(ref cause) => cause,
-            CreateUserPoolError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
-            CreateUserPoolError::InvalidParameter(ref cause) => cause,
-            CreateUserPoolError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            CreateUserPoolError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            CreateUserPoolError::LimitExceeded(ref cause) => cause,
-            CreateUserPoolError::NotAuthorized(ref cause) => cause,
-            CreateUserPoolError::TooManyRequests(ref cause) => cause,
-            CreateUserPoolError::UserPoolTagging(ref cause) => cause,
+            CreateUserPoolError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolError::InvalidEmailRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolError::InvalidSmsRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateUserPoolError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolError::UserPoolTagging(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserPoolError {}
 /// Errors returned by CreateUserPoolClient
 #[derive(Debug, PartialEq)]
 pub enum CreateUserPoolClientError {
@@ -7324,23 +7234,19 @@ impl CreateUserPoolClientError {
 }
 impl fmt::Display for CreateUserPoolClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserPoolClientError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserPoolClientError::InternalError(ref cause) => cause,
-            CreateUserPoolClientError::InvalidOAuthFlow(ref cause) => cause,
-            CreateUserPoolClientError::InvalidParameter(ref cause) => cause,
-            CreateUserPoolClientError::LimitExceeded(ref cause) => cause,
-            CreateUserPoolClientError::NotAuthorized(ref cause) => cause,
-            CreateUserPoolClientError::ResourceNotFound(ref cause) => cause,
-            CreateUserPoolClientError::ScopeDoesNotExist(ref cause) => cause,
-            CreateUserPoolClientError::TooManyRequests(ref cause) => cause,
+            CreateUserPoolClientError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolClientError::InvalidOAuthFlow(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolClientError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolClientError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolClientError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolClientError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolClientError::ScopeDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolClientError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserPoolClientError {}
 /// Errors returned by CreateUserPoolDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateUserPoolDomainError {
@@ -7388,20 +7294,16 @@ impl CreateUserPoolDomainError {
 }
 impl fmt::Display for CreateUserPoolDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserPoolDomainError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserPoolDomainError::InternalError(ref cause) => cause,
-            CreateUserPoolDomainError::InvalidParameter(ref cause) => cause,
-            CreateUserPoolDomainError::LimitExceeded(ref cause) => cause,
-            CreateUserPoolDomainError::NotAuthorized(ref cause) => cause,
-            CreateUserPoolDomainError::ResourceNotFound(ref cause) => cause,
+            CreateUserPoolDomainError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolDomainError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolDomainError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolDomainError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            CreateUserPoolDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserPoolDomainError {}
 /// Errors returned by DeleteGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupError {
@@ -7445,20 +7347,16 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGroupError::InternalError(ref cause) => cause,
-            DeleteGroupError::InvalidParameter(ref cause) => cause,
-            DeleteGroupError::NotAuthorized(ref cause) => cause,
-            DeleteGroupError::ResourceNotFound(ref cause) => cause,
-            DeleteGroupError::TooManyRequests(ref cause) => cause,
+            DeleteGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGroupError {}
 /// Errors returned by DeleteIdentityProvider
 #[derive(Debug, PartialEq)]
 pub enum DeleteIdentityProviderError {
@@ -7519,21 +7417,19 @@ impl DeleteIdentityProviderError {
 }
 impl fmt::Display for DeleteIdentityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteIdentityProviderError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteIdentityProviderError::InternalError(ref cause) => cause,
-            DeleteIdentityProviderError::InvalidParameter(ref cause) => cause,
-            DeleteIdentityProviderError::NotAuthorized(ref cause) => cause,
-            DeleteIdentityProviderError::ResourceNotFound(ref cause) => cause,
-            DeleteIdentityProviderError::TooManyRequests(ref cause) => cause,
-            DeleteIdentityProviderError::UnsupportedIdentityProvider(ref cause) => cause,
+            DeleteIdentityProviderError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteIdentityProviderError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteIdentityProviderError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteIdentityProviderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteIdentityProviderError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteIdentityProviderError::UnsupportedIdentityProvider(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteIdentityProviderError {}
 /// Errors returned by DeleteResourceServer
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceServerError {
@@ -7583,20 +7479,16 @@ impl DeleteResourceServerError {
 }
 impl fmt::Display for DeleteResourceServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteResourceServerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteResourceServerError::InternalError(ref cause) => cause,
-            DeleteResourceServerError::InvalidParameter(ref cause) => cause,
-            DeleteResourceServerError::NotAuthorized(ref cause) => cause,
-            DeleteResourceServerError::ResourceNotFound(ref cause) => cause,
-            DeleteResourceServerError::TooManyRequests(ref cause) => cause,
+            DeleteResourceServerError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteResourceServerError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteResourceServerError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteResourceServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteResourceServerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteResourceServerError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -7655,23 +7547,19 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserError::InternalError(ref cause) => cause,
-            DeleteUserError::InvalidParameter(ref cause) => cause,
-            DeleteUserError::NotAuthorized(ref cause) => cause,
-            DeleteUserError::PasswordResetRequired(ref cause) => cause,
-            DeleteUserError::ResourceNotFound(ref cause) => cause,
-            DeleteUserError::TooManyRequests(ref cause) => cause,
-            DeleteUserError::UserNotConfirmed(ref cause) => cause,
-            DeleteUserError::UserNotFound(ref cause) => cause,
+            DeleteUserError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserError {}
 /// Errors returned by DeleteUserAttributes
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserAttributesError {
@@ -7740,23 +7628,19 @@ impl DeleteUserAttributesError {
 }
 impl fmt::Display for DeleteUserAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserAttributesError::InternalError(ref cause) => cause,
-            DeleteUserAttributesError::InvalidParameter(ref cause) => cause,
-            DeleteUserAttributesError::NotAuthorized(ref cause) => cause,
-            DeleteUserAttributesError::PasswordResetRequired(ref cause) => cause,
-            DeleteUserAttributesError::ResourceNotFound(ref cause) => cause,
-            DeleteUserAttributesError::TooManyRequests(ref cause) => cause,
-            DeleteUserAttributesError::UserNotConfirmed(ref cause) => cause,
-            DeleteUserAttributesError::UserNotFound(ref cause) => cause,
+            DeleteUserAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteUserAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteUserAttributesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteUserAttributesError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            DeleteUserAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUserAttributesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteUserAttributesError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            DeleteUserAttributesError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserAttributesError {}
 /// Errors returned by DeleteUserPool
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPoolError {
@@ -7805,21 +7689,17 @@ impl DeleteUserPoolError {
 }
 impl fmt::Display for DeleteUserPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserPoolError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserPoolError::InternalError(ref cause) => cause,
-            DeleteUserPoolError::InvalidParameter(ref cause) => cause,
-            DeleteUserPoolError::NotAuthorized(ref cause) => cause,
-            DeleteUserPoolError::ResourceNotFound(ref cause) => cause,
-            DeleteUserPoolError::TooManyRequests(ref cause) => cause,
-            DeleteUserPoolError::UserImportInProgress(ref cause) => cause,
+            DeleteUserPoolError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolError::UserImportInProgress(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserPoolError {}
 /// Errors returned by DeleteUserPoolClient
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPoolClientError {
@@ -7869,20 +7749,16 @@ impl DeleteUserPoolClientError {
 }
 impl fmt::Display for DeleteUserPoolClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserPoolClientError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserPoolClientError::InternalError(ref cause) => cause,
-            DeleteUserPoolClientError::InvalidParameter(ref cause) => cause,
-            DeleteUserPoolClientError::NotAuthorized(ref cause) => cause,
-            DeleteUserPoolClientError::ResourceNotFound(ref cause) => cause,
-            DeleteUserPoolClientError::TooManyRequests(ref cause) => cause,
+            DeleteUserPoolClientError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolClientError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolClientError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolClientError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolClientError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserPoolClientError {}
 /// Errors returned by DeleteUserPoolDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPoolDomainError {
@@ -7925,19 +7801,15 @@ impl DeleteUserPoolDomainError {
 }
 impl fmt::Display for DeleteUserPoolDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserPoolDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserPoolDomainError::InternalError(ref cause) => cause,
-            DeleteUserPoolDomainError::InvalidParameter(ref cause) => cause,
-            DeleteUserPoolDomainError::NotAuthorized(ref cause) => cause,
-            DeleteUserPoolDomainError::ResourceNotFound(ref cause) => cause,
+            DeleteUserPoolDomainError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolDomainError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolDomainError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteUserPoolDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserPoolDomainError {}
 /// Errors returned by DescribeIdentityProvider
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityProviderError {
@@ -7991,20 +7863,16 @@ impl DescribeIdentityProviderError {
 }
 impl fmt::Display for DescribeIdentityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeIdentityProviderError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeIdentityProviderError::InternalError(ref cause) => cause,
-            DescribeIdentityProviderError::InvalidParameter(ref cause) => cause,
-            DescribeIdentityProviderError::NotAuthorized(ref cause) => cause,
-            DescribeIdentityProviderError::ResourceNotFound(ref cause) => cause,
-            DescribeIdentityProviderError::TooManyRequests(ref cause) => cause,
+            DescribeIdentityProviderError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityProviderError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityProviderError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityProviderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityProviderError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeIdentityProviderError {}
 /// Errors returned by DescribeResourceServer
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourceServerError {
@@ -8058,20 +7926,16 @@ impl DescribeResourceServerError {
 }
 impl fmt::Display for DescribeResourceServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeResourceServerError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeResourceServerError::InternalError(ref cause) => cause,
-            DescribeResourceServerError::InvalidParameter(ref cause) => cause,
-            DescribeResourceServerError::NotAuthorized(ref cause) => cause,
-            DescribeResourceServerError::ResourceNotFound(ref cause) => cause,
-            DescribeResourceServerError::TooManyRequests(ref cause) => cause,
+            DescribeResourceServerError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeResourceServerError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeResourceServerError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeResourceServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeResourceServerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeResourceServerError {}
 /// Errors returned by DescribeRiskConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeRiskConfigurationError {
@@ -8132,21 +7996,19 @@ impl DescribeRiskConfigurationError {
 }
 impl fmt::Display for DescribeRiskConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRiskConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRiskConfigurationError::InternalError(ref cause) => cause,
-            DescribeRiskConfigurationError::InvalidParameter(ref cause) => cause,
-            DescribeRiskConfigurationError::NotAuthorized(ref cause) => cause,
-            DescribeRiskConfigurationError::ResourceNotFound(ref cause) => cause,
-            DescribeRiskConfigurationError::TooManyRequests(ref cause) => cause,
-            DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(ref cause) => cause,
+            DescribeRiskConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeRiskConfigurationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeRiskConfigurationError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeRiskConfigurationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRiskConfigurationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeRiskConfigurationError {}
 /// Errors returned by DescribeUserImportJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserImportJobError {
@@ -8196,20 +8058,16 @@ impl DescribeUserImportJobError {
 }
 impl fmt::Display for DescribeUserImportJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserImportJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserImportJobError::InternalError(ref cause) => cause,
-            DescribeUserImportJobError::InvalidParameter(ref cause) => cause,
-            DescribeUserImportJobError::NotAuthorized(ref cause) => cause,
-            DescribeUserImportJobError::ResourceNotFound(ref cause) => cause,
-            DescribeUserImportJobError::TooManyRequests(ref cause) => cause,
+            DescribeUserImportJobError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeUserImportJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeUserImportJobError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeUserImportJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeUserImportJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserImportJobError {}
 /// Errors returned by DescribeUserPool
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserPoolError {
@@ -8258,21 +8116,17 @@ impl DescribeUserPoolError {
 }
 impl fmt::Display for DescribeUserPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserPoolError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserPoolError::InternalError(ref cause) => cause,
-            DescribeUserPoolError::InvalidParameter(ref cause) => cause,
-            DescribeUserPoolError::NotAuthorized(ref cause) => cause,
-            DescribeUserPoolError::ResourceNotFound(ref cause) => cause,
-            DescribeUserPoolError::TooManyRequests(ref cause) => cause,
-            DescribeUserPoolError::UserPoolTagging(ref cause) => cause,
+            DescribeUserPoolError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolError::UserPoolTagging(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserPoolError {}
 /// Errors returned by DescribeUserPoolClient
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserPoolClientError {
@@ -8326,20 +8180,16 @@ impl DescribeUserPoolClientError {
 }
 impl fmt::Display for DescribeUserPoolClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserPoolClientError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserPoolClientError::InternalError(ref cause) => cause,
-            DescribeUserPoolClientError::InvalidParameter(ref cause) => cause,
-            DescribeUserPoolClientError::NotAuthorized(ref cause) => cause,
-            DescribeUserPoolClientError::ResourceNotFound(ref cause) => cause,
-            DescribeUserPoolClientError::TooManyRequests(ref cause) => cause,
+            DescribeUserPoolClientError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolClientError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolClientError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolClientError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolClientError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserPoolClientError {}
 /// Errors returned by DescribeUserPoolDomain
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserPoolDomainError {
@@ -8386,19 +8236,15 @@ impl DescribeUserPoolDomainError {
 }
 impl fmt::Display for DescribeUserPoolDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserPoolDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserPoolDomainError::InternalError(ref cause) => cause,
-            DescribeUserPoolDomainError::InvalidParameter(ref cause) => cause,
-            DescribeUserPoolDomainError::NotAuthorized(ref cause) => cause,
-            DescribeUserPoolDomainError::ResourceNotFound(ref cause) => cause,
+            DescribeUserPoolDomainError::InternalError(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolDomainError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolDomainError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeUserPoolDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserPoolDomainError {}
 /// Errors returned by ForgetDevice
 #[derive(Debug, PartialEq)]
 pub enum ForgetDeviceError {
@@ -8464,24 +8310,20 @@ impl ForgetDeviceError {
 }
 impl fmt::Display for ForgetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ForgetDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            ForgetDeviceError::InternalError(ref cause) => cause,
-            ForgetDeviceError::InvalidParameter(ref cause) => cause,
-            ForgetDeviceError::InvalidUserPoolConfiguration(ref cause) => cause,
-            ForgetDeviceError::NotAuthorized(ref cause) => cause,
-            ForgetDeviceError::PasswordResetRequired(ref cause) => cause,
-            ForgetDeviceError::ResourceNotFound(ref cause) => cause,
-            ForgetDeviceError::TooManyRequests(ref cause) => cause,
-            ForgetDeviceError::UserNotConfirmed(ref cause) => cause,
-            ForgetDeviceError::UserNotFound(ref cause) => cause,
+            ForgetDeviceError::InternalError(ref cause) => write!(f, "{}", cause),
+            ForgetDeviceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ForgetDeviceError::InvalidUserPoolConfiguration(ref cause) => write!(f, "{}", cause),
+            ForgetDeviceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ForgetDeviceError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            ForgetDeviceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ForgetDeviceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ForgetDeviceError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            ForgetDeviceError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ForgetDeviceError {}
 /// Errors returned by ForgotPassword
 #[derive(Debug, PartialEq)]
 pub enum ForgotPasswordError {
@@ -8583,30 +8425,28 @@ impl ForgotPasswordError {
 }
 impl fmt::Display for ForgotPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ForgotPasswordError {
-    fn description(&self) -> &str {
         match *self {
-            ForgotPasswordError::CodeDeliveryFailure(ref cause) => cause,
-            ForgotPasswordError::InternalError(ref cause) => cause,
-            ForgotPasswordError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
-            ForgotPasswordError::InvalidLambdaResponse(ref cause) => cause,
-            ForgotPasswordError::InvalidParameter(ref cause) => cause,
-            ForgotPasswordError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            ForgotPasswordError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            ForgotPasswordError::LimitExceeded(ref cause) => cause,
-            ForgotPasswordError::NotAuthorized(ref cause) => cause,
-            ForgotPasswordError::ResourceNotFound(ref cause) => cause,
-            ForgotPasswordError::TooManyRequests(ref cause) => cause,
-            ForgotPasswordError::UnexpectedLambda(ref cause) => cause,
-            ForgotPasswordError::UserLambdaValidation(ref cause) => cause,
-            ForgotPasswordError::UserNotConfirmed(ref cause) => cause,
-            ForgotPasswordError::UserNotFound(ref cause) => cause,
+            ForgotPasswordError::CodeDeliveryFailure(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::InternalError(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::InvalidEmailRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::InvalidSmsRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ForgotPasswordError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            ForgotPasswordError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ForgotPasswordError {}
 /// Errors returned by GetCSVHeader
 #[derive(Debug, PartialEq)]
 pub enum GetCSVHeaderError {
@@ -8650,20 +8490,16 @@ impl GetCSVHeaderError {
 }
 impl fmt::Display for GetCSVHeaderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCSVHeaderError {
-    fn description(&self) -> &str {
         match *self {
-            GetCSVHeaderError::InternalError(ref cause) => cause,
-            GetCSVHeaderError::InvalidParameter(ref cause) => cause,
-            GetCSVHeaderError::NotAuthorized(ref cause) => cause,
-            GetCSVHeaderError::ResourceNotFound(ref cause) => cause,
-            GetCSVHeaderError::TooManyRequests(ref cause) => cause,
+            GetCSVHeaderError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetCSVHeaderError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetCSVHeaderError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetCSVHeaderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetCSVHeaderError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCSVHeaderError {}
 /// Errors returned by GetDevice
 #[derive(Debug, PartialEq)]
 pub enum GetDeviceError {
@@ -8729,24 +8565,20 @@ impl GetDeviceError {
 }
 impl fmt::Display for GetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeviceError::InternalError(ref cause) => cause,
-            GetDeviceError::InvalidParameter(ref cause) => cause,
-            GetDeviceError::InvalidUserPoolConfiguration(ref cause) => cause,
-            GetDeviceError::NotAuthorized(ref cause) => cause,
-            GetDeviceError::PasswordResetRequired(ref cause) => cause,
-            GetDeviceError::ResourceNotFound(ref cause) => cause,
-            GetDeviceError::TooManyRequests(ref cause) => cause,
-            GetDeviceError::UserNotConfirmed(ref cause) => cause,
-            GetDeviceError::UserNotFound(ref cause) => cause,
+            GetDeviceError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::InvalidUserPoolConfiguration(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeviceError {}
 /// Errors returned by GetGroup
 #[derive(Debug, PartialEq)]
 pub enum GetGroupError {
@@ -8790,20 +8622,16 @@ impl GetGroupError {
 }
 impl fmt::Display for GetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupError::InternalError(ref cause) => cause,
-            GetGroupError::InvalidParameter(ref cause) => cause,
-            GetGroupError::NotAuthorized(ref cause) => cause,
-            GetGroupError::ResourceNotFound(ref cause) => cause,
-            GetGroupError::TooManyRequests(ref cause) => cause,
+            GetGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetGroupError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGroupError {}
 /// Errors returned by GetIdentityProviderByIdentifier
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityProviderByIdentifierError {
@@ -8859,20 +8687,26 @@ impl GetIdentityProviderByIdentifierError {
 }
 impl fmt::Display for GetIdentityProviderByIdentifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIdentityProviderByIdentifierError {
-    fn description(&self) -> &str {
         match *self {
-            GetIdentityProviderByIdentifierError::InternalError(ref cause) => cause,
-            GetIdentityProviderByIdentifierError::InvalidParameter(ref cause) => cause,
-            GetIdentityProviderByIdentifierError::NotAuthorized(ref cause) => cause,
-            GetIdentityProviderByIdentifierError::ResourceNotFound(ref cause) => cause,
-            GetIdentityProviderByIdentifierError::TooManyRequests(ref cause) => cause,
+            GetIdentityProviderByIdentifierError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetIdentityProviderByIdentifierError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetIdentityProviderByIdentifierError::NotAuthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetIdentityProviderByIdentifierError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetIdentityProviderByIdentifierError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetIdentityProviderByIdentifierError {}
 /// Errors returned by GetSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetSigningCertificateError {
@@ -8910,18 +8744,14 @@ impl GetSigningCertificateError {
 }
 impl fmt::Display for GetSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSigningCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            GetSigningCertificateError::InternalError(ref cause) => cause,
-            GetSigningCertificateError::InvalidParameter(ref cause) => cause,
-            GetSigningCertificateError::ResourceNotFound(ref cause) => cause,
+            GetSigningCertificateError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetSigningCertificateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetSigningCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSigningCertificateError {}
 /// Errors returned by GetUICustomization
 #[derive(Debug, PartialEq)]
 pub enum GetUICustomizationError {
@@ -8965,20 +8795,16 @@ impl GetUICustomizationError {
 }
 impl fmt::Display for GetUICustomizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUICustomizationError {
-    fn description(&self) -> &str {
         match *self {
-            GetUICustomizationError::InternalError(ref cause) => cause,
-            GetUICustomizationError::InvalidParameter(ref cause) => cause,
-            GetUICustomizationError::NotAuthorized(ref cause) => cause,
-            GetUICustomizationError::ResourceNotFound(ref cause) => cause,
-            GetUICustomizationError::TooManyRequests(ref cause) => cause,
+            GetUICustomizationError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetUICustomizationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetUICustomizationError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetUICustomizationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetUICustomizationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUICustomizationError {}
 /// Errors returned by GetUser
 #[derive(Debug, PartialEq)]
 pub enum GetUserError {
@@ -9037,23 +8863,19 @@ impl GetUserError {
 }
 impl fmt::Display for GetUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserError::InternalError(ref cause) => cause,
-            GetUserError::InvalidParameter(ref cause) => cause,
-            GetUserError::NotAuthorized(ref cause) => cause,
-            GetUserError::PasswordResetRequired(ref cause) => cause,
-            GetUserError::ResourceNotFound(ref cause) => cause,
-            GetUserError::TooManyRequests(ref cause) => cause,
-            GetUserError::UserNotConfirmed(ref cause) => cause,
-            GetUserError::UserNotFound(ref cause) => cause,
+            GetUserError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetUserError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            GetUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetUserError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            GetUserError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUserError {}
 /// Errors returned by GetUserAttributeVerificationCode
 #[derive(Debug, PartialEq)]
 pub enum GetUserAttributeVerificationCodeError {
@@ -9190,33 +9012,59 @@ impl GetUserAttributeVerificationCodeError {
 }
 impl fmt::Display for GetUserAttributeVerificationCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserAttributeVerificationCodeError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserAttributeVerificationCodeError::CodeDeliveryFailure(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::InternalError(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::InvalidLambdaResponse(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::InvalidParameter(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::InvalidSmsRoleTrustRelationship(ref cause) => {
-                cause
+            GetUserAttributeVerificationCodeError::CodeDeliveryFailure(ref cause) => {
+                write!(f, "{}", cause)
             }
-            GetUserAttributeVerificationCodeError::LimitExceeded(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::NotAuthorized(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::PasswordResetRequired(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::ResourceNotFound(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::TooManyRequests(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::UnexpectedLambda(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::UserLambdaValidation(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::UserNotConfirmed(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::UserNotFound(ref cause) => cause,
+            GetUserAttributeVerificationCodeError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::InvalidEmailRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::InvalidLambdaResponse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::InvalidSmsRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::NotAuthorized(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::PasswordResetRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::UnexpectedLambda(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::UserLambdaValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::UserNotConfirmed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetUserAttributeVerificationCodeError::UserNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetUserAttributeVerificationCodeError {}
 /// Errors returned by GetUserPoolMfaConfig
 #[derive(Debug, PartialEq)]
 pub enum GetUserPoolMfaConfigError {
@@ -9266,20 +9114,16 @@ impl GetUserPoolMfaConfigError {
 }
 impl fmt::Display for GetUserPoolMfaConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserPoolMfaConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserPoolMfaConfigError::InternalError(ref cause) => cause,
-            GetUserPoolMfaConfigError::InvalidParameter(ref cause) => cause,
-            GetUserPoolMfaConfigError::NotAuthorized(ref cause) => cause,
-            GetUserPoolMfaConfigError::ResourceNotFound(ref cause) => cause,
-            GetUserPoolMfaConfigError::TooManyRequests(ref cause) => cause,
+            GetUserPoolMfaConfigError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetUserPoolMfaConfigError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetUserPoolMfaConfigError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetUserPoolMfaConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetUserPoolMfaConfigError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUserPoolMfaConfigError {}
 /// Errors returned by GlobalSignOut
 #[derive(Debug, PartialEq)]
 pub enum GlobalSignOutError {
@@ -9333,22 +9177,18 @@ impl GlobalSignOutError {
 }
 impl fmt::Display for GlobalSignOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GlobalSignOutError {
-    fn description(&self) -> &str {
         match *self {
-            GlobalSignOutError::InternalError(ref cause) => cause,
-            GlobalSignOutError::InvalidParameter(ref cause) => cause,
-            GlobalSignOutError::NotAuthorized(ref cause) => cause,
-            GlobalSignOutError::PasswordResetRequired(ref cause) => cause,
-            GlobalSignOutError::ResourceNotFound(ref cause) => cause,
-            GlobalSignOutError::TooManyRequests(ref cause) => cause,
-            GlobalSignOutError::UserNotConfirmed(ref cause) => cause,
+            GlobalSignOutError::InternalError(ref cause) => write!(f, "{}", cause),
+            GlobalSignOutError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GlobalSignOutError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GlobalSignOutError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            GlobalSignOutError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GlobalSignOutError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GlobalSignOutError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GlobalSignOutError {}
 /// Errors returned by InitiateAuth
 #[derive(Debug, PartialEq)]
 pub enum InitiateAuthError {
@@ -9443,29 +9283,25 @@ impl InitiateAuthError {
 }
 impl fmt::Display for InitiateAuthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InitiateAuthError {
-    fn description(&self) -> &str {
         match *self {
-            InitiateAuthError::InternalError(ref cause) => cause,
-            InitiateAuthError::InvalidLambdaResponse(ref cause) => cause,
-            InitiateAuthError::InvalidParameter(ref cause) => cause,
-            InitiateAuthError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            InitiateAuthError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            InitiateAuthError::InvalidUserPoolConfiguration(ref cause) => cause,
-            InitiateAuthError::NotAuthorized(ref cause) => cause,
-            InitiateAuthError::PasswordResetRequired(ref cause) => cause,
-            InitiateAuthError::ResourceNotFound(ref cause) => cause,
-            InitiateAuthError::TooManyRequests(ref cause) => cause,
-            InitiateAuthError::UnexpectedLambda(ref cause) => cause,
-            InitiateAuthError::UserLambdaValidation(ref cause) => cause,
-            InitiateAuthError::UserNotConfirmed(ref cause) => cause,
-            InitiateAuthError::UserNotFound(ref cause) => cause,
+            InitiateAuthError::InternalError(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::InvalidSmsRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::InvalidSmsRoleTrustRelationship(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::InvalidUserPoolConfiguration(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            InitiateAuthError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InitiateAuthError {}
 /// Errors returned by ListDevices
 #[derive(Debug, PartialEq)]
 pub enum ListDevicesError {
@@ -9531,24 +9367,20 @@ impl ListDevicesError {
 }
 impl fmt::Display for ListDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDevicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDevicesError::InternalError(ref cause) => cause,
-            ListDevicesError::InvalidParameter(ref cause) => cause,
-            ListDevicesError::InvalidUserPoolConfiguration(ref cause) => cause,
-            ListDevicesError::NotAuthorized(ref cause) => cause,
-            ListDevicesError::PasswordResetRequired(ref cause) => cause,
-            ListDevicesError::ResourceNotFound(ref cause) => cause,
-            ListDevicesError::TooManyRequests(ref cause) => cause,
-            ListDevicesError::UserNotConfirmed(ref cause) => cause,
-            ListDevicesError::UserNotFound(ref cause) => cause,
+            ListDevicesError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::InvalidUserPoolConfiguration(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDevicesError {}
 /// Errors returned by ListGroups
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsError {
@@ -9592,20 +9424,16 @@ impl ListGroupsError {
 }
 impl fmt::Display for ListGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupsError::InternalError(ref cause) => cause,
-            ListGroupsError::InvalidParameter(ref cause) => cause,
-            ListGroupsError::NotAuthorized(ref cause) => cause,
-            ListGroupsError::ResourceNotFound(ref cause) => cause,
-            ListGroupsError::TooManyRequests(ref cause) => cause,
+            ListGroupsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListGroupsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListGroupsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListGroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListGroupsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGroupsError {}
 /// Errors returned by ListIdentityProviders
 #[derive(Debug, PartialEq)]
 pub enum ListIdentityProvidersError {
@@ -9655,20 +9483,16 @@ impl ListIdentityProvidersError {
 }
 impl fmt::Display for ListIdentityProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListIdentityProvidersError {
-    fn description(&self) -> &str {
         match *self {
-            ListIdentityProvidersError::InternalError(ref cause) => cause,
-            ListIdentityProvidersError::InvalidParameter(ref cause) => cause,
-            ListIdentityProvidersError::NotAuthorized(ref cause) => cause,
-            ListIdentityProvidersError::ResourceNotFound(ref cause) => cause,
-            ListIdentityProvidersError::TooManyRequests(ref cause) => cause,
+            ListIdentityProvidersError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListIdentityProvidersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListIdentityProvidersError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListIdentityProvidersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListIdentityProvidersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListIdentityProvidersError {}
 /// Errors returned by ListResourceServers
 #[derive(Debug, PartialEq)]
 pub enum ListResourceServersError {
@@ -9716,20 +9540,16 @@ impl ListResourceServersError {
 }
 impl fmt::Display for ListResourceServersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourceServersError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourceServersError::InternalError(ref cause) => cause,
-            ListResourceServersError::InvalidParameter(ref cause) => cause,
-            ListResourceServersError::NotAuthorized(ref cause) => cause,
-            ListResourceServersError::ResourceNotFound(ref cause) => cause,
-            ListResourceServersError::TooManyRequests(ref cause) => cause,
+            ListResourceServersError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListResourceServersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListResourceServersError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListResourceServersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListResourceServersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourceServersError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -9777,20 +9597,16 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalError(ref cause) => cause,
-            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
-            ListTagsForResourceError::NotAuthorized(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::TooManyRequests(ref cause) => cause,
+            ListTagsForResourceError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListUserImportJobs
 #[derive(Debug, PartialEq)]
 pub enum ListUserImportJobsError {
@@ -9834,20 +9650,16 @@ impl ListUserImportJobsError {
 }
 impl fmt::Display for ListUserImportJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserImportJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListUserImportJobsError::InternalError(ref cause) => cause,
-            ListUserImportJobsError::InvalidParameter(ref cause) => cause,
-            ListUserImportJobsError::NotAuthorized(ref cause) => cause,
-            ListUserImportJobsError::ResourceNotFound(ref cause) => cause,
-            ListUserImportJobsError::TooManyRequests(ref cause) => cause,
+            ListUserImportJobsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListUserImportJobsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListUserImportJobsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListUserImportJobsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListUserImportJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUserImportJobsError {}
 /// Errors returned by ListUserPoolClients
 #[derive(Debug, PartialEq)]
 pub enum ListUserPoolClientsError {
@@ -9895,20 +9707,16 @@ impl ListUserPoolClientsError {
 }
 impl fmt::Display for ListUserPoolClientsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserPoolClientsError {
-    fn description(&self) -> &str {
         match *self {
-            ListUserPoolClientsError::InternalError(ref cause) => cause,
-            ListUserPoolClientsError::InvalidParameter(ref cause) => cause,
-            ListUserPoolClientsError::NotAuthorized(ref cause) => cause,
-            ListUserPoolClientsError::ResourceNotFound(ref cause) => cause,
-            ListUserPoolClientsError::TooManyRequests(ref cause) => cause,
+            ListUserPoolClientsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListUserPoolClientsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListUserPoolClientsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListUserPoolClientsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListUserPoolClientsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUserPoolClientsError {}
 /// Errors returned by ListUserPools
 #[derive(Debug, PartialEq)]
 pub enum ListUserPoolsError {
@@ -9947,19 +9755,15 @@ impl ListUserPoolsError {
 }
 impl fmt::Display for ListUserPoolsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserPoolsError {
-    fn description(&self) -> &str {
         match *self {
-            ListUserPoolsError::InternalError(ref cause) => cause,
-            ListUserPoolsError::InvalidParameter(ref cause) => cause,
-            ListUserPoolsError::NotAuthorized(ref cause) => cause,
-            ListUserPoolsError::TooManyRequests(ref cause) => cause,
+            ListUserPoolsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListUserPoolsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListUserPoolsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListUserPoolsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUserPoolsError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -10003,20 +9807,16 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUsersError {
-    fn description(&self) -> &str {
         match *self {
-            ListUsersError::InternalError(ref cause) => cause,
-            ListUsersError::InvalidParameter(ref cause) => cause,
-            ListUsersError::NotAuthorized(ref cause) => cause,
-            ListUsersError::ResourceNotFound(ref cause) => cause,
-            ListUsersError::TooManyRequests(ref cause) => cause,
+            ListUsersError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListUsersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListUsersError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListUsersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListUsersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUsersError {}
 /// Errors returned by ListUsersInGroup
 #[derive(Debug, PartialEq)]
 pub enum ListUsersInGroupError {
@@ -10060,20 +9860,16 @@ impl ListUsersInGroupError {
 }
 impl fmt::Display for ListUsersInGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUsersInGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ListUsersInGroupError::InternalError(ref cause) => cause,
-            ListUsersInGroupError::InvalidParameter(ref cause) => cause,
-            ListUsersInGroupError::NotAuthorized(ref cause) => cause,
-            ListUsersInGroupError::ResourceNotFound(ref cause) => cause,
-            ListUsersInGroupError::TooManyRequests(ref cause) => cause,
+            ListUsersInGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListUsersInGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListUsersInGroupError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListUsersInGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListUsersInGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUsersInGroupError {}
 /// Errors returned by ResendConfirmationCode
 #[derive(Debug, PartialEq)]
 pub enum ResendConfirmationCodeError {
@@ -10188,29 +9984,31 @@ impl ResendConfirmationCodeError {
 }
 impl fmt::Display for ResendConfirmationCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResendConfirmationCodeError {
-    fn description(&self) -> &str {
         match *self {
-            ResendConfirmationCodeError::CodeDeliveryFailure(ref cause) => cause,
-            ResendConfirmationCodeError::InternalError(ref cause) => cause,
-            ResendConfirmationCodeError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
-            ResendConfirmationCodeError::InvalidLambdaResponse(ref cause) => cause,
-            ResendConfirmationCodeError::InvalidParameter(ref cause) => cause,
-            ResendConfirmationCodeError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            ResendConfirmationCodeError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            ResendConfirmationCodeError::LimitExceeded(ref cause) => cause,
-            ResendConfirmationCodeError::NotAuthorized(ref cause) => cause,
-            ResendConfirmationCodeError::ResourceNotFound(ref cause) => cause,
-            ResendConfirmationCodeError::TooManyRequests(ref cause) => cause,
-            ResendConfirmationCodeError::UnexpectedLambda(ref cause) => cause,
-            ResendConfirmationCodeError::UserLambdaValidation(ref cause) => cause,
-            ResendConfirmationCodeError::UserNotFound(ref cause) => cause,
+            ResendConfirmationCodeError::CodeDeliveryFailure(ref cause) => write!(f, "{}", cause),
+            ResendConfirmationCodeError::InternalError(ref cause) => write!(f, "{}", cause),
+            ResendConfirmationCodeError::InvalidEmailRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResendConfirmationCodeError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            ResendConfirmationCodeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ResendConfirmationCodeError::InvalidSmsRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResendConfirmationCodeError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResendConfirmationCodeError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ResendConfirmationCodeError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ResendConfirmationCodeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ResendConfirmationCodeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ResendConfirmationCodeError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            ResendConfirmationCodeError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            ResendConfirmationCodeError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResendConfirmationCodeError {}
 /// Errors returned by RespondToAuthChallenge
 #[derive(Debug, PartialEq)]
 pub enum RespondToAuthChallengeError {
@@ -10361,35 +10159,39 @@ impl RespondToAuthChallengeError {
 }
 impl fmt::Display for RespondToAuthChallengeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RespondToAuthChallengeError {
-    fn description(&self) -> &str {
         match *self {
-            RespondToAuthChallengeError::AliasExists(ref cause) => cause,
-            RespondToAuthChallengeError::CodeMismatch(ref cause) => cause,
-            RespondToAuthChallengeError::ExpiredCode(ref cause) => cause,
-            RespondToAuthChallengeError::InternalError(ref cause) => cause,
-            RespondToAuthChallengeError::InvalidLambdaResponse(ref cause) => cause,
-            RespondToAuthChallengeError::InvalidParameter(ref cause) => cause,
-            RespondToAuthChallengeError::InvalidPassword(ref cause) => cause,
-            RespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            RespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            RespondToAuthChallengeError::InvalidUserPoolConfiguration(ref cause) => cause,
-            RespondToAuthChallengeError::MFAMethodNotFound(ref cause) => cause,
-            RespondToAuthChallengeError::NotAuthorized(ref cause) => cause,
-            RespondToAuthChallengeError::PasswordResetRequired(ref cause) => cause,
-            RespondToAuthChallengeError::ResourceNotFound(ref cause) => cause,
-            RespondToAuthChallengeError::SoftwareTokenMFANotFound(ref cause) => cause,
-            RespondToAuthChallengeError::TooManyRequests(ref cause) => cause,
-            RespondToAuthChallengeError::UnexpectedLambda(ref cause) => cause,
-            RespondToAuthChallengeError::UserLambdaValidation(ref cause) => cause,
-            RespondToAuthChallengeError::UserNotConfirmed(ref cause) => cause,
-            RespondToAuthChallengeError::UserNotFound(ref cause) => cause,
+            RespondToAuthChallengeError::AliasExists(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::CodeMismatch(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::ExpiredCode(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::InternalError(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RespondToAuthChallengeError::InvalidUserPoolConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RespondToAuthChallengeError::MFAMethodNotFound(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::SoftwareTokenMFANotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RespondToAuthChallengeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            RespondToAuthChallengeError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RespondToAuthChallengeError {}
 /// Errors returned by SetRiskConfiguration
 #[derive(Debug, PartialEq)]
 pub enum SetRiskConfigurationError {
@@ -10460,23 +10262,21 @@ impl SetRiskConfigurationError {
 }
 impl fmt::Display for SetRiskConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetRiskConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            SetRiskConfigurationError::CodeDeliveryFailure(ref cause) => cause,
-            SetRiskConfigurationError::InternalError(ref cause) => cause,
-            SetRiskConfigurationError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
-            SetRiskConfigurationError::InvalidParameter(ref cause) => cause,
-            SetRiskConfigurationError::NotAuthorized(ref cause) => cause,
-            SetRiskConfigurationError::ResourceNotFound(ref cause) => cause,
-            SetRiskConfigurationError::TooManyRequests(ref cause) => cause,
-            SetRiskConfigurationError::UserPoolAddOnNotEnabled(ref cause) => cause,
+            SetRiskConfigurationError::CodeDeliveryFailure(ref cause) => write!(f, "{}", cause),
+            SetRiskConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetRiskConfigurationError::InvalidEmailRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetRiskConfigurationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetRiskConfigurationError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SetRiskConfigurationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetRiskConfigurationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            SetRiskConfigurationError::UserPoolAddOnNotEnabled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetRiskConfigurationError {}
 /// Errors returned by SetUICustomization
 #[derive(Debug, PartialEq)]
 pub enum SetUICustomizationError {
@@ -10520,20 +10320,16 @@ impl SetUICustomizationError {
 }
 impl fmt::Display for SetUICustomizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetUICustomizationError {
-    fn description(&self) -> &str {
         match *self {
-            SetUICustomizationError::InternalError(ref cause) => cause,
-            SetUICustomizationError::InvalidParameter(ref cause) => cause,
-            SetUICustomizationError::NotAuthorized(ref cause) => cause,
-            SetUICustomizationError::ResourceNotFound(ref cause) => cause,
-            SetUICustomizationError::TooManyRequests(ref cause) => cause,
+            SetUICustomizationError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetUICustomizationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetUICustomizationError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SetUICustomizationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetUICustomizationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetUICustomizationError {}
 /// Errors returned by SetUserMFAPreference
 #[derive(Debug, PartialEq)]
 pub enum SetUserMFAPreferenceError {
@@ -10595,22 +10391,18 @@ impl SetUserMFAPreferenceError {
 }
 impl fmt::Display for SetUserMFAPreferenceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetUserMFAPreferenceError {
-    fn description(&self) -> &str {
         match *self {
-            SetUserMFAPreferenceError::InternalError(ref cause) => cause,
-            SetUserMFAPreferenceError::InvalidParameter(ref cause) => cause,
-            SetUserMFAPreferenceError::NotAuthorized(ref cause) => cause,
-            SetUserMFAPreferenceError::PasswordResetRequired(ref cause) => cause,
-            SetUserMFAPreferenceError::ResourceNotFound(ref cause) => cause,
-            SetUserMFAPreferenceError::UserNotConfirmed(ref cause) => cause,
-            SetUserMFAPreferenceError::UserNotFound(ref cause) => cause,
+            SetUserMFAPreferenceError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetUserMFAPreferenceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetUserMFAPreferenceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SetUserMFAPreferenceError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            SetUserMFAPreferenceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetUserMFAPreferenceError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            SetUserMFAPreferenceError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetUserMFAPreferenceError {}
 /// Errors returned by SetUserPoolMfaConfig
 #[derive(Debug, PartialEq)]
 pub enum SetUserPoolMfaConfigError {
@@ -10674,22 +10466,22 @@ impl SetUserPoolMfaConfigError {
 }
 impl fmt::Display for SetUserPoolMfaConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetUserPoolMfaConfigError {
-    fn description(&self) -> &str {
         match *self {
-            SetUserPoolMfaConfigError::InternalError(ref cause) => cause,
-            SetUserPoolMfaConfigError::InvalidParameter(ref cause) => cause,
-            SetUserPoolMfaConfigError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            SetUserPoolMfaConfigError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            SetUserPoolMfaConfigError::NotAuthorized(ref cause) => cause,
-            SetUserPoolMfaConfigError::ResourceNotFound(ref cause) => cause,
-            SetUserPoolMfaConfigError::TooManyRequests(ref cause) => cause,
+            SetUserPoolMfaConfigError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetUserPoolMfaConfigError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetUserPoolMfaConfigError::InvalidSmsRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetUserPoolMfaConfigError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetUserPoolMfaConfigError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SetUserPoolMfaConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetUserPoolMfaConfigError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetUserPoolMfaConfigError {}
 /// Errors returned by SetUserSettings
 #[derive(Debug, PartialEq)]
 pub enum SetUserSettingsError {
@@ -10745,22 +10537,18 @@ impl SetUserSettingsError {
 }
 impl fmt::Display for SetUserSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetUserSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            SetUserSettingsError::InternalError(ref cause) => cause,
-            SetUserSettingsError::InvalidParameter(ref cause) => cause,
-            SetUserSettingsError::NotAuthorized(ref cause) => cause,
-            SetUserSettingsError::PasswordResetRequired(ref cause) => cause,
-            SetUserSettingsError::ResourceNotFound(ref cause) => cause,
-            SetUserSettingsError::UserNotConfirmed(ref cause) => cause,
-            SetUserSettingsError::UserNotFound(ref cause) => cause,
+            SetUserSettingsError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetUserSettingsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetUserSettingsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SetUserSettingsError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            SetUserSettingsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetUserSettingsError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            SetUserSettingsError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetUserSettingsError {}
 /// Errors returned by SignUp
 #[derive(Debug, PartialEq)]
 pub enum SignUpError {
@@ -10851,29 +10639,25 @@ impl SignUpError {
 }
 impl fmt::Display for SignUpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SignUpError {
-    fn description(&self) -> &str {
         match *self {
-            SignUpError::CodeDeliveryFailure(ref cause) => cause,
-            SignUpError::InternalError(ref cause) => cause,
-            SignUpError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
-            SignUpError::InvalidLambdaResponse(ref cause) => cause,
-            SignUpError::InvalidParameter(ref cause) => cause,
-            SignUpError::InvalidPassword(ref cause) => cause,
-            SignUpError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            SignUpError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            SignUpError::NotAuthorized(ref cause) => cause,
-            SignUpError::ResourceNotFound(ref cause) => cause,
-            SignUpError::TooManyRequests(ref cause) => cause,
-            SignUpError::UnexpectedLambda(ref cause) => cause,
-            SignUpError::UserLambdaValidation(ref cause) => cause,
-            SignUpError::UsernameExists(ref cause) => cause,
+            SignUpError::CodeDeliveryFailure(ref cause) => write!(f, "{}", cause),
+            SignUpError::InternalError(ref cause) => write!(f, "{}", cause),
+            SignUpError::InvalidEmailRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            SignUpError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            SignUpError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SignUpError::InvalidPassword(ref cause) => write!(f, "{}", cause),
+            SignUpError::InvalidSmsRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            SignUpError::InvalidSmsRoleTrustRelationship(ref cause) => write!(f, "{}", cause),
+            SignUpError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SignUpError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SignUpError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            SignUpError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            SignUpError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            SignUpError::UsernameExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SignUpError {}
 /// Errors returned by StartUserImportJob
 #[derive(Debug, PartialEq)]
 pub enum StartUserImportJobError {
@@ -10924,21 +10708,17 @@ impl StartUserImportJobError {
 }
 impl fmt::Display for StartUserImportJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartUserImportJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartUserImportJobError::InternalError(ref cause) => cause,
-            StartUserImportJobError::InvalidParameter(ref cause) => cause,
-            StartUserImportJobError::NotAuthorized(ref cause) => cause,
-            StartUserImportJobError::PreconditionNotMet(ref cause) => cause,
-            StartUserImportJobError::ResourceNotFound(ref cause) => cause,
-            StartUserImportJobError::TooManyRequests(ref cause) => cause,
+            StartUserImportJobError::InternalError(ref cause) => write!(f, "{}", cause),
+            StartUserImportJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartUserImportJobError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            StartUserImportJobError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
+            StartUserImportJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartUserImportJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartUserImportJobError {}
 /// Errors returned by StopUserImportJob
 #[derive(Debug, PartialEq)]
 pub enum StopUserImportJobError {
@@ -10989,21 +10769,17 @@ impl StopUserImportJobError {
 }
 impl fmt::Display for StopUserImportJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopUserImportJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopUserImportJobError::InternalError(ref cause) => cause,
-            StopUserImportJobError::InvalidParameter(ref cause) => cause,
-            StopUserImportJobError::NotAuthorized(ref cause) => cause,
-            StopUserImportJobError::PreconditionNotMet(ref cause) => cause,
-            StopUserImportJobError::ResourceNotFound(ref cause) => cause,
-            StopUserImportJobError::TooManyRequests(ref cause) => cause,
+            StopUserImportJobError::InternalError(ref cause) => write!(f, "{}", cause),
+            StopUserImportJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StopUserImportJobError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            StopUserImportJobError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
+            StopUserImportJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StopUserImportJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopUserImportJobError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -11047,20 +10823,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InternalError(ref cause) => cause,
-            TagResourceError::InvalidParameter(ref cause) => cause,
-            TagResourceError::NotAuthorized(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TooManyRequests(ref cause) => cause,
+            TagResourceError::InternalError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -11104,20 +10876,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InternalError(ref cause) => cause,
-            UntagResourceError::InvalidParameter(ref cause) => cause,
-            UntagResourceError::NotAuthorized(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::TooManyRequests(ref cause) => cause,
+            UntagResourceError::InternalError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateAuthEventFeedback
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthEventFeedbackError {
@@ -11185,22 +10953,20 @@ impl UpdateAuthEventFeedbackError {
 }
 impl fmt::Display for UpdateAuthEventFeedbackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAuthEventFeedbackError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAuthEventFeedbackError::InternalError(ref cause) => cause,
-            UpdateAuthEventFeedbackError::InvalidParameter(ref cause) => cause,
-            UpdateAuthEventFeedbackError::NotAuthorized(ref cause) => cause,
-            UpdateAuthEventFeedbackError::ResourceNotFound(ref cause) => cause,
-            UpdateAuthEventFeedbackError::TooManyRequests(ref cause) => cause,
-            UpdateAuthEventFeedbackError::UserNotFound(ref cause) => cause,
-            UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(ref cause) => cause,
+            UpdateAuthEventFeedbackError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateAuthEventFeedbackError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateAuthEventFeedbackError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateAuthEventFeedbackError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAuthEventFeedbackError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateAuthEventFeedbackError::UserNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateAuthEventFeedbackError {}
 /// Errors returned by UpdateDeviceStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeviceStatusError {
@@ -11268,24 +11034,22 @@ impl UpdateDeviceStatusError {
 }
 impl fmt::Display for UpdateDeviceStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDeviceStatusError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDeviceStatusError::InternalError(ref cause) => cause,
-            UpdateDeviceStatusError::InvalidParameter(ref cause) => cause,
-            UpdateDeviceStatusError::InvalidUserPoolConfiguration(ref cause) => cause,
-            UpdateDeviceStatusError::NotAuthorized(ref cause) => cause,
-            UpdateDeviceStatusError::PasswordResetRequired(ref cause) => cause,
-            UpdateDeviceStatusError::ResourceNotFound(ref cause) => cause,
-            UpdateDeviceStatusError::TooManyRequests(ref cause) => cause,
-            UpdateDeviceStatusError::UserNotConfirmed(ref cause) => cause,
-            UpdateDeviceStatusError::UserNotFound(ref cause) => cause,
+            UpdateDeviceStatusError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceStatusError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceStatusError::InvalidUserPoolConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDeviceStatusError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceStatusError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceStatusError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceStatusError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceStatusError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceStatusError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDeviceStatusError {}
 /// Errors returned by UpdateGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateGroupError {
@@ -11329,20 +11093,16 @@ impl UpdateGroupError {
 }
 impl fmt::Display for UpdateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGroupError::InternalError(ref cause) => cause,
-            UpdateGroupError::InvalidParameter(ref cause) => cause,
-            UpdateGroupError::NotAuthorized(ref cause) => cause,
-            UpdateGroupError::ResourceNotFound(ref cause) => cause,
-            UpdateGroupError::TooManyRequests(ref cause) => cause,
+            UpdateGroupError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGroupError {}
 /// Errors returned by UpdateIdentityProvider
 #[derive(Debug, PartialEq)]
 pub enum UpdateIdentityProviderError {
@@ -11403,21 +11163,19 @@ impl UpdateIdentityProviderError {
 }
 impl fmt::Display for UpdateIdentityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateIdentityProviderError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateIdentityProviderError::InternalError(ref cause) => cause,
-            UpdateIdentityProviderError::InvalidParameter(ref cause) => cause,
-            UpdateIdentityProviderError::NotAuthorized(ref cause) => cause,
-            UpdateIdentityProviderError::ResourceNotFound(ref cause) => cause,
-            UpdateIdentityProviderError::TooManyRequests(ref cause) => cause,
-            UpdateIdentityProviderError::UnsupportedIdentityProvider(ref cause) => cause,
+            UpdateIdentityProviderError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityProviderError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityProviderError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityProviderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityProviderError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateIdentityProviderError::UnsupportedIdentityProvider(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateIdentityProviderError {}
 /// Errors returned by UpdateResourceServer
 #[derive(Debug, PartialEq)]
 pub enum UpdateResourceServerError {
@@ -11467,20 +11225,16 @@ impl UpdateResourceServerError {
 }
 impl fmt::Display for UpdateResourceServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateResourceServerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateResourceServerError::InternalError(ref cause) => cause,
-            UpdateResourceServerError::InvalidParameter(ref cause) => cause,
-            UpdateResourceServerError::NotAuthorized(ref cause) => cause,
-            UpdateResourceServerError::ResourceNotFound(ref cause) => cause,
-            UpdateResourceServerError::TooManyRequests(ref cause) => cause,
+            UpdateResourceServerError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateResourceServerError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateResourceServerError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateResourceServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateResourceServerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateResourceServerError {}
 /// Errors returned by UpdateUserAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserAttributesError {
@@ -11613,33 +11367,35 @@ impl UpdateUserAttributesError {
 }
 impl fmt::Display for UpdateUserAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserAttributesError::AliasExists(ref cause) => cause,
-            UpdateUserAttributesError::CodeDeliveryFailure(ref cause) => cause,
-            UpdateUserAttributesError::CodeMismatch(ref cause) => cause,
-            UpdateUserAttributesError::ExpiredCode(ref cause) => cause,
-            UpdateUserAttributesError::InternalError(ref cause) => cause,
-            UpdateUserAttributesError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
-            UpdateUserAttributesError::InvalidLambdaResponse(ref cause) => cause,
-            UpdateUserAttributesError::InvalidParameter(ref cause) => cause,
-            UpdateUserAttributesError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            UpdateUserAttributesError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            UpdateUserAttributesError::NotAuthorized(ref cause) => cause,
-            UpdateUserAttributesError::PasswordResetRequired(ref cause) => cause,
-            UpdateUserAttributesError::ResourceNotFound(ref cause) => cause,
-            UpdateUserAttributesError::TooManyRequests(ref cause) => cause,
-            UpdateUserAttributesError::UnexpectedLambda(ref cause) => cause,
-            UpdateUserAttributesError::UserLambdaValidation(ref cause) => cause,
-            UpdateUserAttributesError::UserNotConfirmed(ref cause) => cause,
-            UpdateUserAttributesError::UserNotFound(ref cause) => cause,
+            UpdateUserAttributesError::AliasExists(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::CodeDeliveryFailure(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::CodeMismatch(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::ExpiredCode(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::InvalidEmailRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateUserAttributesError::InvalidLambdaResponse(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::InvalidSmsRoleAccessPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateUserAttributesError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateUserAttributesError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::UnexpectedLambda(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::UserLambdaValidation(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            UpdateUserAttributesError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserAttributesError {}
 /// Errors returned by UpdateUserPool
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserPoolError {
@@ -11721,26 +11477,24 @@ impl UpdateUserPoolError {
 }
 impl fmt::Display for UpdateUserPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserPoolError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserPoolError::ConcurrentModification(ref cause) => cause,
-            UpdateUserPoolError::InternalError(ref cause) => cause,
-            UpdateUserPoolError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
-            UpdateUserPoolError::InvalidParameter(ref cause) => cause,
-            UpdateUserPoolError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
-            UpdateUserPoolError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
-            UpdateUserPoolError::NotAuthorized(ref cause) => cause,
-            UpdateUserPoolError::ResourceNotFound(ref cause) => cause,
-            UpdateUserPoolError::TooManyRequests(ref cause) => cause,
-            UpdateUserPoolError::UserImportInProgress(ref cause) => cause,
-            UpdateUserPoolError::UserPoolTagging(ref cause) => cause,
+            UpdateUserPoolError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolError::InvalidEmailRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolError::InvalidSmsRoleAccessPolicy(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolError::InvalidSmsRoleTrustRelationship(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateUserPoolError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolError::UserImportInProgress(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolError::UserPoolTagging(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserPoolError {}
 /// Errors returned by UpdateUserPoolClient
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserPoolClientError {
@@ -11811,23 +11565,19 @@ impl UpdateUserPoolClientError {
 }
 impl fmt::Display for UpdateUserPoolClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserPoolClientError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserPoolClientError::ConcurrentModification(ref cause) => cause,
-            UpdateUserPoolClientError::InternalError(ref cause) => cause,
-            UpdateUserPoolClientError::InvalidOAuthFlow(ref cause) => cause,
-            UpdateUserPoolClientError::InvalidParameter(ref cause) => cause,
-            UpdateUserPoolClientError::NotAuthorized(ref cause) => cause,
-            UpdateUserPoolClientError::ResourceNotFound(ref cause) => cause,
-            UpdateUserPoolClientError::ScopeDoesNotExist(ref cause) => cause,
-            UpdateUserPoolClientError::TooManyRequests(ref cause) => cause,
+            UpdateUserPoolClientError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolClientError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolClientError::InvalidOAuthFlow(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolClientError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolClientError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolClientError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolClientError::ScopeDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolClientError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserPoolClientError {}
 /// Errors returned by UpdateUserPoolDomain
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserPoolDomainError {
@@ -11877,20 +11627,16 @@ impl UpdateUserPoolDomainError {
 }
 impl fmt::Display for UpdateUserPoolDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserPoolDomainError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserPoolDomainError::InternalError(ref cause) => cause,
-            UpdateUserPoolDomainError::InvalidParameter(ref cause) => cause,
-            UpdateUserPoolDomainError::NotAuthorized(ref cause) => cause,
-            UpdateUserPoolDomainError::ResourceNotFound(ref cause) => cause,
-            UpdateUserPoolDomainError::TooManyRequests(ref cause) => cause,
+            UpdateUserPoolDomainError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolDomainError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolDomainError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserPoolDomainError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserPoolDomainError {}
 /// Errors returned by VerifySoftwareToken
 #[derive(Debug, PartialEq)]
 pub enum VerifySoftwareTokenError {
@@ -11983,27 +11729,25 @@ impl VerifySoftwareTokenError {
 }
 impl fmt::Display for VerifySoftwareTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for VerifySoftwareTokenError {
-    fn description(&self) -> &str {
         match *self {
-            VerifySoftwareTokenError::CodeMismatch(ref cause) => cause,
-            VerifySoftwareTokenError::EnableSoftwareTokenMFA(ref cause) => cause,
-            VerifySoftwareTokenError::InternalError(ref cause) => cause,
-            VerifySoftwareTokenError::InvalidParameter(ref cause) => cause,
-            VerifySoftwareTokenError::InvalidUserPoolConfiguration(ref cause) => cause,
-            VerifySoftwareTokenError::NotAuthorized(ref cause) => cause,
-            VerifySoftwareTokenError::PasswordResetRequired(ref cause) => cause,
-            VerifySoftwareTokenError::ResourceNotFound(ref cause) => cause,
-            VerifySoftwareTokenError::SoftwareTokenMFANotFound(ref cause) => cause,
-            VerifySoftwareTokenError::TooManyRequests(ref cause) => cause,
-            VerifySoftwareTokenError::UserNotConfirmed(ref cause) => cause,
-            VerifySoftwareTokenError::UserNotFound(ref cause) => cause,
+            VerifySoftwareTokenError::CodeMismatch(ref cause) => write!(f, "{}", cause),
+            VerifySoftwareTokenError::EnableSoftwareTokenMFA(ref cause) => write!(f, "{}", cause),
+            VerifySoftwareTokenError::InternalError(ref cause) => write!(f, "{}", cause),
+            VerifySoftwareTokenError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            VerifySoftwareTokenError::InvalidUserPoolConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            VerifySoftwareTokenError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            VerifySoftwareTokenError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            VerifySoftwareTokenError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            VerifySoftwareTokenError::SoftwareTokenMFANotFound(ref cause) => write!(f, "{}", cause),
+            VerifySoftwareTokenError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            VerifySoftwareTokenError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            VerifySoftwareTokenError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for VerifySoftwareTokenError {}
 /// Errors returned by VerifyUserAttribute
 #[derive(Debug, PartialEq)]
 pub enum VerifyUserAttributeError {
@@ -12085,26 +11829,22 @@ impl VerifyUserAttributeError {
 }
 impl fmt::Display for VerifyUserAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for VerifyUserAttributeError {
-    fn description(&self) -> &str {
         match *self {
-            VerifyUserAttributeError::CodeMismatch(ref cause) => cause,
-            VerifyUserAttributeError::ExpiredCode(ref cause) => cause,
-            VerifyUserAttributeError::InternalError(ref cause) => cause,
-            VerifyUserAttributeError::InvalidParameter(ref cause) => cause,
-            VerifyUserAttributeError::LimitExceeded(ref cause) => cause,
-            VerifyUserAttributeError::NotAuthorized(ref cause) => cause,
-            VerifyUserAttributeError::PasswordResetRequired(ref cause) => cause,
-            VerifyUserAttributeError::ResourceNotFound(ref cause) => cause,
-            VerifyUserAttributeError::TooManyRequests(ref cause) => cause,
-            VerifyUserAttributeError::UserNotConfirmed(ref cause) => cause,
-            VerifyUserAttributeError::UserNotFound(ref cause) => cause,
+            VerifyUserAttributeError::CodeMismatch(ref cause) => write!(f, "{}", cause),
+            VerifyUserAttributeError::ExpiredCode(ref cause) => write!(f, "{}", cause),
+            VerifyUserAttributeError::InternalError(ref cause) => write!(f, "{}", cause),
+            VerifyUserAttributeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            VerifyUserAttributeError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            VerifyUserAttributeError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            VerifyUserAttributeError::PasswordResetRequired(ref cause) => write!(f, "{}", cause),
+            VerifyUserAttributeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            VerifyUserAttributeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            VerifyUserAttributeError::UserNotConfirmed(ref cause) => write!(f, "{}", cause),
+            VerifyUserAttributeError::UserNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for VerifyUserAttributeError {}
 /// Trait representing the capabilities of the Amazon Cognito Identity Provider API. Amazon Cognito Identity Provider clients implement this trait.
 pub trait CognitoIdentityProvider {
     /// <p>Adds additional user attributes to the user pool schema.</p>

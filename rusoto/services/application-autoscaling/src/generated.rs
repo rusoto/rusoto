@@ -685,18 +685,14 @@ impl DeleteScalingPolicyError {
 }
 impl fmt::Display for DeleteScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteScalingPolicyError::ConcurrentUpdate(ref cause) => cause,
-            DeleteScalingPolicyError::InternalService(ref cause) => cause,
-            DeleteScalingPolicyError::ObjectNotFound(ref cause) => cause,
+            DeleteScalingPolicyError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DeleteScalingPolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteScalingPolicyError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteScalingPolicyError {}
 /// Errors returned by DeleteScheduledAction
 #[derive(Debug, PartialEq)]
 pub enum DeleteScheduledActionError {
@@ -736,18 +732,14 @@ impl DeleteScheduledActionError {
 }
 impl fmt::Display for DeleteScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteScheduledActionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteScheduledActionError::ConcurrentUpdate(ref cause) => cause,
-            DeleteScheduledActionError::InternalService(ref cause) => cause,
-            DeleteScheduledActionError::ObjectNotFound(ref cause) => cause,
+            DeleteScheduledActionError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DeleteScheduledActionError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteScheduledActionError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteScheduledActionError {}
 /// Errors returned by DeregisterScalableTarget
 #[derive(Debug, PartialEq)]
 pub enum DeregisterScalableTargetError {
@@ -787,18 +779,14 @@ impl DeregisterScalableTargetError {
 }
 impl fmt::Display for DeregisterScalableTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterScalableTargetError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterScalableTargetError::ConcurrentUpdate(ref cause) => cause,
-            DeregisterScalableTargetError::InternalService(ref cause) => cause,
-            DeregisterScalableTargetError::ObjectNotFound(ref cause) => cause,
+            DeregisterScalableTargetError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DeregisterScalableTargetError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeregisterScalableTargetError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterScalableTargetError {}
 /// Errors returned by DescribeScalableTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalableTargetsError {
@@ -838,18 +826,14 @@ impl DescribeScalableTargetsError {
 }
 impl fmt::Display for DescribeScalableTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalableTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalableTargetsError::ConcurrentUpdate(ref cause) => cause,
-            DescribeScalableTargetsError::InternalService(ref cause) => cause,
-            DescribeScalableTargetsError::InvalidNextToken(ref cause) => cause,
+            DescribeScalableTargetsError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DescribeScalableTargetsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScalableTargetsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScalableTargetsError {}
 /// Errors returned by DescribeScalingActivities
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingActivitiesError {
@@ -889,18 +873,14 @@ impl DescribeScalingActivitiesError {
 }
 impl fmt::Display for DescribeScalingActivitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalingActivitiesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalingActivitiesError::ConcurrentUpdate(ref cause) => cause,
-            DescribeScalingActivitiesError::InternalService(ref cause) => cause,
-            DescribeScalingActivitiesError::InvalidNextToken(ref cause) => cause,
+            DescribeScalingActivitiesError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DescribeScalingActivitiesError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScalingActivitiesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScalingActivitiesError {}
 /// Errors returned by DescribeScalingPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingPoliciesError {
@@ -947,19 +927,15 @@ impl DescribeScalingPoliciesError {
 }
 impl fmt::Display for DescribeScalingPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalingPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalingPoliciesError::ConcurrentUpdate(ref cause) => cause,
-            DescribeScalingPoliciesError::FailedResourceAccess(ref cause) => cause,
-            DescribeScalingPoliciesError::InternalService(ref cause) => cause,
-            DescribeScalingPoliciesError::InvalidNextToken(ref cause) => cause,
+            DescribeScalingPoliciesError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPoliciesError::FailedResourceAccess(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPoliciesError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScalingPoliciesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScalingPoliciesError {}
 /// Errors returned by DescribeScheduledActions
 #[derive(Debug, PartialEq)]
 pub enum DescribeScheduledActionsError {
@@ -999,18 +975,14 @@ impl DescribeScheduledActionsError {
 }
 impl fmt::Display for DescribeScheduledActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScheduledActionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScheduledActionsError::ConcurrentUpdate(ref cause) => cause,
-            DescribeScheduledActionsError::InternalService(ref cause) => cause,
-            DescribeScheduledActionsError::InvalidNextToken(ref cause) => cause,
+            DescribeScheduledActionsError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            DescribeScheduledActionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeScheduledActionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScheduledActionsError {}
 /// Errors returned by PutScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutScalingPolicyError {
@@ -1056,20 +1028,16 @@ impl PutScalingPolicyError {
 }
 impl fmt::Display for PutScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutScalingPolicyError::ConcurrentUpdate(ref cause) => cause,
-            PutScalingPolicyError::FailedResourceAccess(ref cause) => cause,
-            PutScalingPolicyError::InternalService(ref cause) => cause,
-            PutScalingPolicyError::LimitExceeded(ref cause) => cause,
-            PutScalingPolicyError::ObjectNotFound(ref cause) => cause,
+            PutScalingPolicyError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::FailedResourceAccess(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutScalingPolicyError {}
 /// Errors returned by PutScheduledAction
 #[derive(Debug, PartialEq)]
 pub enum PutScheduledActionError {
@@ -1108,19 +1076,15 @@ impl PutScheduledActionError {
 }
 impl fmt::Display for PutScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutScheduledActionError {
-    fn description(&self) -> &str {
         match *self {
-            PutScheduledActionError::ConcurrentUpdate(ref cause) => cause,
-            PutScheduledActionError::InternalService(ref cause) => cause,
-            PutScheduledActionError::LimitExceeded(ref cause) => cause,
-            PutScheduledActionError::ObjectNotFound(ref cause) => cause,
+            PutScheduledActionError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            PutScheduledActionError::InternalService(ref cause) => write!(f, "{}", cause),
+            PutScheduledActionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutScheduledActionError::ObjectNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutScheduledActionError {}
 /// Errors returned by RegisterScalableTarget
 #[derive(Debug, PartialEq)]
 pub enum RegisterScalableTargetError {
@@ -1160,18 +1124,14 @@ impl RegisterScalableTargetError {
 }
 impl fmt::Display for RegisterScalableTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterScalableTargetError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterScalableTargetError::ConcurrentUpdate(ref cause) => cause,
-            RegisterScalableTargetError::InternalService(ref cause) => cause,
-            RegisterScalableTargetError::LimitExceeded(ref cause) => cause,
+            RegisterScalableTargetError::ConcurrentUpdate(ref cause) => write!(f, "{}", cause),
+            RegisterScalableTargetError::InternalService(ref cause) => write!(f, "{}", cause),
+            RegisterScalableTargetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterScalableTargetError {}
 /// Trait representing the capabilities of the Application Auto Scaling API. Application Auto Scaling clients implement this trait.
 pub trait ApplicationAutoScaling {
     /// <p>Deletes the specified scaling policy for an Application Auto Scaling scalable target.</p> <p>Deleting a step scaling policy deletes the underlying alarm action, but does not delete the CloudWatch alarm associated with the scaling policy, even if it no longer has an associated action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-step-scaling-policies.html#delete-step-scaling-policy">Delete a Step Scaling Policy</a> and <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-target-tracking.html#delete-target-tracking-policy">Delete a Target Tracking Scaling Policy</a> in the <i>Application Auto Scaling User Guide</i>.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>

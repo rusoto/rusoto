@@ -2105,17 +2105,15 @@ impl CreateCostCategoryDefinitionError {
 }
 impl fmt::Display for CreateCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCostCategoryDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
-            CreateCostCategoryDefinitionError::ServiceQuotaExceeded(ref cause) => cause,
+            CreateCostCategoryDefinitionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCostCategoryDefinitionError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateCostCategoryDefinitionError {}
 /// Errors returned by DeleteCostCategoryDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteCostCategoryDefinitionError {
@@ -2150,17 +2148,15 @@ impl DeleteCostCategoryDefinitionError {
 }
 impl fmt::Display for DeleteCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCostCategoryDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
-            DeleteCostCategoryDefinitionError::ResourceNotFound(ref cause) => cause,
+            DeleteCostCategoryDefinitionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteCostCategoryDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteCostCategoryDefinitionError {}
 /// Errors returned by DescribeCostCategoryDefinition
 #[derive(Debug, PartialEq)]
 pub enum DescribeCostCategoryDefinitionError {
@@ -2195,17 +2191,15 @@ impl DescribeCostCategoryDefinitionError {
 }
 impl fmt::Display for DescribeCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCostCategoryDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
-            DescribeCostCategoryDefinitionError::ResourceNotFound(ref cause) => cause,
+            DescribeCostCategoryDefinitionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeCostCategoryDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCostCategoryDefinitionError {}
 /// Errors returned by GetCostAndUsage
 #[derive(Debug, PartialEq)]
 pub enum GetCostAndUsageError {
@@ -2249,20 +2243,16 @@ impl GetCostAndUsageError {
 }
 impl fmt::Display for GetCostAndUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCostAndUsageError {
-    fn description(&self) -> &str {
         match *self {
-            GetCostAndUsageError::BillExpiration(ref cause) => cause,
-            GetCostAndUsageError::DataUnavailable(ref cause) => cause,
-            GetCostAndUsageError::InvalidNextToken(ref cause) => cause,
-            GetCostAndUsageError::LimitExceeded(ref cause) => cause,
-            GetCostAndUsageError::RequestChanged(ref cause) => cause,
+            GetCostAndUsageError::BillExpiration(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageError::RequestChanged(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCostAndUsageError {}
 /// Errors returned by GetCostAndUsageWithResources
 #[derive(Debug, PartialEq)]
 pub enum GetCostAndUsageWithResourcesError {
@@ -2318,20 +2308,18 @@ impl GetCostAndUsageWithResourcesError {
 }
 impl fmt::Display for GetCostAndUsageWithResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCostAndUsageWithResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            GetCostAndUsageWithResourcesError::BillExpiration(ref cause) => cause,
-            GetCostAndUsageWithResourcesError::DataUnavailable(ref cause) => cause,
-            GetCostAndUsageWithResourcesError::InvalidNextToken(ref cause) => cause,
-            GetCostAndUsageWithResourcesError::LimitExceeded(ref cause) => cause,
-            GetCostAndUsageWithResourcesError::RequestChanged(ref cause) => cause,
+            GetCostAndUsageWithResourcesError::BillExpiration(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageWithResourcesError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageWithResourcesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCostAndUsageWithResourcesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetCostAndUsageWithResourcesError::RequestChanged(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCostAndUsageWithResourcesError {}
 /// Errors returned by GetCostForecast
 #[derive(Debug, PartialEq)]
 pub enum GetCostForecastError {
@@ -2360,17 +2348,13 @@ impl GetCostForecastError {
 }
 impl fmt::Display for GetCostForecastError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCostForecastError {
-    fn description(&self) -> &str {
         match *self {
-            GetCostForecastError::DataUnavailable(ref cause) => cause,
-            GetCostForecastError::LimitExceeded(ref cause) => cause,
+            GetCostForecastError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetCostForecastError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCostForecastError {}
 /// Errors returned by GetDimensionValues
 #[derive(Debug, PartialEq)]
 pub enum GetDimensionValuesError {
@@ -2414,20 +2398,16 @@ impl GetDimensionValuesError {
 }
 impl fmt::Display for GetDimensionValuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDimensionValuesError {
-    fn description(&self) -> &str {
         match *self {
-            GetDimensionValuesError::BillExpiration(ref cause) => cause,
-            GetDimensionValuesError::DataUnavailable(ref cause) => cause,
-            GetDimensionValuesError::InvalidNextToken(ref cause) => cause,
-            GetDimensionValuesError::LimitExceeded(ref cause) => cause,
-            GetDimensionValuesError::RequestChanged(ref cause) => cause,
+            GetDimensionValuesError::BillExpiration(ref cause) => write!(f, "{}", cause),
+            GetDimensionValuesError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetDimensionValuesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetDimensionValuesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetDimensionValuesError::RequestChanged(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDimensionValuesError {}
 /// Errors returned by GetReservationCoverage
 #[derive(Debug, PartialEq)]
 pub enum GetReservationCoverageError {
@@ -2467,18 +2447,14 @@ impl GetReservationCoverageError {
 }
 impl fmt::Display for GetReservationCoverageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReservationCoverageError {
-    fn description(&self) -> &str {
         match *self {
-            GetReservationCoverageError::DataUnavailable(ref cause) => cause,
-            GetReservationCoverageError::InvalidNextToken(ref cause) => cause,
-            GetReservationCoverageError::LimitExceeded(ref cause) => cause,
+            GetReservationCoverageError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetReservationCoverageError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetReservationCoverageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetReservationCoverageError {}
 /// Errors returned by GetReservationPurchaseRecommendation
 #[derive(Debug, PartialEq)]
 pub enum GetReservationPurchaseRecommendationError {
@@ -2520,18 +2496,20 @@ impl GetReservationPurchaseRecommendationError {
 }
 impl fmt::Display for GetReservationPurchaseRecommendationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReservationPurchaseRecommendationError {
-    fn description(&self) -> &str {
         match *self {
-            GetReservationPurchaseRecommendationError::DataUnavailable(ref cause) => cause,
-            GetReservationPurchaseRecommendationError::InvalidNextToken(ref cause) => cause,
-            GetReservationPurchaseRecommendationError::LimitExceeded(ref cause) => cause,
+            GetReservationPurchaseRecommendationError::DataUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetReservationPurchaseRecommendationError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetReservationPurchaseRecommendationError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetReservationPurchaseRecommendationError {}
 /// Errors returned by GetReservationUtilization
 #[derive(Debug, PartialEq)]
 pub enum GetReservationUtilizationError {
@@ -2571,18 +2549,14 @@ impl GetReservationUtilizationError {
 }
 impl fmt::Display for GetReservationUtilizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReservationUtilizationError {
-    fn description(&self) -> &str {
         match *self {
-            GetReservationUtilizationError::DataUnavailable(ref cause) => cause,
-            GetReservationUtilizationError::InvalidNextToken(ref cause) => cause,
-            GetReservationUtilizationError::LimitExceeded(ref cause) => cause,
+            GetReservationUtilizationError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetReservationUtilizationError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetReservationUtilizationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetReservationUtilizationError {}
 /// Errors returned by GetRightsizingRecommendation
 #[derive(Debug, PartialEq)]
 pub enum GetRightsizingRecommendationError {
@@ -2617,17 +2591,15 @@ impl GetRightsizingRecommendationError {
 }
 impl fmt::Display for GetRightsizingRecommendationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRightsizingRecommendationError {
-    fn description(&self) -> &str {
         match *self {
-            GetRightsizingRecommendationError::InvalidNextToken(ref cause) => cause,
-            GetRightsizingRecommendationError::LimitExceeded(ref cause) => cause,
+            GetRightsizingRecommendationError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRightsizingRecommendationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRightsizingRecommendationError {}
 /// Errors returned by GetSavingsPlansCoverage
 #[derive(Debug, PartialEq)]
 pub enum GetSavingsPlansCoverageError {
@@ -2667,18 +2639,14 @@ impl GetSavingsPlansCoverageError {
 }
 impl fmt::Display for GetSavingsPlansCoverageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSavingsPlansCoverageError {
-    fn description(&self) -> &str {
         match *self {
-            GetSavingsPlansCoverageError::DataUnavailable(ref cause) => cause,
-            GetSavingsPlansCoverageError::InvalidNextToken(ref cause) => cause,
-            GetSavingsPlansCoverageError::LimitExceeded(ref cause) => cause,
+            GetSavingsPlansCoverageError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetSavingsPlansCoverageError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetSavingsPlansCoverageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSavingsPlansCoverageError {}
 /// Errors returned by GetSavingsPlansPurchaseRecommendation
 #[derive(Debug, PartialEq)]
 pub enum GetSavingsPlansPurchaseRecommendationError {
@@ -2713,17 +2681,17 @@ impl GetSavingsPlansPurchaseRecommendationError {
 }
 impl fmt::Display for GetSavingsPlansPurchaseRecommendationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSavingsPlansPurchaseRecommendationError {
-    fn description(&self) -> &str {
         match *self {
-            GetSavingsPlansPurchaseRecommendationError::InvalidNextToken(ref cause) => cause,
-            GetSavingsPlansPurchaseRecommendationError::LimitExceeded(ref cause) => cause,
+            GetSavingsPlansPurchaseRecommendationError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSavingsPlansPurchaseRecommendationError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetSavingsPlansPurchaseRecommendationError {}
 /// Errors returned by GetSavingsPlansUtilization
 #[derive(Debug, PartialEq)]
 pub enum GetSavingsPlansUtilizationError {
@@ -2758,17 +2726,13 @@ impl GetSavingsPlansUtilizationError {
 }
 impl fmt::Display for GetSavingsPlansUtilizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSavingsPlansUtilizationError {
-    fn description(&self) -> &str {
         match *self {
-            GetSavingsPlansUtilizationError::DataUnavailable(ref cause) => cause,
-            GetSavingsPlansUtilizationError::LimitExceeded(ref cause) => cause,
+            GetSavingsPlansUtilizationError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetSavingsPlansUtilizationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSavingsPlansUtilizationError {}
 /// Errors returned by GetSavingsPlansUtilizationDetails
 #[derive(Debug, PartialEq)]
 pub enum GetSavingsPlansUtilizationDetailsError {
@@ -2810,18 +2774,20 @@ impl GetSavingsPlansUtilizationDetailsError {
 }
 impl fmt::Display for GetSavingsPlansUtilizationDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSavingsPlansUtilizationDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetSavingsPlansUtilizationDetailsError::DataUnavailable(ref cause) => cause,
-            GetSavingsPlansUtilizationDetailsError::InvalidNextToken(ref cause) => cause,
-            GetSavingsPlansUtilizationDetailsError::LimitExceeded(ref cause) => cause,
+            GetSavingsPlansUtilizationDetailsError::DataUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSavingsPlansUtilizationDetailsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSavingsPlansUtilizationDetailsError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetSavingsPlansUtilizationDetailsError {}
 /// Errors returned by GetTags
 #[derive(Debug, PartialEq)]
 pub enum GetTagsError {
@@ -2865,20 +2831,16 @@ impl GetTagsError {
 }
 impl fmt::Display for GetTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTagsError {
-    fn description(&self) -> &str {
         match *self {
-            GetTagsError::BillExpiration(ref cause) => cause,
-            GetTagsError::DataUnavailable(ref cause) => cause,
-            GetTagsError::InvalidNextToken(ref cause) => cause,
-            GetTagsError::LimitExceeded(ref cause) => cause,
-            GetTagsError::RequestChanged(ref cause) => cause,
+            GetTagsError::BillExpiration(ref cause) => write!(f, "{}", cause),
+            GetTagsError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetTagsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetTagsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetTagsError::RequestChanged(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTagsError {}
 /// Errors returned by GetUsageForecast
 #[derive(Debug, PartialEq)]
 pub enum GetUsageForecastError {
@@ -2914,18 +2876,14 @@ impl GetUsageForecastError {
 }
 impl fmt::Display for GetUsageForecastError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUsageForecastError {
-    fn description(&self) -> &str {
         match *self {
-            GetUsageForecastError::DataUnavailable(ref cause) => cause,
-            GetUsageForecastError::LimitExceeded(ref cause) => cause,
-            GetUsageForecastError::UnresolvableUsageUnit(ref cause) => cause,
+            GetUsageForecastError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetUsageForecastError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetUsageForecastError::UnresolvableUsageUnit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUsageForecastError {}
 /// Errors returned by ListCostCategoryDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListCostCategoryDefinitionsError {
@@ -2953,16 +2911,12 @@ impl ListCostCategoryDefinitionsError {
 }
 impl fmt::Display for ListCostCategoryDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCostCategoryDefinitionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListCostCategoryDefinitionsError::LimitExceeded(ref cause) => cause,
+            ListCostCategoryDefinitionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCostCategoryDefinitionsError {}
 /// Errors returned by UpdateCostCategoryDefinition
 #[derive(Debug, PartialEq)]
 pub enum UpdateCostCategoryDefinitionError {
@@ -3004,18 +2958,18 @@ impl UpdateCostCategoryDefinitionError {
 }
 impl fmt::Display for UpdateCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCostCategoryDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
-            UpdateCostCategoryDefinitionError::ResourceNotFound(ref cause) => cause,
-            UpdateCostCategoryDefinitionError::ServiceQuotaExceeded(ref cause) => cause,
+            UpdateCostCategoryDefinitionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateCostCategoryDefinitionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCostCategoryDefinitionError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateCostCategoryDefinitionError {}
 /// Trait representing the capabilities of the AWS Cost Explorer API. AWS Cost Explorer clients implement this trait.
 pub trait CostExplorer {
     /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Creates a new Cost Category with the requested name and rules.</p></p>

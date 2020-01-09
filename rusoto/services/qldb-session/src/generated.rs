@@ -298,20 +298,16 @@ impl SendCommandError {
 }
 impl fmt::Display for SendCommandError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendCommandError {
-    fn description(&self) -> &str {
         match *self {
-            SendCommandError::BadRequest(ref cause) => cause,
-            SendCommandError::InvalidSession(ref cause) => cause,
-            SendCommandError::LimitExceeded(ref cause) => cause,
-            SendCommandError::OccConflict(ref cause) => cause,
-            SendCommandError::RateExceeded(ref cause) => cause,
+            SendCommandError::BadRequest(ref cause) => write!(f, "{}", cause),
+            SendCommandError::InvalidSession(ref cause) => write!(f, "{}", cause),
+            SendCommandError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            SendCommandError::OccConflict(ref cause) => write!(f, "{}", cause),
+            SendCommandError::RateExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendCommandError {}
 /// Trait representing the capabilities of the QLDB Session API. QLDB Session clients implement this trait.
 pub trait QldbSession {
     /// <p>Sends a command to an Amazon QLDB ledger.</p>

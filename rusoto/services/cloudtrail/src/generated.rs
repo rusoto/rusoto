@@ -941,24 +941,20 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsError::CloudTrailARNInvalid(ref cause) => cause,
-            AddTagsError::InvalidTagParameter(ref cause) => cause,
-            AddTagsError::InvalidTrailName(ref cause) => cause,
-            AddTagsError::NotOrganizationMasterAccount(ref cause) => cause,
-            AddTagsError::OperationNotPermitted(ref cause) => cause,
-            AddTagsError::ResourceNotFound(ref cause) => cause,
-            AddTagsError::ResourceTypeNotSupported(ref cause) => cause,
-            AddTagsError::TagsLimitExceeded(ref cause) => cause,
-            AddTagsError::UnsupportedOperation(ref cause) => cause,
+            AddTagsError::CloudTrailARNInvalid(ref cause) => write!(f, "{}", cause),
+            AddTagsError::InvalidTagParameter(ref cause) => write!(f, "{}", cause),
+            AddTagsError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            AddTagsError::NotOrganizationMasterAccount(ref cause) => write!(f, "{}", cause),
+            AddTagsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            AddTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsError::ResourceTypeNotSupported(ref cause) => write!(f, "{}", cause),
+            AddTagsError::TagsLimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddTagsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by CreateTrail
 #[derive(Debug, PartialEq)]
 pub enum CreateTrailError {
@@ -1134,42 +1130,42 @@ impl CreateTrailError {
 }
 impl fmt::Display for CreateTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTrailError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTrailError::CloudTrailAccessNotEnabled(ref cause) => cause,
-            CreateTrailError::CloudWatchLogsDeliveryUnavailable(ref cause) => cause,
-            CreateTrailError::InsufficientDependencyServiceAccessPermission(ref cause) => cause,
-            CreateTrailError::InsufficientEncryptionPolicy(ref cause) => cause,
-            CreateTrailError::InsufficientS3BucketPolicy(ref cause) => cause,
-            CreateTrailError::InsufficientSnsTopicPolicy(ref cause) => cause,
-            CreateTrailError::InvalidCloudWatchLogsLogGroupArn(ref cause) => cause,
-            CreateTrailError::InvalidCloudWatchLogsRoleArn(ref cause) => cause,
-            CreateTrailError::InvalidKmsKeyId(ref cause) => cause,
-            CreateTrailError::InvalidParameterCombination(ref cause) => cause,
-            CreateTrailError::InvalidS3BucketName(ref cause) => cause,
-            CreateTrailError::InvalidS3Prefix(ref cause) => cause,
-            CreateTrailError::InvalidSnsTopicName(ref cause) => cause,
-            CreateTrailError::InvalidTagParameter(ref cause) => cause,
-            CreateTrailError::InvalidTrailName(ref cause) => cause,
-            CreateTrailError::Kms(ref cause) => cause,
-            CreateTrailError::KmsKeyDisabled(ref cause) => cause,
-            CreateTrailError::KmsKeyNotFound(ref cause) => cause,
-            CreateTrailError::MaximumNumberOfTrailsExceeded(ref cause) => cause,
-            CreateTrailError::NotOrganizationMasterAccount(ref cause) => cause,
-            CreateTrailError::OperationNotPermitted(ref cause) => cause,
-            CreateTrailError::OrganizationNotInAllFeaturesMode(ref cause) => cause,
-            CreateTrailError::OrganizationsNotInUse(ref cause) => cause,
-            CreateTrailError::S3BucketDoesNotExist(ref cause) => cause,
-            CreateTrailError::TrailAlreadyExists(ref cause) => cause,
-            CreateTrailError::TrailNotProvided(ref cause) => cause,
-            CreateTrailError::UnsupportedOperation(ref cause) => cause,
+            CreateTrailError::CloudTrailAccessNotEnabled(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::CloudWatchLogsDeliveryUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTrailError::InsufficientDependencyServiceAccessPermission(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTrailError::InsufficientEncryptionPolicy(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InsufficientS3BucketPolicy(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InsufficientSnsTopicPolicy(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InvalidCloudWatchLogsLogGroupArn(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InvalidCloudWatchLogsRoleArn(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InvalidKmsKeyId(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InvalidS3BucketName(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InvalidS3Prefix(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InvalidSnsTopicName(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InvalidTagParameter(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::Kms(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::KmsKeyDisabled(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::KmsKeyNotFound(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::MaximumNumberOfTrailsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::NotOrganizationMasterAccount(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::OrganizationNotInAllFeaturesMode(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::OrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::S3BucketDoesNotExist(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::TrailAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::TrailNotProvided(ref cause) => write!(f, "{}", cause),
+            CreateTrailError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTrailError {}
 /// Errors returned by DeleteTrail
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrailError {
@@ -1227,22 +1223,20 @@ impl DeleteTrailError {
 }
 impl fmt::Display for DeleteTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTrailError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTrailError::InsufficientDependencyServiceAccessPermission(ref cause) => cause,
-            DeleteTrailError::InvalidHomeRegion(ref cause) => cause,
-            DeleteTrailError::InvalidTrailName(ref cause) => cause,
-            DeleteTrailError::NotOrganizationMasterAccount(ref cause) => cause,
-            DeleteTrailError::OperationNotPermitted(ref cause) => cause,
-            DeleteTrailError::TrailNotFound(ref cause) => cause,
-            DeleteTrailError::UnsupportedOperation(ref cause) => cause,
+            DeleteTrailError::InsufficientDependencyServiceAccessPermission(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteTrailError::InvalidHomeRegion(ref cause) => write!(f, "{}", cause),
+            DeleteTrailError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            DeleteTrailError::NotOrganizationMasterAccount(ref cause) => write!(f, "{}", cause),
+            DeleteTrailError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteTrailError::TrailNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTrailError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTrailError {}
 /// Errors returned by DescribeTrails
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrailsError {
@@ -1278,18 +1272,14 @@ impl DescribeTrailsError {
 }
 impl fmt::Display for DescribeTrailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrailsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTrailsError::InvalidTrailName(ref cause) => cause,
-            DescribeTrailsError::OperationNotPermitted(ref cause) => cause,
-            DescribeTrailsError::UnsupportedOperation(ref cause) => cause,
+            DescribeTrailsError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            DescribeTrailsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DescribeTrailsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTrailsError {}
 /// Errors returned by GetEventSelectors
 #[derive(Debug, PartialEq)]
 pub enum GetEventSelectorsError {
@@ -1332,19 +1322,15 @@ impl GetEventSelectorsError {
 }
 impl fmt::Display for GetEventSelectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEventSelectorsError {
-    fn description(&self) -> &str {
         match *self {
-            GetEventSelectorsError::InvalidTrailName(ref cause) => cause,
-            GetEventSelectorsError::OperationNotPermitted(ref cause) => cause,
-            GetEventSelectorsError::TrailNotFound(ref cause) => cause,
-            GetEventSelectorsError::UnsupportedOperation(ref cause) => cause,
+            GetEventSelectorsError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            GetEventSelectorsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            GetEventSelectorsError::TrailNotFound(ref cause) => write!(f, "{}", cause),
+            GetEventSelectorsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEventSelectorsError {}
 /// Errors returned by GetInsightSelectors
 #[derive(Debug, PartialEq)]
 pub enum GetInsightSelectorsError {
@@ -1396,20 +1382,16 @@ impl GetInsightSelectorsError {
 }
 impl fmt::Display for GetInsightSelectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInsightSelectorsError {
-    fn description(&self) -> &str {
         match *self {
-            GetInsightSelectorsError::InsightNotEnabled(ref cause) => cause,
-            GetInsightSelectorsError::InvalidTrailName(ref cause) => cause,
-            GetInsightSelectorsError::OperationNotPermitted(ref cause) => cause,
-            GetInsightSelectorsError::TrailNotFound(ref cause) => cause,
-            GetInsightSelectorsError::UnsupportedOperation(ref cause) => cause,
+            GetInsightSelectorsError::InsightNotEnabled(ref cause) => write!(f, "{}", cause),
+            GetInsightSelectorsError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            GetInsightSelectorsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            GetInsightSelectorsError::TrailNotFound(ref cause) => write!(f, "{}", cause),
+            GetInsightSelectorsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInsightSelectorsError {}
 /// Errors returned by GetTrail
 #[derive(Debug, PartialEq)]
 pub enum GetTrailError {
@@ -1448,19 +1430,15 @@ impl GetTrailError {
 }
 impl fmt::Display for GetTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTrailError {
-    fn description(&self) -> &str {
         match *self {
-            GetTrailError::InvalidTrailName(ref cause) => cause,
-            GetTrailError::OperationNotPermitted(ref cause) => cause,
-            GetTrailError::TrailNotFound(ref cause) => cause,
-            GetTrailError::UnsupportedOperation(ref cause) => cause,
+            GetTrailError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            GetTrailError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            GetTrailError::TrailNotFound(ref cause) => write!(f, "{}", cause),
+            GetTrailError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTrailError {}
 /// Errors returned by GetTrailStatus
 #[derive(Debug, PartialEq)]
 pub enum GetTrailStatusError {
@@ -1501,19 +1479,15 @@ impl GetTrailStatusError {
 }
 impl fmt::Display for GetTrailStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTrailStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetTrailStatusError::InvalidTrailName(ref cause) => cause,
-            GetTrailStatusError::OperationNotPermitted(ref cause) => cause,
-            GetTrailStatusError::TrailNotFound(ref cause) => cause,
-            GetTrailStatusError::UnsupportedOperation(ref cause) => cause,
+            GetTrailStatusError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            GetTrailStatusError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            GetTrailStatusError::TrailNotFound(ref cause) => write!(f, "{}", cause),
+            GetTrailStatusError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTrailStatusError {}
 /// Errors returned by ListPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListPublicKeysError {
@@ -1554,19 +1528,15 @@ impl ListPublicKeysError {
 }
 impl fmt::Display for ListPublicKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPublicKeysError {
-    fn description(&self) -> &str {
         match *self {
-            ListPublicKeysError::InvalidTimeRange(ref cause) => cause,
-            ListPublicKeysError::InvalidToken(ref cause) => cause,
-            ListPublicKeysError::OperationNotPermitted(ref cause) => cause,
-            ListPublicKeysError::UnsupportedOperation(ref cause) => cause,
+            ListPublicKeysError::InvalidTimeRange(ref cause) => write!(f, "{}", cause),
+            ListPublicKeysError::InvalidToken(ref cause) => write!(f, "{}", cause),
+            ListPublicKeysError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ListPublicKeysError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPublicKeysError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
@@ -1620,22 +1590,18 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsError::CloudTrailARNInvalid(ref cause) => cause,
-            ListTagsError::InvalidToken(ref cause) => cause,
-            ListTagsError::InvalidTrailName(ref cause) => cause,
-            ListTagsError::OperationNotPermitted(ref cause) => cause,
-            ListTagsError::ResourceNotFound(ref cause) => cause,
-            ListTagsError::ResourceTypeNotSupported(ref cause) => cause,
-            ListTagsError::UnsupportedOperation(ref cause) => cause,
+            ListTagsError::CloudTrailARNInvalid(ref cause) => write!(f, "{}", cause),
+            ListTagsError::InvalidToken(ref cause) => write!(f, "{}", cause),
+            ListTagsError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            ListTagsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ListTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsError::ResourceTypeNotSupported(ref cause) => write!(f, "{}", cause),
+            ListTagsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsError {}
 /// Errors returned by ListTrails
 #[derive(Debug, PartialEq)]
 pub enum ListTrailsError {
@@ -1664,17 +1630,13 @@ impl ListTrailsError {
 }
 impl fmt::Display for ListTrailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrailsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTrailsError::OperationNotPermitted(ref cause) => cause,
-            ListTrailsError::UnsupportedOperation(ref cause) => cause,
+            ListTrailsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ListTrailsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTrailsError {}
 /// Errors returned by LookupEvents
 #[derive(Debug, PartialEq)]
 pub enum LookupEventsError {
@@ -1730,22 +1692,18 @@ impl LookupEventsError {
 }
 impl fmt::Display for LookupEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for LookupEventsError {
-    fn description(&self) -> &str {
         match *self {
-            LookupEventsError::InvalidEventCategory(ref cause) => cause,
-            LookupEventsError::InvalidLookupAttributes(ref cause) => cause,
-            LookupEventsError::InvalidMaxResults(ref cause) => cause,
-            LookupEventsError::InvalidNextToken(ref cause) => cause,
-            LookupEventsError::InvalidTimeRange(ref cause) => cause,
-            LookupEventsError::OperationNotPermitted(ref cause) => cause,
-            LookupEventsError::UnsupportedOperation(ref cause) => cause,
+            LookupEventsError::InvalidEventCategory(ref cause) => write!(f, "{}", cause),
+            LookupEventsError::InvalidLookupAttributes(ref cause) => write!(f, "{}", cause),
+            LookupEventsError::InvalidMaxResults(ref cause) => write!(f, "{}", cause),
+            LookupEventsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            LookupEventsError::InvalidTimeRange(ref cause) => write!(f, "{}", cause),
+            LookupEventsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            LookupEventsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for LookupEventsError {}
 /// Errors returned by PutEventSelectors
 #[derive(Debug, PartialEq)]
 pub enum PutEventSelectorsError {
@@ -1816,25 +1774,23 @@ impl PutEventSelectorsError {
 }
 impl fmt::Display for PutEventSelectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutEventSelectorsError {
-    fn description(&self) -> &str {
         match *self {
             PutEventSelectorsError::InsufficientDependencyServiceAccessPermission(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            PutEventSelectorsError::InvalidEventSelectors(ref cause) => cause,
-            PutEventSelectorsError::InvalidHomeRegion(ref cause) => cause,
-            PutEventSelectorsError::InvalidTrailName(ref cause) => cause,
-            PutEventSelectorsError::NotOrganizationMasterAccount(ref cause) => cause,
-            PutEventSelectorsError::OperationNotPermitted(ref cause) => cause,
-            PutEventSelectorsError::TrailNotFound(ref cause) => cause,
-            PutEventSelectorsError::UnsupportedOperation(ref cause) => cause,
+            PutEventSelectorsError::InvalidEventSelectors(ref cause) => write!(f, "{}", cause),
+            PutEventSelectorsError::InvalidHomeRegion(ref cause) => write!(f, "{}", cause),
+            PutEventSelectorsError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            PutEventSelectorsError::NotOrganizationMasterAccount(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutEventSelectorsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            PutEventSelectorsError::TrailNotFound(ref cause) => write!(f, "{}", cause),
+            PutEventSelectorsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutEventSelectorsError {}
 /// Errors returned by PutInsightSelectors
 #[derive(Debug, PartialEq)]
 pub enum PutInsightSelectorsError {
@@ -1914,24 +1870,26 @@ impl PutInsightSelectorsError {
 }
 impl fmt::Display for PutInsightSelectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutInsightSelectorsError {
-    fn description(&self) -> &str {
         match *self {
-            PutInsightSelectorsError::InsufficientEncryptionPolicy(ref cause) => cause,
-            PutInsightSelectorsError::InsufficientS3BucketPolicy(ref cause) => cause,
-            PutInsightSelectorsError::InvalidHomeRegion(ref cause) => cause,
-            PutInsightSelectorsError::InvalidInsightSelectors(ref cause) => cause,
-            PutInsightSelectorsError::InvalidTrailName(ref cause) => cause,
-            PutInsightSelectorsError::NotOrganizationMasterAccount(ref cause) => cause,
-            PutInsightSelectorsError::OperationNotPermitted(ref cause) => cause,
-            PutInsightSelectorsError::TrailNotFound(ref cause) => cause,
-            PutInsightSelectorsError::UnsupportedOperation(ref cause) => cause,
+            PutInsightSelectorsError::InsufficientEncryptionPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutInsightSelectorsError::InsufficientS3BucketPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutInsightSelectorsError::InvalidHomeRegion(ref cause) => write!(f, "{}", cause),
+            PutInsightSelectorsError::InvalidInsightSelectors(ref cause) => write!(f, "{}", cause),
+            PutInsightSelectorsError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            PutInsightSelectorsError::NotOrganizationMasterAccount(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutInsightSelectorsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            PutInsightSelectorsError::TrailNotFound(ref cause) => write!(f, "{}", cause),
+            PutInsightSelectorsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutInsightSelectorsError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -1992,23 +1950,19 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsError::CloudTrailARNInvalid(ref cause) => cause,
-            RemoveTagsError::InvalidTagParameter(ref cause) => cause,
-            RemoveTagsError::InvalidTrailName(ref cause) => cause,
-            RemoveTagsError::NotOrganizationMasterAccount(ref cause) => cause,
-            RemoveTagsError::OperationNotPermitted(ref cause) => cause,
-            RemoveTagsError::ResourceNotFound(ref cause) => cause,
-            RemoveTagsError::ResourceTypeNotSupported(ref cause) => cause,
-            RemoveTagsError::UnsupportedOperation(ref cause) => cause,
+            RemoveTagsError::CloudTrailARNInvalid(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::InvalidTagParameter(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::NotOrganizationMasterAccount(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::ResourceTypeNotSupported(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsError {}
 /// Errors returned by StartLogging
 #[derive(Debug, PartialEq)]
 pub enum StartLoggingError {
@@ -2066,22 +2020,20 @@ impl StartLoggingError {
 }
 impl fmt::Display for StartLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartLoggingError {
-    fn description(&self) -> &str {
         match *self {
-            StartLoggingError::InsufficientDependencyServiceAccessPermission(ref cause) => cause,
-            StartLoggingError::InvalidHomeRegion(ref cause) => cause,
-            StartLoggingError::InvalidTrailName(ref cause) => cause,
-            StartLoggingError::NotOrganizationMasterAccount(ref cause) => cause,
-            StartLoggingError::OperationNotPermitted(ref cause) => cause,
-            StartLoggingError::TrailNotFound(ref cause) => cause,
-            StartLoggingError::UnsupportedOperation(ref cause) => cause,
+            StartLoggingError::InsufficientDependencyServiceAccessPermission(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartLoggingError::InvalidHomeRegion(ref cause) => write!(f, "{}", cause),
+            StartLoggingError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            StartLoggingError::NotOrganizationMasterAccount(ref cause) => write!(f, "{}", cause),
+            StartLoggingError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StartLoggingError::TrailNotFound(ref cause) => write!(f, "{}", cause),
+            StartLoggingError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartLoggingError {}
 /// Errors returned by StopLogging
 #[derive(Debug, PartialEq)]
 pub enum StopLoggingError {
@@ -2139,22 +2091,20 @@ impl StopLoggingError {
 }
 impl fmt::Display for StopLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopLoggingError {
-    fn description(&self) -> &str {
         match *self {
-            StopLoggingError::InsufficientDependencyServiceAccessPermission(ref cause) => cause,
-            StopLoggingError::InvalidHomeRegion(ref cause) => cause,
-            StopLoggingError::InvalidTrailName(ref cause) => cause,
-            StopLoggingError::NotOrganizationMasterAccount(ref cause) => cause,
-            StopLoggingError::OperationNotPermitted(ref cause) => cause,
-            StopLoggingError::TrailNotFound(ref cause) => cause,
-            StopLoggingError::UnsupportedOperation(ref cause) => cause,
+            StopLoggingError::InsufficientDependencyServiceAccessPermission(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopLoggingError::InvalidHomeRegion(ref cause) => write!(f, "{}", cause),
+            StopLoggingError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            StopLoggingError::NotOrganizationMasterAccount(ref cause) => write!(f, "{}", cause),
+            StopLoggingError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StopLoggingError::TrailNotFound(ref cause) => write!(f, "{}", cause),
+            StopLoggingError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopLoggingError {}
 /// Errors returned by UpdateTrail
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrailError {
@@ -2328,42 +2278,42 @@ impl UpdateTrailError {
 }
 impl fmt::Display for UpdateTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTrailError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTrailError::CloudTrailAccessNotEnabled(ref cause) => cause,
-            UpdateTrailError::CloudWatchLogsDeliveryUnavailable(ref cause) => cause,
-            UpdateTrailError::InsufficientDependencyServiceAccessPermission(ref cause) => cause,
-            UpdateTrailError::InsufficientEncryptionPolicy(ref cause) => cause,
-            UpdateTrailError::InsufficientS3BucketPolicy(ref cause) => cause,
-            UpdateTrailError::InsufficientSnsTopicPolicy(ref cause) => cause,
-            UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(ref cause) => cause,
-            UpdateTrailError::InvalidCloudWatchLogsRoleArn(ref cause) => cause,
-            UpdateTrailError::InvalidEventSelectors(ref cause) => cause,
-            UpdateTrailError::InvalidHomeRegion(ref cause) => cause,
-            UpdateTrailError::InvalidKmsKeyId(ref cause) => cause,
-            UpdateTrailError::InvalidParameterCombination(ref cause) => cause,
-            UpdateTrailError::InvalidS3BucketName(ref cause) => cause,
-            UpdateTrailError::InvalidS3Prefix(ref cause) => cause,
-            UpdateTrailError::InvalidSnsTopicName(ref cause) => cause,
-            UpdateTrailError::InvalidTrailName(ref cause) => cause,
-            UpdateTrailError::Kms(ref cause) => cause,
-            UpdateTrailError::KmsKeyDisabled(ref cause) => cause,
-            UpdateTrailError::KmsKeyNotFound(ref cause) => cause,
-            UpdateTrailError::NotOrganizationMasterAccount(ref cause) => cause,
-            UpdateTrailError::OperationNotPermitted(ref cause) => cause,
-            UpdateTrailError::OrganizationNotInAllFeaturesMode(ref cause) => cause,
-            UpdateTrailError::OrganizationsNotInUse(ref cause) => cause,
-            UpdateTrailError::S3BucketDoesNotExist(ref cause) => cause,
-            UpdateTrailError::TrailNotFound(ref cause) => cause,
-            UpdateTrailError::TrailNotProvided(ref cause) => cause,
-            UpdateTrailError::UnsupportedOperation(ref cause) => cause,
+            UpdateTrailError::CloudTrailAccessNotEnabled(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::CloudWatchLogsDeliveryUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateTrailError::InsufficientDependencyServiceAccessPermission(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateTrailError::InsufficientEncryptionPolicy(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InsufficientS3BucketPolicy(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InsufficientSnsTopicPolicy(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InvalidCloudWatchLogsRoleArn(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InvalidEventSelectors(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InvalidHomeRegion(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InvalidKmsKeyId(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InvalidS3BucketName(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InvalidS3Prefix(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InvalidSnsTopicName(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::InvalidTrailName(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::Kms(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::KmsKeyDisabled(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::KmsKeyNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::NotOrganizationMasterAccount(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::OrganizationNotInAllFeaturesMode(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::OrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::S3BucketDoesNotExist(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::TrailNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::TrailNotProvided(ref cause) => write!(f, "{}", cause),
+            UpdateTrailError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTrailError {}
 /// Trait representing the capabilities of the CloudTrail API. CloudTrail clients implement this trait.
 pub trait CloudTrail {
     /// <p>Adds one or more tags to a trail, up to a limit of 50. Overwrites an existing tag's value when a new value is specified for an existing tag key. Tag key names must be unique for a trail; you cannot have two keys with the same name but different values. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all AWS Regions only from the Region in which the trail was created (also known as its home region).</p>

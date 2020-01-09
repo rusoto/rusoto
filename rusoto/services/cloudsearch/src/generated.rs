@@ -4043,18 +4043,14 @@ impl BuildSuggestersError {
 }
 impl fmt::Display for BuildSuggestersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BuildSuggestersError {
-    fn description(&self) -> &str {
         match *self {
-            BuildSuggestersError::Base(ref cause) => cause,
-            BuildSuggestersError::Internal(ref cause) => cause,
-            BuildSuggestersError::ResourceNotFound(ref cause) => cause,
+            BuildSuggestersError::Base(ref cause) => write!(f, "{}", cause),
+            BuildSuggestersError::Internal(ref cause) => write!(f, "{}", cause),
+            BuildSuggestersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BuildSuggestersError {}
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
@@ -4104,18 +4100,14 @@ impl CreateDomainError {
 }
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainError::Base(ref cause) => cause,
-            CreateDomainError::Internal(ref cause) => cause,
-            CreateDomainError::LimitExceeded(ref cause) => cause,
+            CreateDomainError::Base(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainError {}
 /// Errors returned by DefineAnalysisScheme
 #[derive(Debug, PartialEq)]
 pub enum DefineAnalysisSchemeError {
@@ -4181,20 +4173,16 @@ impl DefineAnalysisSchemeError {
 }
 impl fmt::Display for DefineAnalysisSchemeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DefineAnalysisSchemeError {
-    fn description(&self) -> &str {
         match *self {
-            DefineAnalysisSchemeError::Base(ref cause) => cause,
-            DefineAnalysisSchemeError::Internal(ref cause) => cause,
-            DefineAnalysisSchemeError::InvalidType(ref cause) => cause,
-            DefineAnalysisSchemeError::LimitExceeded(ref cause) => cause,
-            DefineAnalysisSchemeError::ResourceNotFound(ref cause) => cause,
+            DefineAnalysisSchemeError::Base(ref cause) => write!(f, "{}", cause),
+            DefineAnalysisSchemeError::Internal(ref cause) => write!(f, "{}", cause),
+            DefineAnalysisSchemeError::InvalidType(ref cause) => write!(f, "{}", cause),
+            DefineAnalysisSchemeError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DefineAnalysisSchemeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DefineAnalysisSchemeError {}
 /// Errors returned by DefineExpression
 #[derive(Debug, PartialEq)]
 pub enum DefineExpressionError {
@@ -4260,20 +4248,16 @@ impl DefineExpressionError {
 }
 impl fmt::Display for DefineExpressionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DefineExpressionError {
-    fn description(&self) -> &str {
         match *self {
-            DefineExpressionError::Base(ref cause) => cause,
-            DefineExpressionError::Internal(ref cause) => cause,
-            DefineExpressionError::InvalidType(ref cause) => cause,
-            DefineExpressionError::LimitExceeded(ref cause) => cause,
-            DefineExpressionError::ResourceNotFound(ref cause) => cause,
+            DefineExpressionError::Base(ref cause) => write!(f, "{}", cause),
+            DefineExpressionError::Internal(ref cause) => write!(f, "{}", cause),
+            DefineExpressionError::InvalidType(ref cause) => write!(f, "{}", cause),
+            DefineExpressionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DefineExpressionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DefineExpressionError {}
 /// Errors returned by DefineIndexField
 #[derive(Debug, PartialEq)]
 pub enum DefineIndexFieldError {
@@ -4339,20 +4323,16 @@ impl DefineIndexFieldError {
 }
 impl fmt::Display for DefineIndexFieldError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DefineIndexFieldError {
-    fn description(&self) -> &str {
         match *self {
-            DefineIndexFieldError::Base(ref cause) => cause,
-            DefineIndexFieldError::Internal(ref cause) => cause,
-            DefineIndexFieldError::InvalidType(ref cause) => cause,
-            DefineIndexFieldError::LimitExceeded(ref cause) => cause,
-            DefineIndexFieldError::ResourceNotFound(ref cause) => cause,
+            DefineIndexFieldError::Base(ref cause) => write!(f, "{}", cause),
+            DefineIndexFieldError::Internal(ref cause) => write!(f, "{}", cause),
+            DefineIndexFieldError::InvalidType(ref cause) => write!(f, "{}", cause),
+            DefineIndexFieldError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DefineIndexFieldError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DefineIndexFieldError {}
 /// Errors returned by DefineSuggester
 #[derive(Debug, PartialEq)]
 pub enum DefineSuggesterError {
@@ -4418,20 +4398,16 @@ impl DefineSuggesterError {
 }
 impl fmt::Display for DefineSuggesterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DefineSuggesterError {
-    fn description(&self) -> &str {
         match *self {
-            DefineSuggesterError::Base(ref cause) => cause,
-            DefineSuggesterError::Internal(ref cause) => cause,
-            DefineSuggesterError::InvalidType(ref cause) => cause,
-            DefineSuggesterError::LimitExceeded(ref cause) => cause,
-            DefineSuggesterError::ResourceNotFound(ref cause) => cause,
+            DefineSuggesterError::Base(ref cause) => write!(f, "{}", cause),
+            DefineSuggesterError::Internal(ref cause) => write!(f, "{}", cause),
+            DefineSuggesterError::InvalidType(ref cause) => write!(f, "{}", cause),
+            DefineSuggesterError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DefineSuggesterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DefineSuggesterError {}
 /// Errors returned by DeleteAnalysisScheme
 #[derive(Debug, PartialEq)]
 pub enum DeleteAnalysisSchemeError {
@@ -4490,19 +4466,15 @@ impl DeleteAnalysisSchemeError {
 }
 impl fmt::Display for DeleteAnalysisSchemeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAnalysisSchemeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAnalysisSchemeError::Base(ref cause) => cause,
-            DeleteAnalysisSchemeError::Internal(ref cause) => cause,
-            DeleteAnalysisSchemeError::InvalidType(ref cause) => cause,
-            DeleteAnalysisSchemeError::ResourceNotFound(ref cause) => cause,
+            DeleteAnalysisSchemeError::Base(ref cause) => write!(f, "{}", cause),
+            DeleteAnalysisSchemeError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteAnalysisSchemeError::InvalidType(ref cause) => write!(f, "{}", cause),
+            DeleteAnalysisSchemeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAnalysisSchemeError {}
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
@@ -4545,17 +4517,13 @@ impl DeleteDomainError {
 }
 impl fmt::Display for DeleteDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainError::Base(ref cause) => cause,
-            DeleteDomainError::Internal(ref cause) => cause,
+            DeleteDomainError::Base(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::Internal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainError {}
 /// Errors returned by DeleteExpression
 #[derive(Debug, PartialEq)]
 pub enum DeleteExpressionError {
@@ -4614,19 +4582,15 @@ impl DeleteExpressionError {
 }
 impl fmt::Display for DeleteExpressionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteExpressionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteExpressionError::Base(ref cause) => cause,
-            DeleteExpressionError::Internal(ref cause) => cause,
-            DeleteExpressionError::InvalidType(ref cause) => cause,
-            DeleteExpressionError::ResourceNotFound(ref cause) => cause,
+            DeleteExpressionError::Base(ref cause) => write!(f, "{}", cause),
+            DeleteExpressionError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteExpressionError::InvalidType(ref cause) => write!(f, "{}", cause),
+            DeleteExpressionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteExpressionError {}
 /// Errors returned by DeleteIndexField
 #[derive(Debug, PartialEq)]
 pub enum DeleteIndexFieldError {
@@ -4685,19 +4649,15 @@ impl DeleteIndexFieldError {
 }
 impl fmt::Display for DeleteIndexFieldError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteIndexFieldError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteIndexFieldError::Base(ref cause) => cause,
-            DeleteIndexFieldError::Internal(ref cause) => cause,
-            DeleteIndexFieldError::InvalidType(ref cause) => cause,
-            DeleteIndexFieldError::ResourceNotFound(ref cause) => cause,
+            DeleteIndexFieldError::Base(ref cause) => write!(f, "{}", cause),
+            DeleteIndexFieldError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteIndexFieldError::InvalidType(ref cause) => write!(f, "{}", cause),
+            DeleteIndexFieldError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteIndexFieldError {}
 /// Errors returned by DeleteSuggester
 #[derive(Debug, PartialEq)]
 pub enum DeleteSuggesterError {
@@ -4756,19 +4716,15 @@ impl DeleteSuggesterError {
 }
 impl fmt::Display for DeleteSuggesterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSuggesterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSuggesterError::Base(ref cause) => cause,
-            DeleteSuggesterError::Internal(ref cause) => cause,
-            DeleteSuggesterError::InvalidType(ref cause) => cause,
-            DeleteSuggesterError::ResourceNotFound(ref cause) => cause,
+            DeleteSuggesterError::Base(ref cause) => write!(f, "{}", cause),
+            DeleteSuggesterError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteSuggesterError::InvalidType(ref cause) => write!(f, "{}", cause),
+            DeleteSuggesterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSuggesterError {}
 /// Errors returned by DescribeAnalysisSchemes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAnalysisSchemesError {
@@ -4820,18 +4776,14 @@ impl DescribeAnalysisSchemesError {
 }
 impl fmt::Display for DescribeAnalysisSchemesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAnalysisSchemesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAnalysisSchemesError::Base(ref cause) => cause,
-            DescribeAnalysisSchemesError::Internal(ref cause) => cause,
-            DescribeAnalysisSchemesError::ResourceNotFound(ref cause) => cause,
+            DescribeAnalysisSchemesError::Base(ref cause) => write!(f, "{}", cause),
+            DescribeAnalysisSchemesError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeAnalysisSchemesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAnalysisSchemesError {}
 /// Errors returned by DescribeAvailabilityOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeAvailabilityOptionsError {
@@ -4910,21 +4862,19 @@ impl DescribeAvailabilityOptionsError {
 }
 impl fmt::Display for DescribeAvailabilityOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAvailabilityOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAvailabilityOptionsError::Base(ref cause) => cause,
-            DescribeAvailabilityOptionsError::DisabledOperation(ref cause) => cause,
-            DescribeAvailabilityOptionsError::Internal(ref cause) => cause,
-            DescribeAvailabilityOptionsError::InvalidType(ref cause) => cause,
-            DescribeAvailabilityOptionsError::LimitExceeded(ref cause) => cause,
-            DescribeAvailabilityOptionsError::ResourceNotFound(ref cause) => cause,
+            DescribeAvailabilityOptionsError::Base(ref cause) => write!(f, "{}", cause),
+            DescribeAvailabilityOptionsError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAvailabilityOptionsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeAvailabilityOptionsError::InvalidType(ref cause) => write!(f, "{}", cause),
+            DescribeAvailabilityOptionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeAvailabilityOptionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAvailabilityOptionsError {}
 /// Errors returned by DescribeDomainEndpointOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainEndpointOptionsError {
@@ -4996,20 +4946,20 @@ impl DescribeDomainEndpointOptionsError {
 }
 impl fmt::Display for DescribeDomainEndpointOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDomainEndpointOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDomainEndpointOptionsError::Base(ref cause) => cause,
-            DescribeDomainEndpointOptionsError::DisabledOperation(ref cause) => cause,
-            DescribeDomainEndpointOptionsError::Internal(ref cause) => cause,
-            DescribeDomainEndpointOptionsError::LimitExceeded(ref cause) => cause,
-            DescribeDomainEndpointOptionsError::ResourceNotFound(ref cause) => cause,
+            DescribeDomainEndpointOptionsError::Base(ref cause) => write!(f, "{}", cause),
+            DescribeDomainEndpointOptionsError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDomainEndpointOptionsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeDomainEndpointOptionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeDomainEndpointOptionsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDomainEndpointOptionsError {}
 /// Errors returned by DescribeDomains
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainsError {
@@ -5054,17 +5004,13 @@ impl DescribeDomainsError {
 }
 impl fmt::Display for DescribeDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDomainsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDomainsError::Base(ref cause) => cause,
-            DescribeDomainsError::Internal(ref cause) => cause,
+            DescribeDomainsError::Base(ref cause) => write!(f, "{}", cause),
+            DescribeDomainsError::Internal(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDomainsError {}
 /// Errors returned by DescribeExpressions
 #[derive(Debug, PartialEq)]
 pub enum DescribeExpressionsError {
@@ -5116,18 +5062,14 @@ impl DescribeExpressionsError {
 }
 impl fmt::Display for DescribeExpressionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeExpressionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeExpressionsError::Base(ref cause) => cause,
-            DescribeExpressionsError::Internal(ref cause) => cause,
-            DescribeExpressionsError::ResourceNotFound(ref cause) => cause,
+            DescribeExpressionsError::Base(ref cause) => write!(f, "{}", cause),
+            DescribeExpressionsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeExpressionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeExpressionsError {}
 /// Errors returned by DescribeIndexFields
 #[derive(Debug, PartialEq)]
 pub enum DescribeIndexFieldsError {
@@ -5179,18 +5121,14 @@ impl DescribeIndexFieldsError {
 }
 impl fmt::Display for DescribeIndexFieldsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeIndexFieldsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeIndexFieldsError::Base(ref cause) => cause,
-            DescribeIndexFieldsError::Internal(ref cause) => cause,
-            DescribeIndexFieldsError::ResourceNotFound(ref cause) => cause,
+            DescribeIndexFieldsError::Base(ref cause) => write!(f, "{}", cause),
+            DescribeIndexFieldsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeIndexFieldsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeIndexFieldsError {}
 /// Errors returned by DescribeScalingParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingParametersError {
@@ -5242,18 +5180,14 @@ impl DescribeScalingParametersError {
 }
 impl fmt::Display for DescribeScalingParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalingParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalingParametersError::Base(ref cause) => cause,
-            DescribeScalingParametersError::Internal(ref cause) => cause,
-            DescribeScalingParametersError::ResourceNotFound(ref cause) => cause,
+            DescribeScalingParametersError::Base(ref cause) => write!(f, "{}", cause),
+            DescribeScalingParametersError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeScalingParametersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeScalingParametersError {}
 /// Errors returned by DescribeServiceAccessPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeServiceAccessPoliciesError {
@@ -5309,18 +5243,16 @@ impl DescribeServiceAccessPoliciesError {
 }
 impl fmt::Display for DescribeServiceAccessPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeServiceAccessPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeServiceAccessPoliciesError::Base(ref cause) => cause,
-            DescribeServiceAccessPoliciesError::Internal(ref cause) => cause,
-            DescribeServiceAccessPoliciesError::ResourceNotFound(ref cause) => cause,
+            DescribeServiceAccessPoliciesError::Base(ref cause) => write!(f, "{}", cause),
+            DescribeServiceAccessPoliciesError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeServiceAccessPoliciesError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeServiceAccessPoliciesError {}
 /// Errors returned by DescribeSuggesters
 #[derive(Debug, PartialEq)]
 pub enum DescribeSuggestersError {
@@ -5372,18 +5304,14 @@ impl DescribeSuggestersError {
 }
 impl fmt::Display for DescribeSuggestersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSuggestersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSuggestersError::Base(ref cause) => cause,
-            DescribeSuggestersError::Internal(ref cause) => cause,
-            DescribeSuggestersError::ResourceNotFound(ref cause) => cause,
+            DescribeSuggestersError::Base(ref cause) => write!(f, "{}", cause),
+            DescribeSuggestersError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeSuggestersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSuggestersError {}
 /// Errors returned by IndexDocuments
 #[derive(Debug, PartialEq)]
 pub enum IndexDocumentsError {
@@ -5435,18 +5363,14 @@ impl IndexDocumentsError {
 }
 impl fmt::Display for IndexDocumentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for IndexDocumentsError {
-    fn description(&self) -> &str {
         match *self {
-            IndexDocumentsError::Base(ref cause) => cause,
-            IndexDocumentsError::Internal(ref cause) => cause,
-            IndexDocumentsError::ResourceNotFound(ref cause) => cause,
+            IndexDocumentsError::Base(ref cause) => write!(f, "{}", cause),
+            IndexDocumentsError::Internal(ref cause) => write!(f, "{}", cause),
+            IndexDocumentsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for IndexDocumentsError {}
 /// Errors returned by ListDomainNames
 #[derive(Debug, PartialEq)]
 pub enum ListDomainNamesError {
@@ -5484,16 +5408,12 @@ impl ListDomainNamesError {
 }
 impl fmt::Display for ListDomainNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainNamesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDomainNamesError::Base(ref cause) => cause,
+            ListDomainNamesError::Base(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDomainNamesError {}
 /// Errors returned by UpdateAvailabilityOptions
 #[derive(Debug, PartialEq)]
 pub enum UpdateAvailabilityOptionsError {
@@ -5573,22 +5493,18 @@ impl UpdateAvailabilityOptionsError {
 }
 impl fmt::Display for UpdateAvailabilityOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAvailabilityOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAvailabilityOptionsError::Base(ref cause) => cause,
-            UpdateAvailabilityOptionsError::DisabledOperation(ref cause) => cause,
-            UpdateAvailabilityOptionsError::Internal(ref cause) => cause,
-            UpdateAvailabilityOptionsError::InvalidType(ref cause) => cause,
-            UpdateAvailabilityOptionsError::LimitExceeded(ref cause) => cause,
-            UpdateAvailabilityOptionsError::ResourceNotFound(ref cause) => cause,
-            UpdateAvailabilityOptionsError::Validation(ref cause) => cause,
+            UpdateAvailabilityOptionsError::Base(ref cause) => write!(f, "{}", cause),
+            UpdateAvailabilityOptionsError::DisabledOperation(ref cause) => write!(f, "{}", cause),
+            UpdateAvailabilityOptionsError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateAvailabilityOptionsError::InvalidType(ref cause) => write!(f, "{}", cause),
+            UpdateAvailabilityOptionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateAvailabilityOptionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAvailabilityOptionsError::Validation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAvailabilityOptionsError {}
 /// Errors returned by UpdateDomainEndpointOptions
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainEndpointOptionsError {
@@ -5674,22 +5590,20 @@ impl UpdateDomainEndpointOptionsError {
 }
 impl fmt::Display for UpdateDomainEndpointOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainEndpointOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainEndpointOptionsError::Base(ref cause) => cause,
-            UpdateDomainEndpointOptionsError::DisabledOperation(ref cause) => cause,
-            UpdateDomainEndpointOptionsError::Internal(ref cause) => cause,
-            UpdateDomainEndpointOptionsError::InvalidType(ref cause) => cause,
-            UpdateDomainEndpointOptionsError::LimitExceeded(ref cause) => cause,
-            UpdateDomainEndpointOptionsError::ResourceNotFound(ref cause) => cause,
-            UpdateDomainEndpointOptionsError::Validation(ref cause) => cause,
+            UpdateDomainEndpointOptionsError::Base(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEndpointOptionsError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDomainEndpointOptionsError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEndpointOptionsError::InvalidType(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEndpointOptionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEndpointOptionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDomainEndpointOptionsError::Validation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainEndpointOptionsError {}
 /// Errors returned by UpdateScalingParameters
 #[derive(Debug, PartialEq)]
 pub enum UpdateScalingParametersError {
@@ -5755,20 +5669,16 @@ impl UpdateScalingParametersError {
 }
 impl fmt::Display for UpdateScalingParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateScalingParametersError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateScalingParametersError::Base(ref cause) => cause,
-            UpdateScalingParametersError::Internal(ref cause) => cause,
-            UpdateScalingParametersError::InvalidType(ref cause) => cause,
-            UpdateScalingParametersError::LimitExceeded(ref cause) => cause,
-            UpdateScalingParametersError::ResourceNotFound(ref cause) => cause,
+            UpdateScalingParametersError::Base(ref cause) => write!(f, "{}", cause),
+            UpdateScalingParametersError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateScalingParametersError::InvalidType(ref cause) => write!(f, "{}", cause),
+            UpdateScalingParametersError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateScalingParametersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateScalingParametersError {}
 /// Errors returned by UpdateServiceAccessPolicies
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceAccessPoliciesError {
@@ -5838,20 +5748,16 @@ impl UpdateServiceAccessPoliciesError {
 }
 impl fmt::Display for UpdateServiceAccessPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServiceAccessPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServiceAccessPoliciesError::Base(ref cause) => cause,
-            UpdateServiceAccessPoliciesError::Internal(ref cause) => cause,
-            UpdateServiceAccessPoliciesError::InvalidType(ref cause) => cause,
-            UpdateServiceAccessPoliciesError::LimitExceeded(ref cause) => cause,
-            UpdateServiceAccessPoliciesError::ResourceNotFound(ref cause) => cause,
+            UpdateServiceAccessPoliciesError::Base(ref cause) => write!(f, "{}", cause),
+            UpdateServiceAccessPoliciesError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateServiceAccessPoliciesError::InvalidType(ref cause) => write!(f, "{}", cause),
+            UpdateServiceAccessPoliciesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateServiceAccessPoliciesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServiceAccessPoliciesError {}
 /// Trait representing the capabilities of the Amazon CloudSearch API. Amazon CloudSearch clients implement this trait.
 pub trait CloudSearch {
     /// <p>Indexes the search suggestions. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>

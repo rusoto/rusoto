@@ -3009,19 +3009,15 @@ impl CreateDevicePoolError {
 }
 impl fmt::Display for CreateDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDevicePoolError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDevicePoolError::Argument(ref cause) => cause,
-            CreateDevicePoolError::LimitExceeded(ref cause) => cause,
-            CreateDevicePoolError::NotFound(ref cause) => cause,
-            CreateDevicePoolError::ServiceAccount(ref cause) => cause,
+            CreateDevicePoolError::Argument(ref cause) => write!(f, "{}", cause),
+            CreateDevicePoolError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDevicePoolError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDevicePoolError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDevicePoolError {}
 /// Errors returned by CreateInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateInstanceProfileError {
@@ -3062,19 +3058,15 @@ impl CreateInstanceProfileError {
 }
 impl fmt::Display for CreateInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInstanceProfileError::Argument(ref cause) => cause,
-            CreateInstanceProfileError::LimitExceeded(ref cause) => cause,
-            CreateInstanceProfileError::NotFound(ref cause) => cause,
-            CreateInstanceProfileError::ServiceAccount(ref cause) => cause,
+            CreateInstanceProfileError::Argument(ref cause) => write!(f, "{}", cause),
+            CreateInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateInstanceProfileError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateInstanceProfileError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInstanceProfileError {}
 /// Errors returned by CreateNetworkProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateNetworkProfileError {
@@ -3113,19 +3105,15 @@ impl CreateNetworkProfileError {
 }
 impl fmt::Display for CreateNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNetworkProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNetworkProfileError::Argument(ref cause) => cause,
-            CreateNetworkProfileError::LimitExceeded(ref cause) => cause,
-            CreateNetworkProfileError::NotFound(ref cause) => cause,
-            CreateNetworkProfileError::ServiceAccount(ref cause) => cause,
+            CreateNetworkProfileError::Argument(ref cause) => write!(f, "{}", cause),
+            CreateNetworkProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateNetworkProfileError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateNetworkProfileError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateNetworkProfileError {}
 /// Errors returned by CreateProject
 #[derive(Debug, PartialEq)]
 pub enum CreateProjectError {
@@ -3169,20 +3157,16 @@ impl CreateProjectError {
 }
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProjectError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProjectError::Argument(ref cause) => cause,
-            CreateProjectError::LimitExceeded(ref cause) => cause,
-            CreateProjectError::NotFound(ref cause) => cause,
-            CreateProjectError::ServiceAccount(ref cause) => cause,
-            CreateProjectError::TagOperation(ref cause) => cause,
+            CreateProjectError::Argument(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::ServiceAccount(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::TagOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateProjectError {}
 /// Errors returned by CreateRemoteAccessSession
 #[derive(Debug, PartialEq)]
 pub enum CreateRemoteAccessSessionError {
@@ -3225,19 +3209,15 @@ impl CreateRemoteAccessSessionError {
 }
 impl fmt::Display for CreateRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRemoteAccessSessionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRemoteAccessSessionError::Argument(ref cause) => cause,
-            CreateRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
-            CreateRemoteAccessSessionError::NotFound(ref cause) => cause,
-            CreateRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
+            CreateRemoteAccessSessionError::Argument(ref cause) => write!(f, "{}", cause),
+            CreateRemoteAccessSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRemoteAccessSessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateRemoteAccessSessionError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRemoteAccessSessionError {}
 /// Errors returned by CreateUpload
 #[derive(Debug, PartialEq)]
 pub enum CreateUploadError {
@@ -3276,19 +3256,15 @@ impl CreateUploadError {
 }
 impl fmt::Display for CreateUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUploadError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUploadError::Argument(ref cause) => cause,
-            CreateUploadError::LimitExceeded(ref cause) => cause,
-            CreateUploadError::NotFound(ref cause) => cause,
-            CreateUploadError::ServiceAccount(ref cause) => cause,
+            CreateUploadError::Argument(ref cause) => write!(f, "{}", cause),
+            CreateUploadError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUploadError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateUploadError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUploadError {}
 /// Errors returned by CreateVPCEConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateVPCEConfigurationError {
@@ -3326,18 +3302,14 @@ impl CreateVPCEConfigurationError {
 }
 impl fmt::Display for CreateVPCEConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVPCEConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVPCEConfigurationError::Argument(ref cause) => cause,
-            CreateVPCEConfigurationError::LimitExceeded(ref cause) => cause,
-            CreateVPCEConfigurationError::ServiceAccount(ref cause) => cause,
+            CreateVPCEConfigurationError::Argument(ref cause) => write!(f, "{}", cause),
+            CreateVPCEConfigurationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateVPCEConfigurationError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVPCEConfigurationError {}
 /// Errors returned by DeleteDevicePool
 #[derive(Debug, PartialEq)]
 pub enum DeleteDevicePoolError {
@@ -3376,19 +3348,15 @@ impl DeleteDevicePoolError {
 }
 impl fmt::Display for DeleteDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDevicePoolError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDevicePoolError::Argument(ref cause) => cause,
-            DeleteDevicePoolError::LimitExceeded(ref cause) => cause,
-            DeleteDevicePoolError::NotFound(ref cause) => cause,
-            DeleteDevicePoolError::ServiceAccount(ref cause) => cause,
+            DeleteDevicePoolError::Argument(ref cause) => write!(f, "{}", cause),
+            DeleteDevicePoolError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteDevicePoolError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDevicePoolError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDevicePoolError {}
 /// Errors returned by DeleteInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceProfileError {
@@ -3429,19 +3397,15 @@ impl DeleteInstanceProfileError {
 }
 impl fmt::Display for DeleteInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInstanceProfileError::Argument(ref cause) => cause,
-            DeleteInstanceProfileError::LimitExceeded(ref cause) => cause,
-            DeleteInstanceProfileError::NotFound(ref cause) => cause,
-            DeleteInstanceProfileError::ServiceAccount(ref cause) => cause,
+            DeleteInstanceProfileError::Argument(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceProfileError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceProfileError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInstanceProfileError {}
 /// Errors returned by DeleteNetworkProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteNetworkProfileError {
@@ -3480,19 +3444,15 @@ impl DeleteNetworkProfileError {
 }
 impl fmt::Display for DeleteNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNetworkProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteNetworkProfileError::Argument(ref cause) => cause,
-            DeleteNetworkProfileError::LimitExceeded(ref cause) => cause,
-            DeleteNetworkProfileError::NotFound(ref cause) => cause,
-            DeleteNetworkProfileError::ServiceAccount(ref cause) => cause,
+            DeleteNetworkProfileError::Argument(ref cause) => write!(f, "{}", cause),
+            DeleteNetworkProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteNetworkProfileError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteNetworkProfileError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteNetworkProfileError {}
 /// Errors returned by DeleteProject
 #[derive(Debug, PartialEq)]
 pub enum DeleteProjectError {
@@ -3531,19 +3491,15 @@ impl DeleteProjectError {
 }
 impl fmt::Display for DeleteProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProjectError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteProjectError::Argument(ref cause) => cause,
-            DeleteProjectError::LimitExceeded(ref cause) => cause,
-            DeleteProjectError::NotFound(ref cause) => cause,
-            DeleteProjectError::ServiceAccount(ref cause) => cause,
+            DeleteProjectError::Argument(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteProjectError {}
 /// Errors returned by DeleteRemoteAccessSession
 #[derive(Debug, PartialEq)]
 pub enum DeleteRemoteAccessSessionError {
@@ -3586,19 +3542,15 @@ impl DeleteRemoteAccessSessionError {
 }
 impl fmt::Display for DeleteRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRemoteAccessSessionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRemoteAccessSessionError::Argument(ref cause) => cause,
-            DeleteRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
-            DeleteRemoteAccessSessionError::NotFound(ref cause) => cause,
-            DeleteRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
+            DeleteRemoteAccessSessionError::Argument(ref cause) => write!(f, "{}", cause),
+            DeleteRemoteAccessSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteRemoteAccessSessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRemoteAccessSessionError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRemoteAccessSessionError {}
 /// Errors returned by DeleteRun
 #[derive(Debug, PartialEq)]
 pub enum DeleteRunError {
@@ -3637,19 +3589,15 @@ impl DeleteRunError {
 }
 impl fmt::Display for DeleteRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRunError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRunError::Argument(ref cause) => cause,
-            DeleteRunError::LimitExceeded(ref cause) => cause,
-            DeleteRunError::NotFound(ref cause) => cause,
-            DeleteRunError::ServiceAccount(ref cause) => cause,
+            DeleteRunError::Argument(ref cause) => write!(f, "{}", cause),
+            DeleteRunError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteRunError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRunError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRunError {}
 /// Errors returned by DeleteUpload
 #[derive(Debug, PartialEq)]
 pub enum DeleteUploadError {
@@ -3688,19 +3636,15 @@ impl DeleteUploadError {
 }
 impl fmt::Display for DeleteUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUploadError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUploadError::Argument(ref cause) => cause,
-            DeleteUploadError::LimitExceeded(ref cause) => cause,
-            DeleteUploadError::NotFound(ref cause) => cause,
-            DeleteUploadError::ServiceAccount(ref cause) => cause,
+            DeleteUploadError::Argument(ref cause) => write!(f, "{}", cause),
+            DeleteUploadError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteUploadError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUploadError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUploadError {}
 /// Errors returned by DeleteVPCEConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteVPCEConfigurationError {
@@ -3743,19 +3687,15 @@ impl DeleteVPCEConfigurationError {
 }
 impl fmt::Display for DeleteVPCEConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVPCEConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVPCEConfigurationError::Argument(ref cause) => cause,
-            DeleteVPCEConfigurationError::InvalidOperation(ref cause) => cause,
-            DeleteVPCEConfigurationError::NotFound(ref cause) => cause,
-            DeleteVPCEConfigurationError::ServiceAccount(ref cause) => cause,
+            DeleteVPCEConfigurationError::Argument(ref cause) => write!(f, "{}", cause),
+            DeleteVPCEConfigurationError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DeleteVPCEConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVPCEConfigurationError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVPCEConfigurationError {}
 /// Errors returned by GetAccountSettings
 #[derive(Debug, PartialEq)]
 pub enum GetAccountSettingsError {
@@ -3794,19 +3734,15 @@ impl GetAccountSettingsError {
 }
 impl fmt::Display for GetAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountSettingsError::Argument(ref cause) => cause,
-            GetAccountSettingsError::LimitExceeded(ref cause) => cause,
-            GetAccountSettingsError::NotFound(ref cause) => cause,
-            GetAccountSettingsError::ServiceAccount(ref cause) => cause,
+            GetAccountSettingsError::Argument(ref cause) => write!(f, "{}", cause),
+            GetAccountSettingsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetAccountSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAccountSettingsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountSettingsError {}
 /// Errors returned by GetDevice
 #[derive(Debug, PartialEq)]
 pub enum GetDeviceError {
@@ -3845,19 +3781,15 @@ impl GetDeviceError {
 }
 impl fmt::Display for GetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeviceError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeviceError::Argument(ref cause) => cause,
-            GetDeviceError::LimitExceeded(ref cause) => cause,
-            GetDeviceError::NotFound(ref cause) => cause,
-            GetDeviceError::ServiceAccount(ref cause) => cause,
+            GetDeviceError::Argument(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDeviceError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeviceError {}
 /// Errors returned by GetDeviceInstance
 #[derive(Debug, PartialEq)]
 pub enum GetDeviceInstanceError {
@@ -3896,19 +3828,15 @@ impl GetDeviceInstanceError {
 }
 impl fmt::Display for GetDeviceInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDeviceInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetDeviceInstanceError::Argument(ref cause) => cause,
-            GetDeviceInstanceError::LimitExceeded(ref cause) => cause,
-            GetDeviceInstanceError::NotFound(ref cause) => cause,
-            GetDeviceInstanceError::ServiceAccount(ref cause) => cause,
+            GetDeviceInstanceError::Argument(ref cause) => write!(f, "{}", cause),
+            GetDeviceInstanceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetDeviceInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDeviceInstanceError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDeviceInstanceError {}
 /// Errors returned by GetDevicePool
 #[derive(Debug, PartialEq)]
 pub enum GetDevicePoolError {
@@ -3947,19 +3875,15 @@ impl GetDevicePoolError {
 }
 impl fmt::Display for GetDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDevicePoolError {
-    fn description(&self) -> &str {
         match *self {
-            GetDevicePoolError::Argument(ref cause) => cause,
-            GetDevicePoolError::LimitExceeded(ref cause) => cause,
-            GetDevicePoolError::NotFound(ref cause) => cause,
-            GetDevicePoolError::ServiceAccount(ref cause) => cause,
+            GetDevicePoolError::Argument(ref cause) => write!(f, "{}", cause),
+            GetDevicePoolError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetDevicePoolError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDevicePoolError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDevicePoolError {}
 /// Errors returned by GetDevicePoolCompatibility
 #[derive(Debug, PartialEq)]
 pub enum GetDevicePoolCompatibilityError {
@@ -4004,19 +3928,15 @@ impl GetDevicePoolCompatibilityError {
 }
 impl fmt::Display for GetDevicePoolCompatibilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDevicePoolCompatibilityError {
-    fn description(&self) -> &str {
         match *self {
-            GetDevicePoolCompatibilityError::Argument(ref cause) => cause,
-            GetDevicePoolCompatibilityError::LimitExceeded(ref cause) => cause,
-            GetDevicePoolCompatibilityError::NotFound(ref cause) => cause,
-            GetDevicePoolCompatibilityError::ServiceAccount(ref cause) => cause,
+            GetDevicePoolCompatibilityError::Argument(ref cause) => write!(f, "{}", cause),
+            GetDevicePoolCompatibilityError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetDevicePoolCompatibilityError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDevicePoolCompatibilityError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDevicePoolCompatibilityError {}
 /// Errors returned by GetInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceProfileError {
@@ -4055,19 +3975,15 @@ impl GetInstanceProfileError {
 }
 impl fmt::Display for GetInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceProfileError::Argument(ref cause) => cause,
-            GetInstanceProfileError::LimitExceeded(ref cause) => cause,
-            GetInstanceProfileError::NotFound(ref cause) => cause,
-            GetInstanceProfileError::ServiceAccount(ref cause) => cause,
+            GetInstanceProfileError::Argument(ref cause) => write!(f, "{}", cause),
+            GetInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetInstanceProfileError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceProfileError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceProfileError {}
 /// Errors returned by GetJob
 #[derive(Debug, PartialEq)]
 pub enum GetJobError {
@@ -4102,19 +4018,15 @@ impl GetJobError {
 }
 impl fmt::Display for GetJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobError::Argument(ref cause) => cause,
-            GetJobError::LimitExceeded(ref cause) => cause,
-            GetJobError::NotFound(ref cause) => cause,
-            GetJobError::ServiceAccount(ref cause) => cause,
+            GetJobError::Argument(ref cause) => write!(f, "{}", cause),
+            GetJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetJobError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobError {}
 /// Errors returned by GetNetworkProfile
 #[derive(Debug, PartialEq)]
 pub enum GetNetworkProfileError {
@@ -4153,19 +4065,15 @@ impl GetNetworkProfileError {
 }
 impl fmt::Display for GetNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetNetworkProfileError {
-    fn description(&self) -> &str {
         match *self {
-            GetNetworkProfileError::Argument(ref cause) => cause,
-            GetNetworkProfileError::LimitExceeded(ref cause) => cause,
-            GetNetworkProfileError::NotFound(ref cause) => cause,
-            GetNetworkProfileError::ServiceAccount(ref cause) => cause,
+            GetNetworkProfileError::Argument(ref cause) => write!(f, "{}", cause),
+            GetNetworkProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetNetworkProfileError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetNetworkProfileError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetNetworkProfileError {}
 /// Errors returned by GetOfferingStatus
 #[derive(Debug, PartialEq)]
 pub enum GetOfferingStatusError {
@@ -4209,20 +4117,16 @@ impl GetOfferingStatusError {
 }
 impl fmt::Display for GetOfferingStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOfferingStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetOfferingStatusError::Argument(ref cause) => cause,
-            GetOfferingStatusError::LimitExceeded(ref cause) => cause,
-            GetOfferingStatusError::NotEligible(ref cause) => cause,
-            GetOfferingStatusError::NotFound(ref cause) => cause,
-            GetOfferingStatusError::ServiceAccount(ref cause) => cause,
+            GetOfferingStatusError::Argument(ref cause) => write!(f, "{}", cause),
+            GetOfferingStatusError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetOfferingStatusError::NotEligible(ref cause) => write!(f, "{}", cause),
+            GetOfferingStatusError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetOfferingStatusError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOfferingStatusError {}
 /// Errors returned by GetProject
 #[derive(Debug, PartialEq)]
 pub enum GetProjectError {
@@ -4261,19 +4165,15 @@ impl GetProjectError {
 }
 impl fmt::Display for GetProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetProjectError {
-    fn description(&self) -> &str {
         match *self {
-            GetProjectError::Argument(ref cause) => cause,
-            GetProjectError::LimitExceeded(ref cause) => cause,
-            GetProjectError::NotFound(ref cause) => cause,
-            GetProjectError::ServiceAccount(ref cause) => cause,
+            GetProjectError::Argument(ref cause) => write!(f, "{}", cause),
+            GetProjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetProjectError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetProjectError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetProjectError {}
 /// Errors returned by GetRemoteAccessSession
 #[derive(Debug, PartialEq)]
 pub enum GetRemoteAccessSessionError {
@@ -4316,19 +4216,15 @@ impl GetRemoteAccessSessionError {
 }
 impl fmt::Display for GetRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRemoteAccessSessionError {
-    fn description(&self) -> &str {
         match *self {
-            GetRemoteAccessSessionError::Argument(ref cause) => cause,
-            GetRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
-            GetRemoteAccessSessionError::NotFound(ref cause) => cause,
-            GetRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
+            GetRemoteAccessSessionError::Argument(ref cause) => write!(f, "{}", cause),
+            GetRemoteAccessSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetRemoteAccessSessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRemoteAccessSessionError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRemoteAccessSessionError {}
 /// Errors returned by GetRun
 #[derive(Debug, PartialEq)]
 pub enum GetRunError {
@@ -4363,19 +4259,15 @@ impl GetRunError {
 }
 impl fmt::Display for GetRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRunError {
-    fn description(&self) -> &str {
         match *self {
-            GetRunError::Argument(ref cause) => cause,
-            GetRunError::LimitExceeded(ref cause) => cause,
-            GetRunError::NotFound(ref cause) => cause,
-            GetRunError::ServiceAccount(ref cause) => cause,
+            GetRunError::Argument(ref cause) => write!(f, "{}", cause),
+            GetRunError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetRunError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRunError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRunError {}
 /// Errors returned by GetSuite
 #[derive(Debug, PartialEq)]
 pub enum GetSuiteError {
@@ -4414,19 +4306,15 @@ impl GetSuiteError {
 }
 impl fmt::Display for GetSuiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSuiteError {
-    fn description(&self) -> &str {
         match *self {
-            GetSuiteError::Argument(ref cause) => cause,
-            GetSuiteError::LimitExceeded(ref cause) => cause,
-            GetSuiteError::NotFound(ref cause) => cause,
-            GetSuiteError::ServiceAccount(ref cause) => cause,
+            GetSuiteError::Argument(ref cause) => write!(f, "{}", cause),
+            GetSuiteError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetSuiteError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetSuiteError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSuiteError {}
 /// Errors returned by GetTest
 #[derive(Debug, PartialEq)]
 pub enum GetTestError {
@@ -4465,19 +4353,15 @@ impl GetTestError {
 }
 impl fmt::Display for GetTestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTestError {
-    fn description(&self) -> &str {
         match *self {
-            GetTestError::Argument(ref cause) => cause,
-            GetTestError::LimitExceeded(ref cause) => cause,
-            GetTestError::NotFound(ref cause) => cause,
-            GetTestError::ServiceAccount(ref cause) => cause,
+            GetTestError::Argument(ref cause) => write!(f, "{}", cause),
+            GetTestError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetTestError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetTestError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTestError {}
 /// Errors returned by GetUpload
 #[derive(Debug, PartialEq)]
 pub enum GetUploadError {
@@ -4516,19 +4400,15 @@ impl GetUploadError {
 }
 impl fmt::Display for GetUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUploadError {
-    fn description(&self) -> &str {
         match *self {
-            GetUploadError::Argument(ref cause) => cause,
-            GetUploadError::LimitExceeded(ref cause) => cause,
-            GetUploadError::NotFound(ref cause) => cause,
-            GetUploadError::ServiceAccount(ref cause) => cause,
+            GetUploadError::Argument(ref cause) => write!(f, "{}", cause),
+            GetUploadError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetUploadError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetUploadError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUploadError {}
 /// Errors returned by GetVPCEConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetVPCEConfigurationError {
@@ -4562,18 +4442,14 @@ impl GetVPCEConfigurationError {
 }
 impl fmt::Display for GetVPCEConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVPCEConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetVPCEConfigurationError::Argument(ref cause) => cause,
-            GetVPCEConfigurationError::NotFound(ref cause) => cause,
-            GetVPCEConfigurationError::ServiceAccount(ref cause) => cause,
+            GetVPCEConfigurationError::Argument(ref cause) => write!(f, "{}", cause),
+            GetVPCEConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetVPCEConfigurationError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetVPCEConfigurationError {}
 /// Errors returned by InstallToRemoteAccessSession
 #[derive(Debug, PartialEq)]
 pub enum InstallToRemoteAccessSessionError {
@@ -4622,19 +4498,15 @@ impl InstallToRemoteAccessSessionError {
 }
 impl fmt::Display for InstallToRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InstallToRemoteAccessSessionError {
-    fn description(&self) -> &str {
         match *self {
-            InstallToRemoteAccessSessionError::Argument(ref cause) => cause,
-            InstallToRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
-            InstallToRemoteAccessSessionError::NotFound(ref cause) => cause,
-            InstallToRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
+            InstallToRemoteAccessSessionError::Argument(ref cause) => write!(f, "{}", cause),
+            InstallToRemoteAccessSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            InstallToRemoteAccessSessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            InstallToRemoteAccessSessionError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InstallToRemoteAccessSessionError {}
 /// Errors returned by ListArtifacts
 #[derive(Debug, PartialEq)]
 pub enum ListArtifactsError {
@@ -4673,19 +4545,15 @@ impl ListArtifactsError {
 }
 impl fmt::Display for ListArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListArtifactsError {
-    fn description(&self) -> &str {
         match *self {
-            ListArtifactsError::Argument(ref cause) => cause,
-            ListArtifactsError::LimitExceeded(ref cause) => cause,
-            ListArtifactsError::NotFound(ref cause) => cause,
-            ListArtifactsError::ServiceAccount(ref cause) => cause,
+            ListArtifactsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListArtifactsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListArtifactsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListArtifactsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListArtifactsError {}
 /// Errors returned by ListDeviceInstances
 #[derive(Debug, PartialEq)]
 pub enum ListDeviceInstancesError {
@@ -4724,19 +4592,15 @@ impl ListDeviceInstancesError {
 }
 impl fmt::Display for ListDeviceInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDeviceInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDeviceInstancesError::Argument(ref cause) => cause,
-            ListDeviceInstancesError::LimitExceeded(ref cause) => cause,
-            ListDeviceInstancesError::NotFound(ref cause) => cause,
-            ListDeviceInstancesError::ServiceAccount(ref cause) => cause,
+            ListDeviceInstancesError::Argument(ref cause) => write!(f, "{}", cause),
+            ListDeviceInstancesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListDeviceInstancesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListDeviceInstancesError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDeviceInstancesError {}
 /// Errors returned by ListDevicePools
 #[derive(Debug, PartialEq)]
 pub enum ListDevicePoolsError {
@@ -4775,19 +4639,15 @@ impl ListDevicePoolsError {
 }
 impl fmt::Display for ListDevicePoolsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDevicePoolsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDevicePoolsError::Argument(ref cause) => cause,
-            ListDevicePoolsError::LimitExceeded(ref cause) => cause,
-            ListDevicePoolsError::NotFound(ref cause) => cause,
-            ListDevicePoolsError::ServiceAccount(ref cause) => cause,
+            ListDevicePoolsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListDevicePoolsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListDevicePoolsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListDevicePoolsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDevicePoolsError {}
 /// Errors returned by ListDevices
 #[derive(Debug, PartialEq)]
 pub enum ListDevicesError {
@@ -4826,19 +4686,15 @@ impl ListDevicesError {
 }
 impl fmt::Display for ListDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDevicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDevicesError::Argument(ref cause) => cause,
-            ListDevicesError::LimitExceeded(ref cause) => cause,
-            ListDevicesError::NotFound(ref cause) => cause,
-            ListDevicesError::ServiceAccount(ref cause) => cause,
+            ListDevicesError::Argument(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListDevicesError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDevicesError {}
 /// Errors returned by ListInstanceProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceProfilesError {
@@ -4877,19 +4733,15 @@ impl ListInstanceProfilesError {
 }
 impl fmt::Display for ListInstanceProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstanceProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstanceProfilesError::Argument(ref cause) => cause,
-            ListInstanceProfilesError::LimitExceeded(ref cause) => cause,
-            ListInstanceProfilesError::NotFound(ref cause) => cause,
-            ListInstanceProfilesError::ServiceAccount(ref cause) => cause,
+            ListInstanceProfilesError::Argument(ref cause) => write!(f, "{}", cause),
+            ListInstanceProfilesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListInstanceProfilesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListInstanceProfilesError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstanceProfilesError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -4928,19 +4780,15 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsError::Argument(ref cause) => cause,
-            ListJobsError::LimitExceeded(ref cause) => cause,
-            ListJobsError::NotFound(ref cause) => cause,
-            ListJobsError::ServiceAccount(ref cause) => cause,
+            ListJobsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListJobsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListJobsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListJobsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsError {}
 /// Errors returned by ListNetworkProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListNetworkProfilesError {
@@ -4979,19 +4827,15 @@ impl ListNetworkProfilesError {
 }
 impl fmt::Display for ListNetworkProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListNetworkProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListNetworkProfilesError::Argument(ref cause) => cause,
-            ListNetworkProfilesError::LimitExceeded(ref cause) => cause,
-            ListNetworkProfilesError::NotFound(ref cause) => cause,
-            ListNetworkProfilesError::ServiceAccount(ref cause) => cause,
+            ListNetworkProfilesError::Argument(ref cause) => write!(f, "{}", cause),
+            ListNetworkProfilesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListNetworkProfilesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListNetworkProfilesError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListNetworkProfilesError {}
 /// Errors returned by ListOfferingPromotions
 #[derive(Debug, PartialEq)]
 pub enum ListOfferingPromotionsError {
@@ -5039,20 +4883,16 @@ impl ListOfferingPromotionsError {
 }
 impl fmt::Display for ListOfferingPromotionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOfferingPromotionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOfferingPromotionsError::Argument(ref cause) => cause,
-            ListOfferingPromotionsError::LimitExceeded(ref cause) => cause,
-            ListOfferingPromotionsError::NotEligible(ref cause) => cause,
-            ListOfferingPromotionsError::NotFound(ref cause) => cause,
-            ListOfferingPromotionsError::ServiceAccount(ref cause) => cause,
+            ListOfferingPromotionsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListOfferingPromotionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListOfferingPromotionsError::NotEligible(ref cause) => write!(f, "{}", cause),
+            ListOfferingPromotionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListOfferingPromotionsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOfferingPromotionsError {}
 /// Errors returned by ListOfferingTransactions
 #[derive(Debug, PartialEq)]
 pub enum ListOfferingTransactionsError {
@@ -5102,20 +4942,16 @@ impl ListOfferingTransactionsError {
 }
 impl fmt::Display for ListOfferingTransactionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOfferingTransactionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOfferingTransactionsError::Argument(ref cause) => cause,
-            ListOfferingTransactionsError::LimitExceeded(ref cause) => cause,
-            ListOfferingTransactionsError::NotEligible(ref cause) => cause,
-            ListOfferingTransactionsError::NotFound(ref cause) => cause,
-            ListOfferingTransactionsError::ServiceAccount(ref cause) => cause,
+            ListOfferingTransactionsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListOfferingTransactionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListOfferingTransactionsError::NotEligible(ref cause) => write!(f, "{}", cause),
+            ListOfferingTransactionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListOfferingTransactionsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOfferingTransactionsError {}
 /// Errors returned by ListOfferings
 #[derive(Debug, PartialEq)]
 pub enum ListOfferingsError {
@@ -5159,20 +4995,16 @@ impl ListOfferingsError {
 }
 impl fmt::Display for ListOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOfferingsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOfferingsError::Argument(ref cause) => cause,
-            ListOfferingsError::LimitExceeded(ref cause) => cause,
-            ListOfferingsError::NotEligible(ref cause) => cause,
-            ListOfferingsError::NotFound(ref cause) => cause,
-            ListOfferingsError::ServiceAccount(ref cause) => cause,
+            ListOfferingsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::NotEligible(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListOfferingsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOfferingsError {}
 /// Errors returned by ListProjects
 #[derive(Debug, PartialEq)]
 pub enum ListProjectsError {
@@ -5211,19 +5043,15 @@ impl ListProjectsError {
 }
 impl fmt::Display for ListProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProjectsError {
-    fn description(&self) -> &str {
         match *self {
-            ListProjectsError::Argument(ref cause) => cause,
-            ListProjectsError::LimitExceeded(ref cause) => cause,
-            ListProjectsError::NotFound(ref cause) => cause,
-            ListProjectsError::ServiceAccount(ref cause) => cause,
+            ListProjectsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListProjectsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListProjectsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListProjectsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListProjectsError {}
 /// Errors returned by ListRemoteAccessSessions
 #[derive(Debug, PartialEq)]
 pub enum ListRemoteAccessSessionsError {
@@ -5266,19 +5094,15 @@ impl ListRemoteAccessSessionsError {
 }
 impl fmt::Display for ListRemoteAccessSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRemoteAccessSessionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRemoteAccessSessionsError::Argument(ref cause) => cause,
-            ListRemoteAccessSessionsError::LimitExceeded(ref cause) => cause,
-            ListRemoteAccessSessionsError::NotFound(ref cause) => cause,
-            ListRemoteAccessSessionsError::ServiceAccount(ref cause) => cause,
+            ListRemoteAccessSessionsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListRemoteAccessSessionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListRemoteAccessSessionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListRemoteAccessSessionsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRemoteAccessSessionsError {}
 /// Errors returned by ListRuns
 #[derive(Debug, PartialEq)]
 pub enum ListRunsError {
@@ -5317,19 +5141,15 @@ impl ListRunsError {
 }
 impl fmt::Display for ListRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRunsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRunsError::Argument(ref cause) => cause,
-            ListRunsError::LimitExceeded(ref cause) => cause,
-            ListRunsError::NotFound(ref cause) => cause,
-            ListRunsError::ServiceAccount(ref cause) => cause,
+            ListRunsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListRunsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListRunsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListRunsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRunsError {}
 /// Errors returned by ListSamples
 #[derive(Debug, PartialEq)]
 pub enum ListSamplesError {
@@ -5368,19 +5188,15 @@ impl ListSamplesError {
 }
 impl fmt::Display for ListSamplesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSamplesError {
-    fn description(&self) -> &str {
         match *self {
-            ListSamplesError::Argument(ref cause) => cause,
-            ListSamplesError::LimitExceeded(ref cause) => cause,
-            ListSamplesError::NotFound(ref cause) => cause,
-            ListSamplesError::ServiceAccount(ref cause) => cause,
+            ListSamplesError::Argument(ref cause) => write!(f, "{}", cause),
+            ListSamplesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListSamplesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListSamplesError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSamplesError {}
 /// Errors returned by ListSuites
 #[derive(Debug, PartialEq)]
 pub enum ListSuitesError {
@@ -5419,19 +5235,15 @@ impl ListSuitesError {
 }
 impl fmt::Display for ListSuitesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSuitesError {
-    fn description(&self) -> &str {
         match *self {
-            ListSuitesError::Argument(ref cause) => cause,
-            ListSuitesError::LimitExceeded(ref cause) => cause,
-            ListSuitesError::NotFound(ref cause) => cause,
-            ListSuitesError::ServiceAccount(ref cause) => cause,
+            ListSuitesError::Argument(ref cause) => write!(f, "{}", cause),
+            ListSuitesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListSuitesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListSuitesError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSuitesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -5460,17 +5272,13 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::NotFound(ref cause) => cause,
-            ListTagsForResourceError::TagOperation(ref cause) => cause,
+            ListTagsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TagOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTests
 #[derive(Debug, PartialEq)]
 pub enum ListTestsError {
@@ -5509,19 +5317,15 @@ impl ListTestsError {
 }
 impl fmt::Display for ListTestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTestsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTestsError::Argument(ref cause) => cause,
-            ListTestsError::LimitExceeded(ref cause) => cause,
-            ListTestsError::NotFound(ref cause) => cause,
-            ListTestsError::ServiceAccount(ref cause) => cause,
+            ListTestsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListTestsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTestsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListTestsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTestsError {}
 /// Errors returned by ListUniqueProblems
 #[derive(Debug, PartialEq)]
 pub enum ListUniqueProblemsError {
@@ -5560,19 +5364,15 @@ impl ListUniqueProblemsError {
 }
 impl fmt::Display for ListUniqueProblemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUniqueProblemsError {
-    fn description(&self) -> &str {
         match *self {
-            ListUniqueProblemsError::Argument(ref cause) => cause,
-            ListUniqueProblemsError::LimitExceeded(ref cause) => cause,
-            ListUniqueProblemsError::NotFound(ref cause) => cause,
-            ListUniqueProblemsError::ServiceAccount(ref cause) => cause,
+            ListUniqueProblemsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListUniqueProblemsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListUniqueProblemsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListUniqueProblemsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUniqueProblemsError {}
 /// Errors returned by ListUploads
 #[derive(Debug, PartialEq)]
 pub enum ListUploadsError {
@@ -5611,19 +5411,15 @@ impl ListUploadsError {
 }
 impl fmt::Display for ListUploadsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUploadsError {
-    fn description(&self) -> &str {
         match *self {
-            ListUploadsError::Argument(ref cause) => cause,
-            ListUploadsError::LimitExceeded(ref cause) => cause,
-            ListUploadsError::NotFound(ref cause) => cause,
-            ListUploadsError::ServiceAccount(ref cause) => cause,
+            ListUploadsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListUploadsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListUploadsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListUploadsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUploadsError {}
 /// Errors returned by ListVPCEConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListVPCEConfigurationsError {
@@ -5654,17 +5450,13 @@ impl ListVPCEConfigurationsError {
 }
 impl fmt::Display for ListVPCEConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVPCEConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListVPCEConfigurationsError::Argument(ref cause) => cause,
-            ListVPCEConfigurationsError::ServiceAccount(ref cause) => cause,
+            ListVPCEConfigurationsError::Argument(ref cause) => write!(f, "{}", cause),
+            ListVPCEConfigurationsError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVPCEConfigurationsError {}
 /// Errors returned by PurchaseOffering
 #[derive(Debug, PartialEq)]
 pub enum PurchaseOfferingError {
@@ -5708,20 +5500,16 @@ impl PurchaseOfferingError {
 }
 impl fmt::Display for PurchaseOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PurchaseOfferingError {
-    fn description(&self) -> &str {
         match *self {
-            PurchaseOfferingError::Argument(ref cause) => cause,
-            PurchaseOfferingError::LimitExceeded(ref cause) => cause,
-            PurchaseOfferingError::NotEligible(ref cause) => cause,
-            PurchaseOfferingError::NotFound(ref cause) => cause,
-            PurchaseOfferingError::ServiceAccount(ref cause) => cause,
+            PurchaseOfferingError::Argument(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::NotEligible(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::NotFound(ref cause) => write!(f, "{}", cause),
+            PurchaseOfferingError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PurchaseOfferingError {}
 /// Errors returned by RenewOffering
 #[derive(Debug, PartialEq)]
 pub enum RenewOfferingError {
@@ -5765,20 +5553,16 @@ impl RenewOfferingError {
 }
 impl fmt::Display for RenewOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RenewOfferingError {
-    fn description(&self) -> &str {
         match *self {
-            RenewOfferingError::Argument(ref cause) => cause,
-            RenewOfferingError::LimitExceeded(ref cause) => cause,
-            RenewOfferingError::NotEligible(ref cause) => cause,
-            RenewOfferingError::NotFound(ref cause) => cause,
-            RenewOfferingError::ServiceAccount(ref cause) => cause,
+            RenewOfferingError::Argument(ref cause) => write!(f, "{}", cause),
+            RenewOfferingError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RenewOfferingError::NotEligible(ref cause) => write!(f, "{}", cause),
+            RenewOfferingError::NotFound(ref cause) => write!(f, "{}", cause),
+            RenewOfferingError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RenewOfferingError {}
 /// Errors returned by ScheduleRun
 #[derive(Debug, PartialEq)]
 pub enum ScheduleRunError {
@@ -5822,20 +5606,16 @@ impl ScheduleRunError {
 }
 impl fmt::Display for ScheduleRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ScheduleRunError {
-    fn description(&self) -> &str {
         match *self {
-            ScheduleRunError::Argument(ref cause) => cause,
-            ScheduleRunError::Idempotency(ref cause) => cause,
-            ScheduleRunError::LimitExceeded(ref cause) => cause,
-            ScheduleRunError::NotFound(ref cause) => cause,
-            ScheduleRunError::ServiceAccount(ref cause) => cause,
+            ScheduleRunError::Argument(ref cause) => write!(f, "{}", cause),
+            ScheduleRunError::Idempotency(ref cause) => write!(f, "{}", cause),
+            ScheduleRunError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ScheduleRunError::NotFound(ref cause) => write!(f, "{}", cause),
+            ScheduleRunError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ScheduleRunError {}
 /// Errors returned by StopJob
 #[derive(Debug, PartialEq)]
 pub enum StopJobError {
@@ -5874,19 +5654,15 @@ impl StopJobError {
 }
 impl fmt::Display for StopJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopJobError::Argument(ref cause) => cause,
-            StopJobError::LimitExceeded(ref cause) => cause,
-            StopJobError::NotFound(ref cause) => cause,
-            StopJobError::ServiceAccount(ref cause) => cause,
+            StopJobError::Argument(ref cause) => write!(f, "{}", cause),
+            StopJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StopJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopJobError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopJobError {}
 /// Errors returned by StopRemoteAccessSession
 #[derive(Debug, PartialEq)]
 pub enum StopRemoteAccessSessionError {
@@ -5929,19 +5705,15 @@ impl StopRemoteAccessSessionError {
 }
 impl fmt::Display for StopRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopRemoteAccessSessionError {
-    fn description(&self) -> &str {
         match *self {
-            StopRemoteAccessSessionError::Argument(ref cause) => cause,
-            StopRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
-            StopRemoteAccessSessionError::NotFound(ref cause) => cause,
-            StopRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
+            StopRemoteAccessSessionError::Argument(ref cause) => write!(f, "{}", cause),
+            StopRemoteAccessSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StopRemoteAccessSessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopRemoteAccessSessionError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopRemoteAccessSessionError {}
 /// Errors returned by StopRun
 #[derive(Debug, PartialEq)]
 pub enum StopRunError {
@@ -5980,19 +5752,15 @@ impl StopRunError {
 }
 impl fmt::Display for StopRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopRunError {
-    fn description(&self) -> &str {
         match *self {
-            StopRunError::Argument(ref cause) => cause,
-            StopRunError::LimitExceeded(ref cause) => cause,
-            StopRunError::NotFound(ref cause) => cause,
-            StopRunError::ServiceAccount(ref cause) => cause,
+            StopRunError::Argument(ref cause) => write!(f, "{}", cause),
+            StopRunError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StopRunError::NotFound(ref cause) => write!(f, "{}", cause),
+            StopRunError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopRunError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -6031,19 +5799,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::NotFound(ref cause) => cause,
-            TagResourceError::TagOperation(ref cause) => cause,
-            TagResourceError::TagPolicy(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagOperation(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -6072,17 +5836,13 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::NotFound(ref cause) => cause,
-            UntagResourceError::TagOperation(ref cause) => cause,
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateDeviceInstance
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeviceInstanceError {
@@ -6121,19 +5881,15 @@ impl UpdateDeviceInstanceError {
 }
 impl fmt::Display for UpdateDeviceInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDeviceInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDeviceInstanceError::Argument(ref cause) => cause,
-            UpdateDeviceInstanceError::LimitExceeded(ref cause) => cause,
-            UpdateDeviceInstanceError::NotFound(ref cause) => cause,
-            UpdateDeviceInstanceError::ServiceAccount(ref cause) => cause,
+            UpdateDeviceInstanceError::Argument(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceInstanceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceInstanceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDeviceInstanceError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDeviceInstanceError {}
 /// Errors returned by UpdateDevicePool
 #[derive(Debug, PartialEq)]
 pub enum UpdateDevicePoolError {
@@ -6172,19 +5928,15 @@ impl UpdateDevicePoolError {
 }
 impl fmt::Display for UpdateDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDevicePoolError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDevicePoolError::Argument(ref cause) => cause,
-            UpdateDevicePoolError::LimitExceeded(ref cause) => cause,
-            UpdateDevicePoolError::NotFound(ref cause) => cause,
-            UpdateDevicePoolError::ServiceAccount(ref cause) => cause,
+            UpdateDevicePoolError::Argument(ref cause) => write!(f, "{}", cause),
+            UpdateDevicePoolError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDevicePoolError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDevicePoolError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDevicePoolError {}
 /// Errors returned by UpdateInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateInstanceProfileError {
@@ -6225,19 +5977,15 @@ impl UpdateInstanceProfileError {
 }
 impl fmt::Display for UpdateInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateInstanceProfileError::Argument(ref cause) => cause,
-            UpdateInstanceProfileError::LimitExceeded(ref cause) => cause,
-            UpdateInstanceProfileError::NotFound(ref cause) => cause,
-            UpdateInstanceProfileError::ServiceAccount(ref cause) => cause,
+            UpdateInstanceProfileError::Argument(ref cause) => write!(f, "{}", cause),
+            UpdateInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateInstanceProfileError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateInstanceProfileError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateInstanceProfileError {}
 /// Errors returned by UpdateNetworkProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateNetworkProfileError {
@@ -6276,19 +6024,15 @@ impl UpdateNetworkProfileError {
 }
 impl fmt::Display for UpdateNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNetworkProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNetworkProfileError::Argument(ref cause) => cause,
-            UpdateNetworkProfileError::LimitExceeded(ref cause) => cause,
-            UpdateNetworkProfileError::NotFound(ref cause) => cause,
-            UpdateNetworkProfileError::ServiceAccount(ref cause) => cause,
+            UpdateNetworkProfileError::Argument(ref cause) => write!(f, "{}", cause),
+            UpdateNetworkProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateNetworkProfileError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateNetworkProfileError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNetworkProfileError {}
 /// Errors returned by UpdateProject
 #[derive(Debug, PartialEq)]
 pub enum UpdateProjectError {
@@ -6327,19 +6071,15 @@ impl UpdateProjectError {
 }
 impl fmt::Display for UpdateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateProjectError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateProjectError::Argument(ref cause) => cause,
-            UpdateProjectError::LimitExceeded(ref cause) => cause,
-            UpdateProjectError::NotFound(ref cause) => cause,
-            UpdateProjectError::ServiceAccount(ref cause) => cause,
+            UpdateProjectError::Argument(ref cause) => write!(f, "{}", cause),
+            UpdateProjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateProjectError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateProjectError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateProjectError {}
 /// Errors returned by UpdateUpload
 #[derive(Debug, PartialEq)]
 pub enum UpdateUploadError {
@@ -6378,19 +6118,15 @@ impl UpdateUploadError {
 }
 impl fmt::Display for UpdateUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUploadError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUploadError::Argument(ref cause) => cause,
-            UpdateUploadError::LimitExceeded(ref cause) => cause,
-            UpdateUploadError::NotFound(ref cause) => cause,
-            UpdateUploadError::ServiceAccount(ref cause) => cause,
+            UpdateUploadError::Argument(ref cause) => write!(f, "{}", cause),
+            UpdateUploadError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateUploadError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUploadError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUploadError {}
 /// Errors returned by UpdateVPCEConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateVPCEConfigurationError {
@@ -6433,19 +6169,15 @@ impl UpdateVPCEConfigurationError {
 }
 impl fmt::Display for UpdateVPCEConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVPCEConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVPCEConfigurationError::Argument(ref cause) => cause,
-            UpdateVPCEConfigurationError::InvalidOperation(ref cause) => cause,
-            UpdateVPCEConfigurationError::NotFound(ref cause) => cause,
-            UpdateVPCEConfigurationError::ServiceAccount(ref cause) => cause,
+            UpdateVPCEConfigurationError::Argument(ref cause) => write!(f, "{}", cause),
+            UpdateVPCEConfigurationError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateVPCEConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateVPCEConfigurationError::ServiceAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVPCEConfigurationError {}
 /// Trait representing the capabilities of the AWS Device Farm API. AWS Device Farm clients implement this trait.
 pub trait DeviceFarm {
     /// <p>Creates a device pool.</p>

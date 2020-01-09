@@ -543,20 +543,16 @@ impl CopyBackupToRegionError {
 }
 impl fmt::Display for CopyBackupToRegionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopyBackupToRegionError {
-    fn description(&self) -> &str {
         match *self {
-            CopyBackupToRegionError::CloudHsmAccessDenied(ref cause) => cause,
-            CopyBackupToRegionError::CloudHsmInternalFailure(ref cause) => cause,
-            CopyBackupToRegionError::CloudHsmInvalidRequest(ref cause) => cause,
-            CopyBackupToRegionError::CloudHsmResourceNotFound(ref cause) => cause,
-            CopyBackupToRegionError::CloudHsmService(ref cause) => cause,
+            CopyBackupToRegionError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            CopyBackupToRegionError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            CopyBackupToRegionError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            CopyBackupToRegionError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CopyBackupToRegionError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CopyBackupToRegionError {}
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
@@ -606,20 +602,16 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateClusterError::CloudHsmAccessDenied(ref cause) => cause,
-            CreateClusterError::CloudHsmInternalFailure(ref cause) => cause,
-            CreateClusterError::CloudHsmInvalidRequest(ref cause) => cause,
-            CreateClusterError::CloudHsmResourceNotFound(ref cause) => cause,
-            CreateClusterError::CloudHsmService(ref cause) => cause,
+            CreateClusterError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateClusterError {}
 /// Errors returned by CreateHsm
 #[derive(Debug, PartialEq)]
 pub enum CreateHsmError {
@@ -663,20 +655,16 @@ impl CreateHsmError {
 }
 impl fmt::Display for CreateHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHsmError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHsmError::CloudHsmAccessDenied(ref cause) => cause,
-            CreateHsmError::CloudHsmInternalFailure(ref cause) => cause,
-            CreateHsmError::CloudHsmInvalidRequest(ref cause) => cause,
-            CreateHsmError::CloudHsmResourceNotFound(ref cause) => cause,
-            CreateHsmError::CloudHsmService(ref cause) => cause,
+            CreateHsmError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateHsmError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateHsmError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateHsmError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateHsmError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHsmError {}
 /// Errors returned by DeleteBackup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackupError {
@@ -724,20 +712,16 @@ impl DeleteBackupError {
 }
 impl fmt::Display for DeleteBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBackupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBackupError::CloudHsmAccessDenied(ref cause) => cause,
-            DeleteBackupError::CloudHsmInternalFailure(ref cause) => cause,
-            DeleteBackupError::CloudHsmInvalidRequest(ref cause) => cause,
-            DeleteBackupError::CloudHsmResourceNotFound(ref cause) => cause,
-            DeleteBackupError::CloudHsmService(ref cause) => cause,
+            DeleteBackupError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBackupError {}
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
@@ -787,20 +771,16 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClusterError::CloudHsmAccessDenied(ref cause) => cause,
-            DeleteClusterError::CloudHsmInternalFailure(ref cause) => cause,
-            DeleteClusterError::CloudHsmInvalidRequest(ref cause) => cause,
-            DeleteClusterError::CloudHsmResourceNotFound(ref cause) => cause,
-            DeleteClusterError::CloudHsmService(ref cause) => cause,
+            DeleteClusterError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteClusterError {}
 /// Errors returned by DeleteHsm
 #[derive(Debug, PartialEq)]
 pub enum DeleteHsmError {
@@ -844,20 +824,16 @@ impl DeleteHsmError {
 }
 impl fmt::Display for DeleteHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteHsmError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteHsmError::CloudHsmAccessDenied(ref cause) => cause,
-            DeleteHsmError::CloudHsmInternalFailure(ref cause) => cause,
-            DeleteHsmError::CloudHsmInvalidRequest(ref cause) => cause,
-            DeleteHsmError::CloudHsmResourceNotFound(ref cause) => cause,
-            DeleteHsmError::CloudHsmService(ref cause) => cause,
+            DeleteHsmError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteHsmError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteHsmError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteHsmError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteHsmError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteHsmError {}
 /// Errors returned by DescribeBackups
 #[derive(Debug, PartialEq)]
 pub enum DescribeBackupsError {
@@ -909,20 +885,16 @@ impl DescribeBackupsError {
 }
 impl fmt::Display for DescribeBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBackupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBackupsError::CloudHsmAccessDenied(ref cause) => cause,
-            DescribeBackupsError::CloudHsmInternalFailure(ref cause) => cause,
-            DescribeBackupsError::CloudHsmInvalidRequest(ref cause) => cause,
-            DescribeBackupsError::CloudHsmResourceNotFound(ref cause) => cause,
-            DescribeBackupsError::CloudHsmService(ref cause) => cause,
+            DescribeBackupsError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBackupsError {}
 /// Errors returned by DescribeClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeClustersError {
@@ -967,19 +939,15 @@ impl DescribeClustersError {
 }
 impl fmt::Display for DescribeClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClustersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClustersError::CloudHsmAccessDenied(ref cause) => cause,
-            DescribeClustersError::CloudHsmInternalFailure(ref cause) => cause,
-            DescribeClustersError::CloudHsmInvalidRequest(ref cause) => cause,
-            DescribeClustersError::CloudHsmService(ref cause) => cause,
+            DescribeClustersError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeClustersError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeClustersError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeClustersError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClustersError {}
 /// Errors returned by InitializeCluster
 #[derive(Debug, PartialEq)]
 pub enum InitializeClusterError {
@@ -1031,20 +999,16 @@ impl InitializeClusterError {
 }
 impl fmt::Display for InitializeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InitializeClusterError {
-    fn description(&self) -> &str {
         match *self {
-            InitializeClusterError::CloudHsmAccessDenied(ref cause) => cause,
-            InitializeClusterError::CloudHsmInternalFailure(ref cause) => cause,
-            InitializeClusterError::CloudHsmInvalidRequest(ref cause) => cause,
-            InitializeClusterError::CloudHsmResourceNotFound(ref cause) => cause,
-            InitializeClusterError::CloudHsmService(ref cause) => cause,
+            InitializeClusterError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            InitializeClusterError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            InitializeClusterError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            InitializeClusterError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            InitializeClusterError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InitializeClusterError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
@@ -1088,20 +1052,16 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsError::CloudHsmAccessDenied(ref cause) => cause,
-            ListTagsError::CloudHsmInternalFailure(ref cause) => cause,
-            ListTagsError::CloudHsmInvalidRequest(ref cause) => cause,
-            ListTagsError::CloudHsmResourceNotFound(ref cause) => cause,
-            ListTagsError::CloudHsmService(ref cause) => cause,
+            ListTagsError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTagsError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsError {}
 /// Errors returned by RestoreBackup
 #[derive(Debug, PartialEq)]
 pub enum RestoreBackupError {
@@ -1151,20 +1111,16 @@ impl RestoreBackupError {
 }
 impl fmt::Display for RestoreBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreBackupError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreBackupError::CloudHsmAccessDenied(ref cause) => cause,
-            RestoreBackupError::CloudHsmInternalFailure(ref cause) => cause,
-            RestoreBackupError::CloudHsmInvalidRequest(ref cause) => cause,
-            RestoreBackupError::CloudHsmResourceNotFound(ref cause) => cause,
-            RestoreBackupError::CloudHsmService(ref cause) => cause,
+            RestoreBackupError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            RestoreBackupError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            RestoreBackupError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            RestoreBackupError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RestoreBackupError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RestoreBackupError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1210,20 +1166,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::CloudHsmAccessDenied(ref cause) => cause,
-            TagResourceError::CloudHsmInternalFailure(ref cause) => cause,
-            TagResourceError::CloudHsmInvalidRequest(ref cause) => cause,
-            TagResourceError::CloudHsmResourceNotFound(ref cause) => cause,
-            TagResourceError::CloudHsmService(ref cause) => cause,
+            TagResourceError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1273,20 +1225,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::CloudHsmAccessDenied(ref cause) => cause,
-            UntagResourceError::CloudHsmInternalFailure(ref cause) => cause,
-            UntagResourceError::CloudHsmInvalidRequest(ref cause) => cause,
-            UntagResourceError::CloudHsmResourceNotFound(ref cause) => cause,
-            UntagResourceError::CloudHsmService(ref cause) => cause,
+            UntagResourceError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::CloudHsmService(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the CloudHSM V2 API. CloudHSM V2 clients implement this trait.
 pub trait CloudHsmv2 {
     /// <p>Copy an AWS CloudHSM cluster backup to a different region.</p>

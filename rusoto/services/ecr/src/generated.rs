@@ -1331,18 +1331,16 @@ impl BatchCheckLayerAvailabilityError {
 }
 impl fmt::Display for BatchCheckLayerAvailabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchCheckLayerAvailabilityError {
-    fn description(&self) -> &str {
         match *self {
-            BatchCheckLayerAvailabilityError::InvalidParameter(ref cause) => cause,
-            BatchCheckLayerAvailabilityError::RepositoryNotFound(ref cause) => cause,
-            BatchCheckLayerAvailabilityError::Server(ref cause) => cause,
+            BatchCheckLayerAvailabilityError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            BatchCheckLayerAvailabilityError::RepositoryNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchCheckLayerAvailabilityError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchCheckLayerAvailabilityError {}
 /// Errors returned by BatchDeleteImage
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteImageError {
@@ -1376,18 +1374,14 @@ impl BatchDeleteImageError {
 }
 impl fmt::Display for BatchDeleteImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteImageError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDeleteImageError::InvalidParameter(ref cause) => cause,
-            BatchDeleteImageError::RepositoryNotFound(ref cause) => cause,
-            BatchDeleteImageError::Server(ref cause) => cause,
+            BatchDeleteImageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            BatchDeleteImageError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            BatchDeleteImageError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDeleteImageError {}
 /// Errors returned by BatchGetImage
 #[derive(Debug, PartialEq)]
 pub enum BatchGetImageError {
@@ -1421,18 +1415,14 @@ impl BatchGetImageError {
 }
 impl fmt::Display for BatchGetImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetImageError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetImageError::InvalidParameter(ref cause) => cause,
-            BatchGetImageError::RepositoryNotFound(ref cause) => cause,
-            BatchGetImageError::Server(ref cause) => cause,
+            BatchGetImageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            BatchGetImageError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            BatchGetImageError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetImageError {}
 /// Errors returned by CompleteLayerUpload
 #[derive(Debug, PartialEq)]
 pub enum CompleteLayerUploadError {
@@ -1499,23 +1489,19 @@ impl CompleteLayerUploadError {
 }
 impl fmt::Display for CompleteLayerUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CompleteLayerUploadError {
-    fn description(&self) -> &str {
         match *self {
-            CompleteLayerUploadError::EmptyUpload(ref cause) => cause,
-            CompleteLayerUploadError::InvalidLayer(ref cause) => cause,
-            CompleteLayerUploadError::InvalidParameter(ref cause) => cause,
-            CompleteLayerUploadError::LayerAlreadyExists(ref cause) => cause,
-            CompleteLayerUploadError::LayerPartTooSmall(ref cause) => cause,
-            CompleteLayerUploadError::RepositoryNotFound(ref cause) => cause,
-            CompleteLayerUploadError::Server(ref cause) => cause,
-            CompleteLayerUploadError::UploadNotFound(ref cause) => cause,
+            CompleteLayerUploadError::EmptyUpload(ref cause) => write!(f, "{}", cause),
+            CompleteLayerUploadError::InvalidLayer(ref cause) => write!(f, "{}", cause),
+            CompleteLayerUploadError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CompleteLayerUploadError::LayerAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CompleteLayerUploadError::LayerPartTooSmall(ref cause) => write!(f, "{}", cause),
+            CompleteLayerUploadError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            CompleteLayerUploadError::Server(ref cause) => write!(f, "{}", cause),
+            CompleteLayerUploadError::UploadNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CompleteLayerUploadError {}
 /// Errors returned by CreateRepository
 #[derive(Debug, PartialEq)]
 pub enum CreateRepositoryError {
@@ -1568,21 +1554,17 @@ impl CreateRepositoryError {
 }
 impl fmt::Display for CreateRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRepositoryError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRepositoryError::InvalidParameter(ref cause) => cause,
-            CreateRepositoryError::InvalidTagParameter(ref cause) => cause,
-            CreateRepositoryError::LimitExceeded(ref cause) => cause,
-            CreateRepositoryError::RepositoryAlreadyExists(ref cause) => cause,
-            CreateRepositoryError::Server(ref cause) => cause,
-            CreateRepositoryError::TooManyTags(ref cause) => cause,
+            CreateRepositoryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::InvalidTagParameter(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::RepositoryAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::Server(ref cause) => write!(f, "{}", cause),
+            CreateRepositoryError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRepositoryError {}
 /// Errors returned by DeleteLifecyclePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteLifecyclePolicyError {
@@ -1627,19 +1609,17 @@ impl DeleteLifecyclePolicyError {
 }
 impl fmt::Display for DeleteLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLifecyclePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLifecyclePolicyError::InvalidParameter(ref cause) => cause,
-            DeleteLifecyclePolicyError::LifecyclePolicyNotFound(ref cause) => cause,
-            DeleteLifecyclePolicyError::RepositoryNotFound(ref cause) => cause,
-            DeleteLifecyclePolicyError::Server(ref cause) => cause,
+            DeleteLifecyclePolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteLifecyclePolicyError::LifecyclePolicyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLifecyclePolicyError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLifecyclePolicyError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLifecyclePolicyError {}
 /// Errors returned by DeleteRepository
 #[derive(Debug, PartialEq)]
 pub enum DeleteRepositoryError {
@@ -1678,19 +1658,15 @@ impl DeleteRepositoryError {
 }
 impl fmt::Display for DeleteRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRepositoryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRepositoryError::InvalidParameter(ref cause) => cause,
-            DeleteRepositoryError::RepositoryNotEmpty(ref cause) => cause,
-            DeleteRepositoryError::RepositoryNotFound(ref cause) => cause,
-            DeleteRepositoryError::Server(ref cause) => cause,
+            DeleteRepositoryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryError::RepositoryNotEmpty(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRepositoryError {}
 /// Errors returned by DeleteRepositoryPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteRepositoryPolicyError {
@@ -1735,19 +1711,17 @@ impl DeleteRepositoryPolicyError {
 }
 impl fmt::Display for DeleteRepositoryPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRepositoryPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRepositoryPolicyError::InvalidParameter(ref cause) => cause,
-            DeleteRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
-            DeleteRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => cause,
-            DeleteRepositoryPolicyError::Server(ref cause) => cause,
+            DeleteRepositoryPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryPolicyError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRepositoryPolicyError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRepositoryPolicyError {}
 /// Errors returned by DescribeImageScanFindings
 #[derive(Debug, PartialEq)]
 pub enum DescribeImageScanFindingsError {
@@ -1799,20 +1773,16 @@ impl DescribeImageScanFindingsError {
 }
 impl fmt::Display for DescribeImageScanFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeImageScanFindingsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeImageScanFindingsError::ImageNotFound(ref cause) => cause,
-            DescribeImageScanFindingsError::InvalidParameter(ref cause) => cause,
-            DescribeImageScanFindingsError::RepositoryNotFound(ref cause) => cause,
-            DescribeImageScanFindingsError::ScanNotFound(ref cause) => cause,
-            DescribeImageScanFindingsError::Server(ref cause) => cause,
+            DescribeImageScanFindingsError::ImageNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeImageScanFindingsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeImageScanFindingsError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeImageScanFindingsError::ScanNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeImageScanFindingsError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeImageScanFindingsError {}
 /// Errors returned by DescribeImages
 #[derive(Debug, PartialEq)]
 pub enum DescribeImagesError {
@@ -1851,19 +1821,15 @@ impl DescribeImagesError {
 }
 impl fmt::Display for DescribeImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeImagesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeImagesError::ImageNotFound(ref cause) => cause,
-            DescribeImagesError::InvalidParameter(ref cause) => cause,
-            DescribeImagesError::RepositoryNotFound(ref cause) => cause,
-            DescribeImagesError::Server(ref cause) => cause,
+            DescribeImagesError::ImageNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeImagesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeImagesError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeImagesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeImagesError {}
 /// Errors returned by DescribeRepositories
 #[derive(Debug, PartialEq)]
 pub enum DescribeRepositoriesError {
@@ -1901,18 +1867,14 @@ impl DescribeRepositoriesError {
 }
 impl fmt::Display for DescribeRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRepositoriesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRepositoriesError::InvalidParameter(ref cause) => cause,
-            DescribeRepositoriesError::RepositoryNotFound(ref cause) => cause,
-            DescribeRepositoriesError::Server(ref cause) => cause,
+            DescribeRepositoriesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeRepositoriesError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRepositoriesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeRepositoriesError {}
 /// Errors returned by GetAuthorizationToken
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizationTokenError {
@@ -1943,17 +1905,13 @@ impl GetAuthorizationTokenError {
 }
 impl fmt::Display for GetAuthorizationTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAuthorizationTokenError {
-    fn description(&self) -> &str {
         match *self {
-            GetAuthorizationTokenError::InvalidParameter(ref cause) => cause,
-            GetAuthorizationTokenError::Server(ref cause) => cause,
+            GetAuthorizationTokenError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetAuthorizationTokenError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAuthorizationTokenError {}
 /// Errors returned by GetDownloadUrlForLayer
 #[derive(Debug, PartialEq)]
 pub enum GetDownloadUrlForLayerError {
@@ -2005,20 +1963,16 @@ impl GetDownloadUrlForLayerError {
 }
 impl fmt::Display for GetDownloadUrlForLayerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDownloadUrlForLayerError {
-    fn description(&self) -> &str {
         match *self {
-            GetDownloadUrlForLayerError::InvalidParameter(ref cause) => cause,
-            GetDownloadUrlForLayerError::LayerInaccessible(ref cause) => cause,
-            GetDownloadUrlForLayerError::LayersNotFound(ref cause) => cause,
-            GetDownloadUrlForLayerError::RepositoryNotFound(ref cause) => cause,
-            GetDownloadUrlForLayerError::Server(ref cause) => cause,
+            GetDownloadUrlForLayerError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetDownloadUrlForLayerError::LayerInaccessible(ref cause) => write!(f, "{}", cause),
+            GetDownloadUrlForLayerError::LayersNotFound(ref cause) => write!(f, "{}", cause),
+            GetDownloadUrlForLayerError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            GetDownloadUrlForLayerError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDownloadUrlForLayerError {}
 /// Errors returned by GetLifecyclePolicy
 #[derive(Debug, PartialEq)]
 pub enum GetLifecyclePolicyError {
@@ -2061,19 +2015,15 @@ impl GetLifecyclePolicyError {
 }
 impl fmt::Display for GetLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLifecyclePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetLifecyclePolicyError::InvalidParameter(ref cause) => cause,
-            GetLifecyclePolicyError::LifecyclePolicyNotFound(ref cause) => cause,
-            GetLifecyclePolicyError::RepositoryNotFound(ref cause) => cause,
-            GetLifecyclePolicyError::Server(ref cause) => cause,
+            GetLifecyclePolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetLifecyclePolicyError::LifecyclePolicyNotFound(ref cause) => write!(f, "{}", cause),
+            GetLifecyclePolicyError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            GetLifecyclePolicyError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLifecyclePolicyError {}
 /// Errors returned by GetLifecyclePolicyPreview
 #[derive(Debug, PartialEq)]
 pub enum GetLifecyclePolicyPreviewError {
@@ -2118,19 +2068,17 @@ impl GetLifecyclePolicyPreviewError {
 }
 impl fmt::Display for GetLifecyclePolicyPreviewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLifecyclePolicyPreviewError {
-    fn description(&self) -> &str {
         match *self {
-            GetLifecyclePolicyPreviewError::InvalidParameter(ref cause) => cause,
-            GetLifecyclePolicyPreviewError::LifecyclePolicyPreviewNotFound(ref cause) => cause,
-            GetLifecyclePolicyPreviewError::RepositoryNotFound(ref cause) => cause,
-            GetLifecyclePolicyPreviewError::Server(ref cause) => cause,
+            GetLifecyclePolicyPreviewError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetLifecyclePolicyPreviewError::LifecyclePolicyPreviewNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLifecyclePolicyPreviewError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            GetLifecyclePolicyPreviewError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLifecyclePolicyPreviewError {}
 /// Errors returned by GetRepositoryPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetRepositoryPolicyError {
@@ -2175,19 +2123,15 @@ impl GetRepositoryPolicyError {
 }
 impl fmt::Display for GetRepositoryPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRepositoryPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetRepositoryPolicyError::InvalidParameter(ref cause) => cause,
-            GetRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
-            GetRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => cause,
-            GetRepositoryPolicyError::Server(ref cause) => cause,
+            GetRepositoryPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetRepositoryPolicyError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            GetRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => write!(f, "{}", cause),
+            GetRepositoryPolicyError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRepositoryPolicyError {}
 /// Errors returned by InitiateLayerUpload
 #[derive(Debug, PartialEq)]
 pub enum InitiateLayerUploadError {
@@ -2225,18 +2169,14 @@ impl InitiateLayerUploadError {
 }
 impl fmt::Display for InitiateLayerUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InitiateLayerUploadError {
-    fn description(&self) -> &str {
         match *self {
-            InitiateLayerUploadError::InvalidParameter(ref cause) => cause,
-            InitiateLayerUploadError::RepositoryNotFound(ref cause) => cause,
-            InitiateLayerUploadError::Server(ref cause) => cause,
+            InitiateLayerUploadError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            InitiateLayerUploadError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            InitiateLayerUploadError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InitiateLayerUploadError {}
 /// Errors returned by ListImages
 #[derive(Debug, PartialEq)]
 pub enum ListImagesError {
@@ -2268,18 +2208,14 @@ impl ListImagesError {
 }
 impl fmt::Display for ListImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListImagesError {
-    fn description(&self) -> &str {
         match *self {
-            ListImagesError::InvalidParameter(ref cause) => cause,
-            ListImagesError::RepositoryNotFound(ref cause) => cause,
-            ListImagesError::Server(ref cause) => cause,
+            ListImagesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListImagesError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            ListImagesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListImagesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2317,18 +2253,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
-            ListTagsForResourceError::RepositoryNotFound(ref cause) => cause,
-            ListTagsForResourceError::Server(ref cause) => cause,
+            ListTagsForResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutImage
 #[derive(Debug, PartialEq)]
 pub enum PutImageError {
@@ -2380,22 +2312,18 @@ impl PutImageError {
 }
 impl fmt::Display for PutImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutImageError {
-    fn description(&self) -> &str {
         match *self {
-            PutImageError::ImageAlreadyExists(ref cause) => cause,
-            PutImageError::ImageTagAlreadyExists(ref cause) => cause,
-            PutImageError::InvalidParameter(ref cause) => cause,
-            PutImageError::LayersNotFound(ref cause) => cause,
-            PutImageError::LimitExceeded(ref cause) => cause,
-            PutImageError::RepositoryNotFound(ref cause) => cause,
-            PutImageError::Server(ref cause) => cause,
+            PutImageError::ImageAlreadyExists(ref cause) => write!(f, "{}", cause),
+            PutImageError::ImageTagAlreadyExists(ref cause) => write!(f, "{}", cause),
+            PutImageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutImageError::LayersNotFound(ref cause) => write!(f, "{}", cause),
+            PutImageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutImageError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            PutImageError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutImageError {}
 /// Errors returned by PutImageScanningConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutImageScanningConfigurationError {
@@ -2437,18 +2365,18 @@ impl PutImageScanningConfigurationError {
 }
 impl fmt::Display for PutImageScanningConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutImageScanningConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutImageScanningConfigurationError::InvalidParameter(ref cause) => cause,
-            PutImageScanningConfigurationError::RepositoryNotFound(ref cause) => cause,
-            PutImageScanningConfigurationError::Server(ref cause) => cause,
+            PutImageScanningConfigurationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutImageScanningConfigurationError::RepositoryNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutImageScanningConfigurationError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutImageScanningConfigurationError {}
 /// Errors returned by PutImageTagMutability
 #[derive(Debug, PartialEq)]
 pub enum PutImageTagMutabilityError {
@@ -2486,18 +2414,14 @@ impl PutImageTagMutabilityError {
 }
 impl fmt::Display for PutImageTagMutabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutImageTagMutabilityError {
-    fn description(&self) -> &str {
         match *self {
-            PutImageTagMutabilityError::InvalidParameter(ref cause) => cause,
-            PutImageTagMutabilityError::RepositoryNotFound(ref cause) => cause,
-            PutImageTagMutabilityError::Server(ref cause) => cause,
+            PutImageTagMutabilityError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutImageTagMutabilityError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            PutImageTagMutabilityError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutImageTagMutabilityError {}
 /// Errors returned by PutLifecyclePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutLifecyclePolicyError {
@@ -2533,18 +2457,14 @@ impl PutLifecyclePolicyError {
 }
 impl fmt::Display for PutLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutLifecyclePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutLifecyclePolicyError::InvalidParameter(ref cause) => cause,
-            PutLifecyclePolicyError::RepositoryNotFound(ref cause) => cause,
-            PutLifecyclePolicyError::Server(ref cause) => cause,
+            PutLifecyclePolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutLifecyclePolicyError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            PutLifecyclePolicyError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutLifecyclePolicyError {}
 /// Errors returned by SetRepositoryPolicy
 #[derive(Debug, PartialEq)]
 pub enum SetRepositoryPolicyError {
@@ -2582,18 +2502,14 @@ impl SetRepositoryPolicyError {
 }
 impl fmt::Display for SetRepositoryPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetRepositoryPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            SetRepositoryPolicyError::InvalidParameter(ref cause) => cause,
-            SetRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
-            SetRepositoryPolicyError::Server(ref cause) => cause,
+            SetRepositoryPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetRepositoryPolicyError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            SetRepositoryPolicyError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetRepositoryPolicyError {}
 /// Errors returned by StartImageScan
 #[derive(Debug, PartialEq)]
 pub enum StartImageScanError {
@@ -2632,19 +2548,15 @@ impl StartImageScanError {
 }
 impl fmt::Display for StartImageScanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartImageScanError {
-    fn description(&self) -> &str {
         match *self {
-            StartImageScanError::ImageNotFound(ref cause) => cause,
-            StartImageScanError::InvalidParameter(ref cause) => cause,
-            StartImageScanError::RepositoryNotFound(ref cause) => cause,
-            StartImageScanError::Server(ref cause) => cause,
+            StartImageScanError::ImageNotFound(ref cause) => write!(f, "{}", cause),
+            StartImageScanError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartImageScanError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            StartImageScanError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartImageScanError {}
 /// Errors returned by StartLifecyclePolicyPreview
 #[derive(Debug, PartialEq)]
 pub enum StartLifecyclePolicyPreviewError {
@@ -2698,20 +2610,22 @@ impl StartLifecyclePolicyPreviewError {
 }
 impl fmt::Display for StartLifecyclePolicyPreviewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartLifecyclePolicyPreviewError {
-    fn description(&self) -> &str {
         match *self {
-            StartLifecyclePolicyPreviewError::InvalidParameter(ref cause) => cause,
-            StartLifecyclePolicyPreviewError::LifecyclePolicyNotFound(ref cause) => cause,
-            StartLifecyclePolicyPreviewError::LifecyclePolicyPreviewInProgress(ref cause) => cause,
-            StartLifecyclePolicyPreviewError::RepositoryNotFound(ref cause) => cause,
-            StartLifecyclePolicyPreviewError::Server(ref cause) => cause,
+            StartLifecyclePolicyPreviewError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartLifecyclePolicyPreviewError::LifecyclePolicyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartLifecyclePolicyPreviewError::LifecyclePolicyPreviewInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartLifecyclePolicyPreviewError::RepositoryNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartLifecyclePolicyPreviewError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartLifecyclePolicyPreviewError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2755,20 +2669,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InvalidParameter(ref cause) => cause,
-            TagResourceError::InvalidTagParameter(ref cause) => cause,
-            TagResourceError::RepositoryNotFound(ref cause) => cause,
-            TagResourceError::Server(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidTagParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Server(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -2812,20 +2722,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InvalidParameter(ref cause) => cause,
-            UntagResourceError::InvalidTagParameter(ref cause) => cause,
-            UntagResourceError::RepositoryNotFound(ref cause) => cause,
-            UntagResourceError::Server(ref cause) => cause,
-            UntagResourceError::TooManyTags(ref cause) => cause,
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidTagParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Server(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UploadLayerPart
 #[derive(Debug, PartialEq)]
 pub enum UploadLayerPartError {
@@ -2874,21 +2780,17 @@ impl UploadLayerPartError {
 }
 impl fmt::Display for UploadLayerPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadLayerPartError {
-    fn description(&self) -> &str {
         match *self {
-            UploadLayerPartError::InvalidLayerPart(ref cause) => cause,
-            UploadLayerPartError::InvalidParameter(ref cause) => cause,
-            UploadLayerPartError::LimitExceeded(ref cause) => cause,
-            UploadLayerPartError::RepositoryNotFound(ref cause) => cause,
-            UploadLayerPartError::Server(ref cause) => cause,
-            UploadLayerPartError::UploadNotFound(ref cause) => cause,
+            UploadLayerPartError::InvalidLayerPart(ref cause) => write!(f, "{}", cause),
+            UploadLayerPartError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UploadLayerPartError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UploadLayerPartError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
+            UploadLayerPartError::Server(ref cause) => write!(f, "{}", cause),
+            UploadLayerPartError::UploadNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UploadLayerPartError {}
 /// Trait representing the capabilities of the Amazon ECR API. Amazon ECR clients implement this trait.
 pub trait Ecr {
     /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>

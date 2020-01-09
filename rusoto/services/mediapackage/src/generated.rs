@@ -1363,21 +1363,17 @@ impl CreateChannelError {
 }
 impl fmt::Display for CreateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateChannelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateChannelError::Forbidden(ref cause) => cause,
-            CreateChannelError::InternalServerError(ref cause) => cause,
-            CreateChannelError::NotFound(ref cause) => cause,
-            CreateChannelError::ServiceUnavailable(ref cause) => cause,
-            CreateChannelError::TooManyRequests(ref cause) => cause,
-            CreateChannelError::UnprocessableEntity(ref cause) => cause,
+            CreateChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateChannelError {}
 /// Errors returned by CreateHarvestJob
 #[derive(Debug, PartialEq)]
 pub enum CreateHarvestJobError {
@@ -1430,21 +1426,17 @@ impl CreateHarvestJobError {
 }
 impl fmt::Display for CreateHarvestJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHarvestJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHarvestJobError::Forbidden(ref cause) => cause,
-            CreateHarvestJobError::InternalServerError(ref cause) => cause,
-            CreateHarvestJobError::NotFound(ref cause) => cause,
-            CreateHarvestJobError::ServiceUnavailable(ref cause) => cause,
-            CreateHarvestJobError::TooManyRequests(ref cause) => cause,
-            CreateHarvestJobError::UnprocessableEntity(ref cause) => cause,
+            CreateHarvestJobError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateHarvestJobError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateHarvestJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateHarvestJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateHarvestJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateHarvestJobError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHarvestJobError {}
 /// Errors returned by CreateOriginEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateOriginEndpointError {
@@ -1501,21 +1493,17 @@ impl CreateOriginEndpointError {
 }
 impl fmt::Display for CreateOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateOriginEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateOriginEndpointError::Forbidden(ref cause) => cause,
-            CreateOriginEndpointError::InternalServerError(ref cause) => cause,
-            CreateOriginEndpointError::NotFound(ref cause) => cause,
-            CreateOriginEndpointError::ServiceUnavailable(ref cause) => cause,
-            CreateOriginEndpointError::TooManyRequests(ref cause) => cause,
-            CreateOriginEndpointError::UnprocessableEntity(ref cause) => cause,
+            CreateOriginEndpointError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateOriginEndpointError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateOriginEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateOriginEndpointError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateOriginEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateOriginEndpointError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateOriginEndpointError {}
 /// Errors returned by DeleteChannel
 #[derive(Debug, PartialEq)]
 pub enum DeleteChannelError {
@@ -1564,21 +1552,17 @@ impl DeleteChannelError {
 }
 impl fmt::Display for DeleteChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteChannelError::Forbidden(ref cause) => cause,
-            DeleteChannelError::InternalServerError(ref cause) => cause,
-            DeleteChannelError::NotFound(ref cause) => cause,
-            DeleteChannelError::ServiceUnavailable(ref cause) => cause,
-            DeleteChannelError::TooManyRequests(ref cause) => cause,
-            DeleteChannelError::UnprocessableEntity(ref cause) => cause,
+            DeleteChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteChannelError {}
 /// Errors returned by DeleteOriginEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteOriginEndpointError {
@@ -1635,21 +1619,17 @@ impl DeleteOriginEndpointError {
 }
 impl fmt::Display for DeleteOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteOriginEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteOriginEndpointError::Forbidden(ref cause) => cause,
-            DeleteOriginEndpointError::InternalServerError(ref cause) => cause,
-            DeleteOriginEndpointError::NotFound(ref cause) => cause,
-            DeleteOriginEndpointError::ServiceUnavailable(ref cause) => cause,
-            DeleteOriginEndpointError::TooManyRequests(ref cause) => cause,
-            DeleteOriginEndpointError::UnprocessableEntity(ref cause) => cause,
+            DeleteOriginEndpointError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteOriginEndpointError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteOriginEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteOriginEndpointError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteOriginEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeleteOriginEndpointError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteOriginEndpointError {}
 /// Errors returned by DescribeChannel
 #[derive(Debug, PartialEq)]
 pub enum DescribeChannelError {
@@ -1698,21 +1678,17 @@ impl DescribeChannelError {
 }
 impl fmt::Display for DescribeChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeChannelError::Forbidden(ref cause) => cause,
-            DescribeChannelError::InternalServerError(ref cause) => cause,
-            DescribeChannelError::NotFound(ref cause) => cause,
-            DescribeChannelError::ServiceUnavailable(ref cause) => cause,
-            DescribeChannelError::TooManyRequests(ref cause) => cause,
-            DescribeChannelError::UnprocessableEntity(ref cause) => cause,
+            DescribeChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeChannelError {}
 /// Errors returned by DescribeHarvestJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeHarvestJobError {
@@ -1767,21 +1743,17 @@ impl DescribeHarvestJobError {
 }
 impl fmt::Display for DescribeHarvestJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHarvestJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHarvestJobError::Forbidden(ref cause) => cause,
-            DescribeHarvestJobError::InternalServerError(ref cause) => cause,
-            DescribeHarvestJobError::NotFound(ref cause) => cause,
-            DescribeHarvestJobError::ServiceUnavailable(ref cause) => cause,
-            DescribeHarvestJobError::TooManyRequests(ref cause) => cause,
-            DescribeHarvestJobError::UnprocessableEntity(ref cause) => cause,
+            DescribeHarvestJobError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeHarvestJobError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeHarvestJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeHarvestJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeHarvestJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeHarvestJobError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeHarvestJobError {}
 /// Errors returned by DescribeOriginEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeOriginEndpointError {
@@ -1838,21 +1810,17 @@ impl DescribeOriginEndpointError {
 }
 impl fmt::Display for DescribeOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOriginEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOriginEndpointError::Forbidden(ref cause) => cause,
-            DescribeOriginEndpointError::InternalServerError(ref cause) => cause,
-            DescribeOriginEndpointError::NotFound(ref cause) => cause,
-            DescribeOriginEndpointError::ServiceUnavailable(ref cause) => cause,
-            DescribeOriginEndpointError::TooManyRequests(ref cause) => cause,
-            DescribeOriginEndpointError::UnprocessableEntity(ref cause) => cause,
+            DescribeOriginEndpointError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeOriginEndpointError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeOriginEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeOriginEndpointError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeOriginEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeOriginEndpointError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeOriginEndpointError {}
 /// Errors returned by ListChannels
 #[derive(Debug, PartialEq)]
 pub enum ListChannelsError {
@@ -1901,21 +1869,17 @@ impl ListChannelsError {
 }
 impl fmt::Display for ListChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListChannelsError {
-    fn description(&self) -> &str {
         match *self {
-            ListChannelsError::Forbidden(ref cause) => cause,
-            ListChannelsError::InternalServerError(ref cause) => cause,
-            ListChannelsError::NotFound(ref cause) => cause,
-            ListChannelsError::ServiceUnavailable(ref cause) => cause,
-            ListChannelsError::TooManyRequests(ref cause) => cause,
-            ListChannelsError::UnprocessableEntity(ref cause) => cause,
+            ListChannelsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListChannelsError {}
 /// Errors returned by ListHarvestJobs
 #[derive(Debug, PartialEq)]
 pub enum ListHarvestJobsError {
@@ -1964,21 +1928,17 @@ impl ListHarvestJobsError {
 }
 impl fmt::Display for ListHarvestJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHarvestJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListHarvestJobsError::Forbidden(ref cause) => cause,
-            ListHarvestJobsError::InternalServerError(ref cause) => cause,
-            ListHarvestJobsError::NotFound(ref cause) => cause,
-            ListHarvestJobsError::ServiceUnavailable(ref cause) => cause,
-            ListHarvestJobsError::TooManyRequests(ref cause) => cause,
-            ListHarvestJobsError::UnprocessableEntity(ref cause) => cause,
+            ListHarvestJobsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListHarvestJobsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListHarvestJobsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListHarvestJobsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListHarvestJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListHarvestJobsError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHarvestJobsError {}
 /// Errors returned by ListOriginEndpoints
 #[derive(Debug, PartialEq)]
 pub enum ListOriginEndpointsError {
@@ -2033,21 +1993,17 @@ impl ListOriginEndpointsError {
 }
 impl fmt::Display for ListOriginEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOriginEndpointsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOriginEndpointsError::Forbidden(ref cause) => cause,
-            ListOriginEndpointsError::InternalServerError(ref cause) => cause,
-            ListOriginEndpointsError::NotFound(ref cause) => cause,
-            ListOriginEndpointsError::ServiceUnavailable(ref cause) => cause,
-            ListOriginEndpointsError::TooManyRequests(ref cause) => cause,
-            ListOriginEndpointsError::UnprocessableEntity(ref cause) => cause,
+            ListOriginEndpointsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListOriginEndpointsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListOriginEndpointsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListOriginEndpointsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListOriginEndpointsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListOriginEndpointsError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOriginEndpointsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {}
@@ -2065,14 +2021,10 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by RotateChannelCredentials
 #[derive(Debug, PartialEq)]
 pub enum RotateChannelCredentialsError {
@@ -2129,21 +2081,17 @@ impl RotateChannelCredentialsError {
 }
 impl fmt::Display for RotateChannelCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RotateChannelCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            RotateChannelCredentialsError::Forbidden(ref cause) => cause,
-            RotateChannelCredentialsError::InternalServerError(ref cause) => cause,
-            RotateChannelCredentialsError::NotFound(ref cause) => cause,
-            RotateChannelCredentialsError::ServiceUnavailable(ref cause) => cause,
-            RotateChannelCredentialsError::TooManyRequests(ref cause) => cause,
-            RotateChannelCredentialsError::UnprocessableEntity(ref cause) => cause,
+            RotateChannelCredentialsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RotateChannelCredentialsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RotateChannelCredentialsError::NotFound(ref cause) => write!(f, "{}", cause),
+            RotateChannelCredentialsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RotateChannelCredentialsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            RotateChannelCredentialsError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RotateChannelCredentialsError {}
 /// Errors returned by RotateIngestEndpointCredentials
 #[derive(Debug, PartialEq)]
 pub enum RotateIngestEndpointCredentialsError {
@@ -2206,21 +2154,25 @@ impl RotateIngestEndpointCredentialsError {
 }
 impl fmt::Display for RotateIngestEndpointCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RotateIngestEndpointCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            RotateIngestEndpointCredentialsError::Forbidden(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::InternalServerError(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::NotFound(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::ServiceUnavailable(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::TooManyRequests(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::UnprocessableEntity(ref cause) => cause,
+            RotateIngestEndpointCredentialsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RotateIngestEndpointCredentialsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RotateIngestEndpointCredentialsError::NotFound(ref cause) => write!(f, "{}", cause),
+            RotateIngestEndpointCredentialsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RotateIngestEndpointCredentialsError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RotateIngestEndpointCredentialsError::UnprocessableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RotateIngestEndpointCredentialsError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {}
@@ -2238,14 +2190,10 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {}
@@ -2263,14 +2211,10 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateChannel
 #[derive(Debug, PartialEq)]
 pub enum UpdateChannelError {
@@ -2319,21 +2263,17 @@ impl UpdateChannelError {
 }
 impl fmt::Display for UpdateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateChannelError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateChannelError::Forbidden(ref cause) => cause,
-            UpdateChannelError::InternalServerError(ref cause) => cause,
-            UpdateChannelError::NotFound(ref cause) => cause,
-            UpdateChannelError::ServiceUnavailable(ref cause) => cause,
-            UpdateChannelError::TooManyRequests(ref cause) => cause,
-            UpdateChannelError::UnprocessableEntity(ref cause) => cause,
+            UpdateChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateChannelError {}
 /// Errors returned by UpdateOriginEndpoint
 #[derive(Debug, PartialEq)]
 pub enum UpdateOriginEndpointError {
@@ -2390,21 +2330,17 @@ impl UpdateOriginEndpointError {
 }
 impl fmt::Display for UpdateOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateOriginEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateOriginEndpointError::Forbidden(ref cause) => cause,
-            UpdateOriginEndpointError::InternalServerError(ref cause) => cause,
-            UpdateOriginEndpointError::NotFound(ref cause) => cause,
-            UpdateOriginEndpointError::ServiceUnavailable(ref cause) => cause,
-            UpdateOriginEndpointError::TooManyRequests(ref cause) => cause,
-            UpdateOriginEndpointError::UnprocessableEntity(ref cause) => cause,
+            UpdateOriginEndpointError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateOriginEndpointError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateOriginEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateOriginEndpointError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateOriginEndpointError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateOriginEndpointError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateOriginEndpointError {}
 /// Trait representing the capabilities of the MediaPackage API. MediaPackage clients implement this trait.
 pub trait MediaPackage {
     /// <p>Creates a new Channel.</p>

@@ -8927,16 +8927,12 @@ impl CancelUpdateStackError {
 }
 impl fmt::Display for CancelUpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelUpdateStackError {
-    fn description(&self) -> &str {
         match *self {
-            CancelUpdateStackError::TokenAlreadyExists(ref cause) => cause,
+            CancelUpdateStackError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelUpdateStackError {}
 /// Errors returned by ContinueUpdateRollback
 #[derive(Debug, PartialEq)]
 pub enum ContinueUpdateRollbackError {
@@ -8974,16 +8970,12 @@ impl ContinueUpdateRollbackError {
 }
 impl fmt::Display for ContinueUpdateRollbackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ContinueUpdateRollbackError {
-    fn description(&self) -> &str {
         match *self {
-            ContinueUpdateRollbackError::TokenAlreadyExists(ref cause) => cause,
+            ContinueUpdateRollbackError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ContinueUpdateRollbackError {}
 /// Errors returned by CreateChangeSet
 #[derive(Debug, PartialEq)]
 pub enum CreateChangeSetError {
@@ -9035,18 +9027,14 @@ impl CreateChangeSetError {
 }
 impl fmt::Display for CreateChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateChangeSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateChangeSetError::AlreadyExists(ref cause) => cause,
-            CreateChangeSetError::InsufficientCapabilities(ref cause) => cause,
-            CreateChangeSetError::LimitExceeded(ref cause) => cause,
+            CreateChangeSetError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateChangeSetError::InsufficientCapabilities(ref cause) => write!(f, "{}", cause),
+            CreateChangeSetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateChangeSetError {}
 /// Errors returned by CreateStack
 #[derive(Debug, PartialEq)]
 pub enum CreateStackError {
@@ -9105,19 +9093,15 @@ impl CreateStackError {
 }
 impl fmt::Display for CreateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStackError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStackError::AlreadyExists(ref cause) => cause,
-            CreateStackError::InsufficientCapabilities(ref cause) => cause,
-            CreateStackError::LimitExceeded(ref cause) => cause,
-            CreateStackError::TokenAlreadyExists(ref cause) => cause,
+            CreateStackError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateStackError::InsufficientCapabilities(ref cause) => write!(f, "{}", cause),
+            CreateStackError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStackError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStackError {}
 /// Errors returned by CreateStackInstances
 #[derive(Debug, PartialEq)]
 pub enum CreateStackInstancesError {
@@ -9192,21 +9176,19 @@ impl CreateStackInstancesError {
 }
 impl fmt::Display for CreateStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStackInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStackInstancesError::InvalidOperation(ref cause) => cause,
-            CreateStackInstancesError::LimitExceeded(ref cause) => cause,
-            CreateStackInstancesError::OperationIdAlreadyExists(ref cause) => cause,
-            CreateStackInstancesError::OperationInProgress(ref cause) => cause,
-            CreateStackInstancesError::StackSetNotFound(ref cause) => cause,
-            CreateStackInstancesError::StaleRequest(ref cause) => cause,
+            CreateStackInstancesError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            CreateStackInstancesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStackInstancesError::OperationIdAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStackInstancesError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            CreateStackInstancesError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
+            CreateStackInstancesError::StaleRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStackInstancesError {}
 /// Errors returned by CreateStackSet
 #[derive(Debug, PartialEq)]
 pub enum CreateStackSetError {
@@ -9258,18 +9240,14 @@ impl CreateStackSetError {
 }
 impl fmt::Display for CreateStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStackSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStackSetError::CreatedButModified(ref cause) => cause,
-            CreateStackSetError::LimitExceeded(ref cause) => cause,
-            CreateStackSetError::NameAlreadyExists(ref cause) => cause,
+            CreateStackSetError::CreatedButModified(ref cause) => write!(f, "{}", cause),
+            CreateStackSetError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStackSetError::NameAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStackSetError {}
 /// Errors returned by DeleteChangeSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteChangeSetError {
@@ -9307,16 +9285,12 @@ impl DeleteChangeSetError {
 }
 impl fmt::Display for DeleteChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteChangeSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteChangeSetError::InvalidChangeSetStatus(ref cause) => cause,
+            DeleteChangeSetError::InvalidChangeSetStatus(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteChangeSetError {}
 /// Errors returned by DeleteStack
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackError {
@@ -9354,16 +9328,12 @@ impl DeleteStackError {
 }
 impl fmt::Display for DeleteStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStackError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStackError::TokenAlreadyExists(ref cause) => cause,
+            DeleteStackError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStackError {}
 /// Errors returned by DeleteStackInstances
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackInstancesError {
@@ -9431,20 +9401,18 @@ impl DeleteStackInstancesError {
 }
 impl fmt::Display for DeleteStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStackInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStackInstancesError::InvalidOperation(ref cause) => cause,
-            DeleteStackInstancesError::OperationIdAlreadyExists(ref cause) => cause,
-            DeleteStackInstancesError::OperationInProgress(ref cause) => cause,
-            DeleteStackInstancesError::StackSetNotFound(ref cause) => cause,
-            DeleteStackInstancesError::StaleRequest(ref cause) => cause,
+            DeleteStackInstancesError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DeleteStackInstancesError::OperationIdAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteStackInstancesError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteStackInstancesError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteStackInstancesError::StaleRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStackInstancesError {}
 /// Errors returned by DeleteStackSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackSetError {
@@ -9489,17 +9457,13 @@ impl DeleteStackSetError {
 }
 impl fmt::Display for DeleteStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStackSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStackSetError::OperationInProgress(ref cause) => cause,
-            DeleteStackSetError::StackSetNotEmpty(ref cause) => cause,
+            DeleteStackSetError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteStackSetError::StackSetNotEmpty(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStackSetError {}
 /// Errors returned by DeregisterType
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTypeError {
@@ -9544,17 +9508,13 @@ impl DeregisterTypeError {
 }
 impl fmt::Display for DeregisterTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterTypeError::CFNRegistry(ref cause) => cause,
-            DeregisterTypeError::TypeNotFound(ref cause) => cause,
+            DeregisterTypeError::CFNRegistry(ref cause) => write!(f, "{}", cause),
+            DeregisterTypeError::TypeNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterTypeError {}
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountLimitsError {}
@@ -9584,14 +9544,10 @@ impl DescribeAccountLimitsError {
 }
 impl fmt::Display for DescribeAccountLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountLimitsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountLimitsError {}
 /// Errors returned by DescribeChangeSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeChangeSetError {
@@ -9629,16 +9585,12 @@ impl DescribeChangeSetError {
 }
 impl fmt::Display for DescribeChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeChangeSetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeChangeSetError::ChangeSetNotFound(ref cause) => cause,
+            DescribeChangeSetError::ChangeSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeChangeSetError {}
 /// Errors returned by DescribeStackDriftDetectionStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackDriftDetectionStatusError {}
@@ -9670,14 +9622,10 @@ impl DescribeStackDriftDetectionStatusError {
 }
 impl fmt::Display for DescribeStackDriftDetectionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackDriftDetectionStatusError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStackDriftDetectionStatusError {}
 /// Errors returned by DescribeStackEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackEventsError {}
@@ -9707,14 +9655,10 @@ impl DescribeStackEventsError {
 }
 impl fmt::Display for DescribeStackEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackEventsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStackEventsError {}
 /// Errors returned by DescribeStackInstance
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackInstanceError {
@@ -9759,17 +9703,13 @@ impl DescribeStackInstanceError {
 }
 impl fmt::Display for DescribeStackInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStackInstanceError::StackInstanceNotFound(ref cause) => cause,
-            DescribeStackInstanceError::StackSetNotFound(ref cause) => cause,
+            DescribeStackInstanceError::StackInstanceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeStackInstanceError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStackInstanceError {}
 /// Errors returned by DescribeStackResource
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackResourceError {}
@@ -9799,14 +9739,10 @@ impl DescribeStackResourceError {
 }
 impl fmt::Display for DescribeStackResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackResourceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStackResourceError {}
 /// Errors returned by DescribeStackResourceDrifts
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackResourceDriftsError {}
@@ -9838,14 +9774,10 @@ impl DescribeStackResourceDriftsError {
 }
 impl fmt::Display for DescribeStackResourceDriftsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackResourceDriftsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStackResourceDriftsError {}
 /// Errors returned by DescribeStackResources
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackResourcesError {}
@@ -9875,14 +9807,10 @@ impl DescribeStackResourcesError {
 }
 impl fmt::Display for DescribeStackResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackResourcesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStackResourcesError {}
 /// Errors returned by DescribeStackSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackSetError {
@@ -9920,16 +9848,12 @@ impl DescribeStackSetError {
 }
 impl fmt::Display for DescribeStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackSetError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStackSetError::StackSetNotFound(ref cause) => cause,
+            DescribeStackSetError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStackSetError {}
 /// Errors returned by DescribeStackSetOperation
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackSetOperationError {
@@ -9974,17 +9898,13 @@ impl DescribeStackSetOperationError {
 }
 impl fmt::Display for DescribeStackSetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStackSetOperationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStackSetOperationError::OperationNotFound(ref cause) => cause,
-            DescribeStackSetOperationError::StackSetNotFound(ref cause) => cause,
+            DescribeStackSetOperationError::OperationNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeStackSetOperationError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStackSetOperationError {}
 /// Errors returned by DescribeStacks
 #[derive(Debug, PartialEq)]
 pub enum DescribeStacksError {}
@@ -10014,14 +9934,10 @@ impl DescribeStacksError {
 }
 impl fmt::Display for DescribeStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStacksError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeStacksError {}
 /// Errors returned by DescribeType
 #[derive(Debug, PartialEq)]
 pub enum DescribeTypeError {
@@ -10066,17 +9982,13 @@ impl DescribeTypeError {
 }
 impl fmt::Display for DescribeTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTypeError::CFNRegistry(ref cause) => cause,
-            DescribeTypeError::TypeNotFound(ref cause) => cause,
+            DescribeTypeError::CFNRegistry(ref cause) => write!(f, "{}", cause),
+            DescribeTypeError::TypeNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTypeError {}
 /// Errors returned by DescribeTypeRegistration
 #[derive(Debug, PartialEq)]
 pub enum DescribeTypeRegistrationError {
@@ -10114,16 +10026,12 @@ impl DescribeTypeRegistrationError {
 }
 impl fmt::Display for DescribeTypeRegistrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTypeRegistrationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTypeRegistrationError::CFNRegistry(ref cause) => cause,
+            DescribeTypeRegistrationError::CFNRegistry(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTypeRegistrationError {}
 /// Errors returned by DetectStackDrift
 #[derive(Debug, PartialEq)]
 pub enum DetectStackDriftError {}
@@ -10153,14 +10061,10 @@ impl DetectStackDriftError {
 }
 impl fmt::Display for DetectStackDriftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectStackDriftError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DetectStackDriftError {}
 /// Errors returned by DetectStackResourceDrift
 #[derive(Debug, PartialEq)]
 pub enum DetectStackResourceDriftError {}
@@ -10190,14 +10094,10 @@ impl DetectStackResourceDriftError {
 }
 impl fmt::Display for DetectStackResourceDriftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectStackResourceDriftError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DetectStackResourceDriftError {}
 /// Errors returned by DetectStackSetDrift
 #[derive(Debug, PartialEq)]
 pub enum DetectStackSetDriftError {
@@ -10249,18 +10149,14 @@ impl DetectStackSetDriftError {
 }
 impl fmt::Display for DetectStackSetDriftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectStackSetDriftError {
-    fn description(&self) -> &str {
         match *self {
-            DetectStackSetDriftError::InvalidOperation(ref cause) => cause,
-            DetectStackSetDriftError::OperationInProgress(ref cause) => cause,
-            DetectStackSetDriftError::StackSetNotFound(ref cause) => cause,
+            DetectStackSetDriftError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DetectStackSetDriftError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            DetectStackSetDriftError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectStackSetDriftError {}
 /// Errors returned by EstimateTemplateCost
 #[derive(Debug, PartialEq)]
 pub enum EstimateTemplateCostError {}
@@ -10290,14 +10186,10 @@ impl EstimateTemplateCostError {
 }
 impl fmt::Display for EstimateTemplateCostError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EstimateTemplateCostError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for EstimateTemplateCostError {}
 /// Errors returned by ExecuteChangeSet
 #[derive(Debug, PartialEq)]
 pub enum ExecuteChangeSetError {
@@ -10356,19 +10248,15 @@ impl ExecuteChangeSetError {
 }
 impl fmt::Display for ExecuteChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExecuteChangeSetError {
-    fn description(&self) -> &str {
         match *self {
-            ExecuteChangeSetError::ChangeSetNotFound(ref cause) => cause,
-            ExecuteChangeSetError::InsufficientCapabilities(ref cause) => cause,
-            ExecuteChangeSetError::InvalidChangeSetStatus(ref cause) => cause,
-            ExecuteChangeSetError::TokenAlreadyExists(ref cause) => cause,
+            ExecuteChangeSetError::ChangeSetNotFound(ref cause) => write!(f, "{}", cause),
+            ExecuteChangeSetError::InsufficientCapabilities(ref cause) => write!(f, "{}", cause),
+            ExecuteChangeSetError::InvalidChangeSetStatus(ref cause) => write!(f, "{}", cause),
+            ExecuteChangeSetError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExecuteChangeSetError {}
 /// Errors returned by GetStackPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetStackPolicyError {}
@@ -10398,14 +10286,10 @@ impl GetStackPolicyError {
 }
 impl fmt::Display for GetStackPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStackPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetStackPolicyError {}
 /// Errors returned by GetTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetTemplateError {
@@ -10443,16 +10327,12 @@ impl GetTemplateError {
 }
 impl fmt::Display for GetTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            GetTemplateError::ChangeSetNotFound(ref cause) => cause,
+            GetTemplateError::ChangeSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTemplateError {}
 /// Errors returned by GetTemplateSummary
 #[derive(Debug, PartialEq)]
 pub enum GetTemplateSummaryError {
@@ -10490,16 +10370,12 @@ impl GetTemplateSummaryError {
 }
 impl fmt::Display for GetTemplateSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTemplateSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetTemplateSummaryError::StackSetNotFound(ref cause) => cause,
+            GetTemplateSummaryError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTemplateSummaryError {}
 /// Errors returned by ListChangeSets
 #[derive(Debug, PartialEq)]
 pub enum ListChangeSetsError {}
@@ -10529,14 +10405,10 @@ impl ListChangeSetsError {
 }
 impl fmt::Display for ListChangeSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListChangeSetsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListChangeSetsError {}
 /// Errors returned by ListExports
 #[derive(Debug, PartialEq)]
 pub enum ListExportsError {}
@@ -10566,14 +10438,10 @@ impl ListExportsError {
 }
 impl fmt::Display for ListExportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListExportsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListExportsError {}
 /// Errors returned by ListImports
 #[derive(Debug, PartialEq)]
 pub enum ListImportsError {}
@@ -10603,14 +10471,10 @@ impl ListImportsError {
 }
 impl fmt::Display for ListImportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListImportsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListImportsError {}
 /// Errors returned by ListStackInstances
 #[derive(Debug, PartialEq)]
 pub enum ListStackInstancesError {
@@ -10648,16 +10512,12 @@ impl ListStackInstancesError {
 }
 impl fmt::Display for ListStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStackInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListStackInstancesError::StackSetNotFound(ref cause) => cause,
+            ListStackInstancesError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStackInstancesError {}
 /// Errors returned by ListStackResources
 #[derive(Debug, PartialEq)]
 pub enum ListStackResourcesError {}
@@ -10687,14 +10547,10 @@ impl ListStackResourcesError {
 }
 impl fmt::Display for ListStackResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStackResourcesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListStackResourcesError {}
 /// Errors returned by ListStackSetOperationResults
 #[derive(Debug, PartialEq)]
 pub enum ListStackSetOperationResultsError {
@@ -10745,17 +10601,17 @@ impl ListStackSetOperationResultsError {
 }
 impl fmt::Display for ListStackSetOperationResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStackSetOperationResultsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStackSetOperationResultsError::OperationNotFound(ref cause) => cause,
-            ListStackSetOperationResultsError::StackSetNotFound(ref cause) => cause,
+            ListStackSetOperationResultsError::OperationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListStackSetOperationResultsError::StackSetNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListStackSetOperationResultsError {}
 /// Errors returned by ListStackSetOperations
 #[derive(Debug, PartialEq)]
 pub enum ListStackSetOperationsError {
@@ -10793,16 +10649,12 @@ impl ListStackSetOperationsError {
 }
 impl fmt::Display for ListStackSetOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStackSetOperationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStackSetOperationsError::StackSetNotFound(ref cause) => cause,
+            ListStackSetOperationsError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStackSetOperationsError {}
 /// Errors returned by ListStackSets
 #[derive(Debug, PartialEq)]
 pub enum ListStackSetsError {}
@@ -10832,14 +10684,10 @@ impl ListStackSetsError {
 }
 impl fmt::Display for ListStackSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStackSetsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListStackSetsError {}
 /// Errors returned by ListStacks
 #[derive(Debug, PartialEq)]
 pub enum ListStacksError {}
@@ -10869,14 +10717,10 @@ impl ListStacksError {
 }
 impl fmt::Display for ListStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStacksError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListStacksError {}
 /// Errors returned by ListTypeRegistrations
 #[derive(Debug, PartialEq)]
 pub enum ListTypeRegistrationsError {
@@ -10914,16 +10758,12 @@ impl ListTypeRegistrationsError {
 }
 impl fmt::Display for ListTypeRegistrationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTypeRegistrationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTypeRegistrationsError::CFNRegistry(ref cause) => cause,
+            ListTypeRegistrationsError::CFNRegistry(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTypeRegistrationsError {}
 /// Errors returned by ListTypeVersions
 #[derive(Debug, PartialEq)]
 pub enum ListTypeVersionsError {
@@ -10961,16 +10801,12 @@ impl ListTypeVersionsError {
 }
 impl fmt::Display for ListTypeVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTypeVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTypeVersionsError::CFNRegistry(ref cause) => cause,
+            ListTypeVersionsError::CFNRegistry(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTypeVersionsError {}
 /// Errors returned by ListTypes
 #[derive(Debug, PartialEq)]
 pub enum ListTypesError {
@@ -11008,16 +10844,12 @@ impl ListTypesError {
 }
 impl fmt::Display for ListTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTypesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTypesError::CFNRegistry(ref cause) => cause,
+            ListTypesError::CFNRegistry(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTypesError {}
 /// Errors returned by RecordHandlerProgress
 #[derive(Debug, PartialEq)]
 pub enum RecordHandlerProgressError {
@@ -11066,17 +10898,15 @@ impl RecordHandlerProgressError {
 }
 impl fmt::Display for RecordHandlerProgressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RecordHandlerProgressError {
-    fn description(&self) -> &str {
         match *self {
-            RecordHandlerProgressError::InvalidStateTransition(ref cause) => cause,
-            RecordHandlerProgressError::OperationStatusCheckFailed(ref cause) => cause,
+            RecordHandlerProgressError::InvalidStateTransition(ref cause) => write!(f, "{}", cause),
+            RecordHandlerProgressError::OperationStatusCheckFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RecordHandlerProgressError {}
 /// Errors returned by RegisterType
 #[derive(Debug, PartialEq)]
 pub enum RegisterTypeError {
@@ -11114,16 +10944,12 @@ impl RegisterTypeError {
 }
 impl fmt::Display for RegisterTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterTypeError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterTypeError::CFNRegistry(ref cause) => cause,
+            RegisterTypeError::CFNRegistry(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterTypeError {}
 /// Errors returned by SetStackPolicy
 #[derive(Debug, PartialEq)]
 pub enum SetStackPolicyError {}
@@ -11153,14 +10979,10 @@ impl SetStackPolicyError {
 }
 impl fmt::Display for SetStackPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetStackPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SetStackPolicyError {}
 /// Errors returned by SetTypeDefaultVersion
 #[derive(Debug, PartialEq)]
 pub enum SetTypeDefaultVersionError {
@@ -11205,17 +11027,13 @@ impl SetTypeDefaultVersionError {
 }
 impl fmt::Display for SetTypeDefaultVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetTypeDefaultVersionError {
-    fn description(&self) -> &str {
         match *self {
-            SetTypeDefaultVersionError::CFNRegistry(ref cause) => cause,
-            SetTypeDefaultVersionError::TypeNotFound(ref cause) => cause,
+            SetTypeDefaultVersionError::CFNRegistry(ref cause) => write!(f, "{}", cause),
+            SetTypeDefaultVersionError::TypeNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetTypeDefaultVersionError {}
 /// Errors returned by SignalResource
 #[derive(Debug, PartialEq)]
 pub enum SignalResourceError {}
@@ -11245,14 +11063,10 @@ impl SignalResourceError {
 }
 impl fmt::Display for SignalResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SignalResourceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SignalResourceError {}
 /// Errors returned by StopStackSetOperation
 #[derive(Debug, PartialEq)]
 pub enum StopStackSetOperationError {
@@ -11304,18 +11118,14 @@ impl StopStackSetOperationError {
 }
 impl fmt::Display for StopStackSetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopStackSetOperationError {
-    fn description(&self) -> &str {
         match *self {
-            StopStackSetOperationError::InvalidOperation(ref cause) => cause,
-            StopStackSetOperationError::OperationNotFound(ref cause) => cause,
-            StopStackSetOperationError::StackSetNotFound(ref cause) => cause,
+            StopStackSetOperationError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            StopStackSetOperationError::OperationNotFound(ref cause) => write!(f, "{}", cause),
+            StopStackSetOperationError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopStackSetOperationError {}
 /// Errors returned by UpdateStack
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackError {
@@ -11360,17 +11170,13 @@ impl UpdateStackError {
 }
 impl fmt::Display for UpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStackError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStackError::InsufficientCapabilities(ref cause) => cause,
-            UpdateStackError::TokenAlreadyExists(ref cause) => cause,
+            UpdateStackError::InsufficientCapabilities(ref cause) => write!(f, "{}", cause),
+            UpdateStackError::TokenAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStackError {}
 /// Errors returned by UpdateStackInstances
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackInstancesError {
@@ -11445,21 +11251,19 @@ impl UpdateStackInstancesError {
 }
 impl fmt::Display for UpdateStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStackInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStackInstancesError::InvalidOperation(ref cause) => cause,
-            UpdateStackInstancesError::OperationIdAlreadyExists(ref cause) => cause,
-            UpdateStackInstancesError::OperationInProgress(ref cause) => cause,
-            UpdateStackInstancesError::StackInstanceNotFound(ref cause) => cause,
-            UpdateStackInstancesError::StackSetNotFound(ref cause) => cause,
-            UpdateStackInstancesError::StaleRequest(ref cause) => cause,
+            UpdateStackInstancesError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateStackInstancesError::OperationIdAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStackInstancesError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            UpdateStackInstancesError::StackInstanceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStackInstancesError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStackInstancesError::StaleRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStackInstancesError {}
 /// Errors returned by UpdateStackSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackSetError {
@@ -11532,21 +11336,17 @@ impl UpdateStackSetError {
 }
 impl fmt::Display for UpdateStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStackSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStackSetError::InvalidOperation(ref cause) => cause,
-            UpdateStackSetError::OperationIdAlreadyExists(ref cause) => cause,
-            UpdateStackSetError::OperationInProgress(ref cause) => cause,
-            UpdateStackSetError::StackInstanceNotFound(ref cause) => cause,
-            UpdateStackSetError::StackSetNotFound(ref cause) => cause,
-            UpdateStackSetError::StaleRequest(ref cause) => cause,
+            UpdateStackSetError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateStackSetError::OperationIdAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateStackSetError::OperationInProgress(ref cause) => write!(f, "{}", cause),
+            UpdateStackSetError::StackInstanceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStackSetError::StackSetNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStackSetError::StaleRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStackSetError {}
 /// Errors returned by UpdateTerminationProtection
 #[derive(Debug, PartialEq)]
 pub enum UpdateTerminationProtectionError {}
@@ -11578,14 +11378,10 @@ impl UpdateTerminationProtectionError {
 }
 impl fmt::Display for UpdateTerminationProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTerminationProtectionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UpdateTerminationProtectionError {}
 /// Errors returned by ValidateTemplate
 #[derive(Debug, PartialEq)]
 pub enum ValidateTemplateError {}
@@ -11615,14 +11411,10 @@ impl ValidateTemplateError {
 }
 impl fmt::Display for ValidateTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ValidateTemplateError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ValidateTemplateError {}
 /// Trait representing the capabilities of the AWS CloudFormation API. AWS CloudFormation clients implement this trait.
 pub trait CloudFormation {
     /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>

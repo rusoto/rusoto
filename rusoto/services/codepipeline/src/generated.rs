@@ -1954,17 +1954,13 @@ impl AcknowledgeJobError {
 }
 impl fmt::Display for AcknowledgeJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcknowledgeJobError {
-    fn description(&self) -> &str {
         match *self {
-            AcknowledgeJobError::InvalidNonce(ref cause) => cause,
-            AcknowledgeJobError::JobNotFound(ref cause) => cause,
+            AcknowledgeJobError::InvalidNonce(ref cause) => write!(f, "{}", cause),
+            AcknowledgeJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AcknowledgeJobError {}
 /// Errors returned by AcknowledgeThirdPartyJob
 #[derive(Debug, PartialEq)]
 pub enum AcknowledgeThirdPartyJobError {
@@ -2004,18 +2000,14 @@ impl AcknowledgeThirdPartyJobError {
 }
 impl fmt::Display for AcknowledgeThirdPartyJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcknowledgeThirdPartyJobError {
-    fn description(&self) -> &str {
         match *self {
-            AcknowledgeThirdPartyJobError::InvalidClientToken(ref cause) => cause,
-            AcknowledgeThirdPartyJobError::InvalidNonce(ref cause) => cause,
-            AcknowledgeThirdPartyJobError::JobNotFound(ref cause) => cause,
+            AcknowledgeThirdPartyJobError::InvalidClientToken(ref cause) => write!(f, "{}", cause),
+            AcknowledgeThirdPartyJobError::InvalidNonce(ref cause) => write!(f, "{}", cause),
+            AcknowledgeThirdPartyJobError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AcknowledgeThirdPartyJobError {}
 /// Errors returned by CreateCustomActionType
 #[derive(Debug, PartialEq)]
 pub enum CreateCustomActionTypeError {
@@ -2058,19 +2050,17 @@ impl CreateCustomActionTypeError {
 }
 impl fmt::Display for CreateCustomActionTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCustomActionTypeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCustomActionTypeError::ConcurrentModification(ref cause) => cause,
-            CreateCustomActionTypeError::InvalidTags(ref cause) => cause,
-            CreateCustomActionTypeError::LimitExceeded(ref cause) => cause,
-            CreateCustomActionTypeError::TooManyTags(ref cause) => cause,
+            CreateCustomActionTypeError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCustomActionTypeError::InvalidTags(ref cause) => write!(f, "{}", cause),
+            CreateCustomActionTypeError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCustomActionTypeError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCustomActionTypeError {}
 /// Errors returned by CreatePipeline
 #[derive(Debug, PartialEq)]
 pub enum CreatePipelineError {
@@ -2142,24 +2132,20 @@ impl CreatePipelineError {
 }
 impl fmt::Display for CreatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePipelineError::ConcurrentModification(ref cause) => cause,
-            CreatePipelineError::InvalidActionDeclaration(ref cause) => cause,
-            CreatePipelineError::InvalidBlockerDeclaration(ref cause) => cause,
-            CreatePipelineError::InvalidStageDeclaration(ref cause) => cause,
-            CreatePipelineError::InvalidStructure(ref cause) => cause,
-            CreatePipelineError::InvalidTags(ref cause) => cause,
-            CreatePipelineError::LimitExceeded(ref cause) => cause,
-            CreatePipelineError::PipelineNameInUse(ref cause) => cause,
-            CreatePipelineError::TooManyTags(ref cause) => cause,
+            CreatePipelineError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::InvalidActionDeclaration(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::InvalidBlockerDeclaration(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::InvalidStageDeclaration(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::InvalidStructure(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::InvalidTags(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::PipelineNameInUse(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePipelineError {}
 /// Errors returned by DeleteCustomActionType
 #[derive(Debug, PartialEq)]
 pub enum DeleteCustomActionTypeError {
@@ -2185,16 +2171,14 @@ impl DeleteCustomActionTypeError {
 }
 impl fmt::Display for DeleteCustomActionTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCustomActionTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCustomActionTypeError::ConcurrentModification(ref cause) => cause,
+            DeleteCustomActionTypeError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteCustomActionTypeError {}
 /// Errors returned by DeletePipeline
 #[derive(Debug, PartialEq)]
 pub enum DeletePipelineError {
@@ -2220,16 +2204,12 @@ impl DeletePipelineError {
 }
 impl fmt::Display for DeletePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePipelineError::ConcurrentModification(ref cause) => cause,
+            DeletePipelineError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePipelineError {}
 /// Errors returned by DeleteWebhook
 #[derive(Debug, PartialEq)]
 pub enum DeleteWebhookError {
@@ -2255,16 +2235,12 @@ impl DeleteWebhookError {
 }
 impl fmt::Display for DeleteWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWebhookError::ConcurrentModification(ref cause) => cause,
+            DeleteWebhookError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWebhookError {}
 /// Errors returned by DeregisterWebhookWithThirdParty
 #[derive(Debug, PartialEq)]
 pub enum DeregisterWebhookWithThirdPartyError {
@@ -2292,16 +2268,14 @@ impl DeregisterWebhookWithThirdPartyError {
 }
 impl fmt::Display for DeregisterWebhookWithThirdPartyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterWebhookWithThirdPartyError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterWebhookWithThirdPartyError::WebhookNotFound(ref cause) => cause,
+            DeregisterWebhookWithThirdPartyError::WebhookNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeregisterWebhookWithThirdPartyError {}
 /// Errors returned by DisableStageTransition
 #[derive(Debug, PartialEq)]
 pub enum DisableStageTransitionError {
@@ -2334,17 +2308,13 @@ impl DisableStageTransitionError {
 }
 impl fmt::Display for DisableStageTransitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableStageTransitionError {
-    fn description(&self) -> &str {
         match *self {
-            DisableStageTransitionError::PipelineNotFound(ref cause) => cause,
-            DisableStageTransitionError::StageNotFound(ref cause) => cause,
+            DisableStageTransitionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+            DisableStageTransitionError::StageNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableStageTransitionError {}
 /// Errors returned by EnableStageTransition
 #[derive(Debug, PartialEq)]
 pub enum EnableStageTransitionError {
@@ -2375,17 +2345,13 @@ impl EnableStageTransitionError {
 }
 impl fmt::Display for EnableStageTransitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableStageTransitionError {
-    fn description(&self) -> &str {
         match *self {
-            EnableStageTransitionError::PipelineNotFound(ref cause) => cause,
-            EnableStageTransitionError::StageNotFound(ref cause) => cause,
+            EnableStageTransitionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+            EnableStageTransitionError::StageNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableStageTransitionError {}
 /// Errors returned by GetJobDetails
 #[derive(Debug, PartialEq)]
 pub enum GetJobDetailsError {
@@ -2409,16 +2375,12 @@ impl GetJobDetailsError {
 }
 impl fmt::Display for GetJobDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobDetailsError::JobNotFound(ref cause) => cause,
+            GetJobDetailsError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobDetailsError {}
 /// Errors returned by GetPipeline
 #[derive(Debug, PartialEq)]
 pub enum GetPipelineError {
@@ -2447,17 +2409,13 @@ impl GetPipelineError {
 }
 impl fmt::Display for GetPipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPipelineError {
-    fn description(&self) -> &str {
         match *self {
-            GetPipelineError::PipelineNotFound(ref cause) => cause,
-            GetPipelineError::PipelineVersionNotFound(ref cause) => cause,
+            GetPipelineError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+            GetPipelineError::PipelineVersionNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPipelineError {}
 /// Errors returned by GetPipelineExecution
 #[derive(Debug, PartialEq)]
 pub enum GetPipelineExecutionError {
@@ -2490,17 +2448,15 @@ impl GetPipelineExecutionError {
 }
 impl fmt::Display for GetPipelineExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPipelineExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            GetPipelineExecutionError::PipelineExecutionNotFound(ref cause) => cause,
-            GetPipelineExecutionError::PipelineNotFound(ref cause) => cause,
+            GetPipelineExecutionError::PipelineExecutionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPipelineExecutionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPipelineExecutionError {}
 /// Errors returned by GetPipelineState
 #[derive(Debug, PartialEq)]
 pub enum GetPipelineStateError {
@@ -2524,16 +2480,12 @@ impl GetPipelineStateError {
 }
 impl fmt::Display for GetPipelineStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPipelineStateError {
-    fn description(&self) -> &str {
         match *self {
-            GetPipelineStateError::PipelineNotFound(ref cause) => cause,
+            GetPipelineStateError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPipelineStateError {}
 /// Errors returned by GetThirdPartyJobDetails
 #[derive(Debug, PartialEq)]
 pub enum GetThirdPartyJobDetailsError {
@@ -2569,18 +2521,14 @@ impl GetThirdPartyJobDetailsError {
 }
 impl fmt::Display for GetThirdPartyJobDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetThirdPartyJobDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetThirdPartyJobDetailsError::InvalidClientToken(ref cause) => cause,
-            GetThirdPartyJobDetailsError::InvalidJob(ref cause) => cause,
-            GetThirdPartyJobDetailsError::JobNotFound(ref cause) => cause,
+            GetThirdPartyJobDetailsError::InvalidClientToken(ref cause) => write!(f, "{}", cause),
+            GetThirdPartyJobDetailsError::InvalidJob(ref cause) => write!(f, "{}", cause),
+            GetThirdPartyJobDetailsError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetThirdPartyJobDetailsError {}
 /// Errors returned by ListActionExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListActionExecutionsError {
@@ -2620,18 +2568,16 @@ impl ListActionExecutionsError {
 }
 impl fmt::Display for ListActionExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListActionExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListActionExecutionsError::InvalidNextToken(ref cause) => cause,
-            ListActionExecutionsError::PipelineExecutionNotFound(ref cause) => cause,
-            ListActionExecutionsError::PipelineNotFound(ref cause) => cause,
+            ListActionExecutionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListActionExecutionsError::PipelineExecutionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListActionExecutionsError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListActionExecutionsError {}
 /// Errors returned by ListActionTypes
 #[derive(Debug, PartialEq)]
 pub enum ListActionTypesError {
@@ -2655,16 +2601,12 @@ impl ListActionTypesError {
 }
 impl fmt::Display for ListActionTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListActionTypesError {
-    fn description(&self) -> &str {
         match *self {
-            ListActionTypesError::InvalidNextToken(ref cause) => cause,
+            ListActionTypesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListActionTypesError {}
 /// Errors returned by ListPipelineExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListPipelineExecutionsError {
@@ -2697,17 +2639,13 @@ impl ListPipelineExecutionsError {
 }
 impl fmt::Display for ListPipelineExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPipelineExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPipelineExecutionsError::InvalidNextToken(ref cause) => cause,
-            ListPipelineExecutionsError::PipelineNotFound(ref cause) => cause,
+            ListPipelineExecutionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListPipelineExecutionsError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPipelineExecutionsError {}
 /// Errors returned by ListPipelines
 #[derive(Debug, PartialEq)]
 pub enum ListPipelinesError {
@@ -2731,16 +2669,12 @@ impl ListPipelinesError {
 }
 impl fmt::Display for ListPipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPipelinesError {
-    fn description(&self) -> &str {
         match *self {
-            ListPipelinesError::InvalidNextToken(ref cause) => cause,
+            ListPipelinesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPipelinesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2778,18 +2712,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InvalidArn(ref cause) => cause,
-            ListTagsForResourceError::InvalidNextToken(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListWebhooks
 #[derive(Debug, PartialEq)]
 pub enum ListWebhooksError {
@@ -2813,16 +2743,12 @@ impl ListWebhooksError {
 }
 impl fmt::Display for ListWebhooksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWebhooksError {
-    fn description(&self) -> &str {
         match *self {
-            ListWebhooksError::InvalidNextToken(ref cause) => cause,
+            ListWebhooksError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListWebhooksError {}
 /// Errors returned by PollForJobs
 #[derive(Debug, PartialEq)]
 pub enum PollForJobsError {
@@ -2846,16 +2772,12 @@ impl PollForJobsError {
 }
 impl fmt::Display for PollForJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PollForJobsError {
-    fn description(&self) -> &str {
         match *self {
-            PollForJobsError::ActionTypeNotFound(ref cause) => cause,
+            PollForJobsError::ActionTypeNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PollForJobsError {}
 /// Errors returned by PollForThirdPartyJobs
 #[derive(Debug, PartialEq)]
 pub enum PollForThirdPartyJobsError {
@@ -2881,16 +2803,12 @@ impl PollForThirdPartyJobsError {
 }
 impl fmt::Display for PollForThirdPartyJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PollForThirdPartyJobsError {
-    fn description(&self) -> &str {
         match *self {
-            PollForThirdPartyJobsError::ActionTypeNotFound(ref cause) => cause,
+            PollForThirdPartyJobsError::ActionTypeNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PollForThirdPartyJobsError {}
 /// Errors returned by PutActionRevision
 #[derive(Debug, PartialEq)]
 pub enum PutActionRevisionError {
@@ -2924,18 +2842,14 @@ impl PutActionRevisionError {
 }
 impl fmt::Display for PutActionRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutActionRevisionError {
-    fn description(&self) -> &str {
         match *self {
-            PutActionRevisionError::ActionNotFound(ref cause) => cause,
-            PutActionRevisionError::PipelineNotFound(ref cause) => cause,
-            PutActionRevisionError::StageNotFound(ref cause) => cause,
+            PutActionRevisionError::ActionNotFound(ref cause) => write!(f, "{}", cause),
+            PutActionRevisionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+            PutActionRevisionError::StageNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutActionRevisionError {}
 /// Errors returned by PutApprovalResult
 #[derive(Debug, PartialEq)]
 pub enum PutApprovalResultError {
@@ -2983,20 +2897,16 @@ impl PutApprovalResultError {
 }
 impl fmt::Display for PutApprovalResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutApprovalResultError {
-    fn description(&self) -> &str {
         match *self {
-            PutApprovalResultError::ActionNotFound(ref cause) => cause,
-            PutApprovalResultError::ApprovalAlreadyCompleted(ref cause) => cause,
-            PutApprovalResultError::InvalidApprovalToken(ref cause) => cause,
-            PutApprovalResultError::PipelineNotFound(ref cause) => cause,
-            PutApprovalResultError::StageNotFound(ref cause) => cause,
+            PutApprovalResultError::ActionNotFound(ref cause) => write!(f, "{}", cause),
+            PutApprovalResultError::ApprovalAlreadyCompleted(ref cause) => write!(f, "{}", cause),
+            PutApprovalResultError::InvalidApprovalToken(ref cause) => write!(f, "{}", cause),
+            PutApprovalResultError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+            PutApprovalResultError::StageNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutApprovalResultError {}
 /// Errors returned by PutJobFailureResult
 #[derive(Debug, PartialEq)]
 pub enum PutJobFailureResultError {
@@ -3025,17 +2935,13 @@ impl PutJobFailureResultError {
 }
 impl fmt::Display for PutJobFailureResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutJobFailureResultError {
-    fn description(&self) -> &str {
         match *self {
-            PutJobFailureResultError::InvalidJobState(ref cause) => cause,
-            PutJobFailureResultError::JobNotFound(ref cause) => cause,
+            PutJobFailureResultError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            PutJobFailureResultError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutJobFailureResultError {}
 /// Errors returned by PutJobSuccessResult
 #[derive(Debug, PartialEq)]
 pub enum PutJobSuccessResultError {
@@ -3071,18 +2977,16 @@ impl PutJobSuccessResultError {
 }
 impl fmt::Display for PutJobSuccessResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutJobSuccessResultError {
-    fn description(&self) -> &str {
         match *self {
-            PutJobSuccessResultError::InvalidJobState(ref cause) => cause,
-            PutJobSuccessResultError::JobNotFound(ref cause) => cause,
-            PutJobSuccessResultError::OutputVariablesSizeExceeded(ref cause) => cause,
+            PutJobSuccessResultError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            PutJobSuccessResultError::JobNotFound(ref cause) => write!(f, "{}", cause),
+            PutJobSuccessResultError::OutputVariablesSizeExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutJobSuccessResultError {}
 /// Errors returned by PutThirdPartyJobFailureResult
 #[derive(Debug, PartialEq)]
 pub enum PutThirdPartyJobFailureResultError {
@@ -3124,18 +3028,18 @@ impl PutThirdPartyJobFailureResultError {
 }
 impl fmt::Display for PutThirdPartyJobFailureResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutThirdPartyJobFailureResultError {
-    fn description(&self) -> &str {
         match *self {
-            PutThirdPartyJobFailureResultError::InvalidClientToken(ref cause) => cause,
-            PutThirdPartyJobFailureResultError::InvalidJobState(ref cause) => cause,
-            PutThirdPartyJobFailureResultError::JobNotFound(ref cause) => cause,
+            PutThirdPartyJobFailureResultError::InvalidClientToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutThirdPartyJobFailureResultError::InvalidJobState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutThirdPartyJobFailureResultError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutThirdPartyJobFailureResultError {}
 /// Errors returned by PutThirdPartyJobSuccessResult
 #[derive(Debug, PartialEq)]
 pub enum PutThirdPartyJobSuccessResultError {
@@ -3177,18 +3081,18 @@ impl PutThirdPartyJobSuccessResultError {
 }
 impl fmt::Display for PutThirdPartyJobSuccessResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutThirdPartyJobSuccessResultError {
-    fn description(&self) -> &str {
         match *self {
-            PutThirdPartyJobSuccessResultError::InvalidClientToken(ref cause) => cause,
-            PutThirdPartyJobSuccessResultError::InvalidJobState(ref cause) => cause,
-            PutThirdPartyJobSuccessResultError::JobNotFound(ref cause) => cause,
+            PutThirdPartyJobSuccessResultError::InvalidClientToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutThirdPartyJobSuccessResultError::InvalidJobState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutThirdPartyJobSuccessResultError::JobNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutThirdPartyJobSuccessResultError {}
 /// Errors returned by PutWebhook
 #[derive(Debug, PartialEq)]
 pub enum PutWebhookError {
@@ -3246,22 +3150,20 @@ impl PutWebhookError {
 }
 impl fmt::Display for PutWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            PutWebhookError::ConcurrentModification(ref cause) => cause,
-            PutWebhookError::InvalidTags(ref cause) => cause,
-            PutWebhookError::InvalidWebhookAuthenticationParameters(ref cause) => cause,
-            PutWebhookError::InvalidWebhookFilterPattern(ref cause) => cause,
-            PutWebhookError::LimitExceeded(ref cause) => cause,
-            PutWebhookError::PipelineNotFound(ref cause) => cause,
-            PutWebhookError::TooManyTags(ref cause) => cause,
+            PutWebhookError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            PutWebhookError::InvalidTags(ref cause) => write!(f, "{}", cause),
+            PutWebhookError::InvalidWebhookAuthenticationParameters(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutWebhookError::InvalidWebhookFilterPattern(ref cause) => write!(f, "{}", cause),
+            PutWebhookError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutWebhookError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+            PutWebhookError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutWebhookError {}
 /// Errors returned by RegisterWebhookWithThirdParty
 #[derive(Debug, PartialEq)]
 pub enum RegisterWebhookWithThirdPartyError {
@@ -3289,16 +3191,14 @@ impl RegisterWebhookWithThirdPartyError {
 }
 impl fmt::Display for RegisterWebhookWithThirdPartyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterWebhookWithThirdPartyError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterWebhookWithThirdPartyError::WebhookNotFound(ref cause) => cause,
+            RegisterWebhookWithThirdPartyError::WebhookNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RegisterWebhookWithThirdPartyError {}
 /// Errors returned by RetryStageExecution
 #[derive(Debug, PartialEq)]
 pub enum RetryStageExecutionError {
@@ -3343,19 +3243,17 @@ impl RetryStageExecutionError {
 }
 impl fmt::Display for RetryStageExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RetryStageExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            RetryStageExecutionError::NotLatestPipelineExecution(ref cause) => cause,
-            RetryStageExecutionError::PipelineNotFound(ref cause) => cause,
-            RetryStageExecutionError::StageNotFound(ref cause) => cause,
-            RetryStageExecutionError::StageNotRetryable(ref cause) => cause,
+            RetryStageExecutionError::NotLatestPipelineExecution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RetryStageExecutionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+            RetryStageExecutionError::StageNotFound(ref cause) => write!(f, "{}", cause),
+            RetryStageExecutionError::StageNotRetryable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RetryStageExecutionError {}
 /// Errors returned by StartPipelineExecution
 #[derive(Debug, PartialEq)]
 pub enum StartPipelineExecutionError {
@@ -3381,16 +3279,12 @@ impl StartPipelineExecutionError {
 }
 impl fmt::Display for StartPipelineExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartPipelineExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StartPipelineExecutionError::PipelineNotFound(ref cause) => cause,
+            StartPipelineExecutionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartPipelineExecutionError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -3434,20 +3328,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ConcurrentModification(ref cause) => cause,
-            TagResourceError::InvalidArn(ref cause) => cause,
-            TagResourceError::InvalidTags(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidTags(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -3488,19 +3378,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ConcurrentModification(ref cause) => cause,
-            UntagResourceError::InvalidArn(ref cause) => cause,
-            UntagResourceError::InvalidTags(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidTags(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdatePipeline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePipelineError {
@@ -3550,20 +3436,16 @@ impl UpdatePipelineError {
 }
 impl fmt::Display for UpdatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePipelineError::InvalidActionDeclaration(ref cause) => cause,
-            UpdatePipelineError::InvalidBlockerDeclaration(ref cause) => cause,
-            UpdatePipelineError::InvalidStageDeclaration(ref cause) => cause,
-            UpdatePipelineError::InvalidStructure(ref cause) => cause,
-            UpdatePipelineError::LimitExceeded(ref cause) => cause,
+            UpdatePipelineError::InvalidActionDeclaration(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::InvalidBlockerDeclaration(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::InvalidStageDeclaration(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::InvalidStructure(ref cause) => write!(f, "{}", cause),
+            UpdatePipelineError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePipelineError {}
 /// Trait representing the capabilities of the CodePipeline API. CodePipeline clients implement this trait.
 pub trait CodePipeline {
     /// <p>Returns information about a specified job and whether that job has been received by the job worker. Used for custom actions only.</p>

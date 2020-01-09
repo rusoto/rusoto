@@ -958,19 +958,15 @@ impl CreateHttpNamespaceError {
 }
 impl fmt::Display for CreateHttpNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHttpNamespaceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHttpNamespaceError::DuplicateRequest(ref cause) => cause,
-            CreateHttpNamespaceError::InvalidInput(ref cause) => cause,
-            CreateHttpNamespaceError::NamespaceAlreadyExists(ref cause) => cause,
-            CreateHttpNamespaceError::ResourceLimitExceeded(ref cause) => cause,
+            CreateHttpNamespaceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            CreateHttpNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateHttpNamespaceError::NamespaceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateHttpNamespaceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHttpNamespaceError {}
 /// Errors returned by CreatePrivateDnsNamespace
 #[derive(Debug, PartialEq)]
 pub enum CreatePrivateDnsNamespaceError {
@@ -1017,19 +1013,19 @@ impl CreatePrivateDnsNamespaceError {
 }
 impl fmt::Display for CreatePrivateDnsNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePrivateDnsNamespaceError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePrivateDnsNamespaceError::DuplicateRequest(ref cause) => cause,
-            CreatePrivateDnsNamespaceError::InvalidInput(ref cause) => cause,
-            CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(ref cause) => cause,
-            CreatePrivateDnsNamespaceError::ResourceLimitExceeded(ref cause) => cause,
+            CreatePrivateDnsNamespaceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            CreatePrivateDnsNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePrivateDnsNamespaceError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreatePrivateDnsNamespaceError {}
 /// Errors returned by CreatePublicDnsNamespace
 #[derive(Debug, PartialEq)]
 pub enum CreatePublicDnsNamespaceError {
@@ -1076,19 +1072,19 @@ impl CreatePublicDnsNamespaceError {
 }
 impl fmt::Display for CreatePublicDnsNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePublicDnsNamespaceError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePublicDnsNamespaceError::DuplicateRequest(ref cause) => cause,
-            CreatePublicDnsNamespaceError::InvalidInput(ref cause) => cause,
-            CreatePublicDnsNamespaceError::NamespaceAlreadyExists(ref cause) => cause,
-            CreatePublicDnsNamespaceError::ResourceLimitExceeded(ref cause) => cause,
+            CreatePublicDnsNamespaceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            CreatePublicDnsNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePublicDnsNamespaceError::NamespaceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePublicDnsNamespaceError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreatePublicDnsNamespaceError {}
 /// Errors returned by CreateService
 #[derive(Debug, PartialEq)]
 pub enum CreateServiceError {
@@ -1127,19 +1123,15 @@ impl CreateServiceError {
 }
 impl fmt::Display for CreateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateServiceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateServiceError::InvalidInput(ref cause) => cause,
-            CreateServiceError::NamespaceNotFound(ref cause) => cause,
-            CreateServiceError::ResourceLimitExceeded(ref cause) => cause,
-            CreateServiceError::ServiceAlreadyExists(ref cause) => cause,
+            CreateServiceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::NamespaceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::ServiceAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateServiceError {}
 /// Errors returned by DeleteNamespace
 #[derive(Debug, PartialEq)]
 pub enum DeleteNamespaceError {
@@ -1178,19 +1170,15 @@ impl DeleteNamespaceError {
 }
 impl fmt::Display for DeleteNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNamespaceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteNamespaceError::DuplicateRequest(ref cause) => cause,
-            DeleteNamespaceError::InvalidInput(ref cause) => cause,
-            DeleteNamespaceError::NamespaceNotFound(ref cause) => cause,
-            DeleteNamespaceError::ResourceInUse(ref cause) => cause,
+            DeleteNamespaceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::NamespaceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteNamespaceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteNamespaceError {}
 /// Errors returned by DeleteService
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceError {
@@ -1224,18 +1212,14 @@ impl DeleteServiceError {
 }
 impl fmt::Display for DeleteServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServiceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServiceError::InvalidInput(ref cause) => cause,
-            DeleteServiceError::ResourceInUse(ref cause) => cause,
-            DeleteServiceError::ServiceNotFound(ref cause) => cause,
+            DeleteServiceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteServiceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteServiceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServiceError {}
 /// Errors returned by DeregisterInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterInstanceError {
@@ -1279,20 +1263,16 @@ impl DeregisterInstanceError {
 }
 impl fmt::Display for DeregisterInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterInstanceError::DuplicateRequest(ref cause) => cause,
-            DeregisterInstanceError::InstanceNotFound(ref cause) => cause,
-            DeregisterInstanceError::InvalidInput(ref cause) => cause,
-            DeregisterInstanceError::ResourceInUse(ref cause) => cause,
-            DeregisterInstanceError::ServiceNotFound(ref cause) => cause,
+            DeregisterInstanceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            DeregisterInstanceError::InstanceNotFound(ref cause) => write!(f, "{}", cause),
+            DeregisterInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeregisterInstanceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeregisterInstanceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterInstanceError {}
 /// Errors returned by DiscoverInstances
 #[derive(Debug, PartialEq)]
 pub enum DiscoverInstancesError {
@@ -1326,18 +1306,14 @@ impl DiscoverInstancesError {
 }
 impl fmt::Display for DiscoverInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DiscoverInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DiscoverInstancesError::InvalidInput(ref cause) => cause,
-            DiscoverInstancesError::NamespaceNotFound(ref cause) => cause,
-            DiscoverInstancesError::ServiceNotFound(ref cause) => cause,
+            DiscoverInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DiscoverInstancesError::NamespaceNotFound(ref cause) => write!(f, "{}", cause),
+            DiscoverInstancesError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DiscoverInstancesError {}
 /// Errors returned by GetInstance
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceError {
@@ -1371,18 +1347,14 @@ impl GetInstanceError {
 }
 impl fmt::Display for GetInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceError::InstanceNotFound(ref cause) => cause,
-            GetInstanceError::InvalidInput(ref cause) => cause,
-            GetInstanceError::ServiceNotFound(ref cause) => cause,
+            GetInstanceError::InstanceNotFound(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstanceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceError {}
 /// Errors returned by GetInstancesHealthStatus
 #[derive(Debug, PartialEq)]
 pub enum GetInstancesHealthStatusError {
@@ -1422,18 +1394,14 @@ impl GetInstancesHealthStatusError {
 }
 impl fmt::Display for GetInstancesHealthStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstancesHealthStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstancesHealthStatusError::InstanceNotFound(ref cause) => cause,
-            GetInstancesHealthStatusError::InvalidInput(ref cause) => cause,
-            GetInstancesHealthStatusError::ServiceNotFound(ref cause) => cause,
+            GetInstancesHealthStatusError::InstanceNotFound(ref cause) => write!(f, "{}", cause),
+            GetInstancesHealthStatusError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetInstancesHealthStatusError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstancesHealthStatusError {}
 /// Errors returned by GetNamespace
 #[derive(Debug, PartialEq)]
 pub enum GetNamespaceError {
@@ -1462,17 +1430,13 @@ impl GetNamespaceError {
 }
 impl fmt::Display for GetNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetNamespaceError {
-    fn description(&self) -> &str {
         match *self {
-            GetNamespaceError::InvalidInput(ref cause) => cause,
-            GetNamespaceError::NamespaceNotFound(ref cause) => cause,
+            GetNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetNamespaceError::NamespaceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetNamespaceError {}
 /// Errors returned by GetOperation
 #[derive(Debug, PartialEq)]
 pub enum GetOperationError {
@@ -1501,17 +1465,13 @@ impl GetOperationError {
 }
 impl fmt::Display for GetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOperationError {
-    fn description(&self) -> &str {
         match *self {
-            GetOperationError::InvalidInput(ref cause) => cause,
-            GetOperationError::OperationNotFound(ref cause) => cause,
+            GetOperationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetOperationError::OperationNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOperationError {}
 /// Errors returned by GetService
 #[derive(Debug, PartialEq)]
 pub enum GetServiceError {
@@ -1540,17 +1500,13 @@ impl GetServiceError {
 }
 impl fmt::Display for GetServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceError::InvalidInput(ref cause) => cause,
-            GetServiceError::ServiceNotFound(ref cause) => cause,
+            GetServiceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetServiceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServiceError {}
 /// Errors returned by ListInstances
 #[derive(Debug, PartialEq)]
 pub enum ListInstancesError {
@@ -1579,17 +1535,13 @@ impl ListInstancesError {
 }
 impl fmt::Display for ListInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstancesError::InvalidInput(ref cause) => cause,
-            ListInstancesError::ServiceNotFound(ref cause) => cause,
+            ListInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListInstancesError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstancesError {}
 /// Errors returned by ListNamespaces
 #[derive(Debug, PartialEq)]
 pub enum ListNamespacesError {
@@ -1613,16 +1565,12 @@ impl ListNamespacesError {
 }
 impl fmt::Display for ListNamespacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListNamespacesError {
-    fn description(&self) -> &str {
         match *self {
-            ListNamespacesError::InvalidInput(ref cause) => cause,
+            ListNamespacesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListNamespacesError {}
 /// Errors returned by ListOperations
 #[derive(Debug, PartialEq)]
 pub enum ListOperationsError {
@@ -1646,16 +1594,12 @@ impl ListOperationsError {
 }
 impl fmt::Display for ListOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOperationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOperationsError::InvalidInput(ref cause) => cause,
+            ListOperationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOperationsError {}
 /// Errors returned by ListServices
 #[derive(Debug, PartialEq)]
 pub enum ListServicesError {
@@ -1679,16 +1623,12 @@ impl ListServicesError {
 }
 impl fmt::Display for ListServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListServicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListServicesError::InvalidInput(ref cause) => cause,
+            ListServicesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListServicesError {}
 /// Errors returned by RegisterInstance
 #[derive(Debug, PartialEq)]
 pub enum RegisterInstanceError {
@@ -1734,20 +1674,16 @@ impl RegisterInstanceError {
 }
 impl fmt::Display for RegisterInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterInstanceError::DuplicateRequest(ref cause) => cause,
-            RegisterInstanceError::InvalidInput(ref cause) => cause,
-            RegisterInstanceError::ResourceInUse(ref cause) => cause,
-            RegisterInstanceError::ResourceLimitExceeded(ref cause) => cause,
-            RegisterInstanceError::ServiceNotFound(ref cause) => cause,
+            RegisterInstanceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            RegisterInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RegisterInstanceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            RegisterInstanceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            RegisterInstanceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterInstanceError {}
 /// Errors returned by UpdateInstanceCustomHealthStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdateInstanceCustomHealthStatusError {
@@ -1796,19 +1732,23 @@ impl UpdateInstanceCustomHealthStatusError {
 }
 impl fmt::Display for UpdateInstanceCustomHealthStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateInstanceCustomHealthStatusError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateInstanceCustomHealthStatusError::CustomHealthNotFound(ref cause) => cause,
-            UpdateInstanceCustomHealthStatusError::InstanceNotFound(ref cause) => cause,
-            UpdateInstanceCustomHealthStatusError::InvalidInput(ref cause) => cause,
-            UpdateInstanceCustomHealthStatusError::ServiceNotFound(ref cause) => cause,
+            UpdateInstanceCustomHealthStatusError::CustomHealthNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateInstanceCustomHealthStatusError::InstanceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateInstanceCustomHealthStatusError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateInstanceCustomHealthStatusError::ServiceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateInstanceCustomHealthStatusError {}
 /// Errors returned by UpdateService
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceError {
@@ -1842,18 +1782,14 @@ impl UpdateServiceError {
 }
 impl fmt::Display for UpdateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServiceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServiceError::DuplicateRequest(ref cause) => cause,
-            UpdateServiceError::InvalidInput(ref cause) => cause,
-            UpdateServiceError::ServiceNotFound(ref cause) => cause,
+            UpdateServiceError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateServiceError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServiceError {}
 /// Trait representing the capabilities of the ServiceDiscovery API. ServiceDiscovery clients implement this trait.
 pub trait ServiceDiscovery {
     /// <p>Creates an HTTP namespace. Service instances that you register using an HTTP namespace can be discovered using a <code>DiscoverInstances</code> request but can't be discovered using DNS. </p> <p>For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>

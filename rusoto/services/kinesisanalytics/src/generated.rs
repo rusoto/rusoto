@@ -1309,20 +1309,26 @@ impl AddApplicationCloudWatchLoggingOptionError {
 }
 impl fmt::Display for AddApplicationCloudWatchLoggingOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddApplicationCloudWatchLoggingOptionError {
-    fn description(&self) -> &str {
         match *self {
-            AddApplicationCloudWatchLoggingOptionError::ConcurrentModification(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::InvalidArgument(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => cause,
+            AddApplicationCloudWatchLoggingOptionError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationCloudWatchLoggingOptionError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AddApplicationCloudWatchLoggingOptionError {}
 /// Errors returned by AddApplicationInput
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationInputError {
@@ -1377,21 +1383,17 @@ impl AddApplicationInputError {
 }
 impl fmt::Display for AddApplicationInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddApplicationInputError {
-    fn description(&self) -> &str {
         match *self {
-            AddApplicationInputError::CodeValidation(ref cause) => cause,
-            AddApplicationInputError::ConcurrentModification(ref cause) => cause,
-            AddApplicationInputError::InvalidArgument(ref cause) => cause,
-            AddApplicationInputError::ResourceInUse(ref cause) => cause,
-            AddApplicationInputError::ResourceNotFound(ref cause) => cause,
-            AddApplicationInputError::UnsupportedOperation(ref cause) => cause,
+            AddApplicationInputError::CodeValidation(ref cause) => write!(f, "{}", cause),
+            AddApplicationInputError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            AddApplicationInputError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            AddApplicationInputError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            AddApplicationInputError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddApplicationInputError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddApplicationInputError {}
 /// Errors returned by AddApplicationInputProcessingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationInputProcessingConfigurationError {
@@ -1451,24 +1453,26 @@ impl AddApplicationInputProcessingConfigurationError {
 }
 impl fmt::Display for AddApplicationInputProcessingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddApplicationInputProcessingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
             AddApplicationInputProcessingConfigurationError::ConcurrentModification(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            AddApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => cause,
-            AddApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => cause,
-            AddApplicationInputProcessingConfigurationError::ResourceNotFound(ref cause) => cause,
+            AddApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationInputProcessingConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
             AddApplicationInputProcessingConfigurationError::UnsupportedOperation(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for AddApplicationInputProcessingConfigurationError {}
 /// Errors returned by AddApplicationOutput
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationOutputError {
@@ -1520,20 +1524,16 @@ impl AddApplicationOutputError {
 }
 impl fmt::Display for AddApplicationOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddApplicationOutputError {
-    fn description(&self) -> &str {
         match *self {
-            AddApplicationOutputError::ConcurrentModification(ref cause) => cause,
-            AddApplicationOutputError::InvalidArgument(ref cause) => cause,
-            AddApplicationOutputError::ResourceInUse(ref cause) => cause,
-            AddApplicationOutputError::ResourceNotFound(ref cause) => cause,
-            AddApplicationOutputError::UnsupportedOperation(ref cause) => cause,
+            AddApplicationOutputError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            AddApplicationOutputError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            AddApplicationOutputError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            AddApplicationOutputError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddApplicationOutputError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddApplicationOutputError {}
 /// Errors returned by AddApplicationReferenceDataSource
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationReferenceDataSourceError {
@@ -1589,20 +1589,26 @@ impl AddApplicationReferenceDataSourceError {
 }
 impl fmt::Display for AddApplicationReferenceDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddApplicationReferenceDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddApplicationReferenceDataSourceError::ConcurrentModification(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::InvalidArgument(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::ResourceInUse(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => cause,
+            AddApplicationReferenceDataSourceError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationReferenceDataSourceError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationReferenceDataSourceError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AddApplicationReferenceDataSourceError {}
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
@@ -1653,21 +1659,17 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApplicationError::CodeValidation(ref cause) => cause,
-            CreateApplicationError::ConcurrentModification(ref cause) => cause,
-            CreateApplicationError::InvalidArgument(ref cause) => cause,
-            CreateApplicationError::LimitExceeded(ref cause) => cause,
-            CreateApplicationError::ResourceInUse(ref cause) => cause,
-            CreateApplicationError::TooManyTags(ref cause) => cause,
+            CreateApplicationError::CodeValidation(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateApplicationError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApplicationError {}
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
@@ -1710,19 +1712,15 @@ impl DeleteApplicationError {
 }
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationError::ConcurrentModification(ref cause) => cause,
-            DeleteApplicationError::ResourceInUse(ref cause) => cause,
-            DeleteApplicationError::ResourceNotFound(ref cause) => cause,
-            DeleteApplicationError::UnsupportedOperation(ref cause) => cause,
+            DeleteApplicationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApplicationError {}
 /// Errors returned by DeleteApplicationCloudWatchLoggingOption
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationCloudWatchLoggingOptionError {
@@ -1782,22 +1780,26 @@ impl DeleteApplicationCloudWatchLoggingOptionError {
 }
 impl fmt::Display for DeleteApplicationCloudWatchLoggingOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationCloudWatchLoggingOptionError {
-    fn description(&self) -> &str {
         match *self {
             DeleteApplicationCloudWatchLoggingOptionError::ConcurrentModification(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DeleteApplicationCloudWatchLoggingOptionError::InvalidArgument(ref cause) => cause,
-            DeleteApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => cause,
-            DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => cause,
-            DeleteApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => cause,
+            DeleteApplicationCloudWatchLoggingOptionError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteApplicationCloudWatchLoggingOptionError {}
 /// Errors returned by DeleteApplicationInputProcessingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationInputProcessingConfigurationError {
@@ -1861,26 +1863,26 @@ impl DeleteApplicationInputProcessingConfigurationError {
 }
 impl fmt::Display for DeleteApplicationInputProcessingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationInputProcessingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
             DeleteApplicationInputProcessingConfigurationError::ConcurrentModification(
                 ref cause,
-            ) => cause,
-            DeleteApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => cause,
-            DeleteApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DeleteApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteApplicationInputProcessingConfigurationError::ResourceNotFound(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DeleteApplicationInputProcessingConfigurationError::UnsupportedOperation(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DeleteApplicationInputProcessingConfigurationError {}
 /// Errors returned by DeleteApplicationOutput
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationOutputError {
@@ -1934,20 +1936,18 @@ impl DeleteApplicationOutputError {
 }
 impl fmt::Display for DeleteApplicationOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationOutputError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationOutputError::ConcurrentModification(ref cause) => cause,
-            DeleteApplicationOutputError::InvalidArgument(ref cause) => cause,
-            DeleteApplicationOutputError::ResourceInUse(ref cause) => cause,
-            DeleteApplicationOutputError::ResourceNotFound(ref cause) => cause,
-            DeleteApplicationOutputError::UnsupportedOperation(ref cause) => cause,
+            DeleteApplicationOutputError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationOutputError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationOutputError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationOutputError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteApplicationOutputError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApplicationOutputError {}
 /// Errors returned by DeleteApplicationReferenceDataSource
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationReferenceDataSourceError {
@@ -2003,20 +2003,26 @@ impl DeleteApplicationReferenceDataSourceError {
 }
 impl fmt::Display for DeleteApplicationReferenceDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApplicationReferenceDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApplicationReferenceDataSourceError::ConcurrentModification(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::InvalidArgument(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::ResourceInUse(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => cause,
+            DeleteApplicationReferenceDataSourceError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationReferenceDataSourceError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationReferenceDataSourceError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteApplicationReferenceDataSourceError {}
 /// Errors returned by DescribeApplication
 #[derive(Debug, PartialEq)]
 pub enum DescribeApplicationError {
@@ -2049,17 +2055,13 @@ impl DescribeApplicationError {
 }
 impl fmt::Display for DescribeApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeApplicationError::ResourceNotFound(ref cause) => cause,
-            DescribeApplicationError::UnsupportedOperation(ref cause) => cause,
+            DescribeApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeApplicationError {}
 /// Errors returned by DiscoverInputSchema
 #[derive(Debug, PartialEq)]
 pub enum DiscoverInputSchemaError {
@@ -2104,19 +2106,17 @@ impl DiscoverInputSchemaError {
 }
 impl fmt::Display for DiscoverInputSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DiscoverInputSchemaError {
-    fn description(&self) -> &str {
         match *self {
-            DiscoverInputSchemaError::InvalidArgument(ref cause) => cause,
-            DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(ref cause) => cause,
-            DiscoverInputSchemaError::ServiceUnavailable(ref cause) => cause,
-            DiscoverInputSchemaError::UnableToDetectSchema(ref cause) => cause,
+            DiscoverInputSchemaError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DiscoverInputSchemaError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DiscoverInputSchemaError::UnableToDetectSchema(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DiscoverInputSchemaError {}
 /// Errors returned by ListApplications
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationsError {}
@@ -2134,14 +2134,10 @@ impl ListApplicationsError {
 }
 impl fmt::Display for ListApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListApplicationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListApplicationsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2179,18 +2175,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::ConcurrentModification(ref cause) => cause,
-            ListTagsForResourceError::InvalidArgument(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by StartApplication
 #[derive(Debug, PartialEq)]
 pub enum StartApplicationError {
@@ -2238,20 +2230,18 @@ impl StartApplicationError {
 }
 impl fmt::Display for StartApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            StartApplicationError::InvalidApplicationConfiguration(ref cause) => cause,
-            StartApplicationError::InvalidArgument(ref cause) => cause,
-            StartApplicationError::ResourceInUse(ref cause) => cause,
-            StartApplicationError::ResourceNotFound(ref cause) => cause,
-            StartApplicationError::UnsupportedOperation(ref cause) => cause,
+            StartApplicationError::InvalidApplicationConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartApplicationError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            StartApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StartApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartApplicationError {}
 /// Errors returned by StopApplication
 #[derive(Debug, PartialEq)]
 pub enum StopApplicationError {
@@ -2287,18 +2277,14 @@ impl StopApplicationError {
 }
 impl fmt::Display for StopApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            StopApplicationError::ResourceInUse(ref cause) => cause,
-            StopApplicationError::ResourceNotFound(ref cause) => cause,
-            StopApplicationError::UnsupportedOperation(ref cause) => cause,
+            StopApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StopApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StopApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopApplicationError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2342,20 +2328,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ConcurrentModification(ref cause) => cause,
-            TagResourceError::InvalidArgument(ref cause) => cause,
-            TagResourceError::ResourceInUse(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -2401,20 +2383,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ConcurrentModification(ref cause) => cause,
-            UntagResourceError::InvalidArgument(ref cause) => cause,
-            UntagResourceError::ResourceInUse(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::TooManyTags(ref cause) => cause,
+            UntagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
@@ -2467,21 +2445,17 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateApplicationError::CodeValidation(ref cause) => cause,
-            UpdateApplicationError::ConcurrentModification(ref cause) => cause,
-            UpdateApplicationError::InvalidArgument(ref cause) => cause,
-            UpdateApplicationError::ResourceInUse(ref cause) => cause,
-            UpdateApplicationError::ResourceNotFound(ref cause) => cause,
-            UpdateApplicationError::UnsupportedOperation(ref cause) => cause,
+            UpdateApplicationError::CodeValidation(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the Kinesis Analytics API. Kinesis Analytics clients implement this trait.
 pub trait KinesisAnalytics {
     /// <p><note> <p>This documentation is for version 1 of the Amazon Kinesis Data Analytics API, which only supports SQL applications. Version 2 of the API supports SQL and Java applications. For more information about version 2, see <a href="/kinesisanalytics/latest/apiv2/Welcome.html">Amazon Kinesis Data Analytics API V2 Documentation</a>.</p> </note> <p>Adds a CloudWatch log stream to monitor application configuration errors. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html">Working with Amazon CloudWatch Logs</a>.</p></p>

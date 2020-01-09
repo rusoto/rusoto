@@ -407,14 +407,10 @@ impl DeletePlaybackConfigurationError {
 }
 impl fmt::Display for DeletePlaybackConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePlaybackConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeletePlaybackConfigurationError {}
 /// Errors returned by GetPlaybackConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetPlaybackConfigurationError {}
@@ -432,14 +428,10 @@ impl GetPlaybackConfigurationError {
 }
 impl fmt::Display for GetPlaybackConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPlaybackConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetPlaybackConfigurationError {}
 /// Errors returned by ListPlaybackConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListPlaybackConfigurationsError {}
@@ -459,14 +451,10 @@ impl ListPlaybackConfigurationsError {
 }
 impl fmt::Display for ListPlaybackConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPlaybackConfigurationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListPlaybackConfigurationsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -490,16 +478,12 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutPlaybackConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutPlaybackConfigurationError {}
@@ -517,14 +501,10 @@ impl PutPlaybackConfigurationError {
 }
 impl fmt::Display for PutPlaybackConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutPlaybackConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutPlaybackConfigurationError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -548,16 +528,12 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -581,16 +557,12 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the MediaTailor API. MediaTailor clients implement this trait.
 pub trait MediaTailor {
     /// <p>Deletes the playback configuration for the specified name. </p>

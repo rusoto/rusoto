@@ -599,21 +599,17 @@ impl AddTagsToCertificateError {
 }
 impl fmt::Display for AddTagsToCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToCertificateError::InvalidArn(ref cause) => cause,
-            AddTagsToCertificateError::InvalidParameter(ref cause) => cause,
-            AddTagsToCertificateError::InvalidTag(ref cause) => cause,
-            AddTagsToCertificateError::ResourceNotFound(ref cause) => cause,
-            AddTagsToCertificateError::TagPolicy(ref cause) => cause,
-            AddTagsToCertificateError::TooManyTags(ref cause) => cause,
+            AddTagsToCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            AddTagsToCertificateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AddTagsToCertificateError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            AddTagsToCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsToCertificateError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            AddTagsToCertificateError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToCertificateError {}
 /// Errors returned by DeleteCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCertificateError {
@@ -647,18 +643,14 @@ impl DeleteCertificateError {
 }
 impl fmt::Display for DeleteCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCertificateError::InvalidArn(ref cause) => cause,
-            DeleteCertificateError::ResourceInUse(ref cause) => cause,
-            DeleteCertificateError::ResourceNotFound(ref cause) => cause,
+            DeleteCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCertificateError {}
 /// Errors returned by DescribeCertificate
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificateError {
@@ -689,17 +681,13 @@ impl DescribeCertificateError {
 }
 impl fmt::Display for DescribeCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCertificateError::InvalidArn(ref cause) => cause,
-            DescribeCertificateError::ResourceNotFound(ref cause) => cause,
+            DescribeCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DescribeCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCertificateError {}
 /// Errors returned by ExportCertificate
 #[derive(Debug, PartialEq)]
 pub enum ExportCertificateError {
@@ -733,18 +721,14 @@ impl ExportCertificateError {
 }
 impl fmt::Display for ExportCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExportCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            ExportCertificateError::InvalidArn(ref cause) => cause,
-            ExportCertificateError::RequestInProgress(ref cause) => cause,
-            ExportCertificateError::ResourceNotFound(ref cause) => cause,
+            ExportCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ExportCertificateError::RequestInProgress(ref cause) => write!(f, "{}", cause),
+            ExportCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExportCertificateError {}
 /// Errors returned by GetCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetCertificateError {
@@ -778,18 +762,14 @@ impl GetCertificateError {
 }
 impl fmt::Display for GetCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            GetCertificateError::InvalidArn(ref cause) => cause,
-            GetCertificateError::RequestInProgress(ref cause) => cause,
-            GetCertificateError::ResourceNotFound(ref cause) => cause,
+            GetCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetCertificateError::RequestInProgress(ref cause) => write!(f, "{}", cause),
+            GetCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCertificateError {}
 /// Errors returned by ImportCertificate
 #[derive(Debug, PartialEq)]
 pub enum ImportCertificateError {
@@ -838,21 +818,17 @@ impl ImportCertificateError {
 }
 impl fmt::Display for ImportCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            ImportCertificateError::InvalidParameter(ref cause) => cause,
-            ImportCertificateError::InvalidTag(ref cause) => cause,
-            ImportCertificateError::LimitExceeded(ref cause) => cause,
-            ImportCertificateError::ResourceNotFound(ref cause) => cause,
-            ImportCertificateError::TagPolicy(ref cause) => cause,
-            ImportCertificateError::TooManyTags(ref cause) => cause,
+            ImportCertificateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ImportCertificateError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            ImportCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ImportCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ImportCertificateError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            ImportCertificateError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportCertificateError {}
 /// Errors returned by ListCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListCertificatesError {
@@ -876,16 +852,12 @@ impl ListCertificatesError {
 }
 impl fmt::Display for ListCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListCertificatesError::InvalidArgs(ref cause) => cause,
+            ListCertificatesError::InvalidArgs(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCertificatesError {}
 /// Errors returned by ListTagsForCertificate
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForCertificateError {
@@ -916,17 +888,13 @@ impl ListTagsForCertificateError {
 }
 impl fmt::Display for ListTagsForCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForCertificateError::InvalidArn(ref cause) => cause,
-            ListTagsForCertificateError::ResourceNotFound(ref cause) => cause,
+            ListTagsForCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListTagsForCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForCertificateError {}
 /// Errors returned by RemoveTagsFromCertificate
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromCertificateError {
@@ -978,20 +946,16 @@ impl RemoveTagsFromCertificateError {
 }
 impl fmt::Display for RemoveTagsFromCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromCertificateError::InvalidArn(ref cause) => cause,
-            RemoveTagsFromCertificateError::InvalidParameter(ref cause) => cause,
-            RemoveTagsFromCertificateError::InvalidTag(ref cause) => cause,
-            RemoveTagsFromCertificateError::ResourceNotFound(ref cause) => cause,
-            RemoveTagsFromCertificateError::TagPolicy(ref cause) => cause,
+            RemoveTagsFromCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromCertificateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromCertificateError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromCertificateError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsFromCertificateError {}
 /// Errors returned by RenewCertificate
 #[derive(Debug, PartialEq)]
 pub enum RenewCertificateError {
@@ -1020,17 +984,13 @@ impl RenewCertificateError {
 }
 impl fmt::Display for RenewCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RenewCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            RenewCertificateError::InvalidArn(ref cause) => cause,
-            RenewCertificateError::ResourceNotFound(ref cause) => cause,
+            RenewCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            RenewCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RenewCertificateError {}
 /// Errors returned by RequestCertificate
 #[derive(Debug, PartialEq)]
 pub enum RequestCertificateError {
@@ -1086,22 +1046,20 @@ impl RequestCertificateError {
 }
 impl fmt::Display for RequestCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RequestCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            RequestCertificateError::InvalidArn(ref cause) => cause,
-            RequestCertificateError::InvalidDomainValidationOptions(ref cause) => cause,
-            RequestCertificateError::InvalidParameter(ref cause) => cause,
-            RequestCertificateError::InvalidTag(ref cause) => cause,
-            RequestCertificateError::LimitExceeded(ref cause) => cause,
-            RequestCertificateError::TagPolicy(ref cause) => cause,
-            RequestCertificateError::TooManyTags(ref cause) => cause,
+            RequestCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            RequestCertificateError::InvalidDomainValidationOptions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RequestCertificateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RequestCertificateError::InvalidTag(ref cause) => write!(f, "{}", cause),
+            RequestCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RequestCertificateError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            RequestCertificateError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RequestCertificateError {}
 /// Errors returned by ResendValidationEmail
 #[derive(Debug, PartialEq)]
 pub enum ResendValidationEmailError {
@@ -1144,19 +1102,17 @@ impl ResendValidationEmailError {
 }
 impl fmt::Display for ResendValidationEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResendValidationEmailError {
-    fn description(&self) -> &str {
         match *self {
-            ResendValidationEmailError::InvalidArn(ref cause) => cause,
-            ResendValidationEmailError::InvalidDomainValidationOptions(ref cause) => cause,
-            ResendValidationEmailError::InvalidState(ref cause) => cause,
-            ResendValidationEmailError::ResourceNotFound(ref cause) => cause,
+            ResendValidationEmailError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ResendValidationEmailError::InvalidDomainValidationOptions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResendValidationEmailError::InvalidState(ref cause) => write!(f, "{}", cause),
+            ResendValidationEmailError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResendValidationEmailError {}
 /// Errors returned by UpdateCertificateOptions
 #[derive(Debug, PartialEq)]
 pub enum UpdateCertificateOptionsError {
@@ -1201,19 +1157,15 @@ impl UpdateCertificateOptionsError {
 }
 impl fmt::Display for UpdateCertificateOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCertificateOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCertificateOptionsError::InvalidArn(ref cause) => cause,
-            UpdateCertificateOptionsError::InvalidState(ref cause) => cause,
-            UpdateCertificateOptionsError::LimitExceeded(ref cause) => cause,
-            UpdateCertificateOptionsError::ResourceNotFound(ref cause) => cause,
+            UpdateCertificateOptionsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateOptionsError::InvalidState(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateOptionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateCertificateOptionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateCertificateOptionsError {}
 /// Trait representing the capabilities of the ACM API. ACM clients implement this trait.
 pub trait Acm {
     /// <p>Adds one or more tags to an ACM certificate. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a <code>key</code> and an optional <code>value</code>. You specify the certificate on input by its Amazon Resource Name (ARN). You specify the tag by using a key-value pair. </p> <p>You can apply a tag to just one certificate if you want to identify a specific characteristic of that certificate, or you can apply the same tag to multiple certificates if you want to filter for a common relationship among those certificates. Similarly, you can apply the same tag to multiple resources if you want to specify a relationship among those resources. For example, you can add the same tag to an ACM certificate and an Elastic Load Balancing load balancer to indicate that they are both used by the same website. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/tags.html">Tagging ACM certificates</a>. </p> <p>To remove one or more tags, use the <a>RemoveTagsFromCertificate</a> action. To view all of the tags that have been applied to the certificate, use the <a>ListTagsForCertificate</a> action. </p>

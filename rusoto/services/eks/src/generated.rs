@@ -1080,22 +1080,18 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateClusterError::Client(ref cause) => cause,
-            CreateClusterError::InvalidParameter(ref cause) => cause,
-            CreateClusterError::ResourceInUse(ref cause) => cause,
-            CreateClusterError::ResourceLimitExceeded(ref cause) => cause,
-            CreateClusterError::Server(ref cause) => cause,
-            CreateClusterError::ServiceUnavailable(ref cause) => cause,
-            CreateClusterError::UnsupportedAvailabilityZone(ref cause) => cause,
+            CreateClusterError::Client(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::Server(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::UnsupportedAvailabilityZone(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateClusterError {}
 /// Errors returned by CreateFargateProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateFargateProfileError {
@@ -1150,21 +1146,19 @@ impl CreateFargateProfileError {
 }
 impl fmt::Display for CreateFargateProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFargateProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFargateProfileError::Client(ref cause) => cause,
-            CreateFargateProfileError::InvalidParameter(ref cause) => cause,
-            CreateFargateProfileError::InvalidRequest(ref cause) => cause,
-            CreateFargateProfileError::ResourceLimitExceeded(ref cause) => cause,
-            CreateFargateProfileError::Server(ref cause) => cause,
-            CreateFargateProfileError::UnsupportedAvailabilityZone(ref cause) => cause,
+            CreateFargateProfileError::Client(ref cause) => write!(f, "{}", cause),
+            CreateFargateProfileError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateFargateProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateFargateProfileError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFargateProfileError::Server(ref cause) => write!(f, "{}", cause),
+            CreateFargateProfileError::UnsupportedAvailabilityZone(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateFargateProfileError {}
 /// Errors returned by CreateNodegroup
 #[derive(Debug, PartialEq)]
 pub enum CreateNodegroupError {
@@ -1220,22 +1214,18 @@ impl CreateNodegroupError {
 }
 impl fmt::Display for CreateNodegroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNodegroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNodegroupError::Client(ref cause) => cause,
-            CreateNodegroupError::InvalidParameter(ref cause) => cause,
-            CreateNodegroupError::InvalidRequest(ref cause) => cause,
-            CreateNodegroupError::ResourceInUse(ref cause) => cause,
-            CreateNodegroupError::ResourceLimitExceeded(ref cause) => cause,
-            CreateNodegroupError::Server(ref cause) => cause,
-            CreateNodegroupError::ServiceUnavailable(ref cause) => cause,
+            CreateNodegroupError::Client(ref cause) => write!(f, "{}", cause),
+            CreateNodegroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateNodegroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateNodegroupError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateNodegroupError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateNodegroupError::Server(ref cause) => write!(f, "{}", cause),
+            CreateNodegroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateNodegroupError {}
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
@@ -1279,20 +1269,16 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClusterError::Client(ref cause) => cause,
-            DeleteClusterError::ResourceInUse(ref cause) => cause,
-            DeleteClusterError::ResourceNotFound(ref cause) => cause,
-            DeleteClusterError::Server(ref cause) => cause,
-            DeleteClusterError::ServiceUnavailable(ref cause) => cause,
+            DeleteClusterError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::Server(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteClusterError {}
 /// Errors returned by DeleteFargateProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteFargateProfileError {
@@ -1335,19 +1321,15 @@ impl DeleteFargateProfileError {
 }
 impl fmt::Display for DeleteFargateProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFargateProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFargateProfileError::Client(ref cause) => cause,
-            DeleteFargateProfileError::InvalidParameter(ref cause) => cause,
-            DeleteFargateProfileError::ResourceNotFound(ref cause) => cause,
-            DeleteFargateProfileError::Server(ref cause) => cause,
+            DeleteFargateProfileError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteFargateProfileError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteFargateProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFargateProfileError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFargateProfileError {}
 /// Errors returned by DeleteNodegroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteNodegroupError {
@@ -1396,21 +1378,17 @@ impl DeleteNodegroupError {
 }
 impl fmt::Display for DeleteNodegroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNodegroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteNodegroupError::Client(ref cause) => cause,
-            DeleteNodegroupError::InvalidParameter(ref cause) => cause,
-            DeleteNodegroupError::ResourceInUse(ref cause) => cause,
-            DeleteNodegroupError::ResourceNotFound(ref cause) => cause,
-            DeleteNodegroupError::Server(ref cause) => cause,
-            DeleteNodegroupError::ServiceUnavailable(ref cause) => cause,
+            DeleteNodegroupError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteNodegroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteNodegroupError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteNodegroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteNodegroupError::Server(ref cause) => write!(f, "{}", cause),
+            DeleteNodegroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteNodegroupError {}
 /// Errors returned by DescribeCluster
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterError {
@@ -1449,19 +1427,15 @@ impl DescribeClusterError {
 }
 impl fmt::Display for DescribeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterError::Client(ref cause) => cause,
-            DescribeClusterError::ResourceNotFound(ref cause) => cause,
-            DescribeClusterError::Server(ref cause) => cause,
-            DescribeClusterError::ServiceUnavailable(ref cause) => cause,
+            DescribeClusterError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeClusterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeClusterError::Server(ref cause) => write!(f, "{}", cause),
+            DescribeClusterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClusterError {}
 /// Errors returned by DescribeFargateProfile
 #[derive(Debug, PartialEq)]
 pub enum DescribeFargateProfileError {
@@ -1504,19 +1478,15 @@ impl DescribeFargateProfileError {
 }
 impl fmt::Display for DescribeFargateProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFargateProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFargateProfileError::Client(ref cause) => cause,
-            DescribeFargateProfileError::InvalidParameter(ref cause) => cause,
-            DescribeFargateProfileError::ResourceNotFound(ref cause) => cause,
-            DescribeFargateProfileError::Server(ref cause) => cause,
+            DescribeFargateProfileError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeFargateProfileError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeFargateProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFargateProfileError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFargateProfileError {}
 /// Errors returned by DescribeNodegroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeNodegroupError {
@@ -1562,20 +1532,16 @@ impl DescribeNodegroupError {
 }
 impl fmt::Display for DescribeNodegroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNodegroupError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeNodegroupError::Client(ref cause) => cause,
-            DescribeNodegroupError::InvalidParameter(ref cause) => cause,
-            DescribeNodegroupError::ResourceNotFound(ref cause) => cause,
-            DescribeNodegroupError::Server(ref cause) => cause,
-            DescribeNodegroupError::ServiceUnavailable(ref cause) => cause,
+            DescribeNodegroupError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeNodegroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeNodegroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeNodegroupError::Server(ref cause) => write!(f, "{}", cause),
+            DescribeNodegroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeNodegroupError {}
 /// Errors returned by DescribeUpdate
 #[derive(Debug, PartialEq)]
 pub enum DescribeUpdateError {
@@ -1614,19 +1580,15 @@ impl DescribeUpdateError {
 }
 impl fmt::Display for DescribeUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUpdateError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUpdateError::Client(ref cause) => cause,
-            DescribeUpdateError::InvalidParameter(ref cause) => cause,
-            DescribeUpdateError::ResourceNotFound(ref cause) => cause,
-            DescribeUpdateError::Server(ref cause) => cause,
+            DescribeUpdateError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeUpdateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeUpdateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeUpdateError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUpdateError {}
 /// Errors returned by ListClusters
 #[derive(Debug, PartialEq)]
 pub enum ListClustersError {
@@ -1665,19 +1627,15 @@ impl ListClustersError {
 }
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListClustersError {
-    fn description(&self) -> &str {
         match *self {
-            ListClustersError::Client(ref cause) => cause,
-            ListClustersError::InvalidParameter(ref cause) => cause,
-            ListClustersError::Server(ref cause) => cause,
-            ListClustersError::ServiceUnavailable(ref cause) => cause,
+            ListClustersError::Client(ref cause) => write!(f, "{}", cause),
+            ListClustersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListClustersError::Server(ref cause) => write!(f, "{}", cause),
+            ListClustersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListClustersError {}
 /// Errors returned by ListFargateProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListFargateProfilesError {
@@ -1720,19 +1678,15 @@ impl ListFargateProfilesError {
 }
 impl fmt::Display for ListFargateProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFargateProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListFargateProfilesError::Client(ref cause) => cause,
-            ListFargateProfilesError::InvalidParameter(ref cause) => cause,
-            ListFargateProfilesError::ResourceNotFound(ref cause) => cause,
-            ListFargateProfilesError::Server(ref cause) => cause,
+            ListFargateProfilesError::Client(ref cause) => write!(f, "{}", cause),
+            ListFargateProfilesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListFargateProfilesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListFargateProfilesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFargateProfilesError {}
 /// Errors returned by ListNodegroups
 #[derive(Debug, PartialEq)]
 pub enum ListNodegroupsError {
@@ -1776,20 +1730,16 @@ impl ListNodegroupsError {
 }
 impl fmt::Display for ListNodegroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListNodegroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListNodegroupsError::Client(ref cause) => cause,
-            ListNodegroupsError::InvalidParameter(ref cause) => cause,
-            ListNodegroupsError::ResourceNotFound(ref cause) => cause,
-            ListNodegroupsError::Server(ref cause) => cause,
-            ListNodegroupsError::ServiceUnavailable(ref cause) => cause,
+            ListNodegroupsError::Client(ref cause) => write!(f, "{}", cause),
+            ListNodegroupsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListNodegroupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListNodegroupsError::Server(ref cause) => write!(f, "{}", cause),
+            ListNodegroupsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListNodegroupsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1818,17 +1768,13 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::NotFound(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListUpdates
 #[derive(Debug, PartialEq)]
 pub enum ListUpdatesError {
@@ -1867,19 +1813,15 @@ impl ListUpdatesError {
 }
 impl fmt::Display for ListUpdatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUpdatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListUpdatesError::Client(ref cause) => cause,
-            ListUpdatesError::InvalidParameter(ref cause) => cause,
-            ListUpdatesError::ResourceNotFound(ref cause) => cause,
-            ListUpdatesError::Server(ref cause) => cause,
+            ListUpdatesError::Client(ref cause) => write!(f, "{}", cause),
+            ListUpdatesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListUpdatesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListUpdatesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUpdatesError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1908,17 +1850,13 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::NotFound(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1947,17 +1885,13 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::NotFound(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateClusterConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterConfigError {
@@ -2010,21 +1944,17 @@ impl UpdateClusterConfigError {
 }
 impl fmt::Display for UpdateClusterConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateClusterConfigError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateClusterConfigError::Client(ref cause) => cause,
-            UpdateClusterConfigError::InvalidParameter(ref cause) => cause,
-            UpdateClusterConfigError::InvalidRequest(ref cause) => cause,
-            UpdateClusterConfigError::ResourceInUse(ref cause) => cause,
-            UpdateClusterConfigError::ResourceNotFound(ref cause) => cause,
-            UpdateClusterConfigError::Server(ref cause) => cause,
+            UpdateClusterConfigError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateClusterConfigError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateClusterConfigError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateClusterConfigError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateClusterConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateClusterConfigError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateClusterConfigError {}
 /// Errors returned by UpdateClusterVersion
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterVersionError {
@@ -2077,21 +2007,17 @@ impl UpdateClusterVersionError {
 }
 impl fmt::Display for UpdateClusterVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateClusterVersionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateClusterVersionError::Client(ref cause) => cause,
-            UpdateClusterVersionError::InvalidParameter(ref cause) => cause,
-            UpdateClusterVersionError::InvalidRequest(ref cause) => cause,
-            UpdateClusterVersionError::ResourceInUse(ref cause) => cause,
-            UpdateClusterVersionError::ResourceNotFound(ref cause) => cause,
-            UpdateClusterVersionError::Server(ref cause) => cause,
+            UpdateClusterVersionError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateClusterVersionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateClusterVersionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateClusterVersionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateClusterVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateClusterVersionError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateClusterVersionError {}
 /// Errors returned by UpdateNodegroupConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateNodegroupConfigError {
@@ -2146,21 +2072,17 @@ impl UpdateNodegroupConfigError {
 }
 impl fmt::Display for UpdateNodegroupConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNodegroupConfigError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNodegroupConfigError::Client(ref cause) => cause,
-            UpdateNodegroupConfigError::InvalidParameter(ref cause) => cause,
-            UpdateNodegroupConfigError::InvalidRequest(ref cause) => cause,
-            UpdateNodegroupConfigError::ResourceInUse(ref cause) => cause,
-            UpdateNodegroupConfigError::ResourceNotFound(ref cause) => cause,
-            UpdateNodegroupConfigError::Server(ref cause) => cause,
+            UpdateNodegroupConfigError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateNodegroupConfigError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateNodegroupConfigError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateNodegroupConfigError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateNodegroupConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateNodegroupConfigError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNodegroupConfigError {}
 /// Errors returned by UpdateNodegroupVersion
 #[derive(Debug, PartialEq)]
 pub enum UpdateNodegroupVersionError {
@@ -2217,21 +2139,17 @@ impl UpdateNodegroupVersionError {
 }
 impl fmt::Display for UpdateNodegroupVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNodegroupVersionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNodegroupVersionError::Client(ref cause) => cause,
-            UpdateNodegroupVersionError::InvalidParameter(ref cause) => cause,
-            UpdateNodegroupVersionError::InvalidRequest(ref cause) => cause,
-            UpdateNodegroupVersionError::ResourceInUse(ref cause) => cause,
-            UpdateNodegroupVersionError::ResourceNotFound(ref cause) => cause,
-            UpdateNodegroupVersionError::Server(ref cause) => cause,
+            UpdateNodegroupVersionError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateNodegroupVersionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateNodegroupVersionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateNodegroupVersionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateNodegroupVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateNodegroupVersionError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNodegroupVersionError {}
 /// Trait representing the capabilities of the Amazon EKS API. Amazon EKS clients implement this trait.
 pub trait Eks {
     /// <p>Creates an Amazon EKS control plane. </p> <p>The Amazon EKS control plane consists of control plane instances that run the Kubernetes software, such as <code>etcd</code> and the API server. The control plane runs in an account managed by AWS, and the Kubernetes API is exposed via the Amazon EKS API server endpoint. Each Amazon EKS cluster control plane is single-tenant and unique and runs on its own set of Amazon EC2 instances.</p> <p>The cluster control plane is provisioned across multiple Availability Zones and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS also provisions elastic network interfaces in your VPC subnets to provide connectivity from the control plane instances to the worker nodes (for example, to support <code>kubectl exec</code>, <code>logs</code>, and <code>proxy</code> data flows).</p> <p>Amazon EKS worker nodes run in your AWS account and connect to your cluster's control plane via the Kubernetes API server endpoint and a certificate file that is created for your cluster.</p> <p>You can use the <code>endpointPublicAccess</code> and <code>endpointPrivateAccess</code> parameters to enable or disable public and private access to your cluster's Kubernetes API server endpoint. By default, public access is enabled, and private access is disabled. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>. </p> <p>You can use the <code>logging</code> parameter to enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren't exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note> <p>Cluster creation typically takes between 10 and 15 minutes. After you create an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate with the API server and launch worker nodes into your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html">Managing Cluster Authentication</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html">Launching Amazon EKS Worker Nodes</a> in the <i>Amazon EKS User Guide</i>.</p>

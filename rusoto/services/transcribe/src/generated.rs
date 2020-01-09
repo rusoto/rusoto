@@ -479,19 +479,15 @@ impl CreateVocabularyError {
 }
 impl fmt::Display for CreateVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVocabularyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVocabularyError::BadRequest(ref cause) => cause,
-            CreateVocabularyError::Conflict(ref cause) => cause,
-            CreateVocabularyError::InternalFailure(ref cause) => cause,
-            CreateVocabularyError::LimitExceeded(ref cause) => cause,
+            CreateVocabularyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateVocabularyError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateVocabularyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateVocabularyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVocabularyError {}
 /// Errors returned by DeleteTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteTranscriptionJobError {
@@ -529,18 +525,14 @@ impl DeleteTranscriptionJobError {
 }
 impl fmt::Display for DeleteTranscriptionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTranscriptionJobError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTranscriptionJobError::BadRequest(ref cause) => cause,
-            DeleteTranscriptionJobError::InternalFailure(ref cause) => cause,
-            DeleteTranscriptionJobError::LimitExceeded(ref cause) => cause,
+            DeleteTranscriptionJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteTranscriptionJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteTranscriptionJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTranscriptionJobError {}
 /// Errors returned by DeleteVocabulary
 #[derive(Debug, PartialEq)]
 pub enum DeleteVocabularyError {
@@ -579,19 +571,15 @@ impl DeleteVocabularyError {
 }
 impl fmt::Display for DeleteVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVocabularyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVocabularyError::BadRequest(ref cause) => cause,
-            DeleteVocabularyError::InternalFailure(ref cause) => cause,
-            DeleteVocabularyError::LimitExceeded(ref cause) => cause,
-            DeleteVocabularyError::NotFound(ref cause) => cause,
+            DeleteVocabularyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVocabularyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteVocabularyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteVocabularyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVocabularyError {}
 /// Errors returned by GetTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum GetTranscriptionJobError {
@@ -630,19 +618,15 @@ impl GetTranscriptionJobError {
 }
 impl fmt::Display for GetTranscriptionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTranscriptionJobError {
-    fn description(&self) -> &str {
         match *self {
-            GetTranscriptionJobError::BadRequest(ref cause) => cause,
-            GetTranscriptionJobError::InternalFailure(ref cause) => cause,
-            GetTranscriptionJobError::LimitExceeded(ref cause) => cause,
-            GetTranscriptionJobError::NotFound(ref cause) => cause,
+            GetTranscriptionJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetTranscriptionJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetTranscriptionJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetTranscriptionJobError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTranscriptionJobError {}
 /// Errors returned by GetVocabulary
 #[derive(Debug, PartialEq)]
 pub enum GetVocabularyError {
@@ -681,19 +665,15 @@ impl GetVocabularyError {
 }
 impl fmt::Display for GetVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetVocabularyError {
-    fn description(&self) -> &str {
         match *self {
-            GetVocabularyError::BadRequest(ref cause) => cause,
-            GetVocabularyError::InternalFailure(ref cause) => cause,
-            GetVocabularyError::LimitExceeded(ref cause) => cause,
-            GetVocabularyError::NotFound(ref cause) => cause,
+            GetVocabularyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetVocabularyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetVocabularyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetVocabularyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetVocabularyError {}
 /// Errors returned by ListTranscriptionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTranscriptionJobsError {
@@ -729,18 +709,14 @@ impl ListTranscriptionJobsError {
 }
 impl fmt::Display for ListTranscriptionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTranscriptionJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTranscriptionJobsError::BadRequest(ref cause) => cause,
-            ListTranscriptionJobsError::InternalFailure(ref cause) => cause,
-            ListTranscriptionJobsError::LimitExceeded(ref cause) => cause,
+            ListTranscriptionJobsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTranscriptionJobsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTranscriptionJobsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTranscriptionJobsError {}
 /// Errors returned by ListVocabularies
 #[derive(Debug, PartialEq)]
 pub enum ListVocabulariesError {
@@ -774,18 +750,14 @@ impl ListVocabulariesError {
 }
 impl fmt::Display for ListVocabulariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVocabulariesError {
-    fn description(&self) -> &str {
         match *self {
-            ListVocabulariesError::BadRequest(ref cause) => cause,
-            ListVocabulariesError::InternalFailure(ref cause) => cause,
-            ListVocabulariesError::LimitExceeded(ref cause) => cause,
+            ListVocabulariesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListVocabulariesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListVocabulariesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListVocabulariesError {}
 /// Errors returned by StartTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum StartTranscriptionJobError {
@@ -826,19 +798,15 @@ impl StartTranscriptionJobError {
 }
 impl fmt::Display for StartTranscriptionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartTranscriptionJobError {
-    fn description(&self) -> &str {
         match *self {
-            StartTranscriptionJobError::BadRequest(ref cause) => cause,
-            StartTranscriptionJobError::Conflict(ref cause) => cause,
-            StartTranscriptionJobError::InternalFailure(ref cause) => cause,
-            StartTranscriptionJobError::LimitExceeded(ref cause) => cause,
+            StartTranscriptionJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StartTranscriptionJobError::Conflict(ref cause) => write!(f, "{}", cause),
+            StartTranscriptionJobError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StartTranscriptionJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartTranscriptionJobError {}
 /// Errors returned by UpdateVocabulary
 #[derive(Debug, PartialEq)]
 pub enum UpdateVocabularyError {
@@ -882,20 +850,16 @@ impl UpdateVocabularyError {
 }
 impl fmt::Display for UpdateVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVocabularyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVocabularyError::BadRequest(ref cause) => cause,
-            UpdateVocabularyError::Conflict(ref cause) => cause,
-            UpdateVocabularyError::InternalFailure(ref cause) => cause,
-            UpdateVocabularyError::LimitExceeded(ref cause) => cause,
-            UpdateVocabularyError::NotFound(ref cause) => cause,
+            UpdateVocabularyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateVocabularyError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateVocabularyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateVocabularyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateVocabularyError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateVocabularyError {}
 /// Trait representing the capabilities of the Amazon Transcribe Service API. Amazon Transcribe Service clients implement this trait.
 pub trait Transcribe {
     /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>

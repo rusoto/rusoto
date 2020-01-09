@@ -2726,16 +2726,12 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToResourceError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToResourceError::ResourceNotFoundFault(ref cause) => cause,
+            AddTagsToResourceError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToResourceError {}
 /// Errors returned by ApplyPendingMaintenanceAction
 #[derive(Debug, PartialEq)]
 pub enum ApplyPendingMaintenanceActionError {
@@ -2763,16 +2759,14 @@ impl ApplyPendingMaintenanceActionError {
 }
 impl fmt::Display for ApplyPendingMaintenanceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApplyPendingMaintenanceActionError {
-    fn description(&self) -> &str {
         match *self {
-            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => cause,
+            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ApplyPendingMaintenanceActionError {}
 /// Errors returned by CreateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointError {
@@ -2831,21 +2825,17 @@ impl CreateEndpointError {
 }
 impl fmt::Display for CreateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEndpointError::AccessDeniedFault(ref cause) => cause,
-            CreateEndpointError::InvalidResourceStateFault(ref cause) => cause,
-            CreateEndpointError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CreateEndpointError::ResourceAlreadyExistsFault(ref cause) => cause,
-            CreateEndpointError::ResourceNotFoundFault(ref cause) => cause,
-            CreateEndpointError::ResourceQuotaExceededFault(ref cause) => cause,
+            CreateEndpointError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointError::ResourceQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEndpointError {}
 /// Errors returned by CreateEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSubscriptionError {
@@ -2934,25 +2924,29 @@ impl CreateEventSubscriptionError {
 }
 impl fmt::Display for CreateEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEventSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEventSubscriptionError::KMSAccessDeniedFault(ref cause) => cause,
-            CreateEventSubscriptionError::KMSDisabledFault(ref cause) => cause,
-            CreateEventSubscriptionError::KMSInvalidStateFault(ref cause) => cause,
-            CreateEventSubscriptionError::KMSNotFoundFault(ref cause) => cause,
-            CreateEventSubscriptionError::KMSThrottlingFault(ref cause) => cause,
-            CreateEventSubscriptionError::ResourceAlreadyExistsFault(ref cause) => cause,
-            CreateEventSubscriptionError::ResourceNotFoundFault(ref cause) => cause,
-            CreateEventSubscriptionError::ResourceQuotaExceededFault(ref cause) => cause,
-            CreateEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,
-            CreateEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => cause,
+            CreateEventSubscriptionError::KMSAccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::KMSDisabledFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::KMSInvalidStateFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::KMSNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::KMSThrottlingFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SNSInvalidTopicFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateEventSubscriptionError {}
 /// Errors returned by CreateReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationInstanceError {
@@ -3043,27 +3037,37 @@ impl CreateReplicationInstanceError {
 }
 impl fmt::Display for CreateReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReplicationInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReplicationInstanceError::AccessDeniedFault(ref cause) => cause,
-            CreateReplicationInstanceError::InsufficientResourceCapacityFault(ref cause) => cause,
-            CreateReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
-            CreateReplicationInstanceError::InvalidSubnet(ref cause) => cause,
-            CreateReplicationInstanceError::KMSKeyNotAccessibleFault(ref cause) => cause,
+            CreateReplicationInstanceError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            CreateReplicationInstanceError::InsufficientResourceCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationInstanceError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationInstanceError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateReplicationInstanceError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateReplicationInstanceError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
                 ref cause,
-            ) => cause,
-            CreateReplicationInstanceError::ResourceAlreadyExistsFault(ref cause) => cause,
-            CreateReplicationInstanceError::ResourceNotFoundFault(ref cause) => cause,
-            CreateReplicationInstanceError::ResourceQuotaExceededFault(ref cause) => cause,
-            CreateReplicationInstanceError::StorageQuotaExceededFault(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            CreateReplicationInstanceError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationInstanceError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationInstanceError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationInstanceError::StorageQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateReplicationInstanceError {}
 /// Errors returned by CreateReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationSubnetGroupError {
@@ -3126,23 +3130,27 @@ impl CreateReplicationSubnetGroupError {
 }
 impl fmt::Display for CreateReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReplicationSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReplicationSubnetGroupError::AccessDeniedFault(ref cause) => cause,
-            CreateReplicationSubnetGroupError::InvalidSubnet(ref cause) => cause,
+            CreateReplicationSubnetGroupError::AccessDeniedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
             CreateReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
                 ref cause,
-            ) => cause,
-            CreateReplicationSubnetGroupError::ResourceAlreadyExistsFault(ref cause) => cause,
-            CreateReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => cause,
-            CreateReplicationSubnetGroupError::ResourceQuotaExceededFault(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            CreateReplicationSubnetGroupError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationSubnetGroupError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateReplicationSubnetGroupError {}
 /// Errors returned by CreateReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationTaskError {
@@ -3203,21 +3211,25 @@ impl CreateReplicationTaskError {
 }
 impl fmt::Display for CreateReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReplicationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReplicationTaskError::AccessDeniedFault(ref cause) => cause,
-            CreateReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
-            CreateReplicationTaskError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CreateReplicationTaskError::ResourceAlreadyExistsFault(ref cause) => cause,
-            CreateReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
-            CreateReplicationTaskError::ResourceQuotaExceededFault(ref cause) => cause,
+            CreateReplicationTaskError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            CreateReplicationTaskError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationTaskError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationTaskError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateReplicationTaskError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateReplicationTaskError {}
 /// Errors returned by DeleteCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCertificateError {
@@ -3250,17 +3262,13 @@ impl DeleteCertificateError {
 }
 impl fmt::Display for DeleteCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCertificateError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteCertificateError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteCertificateError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCertificateError {}
 /// Errors returned by DeleteConnection
 #[derive(Debug, PartialEq)]
 pub enum DeleteConnectionError {
@@ -3298,18 +3306,14 @@ impl DeleteConnectionError {
 }
 impl fmt::Display for DeleteConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConnectionError::AccessDeniedFault(ref cause) => cause,
-            DeleteConnectionError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteConnectionError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteConnectionError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteConnectionError {}
 /// Errors returned by DeleteEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointError {
@@ -3342,17 +3346,13 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEndpointError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteEndpointError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteEndpointError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEndpointError {}
 /// Errors returned by DeleteEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSubscriptionError {
@@ -3385,17 +3385,17 @@ impl DeleteEventSubscriptionError {
 }
 impl fmt::Display for DeleteEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEventSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEventSubscriptionError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteEventSubscriptionError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteEventSubscriptionError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteEventSubscriptionError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteEventSubscriptionError {}
 /// Errors returned by DeleteReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationInstanceError {
@@ -3428,17 +3428,17 @@ impl DeleteReplicationInstanceError {
 }
 impl fmt::Display for DeleteReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReplicationInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteReplicationInstanceError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteReplicationInstanceError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationInstanceError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteReplicationInstanceError {}
 /// Errors returned by DeleteReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationSubnetGroupError {
@@ -3473,17 +3473,17 @@ impl DeleteReplicationSubnetGroupError {
 }
 impl fmt::Display for DeleteReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReplicationSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReplicationSubnetGroupError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteReplicationSubnetGroupError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteReplicationSubnetGroupError {}
 /// Errors returned by DeleteReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationTaskError {
@@ -3516,17 +3516,15 @@ impl DeleteReplicationTaskError {
 }
 impl fmt::Display for DeleteReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReplicationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
+            DeleteReplicationTaskError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteReplicationTaskError {}
 /// Errors returned by DescribeAccountAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountAttributesError {}
@@ -3544,14 +3542,10 @@ impl DescribeAccountAttributesError {
 }
 impl fmt::Display for DescribeAccountAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountAttributesError {}
 /// Errors returned by DescribeCertificates
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificatesError {
@@ -3577,16 +3571,12 @@ impl DescribeCertificatesError {
 }
 impl fmt::Display for DescribeCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCertificatesError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeCertificatesError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCertificatesError {}
 /// Errors returned by DescribeConnections
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionsError {
@@ -3612,16 +3602,12 @@ impl DescribeConnectionsError {
 }
 impl fmt::Display for DescribeConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConnectionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConnectionsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeConnectionsError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConnectionsError {}
 /// Errors returned by DescribeEndpointTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointTypesError {}
@@ -3639,14 +3625,10 @@ impl DescribeEndpointTypesError {
 }
 impl fmt::Display for DescribeEndpointTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointTypesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEndpointTypesError {}
 /// Errors returned by DescribeEndpoints
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointsError {
@@ -3672,16 +3654,12 @@ impl DescribeEndpointsError {
 }
 impl fmt::Display for DescribeEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEndpointsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeEndpointsError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEndpointsError {}
 /// Errors returned by DescribeEventCategories
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventCategoriesError {}
@@ -3699,14 +3677,10 @@ impl DescribeEventCategoriesError {
 }
 impl fmt::Display for DescribeEventCategoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventCategoriesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventCategoriesError {}
 /// Errors returned by DescribeEventSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventSubscriptionsError {
@@ -3734,16 +3708,14 @@ impl DescribeEventSubscriptionsError {
 }
 impl fmt::Display for DescribeEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventSubscriptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventSubscriptionsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeEventSubscriptionsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEventSubscriptionsError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {}
@@ -3761,14 +3733,10 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEventsError {}
 /// Errors returned by DescribeOrderableReplicationInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrderableReplicationInstancesError {}
@@ -3788,14 +3756,10 @@ impl DescribeOrderableReplicationInstancesError {
 }
 impl fmt::Display for DescribeOrderableReplicationInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrderableReplicationInstancesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeOrderableReplicationInstancesError {}
 /// Errors returned by DescribePendingMaintenanceActions
 #[derive(Debug, PartialEq)]
 pub enum DescribePendingMaintenanceActionsError {
@@ -3823,16 +3787,14 @@ impl DescribePendingMaintenanceActionsError {
 }
 impl fmt::Display for DescribePendingMaintenanceActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePendingMaintenanceActionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribePendingMaintenanceActionsError {}
 /// Errors returned by DescribeRefreshSchemasStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeRefreshSchemasStatusError {
@@ -3867,17 +3829,17 @@ impl DescribeRefreshSchemasStatusError {
 }
 impl fmt::Display for DescribeRefreshSchemasStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRefreshSchemasStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRefreshSchemasStatusError::InvalidResourceStateFault(ref cause) => cause,
-            DescribeRefreshSchemasStatusError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeRefreshSchemasStatusError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRefreshSchemasStatusError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeRefreshSchemasStatusError {}
 /// Errors returned by DescribeReplicationInstanceTaskLogs
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationInstanceTaskLogsError {
@@ -3914,17 +3876,17 @@ impl DescribeReplicationInstanceTaskLogsError {
 }
 impl fmt::Display for DescribeReplicationInstanceTaskLogsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationInstanceTaskLogsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReplicationInstanceTaskLogsError::InvalidResourceStateFault(ref cause) => cause,
-            DescribeReplicationInstanceTaskLogsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeReplicationInstanceTaskLogsError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeReplicationInstanceTaskLogsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReplicationInstanceTaskLogsError {}
 /// Errors returned by DescribeReplicationInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationInstancesError {
@@ -3952,16 +3914,14 @@ impl DescribeReplicationInstancesError {
 }
 impl fmt::Display for DescribeReplicationInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReplicationInstancesError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeReplicationInstancesError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReplicationInstancesError {}
 /// Errors returned by DescribeReplicationSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationSubnetGroupsError {
@@ -3989,16 +3949,14 @@ impl DescribeReplicationSubnetGroupsError {
 }
 impl fmt::Display for DescribeReplicationSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationSubnetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReplicationSubnetGroupsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeReplicationSubnetGroupsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReplicationSubnetGroupsError {}
 /// Errors returned by DescribeReplicationTaskAssessmentResults
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationTaskAssessmentResultsError {
@@ -4028,18 +3986,14 @@ impl DescribeReplicationTaskAssessmentResultsError {
 }
 impl fmt::Display for DescribeReplicationTaskAssessmentResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationTaskAssessmentResultsError {
-    fn description(&self) -> &str {
         match *self {
             DescribeReplicationTaskAssessmentResultsError::ResourceNotFoundFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeReplicationTaskAssessmentResultsError {}
 /// Errors returned by DescribeReplicationTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationTasksError {
@@ -4065,16 +4019,14 @@ impl DescribeReplicationTasksError {
 }
 impl fmt::Display for DescribeReplicationTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeReplicationTasksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeReplicationTasksError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeReplicationTasksError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeReplicationTasksError {}
 /// Errors returned by DescribeSchemas
 #[derive(Debug, PartialEq)]
 pub enum DescribeSchemasError {
@@ -4107,17 +4059,13 @@ impl DescribeSchemasError {
 }
 impl fmt::Display for DescribeSchemasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSchemasError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSchemasError::InvalidResourceStateFault(ref cause) => cause,
-            DescribeSchemasError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeSchemasError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            DescribeSchemasError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSchemasError {}
 /// Errors returned by DescribeTableStatistics
 #[derive(Debug, PartialEq)]
 pub enum DescribeTableStatisticsError {
@@ -4150,17 +4098,17 @@ impl DescribeTableStatisticsError {
 }
 impl fmt::Display for DescribeTableStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTableStatisticsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTableStatisticsError::InvalidResourceStateFault(ref cause) => cause,
-            DescribeTableStatisticsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeTableStatisticsError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeTableStatisticsError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTableStatisticsError {}
 /// Errors returned by ImportCertificate
 #[derive(Debug, PartialEq)]
 pub enum ImportCertificateError {
@@ -4200,18 +4148,14 @@ impl ImportCertificateError {
 }
 impl fmt::Display for ImportCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            ImportCertificateError::InvalidCertificateFault(ref cause) => cause,
-            ImportCertificateError::ResourceAlreadyExistsFault(ref cause) => cause,
-            ImportCertificateError::ResourceQuotaExceededFault(ref cause) => cause,
+            ImportCertificateError::InvalidCertificateFault(ref cause) => write!(f, "{}", cause),
+            ImportCertificateError::ResourceAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            ImportCertificateError::ResourceQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportCertificateError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -4237,16 +4181,12 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::ResourceNotFoundFault(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ModifyEndpoint
 #[derive(Debug, PartialEq)]
 pub enum ModifyEndpointError {
@@ -4298,20 +4238,16 @@ impl ModifyEndpointError {
 }
 impl fmt::Display for ModifyEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyEndpointError::AccessDeniedFault(ref cause) => cause,
-            ModifyEndpointError::InvalidResourceStateFault(ref cause) => cause,
-            ModifyEndpointError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            ModifyEndpointError::ResourceAlreadyExistsFault(ref cause) => cause,
-            ModifyEndpointError::ResourceNotFoundFault(ref cause) => cause,
+            ModifyEndpointError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            ModifyEndpointError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyEndpointError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            ModifyEndpointError::ResourceAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            ModifyEndpointError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyEndpointError {}
 /// Errors returned by ModifyEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum ModifyEventSubscriptionError {
@@ -4393,24 +4329,26 @@ impl ModifyEventSubscriptionError {
 }
 impl fmt::Display for ModifyEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyEventSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyEventSubscriptionError::KMSAccessDeniedFault(ref cause) => cause,
-            ModifyEventSubscriptionError::KMSDisabledFault(ref cause) => cause,
-            ModifyEventSubscriptionError::KMSInvalidStateFault(ref cause) => cause,
-            ModifyEventSubscriptionError::KMSNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::KMSThrottlingFault(ref cause) => cause,
-            ModifyEventSubscriptionError::ResourceNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::ResourceQuotaExceededFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,
-            ModifyEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => cause,
+            ModifyEventSubscriptionError::KMSAccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::KMSDisabledFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::KMSInvalidStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::KMSNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::KMSThrottlingFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SNSInvalidTopicFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyEventSubscriptionError {}
 /// Errors returned by ModifyReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationInstanceError {
@@ -4478,22 +4416,30 @@ impl ModifyReplicationInstanceError {
 }
 impl fmt::Display for ModifyReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyReplicationInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyReplicationInstanceError::AccessDeniedFault(ref cause) => cause,
-            ModifyReplicationInstanceError::InsufficientResourceCapacityFault(ref cause) => cause,
-            ModifyReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
-            ModifyReplicationInstanceError::ResourceAlreadyExistsFault(ref cause) => cause,
-            ModifyReplicationInstanceError::ResourceNotFoundFault(ref cause) => cause,
-            ModifyReplicationInstanceError::StorageQuotaExceededFault(ref cause) => cause,
-            ModifyReplicationInstanceError::UpgradeDependencyFailureFault(ref cause) => cause,
+            ModifyReplicationInstanceError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            ModifyReplicationInstanceError::InsufficientResourceCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationInstanceError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationInstanceError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationInstanceError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationInstanceError::StorageQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationInstanceError::UpgradeDependencyFailureFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyReplicationInstanceError {}
 /// Errors returned by ModifyReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationSubnetGroupError {
@@ -4556,23 +4502,27 @@ impl ModifyReplicationSubnetGroupError {
 }
 impl fmt::Display for ModifyReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyReplicationSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyReplicationSubnetGroupError::AccessDeniedFault(ref cause) => cause,
-            ModifyReplicationSubnetGroupError::InvalidSubnet(ref cause) => cause,
+            ModifyReplicationSubnetGroupError::AccessDeniedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
             ModifyReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
                 ref cause,
-            ) => cause,
-            ModifyReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => cause,
-            ModifyReplicationSubnetGroupError::ResourceQuotaExceededFault(ref cause) => cause,
-            ModifyReplicationSubnetGroupError::SubnetAlreadyInUse(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            ModifyReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationSubnetGroupError::ResourceQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationSubnetGroupError::SubnetAlreadyInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyReplicationSubnetGroupError {}
 /// Errors returned by ModifyReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationTaskError {
@@ -4619,19 +4569,21 @@ impl ModifyReplicationTaskError {
 }
 impl fmt::Display for ModifyReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyReplicationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
-            ModifyReplicationTaskError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            ModifyReplicationTaskError::ResourceAlreadyExistsFault(ref cause) => cause,
-            ModifyReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
+            ModifyReplicationTaskError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationTaskError::KMSKeyNotAccessibleFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationTaskError::ResourceAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyReplicationTaskError {}
 /// Errors returned by RebootReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum RebootReplicationInstanceError {
@@ -4664,17 +4616,17 @@ impl RebootReplicationInstanceError {
 }
 impl fmt::Display for RebootReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootReplicationInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            RebootReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
-            RebootReplicationInstanceError::ResourceNotFoundFault(ref cause) => cause,
+            RebootReplicationInstanceError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RebootReplicationInstanceError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RebootReplicationInstanceError {}
 /// Errors returned by RefreshSchemas
 #[derive(Debug, PartialEq)]
 pub enum RefreshSchemasError {
@@ -4721,19 +4673,15 @@ impl RefreshSchemasError {
 }
 impl fmt::Display for RefreshSchemasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RefreshSchemasError {
-    fn description(&self) -> &str {
         match *self {
-            RefreshSchemasError::InvalidResourceStateFault(ref cause) => cause,
-            RefreshSchemasError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            RefreshSchemasError::ResourceNotFoundFault(ref cause) => cause,
-            RefreshSchemasError::ResourceQuotaExceededFault(ref cause) => cause,
+            RefreshSchemasError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            RefreshSchemasError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            RefreshSchemasError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RefreshSchemasError::ResourceQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RefreshSchemasError {}
 /// Errors returned by ReloadTables
 #[derive(Debug, PartialEq)]
 pub enum ReloadTablesError {
@@ -4764,17 +4712,13 @@ impl ReloadTablesError {
 }
 impl fmt::Display for ReloadTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReloadTablesError {
-    fn description(&self) -> &str {
         match *self {
-            ReloadTablesError::InvalidResourceStateFault(ref cause) => cause,
-            ReloadTablesError::ResourceNotFoundFault(ref cause) => cause,
+            ReloadTablesError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            ReloadTablesError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReloadTablesError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -4800,16 +4744,12 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromResourceError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromResourceError::ResourceNotFoundFault(ref cause) => cause,
+            RemoveTagsFromResourceError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsFromResourceError {}
 /// Errors returned by StartReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum StartReplicationTaskError {
@@ -4849,18 +4789,16 @@ impl StartReplicationTaskError {
 }
 impl fmt::Display for StartReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartReplicationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StartReplicationTaskError::AccessDeniedFault(ref cause) => cause,
-            StartReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
-            StartReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
+            StartReplicationTaskError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
+            StartReplicationTaskError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartReplicationTaskError {}
 /// Errors returned by StartReplicationTaskAssessment
 #[derive(Debug, PartialEq)]
 pub enum StartReplicationTaskAssessmentError {
@@ -4895,17 +4833,17 @@ impl StartReplicationTaskAssessmentError {
 }
 impl fmt::Display for StartReplicationTaskAssessmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartReplicationTaskAssessmentError {
-    fn description(&self) -> &str {
         match *self {
-            StartReplicationTaskAssessmentError::InvalidResourceStateFault(ref cause) => cause,
-            StartReplicationTaskAssessmentError::ResourceNotFoundFault(ref cause) => cause,
+            StartReplicationTaskAssessmentError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartReplicationTaskAssessmentError::ResourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartReplicationTaskAssessmentError {}
 /// Errors returned by StopReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum StopReplicationTaskError {
@@ -4938,17 +4876,15 @@ impl StopReplicationTaskError {
 }
 impl fmt::Display for StopReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopReplicationTaskError {
-    fn description(&self) -> &str {
         match *self {
-            StopReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
-            StopReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
+            StopReplicationTaskError::InvalidResourceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopReplicationTaskError {}
 /// Errors returned by TestConnection
 #[derive(Debug, PartialEq)]
 pub enum TestConnectionError {
@@ -4995,19 +4931,15 @@ impl TestConnectionError {
 }
 impl fmt::Display for TestConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            TestConnectionError::InvalidResourceStateFault(ref cause) => cause,
-            TestConnectionError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            TestConnectionError::ResourceNotFoundFault(ref cause) => cause,
-            TestConnectionError::ResourceQuotaExceededFault(ref cause) => cause,
+            TestConnectionError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
+            TestConnectionError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
+            TestConnectionError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            TestConnectionError::ResourceQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestConnectionError {}
 /// Trait representing the capabilities of the AWS Database Migration Service API. AWS Database Migration Service clients implement this trait.
 pub trait DatabaseMigrationService {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>

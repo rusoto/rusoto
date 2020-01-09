@@ -3565,16 +3565,14 @@ impl BatchGetAggregateResourceConfigError {
 }
 impl fmt::Display for BatchGetAggregateResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetAggregateResourceConfigError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => cause,
+            BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchGetAggregateResourceConfigError {}
 /// Errors returned by BatchGetResourceConfig
 #[derive(Debug, PartialEq)]
 pub enum BatchGetResourceConfigError {
@@ -3600,16 +3598,14 @@ impl BatchGetResourceConfigError {
 }
 impl fmt::Display for BatchGetResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetResourceConfigError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetResourceConfigError::NoAvailableConfigurationRecorder(ref cause) => cause,
+            BatchGetResourceConfigError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchGetResourceConfigError {}
 /// Errors returned by DeleteAggregationAuthorization
 #[derive(Debug, PartialEq)]
 pub enum DeleteAggregationAuthorizationError {
@@ -3637,16 +3633,14 @@ impl DeleteAggregationAuthorizationError {
 }
 impl fmt::Display for DeleteAggregationAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAggregationAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAggregationAuthorizationError::InvalidParameterValue(ref cause) => cause,
+            DeleteAggregationAuthorizationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteAggregationAuthorizationError {}
 /// Errors returned by DeleteConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigRuleError {
@@ -3675,17 +3669,13 @@ impl DeleteConfigRuleError {
 }
 impl fmt::Display for DeleteConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConfigRuleError::NoSuchConfigRule(ref cause) => cause,
-            DeleteConfigRuleError::ResourceInUse(ref cause) => cause,
+            DeleteConfigRuleError::NoSuchConfigRule(ref cause) => write!(f, "{}", cause),
+            DeleteConfigRuleError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteConfigRuleError {}
 /// Errors returned by DeleteConfigurationAggregator
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationAggregatorError {
@@ -3713,16 +3703,14 @@ impl DeleteConfigurationAggregatorError {
 }
 impl fmt::Display for DeleteConfigurationAggregatorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConfigurationAggregatorError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(ref cause) => cause,
+            DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteConfigurationAggregatorError {}
 /// Errors returned by DeleteConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationRecorderError {
@@ -3750,16 +3738,14 @@ impl DeleteConfigurationRecorderError {
 }
 impl fmt::Display for DeleteConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConfigurationRecorderError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => cause,
+            DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteConfigurationRecorderError {}
 /// Errors returned by DeleteConformancePack
 #[derive(Debug, PartialEq)]
 pub enum DeleteConformancePackError {
@@ -3790,17 +3776,13 @@ impl DeleteConformancePackError {
 }
 impl fmt::Display for DeleteConformancePackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConformancePackError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConformancePackError::NoSuchConformancePack(ref cause) => cause,
-            DeleteConformancePackError::ResourceInUse(ref cause) => cause,
+            DeleteConformancePackError::NoSuchConformancePack(ref cause) => write!(f, "{}", cause),
+            DeleteConformancePackError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteConformancePackError {}
 /// Errors returned by DeleteDeliveryChannel
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeliveryChannelError {
@@ -3833,17 +3815,15 @@ impl DeleteDeliveryChannelError {
 }
 impl fmt::Display for DeleteDeliveryChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDeliveryChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(ref cause) => cause,
-            DeleteDeliveryChannelError::NoSuchDeliveryChannel(ref cause) => cause,
+            DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDeliveryChannelError::NoSuchDeliveryChannel(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDeliveryChannelError {}
 /// Errors returned by DeleteEvaluationResults
 #[derive(Debug, PartialEq)]
 pub enum DeleteEvaluationResultsError {
@@ -3876,17 +3856,13 @@ impl DeleteEvaluationResultsError {
 }
 impl fmt::Display for DeleteEvaluationResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEvaluationResultsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEvaluationResultsError::NoSuchConfigRule(ref cause) => cause,
-            DeleteEvaluationResultsError::ResourceInUse(ref cause) => cause,
+            DeleteEvaluationResultsError::NoSuchConfigRule(ref cause) => write!(f, "{}", cause),
+            DeleteEvaluationResultsError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEvaluationResultsError {}
 /// Errors returned by DeleteOrganizationConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteOrganizationConfigRuleError {
@@ -3928,18 +3904,18 @@ impl DeleteOrganizationConfigRuleError {
 }
 impl fmt::Display for DeleteOrganizationConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteOrganizationConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteOrganizationConfigRuleError::NoSuchOrganizationConfigRule(ref cause) => cause,
-            DeleteOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => cause,
-            DeleteOrganizationConfigRuleError::ResourceInUse(ref cause) => cause,
+            DeleteOrganizationConfigRuleError::NoSuchOrganizationConfigRule(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOrganizationConfigRuleError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteOrganizationConfigRuleError {}
 /// Errors returned by DeleteOrganizationConformancePack
 #[derive(Debug, PartialEq)]
 pub enum DeleteOrganizationConformancePackError {
@@ -3983,20 +3959,20 @@ impl DeleteOrganizationConformancePackError {
 }
 impl fmt::Display for DeleteOrganizationConformancePackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteOrganizationConformancePackError {
-    fn description(&self) -> &str {
         match *self {
             DeleteOrganizationConformancePackError::NoSuchOrganizationConformancePack(
                 ref cause,
-            ) => cause,
-            DeleteOrganizationConformancePackError::OrganizationAccessDenied(ref cause) => cause,
-            DeleteOrganizationConformancePackError::ResourceInUse(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DeleteOrganizationConformancePackError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOrganizationConformancePackError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteOrganizationConformancePackError {}
 /// Errors returned by DeletePendingAggregationRequest
 #[derive(Debug, PartialEq)]
 pub enum DeletePendingAggregationRequestError {
@@ -4024,16 +4000,14 @@ impl DeletePendingAggregationRequestError {
 }
 impl fmt::Display for DeletePendingAggregationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePendingAggregationRequestError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePendingAggregationRequestError::InvalidParameterValue(ref cause) => cause,
+            DeletePendingAggregationRequestError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeletePendingAggregationRequestError {}
 /// Errors returned by DeleteRemediationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteRemediationConfigurationError {
@@ -4070,17 +4044,17 @@ impl DeleteRemediationConfigurationError {
 }
 impl fmt::Display for DeleteRemediationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRemediationConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(ref cause) => cause,
-            DeleteRemediationConfigurationError::RemediationInProgress(ref cause) => cause,
+            DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRemediationConfigurationError::RemediationInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRemediationConfigurationError {}
 /// Errors returned by DeleteRemediationExceptions
 #[derive(Debug, PartialEq)]
 pub enum DeleteRemediationExceptionsError {
@@ -4108,16 +4082,14 @@ impl DeleteRemediationExceptionsError {
 }
 impl fmt::Display for DeleteRemediationExceptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRemediationExceptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRemediationExceptionsError::NoSuchRemediation(ref cause) => cause,
+            DeleteRemediationExceptionsError::NoSuchRemediation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRemediationExceptionsError {}
 /// Errors returned by DeleteResourceConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceConfigError {
@@ -4143,16 +4115,14 @@ impl DeleteResourceConfigError {
 }
 impl fmt::Display for DeleteResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteResourceConfigError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteResourceConfigError::NoRunningConfigurationRecorder(ref cause) => cause,
+            DeleteResourceConfigError::NoRunningConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteResourceConfigError {}
 /// Errors returned by DeleteRetentionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteRetentionConfigurationError {
@@ -4187,17 +4157,17 @@ impl DeleteRetentionConfigurationError {
 }
 impl fmt::Display for DeleteRetentionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRetentionConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRetentionConfigurationError::InvalidParameterValue(ref cause) => cause,
-            DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(ref cause) => cause,
+            DeleteRetentionConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRetentionConfigurationError {}
 /// Errors returned by DeliverConfigSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeliverConfigSnapshotError {
@@ -4237,18 +4207,18 @@ impl DeliverConfigSnapshotError {
 }
 impl fmt::Display for DeliverConfigSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeliverConfigSnapshotError {
-    fn description(&self) -> &str {
         match *self {
-            DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(ref cause) => cause,
-            DeliverConfigSnapshotError::NoRunningConfigurationRecorder(ref cause) => cause,
-            DeliverConfigSnapshotError::NoSuchDeliveryChannel(ref cause) => cause,
+            DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeliverConfigSnapshotError::NoRunningConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeliverConfigSnapshotError::NoSuchDeliveryChannel(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeliverConfigSnapshotError {}
 /// Errors returned by DescribeAggregateComplianceByConfigRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeAggregateComplianceByConfigRulesError {
@@ -4290,20 +4260,20 @@ impl DescribeAggregateComplianceByConfigRulesError {
 }
 impl fmt::Display for DescribeAggregateComplianceByConfigRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAggregateComplianceByConfigRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAggregateComplianceByConfigRulesError::InvalidLimit(ref cause) => cause,
-            DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(ref cause) => cause,
+            DescribeAggregateComplianceByConfigRulesError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAggregateComplianceByConfigRulesError {}
 /// Errors returned by DescribeAggregationAuthorizations
 #[derive(Debug, PartialEq)]
 pub enum DescribeAggregationAuthorizationsError {
@@ -4345,18 +4315,20 @@ impl DescribeAggregationAuthorizationsError {
 }
 impl fmt::Display for DescribeAggregationAuthorizationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAggregationAuthorizationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAggregationAuthorizationsError::InvalidLimit(ref cause) => cause,
-            DescribeAggregationAuthorizationsError::InvalidNextToken(ref cause) => cause,
-            DescribeAggregationAuthorizationsError::InvalidParameterValue(ref cause) => cause,
+            DescribeAggregationAuthorizationsError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAggregationAuthorizationsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAggregationAuthorizationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAggregationAuthorizationsError {}
 /// Errors returned by DescribeComplianceByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DescribeComplianceByConfigRuleError {
@@ -4398,18 +4370,20 @@ impl DescribeComplianceByConfigRuleError {
 }
 impl fmt::Display for DescribeComplianceByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeComplianceByConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeComplianceByConfigRuleError::InvalidNextToken(ref cause) => cause,
-            DescribeComplianceByConfigRuleError::InvalidParameterValue(ref cause) => cause,
-            DescribeComplianceByConfigRuleError::NoSuchConfigRule(ref cause) => cause,
+            DescribeComplianceByConfigRuleError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeComplianceByConfigRuleError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeComplianceByConfigRuleError::NoSuchConfigRule(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeComplianceByConfigRuleError {}
 /// Errors returned by DescribeComplianceByResource
 #[derive(Debug, PartialEq)]
 pub enum DescribeComplianceByResourceError {
@@ -4444,17 +4418,17 @@ impl DescribeComplianceByResourceError {
 }
 impl fmt::Display for DescribeComplianceByResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeComplianceByResourceError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeComplianceByResourceError::InvalidNextToken(ref cause) => cause,
-            DescribeComplianceByResourceError::InvalidParameterValue(ref cause) => cause,
+            DescribeComplianceByResourceError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeComplianceByResourceError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeComplianceByResourceError {}
 /// Errors returned by DescribeConfigRuleEvaluationStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigRuleEvaluationStatusError {
@@ -4496,18 +4470,20 @@ impl DescribeConfigRuleEvaluationStatusError {
 }
 impl fmt::Display for DescribeConfigRuleEvaluationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigRuleEvaluationStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigRuleEvaluationStatusError::InvalidNextToken(ref cause) => cause,
-            DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(ref cause) => cause,
-            DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(ref cause) => cause,
+            DescribeConfigRuleEvaluationStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeConfigRuleEvaluationStatusError {}
 /// Errors returned by DescribeConfigRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigRulesError {
@@ -4540,17 +4516,13 @@ impl DescribeConfigRulesError {
 }
 impl fmt::Display for DescribeConfigRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigRulesError::InvalidNextToken(ref cause) => cause,
-            DescribeConfigRulesError::NoSuchConfigRule(ref cause) => cause,
+            DescribeConfigRulesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeConfigRulesError::NoSuchConfigRule(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigRulesError {}
 /// Errors returned by DescribeConfigurationAggregatorSourcesStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationAggregatorSourcesStatusError {
@@ -4583,23 +4555,23 @@ _ => {}
 }
 impl fmt::Display for DescribeConfigurationAggregatorSourcesStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationAggregatorSourcesStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(ref cause) => cause,
-            DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(ref cause) => cause,
+            DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigurationAggregatorSourcesStatusError {}
 /// Errors returned by DescribeConfigurationAggregators
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationAggregatorsError {
@@ -4650,21 +4622,23 @@ impl DescribeConfigurationAggregatorsError {
 }
 impl fmt::Display for DescribeConfigurationAggregatorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationAggregatorsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationAggregatorsError::InvalidLimit(ref cause) => cause,
-            DescribeConfigurationAggregatorsError::InvalidNextToken(ref cause) => cause,
-            DescribeConfigurationAggregatorsError::InvalidParameterValue(ref cause) => cause,
+            DescribeConfigurationAggregatorsError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigurationAggregatorsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigurationAggregatorsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeConfigurationAggregatorsError {}
 /// Errors returned by DescribeConfigurationRecorderStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationRecorderStatusError {
@@ -4694,18 +4668,14 @@ impl DescribeConfigurationRecorderStatusError {
 }
 impl fmt::Display for DescribeConfigurationRecorderStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationRecorderStatusError {
-    fn description(&self) -> &str {
         match *self {
             DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeConfigurationRecorderStatusError {}
 /// Errors returned by DescribeConfigurationRecorders
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationRecordersError {
@@ -4733,16 +4703,14 @@ impl DescribeConfigurationRecordersError {
 }
 impl fmt::Display for DescribeConfigurationRecordersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationRecordersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(ref cause) => cause,
+            DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeConfigurationRecordersError {}
 /// Errors returned by DescribeConformancePackCompliance
 #[derive(Debug, PartialEq)]
 pub enum DescribeConformancePackComplianceError {
@@ -4800,22 +4768,26 @@ impl DescribeConformancePackComplianceError {
 }
 impl fmt::Display for DescribeConformancePackComplianceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConformancePackComplianceError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConformancePackComplianceError::InvalidLimit(ref cause) => cause,
-            DescribeConformancePackComplianceError::InvalidNextToken(ref cause) => cause,
-            DescribeConformancePackComplianceError::InvalidParameterValue(ref cause) => cause,
+            DescribeConformancePackComplianceError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConformancePackComplianceError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConformancePackComplianceError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeConformancePackComplianceError::NoSuchConfigRuleInConformancePack(
                 ref cause,
-            ) => cause,
-            DescribeConformancePackComplianceError::NoSuchConformancePack(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DescribeConformancePackComplianceError::NoSuchConformancePack(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeConformancePackComplianceError {}
 /// Errors returned by DescribeConformancePackStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConformancePackStatusError {
@@ -4850,17 +4822,15 @@ impl DescribeConformancePackStatusError {
 }
 impl fmt::Display for DescribeConformancePackStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConformancePackStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConformancePackStatusError::InvalidLimit(ref cause) => cause,
-            DescribeConformancePackStatusError::InvalidNextToken(ref cause) => cause,
+            DescribeConformancePackStatusError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            DescribeConformancePackStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeConformancePackStatusError {}
 /// Errors returned by DescribeConformancePacks
 #[derive(Debug, PartialEq)]
 pub enum DescribeConformancePacksError {
@@ -4900,18 +4870,16 @@ impl DescribeConformancePacksError {
 }
 impl fmt::Display for DescribeConformancePacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConformancePacksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConformancePacksError::InvalidLimit(ref cause) => cause,
-            DescribeConformancePacksError::InvalidNextToken(ref cause) => cause,
-            DescribeConformancePacksError::NoSuchConformancePack(ref cause) => cause,
+            DescribeConformancePacksError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            DescribeConformancePacksError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeConformancePacksError::NoSuchConformancePack(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeConformancePacksError {}
 /// Errors returned by DescribeDeliveryChannelStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeDeliveryChannelStatusError {
@@ -4939,16 +4907,14 @@ impl DescribeDeliveryChannelStatusError {
 }
 impl fmt::Display for DescribeDeliveryChannelStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDeliveryChannelStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(ref cause) => cause,
+            DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDeliveryChannelStatusError {}
 /// Errors returned by DescribeDeliveryChannels
 #[derive(Debug, PartialEq)]
 pub enum DescribeDeliveryChannelsError {
@@ -4974,16 +4940,14 @@ impl DescribeDeliveryChannelsError {
 }
 impl fmt::Display for DescribeDeliveryChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDeliveryChannelsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDeliveryChannelsError::NoSuchDeliveryChannel(ref cause) => cause,
+            DescribeDeliveryChannelsError::NoSuchDeliveryChannel(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDeliveryChannelsError {}
 /// Errors returned by DescribeOrganizationConfigRuleStatuses
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrganizationConfigRuleStatusesError {
@@ -5036,23 +5000,23 @@ impl DescribeOrganizationConfigRuleStatusesError {
 }
 impl fmt::Display for DescribeOrganizationConfigRuleStatusesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrganizationConfigRuleStatusesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOrganizationConfigRuleStatusesError::InvalidLimit(ref cause) => cause,
-            DescribeOrganizationConfigRuleStatusesError::InvalidNextToken(ref cause) => cause,
+            DescribeOrganizationConfigRuleStatusesError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConfigRuleStatusesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeOrganizationConfigRuleStatusesError::NoSuchOrganizationConfigRule(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             DescribeOrganizationConfigRuleStatusesError::OrganizationAccessDenied(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeOrganizationConfigRuleStatusesError {}
 /// Errors returned by DescribeOrganizationConfigRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrganizationConfigRulesError {
@@ -5101,19 +5065,21 @@ impl DescribeOrganizationConfigRulesError {
 }
 impl fmt::Display for DescribeOrganizationConfigRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrganizationConfigRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOrganizationConfigRulesError::InvalidLimit(ref cause) => cause,
-            DescribeOrganizationConfigRulesError::InvalidNextToken(ref cause) => cause,
-            DescribeOrganizationConfigRulesError::NoSuchOrganizationConfigRule(ref cause) => cause,
-            DescribeOrganizationConfigRulesError::OrganizationAccessDenied(ref cause) => cause,
+            DescribeOrganizationConfigRulesError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            DescribeOrganizationConfigRulesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConfigRulesError::NoSuchOrganizationConfigRule(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConfigRulesError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeOrganizationConfigRulesError {}
 /// Errors returned by DescribeOrganizationConformancePackStatuses
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrganizationConformancePackStatusesError {
@@ -5146,23 +5112,23 @@ _ => {}
 }
 impl fmt::Display for DescribeOrganizationConformancePackStatusesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrganizationConformancePackStatusesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOrganizationConformancePackStatusesError::InvalidLimit(ref cause) => cause,
-            DescribeOrganizationConformancePackStatusesError::InvalidNextToken(ref cause) => cause,
+            DescribeOrganizationConformancePackStatusesError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConformancePackStatusesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeOrganizationConformancePackStatusesError::NoSuchOrganizationConformancePack(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             DescribeOrganizationConformancePackStatusesError::OrganizationAccessDenied(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeOrganizationConformancePackStatusesError {}
 /// Errors returned by DescribeOrganizationConformancePacks
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrganizationConformancePacksError {
@@ -5213,21 +5179,23 @@ impl DescribeOrganizationConformancePacksError {
 }
 impl fmt::Display for DescribeOrganizationConformancePacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrganizationConformancePacksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOrganizationConformancePacksError::InvalidLimit(ref cause) => cause,
-            DescribeOrganizationConformancePacksError::InvalidNextToken(ref cause) => cause,
+            DescribeOrganizationConformancePacksError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationConformancePacksError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeOrganizationConformancePacksError::NoSuchOrganizationConformancePack(
                 ref cause,
-            ) => cause,
-            DescribeOrganizationConformancePacksError::OrganizationAccessDenied(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DescribeOrganizationConformancePacksError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeOrganizationConformancePacksError {}
 /// Errors returned by DescribePendingAggregationRequests
 #[derive(Debug, PartialEq)]
 pub enum DescribePendingAggregationRequestsError {
@@ -5269,18 +5237,20 @@ impl DescribePendingAggregationRequestsError {
 }
 impl fmt::Display for DescribePendingAggregationRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePendingAggregationRequestsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePendingAggregationRequestsError::InvalidLimit(ref cause) => cause,
-            DescribePendingAggregationRequestsError::InvalidNextToken(ref cause) => cause,
-            DescribePendingAggregationRequestsError::InvalidParameterValue(ref cause) => cause,
+            DescribePendingAggregationRequestsError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePendingAggregationRequestsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribePendingAggregationRequestsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribePendingAggregationRequestsError {}
 /// Errors returned by DescribeRemediationConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeRemediationConfigurationsError {}
@@ -5300,14 +5270,10 @@ impl DescribeRemediationConfigurationsError {
 }
 impl fmt::Display for DescribeRemediationConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRemediationConfigurationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeRemediationConfigurationsError {}
 /// Errors returned by DescribeRemediationExceptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeRemediationExceptionsError {
@@ -5342,17 +5308,17 @@ impl DescribeRemediationExceptionsError {
 }
 impl fmt::Display for DescribeRemediationExceptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRemediationExceptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRemediationExceptionsError::InvalidNextToken(ref cause) => cause,
-            DescribeRemediationExceptionsError::InvalidParameterValue(ref cause) => cause,
+            DescribeRemediationExceptionsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRemediationExceptionsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeRemediationExceptionsError {}
 /// Errors returned by DescribeRemediationExecutionStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeRemediationExecutionStatusError {
@@ -5389,19 +5355,17 @@ impl DescribeRemediationExecutionStatusError {
 }
 impl fmt::Display for DescribeRemediationExecutionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRemediationExecutionStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRemediationExecutionStatusError::InvalidNextToken(ref cause) => cause,
+            DescribeRemediationExecutionStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeRemediationExecutionStatusError::NoSuchRemediationConfiguration(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeRemediationExecutionStatusError {}
 /// Errors returned by DescribeRetentionConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeRetentionConfigurationsError {
@@ -5443,18 +5407,20 @@ impl DescribeRetentionConfigurationsError {
 }
 impl fmt::Display for DescribeRetentionConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRetentionConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRetentionConfigurationsError::InvalidNextToken(ref cause) => cause,
-            DescribeRetentionConfigurationsError::InvalidParameterValue(ref cause) => cause,
-            DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(ref cause) => cause,
+            DescribeRetentionConfigurationsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRetentionConfigurationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeRetentionConfigurationsError {}
 /// Errors returned by GetAggregateComplianceDetailsByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum GetAggregateComplianceDetailsByConfigRuleError {
@@ -5496,20 +5462,20 @@ impl GetAggregateComplianceDetailsByConfigRuleError {
 }
 impl fmt::Display for GetAggregateComplianceDetailsByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAggregateComplianceDetailsByConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(ref cause) => cause,
-            GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(ref cause) => cause,
+            GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAggregateComplianceDetailsByConfigRuleError {}
 /// Errors returned by GetAggregateConfigRuleComplianceSummary
 #[derive(Debug, PartialEq)]
 pub enum GetAggregateConfigRuleComplianceSummaryError {
@@ -5553,20 +5519,20 @@ impl GetAggregateConfigRuleComplianceSummaryError {
 }
 impl fmt::Display for GetAggregateConfigRuleComplianceSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAggregateConfigRuleComplianceSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(ref cause) => cause,
-            GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(ref cause) => cause,
+            GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAggregateConfigRuleComplianceSummaryError {}
 /// Errors returned by GetAggregateDiscoveredResourceCounts
 #[derive(Debug, PartialEq)]
 pub enum GetAggregateDiscoveredResourceCountsError {
@@ -5610,20 +5576,20 @@ impl GetAggregateDiscoveredResourceCountsError {
 }
 impl fmt::Display for GetAggregateDiscoveredResourceCountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAggregateDiscoveredResourceCountsError {
-    fn description(&self) -> &str {
         match *self {
-            GetAggregateDiscoveredResourceCountsError::InvalidLimit(ref cause) => cause,
-            GetAggregateDiscoveredResourceCountsError::InvalidNextToken(ref cause) => cause,
+            GetAggregateDiscoveredResourceCountsError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateDiscoveredResourceCountsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetAggregateDiscoveredResourceCountsError::NoSuchConfigurationAggregator(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetAggregateDiscoveredResourceCountsError {}
 /// Errors returned by GetAggregateResourceConfig
 #[derive(Debug, PartialEq)]
 pub enum GetAggregateResourceConfigError {
@@ -5665,18 +5631,20 @@ impl GetAggregateResourceConfigError {
 }
 impl fmt::Display for GetAggregateResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAggregateResourceConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => cause,
-            GetAggregateResourceConfigError::OversizedConfigurationItem(ref cause) => cause,
-            GetAggregateResourceConfigError::ResourceNotDiscovered(ref cause) => cause,
+            GetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateResourceConfigError::OversizedConfigurationItem(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateResourceConfigError::ResourceNotDiscovered(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetAggregateResourceConfigError {}
 /// Errors returned by GetComplianceDetailsByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceDetailsByConfigRuleError {
@@ -5718,18 +5686,20 @@ impl GetComplianceDetailsByConfigRuleError {
 }
 impl fmt::Display for GetComplianceDetailsByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetComplianceDetailsByConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            GetComplianceDetailsByConfigRuleError::InvalidNextToken(ref cause) => cause,
-            GetComplianceDetailsByConfigRuleError::InvalidParameterValue(ref cause) => cause,
-            GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(ref cause) => cause,
+            GetComplianceDetailsByConfigRuleError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetComplianceDetailsByConfigRuleError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetComplianceDetailsByConfigRuleError {}
 /// Errors returned by GetComplianceDetailsByResource
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceDetailsByResourceError {
@@ -5757,16 +5727,14 @@ impl GetComplianceDetailsByResourceError {
 }
 impl fmt::Display for GetComplianceDetailsByResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetComplianceDetailsByResourceError {
-    fn description(&self) -> &str {
         match *self {
-            GetComplianceDetailsByResourceError::InvalidParameterValue(ref cause) => cause,
+            GetComplianceDetailsByResourceError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetComplianceDetailsByResourceError {}
 /// Errors returned by GetComplianceSummaryByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceSummaryByConfigRuleError {}
@@ -5786,14 +5754,10 @@ impl GetComplianceSummaryByConfigRuleError {
 }
 impl fmt::Display for GetComplianceSummaryByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetComplianceSummaryByConfigRuleError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetComplianceSummaryByConfigRuleError {}
 /// Errors returned by GetComplianceSummaryByResourceType
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceSummaryByResourceTypeError {
@@ -5821,16 +5785,14 @@ impl GetComplianceSummaryByResourceTypeError {
 }
 impl fmt::Display for GetComplianceSummaryByResourceTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetComplianceSummaryByResourceTypeError {
-    fn description(&self) -> &str {
         match *self {
-            GetComplianceSummaryByResourceTypeError::InvalidParameterValue(ref cause) => cause,
+            GetComplianceSummaryByResourceTypeError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetComplianceSummaryByResourceTypeError {}
 /// Errors returned by GetConformancePackComplianceDetails
 #[derive(Debug, PartialEq)]
 pub enum GetConformancePackComplianceDetailsError {
@@ -5888,22 +5850,26 @@ impl GetConformancePackComplianceDetailsError {
 }
 impl fmt::Display for GetConformancePackComplianceDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConformancePackComplianceDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetConformancePackComplianceDetailsError::InvalidLimit(ref cause) => cause,
-            GetConformancePackComplianceDetailsError::InvalidNextToken(ref cause) => cause,
-            GetConformancePackComplianceDetailsError::InvalidParameterValue(ref cause) => cause,
+            GetConformancePackComplianceDetailsError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetConformancePackComplianceDetailsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetConformancePackComplianceDetailsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetConformancePackComplianceDetailsError::NoSuchConfigRuleInConformancePack(
                 ref cause,
-            ) => cause,
-            GetConformancePackComplianceDetailsError::NoSuchConformancePack(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            GetConformancePackComplianceDetailsError::NoSuchConformancePack(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetConformancePackComplianceDetailsError {}
 /// Errors returned by GetConformancePackComplianceSummary
 #[derive(Debug, PartialEq)]
 pub enum GetConformancePackComplianceSummaryError {
@@ -5945,18 +5911,20 @@ impl GetConformancePackComplianceSummaryError {
 }
 impl fmt::Display for GetConformancePackComplianceSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConformancePackComplianceSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetConformancePackComplianceSummaryError::InvalidLimit(ref cause) => cause,
-            GetConformancePackComplianceSummaryError::InvalidNextToken(ref cause) => cause,
-            GetConformancePackComplianceSummaryError::NoSuchConformancePack(ref cause) => cause,
+            GetConformancePackComplianceSummaryError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetConformancePackComplianceSummaryError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetConformancePackComplianceSummaryError::NoSuchConformancePack(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetConformancePackComplianceSummaryError {}
 /// Errors returned by GetDiscoveredResourceCounts
 #[derive(Debug, PartialEq)]
 pub enum GetDiscoveredResourceCountsError {
@@ -5991,17 +5959,13 @@ impl GetDiscoveredResourceCountsError {
 }
 impl fmt::Display for GetDiscoveredResourceCountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDiscoveredResourceCountsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDiscoveredResourceCountsError::InvalidLimit(ref cause) => cause,
-            GetDiscoveredResourceCountsError::InvalidNextToken(ref cause) => cause,
+            GetDiscoveredResourceCountsError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            GetDiscoveredResourceCountsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDiscoveredResourceCountsError {}
 /// Errors returned by GetOrganizationConfigRuleDetailedStatus
 #[derive(Debug, PartialEq)]
 pub enum GetOrganizationConfigRuleDetailedStatusError {
@@ -6054,23 +6018,23 @@ impl GetOrganizationConfigRuleDetailedStatusError {
 }
 impl fmt::Display for GetOrganizationConfigRuleDetailedStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOrganizationConfigRuleDetailedStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetOrganizationConfigRuleDetailedStatusError::InvalidLimit(ref cause) => cause,
-            GetOrganizationConfigRuleDetailedStatusError::InvalidNextToken(ref cause) => cause,
+            GetOrganizationConfigRuleDetailedStatusError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetOrganizationConfigRuleDetailedStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetOrganizationConfigRuleDetailedStatusError::NoSuchOrganizationConfigRule(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             GetOrganizationConfigRuleDetailedStatusError::OrganizationAccessDenied(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetOrganizationConfigRuleDetailedStatusError {}
 /// Errors returned by GetOrganizationConformancePackDetailedStatus
 #[derive(Debug, PartialEq)]
 pub enum GetOrganizationConformancePackDetailedStatusError {
@@ -6103,19 +6067,15 @@ _ => {}
 }
 impl fmt::Display for GetOrganizationConformancePackDetailedStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOrganizationConformancePackDetailedStatusError {
-    fn description(&self) -> &str {
         match *self {
-                            GetOrganizationConformancePackDetailedStatusError::InvalidLimit(ref cause) => cause,
-GetOrganizationConformancePackDetailedStatusError::InvalidNextToken(ref cause) => cause,
-GetOrganizationConformancePackDetailedStatusError::NoSuchOrganizationConformancePack(ref cause) => cause,
-GetOrganizationConformancePackDetailedStatusError::OrganizationAccessDenied(ref cause) => cause
+                            GetOrganizationConformancePackDetailedStatusError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+GetOrganizationConformancePackDetailedStatusError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+GetOrganizationConformancePackDetailedStatusError::NoSuchOrganizationConformancePack(ref cause) => write!(f, "{}", cause),
+GetOrganizationConformancePackDetailedStatusError::OrganizationAccessDenied(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for GetOrganizationConformancePackDetailedStatusError {}
 /// Errors returned by GetResourceConfigHistory
 #[derive(Debug, PartialEq)]
 pub enum GetResourceConfigHistoryError {
@@ -6169,20 +6129,20 @@ impl GetResourceConfigHistoryError {
 }
 impl fmt::Display for GetResourceConfigHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourceConfigHistoryError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourceConfigHistoryError::InvalidLimit(ref cause) => cause,
-            GetResourceConfigHistoryError::InvalidNextToken(ref cause) => cause,
-            GetResourceConfigHistoryError::InvalidTimeRange(ref cause) => cause,
-            GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(ref cause) => cause,
-            GetResourceConfigHistoryError::ResourceNotDiscovered(ref cause) => cause,
+            GetResourceConfigHistoryError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            GetResourceConfigHistoryError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetResourceConfigHistoryError::InvalidTimeRange(ref cause) => write!(f, "{}", cause),
+            GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetResourceConfigHistoryError::ResourceNotDiscovered(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetResourceConfigHistoryError {}
 /// Errors returned by ListAggregateDiscoveredResources
 #[derive(Debug, PartialEq)]
 pub enum ListAggregateDiscoveredResourcesError {
@@ -6226,20 +6186,20 @@ impl ListAggregateDiscoveredResourcesError {
 }
 impl fmt::Display for ListAggregateDiscoveredResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAggregateDiscoveredResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAggregateDiscoveredResourcesError::InvalidLimit(ref cause) => cause,
-            ListAggregateDiscoveredResourcesError::InvalidNextToken(ref cause) => cause,
+            ListAggregateDiscoveredResourcesError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAggregateDiscoveredResourcesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ListAggregateDiscoveredResourcesError::NoSuchConfigurationAggregator(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ListAggregateDiscoveredResourcesError {}
 /// Errors returned by ListDiscoveredResources
 #[derive(Debug, PartialEq)]
 pub enum ListDiscoveredResourcesError {
@@ -6279,18 +6239,16 @@ impl ListDiscoveredResourcesError {
 }
 impl fmt::Display for ListDiscoveredResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDiscoveredResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDiscoveredResourcesError::InvalidLimit(ref cause) => cause,
-            ListDiscoveredResourcesError::InvalidNextToken(ref cause) => cause,
-            ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(ref cause) => cause,
+            ListDiscoveredResourcesError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListDiscoveredResourcesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -6328,18 +6286,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InvalidLimit(ref cause) => cause,
-            ListTagsForResourceError::InvalidNextToken(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutAggregationAuthorization
 #[derive(Debug, PartialEq)]
 pub enum PutAggregationAuthorizationError {
@@ -6367,16 +6321,14 @@ impl PutAggregationAuthorizationError {
 }
 impl fmt::Display for PutAggregationAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAggregationAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            PutAggregationAuthorizationError::InvalidParameterValue(ref cause) => cause,
+            PutAggregationAuthorizationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutAggregationAuthorizationError {}
 /// Errors returned by PutConfigRule
 #[derive(Debug, PartialEq)]
 pub enum PutConfigRuleError {
@@ -6426,20 +6378,18 @@ impl PutConfigRuleError {
 }
 impl fmt::Display for PutConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            PutConfigRuleError::InsufficientPermissions(ref cause) => cause,
-            PutConfigRuleError::InvalidParameterValue(ref cause) => cause,
-            PutConfigRuleError::MaxNumberOfConfigRulesExceeded(ref cause) => cause,
-            PutConfigRuleError::NoAvailableConfigurationRecorder(ref cause) => cause,
-            PutConfigRuleError::ResourceInUse(ref cause) => cause,
+            PutConfigRuleError::InsufficientPermissions(ref cause) => write!(f, "{}", cause),
+            PutConfigRuleError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutConfigRuleError::MaxNumberOfConfigRulesExceeded(ref cause) => write!(f, "{}", cause),
+            PutConfigRuleError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigRuleError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutConfigRuleError {}
 /// Errors returned by PutConfigurationAggregator
 #[derive(Debug, PartialEq)]
 pub enum PutConfigurationAggregatorError {
@@ -6502,21 +6452,25 @@ impl PutConfigurationAggregatorError {
 }
 impl fmt::Display for PutConfigurationAggregatorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutConfigurationAggregatorError {
-    fn description(&self) -> &str {
         match *self {
-            PutConfigurationAggregatorError::InvalidParameterValue(ref cause) => cause,
-            PutConfigurationAggregatorError::InvalidRole(ref cause) => cause,
-            PutConfigurationAggregatorError::LimitExceeded(ref cause) => cause,
-            PutConfigurationAggregatorError::NoAvailableOrganization(ref cause) => cause,
-            PutConfigurationAggregatorError::OrganizationAccessDenied(ref cause) => cause,
-            PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(ref cause) => cause,
+            PutConfigurationAggregatorError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigurationAggregatorError::InvalidRole(ref cause) => write!(f, "{}", cause),
+            PutConfigurationAggregatorError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutConfigurationAggregatorError::NoAvailableOrganization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigurationAggregatorError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutConfigurationAggregatorError {}
 /// Errors returned by PutConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum PutConfigurationRecorderError {
@@ -6565,21 +6519,21 @@ impl PutConfigurationRecorderError {
 }
 impl fmt::Display for PutConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutConfigurationRecorderError {
-    fn description(&self) -> &str {
         match *self {
-            PutConfigurationRecorderError::InvalidConfigurationRecorderName(ref cause) => cause,
-            PutConfigurationRecorderError::InvalidRecordingGroup(ref cause) => cause,
-            PutConfigurationRecorderError::InvalidRole(ref cause) => cause,
+            PutConfigurationRecorderError::InvalidConfigurationRecorderName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigurationRecorderError::InvalidRecordingGroup(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConfigurationRecorderError::InvalidRole(ref cause) => write!(f, "{}", cause),
             PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for PutConfigurationRecorderError {}
 /// Errors returned by PutConformancePack
 #[derive(Debug, PartialEq)]
 pub enum PutConformancePackError {
@@ -6631,20 +6585,20 @@ impl PutConformancePackError {
 }
 impl fmt::Display for PutConformancePackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutConformancePackError {
-    fn description(&self) -> &str {
         match *self {
-            PutConformancePackError::ConformancePackTemplateValidation(ref cause) => cause,
-            PutConformancePackError::InsufficientPermissions(ref cause) => cause,
-            PutConformancePackError::InvalidParameterValue(ref cause) => cause,
-            PutConformancePackError::MaxNumberOfConformancePacksExceeded(ref cause) => cause,
-            PutConformancePackError::ResourceInUse(ref cause) => cause,
+            PutConformancePackError::ConformancePackTemplateValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConformancePackError::InsufficientPermissions(ref cause) => write!(f, "{}", cause),
+            PutConformancePackError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutConformancePackError::MaxNumberOfConformancePacksExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutConformancePackError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutConformancePackError {}
 /// Errors returned by PutDeliveryChannel
 #[derive(Debug, PartialEq)]
 pub enum PutDeliveryChannelError {
@@ -6710,22 +6664,26 @@ impl PutDeliveryChannelError {
 }
 impl fmt::Display for PutDeliveryChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutDeliveryChannelError {
-    fn description(&self) -> &str {
         match *self {
-            PutDeliveryChannelError::InsufficientDeliveryPolicy(ref cause) => cause,
-            PutDeliveryChannelError::InvalidDeliveryChannelName(ref cause) => cause,
-            PutDeliveryChannelError::InvalidS3KeyPrefix(ref cause) => cause,
-            PutDeliveryChannelError::InvalidSNSTopicARN(ref cause) => cause,
-            PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(ref cause) => cause,
-            PutDeliveryChannelError::NoAvailableConfigurationRecorder(ref cause) => cause,
-            PutDeliveryChannelError::NoSuchBucket(ref cause) => cause,
+            PutDeliveryChannelError::InsufficientDeliveryPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutDeliveryChannelError::InvalidDeliveryChannelName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutDeliveryChannelError::InvalidS3KeyPrefix(ref cause) => write!(f, "{}", cause),
+            PutDeliveryChannelError::InvalidSNSTopicARN(ref cause) => write!(f, "{}", cause),
+            PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutDeliveryChannelError::NoAvailableConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutDeliveryChannelError::NoSuchBucket(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutDeliveryChannelError {}
 /// Errors returned by PutEvaluations
 #[derive(Debug, PartialEq)]
 pub enum PutEvaluationsError {
@@ -6761,18 +6719,14 @@ impl PutEvaluationsError {
 }
 impl fmt::Display for PutEvaluationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutEvaluationsError {
-    fn description(&self) -> &str {
         match *self {
-            PutEvaluationsError::InvalidParameterValue(ref cause) => cause,
-            PutEvaluationsError::InvalidResultToken(ref cause) => cause,
-            PutEvaluationsError::NoSuchConfigRule(ref cause) => cause,
+            PutEvaluationsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutEvaluationsError::InvalidResultToken(ref cause) => write!(f, "{}", cause),
+            PutEvaluationsError::NoSuchConfigRule(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutEvaluationsError {}
 /// Errors returned by PutOrganizationConfigRule
 #[derive(Debug, PartialEq)]
 pub enum PutOrganizationConfigRuleError {
@@ -6842,24 +6796,30 @@ impl PutOrganizationConfigRuleError {
 }
 impl fmt::Display for PutOrganizationConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutOrganizationConfigRuleError {
-    fn description(&self) -> &str {
         match *self {
-            PutOrganizationConfigRuleError::InsufficientPermissions(ref cause) => cause,
-            PutOrganizationConfigRuleError::InvalidParameterValue(ref cause) => cause,
+            PutOrganizationConfigRuleError::InsufficientPermissions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutOrganizationConfigRuleError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             PutOrganizationConfigRuleError::MaxNumberOfOrganizationConfigRulesExceeded(
                 ref cause,
-            ) => cause,
-            PutOrganizationConfigRuleError::NoAvailableOrganization(ref cause) => cause,
-            PutOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => cause,
-            PutOrganizationConfigRuleError::OrganizationAllFeaturesNotEnabled(ref cause) => cause,
-            PutOrganizationConfigRuleError::ResourceInUse(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            PutOrganizationConfigRuleError::NoAvailableOrganization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutOrganizationConfigRuleError::OrganizationAllFeaturesNotEnabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutOrganizationConfigRuleError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutOrganizationConfigRuleError {}
 /// Errors returned by PutOrganizationConformancePack
 #[derive(Debug, PartialEq)]
 pub enum PutOrganizationConformancePackError {
@@ -6901,22 +6861,18 @@ _ => {}
 }
 impl fmt::Display for PutOrganizationConformancePackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutOrganizationConformancePackError {
-    fn description(&self) -> &str {
         match *self {
-                            PutOrganizationConformancePackError::InsufficientPermissions(ref cause) => cause,
-PutOrganizationConformancePackError::MaxNumberOfOrganizationConformancePacksExceeded(ref cause) => cause,
-PutOrganizationConformancePackError::NoAvailableOrganization(ref cause) => cause,
-PutOrganizationConformancePackError::OrganizationAccessDenied(ref cause) => cause,
-PutOrganizationConformancePackError::OrganizationAllFeaturesNotEnabled(ref cause) => cause,
-PutOrganizationConformancePackError::OrganizationConformancePackTemplateValidation(ref cause) => cause,
-PutOrganizationConformancePackError::ResourceInUse(ref cause) => cause
+                            PutOrganizationConformancePackError::InsufficientPermissions(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::MaxNumberOfOrganizationConformancePacksExceeded(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::NoAvailableOrganization(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::OrganizationAccessDenied(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::OrganizationAllFeaturesNotEnabled(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::OrganizationConformancePackTemplateValidation(ref cause) => write!(f, "{}", cause),
+PutOrganizationConformancePackError::ResourceInUse(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for PutOrganizationConformancePackError {}
 /// Errors returned by PutRemediationConfigurations
 #[derive(Debug, PartialEq)]
 pub enum PutRemediationConfigurationsError {
@@ -6951,17 +6907,17 @@ impl PutRemediationConfigurationsError {
 }
 impl fmt::Display for PutRemediationConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRemediationConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            PutRemediationConfigurationsError::InsufficientPermissions(ref cause) => cause,
-            PutRemediationConfigurationsError::InvalidParameterValue(ref cause) => cause,
+            PutRemediationConfigurationsError::InsufficientPermissions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRemediationConfigurationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutRemediationConfigurationsError {}
 /// Errors returned by PutRemediationExceptions
 #[derive(Debug, PartialEq)]
 pub enum PutRemediationExceptionsError {
@@ -6987,16 +6943,14 @@ impl PutRemediationExceptionsError {
 }
 impl fmt::Display for PutRemediationExceptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRemediationExceptionsError {
-    fn description(&self) -> &str {
         match *self {
-            PutRemediationExceptionsError::InvalidParameterValue(ref cause) => cause,
+            PutRemediationExceptionsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutRemediationExceptionsError {}
 /// Errors returned by PutResourceConfig
 #[derive(Debug, PartialEq)]
 pub enum PutResourceConfigError {
@@ -7036,18 +6990,16 @@ impl PutResourceConfigError {
 }
 impl fmt::Display for PutResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutResourceConfigError {
-    fn description(&self) -> &str {
         match *self {
-            PutResourceConfigError::InsufficientPermissions(ref cause) => cause,
-            PutResourceConfigError::MaxActiveResourcesExceeded(ref cause) => cause,
-            PutResourceConfigError::NoRunningConfigurationRecorder(ref cause) => cause,
+            PutResourceConfigError::InsufficientPermissions(ref cause) => write!(f, "{}", cause),
+            PutResourceConfigError::MaxActiveResourcesExceeded(ref cause) => write!(f, "{}", cause),
+            PutResourceConfigError::NoRunningConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutResourceConfigError {}
 /// Errors returned by PutRetentionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutRetentionConfigurationError {
@@ -7082,19 +7034,17 @@ impl PutRetentionConfigurationError {
 }
 impl fmt::Display for PutRetentionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRetentionConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutRetentionConfigurationError::InvalidParameterValue(ref cause) => cause,
+            PutRetentionConfigurationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
             PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutRetentionConfigurationError {}
 /// Errors returned by SelectResourceConfig
 #[derive(Debug, PartialEq)]
 pub enum SelectResourceConfigError {
@@ -7132,18 +7082,14 @@ impl SelectResourceConfigError {
 }
 impl fmt::Display for SelectResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SelectResourceConfigError {
-    fn description(&self) -> &str {
         match *self {
-            SelectResourceConfigError::InvalidExpression(ref cause) => cause,
-            SelectResourceConfigError::InvalidLimit(ref cause) => cause,
-            SelectResourceConfigError::InvalidNextToken(ref cause) => cause,
+            SelectResourceConfigError::InvalidExpression(ref cause) => write!(f, "{}", cause),
+            SelectResourceConfigError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            SelectResourceConfigError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SelectResourceConfigError {}
 /// Errors returned by StartConfigRulesEvaluation
 #[derive(Debug, PartialEq)]
 pub enum StartConfigRulesEvaluationError {
@@ -7192,19 +7138,17 @@ impl StartConfigRulesEvaluationError {
 }
 impl fmt::Display for StartConfigRulesEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartConfigRulesEvaluationError {
-    fn description(&self) -> &str {
         match *self {
-            StartConfigRulesEvaluationError::InvalidParameterValue(ref cause) => cause,
-            StartConfigRulesEvaluationError::LimitExceeded(ref cause) => cause,
-            StartConfigRulesEvaluationError::NoSuchConfigRule(ref cause) => cause,
-            StartConfigRulesEvaluationError::ResourceInUse(ref cause) => cause,
+            StartConfigRulesEvaluationError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartConfigRulesEvaluationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartConfigRulesEvaluationError::NoSuchConfigRule(ref cause) => write!(f, "{}", cause),
+            StartConfigRulesEvaluationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartConfigRulesEvaluationError {}
 /// Errors returned by StartConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum StartConfigurationRecorderError {
@@ -7239,17 +7183,17 @@ impl StartConfigurationRecorderError {
 }
 impl fmt::Display for StartConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartConfigurationRecorderError {
-    fn description(&self) -> &str {
         match *self {
-            StartConfigurationRecorderError::NoAvailableDeliveryChannel(ref cause) => cause,
-            StartConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => cause,
+            StartConfigurationRecorderError::NoAvailableDeliveryChannel(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartConfigurationRecorderError {}
 /// Errors returned by StartRemediationExecution
 #[derive(Debug, PartialEq)]
 pub enum StartRemediationExecutionError {
@@ -7289,18 +7233,20 @@ impl StartRemediationExecutionError {
 }
 impl fmt::Display for StartRemediationExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartRemediationExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StartRemediationExecutionError::InsufficientPermissions(ref cause) => cause,
-            StartRemediationExecutionError::InvalidParameterValue(ref cause) => cause,
-            StartRemediationExecutionError::NoSuchRemediationConfiguration(ref cause) => cause,
+            StartRemediationExecutionError::InsufficientPermissions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartRemediationExecutionError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartRemediationExecutionError::NoSuchRemediationConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartRemediationExecutionError {}
 /// Errors returned by StopConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum StopConfigurationRecorderError {
@@ -7326,16 +7272,14 @@ impl StopConfigurationRecorderError {
 }
 impl fmt::Display for StopConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopConfigurationRecorderError {
-    fn description(&self) -> &str {
         match *self {
-            StopConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => cause,
+            StopConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StopConfigurationRecorderError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -7364,17 +7308,13 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -7398,16 +7338,12 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Config Service API. Config Service clients implement this trait.
 pub trait ConfigService {
     /// <p><p>Returns the current configuration items for resources that are present in your AWS Config aggregator. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty <code>unprocessedResourceIdentifiers</code> list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return tags and relationships.</p> </li> </ul> </note></p>

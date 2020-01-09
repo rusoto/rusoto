@@ -757,20 +757,18 @@ impl AddAttachmentsToSetError {
 }
 impl fmt::Display for AddAttachmentsToSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddAttachmentsToSetError {
-    fn description(&self) -> &str {
         match *self {
-            AddAttachmentsToSetError::AttachmentLimitExceeded(ref cause) => cause,
-            AddAttachmentsToSetError::AttachmentSetExpired(ref cause) => cause,
-            AddAttachmentsToSetError::AttachmentSetIdNotFound(ref cause) => cause,
-            AddAttachmentsToSetError::AttachmentSetSizeLimitExceeded(ref cause) => cause,
-            AddAttachmentsToSetError::InternalServerError(ref cause) => cause,
+            AddAttachmentsToSetError::AttachmentLimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddAttachmentsToSetError::AttachmentSetExpired(ref cause) => write!(f, "{}", cause),
+            AddAttachmentsToSetError::AttachmentSetIdNotFound(ref cause) => write!(f, "{}", cause),
+            AddAttachmentsToSetError::AttachmentSetSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddAttachmentsToSetError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddAttachmentsToSetError {}
 /// Errors returned by AddCommunicationToCase
 #[derive(Debug, PartialEq)]
 pub enum AddCommunicationToCaseError {
@@ -817,19 +815,17 @@ impl AddCommunicationToCaseError {
 }
 impl fmt::Display for AddCommunicationToCaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddCommunicationToCaseError {
-    fn description(&self) -> &str {
         match *self {
-            AddCommunicationToCaseError::AttachmentSetExpired(ref cause) => cause,
-            AddCommunicationToCaseError::AttachmentSetIdNotFound(ref cause) => cause,
-            AddCommunicationToCaseError::CaseIdNotFound(ref cause) => cause,
-            AddCommunicationToCaseError::InternalServerError(ref cause) => cause,
+            AddCommunicationToCaseError::AttachmentSetExpired(ref cause) => write!(f, "{}", cause),
+            AddCommunicationToCaseError::AttachmentSetIdNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddCommunicationToCaseError::CaseIdNotFound(ref cause) => write!(f, "{}", cause),
+            AddCommunicationToCaseError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddCommunicationToCaseError {}
 /// Errors returned by CreateCase
 #[derive(Debug, PartialEq)]
 pub enum CreateCaseError {
@@ -870,19 +866,15 @@ impl CreateCaseError {
 }
 impl fmt::Display for CreateCaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCaseError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCaseError::AttachmentSetExpired(ref cause) => cause,
-            CreateCaseError::AttachmentSetIdNotFound(ref cause) => cause,
-            CreateCaseError::CaseCreationLimitExceeded(ref cause) => cause,
-            CreateCaseError::InternalServerError(ref cause) => cause,
+            CreateCaseError::AttachmentSetExpired(ref cause) => write!(f, "{}", cause),
+            CreateCaseError::AttachmentSetIdNotFound(ref cause) => write!(f, "{}", cause),
+            CreateCaseError::CaseCreationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateCaseError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCaseError {}
 /// Errors returned by DescribeAttachment
 #[derive(Debug, PartialEq)]
 pub enum DescribeAttachmentError {
@@ -922,18 +914,16 @@ impl DescribeAttachmentError {
 }
 impl fmt::Display for DescribeAttachmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAttachmentError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAttachmentError::AttachmentIdNotFound(ref cause) => cause,
-            DescribeAttachmentError::DescribeAttachmentLimitExceeded(ref cause) => cause,
-            DescribeAttachmentError::InternalServerError(ref cause) => cause,
+            DescribeAttachmentError::AttachmentIdNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAttachmentError::DescribeAttachmentLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAttachmentError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAttachmentError {}
 /// Errors returned by DescribeCases
 #[derive(Debug, PartialEq)]
 pub enum DescribeCasesError {
@@ -962,17 +952,13 @@ impl DescribeCasesError {
 }
 impl fmt::Display for DescribeCasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCasesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCasesError::CaseIdNotFound(ref cause) => cause,
-            DescribeCasesError::InternalServerError(ref cause) => cause,
+            DescribeCasesError::CaseIdNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeCasesError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCasesError {}
 /// Errors returned by DescribeCommunications
 #[derive(Debug, PartialEq)]
 pub enum DescribeCommunicationsError {
@@ -1005,17 +991,13 @@ impl DescribeCommunicationsError {
 }
 impl fmt::Display for DescribeCommunicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCommunicationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCommunicationsError::CaseIdNotFound(ref cause) => cause,
-            DescribeCommunicationsError::InternalServerError(ref cause) => cause,
+            DescribeCommunicationsError::CaseIdNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeCommunicationsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCommunicationsError {}
 /// Errors returned by DescribeServices
 #[derive(Debug, PartialEq)]
 pub enum DescribeServicesError {
@@ -1041,16 +1023,12 @@ impl DescribeServicesError {
 }
 impl fmt::Display for DescribeServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeServicesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeServicesError::InternalServerError(ref cause) => cause,
+            DescribeServicesError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeServicesError {}
 /// Errors returned by DescribeSeverityLevels
 #[derive(Debug, PartialEq)]
 pub enum DescribeSeverityLevelsError {
@@ -1076,16 +1054,12 @@ impl DescribeSeverityLevelsError {
 }
 impl fmt::Display for DescribeSeverityLevelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSeverityLevelsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSeverityLevelsError::InternalServerError(ref cause) => cause,
+            DescribeSeverityLevelsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSeverityLevelsError {}
 /// Errors returned by DescribeTrustedAdvisorCheckRefreshStatuses
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrustedAdvisorCheckRefreshStatusesError {
@@ -1115,18 +1089,14 @@ impl DescribeTrustedAdvisorCheckRefreshStatusesError {
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckRefreshStatusesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrustedAdvisorCheckRefreshStatusesError {
-    fn description(&self) -> &str {
         match *self {
             DescribeTrustedAdvisorCheckRefreshStatusesError::InternalServerError(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DescribeTrustedAdvisorCheckRefreshStatusesError {}
 /// Errors returned by DescribeTrustedAdvisorCheckResult
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrustedAdvisorCheckResultError {
@@ -1154,16 +1124,14 @@ impl DescribeTrustedAdvisorCheckResultError {
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrustedAdvisorCheckResultError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTrustedAdvisorCheckResultError::InternalServerError(ref cause) => cause,
+            DescribeTrustedAdvisorCheckResultError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTrustedAdvisorCheckResultError {}
 /// Errors returned by DescribeTrustedAdvisorCheckSummaries
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrustedAdvisorCheckSummariesError {
@@ -1191,16 +1159,14 @@ impl DescribeTrustedAdvisorCheckSummariesError {
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckSummariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrustedAdvisorCheckSummariesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTrustedAdvisorCheckSummariesError::InternalServerError(ref cause) => cause,
+            DescribeTrustedAdvisorCheckSummariesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTrustedAdvisorCheckSummariesError {}
 /// Errors returned by DescribeTrustedAdvisorChecks
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrustedAdvisorChecksError {
@@ -1228,16 +1194,14 @@ impl DescribeTrustedAdvisorChecksError {
 }
 impl fmt::Display for DescribeTrustedAdvisorChecksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrustedAdvisorChecksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTrustedAdvisorChecksError::InternalServerError(ref cause) => cause,
+            DescribeTrustedAdvisorChecksError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTrustedAdvisorChecksError {}
 /// Errors returned by RefreshTrustedAdvisorCheck
 #[derive(Debug, PartialEq)]
 pub enum RefreshTrustedAdvisorCheckError {
@@ -1265,16 +1229,14 @@ impl RefreshTrustedAdvisorCheckError {
 }
 impl fmt::Display for RefreshTrustedAdvisorCheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RefreshTrustedAdvisorCheckError {
-    fn description(&self) -> &str {
         match *self {
-            RefreshTrustedAdvisorCheckError::InternalServerError(ref cause) => cause,
+            RefreshTrustedAdvisorCheckError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RefreshTrustedAdvisorCheckError {}
 /// Errors returned by ResolveCase
 #[derive(Debug, PartialEq)]
 pub enum ResolveCaseError {
@@ -1303,17 +1265,13 @@ impl ResolveCaseError {
 }
 impl fmt::Display for ResolveCaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResolveCaseError {
-    fn description(&self) -> &str {
         match *self {
-            ResolveCaseError::CaseIdNotFound(ref cause) => cause,
-            ResolveCaseError::InternalServerError(ref cause) => cause,
+            ResolveCaseError::CaseIdNotFound(ref cause) => write!(f, "{}", cause),
+            ResolveCaseError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResolveCaseError {}
 /// Trait representing the capabilities of the AWS Support API. AWS Support clients implement this trait.
 pub trait AWSSupport {
     /// <p>Adds one or more attachments to an attachment set. If an <code>attachmentSetId</code> is not specified, a new attachment set is created, and the ID of the set is returned in the response. If an <code>attachmentSetId</code> is specified, the attachments are added to the specified set, if it exists.</p> <p>An attachment set is a temporary container for attachments that are to be added to a case or case communication. The set is available for one hour after it is created; the <code>expiryTime</code> returned in the response indicates when the set expires. The maximum number of attachments in a set is 3, and the maximum size of any attachment in the set is 5 MB.</p>

@@ -900,17 +900,13 @@ impl CheckDomainAvailabilityError {
 }
 impl fmt::Display for CheckDomainAvailabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CheckDomainAvailabilityError {
-    fn description(&self) -> &str {
         match *self {
-            CheckDomainAvailabilityError::InvalidInput(ref cause) => cause,
-            CheckDomainAvailabilityError::UnsupportedTLD(ref cause) => cause,
+            CheckDomainAvailabilityError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CheckDomainAvailabilityError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CheckDomainAvailabilityError {}
 /// Errors returned by CheckDomainTransferability
 #[derive(Debug, PartialEq)]
 pub enum CheckDomainTransferabilityError {
@@ -945,17 +941,13 @@ impl CheckDomainTransferabilityError {
 }
 impl fmt::Display for CheckDomainTransferabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CheckDomainTransferabilityError {
-    fn description(&self) -> &str {
         match *self {
-            CheckDomainTransferabilityError::InvalidInput(ref cause) => cause,
-            CheckDomainTransferabilityError::UnsupportedTLD(ref cause) => cause,
+            CheckDomainTransferabilityError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CheckDomainTransferabilityError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CheckDomainTransferabilityError {}
 /// Errors returned by DeleteTagsForDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsForDomainError {
@@ -991,18 +983,14 @@ impl DeleteTagsForDomainError {
 }
 impl fmt::Display for DeleteTagsForDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsForDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsForDomainError::InvalidInput(ref cause) => cause,
-            DeleteTagsForDomainError::OperationLimitExceeded(ref cause) => cause,
-            DeleteTagsForDomainError::UnsupportedTLD(ref cause) => cause,
+            DeleteTagsForDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteTagsForDomainError::OperationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteTagsForDomainError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsForDomainError {}
 /// Errors returned by DisableDomainAutoRenew
 #[derive(Debug, PartialEq)]
 pub enum DisableDomainAutoRenewError {
@@ -1033,17 +1021,13 @@ impl DisableDomainAutoRenewError {
 }
 impl fmt::Display for DisableDomainAutoRenewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableDomainAutoRenewError {
-    fn description(&self) -> &str {
         match *self {
-            DisableDomainAutoRenewError::InvalidInput(ref cause) => cause,
-            DisableDomainAutoRenewError::UnsupportedTLD(ref cause) => cause,
+            DisableDomainAutoRenewError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisableDomainAutoRenewError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableDomainAutoRenewError {}
 /// Errors returned by DisableDomainTransferLock
 #[derive(Debug, PartialEq)]
 pub enum DisableDomainTransferLockError {
@@ -1097,20 +1081,18 @@ impl DisableDomainTransferLockError {
 }
 impl fmt::Display for DisableDomainTransferLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableDomainTransferLockError {
-    fn description(&self) -> &str {
         match *self {
-            DisableDomainTransferLockError::DuplicateRequest(ref cause) => cause,
-            DisableDomainTransferLockError::InvalidInput(ref cause) => cause,
-            DisableDomainTransferLockError::OperationLimitExceeded(ref cause) => cause,
-            DisableDomainTransferLockError::TLDRulesViolation(ref cause) => cause,
-            DisableDomainTransferLockError::UnsupportedTLD(ref cause) => cause,
+            DisableDomainTransferLockError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            DisableDomainTransferLockError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisableDomainTransferLockError::OperationLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableDomainTransferLockError::TLDRulesViolation(ref cause) => write!(f, "{}", cause),
+            DisableDomainTransferLockError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableDomainTransferLockError {}
 /// Errors returned by EnableDomainAutoRenew
 #[derive(Debug, PartialEq)]
 pub enum EnableDomainAutoRenewError {
@@ -1148,18 +1130,14 @@ impl EnableDomainAutoRenewError {
 }
 impl fmt::Display for EnableDomainAutoRenewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableDomainAutoRenewError {
-    fn description(&self) -> &str {
         match *self {
-            EnableDomainAutoRenewError::InvalidInput(ref cause) => cause,
-            EnableDomainAutoRenewError::TLDRulesViolation(ref cause) => cause,
-            EnableDomainAutoRenewError::UnsupportedTLD(ref cause) => cause,
+            EnableDomainAutoRenewError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            EnableDomainAutoRenewError::TLDRulesViolation(ref cause) => write!(f, "{}", cause),
+            EnableDomainAutoRenewError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableDomainAutoRenewError {}
 /// Errors returned by EnableDomainTransferLock
 #[derive(Debug, PartialEq)]
 pub enum EnableDomainTransferLockError {
@@ -1213,20 +1191,18 @@ impl EnableDomainTransferLockError {
 }
 impl fmt::Display for EnableDomainTransferLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableDomainTransferLockError {
-    fn description(&self) -> &str {
         match *self {
-            EnableDomainTransferLockError::DuplicateRequest(ref cause) => cause,
-            EnableDomainTransferLockError::InvalidInput(ref cause) => cause,
-            EnableDomainTransferLockError::OperationLimitExceeded(ref cause) => cause,
-            EnableDomainTransferLockError::TLDRulesViolation(ref cause) => cause,
-            EnableDomainTransferLockError::UnsupportedTLD(ref cause) => cause,
+            EnableDomainTransferLockError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            EnableDomainTransferLockError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            EnableDomainTransferLockError::OperationLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableDomainTransferLockError::TLDRulesViolation(ref cause) => write!(f, "{}", cause),
+            EnableDomainTransferLockError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableDomainTransferLockError {}
 /// Errors returned by GetContactReachabilityStatus
 #[derive(Debug, PartialEq)]
 pub enum GetContactReachabilityStatusError {
@@ -1268,18 +1244,16 @@ impl GetContactReachabilityStatusError {
 }
 impl fmt::Display for GetContactReachabilityStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetContactReachabilityStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetContactReachabilityStatusError::InvalidInput(ref cause) => cause,
-            GetContactReachabilityStatusError::OperationLimitExceeded(ref cause) => cause,
-            GetContactReachabilityStatusError::UnsupportedTLD(ref cause) => cause,
+            GetContactReachabilityStatusError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetContactReachabilityStatusError::OperationLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetContactReachabilityStatusError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetContactReachabilityStatusError {}
 /// Errors returned by GetDomainDetail
 #[derive(Debug, PartialEq)]
 pub enum GetDomainDetailError {
@@ -1308,17 +1282,13 @@ impl GetDomainDetailError {
 }
 impl fmt::Display for GetDomainDetailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDomainDetailError {
-    fn description(&self) -> &str {
         match *self {
-            GetDomainDetailError::InvalidInput(ref cause) => cause,
-            GetDomainDetailError::UnsupportedTLD(ref cause) => cause,
+            GetDomainDetailError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDomainDetailError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDomainDetailError {}
 /// Errors returned by GetDomainSuggestions
 #[derive(Debug, PartialEq)]
 pub enum GetDomainSuggestionsError {
@@ -1347,17 +1317,13 @@ impl GetDomainSuggestionsError {
 }
 impl fmt::Display for GetDomainSuggestionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDomainSuggestionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDomainSuggestionsError::InvalidInput(ref cause) => cause,
-            GetDomainSuggestionsError::UnsupportedTLD(ref cause) => cause,
+            GetDomainSuggestionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDomainSuggestionsError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDomainSuggestionsError {}
 /// Errors returned by GetOperationDetail
 #[derive(Debug, PartialEq)]
 pub enum GetOperationDetailError {
@@ -1381,16 +1347,12 @@ impl GetOperationDetailError {
 }
 impl fmt::Display for GetOperationDetailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOperationDetailError {
-    fn description(&self) -> &str {
         match *self {
-            GetOperationDetailError::InvalidInput(ref cause) => cause,
+            GetOperationDetailError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOperationDetailError {}
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {
@@ -1414,16 +1376,12 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDomainsError::InvalidInput(ref cause) => cause,
+            ListDomainsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDomainsError {}
 /// Errors returned by ListOperations
 #[derive(Debug, PartialEq)]
 pub enum ListOperationsError {
@@ -1447,16 +1405,12 @@ impl ListOperationsError {
 }
 impl fmt::Display for ListOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOperationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListOperationsError::InvalidInput(ref cause) => cause,
+            ListOperationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOperationsError {}
 /// Errors returned by ListTagsForDomain
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForDomainError {
@@ -1492,18 +1446,14 @@ impl ListTagsForDomainError {
 }
 impl fmt::Display for ListTagsForDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForDomainError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForDomainError::InvalidInput(ref cause) => cause,
-            ListTagsForDomainError::OperationLimitExceeded(ref cause) => cause,
-            ListTagsForDomainError::UnsupportedTLD(ref cause) => cause,
+            ListTagsForDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTagsForDomainError::OperationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForDomainError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForDomainError {}
 /// Errors returned by RegisterDomain
 #[derive(Debug, PartialEq)]
 pub enum RegisterDomainError {
@@ -1554,21 +1504,17 @@ impl RegisterDomainError {
 }
 impl fmt::Display for RegisterDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterDomainError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterDomainError::DomainLimitExceeded(ref cause) => cause,
-            RegisterDomainError::DuplicateRequest(ref cause) => cause,
-            RegisterDomainError::InvalidInput(ref cause) => cause,
-            RegisterDomainError::OperationLimitExceeded(ref cause) => cause,
-            RegisterDomainError::TLDRulesViolation(ref cause) => cause,
-            RegisterDomainError::UnsupportedTLD(ref cause) => cause,
+            RegisterDomainError::DomainLimitExceeded(ref cause) => write!(f, "{}", cause),
+            RegisterDomainError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            RegisterDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RegisterDomainError::OperationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            RegisterDomainError::TLDRulesViolation(ref cause) => write!(f, "{}", cause),
+            RegisterDomainError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterDomainError {}
 /// Errors returned by RenewDomain
 #[derive(Debug, PartialEq)]
 pub enum RenewDomainError {
@@ -1612,20 +1558,16 @@ impl RenewDomainError {
 }
 impl fmt::Display for RenewDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RenewDomainError {
-    fn description(&self) -> &str {
         match *self {
-            RenewDomainError::DuplicateRequest(ref cause) => cause,
-            RenewDomainError::InvalidInput(ref cause) => cause,
-            RenewDomainError::OperationLimitExceeded(ref cause) => cause,
-            RenewDomainError::TLDRulesViolation(ref cause) => cause,
-            RenewDomainError::UnsupportedTLD(ref cause) => cause,
+            RenewDomainError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            RenewDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RenewDomainError::OperationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            RenewDomainError::TLDRulesViolation(ref cause) => write!(f, "{}", cause),
+            RenewDomainError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RenewDomainError {}
 /// Errors returned by ResendContactReachabilityEmail
 #[derive(Debug, PartialEq)]
 pub enum ResendContactReachabilityEmailError {
@@ -1667,18 +1609,18 @@ impl ResendContactReachabilityEmailError {
 }
 impl fmt::Display for ResendContactReachabilityEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResendContactReachabilityEmailError {
-    fn description(&self) -> &str {
         match *self {
-            ResendContactReachabilityEmailError::InvalidInput(ref cause) => cause,
-            ResendContactReachabilityEmailError::OperationLimitExceeded(ref cause) => cause,
-            ResendContactReachabilityEmailError::UnsupportedTLD(ref cause) => cause,
+            ResendContactReachabilityEmailError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ResendContactReachabilityEmailError::OperationLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResendContactReachabilityEmailError::UnsupportedTLD(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ResendContactReachabilityEmailError {}
 /// Errors returned by RetrieveDomainAuthCode
 #[derive(Debug, PartialEq)]
 pub enum RetrieveDomainAuthCodeError {
@@ -1709,17 +1651,13 @@ impl RetrieveDomainAuthCodeError {
 }
 impl fmt::Display for RetrieveDomainAuthCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RetrieveDomainAuthCodeError {
-    fn description(&self) -> &str {
         match *self {
-            RetrieveDomainAuthCodeError::InvalidInput(ref cause) => cause,
-            RetrieveDomainAuthCodeError::UnsupportedTLD(ref cause) => cause,
+            RetrieveDomainAuthCodeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RetrieveDomainAuthCodeError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RetrieveDomainAuthCodeError {}
 /// Errors returned by TransferDomain
 #[derive(Debug, PartialEq)]
 pub enum TransferDomainError {
@@ -1770,21 +1708,17 @@ impl TransferDomainError {
 }
 impl fmt::Display for TransferDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TransferDomainError {
-    fn description(&self) -> &str {
         match *self {
-            TransferDomainError::DomainLimitExceeded(ref cause) => cause,
-            TransferDomainError::DuplicateRequest(ref cause) => cause,
-            TransferDomainError::InvalidInput(ref cause) => cause,
-            TransferDomainError::OperationLimitExceeded(ref cause) => cause,
-            TransferDomainError::TLDRulesViolation(ref cause) => cause,
-            TransferDomainError::UnsupportedTLD(ref cause) => cause,
+            TransferDomainError::DomainLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TransferDomainError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            TransferDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TransferDomainError::OperationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TransferDomainError::TLDRulesViolation(ref cause) => write!(f, "{}", cause),
+            TransferDomainError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TransferDomainError {}
 /// Errors returned by UpdateDomainContact
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainContactError {
@@ -1834,20 +1768,16 @@ impl UpdateDomainContactError {
 }
 impl fmt::Display for UpdateDomainContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainContactError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainContactError::DuplicateRequest(ref cause) => cause,
-            UpdateDomainContactError::InvalidInput(ref cause) => cause,
-            UpdateDomainContactError::OperationLimitExceeded(ref cause) => cause,
-            UpdateDomainContactError::TLDRulesViolation(ref cause) => cause,
-            UpdateDomainContactError::UnsupportedTLD(ref cause) => cause,
+            UpdateDomainContactError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDomainContactError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDomainContactError::OperationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDomainContactError::TLDRulesViolation(ref cause) => write!(f, "{}", cause),
+            UpdateDomainContactError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainContactError {}
 /// Errors returned by UpdateDomainContactPrivacy
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainContactPrivacyError {
@@ -1903,20 +1833,18 @@ impl UpdateDomainContactPrivacyError {
 }
 impl fmt::Display for UpdateDomainContactPrivacyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainContactPrivacyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainContactPrivacyError::DuplicateRequest(ref cause) => cause,
-            UpdateDomainContactPrivacyError::InvalidInput(ref cause) => cause,
-            UpdateDomainContactPrivacyError::OperationLimitExceeded(ref cause) => cause,
-            UpdateDomainContactPrivacyError::TLDRulesViolation(ref cause) => cause,
-            UpdateDomainContactPrivacyError::UnsupportedTLD(ref cause) => cause,
+            UpdateDomainContactPrivacyError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDomainContactPrivacyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDomainContactPrivacyError::OperationLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDomainContactPrivacyError::TLDRulesViolation(ref cause) => write!(f, "{}", cause),
+            UpdateDomainContactPrivacyError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainContactPrivacyError {}
 /// Errors returned by UpdateDomainNameservers
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainNameserversError {
@@ -1970,20 +1898,18 @@ impl UpdateDomainNameserversError {
 }
 impl fmt::Display for UpdateDomainNameserversError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainNameserversError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainNameserversError::DuplicateRequest(ref cause) => cause,
-            UpdateDomainNameserversError::InvalidInput(ref cause) => cause,
-            UpdateDomainNameserversError::OperationLimitExceeded(ref cause) => cause,
-            UpdateDomainNameserversError::TLDRulesViolation(ref cause) => cause,
-            UpdateDomainNameserversError::UnsupportedTLD(ref cause) => cause,
+            UpdateDomainNameserversError::DuplicateRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDomainNameserversError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDomainNameserversError::OperationLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDomainNameserversError::TLDRulesViolation(ref cause) => write!(f, "{}", cause),
+            UpdateDomainNameserversError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainNameserversError {}
 /// Errors returned by UpdateTagsForDomain
 #[derive(Debug, PartialEq)]
 pub enum UpdateTagsForDomainError {
@@ -2019,18 +1945,14 @@ impl UpdateTagsForDomainError {
 }
 impl fmt::Display for UpdateTagsForDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTagsForDomainError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTagsForDomainError::InvalidInput(ref cause) => cause,
-            UpdateTagsForDomainError::OperationLimitExceeded(ref cause) => cause,
-            UpdateTagsForDomainError::UnsupportedTLD(ref cause) => cause,
+            UpdateTagsForDomainError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateTagsForDomainError::OperationLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateTagsForDomainError::UnsupportedTLD(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTagsForDomainError {}
 /// Errors returned by ViewBilling
 #[derive(Debug, PartialEq)]
 pub enum ViewBillingError {
@@ -2054,16 +1976,12 @@ impl ViewBillingError {
 }
 impl fmt::Display for ViewBillingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ViewBillingError {
-    fn description(&self) -> &str {
         match *self {
-            ViewBillingError::InvalidInput(ref cause) => cause,
+            ViewBillingError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ViewBillingError {}
 /// Trait representing the capabilities of the Amazon Route 53 Domains API. Amazon Route 53 Domains clients implement this trait.
 pub trait Route53Domains {
     /// <p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>

@@ -15478,16 +15478,12 @@ impl AbortMultipartUploadError {
 }
 impl fmt::Display for AbortMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AbortMultipartUploadError {
-    fn description(&self) -> &str {
         match *self {
-            AbortMultipartUploadError::NoSuchUpload(ref cause) => cause,
+            AbortMultipartUploadError::NoSuchUpload(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AbortMultipartUploadError {}
 /// Errors returned by CompleteMultipartUpload
 #[derive(Debug, PartialEq)]
 pub enum CompleteMultipartUploadError {}
@@ -15516,14 +15512,10 @@ impl CompleteMultipartUploadError {
 }
 impl fmt::Display for CompleteMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CompleteMultipartUploadError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CompleteMultipartUploadError {}
 /// Errors returned by CopyObject
 #[derive(Debug, PartialEq)]
 pub enum CopyObjectError {
@@ -15560,16 +15552,12 @@ impl CopyObjectError {
 }
 impl fmt::Display for CopyObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CopyObjectError {
-    fn description(&self) -> &str {
         match *self {
-            CopyObjectError::ObjectNotInActiveTierError(ref cause) => cause,
+            CopyObjectError::ObjectNotInActiveTierError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CopyObjectError {}
 /// Errors returned by CreateBucket
 #[derive(Debug, PartialEq)]
 pub enum CreateBucketError {
@@ -15613,17 +15601,13 @@ impl CreateBucketError {
 }
 impl fmt::Display for CreateBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBucketError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBucketError::BucketAlreadyExists(ref cause) => cause,
-            CreateBucketError::BucketAlreadyOwnedByYou(ref cause) => cause,
+            CreateBucketError::BucketAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateBucketError::BucketAlreadyOwnedByYou(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBucketError {}
 /// Errors returned by CreateMultipartUpload
 #[derive(Debug, PartialEq)]
 pub enum CreateMultipartUploadError {}
@@ -15652,14 +15636,10 @@ impl CreateMultipartUploadError {
 }
 impl fmt::Display for CreateMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMultipartUploadError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreateMultipartUploadError {}
 /// Errors returned by DeleteBucket
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketError {}
@@ -15688,14 +15668,10 @@ impl DeleteBucketError {
 }
 impl fmt::Display for DeleteBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketError {}
 /// Errors returned by DeleteBucketAnalyticsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketAnalyticsConfigurationError {}
@@ -15726,14 +15702,10 @@ impl DeleteBucketAnalyticsConfigurationError {
 }
 impl fmt::Display for DeleteBucketAnalyticsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketAnalyticsConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketAnalyticsConfigurationError {}
 /// Errors returned by DeleteBucketCors
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketCorsError {}
@@ -15762,14 +15734,10 @@ impl DeleteBucketCorsError {
 }
 impl fmt::Display for DeleteBucketCorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketCorsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketCorsError {}
 /// Errors returned by DeleteBucketEncryption
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketEncryptionError {}
@@ -15798,14 +15766,10 @@ impl DeleteBucketEncryptionError {
 }
 impl fmt::Display for DeleteBucketEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketEncryptionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketEncryptionError {}
 /// Errors returned by DeleteBucketInventoryConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketInventoryConfigurationError {}
@@ -15836,14 +15800,10 @@ impl DeleteBucketInventoryConfigurationError {
 }
 impl fmt::Display for DeleteBucketInventoryConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketInventoryConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketInventoryConfigurationError {}
 /// Errors returned by DeleteBucketLifecycle
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketLifecycleError {}
@@ -15872,14 +15832,10 @@ impl DeleteBucketLifecycleError {
 }
 impl fmt::Display for DeleteBucketLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketLifecycleError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketLifecycleError {}
 /// Errors returned by DeleteBucketMetricsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketMetricsConfigurationError {}
@@ -15910,14 +15866,10 @@ impl DeleteBucketMetricsConfigurationError {
 }
 impl fmt::Display for DeleteBucketMetricsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketMetricsConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketMetricsConfigurationError {}
 /// Errors returned by DeleteBucketPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketPolicyError {}
@@ -15946,14 +15898,10 @@ impl DeleteBucketPolicyError {
 }
 impl fmt::Display for DeleteBucketPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketPolicyError {}
 /// Errors returned by DeleteBucketReplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketReplicationError {}
@@ -15982,14 +15930,10 @@ impl DeleteBucketReplicationError {
 }
 impl fmt::Display for DeleteBucketReplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketReplicationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketReplicationError {}
 /// Errors returned by DeleteBucketTagging
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketTaggingError {}
@@ -16018,14 +15962,10 @@ impl DeleteBucketTaggingError {
 }
 impl fmt::Display for DeleteBucketTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketTaggingError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketTaggingError {}
 /// Errors returned by DeleteBucketWebsite
 #[derive(Debug, PartialEq)]
 pub enum DeleteBucketWebsiteError {}
@@ -16054,14 +15994,10 @@ impl DeleteBucketWebsiteError {
 }
 impl fmt::Display for DeleteBucketWebsiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBucketWebsiteError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteBucketWebsiteError {}
 /// Errors returned by DeleteObject
 #[derive(Debug, PartialEq)]
 pub enum DeleteObjectError {}
@@ -16090,14 +16026,10 @@ impl DeleteObjectError {
 }
 impl fmt::Display for DeleteObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteObjectError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteObjectError {}
 /// Errors returned by DeleteObjectTagging
 #[derive(Debug, PartialEq)]
 pub enum DeleteObjectTaggingError {}
@@ -16126,14 +16058,10 @@ impl DeleteObjectTaggingError {
 }
 impl fmt::Display for DeleteObjectTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteObjectTaggingError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteObjectTaggingError {}
 /// Errors returned by DeleteObjects
 #[derive(Debug, PartialEq)]
 pub enum DeleteObjectsError {}
@@ -16162,14 +16090,10 @@ impl DeleteObjectsError {
 }
 impl fmt::Display for DeleteObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteObjectsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteObjectsError {}
 /// Errors returned by DeletePublicAccessBlock
 #[derive(Debug, PartialEq)]
 pub enum DeletePublicAccessBlockError {}
@@ -16198,14 +16122,10 @@ impl DeletePublicAccessBlockError {
 }
 impl fmt::Display for DeletePublicAccessBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePublicAccessBlockError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeletePublicAccessBlockError {}
 /// Errors returned by GetBucketAccelerateConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetBucketAccelerateConfigurationError {}
@@ -16236,14 +16156,10 @@ impl GetBucketAccelerateConfigurationError {
 }
 impl fmt::Display for GetBucketAccelerateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketAccelerateConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketAccelerateConfigurationError {}
 /// Errors returned by GetBucketAcl
 #[derive(Debug, PartialEq)]
 pub enum GetBucketAclError {}
@@ -16272,14 +16188,10 @@ impl GetBucketAclError {
 }
 impl fmt::Display for GetBucketAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketAclError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketAclError {}
 /// Errors returned by GetBucketAnalyticsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetBucketAnalyticsConfigurationError {}
@@ -16310,14 +16222,10 @@ impl GetBucketAnalyticsConfigurationError {
 }
 impl fmt::Display for GetBucketAnalyticsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketAnalyticsConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketAnalyticsConfigurationError {}
 /// Errors returned by GetBucketCors
 #[derive(Debug, PartialEq)]
 pub enum GetBucketCorsError {}
@@ -16346,14 +16254,10 @@ impl GetBucketCorsError {
 }
 impl fmt::Display for GetBucketCorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketCorsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketCorsError {}
 /// Errors returned by GetBucketEncryption
 #[derive(Debug, PartialEq)]
 pub enum GetBucketEncryptionError {}
@@ -16382,14 +16286,10 @@ impl GetBucketEncryptionError {
 }
 impl fmt::Display for GetBucketEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketEncryptionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketEncryptionError {}
 /// Errors returned by GetBucketInventoryConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetBucketInventoryConfigurationError {}
@@ -16420,14 +16320,10 @@ impl GetBucketInventoryConfigurationError {
 }
 impl fmt::Display for GetBucketInventoryConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketInventoryConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketInventoryConfigurationError {}
 /// Errors returned by GetBucketLifecycle
 #[derive(Debug, PartialEq)]
 pub enum GetBucketLifecycleError {}
@@ -16456,14 +16352,10 @@ impl GetBucketLifecycleError {
 }
 impl fmt::Display for GetBucketLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketLifecycleError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketLifecycleError {}
 /// Errors returned by GetBucketLifecycleConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetBucketLifecycleConfigurationError {}
@@ -16494,14 +16386,10 @@ impl GetBucketLifecycleConfigurationError {
 }
 impl fmt::Display for GetBucketLifecycleConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketLifecycleConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketLifecycleConfigurationError {}
 /// Errors returned by GetBucketLocation
 #[derive(Debug, PartialEq)]
 pub enum GetBucketLocationError {}
@@ -16530,14 +16418,10 @@ impl GetBucketLocationError {
 }
 impl fmt::Display for GetBucketLocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketLocationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketLocationError {}
 /// Errors returned by GetBucketLogging
 #[derive(Debug, PartialEq)]
 pub enum GetBucketLoggingError {}
@@ -16566,14 +16450,10 @@ impl GetBucketLoggingError {
 }
 impl fmt::Display for GetBucketLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketLoggingError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketLoggingError {}
 /// Errors returned by GetBucketMetricsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetBucketMetricsConfigurationError {}
@@ -16604,14 +16484,10 @@ impl GetBucketMetricsConfigurationError {
 }
 impl fmt::Display for GetBucketMetricsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketMetricsConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketMetricsConfigurationError {}
 /// Errors returned by GetBucketNotification
 #[derive(Debug, PartialEq)]
 pub enum GetBucketNotificationError {}
@@ -16640,14 +16516,10 @@ impl GetBucketNotificationError {
 }
 impl fmt::Display for GetBucketNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketNotificationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketNotificationError {}
 /// Errors returned by GetBucketNotificationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetBucketNotificationConfigurationError {}
@@ -16678,14 +16550,10 @@ impl GetBucketNotificationConfigurationError {
 }
 impl fmt::Display for GetBucketNotificationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketNotificationConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketNotificationConfigurationError {}
 /// Errors returned by GetBucketPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetBucketPolicyError {}
@@ -16714,14 +16582,10 @@ impl GetBucketPolicyError {
 }
 impl fmt::Display for GetBucketPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketPolicyError {}
 /// Errors returned by GetBucketPolicyStatus
 #[derive(Debug, PartialEq)]
 pub enum GetBucketPolicyStatusError {}
@@ -16750,14 +16614,10 @@ impl GetBucketPolicyStatusError {
 }
 impl fmt::Display for GetBucketPolicyStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketPolicyStatusError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketPolicyStatusError {}
 /// Errors returned by GetBucketReplication
 #[derive(Debug, PartialEq)]
 pub enum GetBucketReplicationError {}
@@ -16786,14 +16646,10 @@ impl GetBucketReplicationError {
 }
 impl fmt::Display for GetBucketReplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketReplicationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketReplicationError {}
 /// Errors returned by GetBucketRequestPayment
 #[derive(Debug, PartialEq)]
 pub enum GetBucketRequestPaymentError {}
@@ -16822,14 +16678,10 @@ impl GetBucketRequestPaymentError {
 }
 impl fmt::Display for GetBucketRequestPaymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketRequestPaymentError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketRequestPaymentError {}
 /// Errors returned by GetBucketTagging
 #[derive(Debug, PartialEq)]
 pub enum GetBucketTaggingError {}
@@ -16858,14 +16710,10 @@ impl GetBucketTaggingError {
 }
 impl fmt::Display for GetBucketTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketTaggingError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketTaggingError {}
 /// Errors returned by GetBucketVersioning
 #[derive(Debug, PartialEq)]
 pub enum GetBucketVersioningError {}
@@ -16894,14 +16742,10 @@ impl GetBucketVersioningError {
 }
 impl fmt::Display for GetBucketVersioningError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketVersioningError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketVersioningError {}
 /// Errors returned by GetBucketWebsite
 #[derive(Debug, PartialEq)]
 pub enum GetBucketWebsiteError {}
@@ -16930,14 +16774,10 @@ impl GetBucketWebsiteError {
 }
 impl fmt::Display for GetBucketWebsiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBucketWebsiteError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetBucketWebsiteError {}
 /// Errors returned by GetObject
 #[derive(Debug, PartialEq)]
 pub enum GetObjectError {
@@ -16974,16 +16814,12 @@ impl GetObjectError {
 }
 impl fmt::Display for GetObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetObjectError {
-    fn description(&self) -> &str {
         match *self {
-            GetObjectError::NoSuchKey(ref cause) => cause,
+            GetObjectError::NoSuchKey(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetObjectError {}
 /// Errors returned by GetObjectAcl
 #[derive(Debug, PartialEq)]
 pub enum GetObjectAclError {
@@ -17020,16 +16856,12 @@ impl GetObjectAclError {
 }
 impl fmt::Display for GetObjectAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetObjectAclError {
-    fn description(&self) -> &str {
         match *self {
-            GetObjectAclError::NoSuchKey(ref cause) => cause,
+            GetObjectAclError::NoSuchKey(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetObjectAclError {}
 /// Errors returned by GetObjectLegalHold
 #[derive(Debug, PartialEq)]
 pub enum GetObjectLegalHoldError {}
@@ -17058,14 +16890,10 @@ impl GetObjectLegalHoldError {
 }
 impl fmt::Display for GetObjectLegalHoldError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetObjectLegalHoldError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetObjectLegalHoldError {}
 /// Errors returned by GetObjectLockConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetObjectLockConfigurationError {}
@@ -17096,14 +16924,10 @@ impl GetObjectLockConfigurationError {
 }
 impl fmt::Display for GetObjectLockConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetObjectLockConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetObjectLockConfigurationError {}
 /// Errors returned by GetObjectRetention
 #[derive(Debug, PartialEq)]
 pub enum GetObjectRetentionError {}
@@ -17132,14 +16956,10 @@ impl GetObjectRetentionError {
 }
 impl fmt::Display for GetObjectRetentionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetObjectRetentionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetObjectRetentionError {}
 /// Errors returned by GetObjectTagging
 #[derive(Debug, PartialEq)]
 pub enum GetObjectTaggingError {}
@@ -17168,14 +16988,10 @@ impl GetObjectTaggingError {
 }
 impl fmt::Display for GetObjectTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetObjectTaggingError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetObjectTaggingError {}
 /// Errors returned by GetObjectTorrent
 #[derive(Debug, PartialEq)]
 pub enum GetObjectTorrentError {}
@@ -17204,14 +17020,10 @@ impl GetObjectTorrentError {
 }
 impl fmt::Display for GetObjectTorrentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetObjectTorrentError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetObjectTorrentError {}
 /// Errors returned by GetPublicAccessBlock
 #[derive(Debug, PartialEq)]
 pub enum GetPublicAccessBlockError {}
@@ -17240,14 +17052,10 @@ impl GetPublicAccessBlockError {
 }
 impl fmt::Display for GetPublicAccessBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPublicAccessBlockError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetPublicAccessBlockError {}
 /// Errors returned by HeadBucket
 #[derive(Debug, PartialEq)]
 pub enum HeadBucketError {
@@ -17284,16 +17092,12 @@ impl HeadBucketError {
 }
 impl fmt::Display for HeadBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for HeadBucketError {
-    fn description(&self) -> &str {
         match *self {
-            HeadBucketError::NoSuchBucket(ref cause) => cause,
+            HeadBucketError::NoSuchBucket(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for HeadBucketError {}
 /// Errors returned by HeadObject
 #[derive(Debug, PartialEq)]
 pub enum HeadObjectError {
@@ -17330,16 +17134,12 @@ impl HeadObjectError {
 }
 impl fmt::Display for HeadObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for HeadObjectError {
-    fn description(&self) -> &str {
         match *self {
-            HeadObjectError::NoSuchKey(ref cause) => cause,
+            HeadObjectError::NoSuchKey(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for HeadObjectError {}
 /// Errors returned by ListBucketAnalyticsConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListBucketAnalyticsConfigurationsError {}
@@ -17370,14 +17170,10 @@ impl ListBucketAnalyticsConfigurationsError {
 }
 impl fmt::Display for ListBucketAnalyticsConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBucketAnalyticsConfigurationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListBucketAnalyticsConfigurationsError {}
 /// Errors returned by ListBucketInventoryConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListBucketInventoryConfigurationsError {}
@@ -17408,14 +17204,10 @@ impl ListBucketInventoryConfigurationsError {
 }
 impl fmt::Display for ListBucketInventoryConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBucketInventoryConfigurationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListBucketInventoryConfigurationsError {}
 /// Errors returned by ListBucketMetricsConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListBucketMetricsConfigurationsError {}
@@ -17446,14 +17238,10 @@ impl ListBucketMetricsConfigurationsError {
 }
 impl fmt::Display for ListBucketMetricsConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBucketMetricsConfigurationsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListBucketMetricsConfigurationsError {}
 /// Errors returned by ListBuckets
 #[derive(Debug, PartialEq)]
 pub enum ListBucketsError {}
@@ -17482,14 +17270,10 @@ impl ListBucketsError {
 }
 impl fmt::Display for ListBucketsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBucketsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListBucketsError {}
 /// Errors returned by ListMultipartUploads
 #[derive(Debug, PartialEq)]
 pub enum ListMultipartUploadsError {}
@@ -17518,14 +17302,10 @@ impl ListMultipartUploadsError {
 }
 impl fmt::Display for ListMultipartUploadsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMultipartUploadsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListMultipartUploadsError {}
 /// Errors returned by ListObjectVersions
 #[derive(Debug, PartialEq)]
 pub enum ListObjectVersionsError {}
@@ -17554,14 +17334,10 @@ impl ListObjectVersionsError {
 }
 impl fmt::Display for ListObjectVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListObjectVersionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListObjectVersionsError {}
 /// Errors returned by ListObjects
 #[derive(Debug, PartialEq)]
 pub enum ListObjectsError {
@@ -17598,16 +17374,12 @@ impl ListObjectsError {
 }
 impl fmt::Display for ListObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListObjectsError {
-    fn description(&self) -> &str {
         match *self {
-            ListObjectsError::NoSuchBucket(ref cause) => cause,
+            ListObjectsError::NoSuchBucket(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListObjectsError {}
 /// Errors returned by ListObjectsV2
 #[derive(Debug, PartialEq)]
 pub enum ListObjectsV2Error {
@@ -17644,16 +17416,12 @@ impl ListObjectsV2Error {
 }
 impl fmt::Display for ListObjectsV2Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListObjectsV2Error {
-    fn description(&self) -> &str {
         match *self {
-            ListObjectsV2Error::NoSuchBucket(ref cause) => cause,
+            ListObjectsV2Error::NoSuchBucket(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListObjectsV2Error {}
 /// Errors returned by ListParts
 #[derive(Debug, PartialEq)]
 pub enum ListPartsError {}
@@ -17682,14 +17450,10 @@ impl ListPartsError {
 }
 impl fmt::Display for ListPartsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPartsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListPartsError {}
 /// Errors returned by PutBucketAccelerateConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutBucketAccelerateConfigurationError {}
@@ -17720,14 +17484,10 @@ impl PutBucketAccelerateConfigurationError {
 }
 impl fmt::Display for PutBucketAccelerateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketAccelerateConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketAccelerateConfigurationError {}
 /// Errors returned by PutBucketAcl
 #[derive(Debug, PartialEq)]
 pub enum PutBucketAclError {}
@@ -17756,14 +17516,10 @@ impl PutBucketAclError {
 }
 impl fmt::Display for PutBucketAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketAclError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketAclError {}
 /// Errors returned by PutBucketAnalyticsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutBucketAnalyticsConfigurationError {}
@@ -17794,14 +17550,10 @@ impl PutBucketAnalyticsConfigurationError {
 }
 impl fmt::Display for PutBucketAnalyticsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketAnalyticsConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketAnalyticsConfigurationError {}
 /// Errors returned by PutBucketCors
 #[derive(Debug, PartialEq)]
 pub enum PutBucketCorsError {}
@@ -17830,14 +17582,10 @@ impl PutBucketCorsError {
 }
 impl fmt::Display for PutBucketCorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketCorsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketCorsError {}
 /// Errors returned by PutBucketEncryption
 #[derive(Debug, PartialEq)]
 pub enum PutBucketEncryptionError {}
@@ -17866,14 +17614,10 @@ impl PutBucketEncryptionError {
 }
 impl fmt::Display for PutBucketEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketEncryptionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketEncryptionError {}
 /// Errors returned by PutBucketInventoryConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutBucketInventoryConfigurationError {}
@@ -17904,14 +17648,10 @@ impl PutBucketInventoryConfigurationError {
 }
 impl fmt::Display for PutBucketInventoryConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketInventoryConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketInventoryConfigurationError {}
 /// Errors returned by PutBucketLifecycle
 #[derive(Debug, PartialEq)]
 pub enum PutBucketLifecycleError {}
@@ -17940,14 +17680,10 @@ impl PutBucketLifecycleError {
 }
 impl fmt::Display for PutBucketLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketLifecycleError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketLifecycleError {}
 /// Errors returned by PutBucketLifecycleConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutBucketLifecycleConfigurationError {}
@@ -17978,14 +17714,10 @@ impl PutBucketLifecycleConfigurationError {
 }
 impl fmt::Display for PutBucketLifecycleConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketLifecycleConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketLifecycleConfigurationError {}
 /// Errors returned by PutBucketLogging
 #[derive(Debug, PartialEq)]
 pub enum PutBucketLoggingError {}
@@ -18014,14 +17746,10 @@ impl PutBucketLoggingError {
 }
 impl fmt::Display for PutBucketLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketLoggingError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketLoggingError {}
 /// Errors returned by PutBucketMetricsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutBucketMetricsConfigurationError {}
@@ -18052,14 +17780,10 @@ impl PutBucketMetricsConfigurationError {
 }
 impl fmt::Display for PutBucketMetricsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketMetricsConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketMetricsConfigurationError {}
 /// Errors returned by PutBucketNotification
 #[derive(Debug, PartialEq)]
 pub enum PutBucketNotificationError {}
@@ -18088,14 +17812,10 @@ impl PutBucketNotificationError {
 }
 impl fmt::Display for PutBucketNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketNotificationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketNotificationError {}
 /// Errors returned by PutBucketNotificationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutBucketNotificationConfigurationError {}
@@ -18126,14 +17846,10 @@ impl PutBucketNotificationConfigurationError {
 }
 impl fmt::Display for PutBucketNotificationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketNotificationConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketNotificationConfigurationError {}
 /// Errors returned by PutBucketPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutBucketPolicyError {}
@@ -18162,14 +17878,10 @@ impl PutBucketPolicyError {
 }
 impl fmt::Display for PutBucketPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketPolicyError {}
 /// Errors returned by PutBucketReplication
 #[derive(Debug, PartialEq)]
 pub enum PutBucketReplicationError {}
@@ -18198,14 +17910,10 @@ impl PutBucketReplicationError {
 }
 impl fmt::Display for PutBucketReplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketReplicationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketReplicationError {}
 /// Errors returned by PutBucketRequestPayment
 #[derive(Debug, PartialEq)]
 pub enum PutBucketRequestPaymentError {}
@@ -18234,14 +17942,10 @@ impl PutBucketRequestPaymentError {
 }
 impl fmt::Display for PutBucketRequestPaymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketRequestPaymentError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketRequestPaymentError {}
 /// Errors returned by PutBucketTagging
 #[derive(Debug, PartialEq)]
 pub enum PutBucketTaggingError {}
@@ -18270,14 +17974,10 @@ impl PutBucketTaggingError {
 }
 impl fmt::Display for PutBucketTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketTaggingError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketTaggingError {}
 /// Errors returned by PutBucketVersioning
 #[derive(Debug, PartialEq)]
 pub enum PutBucketVersioningError {}
@@ -18306,14 +18006,10 @@ impl PutBucketVersioningError {
 }
 impl fmt::Display for PutBucketVersioningError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketVersioningError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketVersioningError {}
 /// Errors returned by PutBucketWebsite
 #[derive(Debug, PartialEq)]
 pub enum PutBucketWebsiteError {}
@@ -18342,14 +18038,10 @@ impl PutBucketWebsiteError {
 }
 impl fmt::Display for PutBucketWebsiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBucketWebsiteError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutBucketWebsiteError {}
 /// Errors returned by PutObject
 #[derive(Debug, PartialEq)]
 pub enum PutObjectError {}
@@ -18378,14 +18070,10 @@ impl PutObjectError {
 }
 impl fmt::Display for PutObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutObjectError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutObjectError {}
 /// Errors returned by PutObjectAcl
 #[derive(Debug, PartialEq)]
 pub enum PutObjectAclError {
@@ -18422,16 +18110,12 @@ impl PutObjectAclError {
 }
 impl fmt::Display for PutObjectAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutObjectAclError {
-    fn description(&self) -> &str {
         match *self {
-            PutObjectAclError::NoSuchKey(ref cause) => cause,
+            PutObjectAclError::NoSuchKey(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutObjectAclError {}
 /// Errors returned by PutObjectLegalHold
 #[derive(Debug, PartialEq)]
 pub enum PutObjectLegalHoldError {}
@@ -18460,14 +18144,10 @@ impl PutObjectLegalHoldError {
 }
 impl fmt::Display for PutObjectLegalHoldError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutObjectLegalHoldError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutObjectLegalHoldError {}
 /// Errors returned by PutObjectLockConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutObjectLockConfigurationError {}
@@ -18498,14 +18178,10 @@ impl PutObjectLockConfigurationError {
 }
 impl fmt::Display for PutObjectLockConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutObjectLockConfigurationError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutObjectLockConfigurationError {}
 /// Errors returned by PutObjectRetention
 #[derive(Debug, PartialEq)]
 pub enum PutObjectRetentionError {}
@@ -18534,14 +18210,10 @@ impl PutObjectRetentionError {
 }
 impl fmt::Display for PutObjectRetentionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutObjectRetentionError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutObjectRetentionError {}
 /// Errors returned by PutObjectTagging
 #[derive(Debug, PartialEq)]
 pub enum PutObjectTaggingError {}
@@ -18570,14 +18242,10 @@ impl PutObjectTaggingError {
 }
 impl fmt::Display for PutObjectTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutObjectTaggingError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutObjectTaggingError {}
 /// Errors returned by PutPublicAccessBlock
 #[derive(Debug, PartialEq)]
 pub enum PutPublicAccessBlockError {}
@@ -18606,14 +18274,10 @@ impl PutPublicAccessBlockError {
 }
 impl fmt::Display for PutPublicAccessBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutPublicAccessBlockError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutPublicAccessBlockError {}
 /// Errors returned by RestoreObject
 #[derive(Debug, PartialEq)]
 pub enum RestoreObjectError {
@@ -18652,16 +18316,12 @@ impl RestoreObjectError {
 }
 impl fmt::Display for RestoreObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreObjectError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreObjectError::ObjectAlreadyInActiveTierError(ref cause) => cause,
+            RestoreObjectError::ObjectAlreadyInActiveTierError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RestoreObjectError {}
 /// Errors returned by SelectObjectContent
 #[derive(Debug, PartialEq)]
 pub enum SelectObjectContentError {}
@@ -18690,14 +18350,10 @@ impl SelectObjectContentError {
 }
 impl fmt::Display for SelectObjectContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SelectObjectContentError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SelectObjectContentError {}
 /// Errors returned by UploadPart
 #[derive(Debug, PartialEq)]
 pub enum UploadPartError {}
@@ -18726,14 +18382,10 @@ impl UploadPartError {
 }
 impl fmt::Display for UploadPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadPartError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UploadPartError {}
 /// Errors returned by UploadPartCopy
 #[derive(Debug, PartialEq)]
 pub enum UploadPartCopyError {}
@@ -18762,14 +18414,10 @@ impl UploadPartCopyError {
 }
 impl fmt::Display for UploadPartCopyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadPartCopyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UploadPartCopyError {}
 /// Trait representing the capabilities of the Amazon S3 API. Amazon S3 clients implement this trait.
 pub trait S3 {
     /// <p><p>This operation aborts a multipart upload. After a multipart upload is aborted, no additional parts can be uploaded using that upload ID. The storage consumed by any previously uploaded parts will be freed. However, if any part uploads are currently in progress, those part uploads might or might not succeed. As a result, it might be necessary to abort a given multipart upload multiple times in order to completely free all storage consumed by all parts. </p> <p>To verify that all parts have been removed, so you don&#39;t get charged for the part storage, you should call the <a>ListParts</a> operation and ensure that the parts list is empty.</p> <p>For information about permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p>The following operations are related to <code>AbortMultipartUpload</code>:</p> <ul> <li> <p> <a>CreateMultipartUpload</a> </p> </li> <li> <p> <a>UploadPart</a> </p> </li> <li> <p> <a>CompleteMultipartUpload</a> </p> </li> <li> <p> <a>ListParts</a> </p> </li> <li> <p> <a>ListMultipartUploads</a> </p> </li> </ul></p>

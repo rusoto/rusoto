@@ -658,21 +658,21 @@ impl CreateSignalingChannelError {
 }
 impl fmt::Display for CreateSignalingChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSignalingChannelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSignalingChannelError::AccessDenied(ref cause) => cause,
-            CreateSignalingChannelError::AccountChannelLimitExceeded(ref cause) => cause,
-            CreateSignalingChannelError::ClientLimitExceeded(ref cause) => cause,
-            CreateSignalingChannelError::InvalidArgument(ref cause) => cause,
-            CreateSignalingChannelError::ResourceInUse(ref cause) => cause,
-            CreateSignalingChannelError::TagsPerResourceExceededLimit(ref cause) => cause,
+            CreateSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::AccountChannelLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateSignalingChannelError::TagsPerResourceExceededLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateSignalingChannelError {}
 /// Errors returned by CreateStream
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamError {
@@ -732,22 +732,18 @@ impl CreateStreamError {
 }
 impl fmt::Display for CreateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamError::AccountStreamLimitExceeded(ref cause) => cause,
-            CreateStreamError::ClientLimitExceeded(ref cause) => cause,
-            CreateStreamError::DeviceStreamLimitExceeded(ref cause) => cause,
-            CreateStreamError::InvalidArgument(ref cause) => cause,
-            CreateStreamError::InvalidDevice(ref cause) => cause,
-            CreateStreamError::ResourceInUse(ref cause) => cause,
-            CreateStreamError::TagsPerResourceExceededLimit(ref cause) => cause,
+            CreateStreamError::AccountStreamLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::DeviceStreamLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::InvalidDevice(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::TagsPerResourceExceededLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStreamError {}
 /// Errors returned by DeleteSignalingChannel
 #[derive(Debug, PartialEq)]
 pub enum DeleteSignalingChannelError {
@@ -799,20 +795,16 @@ impl DeleteSignalingChannelError {
 }
 impl fmt::Display for DeleteSignalingChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSignalingChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSignalingChannelError::AccessDenied(ref cause) => cause,
-            DeleteSignalingChannelError::ClientLimitExceeded(ref cause) => cause,
-            DeleteSignalingChannelError::InvalidArgument(ref cause) => cause,
-            DeleteSignalingChannelError::ResourceNotFound(ref cause) => cause,
-            DeleteSignalingChannelError::VersionMismatch(ref cause) => cause,
+            DeleteSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSignalingChannelError {}
 /// Errors returned by DeleteStream
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamError {
@@ -856,20 +848,16 @@ impl DeleteStreamError {
 }
 impl fmt::Display for DeleteStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStreamError::ClientLimitExceeded(ref cause) => cause,
-            DeleteStreamError::InvalidArgument(ref cause) => cause,
-            DeleteStreamError::NotAuthorized(ref cause) => cause,
-            DeleteStreamError::ResourceNotFound(ref cause) => cause,
-            DeleteStreamError::VersionMismatch(ref cause) => cause,
+            DeleteStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStreamError {}
 /// Errors returned by DescribeSignalingChannel
 #[derive(Debug, PartialEq)]
 pub enum DescribeSignalingChannelError {
@@ -916,19 +904,15 @@ impl DescribeSignalingChannelError {
 }
 impl fmt::Display for DescribeSignalingChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSignalingChannelError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSignalingChannelError::AccessDenied(ref cause) => cause,
-            DescribeSignalingChannelError::ClientLimitExceeded(ref cause) => cause,
-            DescribeSignalingChannelError::InvalidArgument(ref cause) => cause,
-            DescribeSignalingChannelError::ResourceNotFound(ref cause) => cause,
+            DescribeSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeSignalingChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSignalingChannelError {}
 /// Errors returned by DescribeStream
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamError {
@@ -967,19 +951,15 @@ impl DescribeStreamError {
 }
 impl fmt::Display for DescribeStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStreamError::ClientLimitExceeded(ref cause) => cause,
-            DescribeStreamError::InvalidArgument(ref cause) => cause,
-            DescribeStreamError::NotAuthorized(ref cause) => cause,
-            DescribeStreamError::ResourceNotFound(ref cause) => cause,
+            DescribeStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStreamError {}
 /// Errors returned by GetDataEndpoint
 #[derive(Debug, PartialEq)]
 pub enum GetDataEndpointError {
@@ -1018,19 +998,15 @@ impl GetDataEndpointError {
 }
 impl fmt::Display for GetDataEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDataEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            GetDataEndpointError::ClientLimitExceeded(ref cause) => cause,
-            GetDataEndpointError::InvalidArgument(ref cause) => cause,
-            GetDataEndpointError::NotAuthorized(ref cause) => cause,
-            GetDataEndpointError::ResourceNotFound(ref cause) => cause,
+            GetDataEndpointError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetDataEndpointError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetDataEndpointError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetDataEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDataEndpointError {}
 /// Errors returned by GetSignalingChannelEndpoint
 #[derive(Debug, PartialEq)]
 pub enum GetSignalingChannelEndpointError {
@@ -1086,20 +1062,18 @@ impl GetSignalingChannelEndpointError {
 }
 impl fmt::Display for GetSignalingChannelEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSignalingChannelEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            GetSignalingChannelEndpointError::AccessDenied(ref cause) => cause,
-            GetSignalingChannelEndpointError::ClientLimitExceeded(ref cause) => cause,
-            GetSignalingChannelEndpointError::InvalidArgument(ref cause) => cause,
-            GetSignalingChannelEndpointError::ResourceInUse(ref cause) => cause,
-            GetSignalingChannelEndpointError::ResourceNotFound(ref cause) => cause,
+            GetSignalingChannelEndpointError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetSignalingChannelEndpointError::ClientLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSignalingChannelEndpointError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetSignalingChannelEndpointError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            GetSignalingChannelEndpointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSignalingChannelEndpointError {}
 /// Errors returned by ListSignalingChannels
 #[derive(Debug, PartialEq)]
 pub enum ListSignalingChannelsError {
@@ -1137,18 +1111,14 @@ impl ListSignalingChannelsError {
 }
 impl fmt::Display for ListSignalingChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSignalingChannelsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSignalingChannelsError::AccessDenied(ref cause) => cause,
-            ListSignalingChannelsError::ClientLimitExceeded(ref cause) => cause,
-            ListSignalingChannelsError::InvalidArgument(ref cause) => cause,
+            ListSignalingChannelsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListSignalingChannelsError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListSignalingChannelsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSignalingChannelsError {}
 /// Errors returned by ListStreams
 #[derive(Debug, PartialEq)]
 pub enum ListStreamsError {
@@ -1177,17 +1147,13 @@ impl ListStreamsError {
 }
 impl fmt::Display for ListStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStreamsError::ClientLimitExceeded(ref cause) => cause,
-            ListStreamsError::InvalidArgument(ref cause) => cause,
+            ListStreamsError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListStreamsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStreamsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1230,19 +1196,15 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AccessDenied(ref cause) => cause,
-            ListTagsForResourceError::ClientLimitExceeded(ref cause) => cause,
-            ListTagsForResourceError::InvalidArgument(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTagsForStream
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForStreamError {
@@ -1290,20 +1252,16 @@ impl ListTagsForStreamError {
 }
 impl fmt::Display for ListTagsForStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForStreamError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForStreamError::ClientLimitExceeded(ref cause) => cause,
-            ListTagsForStreamError::InvalidArgument(ref cause) => cause,
-            ListTagsForStreamError::InvalidResourceFormat(ref cause) => cause,
-            ListTagsForStreamError::NotAuthorized(ref cause) => cause,
-            ListTagsForStreamError::ResourceNotFound(ref cause) => cause,
+            ListTagsForStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::InvalidResourceFormat(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForStreamError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1349,20 +1307,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AccessDenied(ref cause) => cause,
-            TagResourceError::ClientLimitExceeded(ref cause) => cause,
-            TagResourceError::InvalidArgument(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TagsPerResourceExceededLimit(ref cause) => cause,
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagsPerResourceExceededLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by TagStream
 #[derive(Debug, PartialEq)]
 pub enum TagStreamError {
@@ -1413,21 +1367,17 @@ impl TagStreamError {
 }
 impl fmt::Display for TagStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagStreamError {
-    fn description(&self) -> &str {
         match *self {
-            TagStreamError::ClientLimitExceeded(ref cause) => cause,
-            TagStreamError::InvalidArgument(ref cause) => cause,
-            TagStreamError::InvalidResourceFormat(ref cause) => cause,
-            TagStreamError::NotAuthorized(ref cause) => cause,
-            TagStreamError::ResourceNotFound(ref cause) => cause,
-            TagStreamError::TagsPerResourceExceededLimit(ref cause) => cause,
+            TagStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TagStreamError::InvalidResourceFormat(ref cause) => write!(f, "{}", cause),
+            TagStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            TagStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagStreamError::TagsPerResourceExceededLimit(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagStreamError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1466,19 +1416,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AccessDenied(ref cause) => cause,
-            UntagResourceError::ClientLimitExceeded(ref cause) => cause,
-            UntagResourceError::InvalidArgument(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UntagStream
 #[derive(Debug, PartialEq)]
 pub enum UntagStreamError {
@@ -1522,20 +1468,16 @@ impl UntagStreamError {
 }
 impl fmt::Display for UntagStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagStreamError {
-    fn description(&self) -> &str {
         match *self {
-            UntagStreamError::ClientLimitExceeded(ref cause) => cause,
-            UntagStreamError::InvalidArgument(ref cause) => cause,
-            UntagStreamError::InvalidResourceFormat(ref cause) => cause,
-            UntagStreamError::NotAuthorized(ref cause) => cause,
-            UntagStreamError::ResourceNotFound(ref cause) => cause,
+            UntagStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::InvalidResourceFormat(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UntagStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagStreamError {}
 /// Errors returned by UpdateDataRetention
 #[derive(Debug, PartialEq)]
 pub enum UpdateDataRetentionError {
@@ -1588,21 +1530,17 @@ impl UpdateDataRetentionError {
 }
 impl fmt::Display for UpdateDataRetentionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDataRetentionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDataRetentionError::ClientLimitExceeded(ref cause) => cause,
-            UpdateDataRetentionError::InvalidArgument(ref cause) => cause,
-            UpdateDataRetentionError::NotAuthorized(ref cause) => cause,
-            UpdateDataRetentionError::ResourceInUse(ref cause) => cause,
-            UpdateDataRetentionError::ResourceNotFound(ref cause) => cause,
-            UpdateDataRetentionError::VersionMismatch(ref cause) => cause,
+            UpdateDataRetentionError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDataRetentionError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDataRetentionError {}
 /// Errors returned by UpdateSignalingChannel
 #[derive(Debug, PartialEq)]
 pub enum UpdateSignalingChannelError {
@@ -1661,21 +1599,17 @@ impl UpdateSignalingChannelError {
 }
 impl fmt::Display for UpdateSignalingChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSignalingChannelError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSignalingChannelError::AccessDenied(ref cause) => cause,
-            UpdateSignalingChannelError::ClientLimitExceeded(ref cause) => cause,
-            UpdateSignalingChannelError::InvalidArgument(ref cause) => cause,
-            UpdateSignalingChannelError::ResourceInUse(ref cause) => cause,
-            UpdateSignalingChannelError::ResourceNotFound(ref cause) => cause,
-            UpdateSignalingChannelError::VersionMismatch(ref cause) => cause,
+            UpdateSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateSignalingChannelError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSignalingChannelError {}
 /// Errors returned by UpdateStream
 #[derive(Debug, PartialEq)]
 pub enum UpdateStreamError {
@@ -1724,21 +1658,17 @@ impl UpdateStreamError {
 }
 impl fmt::Display for UpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStreamError::ClientLimitExceeded(ref cause) => cause,
-            UpdateStreamError::InvalidArgument(ref cause) => cause,
-            UpdateStreamError::NotAuthorized(ref cause) => cause,
-            UpdateStreamError::ResourceInUse(ref cause) => cause,
-            UpdateStreamError::ResourceNotFound(ref cause) => cause,
-            UpdateStreamError::VersionMismatch(ref cause) => cause,
+            UpdateStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateStreamError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStreamError {}
 /// Trait representing the capabilities of the Kinesis Video API. Kinesis Video clients implement this trait.
 pub trait KinesisVideo {
     /// <p>Creates a signaling channel. </p> <p> <code>CreateSignalingChannel</code> is an asynchronous operation.</p>

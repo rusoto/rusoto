@@ -281,18 +281,14 @@ impl DescribeDimensionKeysError {
 }
 impl fmt::Display for DescribeDimensionKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDimensionKeysError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDimensionKeysError::InternalServiceError(ref cause) => cause,
-            DescribeDimensionKeysError::InvalidArgument(ref cause) => cause,
-            DescribeDimensionKeysError::NotAuthorized(ref cause) => cause,
+            DescribeDimensionKeysError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DescribeDimensionKeysError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeDimensionKeysError::NotAuthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDimensionKeysError {}
 /// Errors returned by GetResourceMetrics
 #[derive(Debug, PartialEq)]
 pub enum GetResourceMetricsError {
@@ -328,18 +324,14 @@ impl GetResourceMetricsError {
 }
 impl fmt::Display for GetResourceMetricsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourceMetricsError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourceMetricsError::InternalServiceError(ref cause) => cause,
-            GetResourceMetricsError::InvalidArgument(ref cause) => cause,
-            GetResourceMetricsError::NotAuthorized(ref cause) => cause,
+            GetResourceMetricsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            GetResourceMetricsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetResourceMetricsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourceMetricsError {}
 /// Trait representing the capabilities of the AWS PI API. AWS PI clients implement this trait.
 pub trait PerformanceInsights {
     /// <p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p>

@@ -3076,19 +3076,15 @@ impl BatchGetItemError {
 }
 impl fmt::Display for BatchGetItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetItemError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetItemError::InternalServerError(ref cause) => cause,
-            BatchGetItemError::ProvisionedThroughputExceeded(ref cause) => cause,
-            BatchGetItemError::RequestLimitExceeded(ref cause) => cause,
-            BatchGetItemError::ResourceNotFound(ref cause) => cause,
+            BatchGetItemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BatchGetItemError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            BatchGetItemError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchGetItemError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetItemError {}
 /// Errors returned by BatchWriteItem
 #[derive(Debug, PartialEq)]
 pub enum BatchWriteItemError {
@@ -3136,20 +3132,18 @@ impl BatchWriteItemError {
 }
 impl fmt::Display for BatchWriteItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchWriteItemError {
-    fn description(&self) -> &str {
         match *self {
-            BatchWriteItemError::InternalServerError(ref cause) => cause,
-            BatchWriteItemError::ItemCollectionSizeLimitExceeded(ref cause) => cause,
-            BatchWriteItemError::ProvisionedThroughputExceeded(ref cause) => cause,
-            BatchWriteItemError::RequestLimitExceeded(ref cause) => cause,
-            BatchWriteItemError::ResourceNotFound(ref cause) => cause,
+            BatchWriteItemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BatchWriteItemError::ItemCollectionSizeLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchWriteItemError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            BatchWriteItemError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            BatchWriteItemError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchWriteItemError {}
 /// Errors returned by CreateBackup
 #[derive(Debug, PartialEq)]
 pub enum CreateBackupError {
@@ -3200,21 +3194,17 @@ impl CreateBackupError {
 }
 impl fmt::Display for CreateBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBackupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBackupError::BackupInUse(ref cause) => cause,
-            CreateBackupError::ContinuousBackupsUnavailable(ref cause) => cause,
-            CreateBackupError::InternalServerError(ref cause) => cause,
-            CreateBackupError::LimitExceeded(ref cause) => cause,
-            CreateBackupError::TableInUse(ref cause) => cause,
-            CreateBackupError::TableNotFound(ref cause) => cause,
+            CreateBackupError::BackupInUse(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::ContinuousBackupsUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::TableInUse(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::TableNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBackupError {}
 /// Errors returned by CreateGlobalTable
 #[derive(Debug, PartialEq)]
 pub enum CreateGlobalTableError {
@@ -3257,19 +3247,15 @@ impl CreateGlobalTableError {
 }
 impl fmt::Display for CreateGlobalTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGlobalTableError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGlobalTableError::GlobalTableAlreadyExists(ref cause) => cause,
-            CreateGlobalTableError::InternalServerError(ref cause) => cause,
-            CreateGlobalTableError::LimitExceeded(ref cause) => cause,
-            CreateGlobalTableError::TableNotFound(ref cause) => cause,
+            CreateGlobalTableError::GlobalTableAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateGlobalTableError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateGlobalTableError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGlobalTableError::TableNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGlobalTableError {}
 /// Errors returned by CreateTable
 #[derive(Debug, PartialEq)]
 pub enum CreateTableError {
@@ -3303,18 +3289,14 @@ impl CreateTableError {
 }
 impl fmt::Display for CreateTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTableError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTableError::InternalServerError(ref cause) => cause,
-            CreateTableError::LimitExceeded(ref cause) => cause,
-            CreateTableError::ResourceInUse(ref cause) => cause,
+            CreateTableError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateTableError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTableError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTableError {}
 /// Errors returned by DeleteBackup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackupError {
@@ -3353,19 +3335,15 @@ impl DeleteBackupError {
 }
 impl fmt::Display for DeleteBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBackupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBackupError::BackupInUse(ref cause) => cause,
-            DeleteBackupError::BackupNotFound(ref cause) => cause,
-            DeleteBackupError::InternalServerError(ref cause) => cause,
-            DeleteBackupError::LimitExceeded(ref cause) => cause,
+            DeleteBackupError::BackupInUse(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBackupError {}
 /// Errors returned by DeleteItem
 #[derive(Debug, PartialEq)]
 pub enum DeleteItemError {
@@ -3423,22 +3401,18 @@ impl DeleteItemError {
 }
 impl fmt::Display for DeleteItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteItemError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteItemError::ConditionalCheckFailed(ref cause) => cause,
-            DeleteItemError::InternalServerError(ref cause) => cause,
-            DeleteItemError::ItemCollectionSizeLimitExceeded(ref cause) => cause,
-            DeleteItemError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DeleteItemError::RequestLimitExceeded(ref cause) => cause,
-            DeleteItemError::ResourceNotFound(ref cause) => cause,
-            DeleteItemError::TransactionConflict(ref cause) => cause,
+            DeleteItemError::ConditionalCheckFailed(ref cause) => write!(f, "{}", cause),
+            DeleteItemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteItemError::ItemCollectionSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteItemError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteItemError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteItemError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteItemError::TransactionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteItemError {}
 /// Errors returned by DeleteTable
 #[derive(Debug, PartialEq)]
 pub enum DeleteTableError {
@@ -3477,19 +3451,15 @@ impl DeleteTableError {
 }
 impl fmt::Display for DeleteTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTableError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTableError::InternalServerError(ref cause) => cause,
-            DeleteTableError::LimitExceeded(ref cause) => cause,
-            DeleteTableError::ResourceInUse(ref cause) => cause,
-            DeleteTableError::ResourceNotFound(ref cause) => cause,
+            DeleteTableError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteTableError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteTableError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteTableError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTableError {}
 /// Errors returned by DescribeBackup
 #[derive(Debug, PartialEq)]
 pub enum DescribeBackupError {
@@ -3518,17 +3488,13 @@ impl DescribeBackupError {
 }
 impl fmt::Display for DescribeBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBackupError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBackupError::BackupNotFound(ref cause) => cause,
-            DescribeBackupError::InternalServerError(ref cause) => cause,
+            DescribeBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBackupError {}
 /// Errors returned by DescribeContinuousBackups
 #[derive(Debug, PartialEq)]
 pub enum DescribeContinuousBackupsError {
@@ -3561,17 +3527,15 @@ impl DescribeContinuousBackupsError {
 }
 impl fmt::Display for DescribeContinuousBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeContinuousBackupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeContinuousBackupsError::InternalServerError(ref cause) => cause,
-            DescribeContinuousBackupsError::TableNotFound(ref cause) => cause,
+            DescribeContinuousBackupsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeContinuousBackupsError::TableNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeContinuousBackupsError {}
 /// Errors returned by DescribeContributorInsights
 #[derive(Debug, PartialEq)]
 pub enum DescribeContributorInsightsError {
@@ -3606,17 +3570,15 @@ impl DescribeContributorInsightsError {
 }
 impl fmt::Display for DescribeContributorInsightsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeContributorInsightsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeContributorInsightsError::InternalServerError(ref cause) => cause,
-            DescribeContributorInsightsError::ResourceNotFound(ref cause) => cause,
+            DescribeContributorInsightsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeContributorInsightsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeContributorInsightsError {}
 /// Errors returned by DescribeEndpoints
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointsError {}
@@ -3634,14 +3596,10 @@ impl DescribeEndpointsError {
 }
 impl fmt::Display for DescribeEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEndpointsError {}
 /// Errors returned by DescribeGlobalTable
 #[derive(Debug, PartialEq)]
 pub enum DescribeGlobalTableError {
@@ -3674,17 +3632,13 @@ impl DescribeGlobalTableError {
 }
 impl fmt::Display for DescribeGlobalTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeGlobalTableError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeGlobalTableError::GlobalTableNotFound(ref cause) => cause,
-            DescribeGlobalTableError::InternalServerError(ref cause) => cause,
+            DescribeGlobalTableError::GlobalTableNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeGlobalTableError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeGlobalTableError {}
 /// Errors returned by DescribeGlobalTableSettings
 #[derive(Debug, PartialEq)]
 pub enum DescribeGlobalTableSettingsError {
@@ -3719,17 +3673,17 @@ impl DescribeGlobalTableSettingsError {
 }
 impl fmt::Display for DescribeGlobalTableSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeGlobalTableSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeGlobalTableSettingsError::GlobalTableNotFound(ref cause) => cause,
-            DescribeGlobalTableSettingsError::InternalServerError(ref cause) => cause,
+            DescribeGlobalTableSettingsError::GlobalTableNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeGlobalTableSettingsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeGlobalTableSettingsError {}
 /// Errors returned by DescribeLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeLimitsError {
@@ -3753,16 +3707,12 @@ impl DescribeLimitsError {
 }
 impl fmt::Display for DescribeLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLimitsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLimitsError::InternalServerError(ref cause) => cause,
+            DescribeLimitsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLimitsError {}
 /// Errors returned by DescribeTable
 #[derive(Debug, PartialEq)]
 pub enum DescribeTableError {
@@ -3791,17 +3741,13 @@ impl DescribeTableError {
 }
 impl fmt::Display for DescribeTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTableError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTableError::InternalServerError(ref cause) => cause,
-            DescribeTableError::ResourceNotFound(ref cause) => cause,
+            DescribeTableError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeTableError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTableError {}
 /// Errors returned by DescribeTableReplicaAutoScaling
 #[derive(Debug, PartialEq)]
 pub enum DescribeTableReplicaAutoScalingError {
@@ -3836,17 +3782,17 @@ impl DescribeTableReplicaAutoScalingError {
 }
 impl fmt::Display for DescribeTableReplicaAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTableReplicaAutoScalingError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTableReplicaAutoScalingError::InternalServerError(ref cause) => cause,
-            DescribeTableReplicaAutoScalingError::ResourceNotFound(ref cause) => cause,
+            DescribeTableReplicaAutoScalingError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeTableReplicaAutoScalingError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTableReplicaAutoScalingError {}
 /// Errors returned by DescribeTimeToLive
 #[derive(Debug, PartialEq)]
 pub enum DescribeTimeToLiveError {
@@ -3877,17 +3823,13 @@ impl DescribeTimeToLiveError {
 }
 impl fmt::Display for DescribeTimeToLiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTimeToLiveError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTimeToLiveError::InternalServerError(ref cause) => cause,
-            DescribeTimeToLiveError::ResourceNotFound(ref cause) => cause,
+            DescribeTimeToLiveError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeTimeToLiveError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTimeToLiveError {}
 /// Errors returned by GetItem
 #[derive(Debug, PartialEq)]
 pub enum GetItemError {
@@ -3928,19 +3870,15 @@ impl GetItemError {
 }
 impl fmt::Display for GetItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetItemError {
-    fn description(&self) -> &str {
         match *self {
-            GetItemError::InternalServerError(ref cause) => cause,
-            GetItemError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetItemError::RequestLimitExceeded(ref cause) => cause,
-            GetItemError::ResourceNotFound(ref cause) => cause,
+            GetItemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetItemError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            GetItemError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetItemError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetItemError {}
 /// Errors returned by ListBackups
 #[derive(Debug, PartialEq)]
 pub enum ListBackupsError {
@@ -3964,16 +3902,12 @@ impl ListBackupsError {
 }
 impl fmt::Display for ListBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBackupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBackupsError::InternalServerError(ref cause) => cause,
+            ListBackupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBackupsError {}
 /// Errors returned by ListContributorInsights
 #[derive(Debug, PartialEq)]
 pub enum ListContributorInsightsError {
@@ -4006,17 +3940,13 @@ impl ListContributorInsightsError {
 }
 impl fmt::Display for ListContributorInsightsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListContributorInsightsError {
-    fn description(&self) -> &str {
         match *self {
-            ListContributorInsightsError::InternalServerError(ref cause) => cause,
-            ListContributorInsightsError::ResourceNotFound(ref cause) => cause,
+            ListContributorInsightsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListContributorInsightsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListContributorInsightsError {}
 /// Errors returned by ListGlobalTables
 #[derive(Debug, PartialEq)]
 pub enum ListGlobalTablesError {
@@ -4042,16 +3972,12 @@ impl ListGlobalTablesError {
 }
 impl fmt::Display for ListGlobalTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGlobalTablesError {
-    fn description(&self) -> &str {
         match *self {
-            ListGlobalTablesError::InternalServerError(ref cause) => cause,
+            ListGlobalTablesError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGlobalTablesError {}
 /// Errors returned by ListTables
 #[derive(Debug, PartialEq)]
 pub enum ListTablesError {
@@ -4075,16 +4001,12 @@ impl ListTablesError {
 }
 impl fmt::Display for ListTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTablesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTablesError::InternalServerError(ref cause) => cause,
+            ListTablesError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTablesError {}
 /// Errors returned by ListTagsOfResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsOfResourceError {
@@ -4115,17 +4037,13 @@ impl ListTagsOfResourceError {
 }
 impl fmt::Display for ListTagsOfResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsOfResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsOfResourceError::InternalServerError(ref cause) => cause,
-            ListTagsOfResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsOfResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsOfResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsOfResourceError {}
 /// Errors returned by PutItem
 #[derive(Debug, PartialEq)]
 pub enum PutItemError {
@@ -4183,22 +4101,18 @@ impl PutItemError {
 }
 impl fmt::Display for PutItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutItemError {
-    fn description(&self) -> &str {
         match *self {
-            PutItemError::ConditionalCheckFailed(ref cause) => cause,
-            PutItemError::InternalServerError(ref cause) => cause,
-            PutItemError::ItemCollectionSizeLimitExceeded(ref cause) => cause,
-            PutItemError::ProvisionedThroughputExceeded(ref cause) => cause,
-            PutItemError::RequestLimitExceeded(ref cause) => cause,
-            PutItemError::ResourceNotFound(ref cause) => cause,
-            PutItemError::TransactionConflict(ref cause) => cause,
+            PutItemError::ConditionalCheckFailed(ref cause) => write!(f, "{}", cause),
+            PutItemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PutItemError::ItemCollectionSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutItemError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            PutItemError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutItemError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutItemError::TransactionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutItemError {}
 /// Errors returned by Query
 #[derive(Debug, PartialEq)]
 pub enum QueryError {
@@ -4237,19 +4151,15 @@ impl QueryError {
 }
 impl fmt::Display for QueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for QueryError {
-    fn description(&self) -> &str {
         match *self {
-            QueryError::InternalServerError(ref cause) => cause,
-            QueryError::ProvisionedThroughputExceeded(ref cause) => cause,
-            QueryError::RequestLimitExceeded(ref cause) => cause,
-            QueryError::ResourceNotFound(ref cause) => cause,
+            QueryError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            QueryError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            QueryError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            QueryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for QueryError {}
 /// Errors returned by RestoreTableFromBackup
 #[derive(Debug, PartialEq)]
 pub enum RestoreTableFromBackupError {
@@ -4306,21 +4216,17 @@ impl RestoreTableFromBackupError {
 }
 impl fmt::Display for RestoreTableFromBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreTableFromBackupError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreTableFromBackupError::BackupInUse(ref cause) => cause,
-            RestoreTableFromBackupError::BackupNotFound(ref cause) => cause,
-            RestoreTableFromBackupError::InternalServerError(ref cause) => cause,
-            RestoreTableFromBackupError::LimitExceeded(ref cause) => cause,
-            RestoreTableFromBackupError::TableAlreadyExists(ref cause) => cause,
-            RestoreTableFromBackupError::TableInUse(ref cause) => cause,
+            RestoreTableFromBackupError::BackupInUse(ref cause) => write!(f, "{}", cause),
+            RestoreTableFromBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            RestoreTableFromBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RestoreTableFromBackupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RestoreTableFromBackupError::TableAlreadyExists(ref cause) => write!(f, "{}", cause),
+            RestoreTableFromBackupError::TableInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RestoreTableFromBackupError {}
 /// Errors returned by RestoreTableToPointInTime
 #[derive(Debug, PartialEq)]
 pub enum RestoreTableToPointInTimeError {
@@ -4388,22 +4294,22 @@ impl RestoreTableToPointInTimeError {
 }
 impl fmt::Display for RestoreTableToPointInTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreTableToPointInTimeError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreTableToPointInTimeError::InternalServerError(ref cause) => cause,
-            RestoreTableToPointInTimeError::InvalidRestoreTime(ref cause) => cause,
-            RestoreTableToPointInTimeError::LimitExceeded(ref cause) => cause,
-            RestoreTableToPointInTimeError::PointInTimeRecoveryUnavailable(ref cause) => cause,
-            RestoreTableToPointInTimeError::TableAlreadyExists(ref cause) => cause,
-            RestoreTableToPointInTimeError::TableInUse(ref cause) => cause,
-            RestoreTableToPointInTimeError::TableNotFound(ref cause) => cause,
+            RestoreTableToPointInTimeError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreTableToPointInTimeError::InvalidRestoreTime(ref cause) => write!(f, "{}", cause),
+            RestoreTableToPointInTimeError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RestoreTableToPointInTimeError::PointInTimeRecoveryUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RestoreTableToPointInTimeError::TableAlreadyExists(ref cause) => write!(f, "{}", cause),
+            RestoreTableToPointInTimeError::TableInUse(ref cause) => write!(f, "{}", cause),
+            RestoreTableToPointInTimeError::TableNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RestoreTableToPointInTimeError {}
 /// Errors returned by Scan
 #[derive(Debug, PartialEq)]
 pub enum ScanError {
@@ -4442,19 +4348,15 @@ impl ScanError {
 }
 impl fmt::Display for ScanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ScanError {
-    fn description(&self) -> &str {
         match *self {
-            ScanError::InternalServerError(ref cause) => cause,
-            ScanError::ProvisionedThroughputExceeded(ref cause) => cause,
-            ScanError::RequestLimitExceeded(ref cause) => cause,
-            ScanError::ResourceNotFound(ref cause) => cause,
+            ScanError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ScanError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            ScanError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ScanError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ScanError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4493,19 +4395,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InternalServerError(ref cause) => cause,
-            TagResourceError::LimitExceeded(ref cause) => cause,
-            TagResourceError::ResourceInUse(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by TransactGetItems
 #[derive(Debug, PartialEq)]
 pub enum TransactGetItemsError {
@@ -4557,20 +4455,18 @@ impl TransactGetItemsError {
 }
 impl fmt::Display for TransactGetItemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TransactGetItemsError {
-    fn description(&self) -> &str {
         match *self {
-            TransactGetItemsError::InternalServerError(ref cause) => cause,
-            TransactGetItemsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            TransactGetItemsError::RequestLimitExceeded(ref cause) => cause,
-            TransactGetItemsError::ResourceNotFound(ref cause) => cause,
-            TransactGetItemsError::TransactionCanceled(ref cause) => cause,
+            TransactGetItemsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TransactGetItemsError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TransactGetItemsError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TransactGetItemsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TransactGetItemsError::TransactionCanceled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TransactGetItemsError {}
 /// Errors returned by TransactWriteItems
 #[derive(Debug, PartialEq)]
 pub enum TransactWriteItemsError {
@@ -4636,22 +4532,22 @@ impl TransactWriteItemsError {
 }
 impl fmt::Display for TransactWriteItemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TransactWriteItemsError {
-    fn description(&self) -> &str {
         match *self {
-            TransactWriteItemsError::IdempotentParameterMismatch(ref cause) => cause,
-            TransactWriteItemsError::InternalServerError(ref cause) => cause,
-            TransactWriteItemsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            TransactWriteItemsError::RequestLimitExceeded(ref cause) => cause,
-            TransactWriteItemsError::ResourceNotFound(ref cause) => cause,
-            TransactWriteItemsError::TransactionCanceled(ref cause) => cause,
-            TransactWriteItemsError::TransactionInProgress(ref cause) => cause,
+            TransactWriteItemsError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TransactWriteItemsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TransactWriteItemsError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            TransactWriteItemsError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TransactWriteItemsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TransactWriteItemsError::TransactionCanceled(ref cause) => write!(f, "{}", cause),
+            TransactWriteItemsError::TransactionInProgress(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TransactWriteItemsError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4690,19 +4586,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InternalServerError(ref cause) => cause,
-            UntagResourceError::LimitExceeded(ref cause) => cause,
-            UntagResourceError::ResourceInUse(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateContinuousBackups
 #[derive(Debug, PartialEq)]
 pub enum UpdateContinuousBackupsError {
@@ -4742,18 +4634,16 @@ impl UpdateContinuousBackupsError {
 }
 impl fmt::Display for UpdateContinuousBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateContinuousBackupsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateContinuousBackupsError::ContinuousBackupsUnavailable(ref cause) => cause,
-            UpdateContinuousBackupsError::InternalServerError(ref cause) => cause,
-            UpdateContinuousBackupsError::TableNotFound(ref cause) => cause,
+            UpdateContinuousBackupsError::ContinuousBackupsUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateContinuousBackupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateContinuousBackupsError::TableNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateContinuousBackupsError {}
 /// Errors returned by UpdateContributorInsights
 #[derive(Debug, PartialEq)]
 pub enum UpdateContributorInsightsError {
@@ -4786,17 +4676,15 @@ impl UpdateContributorInsightsError {
 }
 impl fmt::Display for UpdateContributorInsightsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateContributorInsightsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateContributorInsightsError::InternalServerError(ref cause) => cause,
-            UpdateContributorInsightsError::ResourceNotFound(ref cause) => cause,
+            UpdateContributorInsightsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateContributorInsightsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateContributorInsightsError {}
 /// Errors returned by UpdateGlobalTable
 #[derive(Debug, PartialEq)]
 pub enum UpdateGlobalTableError {
@@ -4846,20 +4734,16 @@ impl UpdateGlobalTableError {
 }
 impl fmt::Display for UpdateGlobalTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGlobalTableError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGlobalTableError::GlobalTableNotFound(ref cause) => cause,
-            UpdateGlobalTableError::InternalServerError(ref cause) => cause,
-            UpdateGlobalTableError::ReplicaAlreadyExists(ref cause) => cause,
-            UpdateGlobalTableError::ReplicaNotFound(ref cause) => cause,
-            UpdateGlobalTableError::TableNotFound(ref cause) => cause,
+            UpdateGlobalTableError::GlobalTableNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalTableError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalTableError::ReplicaAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalTableError::ReplicaNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalTableError::TableNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGlobalTableError {}
 /// Errors returned by UpdateGlobalTableSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateGlobalTableSettingsError {
@@ -4920,21 +4804,21 @@ impl UpdateGlobalTableSettingsError {
 }
 impl fmt::Display for UpdateGlobalTableSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGlobalTableSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGlobalTableSettingsError::GlobalTableNotFound(ref cause) => cause,
-            UpdateGlobalTableSettingsError::IndexNotFound(ref cause) => cause,
-            UpdateGlobalTableSettingsError::InternalServerError(ref cause) => cause,
-            UpdateGlobalTableSettingsError::LimitExceeded(ref cause) => cause,
-            UpdateGlobalTableSettingsError::ReplicaNotFound(ref cause) => cause,
-            UpdateGlobalTableSettingsError::ResourceInUse(ref cause) => cause,
+            UpdateGlobalTableSettingsError::GlobalTableNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateGlobalTableSettingsError::IndexNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalTableSettingsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateGlobalTableSettingsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalTableSettingsError::ReplicaNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateGlobalTableSettingsError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGlobalTableSettingsError {}
 /// Errors returned by UpdateItem
 #[derive(Debug, PartialEq)]
 pub enum UpdateItemError {
@@ -4992,22 +4876,18 @@ impl UpdateItemError {
 }
 impl fmt::Display for UpdateItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateItemError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateItemError::ConditionalCheckFailed(ref cause) => cause,
-            UpdateItemError::InternalServerError(ref cause) => cause,
-            UpdateItemError::ItemCollectionSizeLimitExceeded(ref cause) => cause,
-            UpdateItemError::ProvisionedThroughputExceeded(ref cause) => cause,
-            UpdateItemError::RequestLimitExceeded(ref cause) => cause,
-            UpdateItemError::ResourceNotFound(ref cause) => cause,
-            UpdateItemError::TransactionConflict(ref cause) => cause,
+            UpdateItemError::ConditionalCheckFailed(ref cause) => write!(f, "{}", cause),
+            UpdateItemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateItemError::ItemCollectionSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateItemError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateItemError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateItemError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateItemError::TransactionConflict(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateItemError {}
 /// Errors returned by UpdateTable
 #[derive(Debug, PartialEq)]
 pub enum UpdateTableError {
@@ -5046,19 +4926,15 @@ impl UpdateTableError {
 }
 impl fmt::Display for UpdateTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTableError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTableError::InternalServerError(ref cause) => cause,
-            UpdateTableError::LimitExceeded(ref cause) => cause,
-            UpdateTableError::ResourceInUse(ref cause) => cause,
-            UpdateTableError::ResourceNotFound(ref cause) => cause,
+            UpdateTableError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateTableError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateTableError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateTableError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTableError {}
 /// Errors returned by UpdateTableReplicaAutoScaling
 #[derive(Debug, PartialEq)]
 pub enum UpdateTableReplicaAutoScalingError {
@@ -5107,19 +4983,19 @@ impl UpdateTableReplicaAutoScalingError {
 }
 impl fmt::Display for UpdateTableReplicaAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTableReplicaAutoScalingError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTableReplicaAutoScalingError::InternalServerError(ref cause) => cause,
-            UpdateTableReplicaAutoScalingError::LimitExceeded(ref cause) => cause,
-            UpdateTableReplicaAutoScalingError::ResourceInUse(ref cause) => cause,
-            UpdateTableReplicaAutoScalingError::ResourceNotFound(ref cause) => cause,
+            UpdateTableReplicaAutoScalingError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateTableReplicaAutoScalingError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateTableReplicaAutoScalingError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateTableReplicaAutoScalingError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateTableReplicaAutoScalingError {}
 /// Errors returned by UpdateTimeToLive
 #[derive(Debug, PartialEq)]
 pub enum UpdateTimeToLiveError {
@@ -5160,19 +5036,15 @@ impl UpdateTimeToLiveError {
 }
 impl fmt::Display for UpdateTimeToLiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTimeToLiveError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTimeToLiveError::InternalServerError(ref cause) => cause,
-            UpdateTimeToLiveError::LimitExceeded(ref cause) => cause,
-            UpdateTimeToLiveError::ResourceInUse(ref cause) => cause,
-            UpdateTimeToLiveError::ResourceNotFound(ref cause) => cause,
+            UpdateTimeToLiveError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateTimeToLiveError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateTimeToLiveError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateTimeToLiveError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTimeToLiveError {}
 /// Trait representing the capabilities of the DynamoDB API. DynamoDB clients implement this trait.
 pub trait DynamoDb {
     /// <p>The <code>BatchGetItem</code> operation returns the attributes of one or more items from one or more tables. You identify requested items by primary key.</p> <p>A single operation can retrieve up to 16 MB of data, which can contain as many as 100 items. <code>BatchGetItem</code> returns a partial result if the response size limit is exceeded, the table's provisioned throughput is exceeded, or an internal processing failure occurs. If a partial result is returned, the operation returns a value for <code>UnprocessedKeys</code>. You can use this value to retry the operation starting with the next item to get.</p> <important> <p>If you request more than 100 items, <code>BatchGetItem</code> returns a <code>ValidationException</code> with the message "Too many items requested for the BatchGetItem call."</p> </important> <p>For example, if you ask to retrieve 100 items, but each individual item is 300 KB in size, the system returns 52 items (so as not to exceed the 16 MB limit). It also returns an appropriate <code>UnprocessedKeys</code> value so you can get the next page of results. If desired, your application can include its own logic to assemble the pages of results into one dataset.</p> <p>If <i>none</i> of the items can be processed due to insufficient provisioned throughput on all of the tables in the request, then <code>BatchGetItem</code> returns a <code>ProvisionedThroughputExceededException</code>. If <i>at least one</i> of the items is successfully processed, then <code>BatchGetItem</code> completes successfully, while returning the keys of the unread items in <code>UnprocessedKeys</code>.</p> <important> <p>If DynamoDB returns any unprocessed items, you should retry the batch operation on those items. However, <i>we strongly recommend that you use an exponential backoff algorithm</i>. If you retry the batch operation immediately, the underlying read or write requests can still fail due to throttling on the individual tables. If you delay the batch operation using exponential backoff, the individual requests in the batch are much more likely to succeed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#BatchOperations">Batch Operations and Error Handling</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </important> <p>By default, <code>BatchGetItem</code> performs eventually consistent reads on every table in the request. If you want strongly consistent reads instead, you can set <code>ConsistentRead</code> to <code>true</code> for any or all tables.</p> <p>In order to minimize response latency, <code>BatchGetItem</code> retrieves items in parallel.</p> <p>When designing your application, keep in mind that DynamoDB does not return items in any particular order. To help parse the response by item, include the primary key values for the items in your request in the <code>ProjectionExpression</code> parameter.</p> <p>If a requested item does not exist, it is not returned in the result. Requests for nonexistent items consume the minimum read capacity units according to the type of read. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#CapacityUnitCalculations">Working with Tables</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>

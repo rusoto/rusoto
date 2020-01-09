@@ -1829,16 +1829,12 @@ impl BatchDeleteBuildsError {
 }
 impl fmt::Display for BatchDeleteBuildsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteBuildsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDeleteBuildsError::InvalidInput(ref cause) => cause,
+            BatchDeleteBuildsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDeleteBuildsError {}
 /// Errors returned by BatchGetBuilds
 #[derive(Debug, PartialEq)]
 pub enum BatchGetBuildsError {
@@ -1862,16 +1858,12 @@ impl BatchGetBuildsError {
 }
 impl fmt::Display for BatchGetBuildsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetBuildsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetBuildsError::InvalidInput(ref cause) => cause,
+            BatchGetBuildsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetBuildsError {}
 /// Errors returned by BatchGetProjects
 #[derive(Debug, PartialEq)]
 pub enum BatchGetProjectsError {
@@ -1895,16 +1887,12 @@ impl BatchGetProjectsError {
 }
 impl fmt::Display for BatchGetProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetProjectsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetProjectsError::InvalidInput(ref cause) => cause,
+            BatchGetProjectsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetProjectsError {}
 /// Errors returned by BatchGetReportGroups
 #[derive(Debug, PartialEq)]
 pub enum BatchGetReportGroupsError {
@@ -1928,16 +1916,12 @@ impl BatchGetReportGroupsError {
 }
 impl fmt::Display for BatchGetReportGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetReportGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetReportGroupsError::InvalidInput(ref cause) => cause,
+            BatchGetReportGroupsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetReportGroupsError {}
 /// Errors returned by BatchGetReports
 #[derive(Debug, PartialEq)]
 pub enum BatchGetReportsError {
@@ -1961,16 +1945,12 @@ impl BatchGetReportsError {
 }
 impl fmt::Display for BatchGetReportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetReportsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetReportsError::InvalidInput(ref cause) => cause,
+            BatchGetReportsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetReportsError {}
 /// Errors returned by CreateProject
 #[derive(Debug, PartialEq)]
 pub enum CreateProjectError {
@@ -2004,18 +1984,14 @@ impl CreateProjectError {
 }
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProjectError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProjectError::AccountLimitExceeded(ref cause) => cause,
-            CreateProjectError::InvalidInput(ref cause) => cause,
-            CreateProjectError::ResourceAlreadyExists(ref cause) => cause,
+            CreateProjectError::AccountLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateProjectError {}
 /// Errors returned by CreateReportGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateReportGroupError {
@@ -2053,18 +2029,14 @@ impl CreateReportGroupError {
 }
 impl fmt::Display for CreateReportGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReportGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReportGroupError::AccountLimitExceeded(ref cause) => cause,
-            CreateReportGroupError::InvalidInput(ref cause) => cause,
-            CreateReportGroupError::ResourceAlreadyExists(ref cause) => cause,
+            CreateReportGroupError::AccountLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateReportGroupError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateReportGroupError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateReportGroupError {}
 /// Errors returned by CreateWebhook
 #[derive(Debug, PartialEq)]
 pub enum CreateWebhookError {
@@ -2103,19 +2075,15 @@ impl CreateWebhookError {
 }
 impl fmt::Display for CreateWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWebhookError::InvalidInput(ref cause) => cause,
-            CreateWebhookError::OAuthProvider(ref cause) => cause,
-            CreateWebhookError::ResourceAlreadyExists(ref cause) => cause,
-            CreateWebhookError::ResourceNotFound(ref cause) => cause,
+            CreateWebhookError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::OAuthProvider(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateWebhookError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWebhookError {}
 /// Errors returned by DeleteProject
 #[derive(Debug, PartialEq)]
 pub enum DeleteProjectError {
@@ -2139,16 +2107,12 @@ impl DeleteProjectError {
 }
 impl fmt::Display for DeleteProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProjectError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteProjectError::InvalidInput(ref cause) => cause,
+            DeleteProjectError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteProjectError {}
 /// Errors returned by DeleteReport
 #[derive(Debug, PartialEq)]
 pub enum DeleteReportError {
@@ -2172,16 +2136,12 @@ impl DeleteReportError {
 }
 impl fmt::Display for DeleteReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReportError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReportError::InvalidInput(ref cause) => cause,
+            DeleteReportError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteReportError {}
 /// Errors returned by DeleteReportGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteReportGroupError {
@@ -2205,16 +2165,12 @@ impl DeleteReportGroupError {
 }
 impl fmt::Display for DeleteReportGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReportGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReportGroupError::InvalidInput(ref cause) => cause,
+            DeleteReportGroupError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteReportGroupError {}
 /// Errors returned by DeleteSourceCredentials
 #[derive(Debug, PartialEq)]
 pub enum DeleteSourceCredentialsError {
@@ -2247,17 +2203,13 @@ impl DeleteSourceCredentialsError {
 }
 impl fmt::Display for DeleteSourceCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSourceCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSourceCredentialsError::InvalidInput(ref cause) => cause,
-            DeleteSourceCredentialsError::ResourceNotFound(ref cause) => cause,
+            DeleteSourceCredentialsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteSourceCredentialsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSourceCredentialsError {}
 /// Errors returned by DeleteWebhook
 #[derive(Debug, PartialEq)]
 pub enum DeleteWebhookError {
@@ -2291,18 +2243,14 @@ impl DeleteWebhookError {
 }
 impl fmt::Display for DeleteWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWebhookError::InvalidInput(ref cause) => cause,
-            DeleteWebhookError::OAuthProvider(ref cause) => cause,
-            DeleteWebhookError::ResourceNotFound(ref cause) => cause,
+            DeleteWebhookError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteWebhookError::OAuthProvider(ref cause) => write!(f, "{}", cause),
+            DeleteWebhookError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWebhookError {}
 /// Errors returned by DescribeTestCases
 #[derive(Debug, PartialEq)]
 pub enum DescribeTestCasesError {
@@ -2331,17 +2279,13 @@ impl DescribeTestCasesError {
 }
 impl fmt::Display for DescribeTestCasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTestCasesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTestCasesError::InvalidInput(ref cause) => cause,
-            DescribeTestCasesError::ResourceNotFound(ref cause) => cause,
+            DescribeTestCasesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeTestCasesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTestCasesError {}
 /// Errors returned by ImportSourceCredentials
 #[derive(Debug, PartialEq)]
 pub enum ImportSourceCredentialsError {
@@ -2381,18 +2325,16 @@ impl ImportSourceCredentialsError {
 }
 impl fmt::Display for ImportSourceCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportSourceCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            ImportSourceCredentialsError::AccountLimitExceeded(ref cause) => cause,
-            ImportSourceCredentialsError::InvalidInput(ref cause) => cause,
-            ImportSourceCredentialsError::ResourceAlreadyExists(ref cause) => cause,
+            ImportSourceCredentialsError::AccountLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ImportSourceCredentialsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ImportSourceCredentialsError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ImportSourceCredentialsError {}
 /// Errors returned by InvalidateProjectCache
 #[derive(Debug, PartialEq)]
 pub enum InvalidateProjectCacheError {
@@ -2423,17 +2365,13 @@ impl InvalidateProjectCacheError {
 }
 impl fmt::Display for InvalidateProjectCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InvalidateProjectCacheError {
-    fn description(&self) -> &str {
         match *self {
-            InvalidateProjectCacheError::InvalidInput(ref cause) => cause,
-            InvalidateProjectCacheError::ResourceNotFound(ref cause) => cause,
+            InvalidateProjectCacheError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            InvalidateProjectCacheError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InvalidateProjectCacheError {}
 /// Errors returned by ListBuilds
 #[derive(Debug, PartialEq)]
 pub enum ListBuildsError {
@@ -2457,16 +2395,12 @@ impl ListBuildsError {
 }
 impl fmt::Display for ListBuildsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBuildsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBuildsError::InvalidInput(ref cause) => cause,
+            ListBuildsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBuildsError {}
 /// Errors returned by ListBuildsForProject
 #[derive(Debug, PartialEq)]
 pub enum ListBuildsForProjectError {
@@ -2497,17 +2431,13 @@ impl ListBuildsForProjectError {
 }
 impl fmt::Display for ListBuildsForProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBuildsForProjectError {
-    fn description(&self) -> &str {
         match *self {
-            ListBuildsForProjectError::InvalidInput(ref cause) => cause,
-            ListBuildsForProjectError::ResourceNotFound(ref cause) => cause,
+            ListBuildsForProjectError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListBuildsForProjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBuildsForProjectError {}
 /// Errors returned by ListCuratedEnvironmentImages
 #[derive(Debug, PartialEq)]
 pub enum ListCuratedEnvironmentImagesError {}
@@ -2527,14 +2457,10 @@ impl ListCuratedEnvironmentImagesError {
 }
 impl fmt::Display for ListCuratedEnvironmentImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCuratedEnvironmentImagesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListCuratedEnvironmentImagesError {}
 /// Errors returned by ListProjects
 #[derive(Debug, PartialEq)]
 pub enum ListProjectsError {
@@ -2558,16 +2484,12 @@ impl ListProjectsError {
 }
 impl fmt::Display for ListProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProjectsError {
-    fn description(&self) -> &str {
         match *self {
-            ListProjectsError::InvalidInput(ref cause) => cause,
+            ListProjectsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListProjectsError {}
 /// Errors returned by ListReportGroups
 #[derive(Debug, PartialEq)]
 pub enum ListReportGroupsError {
@@ -2591,16 +2513,12 @@ impl ListReportGroupsError {
 }
 impl fmt::Display for ListReportGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReportGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListReportGroupsError::InvalidInput(ref cause) => cause,
+            ListReportGroupsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListReportGroupsError {}
 /// Errors returned by ListReports
 #[derive(Debug, PartialEq)]
 pub enum ListReportsError {
@@ -2624,16 +2542,12 @@ impl ListReportsError {
 }
 impl fmt::Display for ListReportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReportsError {
-    fn description(&self) -> &str {
         match *self {
-            ListReportsError::InvalidInput(ref cause) => cause,
+            ListReportsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListReportsError {}
 /// Errors returned by ListReportsForReportGroup
 #[derive(Debug, PartialEq)]
 pub enum ListReportsForReportGroupError {
@@ -2666,17 +2580,13 @@ impl ListReportsForReportGroupError {
 }
 impl fmt::Display for ListReportsForReportGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReportsForReportGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ListReportsForReportGroupError::InvalidInput(ref cause) => cause,
-            ListReportsForReportGroupError::ResourceNotFound(ref cause) => cause,
+            ListReportsForReportGroupError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListReportsForReportGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListReportsForReportGroupError {}
 /// Errors returned by ListSourceCredentials
 #[derive(Debug, PartialEq)]
 pub enum ListSourceCredentialsError {}
@@ -2694,14 +2604,10 @@ impl ListSourceCredentialsError {
 }
 impl fmt::Display for ListSourceCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSourceCredentialsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListSourceCredentialsError {}
 /// Errors returned by StartBuild
 #[derive(Debug, PartialEq)]
 pub enum StartBuildError {
@@ -2735,18 +2641,14 @@ impl StartBuildError {
 }
 impl fmt::Display for StartBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartBuildError {
-    fn description(&self) -> &str {
         match *self {
-            StartBuildError::AccountLimitExceeded(ref cause) => cause,
-            StartBuildError::InvalidInput(ref cause) => cause,
-            StartBuildError::ResourceNotFound(ref cause) => cause,
+            StartBuildError::AccountLimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartBuildError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartBuildError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartBuildError {}
 /// Errors returned by StopBuild
 #[derive(Debug, PartialEq)]
 pub enum StopBuildError {
@@ -2775,17 +2677,13 @@ impl StopBuildError {
 }
 impl fmt::Display for StopBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopBuildError {
-    fn description(&self) -> &str {
         match *self {
-            StopBuildError::InvalidInput(ref cause) => cause,
-            StopBuildError::ResourceNotFound(ref cause) => cause,
+            StopBuildError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopBuildError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopBuildError {}
 /// Errors returned by UpdateProject
 #[derive(Debug, PartialEq)]
 pub enum UpdateProjectError {
@@ -2814,17 +2712,13 @@ impl UpdateProjectError {
 }
 impl fmt::Display for UpdateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateProjectError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateProjectError::InvalidInput(ref cause) => cause,
-            UpdateProjectError::ResourceNotFound(ref cause) => cause,
+            UpdateProjectError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateProjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateProjectError {}
 /// Errors returned by UpdateReportGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateReportGroupError {
@@ -2853,17 +2747,13 @@ impl UpdateReportGroupError {
 }
 impl fmt::Display for UpdateReportGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateReportGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateReportGroupError::InvalidInput(ref cause) => cause,
-            UpdateReportGroupError::ResourceNotFound(ref cause) => cause,
+            UpdateReportGroupError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateReportGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateReportGroupError {}
 /// Errors returned by UpdateWebhook
 #[derive(Debug, PartialEq)]
 pub enum UpdateWebhookError {
@@ -2897,18 +2787,14 @@ impl UpdateWebhookError {
 }
 impl fmt::Display for UpdateWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateWebhookError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateWebhookError::InvalidInput(ref cause) => cause,
-            UpdateWebhookError::OAuthProvider(ref cause) => cause,
-            UpdateWebhookError::ResourceNotFound(ref cause) => cause,
+            UpdateWebhookError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateWebhookError::OAuthProvider(ref cause) => write!(f, "{}", cause),
+            UpdateWebhookError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateWebhookError {}
 /// Trait representing the capabilities of the AWS CodeBuild API. AWS CodeBuild clients implement this trait.
 pub trait CodeBuild {
     /// <p>Deletes one or more builds.</p>

@@ -1354,26 +1354,22 @@ impl AcceptHandshakeError {
 }
 impl fmt::Display for AcceptHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcceptHandshakeError {
-    fn description(&self) -> &str {
         match *self {
-            AcceptHandshakeError::AWSOrganizationsNotInUse(ref cause) => cause,
-            AcceptHandshakeError::AccessDenied(ref cause) => cause,
-            AcceptHandshakeError::AccessDeniedForDependency(ref cause) => cause,
-            AcceptHandshakeError::ConcurrentModification(ref cause) => cause,
-            AcceptHandshakeError::HandshakeAlreadyInState(ref cause) => cause,
-            AcceptHandshakeError::HandshakeConstraintViolation(ref cause) => cause,
-            AcceptHandshakeError::HandshakeNotFound(ref cause) => cause,
-            AcceptHandshakeError::InvalidHandshakeTransition(ref cause) => cause,
-            AcceptHandshakeError::InvalidInput(ref cause) => cause,
-            AcceptHandshakeError::Service(ref cause) => cause,
-            AcceptHandshakeError::TooManyRequests(ref cause) => cause,
+            AcceptHandshakeError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            AcceptHandshakeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AcceptHandshakeError::AccessDeniedForDependency(ref cause) => write!(f, "{}", cause),
+            AcceptHandshakeError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            AcceptHandshakeError::HandshakeAlreadyInState(ref cause) => write!(f, "{}", cause),
+            AcceptHandshakeError::HandshakeConstraintViolation(ref cause) => write!(f, "{}", cause),
+            AcceptHandshakeError::HandshakeNotFound(ref cause) => write!(f, "{}", cause),
+            AcceptHandshakeError::InvalidHandshakeTransition(ref cause) => write!(f, "{}", cause),
+            AcceptHandshakeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AcceptHandshakeError::Service(ref cause) => write!(f, "{}", cause),
+            AcceptHandshakeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AcceptHandshakeError {}
 /// Errors returned by AttachPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachPolicyError {
@@ -1463,28 +1459,24 @@ impl AttachPolicyError {
 }
 impl fmt::Display for AttachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            AttachPolicyError::AWSOrganizationsNotInUse(ref cause) => cause,
-            AttachPolicyError::AccessDenied(ref cause) => cause,
-            AttachPolicyError::ConcurrentModification(ref cause) => cause,
-            AttachPolicyError::ConstraintViolation(ref cause) => cause,
-            AttachPolicyError::DuplicatePolicyAttachment(ref cause) => cause,
-            AttachPolicyError::InvalidInput(ref cause) => cause,
-            AttachPolicyError::PolicyChangesInProgress(ref cause) => cause,
-            AttachPolicyError::PolicyNotFound(ref cause) => cause,
-            AttachPolicyError::PolicyTypeNotEnabled(ref cause) => cause,
-            AttachPolicyError::Service(ref cause) => cause,
-            AttachPolicyError::TargetNotFound(ref cause) => cause,
-            AttachPolicyError::TooManyRequests(ref cause) => cause,
-            AttachPolicyError::UnsupportedAPIEndpoint(ref cause) => cause,
+            AttachPolicyError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::DuplicatePolicyAttachment(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::PolicyChangesInProgress(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::PolicyTypeNotEnabled(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::Service(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::TargetNotFound(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AttachPolicyError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachPolicyError {}
 /// Errors returned by CancelHandshake
 #[derive(Debug, PartialEq)]
 pub enum CancelHandshakeError {
@@ -1549,23 +1541,19 @@ impl CancelHandshakeError {
 }
 impl fmt::Display for CancelHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelHandshakeError {
-    fn description(&self) -> &str {
         match *self {
-            CancelHandshakeError::AccessDenied(ref cause) => cause,
-            CancelHandshakeError::ConcurrentModification(ref cause) => cause,
-            CancelHandshakeError::HandshakeAlreadyInState(ref cause) => cause,
-            CancelHandshakeError::HandshakeNotFound(ref cause) => cause,
-            CancelHandshakeError::InvalidHandshakeTransition(ref cause) => cause,
-            CancelHandshakeError::InvalidInput(ref cause) => cause,
-            CancelHandshakeError::Service(ref cause) => cause,
-            CancelHandshakeError::TooManyRequests(ref cause) => cause,
+            CancelHandshakeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CancelHandshakeError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CancelHandshakeError::HandshakeAlreadyInState(ref cause) => write!(f, "{}", cause),
+            CancelHandshakeError::HandshakeNotFound(ref cause) => write!(f, "{}", cause),
+            CancelHandshakeError::InvalidHandshakeTransition(ref cause) => write!(f, "{}", cause),
+            CancelHandshakeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CancelHandshakeError::Service(ref cause) => write!(f, "{}", cause),
+            CancelHandshakeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelHandshakeError {}
 /// Errors returned by CreateAccount
 #[derive(Debug, PartialEq)]
 pub enum CreateAccountError {
@@ -1637,24 +1625,20 @@ impl CreateAccountError {
 }
 impl fmt::Display for CreateAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAccountError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAccountError::AWSOrganizationsNotInUse(ref cause) => cause,
-            CreateAccountError::AccessDenied(ref cause) => cause,
-            CreateAccountError::ConcurrentModification(ref cause) => cause,
-            CreateAccountError::ConstraintViolation(ref cause) => cause,
-            CreateAccountError::FinalizingOrganization(ref cause) => cause,
-            CreateAccountError::InvalidInput(ref cause) => cause,
-            CreateAccountError::Service(ref cause) => cause,
-            CreateAccountError::TooManyRequests(ref cause) => cause,
-            CreateAccountError::UnsupportedAPIEndpoint(ref cause) => cause,
+            CreateAccountError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::FinalizingOrganization(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::Service(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateAccountError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAccountError {}
 /// Errors returned by CreateGovCloudAccount
 #[derive(Debug, PartialEq)]
 pub enum CreateGovCloudAccountError {
@@ -1730,24 +1714,22 @@ impl CreateGovCloudAccountError {
 }
 impl fmt::Display for CreateGovCloudAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGovCloudAccountError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGovCloudAccountError::AWSOrganizationsNotInUse(ref cause) => cause,
-            CreateGovCloudAccountError::AccessDenied(ref cause) => cause,
-            CreateGovCloudAccountError::ConcurrentModification(ref cause) => cause,
-            CreateGovCloudAccountError::ConstraintViolation(ref cause) => cause,
-            CreateGovCloudAccountError::FinalizingOrganization(ref cause) => cause,
-            CreateGovCloudAccountError::InvalidInput(ref cause) => cause,
-            CreateGovCloudAccountError::Service(ref cause) => cause,
-            CreateGovCloudAccountError::TooManyRequests(ref cause) => cause,
-            CreateGovCloudAccountError::UnsupportedAPIEndpoint(ref cause) => cause,
+            CreateGovCloudAccountError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateGovCloudAccountError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateGovCloudAccountError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateGovCloudAccountError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            CreateGovCloudAccountError::FinalizingOrganization(ref cause) => write!(f, "{}", cause),
+            CreateGovCloudAccountError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateGovCloudAccountError::Service(ref cause) => write!(f, "{}", cause),
+            CreateGovCloudAccountError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreateGovCloudAccountError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGovCloudAccountError {}
 /// Errors returned by CreateOrganization
 #[derive(Debug, PartialEq)]
 pub enum CreateOrganizationError {
@@ -1814,23 +1796,19 @@ impl CreateOrganizationError {
 }
 impl fmt::Display for CreateOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateOrganizationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateOrganizationError::AccessDenied(ref cause) => cause,
-            CreateOrganizationError::AccessDeniedForDependency(ref cause) => cause,
-            CreateOrganizationError::AlreadyInOrganization(ref cause) => cause,
-            CreateOrganizationError::ConcurrentModification(ref cause) => cause,
-            CreateOrganizationError::ConstraintViolation(ref cause) => cause,
-            CreateOrganizationError::InvalidInput(ref cause) => cause,
-            CreateOrganizationError::Service(ref cause) => cause,
-            CreateOrganizationError::TooManyRequests(ref cause) => cause,
+            CreateOrganizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::AccessDeniedForDependency(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::AlreadyInOrganization(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::Service(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateOrganizationError {}
 /// Errors returned by CreateOrganizationalUnit
 #[derive(Debug, PartialEq)]
 pub enum CreateOrganizationalUnitError {
@@ -1910,24 +1888,26 @@ impl CreateOrganizationalUnitError {
 }
 impl fmt::Display for CreateOrganizationalUnitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateOrganizationalUnitError {
-    fn description(&self) -> &str {
         match *self {
-            CreateOrganizationalUnitError::AWSOrganizationsNotInUse(ref cause) => cause,
-            CreateOrganizationalUnitError::AccessDenied(ref cause) => cause,
-            CreateOrganizationalUnitError::ConcurrentModification(ref cause) => cause,
-            CreateOrganizationalUnitError::ConstraintViolation(ref cause) => cause,
-            CreateOrganizationalUnitError::DuplicateOrganizationalUnit(ref cause) => cause,
-            CreateOrganizationalUnitError::InvalidInput(ref cause) => cause,
-            CreateOrganizationalUnitError::ParentNotFound(ref cause) => cause,
-            CreateOrganizationalUnitError::Service(ref cause) => cause,
-            CreateOrganizationalUnitError::TooManyRequests(ref cause) => cause,
+            CreateOrganizationalUnitError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOrganizationalUnitError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationalUnitError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOrganizationalUnitError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationalUnitError::DuplicateOrganizationalUnit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOrganizationalUnitError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationalUnitError::ParentNotFound(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationalUnitError::Service(ref cause) => write!(f, "{}", cause),
+            CreateOrganizationalUnitError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateOrganizationalUnitError {}
 /// Errors returned by CreatePolicy
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyError {
@@ -2007,26 +1987,24 @@ impl CreatePolicyError {
 }
 impl fmt::Display for CreatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePolicyError::AWSOrganizationsNotInUse(ref cause) => cause,
-            CreatePolicyError::AccessDenied(ref cause) => cause,
-            CreatePolicyError::ConcurrentModification(ref cause) => cause,
-            CreatePolicyError::ConstraintViolation(ref cause) => cause,
-            CreatePolicyError::DuplicatePolicy(ref cause) => cause,
-            CreatePolicyError::InvalidInput(ref cause) => cause,
-            CreatePolicyError::MalformedPolicyDocument(ref cause) => cause,
-            CreatePolicyError::PolicyTypeNotAvailableForOrganization(ref cause) => cause,
-            CreatePolicyError::Service(ref cause) => cause,
-            CreatePolicyError::TooManyRequests(ref cause) => cause,
-            CreatePolicyError::UnsupportedAPIEndpoint(ref cause) => cause,
+            CreatePolicyError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::DuplicatePolicy(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::PolicyTypeNotAvailableForOrganization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePolicyError::Service(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePolicyError {}
 /// Errors returned by DeclineHandshake
 #[derive(Debug, PartialEq)]
 pub enum DeclineHandshakeError {
@@ -2091,23 +2069,19 @@ impl DeclineHandshakeError {
 }
 impl fmt::Display for DeclineHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeclineHandshakeError {
-    fn description(&self) -> &str {
         match *self {
-            DeclineHandshakeError::AccessDenied(ref cause) => cause,
-            DeclineHandshakeError::ConcurrentModification(ref cause) => cause,
-            DeclineHandshakeError::HandshakeAlreadyInState(ref cause) => cause,
-            DeclineHandshakeError::HandshakeNotFound(ref cause) => cause,
-            DeclineHandshakeError::InvalidHandshakeTransition(ref cause) => cause,
-            DeclineHandshakeError::InvalidInput(ref cause) => cause,
-            DeclineHandshakeError::Service(ref cause) => cause,
-            DeclineHandshakeError::TooManyRequests(ref cause) => cause,
+            DeclineHandshakeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeclineHandshakeError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeclineHandshakeError::HandshakeAlreadyInState(ref cause) => write!(f, "{}", cause),
+            DeclineHandshakeError::HandshakeNotFound(ref cause) => write!(f, "{}", cause),
+            DeclineHandshakeError::InvalidHandshakeTransition(ref cause) => write!(f, "{}", cause),
+            DeclineHandshakeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeclineHandshakeError::Service(ref cause) => write!(f, "{}", cause),
+            DeclineHandshakeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeclineHandshakeError {}
 /// Errors returned by DeleteOrganization
 #[derive(Debug, PartialEq)]
 pub enum DeleteOrganizationError {
@@ -2167,22 +2141,18 @@ impl DeleteOrganizationError {
 }
 impl fmt::Display for DeleteOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteOrganizationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteOrganizationError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DeleteOrganizationError::AccessDenied(ref cause) => cause,
-            DeleteOrganizationError::ConcurrentModification(ref cause) => cause,
-            DeleteOrganizationError::InvalidInput(ref cause) => cause,
-            DeleteOrganizationError::OrganizationNotEmpty(ref cause) => cause,
-            DeleteOrganizationError::Service(ref cause) => cause,
-            DeleteOrganizationError::TooManyRequests(ref cause) => cause,
+            DeleteOrganizationError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationError::OrganizationNotEmpty(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteOrganizationError {}
 /// Errors returned by DeleteOrganizationalUnit
 #[derive(Debug, PartialEq)]
 pub enum DeleteOrganizationalUnitError {
@@ -2255,23 +2225,27 @@ impl DeleteOrganizationalUnitError {
 }
 impl fmt::Display for DeleteOrganizationalUnitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteOrganizationalUnitError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteOrganizationalUnitError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DeleteOrganizationalUnitError::AccessDenied(ref cause) => cause,
-            DeleteOrganizationalUnitError::ConcurrentModification(ref cause) => cause,
-            DeleteOrganizationalUnitError::InvalidInput(ref cause) => cause,
-            DeleteOrganizationalUnitError::OrganizationalUnitNotEmpty(ref cause) => cause,
-            DeleteOrganizationalUnitError::OrganizationalUnitNotFound(ref cause) => cause,
-            DeleteOrganizationalUnitError::Service(ref cause) => cause,
-            DeleteOrganizationalUnitError::TooManyRequests(ref cause) => cause,
+            DeleteOrganizationalUnitError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOrganizationalUnitError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationalUnitError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOrganizationalUnitError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationalUnitError::OrganizationalUnitNotEmpty(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOrganizationalUnitError::OrganizationalUnitNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOrganizationalUnitError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteOrganizationalUnitError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteOrganizationalUnitError {}
 /// Errors returned by DeletePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyError {
@@ -2337,24 +2311,20 @@ impl DeletePolicyError {
 }
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePolicyError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DeletePolicyError::AccessDenied(ref cause) => cause,
-            DeletePolicyError::ConcurrentModification(ref cause) => cause,
-            DeletePolicyError::InvalidInput(ref cause) => cause,
-            DeletePolicyError::PolicyInUse(ref cause) => cause,
-            DeletePolicyError::PolicyNotFound(ref cause) => cause,
-            DeletePolicyError::Service(ref cause) => cause,
-            DeletePolicyError::TooManyRequests(ref cause) => cause,
-            DeletePolicyError::UnsupportedAPIEndpoint(ref cause) => cause,
+            DeletePolicyError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::PolicyInUse(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::Service(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePolicyError {}
 /// Errors returned by DescribeAccount
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountError {
@@ -2405,21 +2375,17 @@ impl DescribeAccountError {
 }
 impl fmt::Display for DescribeAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAccountError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DescribeAccountError::AccessDenied(ref cause) => cause,
-            DescribeAccountError::AccountNotFound(ref cause) => cause,
-            DescribeAccountError::InvalidInput(ref cause) => cause,
-            DescribeAccountError::Service(ref cause) => cause,
-            DescribeAccountError::TooManyRequests(ref cause) => cause,
+            DescribeAccountError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            DescribeAccountError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeAccountError::AccountNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAccountError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeAccountError::Service(ref cause) => write!(f, "{}", cause),
+            DescribeAccountError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAccountError {}
 /// Errors returned by DescribeCreateAccountStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeCreateAccountStatusError {
@@ -2487,22 +2453,24 @@ impl DescribeCreateAccountStatusError {
 }
 impl fmt::Display for DescribeCreateAccountStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCreateAccountStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCreateAccountStatusError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DescribeCreateAccountStatusError::AccessDenied(ref cause) => cause,
-            DescribeCreateAccountStatusError::CreateAccountStatusNotFound(ref cause) => cause,
-            DescribeCreateAccountStatusError::InvalidInput(ref cause) => cause,
-            DescribeCreateAccountStatusError::Service(ref cause) => cause,
-            DescribeCreateAccountStatusError::TooManyRequests(ref cause) => cause,
-            DescribeCreateAccountStatusError::UnsupportedAPIEndpoint(ref cause) => cause,
+            DescribeCreateAccountStatusError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCreateAccountStatusError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeCreateAccountStatusError::CreateAccountStatusNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCreateAccountStatusError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeCreateAccountStatusError::Service(ref cause) => write!(f, "{}", cause),
+            DescribeCreateAccountStatusError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeCreateAccountStatusError::UnsupportedAPIEndpoint(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeCreateAccountStatusError {}
 /// Errors returned by DescribeEffectivePolicy
 #[derive(Debug, PartialEq)]
 pub enum DescribeEffectivePolicyError {
@@ -2582,24 +2550,26 @@ impl DescribeEffectivePolicyError {
 }
 impl fmt::Display for DescribeEffectivePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEffectivePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEffectivePolicyError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DescribeEffectivePolicyError::AccessDenied(ref cause) => cause,
-            DescribeEffectivePolicyError::ConstraintViolation(ref cause) => cause,
-            DescribeEffectivePolicyError::EffectivePolicyNotFound(ref cause) => cause,
-            DescribeEffectivePolicyError::InvalidInput(ref cause) => cause,
-            DescribeEffectivePolicyError::Service(ref cause) => cause,
-            DescribeEffectivePolicyError::TargetNotFound(ref cause) => cause,
-            DescribeEffectivePolicyError::TooManyRequests(ref cause) => cause,
-            DescribeEffectivePolicyError::UnsupportedAPIEndpoint(ref cause) => cause,
+            DescribeEffectivePolicyError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEffectivePolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeEffectivePolicyError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            DescribeEffectivePolicyError::EffectivePolicyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEffectivePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeEffectivePolicyError::Service(ref cause) => write!(f, "{}", cause),
+            DescribeEffectivePolicyError::TargetNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeEffectivePolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribeEffectivePolicyError::UnsupportedAPIEndpoint(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEffectivePolicyError {}
 /// Errors returned by DescribeHandshake
 #[derive(Debug, PartialEq)]
 pub enum DescribeHandshakeError {
@@ -2650,21 +2620,17 @@ impl DescribeHandshakeError {
 }
 impl fmt::Display for DescribeHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHandshakeError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHandshakeError::AccessDenied(ref cause) => cause,
-            DescribeHandshakeError::ConcurrentModification(ref cause) => cause,
-            DescribeHandshakeError::HandshakeNotFound(ref cause) => cause,
-            DescribeHandshakeError::InvalidInput(ref cause) => cause,
-            DescribeHandshakeError::Service(ref cause) => cause,
-            DescribeHandshakeError::TooManyRequests(ref cause) => cause,
+            DescribeHandshakeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeHandshakeError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DescribeHandshakeError::HandshakeNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeHandshakeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeHandshakeError::Service(ref cause) => write!(f, "{}", cause),
+            DescribeHandshakeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeHandshakeError {}
 /// Errors returned by DescribeOrganization
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrganizationError {
@@ -2714,20 +2680,18 @@ impl DescribeOrganizationError {
 }
 impl fmt::Display for DescribeOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrganizationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOrganizationError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DescribeOrganizationError::AccessDenied(ref cause) => cause,
-            DescribeOrganizationError::ConcurrentModification(ref cause) => cause,
-            DescribeOrganizationError::Service(ref cause) => cause,
-            DescribeOrganizationError::TooManyRequests(ref cause) => cause,
+            DescribeOrganizationError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeOrganizationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DescribeOrganizationError::Service(ref cause) => write!(f, "{}", cause),
+            DescribeOrganizationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeOrganizationError {}
 /// Errors returned by DescribeOrganizationalUnit
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrganizationalUnitError {
@@ -2788,21 +2752,21 @@ impl DescribeOrganizationalUnitError {
 }
 impl fmt::Display for DescribeOrganizationalUnitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeOrganizationalUnitError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeOrganizationalUnitError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DescribeOrganizationalUnitError::AccessDenied(ref cause) => cause,
-            DescribeOrganizationalUnitError::InvalidInput(ref cause) => cause,
-            DescribeOrganizationalUnitError::OrganizationalUnitNotFound(ref cause) => cause,
-            DescribeOrganizationalUnitError::Service(ref cause) => cause,
-            DescribeOrganizationalUnitError::TooManyRequests(ref cause) => cause,
+            DescribeOrganizationalUnitError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationalUnitError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeOrganizationalUnitError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeOrganizationalUnitError::OrganizationalUnitNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOrganizationalUnitError::Service(ref cause) => write!(f, "{}", cause),
+            DescribeOrganizationalUnitError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeOrganizationalUnitError {}
 /// Errors returned by DescribePolicy
 #[derive(Debug, PartialEq)]
 pub enum DescribePolicyError {
@@ -2860,22 +2824,18 @@ impl DescribePolicyError {
 }
 impl fmt::Display for DescribePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePolicyError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DescribePolicyError::AccessDenied(ref cause) => cause,
-            DescribePolicyError::InvalidInput(ref cause) => cause,
-            DescribePolicyError::PolicyNotFound(ref cause) => cause,
-            DescribePolicyError::Service(ref cause) => cause,
-            DescribePolicyError::TooManyRequests(ref cause) => cause,
-            DescribePolicyError::UnsupportedAPIEndpoint(ref cause) => cause,
+            DescribePolicyError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            DescribePolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribePolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
+            DescribePolicyError::Service(ref cause) => write!(f, "{}", cause),
+            DescribePolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DescribePolicyError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePolicyError {}
 /// Errors returned by DetachPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachPolicyError {
@@ -2958,27 +2918,23 @@ impl DetachPolicyError {
 }
 impl fmt::Display for DetachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DetachPolicyError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DetachPolicyError::AccessDenied(ref cause) => cause,
-            DetachPolicyError::ConcurrentModification(ref cause) => cause,
-            DetachPolicyError::ConstraintViolation(ref cause) => cause,
-            DetachPolicyError::InvalidInput(ref cause) => cause,
-            DetachPolicyError::PolicyChangesInProgress(ref cause) => cause,
-            DetachPolicyError::PolicyNotAttached(ref cause) => cause,
-            DetachPolicyError::PolicyNotFound(ref cause) => cause,
-            DetachPolicyError::Service(ref cause) => cause,
-            DetachPolicyError::TargetNotFound(ref cause) => cause,
-            DetachPolicyError::TooManyRequests(ref cause) => cause,
-            DetachPolicyError::UnsupportedAPIEndpoint(ref cause) => cause,
+            DetachPolicyError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::PolicyChangesInProgress(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::PolicyNotAttached(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::Service(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::TargetNotFound(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DetachPolicyError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachPolicyError {}
 /// Errors returned by DisableAWSServiceAccess
 #[derive(Debug, PartialEq)]
 pub enum DisableAWSServiceAccessError {
@@ -3044,22 +3000,22 @@ impl DisableAWSServiceAccessError {
 }
 impl fmt::Display for DisableAWSServiceAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableAWSServiceAccessError {
-    fn description(&self) -> &str {
         match *self {
-            DisableAWSServiceAccessError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DisableAWSServiceAccessError::AccessDenied(ref cause) => cause,
-            DisableAWSServiceAccessError::ConcurrentModification(ref cause) => cause,
-            DisableAWSServiceAccessError::ConstraintViolation(ref cause) => cause,
-            DisableAWSServiceAccessError::InvalidInput(ref cause) => cause,
-            DisableAWSServiceAccessError::Service(ref cause) => cause,
-            DisableAWSServiceAccessError::TooManyRequests(ref cause) => cause,
+            DisableAWSServiceAccessError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableAWSServiceAccessError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisableAWSServiceAccessError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisableAWSServiceAccessError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            DisableAWSServiceAccessError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisableAWSServiceAccessError::Service(ref cause) => write!(f, "{}", cause),
+            DisableAWSServiceAccessError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableAWSServiceAccessError {}
 /// Errors returned by DisablePolicyType
 #[derive(Debug, PartialEq)]
 pub enum DisablePolicyTypeError {
@@ -3145,26 +3101,22 @@ impl DisablePolicyTypeError {
 }
 impl fmt::Display for DisablePolicyTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisablePolicyTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DisablePolicyTypeError::AWSOrganizationsNotInUse(ref cause) => cause,
-            DisablePolicyTypeError::AccessDenied(ref cause) => cause,
-            DisablePolicyTypeError::ConcurrentModification(ref cause) => cause,
-            DisablePolicyTypeError::ConstraintViolation(ref cause) => cause,
-            DisablePolicyTypeError::InvalidInput(ref cause) => cause,
-            DisablePolicyTypeError::PolicyChangesInProgress(ref cause) => cause,
-            DisablePolicyTypeError::PolicyTypeNotEnabled(ref cause) => cause,
-            DisablePolicyTypeError::RootNotFound(ref cause) => cause,
-            DisablePolicyTypeError::Service(ref cause) => cause,
-            DisablePolicyTypeError::TooManyRequests(ref cause) => cause,
-            DisablePolicyTypeError::UnsupportedAPIEndpoint(ref cause) => cause,
+            DisablePolicyTypeError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            DisablePolicyTypeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisablePolicyTypeError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DisablePolicyTypeError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            DisablePolicyTypeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisablePolicyTypeError::PolicyChangesInProgress(ref cause) => write!(f, "{}", cause),
+            DisablePolicyTypeError::PolicyTypeNotEnabled(ref cause) => write!(f, "{}", cause),
+            DisablePolicyTypeError::RootNotFound(ref cause) => write!(f, "{}", cause),
+            DisablePolicyTypeError::Service(ref cause) => write!(f, "{}", cause),
+            DisablePolicyTypeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            DisablePolicyTypeError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisablePolicyTypeError {}
 /// Errors returned by EnableAWSServiceAccess
 #[derive(Debug, PartialEq)]
 pub enum EnableAWSServiceAccessError {
@@ -3226,22 +3178,22 @@ impl EnableAWSServiceAccessError {
 }
 impl fmt::Display for EnableAWSServiceAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableAWSServiceAccessError {
-    fn description(&self) -> &str {
         match *self {
-            EnableAWSServiceAccessError::AWSOrganizationsNotInUse(ref cause) => cause,
-            EnableAWSServiceAccessError::AccessDenied(ref cause) => cause,
-            EnableAWSServiceAccessError::ConcurrentModification(ref cause) => cause,
-            EnableAWSServiceAccessError::ConstraintViolation(ref cause) => cause,
-            EnableAWSServiceAccessError::InvalidInput(ref cause) => cause,
-            EnableAWSServiceAccessError::Service(ref cause) => cause,
-            EnableAWSServiceAccessError::TooManyRequests(ref cause) => cause,
+            EnableAWSServiceAccessError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableAWSServiceAccessError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            EnableAWSServiceAccessError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableAWSServiceAccessError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            EnableAWSServiceAccessError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            EnableAWSServiceAccessError::Service(ref cause) => write!(f, "{}", cause),
+            EnableAWSServiceAccessError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableAWSServiceAccessError {}
 /// Errors returned by EnableAllFeatures
 #[derive(Debug, PartialEq)]
 pub enum EnableAllFeaturesError {
@@ -3301,22 +3253,20 @@ impl EnableAllFeaturesError {
 }
 impl fmt::Display for EnableAllFeaturesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableAllFeaturesError {
-    fn description(&self) -> &str {
         match *self {
-            EnableAllFeaturesError::AWSOrganizationsNotInUse(ref cause) => cause,
-            EnableAllFeaturesError::AccessDenied(ref cause) => cause,
-            EnableAllFeaturesError::ConcurrentModification(ref cause) => cause,
-            EnableAllFeaturesError::HandshakeConstraintViolation(ref cause) => cause,
-            EnableAllFeaturesError::InvalidInput(ref cause) => cause,
-            EnableAllFeaturesError::Service(ref cause) => cause,
-            EnableAllFeaturesError::TooManyRequests(ref cause) => cause,
+            EnableAllFeaturesError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            EnableAllFeaturesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            EnableAllFeaturesError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            EnableAllFeaturesError::HandshakeConstraintViolation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableAllFeaturesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            EnableAllFeaturesError::Service(ref cause) => write!(f, "{}", cause),
+            EnableAllFeaturesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableAllFeaturesError {}
 /// Errors returned by EnablePolicyType
 #[derive(Debug, PartialEq)]
 pub enum EnablePolicyTypeError {
@@ -3409,27 +3359,25 @@ impl EnablePolicyTypeError {
 }
 impl fmt::Display for EnablePolicyTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnablePolicyTypeError {
-    fn description(&self) -> &str {
         match *self {
-            EnablePolicyTypeError::AWSOrganizationsNotInUse(ref cause) => cause,
-            EnablePolicyTypeError::AccessDenied(ref cause) => cause,
-            EnablePolicyTypeError::ConcurrentModification(ref cause) => cause,
-            EnablePolicyTypeError::ConstraintViolation(ref cause) => cause,
-            EnablePolicyTypeError::InvalidInput(ref cause) => cause,
-            EnablePolicyTypeError::PolicyChangesInProgress(ref cause) => cause,
-            EnablePolicyTypeError::PolicyTypeAlreadyEnabled(ref cause) => cause,
-            EnablePolicyTypeError::PolicyTypeNotAvailableForOrganization(ref cause) => cause,
-            EnablePolicyTypeError::RootNotFound(ref cause) => cause,
-            EnablePolicyTypeError::Service(ref cause) => cause,
-            EnablePolicyTypeError::TooManyRequests(ref cause) => cause,
-            EnablePolicyTypeError::UnsupportedAPIEndpoint(ref cause) => cause,
+            EnablePolicyTypeError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            EnablePolicyTypeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            EnablePolicyTypeError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            EnablePolicyTypeError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            EnablePolicyTypeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            EnablePolicyTypeError::PolicyChangesInProgress(ref cause) => write!(f, "{}", cause),
+            EnablePolicyTypeError::PolicyTypeAlreadyEnabled(ref cause) => write!(f, "{}", cause),
+            EnablePolicyTypeError::PolicyTypeNotAvailableForOrganization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnablePolicyTypeError::RootNotFound(ref cause) => write!(f, "{}", cause),
+            EnablePolicyTypeError::Service(ref cause) => write!(f, "{}", cause),
+            EnablePolicyTypeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            EnablePolicyTypeError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnablePolicyTypeError {}
 /// Errors returned by InviteAccountToOrganization
 #[derive(Debug, PartialEq)]
 pub enum InviteAccountToOrganizationError {
@@ -3518,25 +3466,33 @@ impl InviteAccountToOrganizationError {
 }
 impl fmt::Display for InviteAccountToOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for InviteAccountToOrganizationError {
-    fn description(&self) -> &str {
         match *self {
-            InviteAccountToOrganizationError::AWSOrganizationsNotInUse(ref cause) => cause,
-            InviteAccountToOrganizationError::AccessDenied(ref cause) => cause,
-            InviteAccountToOrganizationError::AccountOwnerNotVerified(ref cause) => cause,
-            InviteAccountToOrganizationError::ConcurrentModification(ref cause) => cause,
-            InviteAccountToOrganizationError::DuplicateHandshake(ref cause) => cause,
-            InviteAccountToOrganizationError::FinalizingOrganization(ref cause) => cause,
-            InviteAccountToOrganizationError::HandshakeConstraintViolation(ref cause) => cause,
-            InviteAccountToOrganizationError::InvalidInput(ref cause) => cause,
-            InviteAccountToOrganizationError::Service(ref cause) => cause,
-            InviteAccountToOrganizationError::TooManyRequests(ref cause) => cause,
+            InviteAccountToOrganizationError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InviteAccountToOrganizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            InviteAccountToOrganizationError::AccountOwnerNotVerified(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InviteAccountToOrganizationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InviteAccountToOrganizationError::DuplicateHandshake(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InviteAccountToOrganizationError::FinalizingOrganization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InviteAccountToOrganizationError::HandshakeConstraintViolation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            InviteAccountToOrganizationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            InviteAccountToOrganizationError::Service(ref cause) => write!(f, "{}", cause),
+            InviteAccountToOrganizationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for InviteAccountToOrganizationError {}
 /// Errors returned by LeaveOrganization
 #[derive(Debug, PartialEq)]
 pub enum LeaveOrganizationError {
@@ -3608,24 +3564,22 @@ impl LeaveOrganizationError {
 }
 impl fmt::Display for LeaveOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for LeaveOrganizationError {
-    fn description(&self) -> &str {
         match *self {
-            LeaveOrganizationError::AWSOrganizationsNotInUse(ref cause) => cause,
-            LeaveOrganizationError::AccessDenied(ref cause) => cause,
-            LeaveOrganizationError::AccountNotFound(ref cause) => cause,
-            LeaveOrganizationError::ConcurrentModification(ref cause) => cause,
-            LeaveOrganizationError::ConstraintViolation(ref cause) => cause,
-            LeaveOrganizationError::InvalidInput(ref cause) => cause,
-            LeaveOrganizationError::MasterCannotLeaveOrganization(ref cause) => cause,
-            LeaveOrganizationError::Service(ref cause) => cause,
-            LeaveOrganizationError::TooManyRequests(ref cause) => cause,
+            LeaveOrganizationError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            LeaveOrganizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            LeaveOrganizationError::AccountNotFound(ref cause) => write!(f, "{}", cause),
+            LeaveOrganizationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            LeaveOrganizationError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            LeaveOrganizationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            LeaveOrganizationError::MasterCannotLeaveOrganization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            LeaveOrganizationError::Service(ref cause) => write!(f, "{}", cause),
+            LeaveOrganizationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for LeaveOrganizationError {}
 /// Errors returned by ListAWSServiceAccessForOrganization
 #[derive(Debug, PartialEq)]
 pub enum ListAWSServiceAccessForOrganizationError {
@@ -3688,21 +3642,27 @@ impl ListAWSServiceAccessForOrganizationError {
 }
 impl fmt::Display for ListAWSServiceAccessForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAWSServiceAccessForOrganizationError {
-    fn description(&self) -> &str {
         match *self {
-            ListAWSServiceAccessForOrganizationError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListAWSServiceAccessForOrganizationError::AccessDenied(ref cause) => cause,
-            ListAWSServiceAccessForOrganizationError::ConstraintViolation(ref cause) => cause,
-            ListAWSServiceAccessForOrganizationError::InvalidInput(ref cause) => cause,
-            ListAWSServiceAccessForOrganizationError::Service(ref cause) => cause,
-            ListAWSServiceAccessForOrganizationError::TooManyRequests(ref cause) => cause,
+            ListAWSServiceAccessForOrganizationError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAWSServiceAccessForOrganizationError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAWSServiceAccessForOrganizationError::ConstraintViolation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAWSServiceAccessForOrganizationError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAWSServiceAccessForOrganizationError::Service(ref cause) => write!(f, "{}", cause),
+            ListAWSServiceAccessForOrganizationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListAWSServiceAccessForOrganizationError {}
 /// Errors returned by ListAccounts
 #[derive(Debug, PartialEq)]
 pub enum ListAccountsError {
@@ -3748,20 +3708,16 @@ impl ListAccountsError {
 }
 impl fmt::Display for ListAccountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAccountsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAccountsError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListAccountsError::AccessDenied(ref cause) => cause,
-            ListAccountsError::InvalidInput(ref cause) => cause,
-            ListAccountsError::Service(ref cause) => cause,
-            ListAccountsError::TooManyRequests(ref cause) => cause,
+            ListAccountsError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            ListAccountsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListAccountsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAccountsError::Service(ref cause) => write!(f, "{}", cause),
+            ListAccountsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAccountsError {}
 /// Errors returned by ListAccountsForParent
 #[derive(Debug, PartialEq)]
 pub enum ListAccountsForParentError {
@@ -3816,21 +3772,19 @@ impl ListAccountsForParentError {
 }
 impl fmt::Display for ListAccountsForParentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAccountsForParentError {
-    fn description(&self) -> &str {
         match *self {
-            ListAccountsForParentError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListAccountsForParentError::AccessDenied(ref cause) => cause,
-            ListAccountsForParentError::InvalidInput(ref cause) => cause,
-            ListAccountsForParentError::ParentNotFound(ref cause) => cause,
-            ListAccountsForParentError::Service(ref cause) => cause,
-            ListAccountsForParentError::TooManyRequests(ref cause) => cause,
+            ListAccountsForParentError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListAccountsForParentError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListAccountsForParentError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAccountsForParentError::ParentNotFound(ref cause) => write!(f, "{}", cause),
+            ListAccountsForParentError::Service(ref cause) => write!(f, "{}", cause),
+            ListAccountsForParentError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAccountsForParentError {}
 /// Errors returned by ListChildren
 #[derive(Debug, PartialEq)]
 pub enum ListChildrenError {
@@ -3881,21 +3835,17 @@ impl ListChildrenError {
 }
 impl fmt::Display for ListChildrenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListChildrenError {
-    fn description(&self) -> &str {
         match *self {
-            ListChildrenError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListChildrenError::AccessDenied(ref cause) => cause,
-            ListChildrenError::InvalidInput(ref cause) => cause,
-            ListChildrenError::ParentNotFound(ref cause) => cause,
-            ListChildrenError::Service(ref cause) => cause,
-            ListChildrenError::TooManyRequests(ref cause) => cause,
+            ListChildrenError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            ListChildrenError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListChildrenError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListChildrenError::ParentNotFound(ref cause) => write!(f, "{}", cause),
+            ListChildrenError::Service(ref cause) => write!(f, "{}", cause),
+            ListChildrenError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListChildrenError {}
 /// Errors returned by ListCreateAccountStatus
 #[derive(Debug, PartialEq)]
 pub enum ListCreateAccountStatusError {
@@ -3954,21 +3904,21 @@ impl ListCreateAccountStatusError {
 }
 impl fmt::Display for ListCreateAccountStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCreateAccountStatusError {
-    fn description(&self) -> &str {
         match *self {
-            ListCreateAccountStatusError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListCreateAccountStatusError::AccessDenied(ref cause) => cause,
-            ListCreateAccountStatusError::InvalidInput(ref cause) => cause,
-            ListCreateAccountStatusError::Service(ref cause) => cause,
-            ListCreateAccountStatusError::TooManyRequests(ref cause) => cause,
-            ListCreateAccountStatusError::UnsupportedAPIEndpoint(ref cause) => cause,
+            ListCreateAccountStatusError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCreateAccountStatusError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListCreateAccountStatusError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListCreateAccountStatusError::Service(ref cause) => write!(f, "{}", cause),
+            ListCreateAccountStatusError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListCreateAccountStatusError::UnsupportedAPIEndpoint(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListCreateAccountStatusError {}
 /// Errors returned by ListHandshakesForAccount
 #[derive(Debug, PartialEq)]
 pub enum ListHandshakesForAccountError {
@@ -4020,20 +3970,18 @@ impl ListHandshakesForAccountError {
 }
 impl fmt::Display for ListHandshakesForAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHandshakesForAccountError {
-    fn description(&self) -> &str {
         match *self {
-            ListHandshakesForAccountError::AccessDenied(ref cause) => cause,
-            ListHandshakesForAccountError::ConcurrentModification(ref cause) => cause,
-            ListHandshakesForAccountError::InvalidInput(ref cause) => cause,
-            ListHandshakesForAccountError::Service(ref cause) => cause,
-            ListHandshakesForAccountError::TooManyRequests(ref cause) => cause,
+            ListHandshakesForAccountError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListHandshakesForAccountError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListHandshakesForAccountError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListHandshakesForAccountError::Service(ref cause) => write!(f, "{}", cause),
+            ListHandshakesForAccountError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHandshakesForAccountError {}
 /// Errors returned by ListHandshakesForOrganization
 #[derive(Debug, PartialEq)]
 pub enum ListHandshakesForOrganizationError {
@@ -4096,21 +4044,23 @@ impl ListHandshakesForOrganizationError {
 }
 impl fmt::Display for ListHandshakesForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHandshakesForOrganizationError {
-    fn description(&self) -> &str {
         match *self {
-            ListHandshakesForOrganizationError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListHandshakesForOrganizationError::AccessDenied(ref cause) => cause,
-            ListHandshakesForOrganizationError::ConcurrentModification(ref cause) => cause,
-            ListHandshakesForOrganizationError::InvalidInput(ref cause) => cause,
-            ListHandshakesForOrganizationError::Service(ref cause) => cause,
-            ListHandshakesForOrganizationError::TooManyRequests(ref cause) => cause,
+            ListHandshakesForOrganizationError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListHandshakesForOrganizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListHandshakesForOrganizationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListHandshakesForOrganizationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListHandshakesForOrganizationError::Service(ref cause) => write!(f, "{}", cause),
+            ListHandshakesForOrganizationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListHandshakesForOrganizationError {}
 /// Errors returned by ListOrganizationalUnitsForParent
 #[derive(Debug, PartialEq)]
 pub enum ListOrganizationalUnitsForParentError {
@@ -4173,21 +4123,27 @@ impl ListOrganizationalUnitsForParentError {
 }
 impl fmt::Display for ListOrganizationalUnitsForParentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOrganizationalUnitsForParentError {
-    fn description(&self) -> &str {
         match *self {
-            ListOrganizationalUnitsForParentError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListOrganizationalUnitsForParentError::AccessDenied(ref cause) => cause,
-            ListOrganizationalUnitsForParentError::InvalidInput(ref cause) => cause,
-            ListOrganizationalUnitsForParentError::ParentNotFound(ref cause) => cause,
-            ListOrganizationalUnitsForParentError::Service(ref cause) => cause,
-            ListOrganizationalUnitsForParentError::TooManyRequests(ref cause) => cause,
+            ListOrganizationalUnitsForParentError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListOrganizationalUnitsForParentError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListOrganizationalUnitsForParentError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListOrganizationalUnitsForParentError::ParentNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListOrganizationalUnitsForParentError::Service(ref cause) => write!(f, "{}", cause),
+            ListOrganizationalUnitsForParentError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListOrganizationalUnitsForParentError {}
 /// Errors returned by ListParents
 #[derive(Debug, PartialEq)]
 pub enum ListParentsError {
@@ -4238,21 +4194,17 @@ impl ListParentsError {
 }
 impl fmt::Display for ListParentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListParentsError {
-    fn description(&self) -> &str {
         match *self {
-            ListParentsError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListParentsError::AccessDenied(ref cause) => cause,
-            ListParentsError::ChildNotFound(ref cause) => cause,
-            ListParentsError::InvalidInput(ref cause) => cause,
-            ListParentsError::Service(ref cause) => cause,
-            ListParentsError::TooManyRequests(ref cause) => cause,
+            ListParentsError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            ListParentsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListParentsError::ChildNotFound(ref cause) => write!(f, "{}", cause),
+            ListParentsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListParentsError::Service(ref cause) => write!(f, "{}", cause),
+            ListParentsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListParentsError {}
 /// Errors returned by ListPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListPoliciesError {
@@ -4303,21 +4255,17 @@ impl ListPoliciesError {
 }
 impl fmt::Display for ListPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListPoliciesError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListPoliciesError::AccessDenied(ref cause) => cause,
-            ListPoliciesError::InvalidInput(ref cause) => cause,
-            ListPoliciesError::Service(ref cause) => cause,
-            ListPoliciesError::TooManyRequests(ref cause) => cause,
-            ListPoliciesError::UnsupportedAPIEndpoint(ref cause) => cause,
+            ListPoliciesError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            ListPoliciesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListPoliciesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListPoliciesError::Service(ref cause) => write!(f, "{}", cause),
+            ListPoliciesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListPoliciesError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPoliciesError {}
 /// Errors returned by ListPoliciesForTarget
 #[derive(Debug, PartialEq)]
 pub enum ListPoliciesForTargetError {
@@ -4379,22 +4327,20 @@ impl ListPoliciesForTargetError {
 }
 impl fmt::Display for ListPoliciesForTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPoliciesForTargetError {
-    fn description(&self) -> &str {
         match *self {
-            ListPoliciesForTargetError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListPoliciesForTargetError::AccessDenied(ref cause) => cause,
-            ListPoliciesForTargetError::InvalidInput(ref cause) => cause,
-            ListPoliciesForTargetError::Service(ref cause) => cause,
-            ListPoliciesForTargetError::TargetNotFound(ref cause) => cause,
-            ListPoliciesForTargetError::TooManyRequests(ref cause) => cause,
-            ListPoliciesForTargetError::UnsupportedAPIEndpoint(ref cause) => cause,
+            ListPoliciesForTargetError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListPoliciesForTargetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListPoliciesForTargetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListPoliciesForTargetError::Service(ref cause) => write!(f, "{}", cause),
+            ListPoliciesForTargetError::TargetNotFound(ref cause) => write!(f, "{}", cause),
+            ListPoliciesForTargetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListPoliciesForTargetError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPoliciesForTargetError {}
 /// Errors returned by ListRoots
 #[derive(Debug, PartialEq)]
 pub enum ListRootsError {
@@ -4438,20 +4384,16 @@ impl ListRootsError {
 }
 impl fmt::Display for ListRootsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRootsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRootsError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListRootsError::AccessDenied(ref cause) => cause,
-            ListRootsError::InvalidInput(ref cause) => cause,
-            ListRootsError::Service(ref cause) => cause,
-            ListRootsError::TooManyRequests(ref cause) => cause,
+            ListRootsError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            ListRootsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListRootsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListRootsError::Service(ref cause) => write!(f, "{}", cause),
+            ListRootsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRootsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -4502,21 +4444,17 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListTagsForResourceError::AccessDenied(ref cause) => cause,
-            ListTagsForResourceError::InvalidInput(ref cause) => cause,
-            ListTagsForResourceError::Service(ref cause) => cause,
-            ListTagsForResourceError::TargetNotFound(ref cause) => cause,
-            ListTagsForResourceError::TooManyRequests(ref cause) => cause,
+            ListTagsForResourceError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Service(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TargetNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTargetsForPolicy
 #[derive(Debug, PartialEq)]
 pub enum ListTargetsForPolicyError {
@@ -4576,22 +4514,20 @@ impl ListTargetsForPolicyError {
 }
 impl fmt::Display for ListTargetsForPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTargetsForPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            ListTargetsForPolicyError::AWSOrganizationsNotInUse(ref cause) => cause,
-            ListTargetsForPolicyError::AccessDenied(ref cause) => cause,
-            ListTargetsForPolicyError::InvalidInput(ref cause) => cause,
-            ListTargetsForPolicyError::PolicyNotFound(ref cause) => cause,
-            ListTargetsForPolicyError::Service(ref cause) => cause,
-            ListTargetsForPolicyError::TooManyRequests(ref cause) => cause,
-            ListTargetsForPolicyError::UnsupportedAPIEndpoint(ref cause) => cause,
+            ListTargetsForPolicyError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTargetsForPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::Service(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListTargetsForPolicyError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTargetsForPolicyError {}
 /// Errors returned by MoveAccount
 #[derive(Debug, PartialEq)]
 pub enum MoveAccountError {
@@ -4664,25 +4600,21 @@ impl MoveAccountError {
 }
 impl fmt::Display for MoveAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for MoveAccountError {
-    fn description(&self) -> &str {
         match *self {
-            MoveAccountError::AWSOrganizationsNotInUse(ref cause) => cause,
-            MoveAccountError::AccessDenied(ref cause) => cause,
-            MoveAccountError::AccountNotFound(ref cause) => cause,
-            MoveAccountError::ConcurrentModification(ref cause) => cause,
-            MoveAccountError::DestinationParentNotFound(ref cause) => cause,
-            MoveAccountError::DuplicateAccount(ref cause) => cause,
-            MoveAccountError::InvalidInput(ref cause) => cause,
-            MoveAccountError::Service(ref cause) => cause,
-            MoveAccountError::SourceParentNotFound(ref cause) => cause,
-            MoveAccountError::TooManyRequests(ref cause) => cause,
+            MoveAccountError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            MoveAccountError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            MoveAccountError::AccountNotFound(ref cause) => write!(f, "{}", cause),
+            MoveAccountError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            MoveAccountError::DestinationParentNotFound(ref cause) => write!(f, "{}", cause),
+            MoveAccountError::DuplicateAccount(ref cause) => write!(f, "{}", cause),
+            MoveAccountError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            MoveAccountError::Service(ref cause) => write!(f, "{}", cause),
+            MoveAccountError::SourceParentNotFound(ref cause) => write!(f, "{}", cause),
+            MoveAccountError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for MoveAccountError {}
 /// Errors returned by RemoveAccountFromOrganization
 #[derive(Debug, PartialEq)]
 pub enum RemoveAccountFromOrganizationError {
@@ -4766,24 +4698,32 @@ impl RemoveAccountFromOrganizationError {
 }
 impl fmt::Display for RemoveAccountFromOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveAccountFromOrganizationError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveAccountFromOrganizationError::AWSOrganizationsNotInUse(ref cause) => cause,
-            RemoveAccountFromOrganizationError::AccessDenied(ref cause) => cause,
-            RemoveAccountFromOrganizationError::AccountNotFound(ref cause) => cause,
-            RemoveAccountFromOrganizationError::ConcurrentModification(ref cause) => cause,
-            RemoveAccountFromOrganizationError::ConstraintViolation(ref cause) => cause,
-            RemoveAccountFromOrganizationError::InvalidInput(ref cause) => cause,
-            RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(ref cause) => cause,
-            RemoveAccountFromOrganizationError::Service(ref cause) => cause,
-            RemoveAccountFromOrganizationError::TooManyRequests(ref cause) => cause,
+            RemoveAccountFromOrganizationError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveAccountFromOrganizationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RemoveAccountFromOrganizationError::AccountNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveAccountFromOrganizationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveAccountFromOrganizationError::ConstraintViolation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveAccountFromOrganizationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveAccountFromOrganizationError::Service(ref cause) => write!(f, "{}", cause),
+            RemoveAccountFromOrganizationError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveAccountFromOrganizationError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4844,23 +4784,19 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AWSOrganizationsNotInUse(ref cause) => cause,
-            TagResourceError::AccessDenied(ref cause) => cause,
-            TagResourceError::ConcurrentModification(ref cause) => cause,
-            TagResourceError::ConstraintViolation(ref cause) => cause,
-            TagResourceError::InvalidInput(ref cause) => cause,
-            TagResourceError::Service(ref cause) => cause,
-            TagResourceError::TargetNotFound(ref cause) => cause,
-            TagResourceError::TooManyRequests(ref cause) => cause,
+            TagResourceError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Service(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TargetNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4923,23 +4859,19 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AWSOrganizationsNotInUse(ref cause) => cause,
-            UntagResourceError::AccessDenied(ref cause) => cause,
-            UntagResourceError::ConcurrentModification(ref cause) => cause,
-            UntagResourceError::ConstraintViolation(ref cause) => cause,
-            UntagResourceError::InvalidInput(ref cause) => cause,
-            UntagResourceError::Service(ref cause) => cause,
-            UntagResourceError::TargetNotFound(ref cause) => cause,
-            UntagResourceError::TooManyRequests(ref cause) => cause,
+            UntagResourceError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Service(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TargetNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateOrganizationalUnit
 #[derive(Debug, PartialEq)]
 pub enum UpdateOrganizationalUnitError {
@@ -5012,23 +4944,27 @@ impl UpdateOrganizationalUnitError {
 }
 impl fmt::Display for UpdateOrganizationalUnitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateOrganizationalUnitError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateOrganizationalUnitError::AWSOrganizationsNotInUse(ref cause) => cause,
-            UpdateOrganizationalUnitError::AccessDenied(ref cause) => cause,
-            UpdateOrganizationalUnitError::ConcurrentModification(ref cause) => cause,
-            UpdateOrganizationalUnitError::DuplicateOrganizationalUnit(ref cause) => cause,
-            UpdateOrganizationalUnitError::InvalidInput(ref cause) => cause,
-            UpdateOrganizationalUnitError::OrganizationalUnitNotFound(ref cause) => cause,
-            UpdateOrganizationalUnitError::Service(ref cause) => cause,
-            UpdateOrganizationalUnitError::TooManyRequests(ref cause) => cause,
+            UpdateOrganizationalUnitError::AWSOrganizationsNotInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOrganizationalUnitError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateOrganizationalUnitError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOrganizationalUnitError::DuplicateOrganizationalUnit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOrganizationalUnitError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateOrganizationalUnitError::OrganizationalUnitNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOrganizationalUnitError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateOrganizationalUnitError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateOrganizationalUnitError {}
 /// Errors returned by UpdatePolicy
 #[derive(Debug, PartialEq)]
 pub enum UpdatePolicyError {
@@ -5113,27 +5049,23 @@ impl UpdatePolicyError {
 }
 impl fmt::Display for UpdatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePolicyError::AWSOrganizationsNotInUse(ref cause) => cause,
-            UpdatePolicyError::AccessDenied(ref cause) => cause,
-            UpdatePolicyError::ConcurrentModification(ref cause) => cause,
-            UpdatePolicyError::ConstraintViolation(ref cause) => cause,
-            UpdatePolicyError::DuplicatePolicy(ref cause) => cause,
-            UpdatePolicyError::InvalidInput(ref cause) => cause,
-            UpdatePolicyError::MalformedPolicyDocument(ref cause) => cause,
-            UpdatePolicyError::PolicyChangesInProgress(ref cause) => cause,
-            UpdatePolicyError::PolicyNotFound(ref cause) => cause,
-            UpdatePolicyError::Service(ref cause) => cause,
-            UpdatePolicyError::TooManyRequests(ref cause) => cause,
-            UpdatePolicyError::UnsupportedAPIEndpoint(ref cause) => cause,
+            UpdatePolicyError::AWSOrganizationsNotInUse(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::ConstraintViolation(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::DuplicatePolicy(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::PolicyChangesInProgress(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::Service(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdatePolicyError::UnsupportedAPIEndpoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePolicyError {}
 /// Trait representing the capabilities of the Organizations API. Organizations clients implement this trait.
 pub trait Organizations {
     /// <p>Sends a response to the originator of a handshake agreeing to the action proposed by the handshake request. </p> <p>This operation can be called only by the following principals when they also have the relevant IAM permissions:</p> <ul> <li> <p> <b>Invitation to join</b> or <b>Approve all features request</b> handshakes: only a principal from the member account. </p> <p>The user who calls the API for an invitation to join must have the <code>organizations:AcceptHandshake</code> permission. If you enabled all features in the organization, the user must also have the <code>iam:CreateServiceLinkedRole</code> permission so that AWS Organizations can create the required service-linked role named <code>AWSServiceRoleForOrganizations</code>. For more information, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_integration_services.html#orgs_integration_service-linked-roles">AWS Organizations and Service-Linked Roles</a> in the <i>AWS Organizations User Guide</i>.</p> </li> <li> <p> <b>Enable all features final confirmation</b> handshake: only a principal from the master account.</p> <p>For more information about invitations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_invites.html">Inviting an AWS Account to Join Your Organization</a> in the <i>AWS Organizations User Guide.</i> For more information about requests to enable all features in the organization, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide.</i> </p> </li> </ul> <p>After you accept a handshake, it continues to appear in the results of relevant APIs for only 30 days. After that, it's deleted.</p>

@@ -1930,21 +1930,17 @@ impl AcceptDirectConnectGatewayAssociationProposalError {
 }
 impl fmt::Display for AcceptDirectConnectGatewayAssociationProposalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AcceptDirectConnectGatewayAssociationProposalError {
-    fn description(&self) -> &str {
         match *self {
             AcceptDirectConnectGatewayAssociationProposalError::DirectConnectClient(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             AcceptDirectConnectGatewayAssociationProposalError::DirectConnectServer(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for AcceptDirectConnectGatewayAssociationProposalError {}
 /// Errors returned by AllocateConnectionOnInterconnect
 #[derive(Debug, PartialEq)]
 pub enum AllocateConnectionOnInterconnectError {
@@ -1979,17 +1975,17 @@ impl AllocateConnectionOnInterconnectError {
 }
 impl fmt::Display for AllocateConnectionOnInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AllocateConnectionOnInterconnectError {
-    fn description(&self) -> &str {
         match *self {
-            AllocateConnectionOnInterconnectError::DirectConnectClient(ref cause) => cause,
-            AllocateConnectionOnInterconnectError::DirectConnectServer(ref cause) => cause,
+            AllocateConnectionOnInterconnectError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllocateConnectionOnInterconnectError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AllocateConnectionOnInterconnectError {}
 /// Errors returned by AllocateHostedConnection
 #[derive(Debug, PartialEq)]
 pub enum AllocateHostedConnectionError {
@@ -2036,19 +2032,15 @@ impl AllocateHostedConnectionError {
 }
 impl fmt::Display for AllocateHostedConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AllocateHostedConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            AllocateHostedConnectionError::DirectConnectClient(ref cause) => cause,
-            AllocateHostedConnectionError::DirectConnectServer(ref cause) => cause,
-            AllocateHostedConnectionError::DuplicateTagKeys(ref cause) => cause,
-            AllocateHostedConnectionError::TooManyTags(ref cause) => cause,
+            AllocateHostedConnectionError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            AllocateHostedConnectionError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
+            AllocateHostedConnectionError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            AllocateHostedConnectionError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AllocateHostedConnectionError {}
 /// Errors returned by AllocatePrivateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AllocatePrivateVirtualInterfaceError {
@@ -2097,19 +2089,21 @@ impl AllocatePrivateVirtualInterfaceError {
 }
 impl fmt::Display for AllocatePrivateVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AllocatePrivateVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            AllocatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            AllocatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            AllocatePrivateVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
-            AllocatePrivateVirtualInterfaceError::TooManyTags(ref cause) => cause,
+            AllocatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllocatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllocatePrivateVirtualInterfaceError::DuplicateTagKeys(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllocatePrivateVirtualInterfaceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AllocatePrivateVirtualInterfaceError {}
 /// Errors returned by AllocatePublicVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AllocatePublicVirtualInterfaceError {
@@ -2158,19 +2152,21 @@ impl AllocatePublicVirtualInterfaceError {
 }
 impl fmt::Display for AllocatePublicVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AllocatePublicVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            AllocatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            AllocatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            AllocatePublicVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
-            AllocatePublicVirtualInterfaceError::TooManyTags(ref cause) => cause,
+            AllocatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllocatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllocatePublicVirtualInterfaceError::DuplicateTagKeys(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllocatePublicVirtualInterfaceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AllocatePublicVirtualInterfaceError {}
 /// Errors returned by AllocateTransitVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AllocateTransitVirtualInterfaceError {
@@ -2219,19 +2215,21 @@ impl AllocateTransitVirtualInterfaceError {
 }
 impl fmt::Display for AllocateTransitVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AllocateTransitVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            AllocateTransitVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            AllocateTransitVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            AllocateTransitVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
-            AllocateTransitVirtualInterfaceError::TooManyTags(ref cause) => cause,
+            AllocateTransitVirtualInterfaceError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllocateTransitVirtualInterfaceError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllocateTransitVirtualInterfaceError::DuplicateTagKeys(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AllocateTransitVirtualInterfaceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AllocateTransitVirtualInterfaceError {}
 /// Errors returned by AssociateConnectionWithLag
 #[derive(Debug, PartialEq)]
 pub enum AssociateConnectionWithLagError {
@@ -2266,17 +2264,17 @@ impl AssociateConnectionWithLagError {
 }
 impl fmt::Display for AssociateConnectionWithLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateConnectionWithLagError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateConnectionWithLagError::DirectConnectClient(ref cause) => cause,
-            AssociateConnectionWithLagError::DirectConnectServer(ref cause) => cause,
+            AssociateConnectionWithLagError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateConnectionWithLagError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateConnectionWithLagError {}
 /// Errors returned by AssociateHostedConnection
 #[derive(Debug, PartialEq)]
 pub enum AssociateHostedConnectionError {
@@ -2309,17 +2307,17 @@ impl AssociateHostedConnectionError {
 }
 impl fmt::Display for AssociateHostedConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateHostedConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateHostedConnectionError::DirectConnectClient(ref cause) => cause,
-            AssociateHostedConnectionError::DirectConnectServer(ref cause) => cause,
+            AssociateHostedConnectionError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateHostedConnectionError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateHostedConnectionError {}
 /// Errors returned by AssociateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AssociateVirtualInterfaceError {
@@ -2352,17 +2350,17 @@ impl AssociateVirtualInterfaceError {
 }
 impl fmt::Display for AssociateVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            AssociateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            AssociateVirtualInterfaceError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateVirtualInterfaceError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateVirtualInterfaceError {}
 /// Errors returned by ConfirmConnection
 #[derive(Debug, PartialEq)]
 pub enum ConfirmConnectionError {
@@ -2395,17 +2393,13 @@ impl ConfirmConnectionError {
 }
 impl fmt::Display for ConfirmConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            ConfirmConnectionError::DirectConnectClient(ref cause) => cause,
-            ConfirmConnectionError::DirectConnectServer(ref cause) => cause,
+            ConfirmConnectionError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            ConfirmConnectionError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ConfirmConnectionError {}
 /// Errors returned by ConfirmPrivateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum ConfirmPrivateVirtualInterfaceError {
@@ -2440,17 +2434,17 @@ impl ConfirmPrivateVirtualInterfaceError {
 }
 impl fmt::Display for ConfirmPrivateVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmPrivateVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            ConfirmPrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            ConfirmPrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            ConfirmPrivateVirtualInterfaceError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConfirmPrivateVirtualInterfaceError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ConfirmPrivateVirtualInterfaceError {}
 /// Errors returned by ConfirmPublicVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum ConfirmPublicVirtualInterfaceError {
@@ -2485,17 +2479,17 @@ impl ConfirmPublicVirtualInterfaceError {
 }
 impl fmt::Display for ConfirmPublicVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmPublicVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            ConfirmPublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            ConfirmPublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            ConfirmPublicVirtualInterfaceError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConfirmPublicVirtualInterfaceError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ConfirmPublicVirtualInterfaceError {}
 /// Errors returned by ConfirmTransitVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum ConfirmTransitVirtualInterfaceError {
@@ -2530,17 +2524,17 @@ impl ConfirmTransitVirtualInterfaceError {
 }
 impl fmt::Display for ConfirmTransitVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmTransitVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            ConfirmTransitVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            ConfirmTransitVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            ConfirmTransitVirtualInterfaceError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConfirmTransitVirtualInterfaceError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ConfirmTransitVirtualInterfaceError {}
 /// Errors returned by CreateBGPPeer
 #[derive(Debug, PartialEq)]
 pub enum CreateBGPPeerError {
@@ -2569,17 +2563,13 @@ impl CreateBGPPeerError {
 }
 impl fmt::Display for CreateBGPPeerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBGPPeerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBGPPeerError::DirectConnectClient(ref cause) => cause,
-            CreateBGPPeerError::DirectConnectServer(ref cause) => cause,
+            CreateBGPPeerError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            CreateBGPPeerError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBGPPeerError {}
 /// Errors returned by CreateConnection
 #[derive(Debug, PartialEq)]
 pub enum CreateConnectionError {
@@ -2622,19 +2612,15 @@ impl CreateConnectionError {
 }
 impl fmt::Display for CreateConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateConnectionError::DirectConnectClient(ref cause) => cause,
-            CreateConnectionError::DirectConnectServer(ref cause) => cause,
-            CreateConnectionError::DuplicateTagKeys(ref cause) => cause,
-            CreateConnectionError::TooManyTags(ref cause) => cause,
+            CreateConnectionError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateConnectionError {}
 /// Errors returned by CreateDirectConnectGateway
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectConnectGatewayError {
@@ -2669,17 +2655,17 @@ impl CreateDirectConnectGatewayError {
 }
 impl fmt::Display for CreateDirectConnectGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDirectConnectGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDirectConnectGatewayError::DirectConnectClient(ref cause) => cause,
-            CreateDirectConnectGatewayError::DirectConnectServer(ref cause) => cause,
+            CreateDirectConnectGatewayError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDirectConnectGatewayError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateDirectConnectGatewayError {}
 /// Errors returned by CreateDirectConnectGatewayAssociation
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectConnectGatewayAssociationError {
@@ -2714,17 +2700,17 @@ impl CreateDirectConnectGatewayAssociationError {
 }
 impl fmt::Display for CreateDirectConnectGatewayAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDirectConnectGatewayAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => cause,
-            CreateDirectConnectGatewayAssociationError::DirectConnectServer(ref cause) => cause,
+            CreateDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDirectConnectGatewayAssociationError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateDirectConnectGatewayAssociationError {}
 /// Errors returned by CreateDirectConnectGatewayAssociationProposal
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectConnectGatewayAssociationProposalError {
@@ -2763,21 +2749,17 @@ impl CreateDirectConnectGatewayAssociationProposalError {
 }
 impl fmt::Display for CreateDirectConnectGatewayAssociationProposalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDirectConnectGatewayAssociationProposalError {
-    fn description(&self) -> &str {
         match *self {
             CreateDirectConnectGatewayAssociationProposalError::DirectConnectClient(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             CreateDirectConnectGatewayAssociationProposalError::DirectConnectServer(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for CreateDirectConnectGatewayAssociationProposalError {}
 /// Errors returned by CreateInterconnect
 #[derive(Debug, PartialEq)]
 pub enum CreateInterconnectError {
@@ -2820,19 +2802,15 @@ impl CreateInterconnectError {
 }
 impl fmt::Display for CreateInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInterconnectError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInterconnectError::DirectConnectClient(ref cause) => cause,
-            CreateInterconnectError::DirectConnectServer(ref cause) => cause,
-            CreateInterconnectError::DuplicateTagKeys(ref cause) => cause,
-            CreateInterconnectError::TooManyTags(ref cause) => cause,
+            CreateInterconnectError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            CreateInterconnectError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
+            CreateInterconnectError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            CreateInterconnectError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInterconnectError {}
 /// Errors returned by CreateLag
 #[derive(Debug, PartialEq)]
 pub enum CreateLagError {
@@ -2871,19 +2849,15 @@ impl CreateLagError {
 }
 impl fmt::Display for CreateLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLagError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLagError::DirectConnectClient(ref cause) => cause,
-            CreateLagError::DirectConnectServer(ref cause) => cause,
-            CreateLagError::DuplicateTagKeys(ref cause) => cause,
-            CreateLagError::TooManyTags(ref cause) => cause,
+            CreateLagError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            CreateLagError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
+            CreateLagError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            CreateLagError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLagError {}
 /// Errors returned by CreatePrivateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum CreatePrivateVirtualInterfaceError {
@@ -2932,19 +2906,21 @@ impl CreatePrivateVirtualInterfaceError {
 }
 impl fmt::Display for CreatePrivateVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePrivateVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            CreatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            CreatePrivateVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
-            CreatePrivateVirtualInterfaceError::TooManyTags(ref cause) => cause,
+            CreatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePrivateVirtualInterfaceError::DuplicateTagKeys(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePrivateVirtualInterfaceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePrivateVirtualInterfaceError {}
 /// Errors returned by CreatePublicVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum CreatePublicVirtualInterfaceError {
@@ -2993,19 +2969,21 @@ impl CreatePublicVirtualInterfaceError {
 }
 impl fmt::Display for CreatePublicVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePublicVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            CreatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            CreatePublicVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
-            CreatePublicVirtualInterfaceError::TooManyTags(ref cause) => cause,
+            CreatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePublicVirtualInterfaceError::DuplicateTagKeys(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreatePublicVirtualInterfaceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePublicVirtualInterfaceError {}
 /// Errors returned by CreateTransitVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum CreateTransitVirtualInterfaceError {
@@ -3054,19 +3032,21 @@ impl CreateTransitVirtualInterfaceError {
 }
 impl fmt::Display for CreateTransitVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTransitVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTransitVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            CreateTransitVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            CreateTransitVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
-            CreateTransitVirtualInterfaceError::TooManyTags(ref cause) => cause,
+            CreateTransitVirtualInterfaceError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTransitVirtualInterfaceError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTransitVirtualInterfaceError::DuplicateTagKeys(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTransitVirtualInterfaceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTransitVirtualInterfaceError {}
 /// Errors returned by DeleteBGPPeer
 #[derive(Debug, PartialEq)]
 pub enum DeleteBGPPeerError {
@@ -3095,17 +3075,13 @@ impl DeleteBGPPeerError {
 }
 impl fmt::Display for DeleteBGPPeerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBGPPeerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBGPPeerError::DirectConnectClient(ref cause) => cause,
-            DeleteBGPPeerError::DirectConnectServer(ref cause) => cause,
+            DeleteBGPPeerError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DeleteBGPPeerError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBGPPeerError {}
 /// Errors returned by DeleteConnection
 #[derive(Debug, PartialEq)]
 pub enum DeleteConnectionError {
@@ -3138,17 +3114,13 @@ impl DeleteConnectionError {
 }
 impl fmt::Display for DeleteConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConnectionError::DirectConnectClient(ref cause) => cause,
-            DeleteConnectionError::DirectConnectServer(ref cause) => cause,
+            DeleteConnectionError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteConnectionError {}
 /// Errors returned by DeleteDirectConnectGateway
 #[derive(Debug, PartialEq)]
 pub enum DeleteDirectConnectGatewayError {
@@ -3183,17 +3155,17 @@ impl DeleteDirectConnectGatewayError {
 }
 impl fmt::Display for DeleteDirectConnectGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDirectConnectGatewayError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDirectConnectGatewayError::DirectConnectClient(ref cause) => cause,
-            DeleteDirectConnectGatewayError::DirectConnectServer(ref cause) => cause,
+            DeleteDirectConnectGatewayError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDirectConnectGatewayError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteDirectConnectGatewayError {}
 /// Errors returned by DeleteDirectConnectGatewayAssociation
 #[derive(Debug, PartialEq)]
 pub enum DeleteDirectConnectGatewayAssociationError {
@@ -3228,17 +3200,17 @@ impl DeleteDirectConnectGatewayAssociationError {
 }
 impl fmt::Display for DeleteDirectConnectGatewayAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDirectConnectGatewayAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => cause,
-            DeleteDirectConnectGatewayAssociationError::DirectConnectServer(ref cause) => cause,
+            DeleteDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDirectConnectGatewayAssociationError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteDirectConnectGatewayAssociationError {}
 /// Errors returned by DeleteDirectConnectGatewayAssociationProposal
 #[derive(Debug, PartialEq)]
 pub enum DeleteDirectConnectGatewayAssociationProposalError {
@@ -3277,21 +3249,17 @@ impl DeleteDirectConnectGatewayAssociationProposalError {
 }
 impl fmt::Display for DeleteDirectConnectGatewayAssociationProposalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDirectConnectGatewayAssociationProposalError {
-    fn description(&self) -> &str {
         match *self {
             DeleteDirectConnectGatewayAssociationProposalError::DirectConnectClient(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             DeleteDirectConnectGatewayAssociationProposalError::DirectConnectServer(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for DeleteDirectConnectGatewayAssociationProposalError {}
 /// Errors returned by DeleteInterconnect
 #[derive(Debug, PartialEq)]
 pub enum DeleteInterconnectError {
@@ -3324,17 +3292,13 @@ impl DeleteInterconnectError {
 }
 impl fmt::Display for DeleteInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInterconnectError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInterconnectError::DirectConnectClient(ref cause) => cause,
-            DeleteInterconnectError::DirectConnectServer(ref cause) => cause,
+            DeleteInterconnectError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DeleteInterconnectError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInterconnectError {}
 /// Errors returned by DeleteLag
 #[derive(Debug, PartialEq)]
 pub enum DeleteLagError {
@@ -3363,17 +3327,13 @@ impl DeleteLagError {
 }
 impl fmt::Display for DeleteLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLagError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLagError::DirectConnectClient(ref cause) => cause,
-            DeleteLagError::DirectConnectServer(ref cause) => cause,
+            DeleteLagError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DeleteLagError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLagError {}
 /// Errors returned by DeleteVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualInterfaceError {
@@ -3406,17 +3366,13 @@ impl DeleteVirtualInterfaceError {
 }
 impl fmt::Display for DeleteVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVirtualInterfaceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
-            DeleteVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            DeleteVirtualInterfaceError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualInterfaceError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVirtualInterfaceError {}
 /// Errors returned by DescribeConnectionLoa
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionLoaError {
@@ -3449,17 +3405,13 @@ impl DescribeConnectionLoaError {
 }
 impl fmt::Display for DescribeConnectionLoaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConnectionLoaError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConnectionLoaError::DirectConnectClient(ref cause) => cause,
-            DescribeConnectionLoaError::DirectConnectServer(ref cause) => cause,
+            DescribeConnectionLoaError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DescribeConnectionLoaError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConnectionLoaError {}
 /// Errors returned by DescribeConnections
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionsError {
@@ -3492,17 +3444,13 @@ impl DescribeConnectionsError {
 }
 impl fmt::Display for DescribeConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConnectionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConnectionsError::DirectConnectClient(ref cause) => cause,
-            DescribeConnectionsError::DirectConnectServer(ref cause) => cause,
+            DescribeConnectionsError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DescribeConnectionsError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConnectionsError {}
 /// Errors returned by DescribeConnectionsOnInterconnect
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionsOnInterconnectError {
@@ -3537,17 +3485,17 @@ impl DescribeConnectionsOnInterconnectError {
 }
 impl fmt::Display for DescribeConnectionsOnInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConnectionsOnInterconnectError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConnectionsOnInterconnectError::DirectConnectClient(ref cause) => cause,
-            DescribeConnectionsOnInterconnectError::DirectConnectServer(ref cause) => cause,
+            DescribeConnectionsOnInterconnectError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConnectionsOnInterconnectError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeConnectionsOnInterconnectError {}
 /// Errors returned by DescribeDirectConnectGatewayAssociationProposals
 #[derive(Debug, PartialEq)]
 pub enum DescribeDirectConnectGatewayAssociationProposalsError {
@@ -3586,21 +3534,17 @@ impl DescribeDirectConnectGatewayAssociationProposalsError {
 }
 impl fmt::Display for DescribeDirectConnectGatewayAssociationProposalsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDirectConnectGatewayAssociationProposalsError {
-    fn description(&self) -> &str {
         match *self {
             DescribeDirectConnectGatewayAssociationProposalsError::DirectConnectClient(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             DescribeDirectConnectGatewayAssociationProposalsError::DirectConnectServer(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDirectConnectGatewayAssociationProposalsError {}
 /// Errors returned by DescribeDirectConnectGatewayAssociations
 #[derive(Debug, PartialEq)]
 pub enum DescribeDirectConnectGatewayAssociationsError {
@@ -3635,17 +3579,17 @@ impl DescribeDirectConnectGatewayAssociationsError {
 }
 impl fmt::Display for DescribeDirectConnectGatewayAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDirectConnectGatewayAssociationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(ref cause) => cause,
-            DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(ref cause) => cause,
+            DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDirectConnectGatewayAssociationsError {}
 /// Errors returned by DescribeDirectConnectGatewayAttachments
 #[derive(Debug, PartialEq)]
 pub enum DescribeDirectConnectGatewayAttachmentsError {
@@ -3680,17 +3624,17 @@ impl DescribeDirectConnectGatewayAttachmentsError {
 }
 impl fmt::Display for DescribeDirectConnectGatewayAttachmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDirectConnectGatewayAttachmentsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(ref cause) => cause,
-            DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(ref cause) => cause,
+            DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDirectConnectGatewayAttachmentsError {}
 /// Errors returned by DescribeDirectConnectGateways
 #[derive(Debug, PartialEq)]
 pub enum DescribeDirectConnectGatewaysError {
@@ -3725,17 +3669,17 @@ impl DescribeDirectConnectGatewaysError {
 }
 impl fmt::Display for DescribeDirectConnectGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDirectConnectGatewaysError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDirectConnectGatewaysError::DirectConnectClient(ref cause) => cause,
-            DescribeDirectConnectGatewaysError::DirectConnectServer(ref cause) => cause,
+            DescribeDirectConnectGatewaysError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDirectConnectGatewaysError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDirectConnectGatewaysError {}
 /// Errors returned by DescribeHostedConnections
 #[derive(Debug, PartialEq)]
 pub enum DescribeHostedConnectionsError {
@@ -3768,17 +3712,17 @@ impl DescribeHostedConnectionsError {
 }
 impl fmt::Display for DescribeHostedConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHostedConnectionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHostedConnectionsError::DirectConnectClient(ref cause) => cause,
-            DescribeHostedConnectionsError::DirectConnectServer(ref cause) => cause,
+            DescribeHostedConnectionsError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeHostedConnectionsError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeHostedConnectionsError {}
 /// Errors returned by DescribeInterconnectLoa
 #[derive(Debug, PartialEq)]
 pub enum DescribeInterconnectLoaError {
@@ -3811,17 +3755,13 @@ impl DescribeInterconnectLoaError {
 }
 impl fmt::Display for DescribeInterconnectLoaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInterconnectLoaError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInterconnectLoaError::DirectConnectClient(ref cause) => cause,
-            DescribeInterconnectLoaError::DirectConnectServer(ref cause) => cause,
+            DescribeInterconnectLoaError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DescribeInterconnectLoaError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInterconnectLoaError {}
 /// Errors returned by DescribeInterconnects
 #[derive(Debug, PartialEq)]
 pub enum DescribeInterconnectsError {
@@ -3854,17 +3794,13 @@ impl DescribeInterconnectsError {
 }
 impl fmt::Display for DescribeInterconnectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInterconnectsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInterconnectsError::DirectConnectClient(ref cause) => cause,
-            DescribeInterconnectsError::DirectConnectServer(ref cause) => cause,
+            DescribeInterconnectsError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DescribeInterconnectsError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInterconnectsError {}
 /// Errors returned by DescribeLags
 #[derive(Debug, PartialEq)]
 pub enum DescribeLagsError {
@@ -3893,17 +3829,13 @@ impl DescribeLagsError {
 }
 impl fmt::Display for DescribeLagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLagsError::DirectConnectClient(ref cause) => cause,
-            DescribeLagsError::DirectConnectServer(ref cause) => cause,
+            DescribeLagsError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DescribeLagsError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLagsError {}
 /// Errors returned by DescribeLoa
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoaError {
@@ -3932,17 +3864,13 @@ impl DescribeLoaError {
 }
 impl fmt::Display for DescribeLoaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoaError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoaError::DirectConnectClient(ref cause) => cause,
-            DescribeLoaError::DirectConnectServer(ref cause) => cause,
+            DescribeLoaError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DescribeLoaError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLoaError {}
 /// Errors returned by DescribeLocations
 #[derive(Debug, PartialEq)]
 pub enum DescribeLocationsError {
@@ -3975,17 +3903,13 @@ impl DescribeLocationsError {
 }
 impl fmt::Display for DescribeLocationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLocationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLocationsError::DirectConnectClient(ref cause) => cause,
-            DescribeLocationsError::DirectConnectServer(ref cause) => cause,
+            DescribeLocationsError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DescribeLocationsError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLocationsError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -4014,17 +3938,13 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::DirectConnectClient(ref cause) => cause,
-            DescribeTagsError::DirectConnectServer(ref cause) => cause,
+            DescribeTagsError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by DescribeVirtualGateways
 #[derive(Debug, PartialEq)]
 pub enum DescribeVirtualGatewaysError {
@@ -4057,17 +3977,13 @@ impl DescribeVirtualGatewaysError {
 }
 impl fmt::Display for DescribeVirtualGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVirtualGatewaysError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVirtualGatewaysError::DirectConnectClient(ref cause) => cause,
-            DescribeVirtualGatewaysError::DirectConnectServer(ref cause) => cause,
+            DescribeVirtualGatewaysError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualGatewaysError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeVirtualGatewaysError {}
 /// Errors returned by DescribeVirtualInterfaces
 #[derive(Debug, PartialEq)]
 pub enum DescribeVirtualInterfacesError {
@@ -4100,17 +4016,17 @@ impl DescribeVirtualInterfacesError {
 }
 impl fmt::Display for DescribeVirtualInterfacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeVirtualInterfacesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeVirtualInterfacesError::DirectConnectClient(ref cause) => cause,
-            DescribeVirtualInterfacesError::DirectConnectServer(ref cause) => cause,
+            DescribeVirtualInterfacesError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeVirtualInterfacesError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeVirtualInterfacesError {}
 /// Errors returned by DisassociateConnectionFromLag
 #[derive(Debug, PartialEq)]
 pub enum DisassociateConnectionFromLagError {
@@ -4145,17 +4061,17 @@ impl DisassociateConnectionFromLagError {
 }
 impl fmt::Display for DisassociateConnectionFromLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateConnectionFromLagError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateConnectionFromLagError::DirectConnectClient(ref cause) => cause,
-            DisassociateConnectionFromLagError::DirectConnectServer(ref cause) => cause,
+            DisassociateConnectionFromLagError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateConnectionFromLagError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateConnectionFromLagError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4194,19 +4110,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::DirectConnectClient(ref cause) => cause,
-            TagResourceError::DirectConnectServer(ref cause) => cause,
-            TagResourceError::DuplicateTagKeys(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            TagResourceError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
+            TagResourceError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4235,17 +4147,13 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::DirectConnectClient(ref cause) => cause,
-            UntagResourceError::DirectConnectServer(ref cause) => cause,
+            UntagResourceError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateDirectConnectGatewayAssociation
 #[derive(Debug, PartialEq)]
 pub enum UpdateDirectConnectGatewayAssociationError {
@@ -4280,17 +4188,17 @@ impl UpdateDirectConnectGatewayAssociationError {
 }
 impl fmt::Display for UpdateDirectConnectGatewayAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDirectConnectGatewayAssociationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => cause,
-            UpdateDirectConnectGatewayAssociationError::DirectConnectServer(ref cause) => cause,
+            UpdateDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDirectConnectGatewayAssociationError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateDirectConnectGatewayAssociationError {}
 /// Errors returned by UpdateLag
 #[derive(Debug, PartialEq)]
 pub enum UpdateLagError {
@@ -4319,17 +4227,13 @@ impl UpdateLagError {
 }
 impl fmt::Display for UpdateLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLagError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLagError::DirectConnectClient(ref cause) => cause,
-            UpdateLagError::DirectConnectServer(ref cause) => cause,
+            UpdateLagError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            UpdateLagError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateLagError {}
 /// Errors returned by UpdateVirtualInterfaceAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateVirtualInterfaceAttributesError {
@@ -4364,17 +4268,17 @@ impl UpdateVirtualInterfaceAttributesError {
 }
 impl fmt::Display for UpdateVirtualInterfaceAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateVirtualInterfaceAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateVirtualInterfaceAttributesError::DirectConnectClient(ref cause) => cause,
-            UpdateVirtualInterfaceAttributesError::DirectConnectServer(ref cause) => cause,
+            UpdateVirtualInterfaceAttributesError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateVirtualInterfaceAttributesError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateVirtualInterfaceAttributesError {}
 /// Trait representing the capabilities of the AWS Direct Connect API. AWS Direct Connect clients implement this trait.
 pub trait DirectConnect {
     /// <p>Accepts a proposal request to attach a virtual private gateway or transit gateway to a Direct Connect gateway.</p>

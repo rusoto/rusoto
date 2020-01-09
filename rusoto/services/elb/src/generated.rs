@@ -4109,18 +4109,14 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsError::AccessPointNotFound(ref cause) => cause,
-            AddTagsError::DuplicateTagKeys(ref cause) => cause,
-            AddTagsError::TooManyTags(ref cause) => cause,
+            AddTagsError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            AddTagsError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by ApplySecurityGroupsToLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum ApplySecurityGroupsToLoadBalancerError {
@@ -4180,18 +4176,20 @@ impl ApplySecurityGroupsToLoadBalancerError {
 }
 impl fmt::Display for ApplySecurityGroupsToLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ApplySecurityGroupsToLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(ref cause) => cause,
-            ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
-            ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
+            ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ApplySecurityGroupsToLoadBalancerError {}
 /// Errors returned by AttachLoadBalancerToSubnets
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancerToSubnetsError {
@@ -4256,19 +4254,19 @@ impl AttachLoadBalancerToSubnetsError {
 }
 impl fmt::Display for AttachLoadBalancerToSubnetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachLoadBalancerToSubnetsError {
-    fn description(&self) -> &str {
         match *self {
-            AttachLoadBalancerToSubnetsError::AccessPointNotFound(ref cause) => cause,
-            AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
-            AttachLoadBalancerToSubnetsError::InvalidSubnet(ref cause) => cause,
-            AttachLoadBalancerToSubnetsError::SubnetNotFound(ref cause) => cause,
+            AttachLoadBalancerToSubnetsError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerToSubnetsError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            AttachLoadBalancerToSubnetsError::SubnetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachLoadBalancerToSubnetsError {}
 /// Errors returned by ConfigureHealthCheck
 #[derive(Debug, PartialEq)]
 pub enum ConfigureHealthCheckError {
@@ -4306,16 +4304,12 @@ impl ConfigureHealthCheckError {
 }
 impl fmt::Display for ConfigureHealthCheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfigureHealthCheckError {
-    fn description(&self) -> &str {
         match *self {
-            ConfigureHealthCheckError::AccessPointNotFound(ref cause) => cause,
+            ConfigureHealthCheckError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ConfigureHealthCheckError {}
 /// Errors returned by CreateAppCookieStickinessPolicy
 #[derive(Debug, PartialEq)]
 pub enum CreateAppCookieStickinessPolicyError {
@@ -4384,19 +4378,23 @@ impl CreateAppCookieStickinessPolicyError {
 }
 impl fmt::Display for CreateAppCookieStickinessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAppCookieStickinessPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAppCookieStickinessPolicyError::AccessPointNotFound(ref cause) => cause,
-            CreateAppCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => cause,
-            CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateAppCookieStickinessPolicyError::TooManyPolicies(ref cause) => cause,
+            CreateAppCookieStickinessPolicyError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAppCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAppCookieStickinessPolicyError::TooManyPolicies(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateAppCookieStickinessPolicyError {}
 /// Errors returned by CreateLBCookieStickinessPolicy
 #[derive(Debug, PartialEq)]
 pub enum CreateLBCookieStickinessPolicyError {
@@ -4465,19 +4463,23 @@ impl CreateLBCookieStickinessPolicyError {
 }
 impl fmt::Display for CreateLBCookieStickinessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLBCookieStickinessPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLBCookieStickinessPolicyError::AccessPointNotFound(ref cause) => cause,
-            CreateLBCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => cause,
-            CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateLBCookieStickinessPolicyError::TooManyPolicies(ref cause) => cause,
+            CreateLBCookieStickinessPolicyError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLBCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLBCookieStickinessPolicyError::TooManyPolicies(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateLBCookieStickinessPolicyError {}
 /// Errors returned by CreateLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerError {
@@ -4594,27 +4596,25 @@ impl CreateLoadBalancerError {
 }
 impl fmt::Display for CreateLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerError::CertificateNotFound(ref cause) => cause,
-            CreateLoadBalancerError::DuplicateAccessPointName(ref cause) => cause,
-            CreateLoadBalancerError::DuplicateTagKeys(ref cause) => cause,
-            CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateLoadBalancerError::InvalidScheme(ref cause) => cause,
-            CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
-            CreateLoadBalancerError::InvalidSubnet(ref cause) => cause,
-            CreateLoadBalancerError::OperationNotPermitted(ref cause) => cause,
-            CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,
-            CreateLoadBalancerError::TooManyAccessPoints(ref cause) => cause,
-            CreateLoadBalancerError::TooManyTags(ref cause) => cause,
-            CreateLoadBalancerError::UnsupportedProtocol(ref cause) => cause,
+            CreateLoadBalancerError::CertificateNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::DuplicateAccessPointName(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerError::InvalidScheme(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::SubnetNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::TooManyAccessPoints(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::TooManyTags(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoadBalancerError {}
 /// Errors returned by CreateLoadBalancerListeners
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerListenersError {
@@ -4692,20 +4692,26 @@ impl CreateLoadBalancerListenersError {
 }
 impl fmt::Display for CreateLoadBalancerListenersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerListenersError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerListenersError::AccessPointNotFound(ref cause) => cause,
-            CreateLoadBalancerListenersError::CertificateNotFound(ref cause) => cause,
-            CreateLoadBalancerListenersError::DuplicateListener(ref cause) => cause,
-            CreateLoadBalancerListenersError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateLoadBalancerListenersError::UnsupportedProtocol(ref cause) => cause,
+            CreateLoadBalancerListenersError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerListenersError::CertificateNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerListenersError::DuplicateListener(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerListenersError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerListenersError::UnsupportedProtocol(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateLoadBalancerListenersError {}
 /// Errors returned by CreateLoadBalancerPolicy
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerPolicyError {
@@ -4777,20 +4783,18 @@ impl CreateLoadBalancerPolicyError {
 }
 impl fmt::Display for CreateLoadBalancerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerPolicyError::AccessPointNotFound(ref cause) => cause,
-            CreateLoadBalancerPolicyError::DuplicatePolicyName(ref cause) => cause,
-            CreateLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateLoadBalancerPolicyError::PolicyTypeNotFound(ref cause) => cause,
-            CreateLoadBalancerPolicyError::TooManyPolicies(ref cause) => cause,
+            CreateLoadBalancerPolicyError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerPolicyError::DuplicatePolicyName(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerPolicyError::PolicyTypeNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerPolicyError::TooManyPolicies(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoadBalancerPolicyError {}
 /// Errors returned by DeleteLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerError {}
@@ -4820,14 +4824,10 @@ impl DeleteLoadBalancerError {
 }
 impl fmt::Display for DeleteLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteLoadBalancerError {}
 /// Errors returned by DeleteLoadBalancerListeners
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerListenersError {
@@ -4869,16 +4869,14 @@ impl DeleteLoadBalancerListenersError {
 }
 impl fmt::Display for DeleteLoadBalancerListenersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerListenersError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoadBalancerListenersError::AccessPointNotFound(ref cause) => cause,
+            DeleteLoadBalancerListenersError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteLoadBalancerListenersError {}
 /// Errors returned by DeleteLoadBalancerPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerPolicyError {
@@ -4927,17 +4925,15 @@ impl DeleteLoadBalancerPolicyError {
 }
 impl fmt::Display for DeleteLoadBalancerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoadBalancerPolicyError::AccessPointNotFound(ref cause) => cause,
-            DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => cause,
+            DeleteLoadBalancerPolicyError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteLoadBalancerPolicyError {}
 /// Errors returned by DeregisterInstancesFromLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DeregisterInstancesFromLoadBalancerError {
@@ -4988,17 +4984,17 @@ impl DeregisterInstancesFromLoadBalancerError {
 }
 impl fmt::Display for DeregisterInstancesFromLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterInstancesFromLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(ref cause) => cause,
-            DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(ref cause) => cause,
+            DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeregisterInstancesFromLoadBalancerError {}
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountLimitsError {}
@@ -5028,14 +5024,10 @@ impl DescribeAccountLimitsError {
 }
 impl fmt::Display for DescribeAccountLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountLimitsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountLimitsError {}
 /// Errors returned by DescribeInstanceHealth
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceHealthError {
@@ -5080,17 +5072,13 @@ impl DescribeInstanceHealthError {
 }
 impl fmt::Display for DescribeInstanceHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInstanceHealthError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInstanceHealthError::AccessPointNotFound(ref cause) => cause,
-            DescribeInstanceHealthError::InvalidEndPoint(ref cause) => cause,
+            DescribeInstanceHealthError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeInstanceHealthError::InvalidEndPoint(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInstanceHealthError {}
 /// Errors returned by DescribeLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerAttributesError {
@@ -5141,17 +5129,17 @@ impl DescribeLoadBalancerAttributesError {
 }
 impl fmt::Display for DescribeLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancerAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancerAttributesError::AccessPointNotFound(ref cause) => cause,
-            DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => cause,
+            DescribeLoadBalancerAttributesError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLoadBalancerAttributesError {}
 /// Errors returned by DescribeLoadBalancerPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerPoliciesError {
@@ -5200,17 +5188,15 @@ impl DescribeLoadBalancerPoliciesError {
 }
 impl fmt::Display for DescribeLoadBalancerPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancerPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancerPoliciesError::AccessPointNotFound(ref cause) => cause,
-            DescribeLoadBalancerPoliciesError::PolicyNotFound(ref cause) => cause,
+            DescribeLoadBalancerPoliciesError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeLoadBalancerPoliciesError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLoadBalancerPoliciesError {}
 /// Errors returned by DescribeLoadBalancerPolicyTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerPolicyTypesError {
@@ -5252,16 +5238,14 @@ impl DescribeLoadBalancerPolicyTypesError {
 }
 impl fmt::Display for DescribeLoadBalancerPolicyTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancerPolicyTypesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(ref cause) => cause,
+            DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLoadBalancerPolicyTypesError {}
 /// Errors returned by DescribeLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancersError {
@@ -5306,17 +5290,13 @@ impl DescribeLoadBalancersError {
 }
 impl fmt::Display for DescribeLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancersError::AccessPointNotFound(ref cause) => cause,
-            DescribeLoadBalancersError::DependencyThrottle(ref cause) => cause,
+            DescribeLoadBalancersError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeLoadBalancersError::DependencyThrottle(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLoadBalancersError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -5354,16 +5334,12 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::AccessPointNotFound(ref cause) => cause,
+            DescribeTagsError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by DetachLoadBalancerFromSubnets
 #[derive(Debug, PartialEq)]
 pub enum DetachLoadBalancerFromSubnetsError {
@@ -5414,17 +5390,17 @@ impl DetachLoadBalancerFromSubnetsError {
 }
 impl fmt::Display for DetachLoadBalancerFromSubnetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachLoadBalancerFromSubnetsError {
-    fn description(&self) -> &str {
         match *self {
-            DetachLoadBalancerFromSubnetsError::AccessPointNotFound(ref cause) => cause,
-            DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
+            DetachLoadBalancerFromSubnetsError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DetachLoadBalancerFromSubnetsError {}
 /// Errors returned by DisableAvailabilityZonesForLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DisableAvailabilityZonesForLoadBalancerError {
@@ -5473,19 +5449,17 @@ impl DisableAvailabilityZonesForLoadBalancerError {
 }
 impl fmt::Display for DisableAvailabilityZonesForLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableAvailabilityZonesForLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => cause,
+            DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableAvailabilityZonesForLoadBalancerError {}
 /// Errors returned by EnableAvailabilityZonesForLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum EnableAvailabilityZonesForLoadBalancerError {
@@ -5527,16 +5501,14 @@ impl EnableAvailabilityZonesForLoadBalancerError {
 }
 impl fmt::Display for EnableAvailabilityZonesForLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableAvailabilityZonesForLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => cause,
+            EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for EnableAvailabilityZonesForLoadBalancerError {}
 /// Errors returned by ModifyLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum ModifyLoadBalancerAttributesError {
@@ -5596,18 +5568,20 @@ impl ModifyLoadBalancerAttributesError {
 }
 impl fmt::Display for ModifyLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyLoadBalancerAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyLoadBalancerAttributesError::AccessPointNotFound(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => cause,
+            ModifyLoadBalancerAttributesError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyLoadBalancerAttributesError {}
 /// Errors returned by RegisterInstancesWithLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum RegisterInstancesWithLoadBalancerError {
@@ -5658,17 +5632,17 @@ impl RegisterInstancesWithLoadBalancerError {
 }
 impl fmt::Display for RegisterInstancesWithLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterInstancesWithLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterInstancesWithLoadBalancerError::AccessPointNotFound(ref cause) => cause,
-            RegisterInstancesWithLoadBalancerError::InvalidEndPoint(ref cause) => cause,
+            RegisterInstancesWithLoadBalancerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterInstancesWithLoadBalancerError::InvalidEndPoint(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RegisterInstancesWithLoadBalancerError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -5706,16 +5680,12 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsError::AccessPointNotFound(ref cause) => cause,
+            RemoveTagsError::AccessPointNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsError {}
 /// Errors returned by SetLoadBalancerListenerSSLCertificate
 #[derive(Debug, PartialEq)]
 pub enum SetLoadBalancerListenerSSLCertificateError {
@@ -5793,22 +5763,26 @@ impl SetLoadBalancerListenerSSLCertificateError {
 }
 impl fmt::Display for SetLoadBalancerListenerSSLCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetLoadBalancerListenerSSLCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(ref cause) => cause,
-            SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(ref cause) => cause,
-            SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(ref cause) => {
-                cause
+            SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
             }
-            SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(ref cause) => cause,
-            SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(ref cause) => cause,
+            SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetLoadBalancerListenerSSLCertificateError {}
 /// Errors returned by SetLoadBalancerPoliciesForBackendServer
 #[derive(Debug, PartialEq)]
 pub enum SetLoadBalancerPoliciesForBackendServerError {
@@ -5866,20 +5840,20 @@ impl SetLoadBalancerPoliciesForBackendServerError {
 }
 impl fmt::Display for SetLoadBalancerPoliciesForBackendServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetLoadBalancerPoliciesForBackendServerError {
-    fn description(&self) -> &str {
         match *self {
-            SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(ref cause) => cause,
+            SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
             SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(
                 ref cause,
-            ) => cause,
-            SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetLoadBalancerPoliciesForBackendServerError {}
 /// Errors returned by SetLoadBalancerPoliciesOfListener
 #[derive(Debug, PartialEq)]
 pub enum SetLoadBalancerPoliciesOfListenerError {
@@ -5948,19 +5922,23 @@ impl SetLoadBalancerPoliciesOfListenerError {
 }
 impl fmt::Display for SetLoadBalancerPoliciesOfListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetLoadBalancerPoliciesOfListenerError {
-    fn description(&self) -> &str {
         match *self {
-            SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(ref cause) => cause,
-            SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(ref cause) => cause,
-            SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(ref cause) => cause,
-            SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(ref cause) => cause,
+            SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetLoadBalancerPoliciesOfListenerError {}
 /// Trait representing the capabilities of the Elastic Load Balancing API. Elastic Load Balancing clients implement this trait.
 pub trait Elb {
     /// <p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>

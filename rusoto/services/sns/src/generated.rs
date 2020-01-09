@@ -2291,19 +2291,15 @@ impl AddPermissionError {
 }
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddPermissionError {
-    fn description(&self) -> &str {
         match *self {
-            AddPermissionError::AuthorizationError(ref cause) => cause,
-            AddPermissionError::InternalError(ref cause) => cause,
-            AddPermissionError::InvalidParameter(ref cause) => cause,
-            AddPermissionError::NotFound(ref cause) => cause,
+            AddPermissionError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::InternalError(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AddPermissionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddPermissionError {}
 /// Errors returned by CheckIfPhoneNumberIsOptedOut
 #[derive(Debug, PartialEq)]
 pub enum CheckIfPhoneNumberIsOptedOutError {
@@ -2368,19 +2364,19 @@ impl CheckIfPhoneNumberIsOptedOutError {
 }
 impl fmt::Display for CheckIfPhoneNumberIsOptedOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CheckIfPhoneNumberIsOptedOutError {
-    fn description(&self) -> &str {
         match *self {
-            CheckIfPhoneNumberIsOptedOutError::AuthorizationError(ref cause) => cause,
-            CheckIfPhoneNumberIsOptedOutError::InternalError(ref cause) => cause,
-            CheckIfPhoneNumberIsOptedOutError::InvalidParameter(ref cause) => cause,
-            CheckIfPhoneNumberIsOptedOutError::Throttled(ref cause) => cause,
+            CheckIfPhoneNumberIsOptedOutError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CheckIfPhoneNumberIsOptedOutError::InternalError(ref cause) => write!(f, "{}", cause),
+            CheckIfPhoneNumberIsOptedOutError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CheckIfPhoneNumberIsOptedOutError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CheckIfPhoneNumberIsOptedOutError {}
 /// Errors returned by ConfirmSubscription
 #[derive(Debug, PartialEq)]
 pub enum ConfirmSubscriptionError {
@@ -2457,21 +2453,21 @@ impl ConfirmSubscriptionError {
 }
 impl fmt::Display for ConfirmSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmSubscriptionError {
-    fn description(&self) -> &str {
         match *self {
-            ConfirmSubscriptionError::AuthorizationError(ref cause) => cause,
-            ConfirmSubscriptionError::FilterPolicyLimitExceeded(ref cause) => cause,
-            ConfirmSubscriptionError::InternalError(ref cause) => cause,
-            ConfirmSubscriptionError::InvalidParameter(ref cause) => cause,
-            ConfirmSubscriptionError::NotFound(ref cause) => cause,
-            ConfirmSubscriptionError::SubscriptionLimitExceeded(ref cause) => cause,
+            ConfirmSubscriptionError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::FilterPolicyLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ConfirmSubscriptionError::InternalError(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::NotFound(ref cause) => write!(f, "{}", cause),
+            ConfirmSubscriptionError::SubscriptionLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ConfirmSubscriptionError {}
 /// Errors returned by CreatePlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum CreatePlatformApplicationError {
@@ -2525,18 +2521,14 @@ impl CreatePlatformApplicationError {
 }
 impl fmt::Display for CreatePlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePlatformApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePlatformApplicationError::AuthorizationError(ref cause) => cause,
-            CreatePlatformApplicationError::InternalError(ref cause) => cause,
-            CreatePlatformApplicationError::InvalidParameter(ref cause) => cause,
+            CreatePlatformApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformApplicationError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformApplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePlatformApplicationError {}
 /// Errors returned by CreatePlatformEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreatePlatformEndpointError {
@@ -2595,19 +2587,15 @@ impl CreatePlatformEndpointError {
 }
 impl fmt::Display for CreatePlatformEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePlatformEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePlatformEndpointError::AuthorizationError(ref cause) => cause,
-            CreatePlatformEndpointError::InternalError(ref cause) => cause,
-            CreatePlatformEndpointError::InvalidParameter(ref cause) => cause,
-            CreatePlatformEndpointError::NotFound(ref cause) => cause,
+            CreatePlatformEndpointError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformEndpointError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreatePlatformEndpointError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreatePlatformEndpointError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePlatformEndpointError {}
 /// Errors returned by CreateTopic
 #[derive(Debug, PartialEq)]
 pub enum CreateTopicError {
@@ -2701,24 +2689,20 @@ impl CreateTopicError {
 }
 impl fmt::Display for CreateTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTopicError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTopicError::AuthorizationError(ref cause) => cause,
-            CreateTopicError::ConcurrentAccess(ref cause) => cause,
-            CreateTopicError::InternalError(ref cause) => cause,
-            CreateTopicError::InvalidParameter(ref cause) => cause,
-            CreateTopicError::InvalidSecurity(ref cause) => cause,
-            CreateTopicError::StaleTag(ref cause) => cause,
-            CreateTopicError::TagLimitExceeded(ref cause) => cause,
-            CreateTopicError::TagPolicy(ref cause) => cause,
-            CreateTopicError::TopicLimitExceeded(ref cause) => cause,
+            CreateTopicError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::StaleTag(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            CreateTopicError::TopicLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTopicError {}
 /// Errors returned by DeleteEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointError {
@@ -2770,18 +2754,14 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteEndpointError::AuthorizationError(ref cause) => cause,
-            DeleteEndpointError::InternalError(ref cause) => cause,
-            DeleteEndpointError::InvalidParameter(ref cause) => cause,
+            DeleteEndpointError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteEndpointError {}
 /// Errors returned by DeletePlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum DeletePlatformApplicationError {
@@ -2835,18 +2815,14 @@ impl DeletePlatformApplicationError {
 }
 impl fmt::Display for DeletePlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePlatformApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePlatformApplicationError::AuthorizationError(ref cause) => cause,
-            DeletePlatformApplicationError::InternalError(ref cause) => cause,
-            DeletePlatformApplicationError::InvalidParameter(ref cause) => cause,
+            DeletePlatformApplicationError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeletePlatformApplicationError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeletePlatformApplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePlatformApplicationError {}
 /// Errors returned by DeleteTopic
 #[derive(Debug, PartialEq)]
 pub enum DeleteTopicError {
@@ -2926,22 +2902,18 @@ impl DeleteTopicError {
 }
 impl fmt::Display for DeleteTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTopicError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTopicError::AuthorizationError(ref cause) => cause,
-            DeleteTopicError::ConcurrentAccess(ref cause) => cause,
-            DeleteTopicError::InternalError(ref cause) => cause,
-            DeleteTopicError::InvalidParameter(ref cause) => cause,
-            DeleteTopicError::NotFound(ref cause) => cause,
-            DeleteTopicError::StaleTag(ref cause) => cause,
-            DeleteTopicError::TagPolicy(ref cause) => cause,
+            DeleteTopicError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::StaleTag(ref cause) => write!(f, "{}", cause),
+            DeleteTopicError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTopicError {}
 /// Errors returned by GetEndpointAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetEndpointAttributesError {
@@ -3000,19 +2972,15 @@ impl GetEndpointAttributesError {
 }
 impl fmt::Display for GetEndpointAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetEndpointAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetEndpointAttributesError::AuthorizationError(ref cause) => cause,
-            GetEndpointAttributesError::InternalError(ref cause) => cause,
-            GetEndpointAttributesError::InvalidParameter(ref cause) => cause,
-            GetEndpointAttributesError::NotFound(ref cause) => cause,
+            GetEndpointAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetEndpointAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetEndpointAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetEndpointAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetEndpointAttributesError {}
 /// Errors returned by GetPlatformApplicationAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetPlatformApplicationAttributesError {
@@ -3079,19 +3047,21 @@ impl GetPlatformApplicationAttributesError {
 }
 impl fmt::Display for GetPlatformApplicationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPlatformApplicationAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
-            GetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
-            GetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
-            GetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
+            GetPlatformApplicationAttributesError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPlatformApplicationAttributesError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPlatformApplicationAttributesError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPlatformApplicationAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPlatformApplicationAttributesError {}
 /// Errors returned by GetSMSAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetSMSAttributesError {
@@ -3150,19 +3120,15 @@ impl GetSMSAttributesError {
 }
 impl fmt::Display for GetSMSAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSMSAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetSMSAttributesError::AuthorizationError(ref cause) => cause,
-            GetSMSAttributesError::InternalError(ref cause) => cause,
-            GetSMSAttributesError::InvalidParameter(ref cause) => cause,
-            GetSMSAttributesError::Throttled(ref cause) => cause,
+            GetSMSAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetSMSAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetSMSAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetSMSAttributesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSMSAttributesError {}
 /// Errors returned by GetSubscriptionAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetSubscriptionAttributesError {
@@ -3223,19 +3189,15 @@ impl GetSubscriptionAttributesError {
 }
 impl fmt::Display for GetSubscriptionAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSubscriptionAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
-            GetSubscriptionAttributesError::InternalError(ref cause) => cause,
-            GetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
-            GetSubscriptionAttributesError::NotFound(ref cause) => cause,
+            GetSubscriptionAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetSubscriptionAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetSubscriptionAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetSubscriptionAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSubscriptionAttributesError {}
 /// Errors returned by GetTopicAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetTopicAttributesError {
@@ -3301,20 +3263,16 @@ impl GetTopicAttributesError {
 }
 impl fmt::Display for GetTopicAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTopicAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            GetTopicAttributesError::AuthorizationError(ref cause) => cause,
-            GetTopicAttributesError::InternalError(ref cause) => cause,
-            GetTopicAttributesError::InvalidParameter(ref cause) => cause,
-            GetTopicAttributesError::InvalidSecurity(ref cause) => cause,
-            GetTopicAttributesError::NotFound(ref cause) => cause,
+            GetTopicAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            GetTopicAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTopicAttributesError {}
 /// Errors returned by ListEndpointsByPlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointsByPlatformApplicationError {
@@ -3381,19 +3339,21 @@ impl ListEndpointsByPlatformApplicationError {
 }
 impl fmt::Display for ListEndpointsByPlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEndpointsByPlatformApplicationError {
-    fn description(&self) -> &str {
         match *self {
-            ListEndpointsByPlatformApplicationError::AuthorizationError(ref cause) => cause,
-            ListEndpointsByPlatformApplicationError::InternalError(ref cause) => cause,
-            ListEndpointsByPlatformApplicationError::InvalidParameter(ref cause) => cause,
-            ListEndpointsByPlatformApplicationError::NotFound(ref cause) => cause,
+            ListEndpointsByPlatformApplicationError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListEndpointsByPlatformApplicationError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListEndpointsByPlatformApplicationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListEndpointsByPlatformApplicationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEndpointsByPlatformApplicationError {}
 /// Errors returned by ListPhoneNumbersOptedOut
 #[derive(Debug, PartialEq)]
 pub enum ListPhoneNumbersOptedOutError {
@@ -3452,19 +3412,15 @@ impl ListPhoneNumbersOptedOutError {
 }
 impl fmt::Display for ListPhoneNumbersOptedOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPhoneNumbersOptedOutError {
-    fn description(&self) -> &str {
         match *self {
-            ListPhoneNumbersOptedOutError::AuthorizationError(ref cause) => cause,
-            ListPhoneNumbersOptedOutError::InternalError(ref cause) => cause,
-            ListPhoneNumbersOptedOutError::InvalidParameter(ref cause) => cause,
-            ListPhoneNumbersOptedOutError::Throttled(ref cause) => cause,
+            ListPhoneNumbersOptedOutError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersOptedOutError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersOptedOutError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersOptedOutError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPhoneNumbersOptedOutError {}
 /// Errors returned by ListPlatformApplications
 #[derive(Debug, PartialEq)]
 pub enum ListPlatformApplicationsError {
@@ -3516,18 +3472,14 @@ impl ListPlatformApplicationsError {
 }
 impl fmt::Display for ListPlatformApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPlatformApplicationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPlatformApplicationsError::AuthorizationError(ref cause) => cause,
-            ListPlatformApplicationsError::InternalError(ref cause) => cause,
-            ListPlatformApplicationsError::InvalidParameter(ref cause) => cause,
+            ListPlatformApplicationsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListPlatformApplicationsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListPlatformApplicationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPlatformApplicationsError {}
 /// Errors returned by ListSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionsError {
@@ -3579,18 +3531,14 @@ impl ListSubscriptionsError {
 }
 impl fmt::Display for ListSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscriptionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSubscriptionsError::AuthorizationError(ref cause) => cause,
-            ListSubscriptionsError::InternalError(ref cause) => cause,
-            ListSubscriptionsError::InvalidParameter(ref cause) => cause,
+            ListSubscriptionsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSubscriptionsError {}
 /// Errors returned by ListSubscriptionsByTopic
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionsByTopicError {
@@ -3649,19 +3597,15 @@ impl ListSubscriptionsByTopicError {
 }
 impl fmt::Display for ListSubscriptionsByTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscriptionsByTopicError {
-    fn description(&self) -> &str {
         match *self {
-            ListSubscriptionsByTopicError::AuthorizationError(ref cause) => cause,
-            ListSubscriptionsByTopicError::InternalError(ref cause) => cause,
-            ListSubscriptionsByTopicError::InvalidParameter(ref cause) => cause,
-            ListSubscriptionsByTopicError::NotFound(ref cause) => cause,
+            ListSubscriptionsByTopicError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsByTopicError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsByTopicError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListSubscriptionsByTopicError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSubscriptionsByTopicError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -3727,20 +3671,16 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AuthorizationError(ref cause) => cause,
-            ListTagsForResourceError::ConcurrentAccess(ref cause) => cause,
-            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::TagPolicy(ref cause) => cause,
+            ListTagsForResourceError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTopics
 #[derive(Debug, PartialEq)]
 pub enum ListTopicsError {
@@ -3792,18 +3732,14 @@ impl ListTopicsError {
 }
 impl fmt::Display for ListTopicsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTopicsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTopicsError::AuthorizationError(ref cause) => cause,
-            ListTopicsError::InternalError(ref cause) => cause,
-            ListTopicsError::InvalidParameter(ref cause) => cause,
+            ListTopicsError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListTopicsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListTopicsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTopicsError {}
 /// Errors returned by OptInPhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum OptInPhoneNumberError {
@@ -3862,19 +3798,15 @@ impl OptInPhoneNumberError {
 }
 impl fmt::Display for OptInPhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for OptInPhoneNumberError {
-    fn description(&self) -> &str {
         match *self {
-            OptInPhoneNumberError::AuthorizationError(ref cause) => cause,
-            OptInPhoneNumberError::InternalError(ref cause) => cause,
-            OptInPhoneNumberError::InvalidParameter(ref cause) => cause,
-            OptInPhoneNumberError::Throttled(ref cause) => cause,
+            OptInPhoneNumberError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            OptInPhoneNumberError::InternalError(ref cause) => write!(f, "{}", cause),
+            OptInPhoneNumberError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            OptInPhoneNumberError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for OptInPhoneNumberError {}
 /// Errors returned by Publish
 #[derive(Debug, PartialEq)]
 pub enum PublishError {
@@ -4001,29 +3933,25 @@ impl PublishError {
 }
 impl fmt::Display for PublishError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PublishError {
-    fn description(&self) -> &str {
         match *self {
-            PublishError::AuthorizationError(ref cause) => cause,
-            PublishError::EndpointDisabled(ref cause) => cause,
-            PublishError::InternalError(ref cause) => cause,
-            PublishError::InvalidParameter(ref cause) => cause,
-            PublishError::InvalidParameterValue(ref cause) => cause,
-            PublishError::InvalidSecurity(ref cause) => cause,
-            PublishError::KMSAccessDenied(ref cause) => cause,
-            PublishError::KMSDisabled(ref cause) => cause,
-            PublishError::KMSInvalidState(ref cause) => cause,
-            PublishError::KMSNotFound(ref cause) => cause,
-            PublishError::KMSOptInRequired(ref cause) => cause,
-            PublishError::KMSThrottling(ref cause) => cause,
-            PublishError::NotFound(ref cause) => cause,
-            PublishError::PlatformApplicationDisabled(ref cause) => cause,
+            PublishError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            PublishError::EndpointDisabled(ref cause) => write!(f, "{}", cause),
+            PublishError::InternalError(ref cause) => write!(f, "{}", cause),
+            PublishError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PublishError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PublishError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSAccessDenied(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSDisabled(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSNotFound(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSOptInRequired(ref cause) => write!(f, "{}", cause),
+            PublishError::KMSThrottling(ref cause) => write!(f, "{}", cause),
+            PublishError::NotFound(ref cause) => write!(f, "{}", cause),
+            PublishError::PlatformApplicationDisabled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PublishError {}
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {
@@ -4082,19 +4010,15 @@ impl RemovePermissionError {
 }
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemovePermissionError {
-    fn description(&self) -> &str {
         match *self {
-            RemovePermissionError::AuthorizationError(ref cause) => cause,
-            RemovePermissionError::InternalError(ref cause) => cause,
-            RemovePermissionError::InvalidParameter(ref cause) => cause,
-            RemovePermissionError::NotFound(ref cause) => cause,
+            RemovePermissionError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::InternalError(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemovePermissionError {}
 /// Errors returned by SetEndpointAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetEndpointAttributesError {
@@ -4153,19 +4077,15 @@ impl SetEndpointAttributesError {
 }
 impl fmt::Display for SetEndpointAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetEndpointAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetEndpointAttributesError::AuthorizationError(ref cause) => cause,
-            SetEndpointAttributesError::InternalError(ref cause) => cause,
-            SetEndpointAttributesError::InvalidParameter(ref cause) => cause,
-            SetEndpointAttributesError::NotFound(ref cause) => cause,
+            SetEndpointAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetEndpointAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetEndpointAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetEndpointAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetEndpointAttributesError {}
 /// Errors returned by SetPlatformApplicationAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetPlatformApplicationAttributesError {
@@ -4232,19 +4152,21 @@ impl SetPlatformApplicationAttributesError {
 }
 impl fmt::Display for SetPlatformApplicationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetPlatformApplicationAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
-            SetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
-            SetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
-            SetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
+            SetPlatformApplicationAttributesError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetPlatformApplicationAttributesError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetPlatformApplicationAttributesError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetPlatformApplicationAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetPlatformApplicationAttributesError {}
 /// Errors returned by SetSMSAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetSMSAttributesError {
@@ -4303,19 +4225,15 @@ impl SetSMSAttributesError {
 }
 impl fmt::Display for SetSMSAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSMSAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetSMSAttributesError::AuthorizationError(ref cause) => cause,
-            SetSMSAttributesError::InternalError(ref cause) => cause,
-            SetSMSAttributesError::InvalidParameter(ref cause) => cause,
-            SetSMSAttributesError::Throttled(ref cause) => cause,
+            SetSMSAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetSMSAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetSMSAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetSMSAttributesError::Throttled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSMSAttributesError {}
 /// Errors returned by SetSubscriptionAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetSubscriptionAttributesError {
@@ -4385,20 +4303,18 @@ impl SetSubscriptionAttributesError {
 }
 impl fmt::Display for SetSubscriptionAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSubscriptionAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
-            SetSubscriptionAttributesError::FilterPolicyLimitExceeded(ref cause) => cause,
-            SetSubscriptionAttributesError::InternalError(ref cause) => cause,
-            SetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
-            SetSubscriptionAttributesError::NotFound(ref cause) => cause,
+            SetSubscriptionAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetSubscriptionAttributesError::FilterPolicyLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetSubscriptionAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetSubscriptionAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetSubscriptionAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSubscriptionAttributesError {}
 /// Errors returned by SetTopicAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetTopicAttributesError {
@@ -4464,20 +4380,16 @@ impl SetTopicAttributesError {
 }
 impl fmt::Display for SetTopicAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetTopicAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            SetTopicAttributesError::AuthorizationError(ref cause) => cause,
-            SetTopicAttributesError::InternalError(ref cause) => cause,
-            SetTopicAttributesError::InvalidParameter(ref cause) => cause,
-            SetTopicAttributesError::InvalidSecurity(ref cause) => cause,
-            SetTopicAttributesError::NotFound(ref cause) => cause,
+            SetTopicAttributesError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            SetTopicAttributesError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetTopicAttributesError {}
 /// Errors returned by Subscribe
 #[derive(Debug, PartialEq)]
 pub enum SubscribeError {
@@ -4555,22 +4467,18 @@ impl SubscribeError {
 }
 impl fmt::Display for SubscribeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SubscribeError {
-    fn description(&self) -> &str {
         match *self {
-            SubscribeError::AuthorizationError(ref cause) => cause,
-            SubscribeError::FilterPolicyLimitExceeded(ref cause) => cause,
-            SubscribeError::InternalError(ref cause) => cause,
-            SubscribeError::InvalidParameter(ref cause) => cause,
-            SubscribeError::InvalidSecurity(ref cause) => cause,
-            SubscribeError::NotFound(ref cause) => cause,
-            SubscribeError::SubscriptionLimitExceeded(ref cause) => cause,
+            SubscribeError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            SubscribeError::FilterPolicyLimitExceeded(ref cause) => write!(f, "{}", cause),
+            SubscribeError::InternalError(ref cause) => write!(f, "{}", cause),
+            SubscribeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SubscribeError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            SubscribeError::NotFound(ref cause) => write!(f, "{}", cause),
+            SubscribeError::SubscriptionLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SubscribeError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4650,22 +4558,18 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AuthorizationError(ref cause) => cause,
-            TagResourceError::ConcurrentAccess(ref cause) => cause,
-            TagResourceError::InvalidParameter(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::StaleTag(ref cause) => cause,
-            TagResourceError::TagLimitExceeded(ref cause) => cause,
-            TagResourceError::TagPolicy(ref cause) => cause,
+            TagResourceError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::StaleTag(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by Unsubscribe
 #[derive(Debug, PartialEq)]
 pub enum UnsubscribeError {
@@ -4731,20 +4635,16 @@ impl UnsubscribeError {
 }
 impl fmt::Display for UnsubscribeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UnsubscribeError {
-    fn description(&self) -> &str {
         match *self {
-            UnsubscribeError::AuthorizationError(ref cause) => cause,
-            UnsubscribeError::InternalError(ref cause) => cause,
-            UnsubscribeError::InvalidParameter(ref cause) => cause,
-            UnsubscribeError::InvalidSecurity(ref cause) => cause,
-            UnsubscribeError::NotFound(ref cause) => cause,
+            UnsubscribeError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::InternalError(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::InvalidSecurity(ref cause) => write!(f, "{}", cause),
+            UnsubscribeError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UnsubscribeError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -4824,22 +4724,18 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AuthorizationError(ref cause) => cause,
-            UntagResourceError::ConcurrentAccess(ref cause) => cause,
-            UntagResourceError::InvalidParameter(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::StaleTag(ref cause) => cause,
-            UntagResourceError::TagLimitExceeded(ref cause) => cause,
-            UntagResourceError::TagPolicy(ref cause) => cause,
+            UntagResourceError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::StaleTag(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
 pub trait Sns {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>

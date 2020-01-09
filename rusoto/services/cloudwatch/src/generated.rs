@@ -4453,16 +4453,12 @@ impl DeleteAlarmsError {
 }
 impl fmt::Display for DeleteAlarmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAlarmsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAlarmsError::ResourceNotFound(ref cause) => cause,
+            DeleteAlarmsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAlarmsError {}
 /// Errors returned by DeleteAnomalyDetector
 #[derive(Debug, PartialEq)]
 pub enum DeleteAnomalyDetectorError {
@@ -4523,19 +4519,17 @@ impl DeleteAnomalyDetectorError {
 }
 impl fmt::Display for DeleteAnomalyDetectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAnomalyDetectorError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAnomalyDetectorError::InternalServiceFault(ref cause) => cause,
-            DeleteAnomalyDetectorError::InvalidParameterValue(ref cause) => cause,
-            DeleteAnomalyDetectorError::MissingRequiredParameter(ref cause) => cause,
-            DeleteAnomalyDetectorError::ResourceNotFound(ref cause) => cause,
+            DeleteAnomalyDetectorError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            DeleteAnomalyDetectorError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteAnomalyDetectorError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAnomalyDetectorError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAnomalyDetectorError {}
 /// Errors returned by DeleteDashboards
 #[derive(Debug, PartialEq)]
 pub enum DeleteDashboardsError {
@@ -4587,18 +4581,14 @@ impl DeleteDashboardsError {
 }
 impl fmt::Display for DeleteDashboardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDashboardsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDashboardsError::DashboardNotFoundError(ref cause) => cause,
-            DeleteDashboardsError::InternalServiceFault(ref cause) => cause,
-            DeleteDashboardsError::InvalidParameterValue(ref cause) => cause,
+            DeleteDashboardsError::DashboardNotFoundError(ref cause) => write!(f, "{}", cause),
+            DeleteDashboardsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            DeleteDashboardsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDashboardsError {}
 /// Errors returned by DeleteInsightRules
 #[derive(Debug, PartialEq)]
 pub enum DeleteInsightRulesError {
@@ -4643,17 +4633,13 @@ impl DeleteInsightRulesError {
 }
 impl fmt::Display for DeleteInsightRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInsightRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInsightRulesError::InvalidParameterValue(ref cause) => cause,
-            DeleteInsightRulesError::MissingRequiredParameter(ref cause) => cause,
+            DeleteInsightRulesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteInsightRulesError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInsightRulesError {}
 /// Errors returned by DescribeAlarmHistory
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlarmHistoryError {
@@ -4691,16 +4677,12 @@ impl DescribeAlarmHistoryError {
 }
 impl fmt::Display for DescribeAlarmHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAlarmHistoryError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAlarmHistoryError::InvalidNextToken(ref cause) => cause,
+            DescribeAlarmHistoryError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAlarmHistoryError {}
 /// Errors returned by DescribeAlarms
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlarmsError {
@@ -4738,16 +4720,12 @@ impl DescribeAlarmsError {
 }
 impl fmt::Display for DescribeAlarmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAlarmsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAlarmsError::InvalidNextToken(ref cause) => cause,
+            DescribeAlarmsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAlarmsError {}
 /// Errors returned by DescribeAlarmsForMetric
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlarmsForMetricError {}
@@ -4777,14 +4755,10 @@ impl DescribeAlarmsForMetricError {
 }
 impl fmt::Display for DescribeAlarmsForMetricError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAlarmsForMetricError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAlarmsForMetricError {}
 /// Errors returned by DescribeAnomalyDetectors
 #[derive(Debug, PartialEq)]
 pub enum DescribeAnomalyDetectorsError {
@@ -4840,18 +4814,18 @@ impl DescribeAnomalyDetectorsError {
 }
 impl fmt::Display for DescribeAnomalyDetectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAnomalyDetectorsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAnomalyDetectorsError::InternalServiceFault(ref cause) => cause,
-            DescribeAnomalyDetectorsError::InvalidNextToken(ref cause) => cause,
-            DescribeAnomalyDetectorsError::InvalidParameterValue(ref cause) => cause,
+            DescribeAnomalyDetectorsError::InternalServiceFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAnomalyDetectorsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeAnomalyDetectorsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAnomalyDetectorsError {}
 /// Errors returned by DescribeInsightRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeInsightRulesError {
@@ -4889,16 +4863,12 @@ impl DescribeInsightRulesError {
 }
 impl fmt::Display for DescribeInsightRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeInsightRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeInsightRulesError::InvalidNextToken(ref cause) => cause,
+            DescribeInsightRulesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeInsightRulesError {}
 /// Errors returned by DisableAlarmActions
 #[derive(Debug, PartialEq)]
 pub enum DisableAlarmActionsError {}
@@ -4928,14 +4898,10 @@ impl DisableAlarmActionsError {
 }
 impl fmt::Display for DisableAlarmActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableAlarmActionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DisableAlarmActionsError {}
 /// Errors returned by DisableInsightRules
 #[derive(Debug, PartialEq)]
 pub enum DisableInsightRulesError {
@@ -4982,17 +4948,13 @@ impl DisableInsightRulesError {
 }
 impl fmt::Display for DisableInsightRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableInsightRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DisableInsightRulesError::InvalidParameterValue(ref cause) => cause,
-            DisableInsightRulesError::MissingRequiredParameter(ref cause) => cause,
+            DisableInsightRulesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DisableInsightRulesError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableInsightRulesError {}
 /// Errors returned by EnableAlarmActions
 #[derive(Debug, PartialEq)]
 pub enum EnableAlarmActionsError {}
@@ -5022,14 +4984,10 @@ impl EnableAlarmActionsError {
 }
 impl fmt::Display for EnableAlarmActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableAlarmActionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for EnableAlarmActionsError {}
 /// Errors returned by EnableInsightRules
 #[derive(Debug, PartialEq)]
 pub enum EnableInsightRulesError {
@@ -5081,18 +5039,14 @@ impl EnableInsightRulesError {
 }
 impl fmt::Display for EnableInsightRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableInsightRulesError {
-    fn description(&self) -> &str {
         match *self {
-            EnableInsightRulesError::InvalidParameterValue(ref cause) => cause,
-            EnableInsightRulesError::LimitExceeded(ref cause) => cause,
-            EnableInsightRulesError::MissingRequiredParameter(ref cause) => cause,
+            EnableInsightRulesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            EnableInsightRulesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            EnableInsightRulesError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableInsightRulesError {}
 /// Errors returned by GetDashboard
 #[derive(Debug, PartialEq)]
 pub enum GetDashboardError {
@@ -5144,18 +5098,14 @@ impl GetDashboardError {
 }
 impl fmt::Display for GetDashboardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDashboardError {
-    fn description(&self) -> &str {
         match *self {
-            GetDashboardError::DashboardNotFoundError(ref cause) => cause,
-            GetDashboardError::InternalServiceFault(ref cause) => cause,
-            GetDashboardError::InvalidParameterValue(ref cause) => cause,
+            GetDashboardError::DashboardNotFoundError(ref cause) => write!(f, "{}", cause),
+            GetDashboardError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            GetDashboardError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDashboardError {}
 /// Errors returned by GetInsightRuleReport
 #[derive(Debug, PartialEq)]
 pub enum GetInsightRuleReportError {
@@ -5209,18 +5159,16 @@ impl GetInsightRuleReportError {
 }
 impl fmt::Display for GetInsightRuleReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInsightRuleReportError {
-    fn description(&self) -> &str {
         match *self {
-            GetInsightRuleReportError::InvalidParameterValue(ref cause) => cause,
-            GetInsightRuleReportError::MissingRequiredParameter(ref cause) => cause,
-            GetInsightRuleReportError::ResourceNotFound(ref cause) => cause,
+            GetInsightRuleReportError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetInsightRuleReportError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetInsightRuleReportError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInsightRuleReportError {}
 /// Errors returned by GetMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetMetricDataError {
@@ -5258,16 +5206,12 @@ impl GetMetricDataError {
 }
 impl fmt::Display for GetMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            GetMetricDataError::InvalidNextToken(ref cause) => cause,
+            GetMetricDataError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMetricDataError {}
 /// Errors returned by GetMetricStatistics
 #[derive(Debug, PartialEq)]
 pub enum GetMetricStatisticsError {
@@ -5330,19 +5274,17 @@ impl GetMetricStatisticsError {
 }
 impl fmt::Display for GetMetricStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMetricStatisticsError {
-    fn description(&self) -> &str {
         match *self {
-            GetMetricStatisticsError::InternalServiceFault(ref cause) => cause,
-            GetMetricStatisticsError::InvalidParameterCombination(ref cause) => cause,
-            GetMetricStatisticsError::InvalidParameterValue(ref cause) => cause,
-            GetMetricStatisticsError::MissingRequiredParameter(ref cause) => cause,
+            GetMetricStatisticsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            GetMetricStatisticsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMetricStatisticsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetMetricStatisticsError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMetricStatisticsError {}
 /// Errors returned by GetMetricWidgetImage
 #[derive(Debug, PartialEq)]
 pub enum GetMetricWidgetImageError {}
@@ -5372,14 +5314,10 @@ impl GetMetricWidgetImageError {
 }
 impl fmt::Display for GetMetricWidgetImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMetricWidgetImageError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetMetricWidgetImageError {}
 /// Errors returned by ListDashboards
 #[derive(Debug, PartialEq)]
 pub enum ListDashboardsError {
@@ -5424,17 +5362,13 @@ impl ListDashboardsError {
 }
 impl fmt::Display for ListDashboardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDashboardsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDashboardsError::InternalServiceFault(ref cause) => cause,
-            ListDashboardsError::InvalidParameterValue(ref cause) => cause,
+            ListDashboardsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            ListDashboardsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDashboardsError {}
 /// Errors returned by ListMetrics
 #[derive(Debug, PartialEq)]
 pub enum ListMetricsError {
@@ -5479,17 +5413,13 @@ impl ListMetricsError {
 }
 impl fmt::Display for ListMetricsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMetricsError {
-    fn description(&self) -> &str {
         match *self {
-            ListMetricsError::InternalServiceFault(ref cause) => cause,
-            ListMetricsError::InvalidParameterValue(ref cause) => cause,
+            ListMetricsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            ListMetricsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMetricsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -5541,18 +5471,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalServiceFault(ref cause) => cause,
-            ListTagsForResourceError::InvalidParameterValue(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutAnomalyDetector
 #[derive(Debug, PartialEq)]
 pub enum PutAnomalyDetectorError {
@@ -5611,19 +5537,15 @@ impl PutAnomalyDetectorError {
 }
 impl fmt::Display for PutAnomalyDetectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAnomalyDetectorError {
-    fn description(&self) -> &str {
         match *self {
-            PutAnomalyDetectorError::InternalServiceFault(ref cause) => cause,
-            PutAnomalyDetectorError::InvalidParameterValue(ref cause) => cause,
-            PutAnomalyDetectorError::LimitExceeded(ref cause) => cause,
-            PutAnomalyDetectorError::MissingRequiredParameter(ref cause) => cause,
+            PutAnomalyDetectorError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            PutAnomalyDetectorError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutAnomalyDetectorError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutAnomalyDetectorError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutAnomalyDetectorError {}
 /// Errors returned by PutDashboard
 #[derive(Debug, PartialEq)]
 pub enum PutDashboardError {
@@ -5668,17 +5590,13 @@ impl PutDashboardError {
 }
 impl fmt::Display for PutDashboardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutDashboardError {
-    fn description(&self) -> &str {
         match *self {
-            PutDashboardError::DashboardInvalidInputError(ref cause) => cause,
-            PutDashboardError::InternalServiceFault(ref cause) => cause,
+            PutDashboardError::DashboardInvalidInputError(ref cause) => write!(f, "{}", cause),
+            PutDashboardError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutDashboardError {}
 /// Errors returned by PutInsightRule
 #[derive(Debug, PartialEq)]
 pub enum PutInsightRuleError {
@@ -5730,18 +5648,14 @@ impl PutInsightRuleError {
 }
 impl fmt::Display for PutInsightRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutInsightRuleError {
-    fn description(&self) -> &str {
         match *self {
-            PutInsightRuleError::InvalidParameterValue(ref cause) => cause,
-            PutInsightRuleError::LimitExceeded(ref cause) => cause,
-            PutInsightRuleError::MissingRequiredParameter(ref cause) => cause,
+            PutInsightRuleError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutInsightRuleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutInsightRuleError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutInsightRuleError {}
 /// Errors returned by PutMetricAlarm
 #[derive(Debug, PartialEq)]
 pub enum PutMetricAlarmError {
@@ -5779,16 +5693,12 @@ impl PutMetricAlarmError {
 }
 impl fmt::Display for PutMetricAlarmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutMetricAlarmError {
-    fn description(&self) -> &str {
         match *self {
-            PutMetricAlarmError::LimitExceededFault(ref cause) => cause,
+            PutMetricAlarmError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutMetricAlarmError {}
 /// Errors returned by PutMetricData
 #[derive(Debug, PartialEq)]
 pub enum PutMetricDataError {
@@ -5847,19 +5757,15 @@ impl PutMetricDataError {
 }
 impl fmt::Display for PutMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutMetricDataError {
-    fn description(&self) -> &str {
         match *self {
-            PutMetricDataError::InternalServiceFault(ref cause) => cause,
-            PutMetricDataError::InvalidParameterCombination(ref cause) => cause,
-            PutMetricDataError::InvalidParameterValue(ref cause) => cause,
-            PutMetricDataError::MissingRequiredParameter(ref cause) => cause,
+            PutMetricDataError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            PutMetricDataError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            PutMetricDataError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutMetricDataError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutMetricDataError {}
 /// Errors returned by SetAlarmState
 #[derive(Debug, PartialEq)]
 pub enum SetAlarmStateError {
@@ -5904,17 +5810,13 @@ impl SetAlarmStateError {
 }
 impl fmt::Display for SetAlarmStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetAlarmStateError {
-    fn description(&self) -> &str {
         match *self {
-            SetAlarmStateError::InvalidFormatFault(ref cause) => cause,
-            SetAlarmStateError::ResourceNotFound(ref cause) => cause,
+            SetAlarmStateError::InvalidFormatFault(ref cause) => write!(f, "{}", cause),
+            SetAlarmStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetAlarmStateError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -5973,19 +5875,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ConcurrentModification(ref cause) => cause,
-            TagResourceError::InternalServiceFault(ref cause) => cause,
-            TagResourceError::InvalidParameterValue(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -6044,19 +5942,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ConcurrentModification(ref cause) => cause,
-            UntagResourceError::InternalServiceFault(ref cause) => cause,
-            UntagResourceError::InvalidParameterValue(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the CloudWatch API. CloudWatch clients implement this trait.
 pub trait CloudWatch {
     /// <p>Deletes the specified alarms. You can delete up to 50 alarms in one operation. In the event of an error, no alarms are deleted.</p>

@@ -1032,29 +1032,35 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClusterError {
-    fn description(&self) -> &str {
         match *self {
-            CreateClusterError::ClusterAlreadyExistsFault(ref cause) => cause,
-            CreateClusterError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,
-            CreateClusterError::InsufficientClusterCapacityFault(ref cause) => cause,
-            CreateClusterError::InvalidClusterStateFault(ref cause) => cause,
-            CreateClusterError::InvalidParameterCombination(ref cause) => cause,
-            CreateClusterError::InvalidParameterGroupStateFault(ref cause) => cause,
-            CreateClusterError::InvalidParameterValue(ref cause) => cause,
-            CreateClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            CreateClusterError::NodeQuotaForClusterExceededFault(ref cause) => cause,
-            CreateClusterError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
-            CreateClusterError::ParameterGroupNotFoundFault(ref cause) => cause,
-            CreateClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            CreateClusterError::SubnetGroupNotFoundFault(ref cause) => cause,
-            CreateClusterError::TagQuotaPerResourceExceeded(ref cause) => cause,
+            CreateClusterError::ClusterAlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::ClusterQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::InsufficientClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidParameterGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::NodeQuotaForClusterExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::NodeQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateClusterError::ParameterGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::SubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::TagQuotaPerResourceExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateClusterError {}
 /// Errors returned by CreateParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateParameterGroupError {
@@ -1115,21 +1121,27 @@ impl CreateParameterGroupError {
 }
 impl fmt::Display for CreateParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateParameterGroupError::InvalidParameterCombination(ref cause) => cause,
-            CreateParameterGroupError::InvalidParameterGroupStateFault(ref cause) => cause,
-            CreateParameterGroupError::InvalidParameterValue(ref cause) => cause,
-            CreateParameterGroupError::ParameterGroupAlreadyExistsFault(ref cause) => cause,
-            CreateParameterGroupError::ParameterGroupQuotaExceededFault(ref cause) => cause,
-            CreateParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            CreateParameterGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateParameterGroupError::InvalidParameterGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateParameterGroupError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateParameterGroupError::ParameterGroupAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateParameterGroupError::ParameterGroupQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateParameterGroupError {}
 /// Errors returned by CreateSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateSubnetGroupError {
@@ -1181,20 +1193,22 @@ impl CreateSubnetGroupError {
 }
 impl fmt::Display for CreateSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSubnetGroupError::InvalidSubnet(ref cause) => cause,
-            CreateSubnetGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(ref cause) => cause,
-            CreateSubnetGroupError::SubnetGroupQuotaExceededFault(ref cause) => cause,
-            CreateSubnetGroupError::SubnetQuotaExceededFault(ref cause) => cause,
+            CreateSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateSubnetGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSubnetGroupError::SubnetGroupQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSubnetGroupError::SubnetQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSubnetGroupError {}
 /// Errors returned by DecreaseReplicationFactor
 #[derive(Debug, PartialEq)]
 pub enum DecreaseReplicationFactorError {
@@ -1255,21 +1269,27 @@ impl DecreaseReplicationFactorError {
 }
 impl fmt::Display for DecreaseReplicationFactorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DecreaseReplicationFactorError {
-    fn description(&self) -> &str {
         match *self {
-            DecreaseReplicationFactorError::ClusterNotFoundFault(ref cause) => cause,
-            DecreaseReplicationFactorError::InvalidClusterStateFault(ref cause) => cause,
-            DecreaseReplicationFactorError::InvalidParameterCombination(ref cause) => cause,
-            DecreaseReplicationFactorError::InvalidParameterValue(ref cause) => cause,
-            DecreaseReplicationFactorError::NodeNotFoundFault(ref cause) => cause,
-            DecreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            DecreaseReplicationFactorError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicationFactorError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicationFactorError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicationFactorError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseReplicationFactorError::NodeNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DecreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DecreaseReplicationFactorError {}
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
@@ -1319,20 +1339,16 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClusterError::ClusterNotFoundFault(ref cause) => cause,
-            DeleteClusterError::InvalidClusterStateFault(ref cause) => cause,
-            DeleteClusterError::InvalidParameterCombination(ref cause) => cause,
-            DeleteClusterError::InvalidParameterValue(ref cause) => cause,
-            DeleteClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            DeleteClusterError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteClusterError {}
 /// Errors returned by DeleteParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteParameterGroupError {
@@ -1386,20 +1402,24 @@ impl DeleteParameterGroupError {
 }
 impl fmt::Display for DeleteParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteParameterGroupError::InvalidParameterCombination(ref cause) => cause,
-            DeleteParameterGroupError::InvalidParameterGroupStateFault(ref cause) => cause,
-            DeleteParameterGroupError::InvalidParameterValue(ref cause) => cause,
-            DeleteParameterGroupError::ParameterGroupNotFoundFault(ref cause) => cause,
-            DeleteParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            DeleteParameterGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteParameterGroupError::InvalidParameterGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteParameterGroupError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteParameterGroupError::ParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteParameterGroupError {}
 /// Errors returned by DeleteSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubnetGroupError {
@@ -1439,18 +1459,16 @@ impl DeleteSubnetGroupError {
 }
 impl fmt::Display for DeleteSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSubnetGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            DeleteSubnetGroupError::SubnetGroupInUseFault(ref cause) => cause,
-            DeleteSubnetGroupError::SubnetGroupNotFoundFault(ref cause) => cause,
+            DeleteSubnetGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteSubnetGroupError::SubnetGroupInUseFault(ref cause) => write!(f, "{}", cause),
+            DeleteSubnetGroupError::SubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSubnetGroupError {}
 /// Errors returned by DescribeClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeClustersError {
@@ -1497,19 +1515,17 @@ impl DescribeClustersError {
 }
 impl fmt::Display for DescribeClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClustersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClustersError::ClusterNotFoundFault(ref cause) => cause,
-            DescribeClustersError::InvalidParameterCombination(ref cause) => cause,
-            DescribeClustersError::InvalidParameterValue(ref cause) => cause,
-            DescribeClustersError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            DescribeClustersError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DescribeClustersError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            DescribeClustersError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeClustersError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeClustersError {}
 /// Errors returned by DescribeDefaultParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeDefaultParametersError {
@@ -1549,18 +1565,20 @@ impl DescribeDefaultParametersError {
 }
 impl fmt::Display for DescribeDefaultParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDefaultParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDefaultParametersError::InvalidParameterCombination(ref cause) => cause,
-            DescribeDefaultParametersError::InvalidParameterValue(ref cause) => cause,
-            DescribeDefaultParametersError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            DescribeDefaultParametersError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDefaultParametersError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDefaultParametersError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeDefaultParametersError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {
@@ -1600,18 +1618,16 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventsError::InvalidParameterCombination(ref cause) => cause,
-            DescribeEventsError::InvalidParameterValue(ref cause) => cause,
-            DescribeEventsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            DescribeEventsError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            DescribeEventsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeEventsError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeEventsError {}
 /// Errors returned by DescribeParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeParameterGroupsError {
@@ -1658,19 +1674,23 @@ impl DescribeParameterGroupsError {
 }
 impl fmt::Display for DescribeParameterGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeParameterGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeParameterGroupsError::InvalidParameterCombination(ref cause) => cause,
-            DescribeParameterGroupsError::InvalidParameterValue(ref cause) => cause,
-            DescribeParameterGroupsError::ParameterGroupNotFoundFault(ref cause) => cause,
-            DescribeParameterGroupsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            DescribeParameterGroupsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeParameterGroupsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeParameterGroupsError::ParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeParameterGroupsError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeParameterGroupsError {}
 /// Errors returned by DescribeParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeParametersError {
@@ -1717,19 +1737,21 @@ impl DescribeParametersError {
 }
 impl fmt::Display for DescribeParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeParametersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeParametersError::InvalidParameterCombination(ref cause) => cause,
-            DescribeParametersError::InvalidParameterValue(ref cause) => cause,
-            DescribeParametersError::ParameterGroupNotFoundFault(ref cause) => cause,
-            DescribeParametersError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            DescribeParametersError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeParametersError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeParametersError::ParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeParametersError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeParametersError {}
 /// Errors returned by DescribeSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubnetGroupsError {
@@ -1762,17 +1784,17 @@ impl DescribeSubnetGroupsError {
 }
 impl fmt::Display for DescribeSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSubnetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSubnetGroupsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            DescribeSubnetGroupsError::SubnetGroupNotFoundFault(ref cause) => cause,
+            DescribeSubnetGroupsError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeSubnetGroupsError::SubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeSubnetGroupsError {}
 /// Errors returned by IncreaseReplicationFactor
 #[derive(Debug, PartialEq)]
 pub enum IncreaseReplicationFactorError {
@@ -1854,24 +1876,38 @@ impl IncreaseReplicationFactorError {
 }
 impl fmt::Display for IncreaseReplicationFactorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for IncreaseReplicationFactorError {
-    fn description(&self) -> &str {
         match *self {
-            IncreaseReplicationFactorError::ClusterNotFoundFault(ref cause) => cause,
-            IncreaseReplicationFactorError::InsufficientClusterCapacityFault(ref cause) => cause,
-            IncreaseReplicationFactorError::InvalidClusterStateFault(ref cause) => cause,
-            IncreaseReplicationFactorError::InvalidParameterCombination(ref cause) => cause,
-            IncreaseReplicationFactorError::InvalidParameterValue(ref cause) => cause,
-            IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(ref cause) => cause,
-            IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(ref cause) => cause,
-            IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
-            IncreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            IncreaseReplicationFactorError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicationFactorError::InsufficientClusterCapacityFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicationFactorError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicationFactorError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicationFactorError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for IncreaseReplicationFactorError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
@@ -1924,21 +1960,17 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsError::ClusterNotFoundFault(ref cause) => cause,
-            ListTagsError::InvalidARNFault(ref cause) => cause,
-            ListTagsError::InvalidClusterStateFault(ref cause) => cause,
-            ListTagsError::InvalidParameterCombination(ref cause) => cause,
-            ListTagsError::InvalidParameterValue(ref cause) => cause,
-            ListTagsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            ListTagsError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ListTagsError::InvalidARNFault(ref cause) => write!(f, "{}", cause),
+            ListTagsError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            ListTagsError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            ListTagsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListTagsError::ServiceLinkedRoleNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsError {}
 /// Errors returned by RebootNode
 #[derive(Debug, PartialEq)]
 pub enum RebootNodeError {
@@ -1991,21 +2023,17 @@ impl RebootNodeError {
 }
 impl fmt::Display for RebootNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootNodeError {
-    fn description(&self) -> &str {
         match *self {
-            RebootNodeError::ClusterNotFoundFault(ref cause) => cause,
-            RebootNodeError::InvalidClusterStateFault(ref cause) => cause,
-            RebootNodeError::InvalidParameterCombination(ref cause) => cause,
-            RebootNodeError::InvalidParameterValue(ref cause) => cause,
-            RebootNodeError::NodeNotFoundFault(ref cause) => cause,
-            RebootNodeError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            RebootNodeError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RebootNodeError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            RebootNodeError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            RebootNodeError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            RebootNodeError::NodeNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RebootNodeError::ServiceLinkedRoleNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebootNodeError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2067,22 +2095,18 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::ClusterNotFoundFault(ref cause) => cause,
-            TagResourceError::InvalidARNFault(ref cause) => cause,
-            TagResourceError::InvalidClusterStateFault(ref cause) => cause,
-            TagResourceError::InvalidParameterCombination(ref cause) => cause,
-            TagResourceError::InvalidParameterValue(ref cause) => cause,
-            TagResourceError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            TagResourceError::TagQuotaPerResourceExceeded(ref cause) => cause,
+            TagResourceError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidARNFault(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ServiceLinkedRoleNotFoundFault(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TagQuotaPerResourceExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -2142,22 +2166,18 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::ClusterNotFoundFault(ref cause) => cause,
-            UntagResourceError::InvalidARNFault(ref cause) => cause,
-            UntagResourceError::InvalidClusterStateFault(ref cause) => cause,
-            UntagResourceError::InvalidParameterCombination(ref cause) => cause,
-            UntagResourceError::InvalidParameterValue(ref cause) => cause,
-            UntagResourceError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            UntagResourceError::TagNotFoundFault(ref cause) => cause,
+            UntagResourceError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidARNFault(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ServiceLinkedRoleNotFoundFault(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TagNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateCluster
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterError {
@@ -2221,22 +2241,20 @@ impl UpdateClusterError {
 }
 impl fmt::Display for UpdateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateClusterError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateClusterError::ClusterNotFoundFault(ref cause) => cause,
-            UpdateClusterError::InvalidClusterStateFault(ref cause) => cause,
-            UpdateClusterError::InvalidParameterCombination(ref cause) => cause,
-            UpdateClusterError::InvalidParameterGroupStateFault(ref cause) => cause,
-            UpdateClusterError::InvalidParameterValue(ref cause) => cause,
-            UpdateClusterError::ParameterGroupNotFoundFault(ref cause) => cause,
-            UpdateClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            UpdateClusterError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::InvalidParameterGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateClusterError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::ParameterGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateClusterError {}
 /// Errors returned by UpdateParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateParameterGroupError {
@@ -2290,20 +2308,24 @@ impl UpdateParameterGroupError {
 }
 impl fmt::Display for UpdateParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateParameterGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateParameterGroupError::InvalidParameterCombination(ref cause) => cause,
-            UpdateParameterGroupError::InvalidParameterGroupStateFault(ref cause) => cause,
-            UpdateParameterGroupError::InvalidParameterValue(ref cause) => cause,
-            UpdateParameterGroupError::ParameterGroupNotFoundFault(ref cause) => cause,
-            UpdateParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
+            UpdateParameterGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateParameterGroupError::InvalidParameterGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateParameterGroupError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateParameterGroupError::ParameterGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateParameterGroupError {}
 /// Errors returned by UpdateSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateSubnetGroupError {
@@ -2353,20 +2375,18 @@ impl UpdateSubnetGroupError {
 }
 impl fmt::Display for UpdateSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSubnetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSubnetGroupError::InvalidSubnet(ref cause) => cause,
-            UpdateSubnetGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            UpdateSubnetGroupError::SubnetGroupNotFoundFault(ref cause) => cause,
-            UpdateSubnetGroupError::SubnetInUse(ref cause) => cause,
-            UpdateSubnetGroupError::SubnetQuotaExceededFault(ref cause) => cause,
+            UpdateSubnetGroupError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            UpdateSubnetGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSubnetGroupError::SubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            UpdateSubnetGroupError::SubnetInUse(ref cause) => write!(f, "{}", cause),
+            UpdateSubnetGroupError::SubnetQuotaExceededFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSubnetGroupError {}
 /// Trait representing the capabilities of the Amazon DAX API. Amazon DAX clients implement this trait.
 pub trait DynamodbAccelerator {
     /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
