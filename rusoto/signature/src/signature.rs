@@ -28,8 +28,7 @@ use log::{debug, log_enabled, Level::Debug};
 use md5;
 use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
 use sha2::{Digest, Sha256};
-use time::now_utc;
-use time::Tm;
+use time::{Date, PrimitiveDateTime};
 
 use crate::credential::AwsCredentials;
 use crate::region::Region;
@@ -265,10 +264,10 @@ impl SignedRequest {
         self.sign(creds);
         let hostname = self.hostname();
 
-        let current_time = now_utc();
-        let current_time_fmted = current_time.strftime("%Y%m%dT%H%M%SZ").unwrap();
+        let current_time = PrimitiveDateTime::now();
+        let current_time_fmted = current_time.format("%Y%m%dT%H%M%SZ");
         let current_time_fmted = format!("{}", &current_time_fmted);
-        let current_date = current_time.strftime("%Y%m%d").unwrap();
+        let current_date = current_time.format("%Y%m%d");
 
         self.remove_header("X-Amz-Content-Sha256");
 
@@ -369,7 +368,7 @@ impl SignedRequest {
         let signature = sign_string(
             &string_to_sign,
             creds.aws_secret_access_key(),
-            current_time,
+            current_time.date(),
             &self.region.name(),
             &self.service,
         );
@@ -433,12 +432,9 @@ impl SignedRequest {
     /// Authorization header uses AWS4-HMAC-SHA256 for signing.
     pub fn sign_with_plus(&mut self, creds: &AwsCredentials, should_treat_plus_literally: bool) {
         self.complement_with_plus(should_treat_plus_literally);
-        let date = now_utc();
+        let date = PrimitiveDateTime::now();
         self.remove_header("x-amz-date");
-        self.add_header(
-            "x-amz-date",
-            &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string(),
-        );
+        self.add_header("x-amz-date", &date.format("%Y%m%dT%H%M%SZ"));
 
         if let Some(ref token) = *creds.token() {
             self.remove_header("X-Amz-Security-Token");
@@ -482,7 +478,7 @@ impl SignedRequest {
         let hashed_canonical_request = to_hexdigest(&canonical_request);
         let scope = format!(
             "{}/{}/{}/aws4_request",
-            date.strftime("%Y%m%d").unwrap(),
+            date.format("%Y%m%d"),
             self.region.name(),
             &self.service
         );
@@ -492,7 +488,7 @@ impl SignedRequest {
         let signature = sign_string(
             &string_to_sign,
             creds.aws_secret_access_key(),
-            date,
+            date.date(),
             &self.region.name(),
             &self.service,
         );
@@ -596,11 +592,11 @@ fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
 fn sign_string(
     string_to_sign: &str,
     secret: &str,
-    date: Tm,
+    date: Date,
     region: &str,
     service: &str,
 ) -> String {
-    let date_str = date.strftime("%Y%m%d").unwrap().to_string();
+    let date_str = date.format("%Y%m%d");
     let date_hmac = hmac(format!("AWS4{}", secret).as_bytes(), date_str.as_bytes())
         .result()
         .code();
@@ -618,10 +614,14 @@ fn sign_string(
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
-pub fn string_to_sign(date: Tm, hashed_canonical_request: &str, scope: &str) -> String {
+pub fn string_to_sign(
+    date: PrimitiveDateTime,
+    hashed_canonical_request: &str,
+    scope: &str,
+) -> String {
     format!(
         "AWS4-HMAC-SHA256\n{}\n{}\n{}",
-        date.strftime("%Y%m%dT%H%M%SZ").unwrap(),
+        date.format("%Y%m%dT%H%M%SZ"),
         scope,
         hashed_canonical_request
     )
@@ -854,7 +854,7 @@ fn build_hostname(service: &str, region: &Region) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use time::empty_tm;
+    use time::Date;
 
     #[test]
     fn get_hostname_none_present() {
@@ -965,27 +965,28 @@ mod tests {
 
     #[test]
     fn signature_generation() {
+        let date = Date::try_from_ymd(0, 1, 1).unwrap();
         let signature_foo = super::sign_string(
             "foo",
             "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
-            empty_tm(),
+            date,
             "us-west-1",
             "s3",
         );
         assert_eq!(
             signature_foo,
-            "29673d1d856a7684ff6f0f53c542bae0bfbb1e564f531aff7568be9fd206383b".to_string()
+            "74d97a931fb073b276cdb5e5731374b72778cdd29f0764a51dafab99d3e41130".to_string()
         );
         let signature_bar = super::sign_string(
             "bar",
             "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
-            empty_tm(),
+            date,
             "us-west-1",
             "s3",
         );
         assert_eq!(
             signature_bar,
-            "2ba6879cd9e769d73df721dc90aafdaa843005d23f5b6c91d0744f804962e44f".to_string()
+            "d767b8a0bc0246f8093953484857d2fd7f43e984377102eede37b0a8dae3d82c".to_string()
         );
     }
 

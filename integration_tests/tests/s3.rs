@@ -15,7 +15,7 @@ use std::fs::File;
 use std::io::Read;
 use std::str;
 use std::time::Duration;
-use time::get_time;
+use time::Time;
 
 use futures::{Future, Stream};
 use futures_fs::FsPool;
@@ -157,7 +157,7 @@ fn init_logging() {
 fn test_bucket_creation_deletion() {
     init_logging();
 
-    let bucket_name = format!("s3-test-bucket-{}", get_time().sec);
+    let bucket_name = format!("s3-test-bucket-{}", Time::now().second());
     let mut test_client = TestS3Client::new(bucket_name.clone());
 
     let create_bucket_req = CreateBucketRequest {
@@ -205,7 +205,7 @@ fn test_bucket_creation_deletion() {
 fn test_puts_gets_deletes() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "default".to_owned(), get_time().sec);
+    let bucket_name = format!("test-bucket-{}-{}", "default".to_owned(), Time::now().second());
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket_with_acl(bucket_name.clone(), Some("public-read".to_owned()));
 
@@ -216,8 +216,8 @@ fn test_puts_gets_deletes() {
     }
 
     // file used for testing puts/gets
-    let filename = format!("test_file_{}", get_time().sec);
-    let filename2 = format!("test_file_2_{}", get_time().sec);
+    let filename = format!("test_file_{}", Time::now().second());
+    let filename2 = format!("test_file_2_{}", Time::now().second());
 
     // test failure responses on empty bucket
     test_get_object_no_such_object(&test_client.s3, &test_client.bucket_name, &filename);
@@ -288,11 +288,11 @@ fn test_puts_gets_deletes() {
 fn test_puts_gets_deletes_utf8() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "utf-8".to_owned(), get_time().sec);
+    let bucket_name = format!("test-bucket-{}-{}", "utf-8".to_owned(), Time::now().second());
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
-    let utf8_filename = format!("test[über]file@{}", get_time().sec);
+    let utf8_filename = format!("test[über]file@{}", Time::now().second());
     // UTF8 filenames
     test_put_object_with_filename(
         &test_client.s3,
@@ -310,11 +310,11 @@ fn test_puts_gets_deletes_utf8() {
 fn test_puts_gets_deletes_binary() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "binary".to_owned(), get_time().sec);
+    let bucket_name = format!("test-bucket-{}-{}", "binary".to_owned(), Time::now().second());
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
-    let binary_filename = format!("test_file_b{}", get_time().sec);
+    let binary_filename = format!("test_file_b{}", Time::now().second());
 
     // Binary objects:
     test_put_object_with_filename(
@@ -333,11 +333,11 @@ fn test_puts_gets_deletes_binary() {
 fn test_puts_gets_deletes_metadata() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "metadata".to_owned(), get_time().sec);
+    let bucket_name = format!("test-bucket-{}-{}", "metadata".to_owned(), Time::now().second());
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
-    let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
+    let metadata_filename = format!("test_metadata_file_{}", Time::now().second());
     let mut metadata = HashMap::<String, String>::new();
     metadata.insert(
         "rusoto-metadata-some".to_string(),
@@ -377,11 +377,11 @@ fn test_puts_gets_deletes_metadata() {
 fn test_puts_gets_deletes_presigned_url() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "presigned".to_owned(), get_time().sec);
+    let bucket_name = format!("test-bucket-{}-{}", "presigned".to_owned(), Time::now().second());
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
-    let filename = format!("test_file_{}_for_presigned", get_time().sec);
+    let filename = format!("test_file_{}_for_presigned", Time::now().second());
     // PUT an object for presigned url
     test_put_object_with_filename(
         &test_client.s3,
@@ -422,7 +422,7 @@ fn test_puts_gets_deletes_presigned_url() {
         &filename,
     );
 
-    let utf8_filename = format!("test[über]file@{}_for_presigned", get_time().sec);
+    let utf8_filename = format!("test[über]file@{}_for_presigned", Time::now().second());
     // UTF8 filenames for presigned url
     test_put_object_with_filename(
         &test_client.s3,
@@ -461,11 +461,11 @@ fn test_puts_gets_deletes_presigned_url() {
 fn test_multipart_stream_uploads() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "multipart".to_owned(), get_time().sec);
+    let bucket_name = format!("test-bucket-{}-{}", "multipart".to_owned(), Time::now().second());
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
-    let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
+    let multipart_filename = format!("test_multipart_file_{}", Time::now().second());
     let credentials = DefaultCredentialsProvider::new()
         .unwrap()
         .credentials()
@@ -482,7 +482,7 @@ fn test_multipart_stream_uploads() {
     );
 
     // PUT an object via stream
-    let streaming_filename = format!("streaming_test_file_{}", get_time().sec);
+    let streaming_filename = format!("streaming_test_file_{}", Time::now().second());
     test_put_object_stream_with_filename(
         &test_client.s3,
         &test_client.bucket_name,
@@ -507,7 +507,7 @@ fn test_multipart_stream_uploads() {
 fn test_list_objects_encoding() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "encoding".to_owned(), get_time().sec);
+    let bucket_name = format!("test-bucket-{}-{}", "encoding".to_owned(), Time::now().second());
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone());
 
@@ -582,7 +582,7 @@ fn test_list_objects_encoding() {
 fn test_name_space_truncate() {
     init_logging();
 
-    let bucket_name = format!("test-name-space-{}", get_time().sec);
+    let bucket_name = format!("test-name-space-{}", Time::now().second());
     let test_client = TestS3Client::new(bucket_name.clone());
 
     test_client.create_test_bucket(bucket_name.clone());
