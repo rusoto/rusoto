@@ -53,6 +53,7 @@ pub struct Action {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreatePartitionRequest {
     /// <p>The ID of the catalog in which the partition is to be created. Currently, this should be the AWS account ID.</p>
     #[serde(rename = "CatalogId")]
@@ -79,6 +80,7 @@ pub struct BatchCreatePartitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteConnectionRequest {
     /// <p>The ID of the Data Catalog in which the connections reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -103,6 +105,7 @@ pub struct BatchDeleteConnectionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeletePartitionRequest {
     /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -129,6 +132,7 @@ pub struct BatchDeletePartitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteTableRequest {
     /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -152,6 +156,7 @@ pub struct BatchDeleteTableResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteTableVersionRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -178,6 +183,7 @@ pub struct BatchDeleteTableVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetCrawlersRequest {
     /// <p>A list of crawler names, which might be the names returned from the <code>ListCrawlers</code> operation.</p>
     #[serde(rename = "CrawlerNames")]
@@ -198,6 +204,7 @@ pub struct BatchGetCrawlersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDevEndpointsRequest {
     /// <p>The list of <code>DevEndpoint</code> names, which might be the names returned from the <code>ListDevEndpoint</code> operation.</p>
     #[serde(rename = "DevEndpointNames")]
@@ -218,6 +225,7 @@ pub struct BatchGetDevEndpointsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetJobsRequest {
     /// <p>A list of job names, which might be the names returned from the <code>ListJobs</code> operation.</p>
     #[serde(rename = "JobNames")]
@@ -238,6 +246,7 @@ pub struct BatchGetJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetPartitionRequest {
     /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -268,6 +277,7 @@ pub struct BatchGetPartitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetTriggersRequest {
     /// <p>A list of trigger names, which may be the names returned from the <code>ListTriggers</code> operation.</p>
     #[serde(rename = "TriggerNames")]
@@ -288,6 +298,7 @@ pub struct BatchGetTriggersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetWorkflowsRequest {
     /// <p>Specifies whether to include a graph when returning the workflow resource metadata.</p>
     #[serde(rename = "IncludeGraph")]
@@ -330,6 +341,7 @@ pub struct BatchStopJobRunError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchStopJobRunRequest {
     /// <p>The name of the job definition for which to stop job runs.</p>
     #[serde(rename = "JobName")]
@@ -367,6 +379,7 @@ pub struct BatchStopJobRunSuccessfulSubmission {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelMLTaskRunRequest {
     /// <p>A unique identifier for the task run.</p>
     #[serde(rename = "TaskRunId")]
@@ -395,6 +408,7 @@ pub struct CancelMLTaskRunResponse {
 
 /// <p>Specifies a table definition in the AWS Glue Data Catalog.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CatalogEntry {
     /// <p>The database in which the table metadata resides.</p>
     #[serde(rename = "DatabaseName")]
@@ -627,6 +641,7 @@ pub struct Connection {
 
 /// <p>A structure that is used to specify a connection to create or update.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConnectionInput {
     /// <p>These key-value pairs define parameters for the connection.</p>
     #[serde(rename = "ConnectionProperties")]
@@ -846,6 +861,7 @@ pub struct CrawlerTargets {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClassifierRequest {
     /// <p>A <code>CsvClassifier</code> object specifying the classifier to create.</p>
     #[serde(rename = "CsvClassifier")]
@@ -870,6 +886,7 @@ pub struct CreateClassifierRequest {
 pub struct CreateClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectionRequest {
     /// <p>The ID of the Data Catalog in which to create the connection. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -885,6 +902,7 @@ pub struct CreateConnectionRequest {
 pub struct CreateConnectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCrawlerRequest {
     /// <p>A list of custom classifiers that the user has registered. By default, all built-in classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
     #[serde(rename = "Classifiers")]
@@ -939,6 +957,7 @@ pub struct CreateCrawlerResponse {}
 
 /// <p>Specifies a custom CSV classifier for <code>CreateClassifier</code> to create.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCsvClassifierRequest {
     /// <p>Enables the processing of files that contain only one column.</p>
     #[serde(rename = "AllowSingleColumn")]
@@ -970,6 +989,7 @@ pub struct CreateCsvClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatabaseRequest {
     /// <p>The ID of the Data Catalog in which to create the database. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -985,6 +1005,7 @@ pub struct CreateDatabaseRequest {
 pub struct CreateDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDevEndpointRequest {
     /// <p>A map of arguments used to configure the <code>DevEndpoint</code>.</p>
     #[serde(rename = "Arguments")]
@@ -1129,6 +1150,7 @@ pub struct CreateDevEndpointResponse {
 
 /// <p>Specifies a <code>grok</code> classifier for <code>CreateClassifier</code> to create.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGrokClassifierRequest {
     /// <p>An identifier of the data format that the classifier matches, such as Twitter, JSON, Omniture logs, Amazon CloudWatch Logs, and so on.</p>
     #[serde(rename = "Classification")]
@@ -1146,6 +1168,7 @@ pub struct CreateGrokClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
     /// <p>The <code>JobCommand</code> that executes this job.</p>
     #[serde(rename = "Command")]
@@ -1225,6 +1248,7 @@ pub struct CreateJobResponse {
 
 /// <p>Specifies a JSON classifier for <code>CreateClassifier</code> to create.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJsonClassifierRequest {
     /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of <code>JsonPath</code>, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
     #[serde(rename = "JsonPath")]
@@ -1235,6 +1259,7 @@ pub struct CreateJsonClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMLTransformRequest {
     /// <p>A description of the machine learning transform that is being defined. The default is an empty string.</p>
     #[serde(rename = "Description")]
@@ -1288,6 +1313,7 @@ pub struct CreateMLTransformResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePartitionRequest {
     /// <p>The AWS account ID of the catalog in which the partition is to be created.</p>
     #[serde(rename = "CatalogId")]
@@ -1309,6 +1335,7 @@ pub struct CreatePartitionRequest {
 pub struct CreatePartitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScriptRequest {
     /// <p>A list of the edges in the DAG.</p>
     #[serde(rename = "DagEdges")]
@@ -1338,6 +1365,7 @@ pub struct CreateScriptResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityConfigurationRequest {
     /// <p>The encryption configuration for the new security configuration.</p>
     #[serde(rename = "EncryptionConfiguration")]
@@ -1361,6 +1389,7 @@ pub struct CreateSecurityConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTableRequest {
     /// <p>The ID of the Data Catalog in which to create the <code>Table</code>. If none is supplied, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -1379,6 +1408,7 @@ pub struct CreateTableRequest {
 pub struct CreateTableResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTriggerRequest {
     /// <p>The actions initiated by this trigger when it fires.</p>
     #[serde(rename = "Actions")]
@@ -1425,6 +1455,7 @@ pub struct CreateTriggerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserDefinedFunctionRequest {
     /// <p>The ID of the Data Catalog in which to create the function. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -1443,6 +1474,7 @@ pub struct CreateUserDefinedFunctionRequest {
 pub struct CreateUserDefinedFunctionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkflowRequest {
     /// <p>A collection of properties to be used as part of each execution of the workflow.</p>
     #[serde(rename = "DefaultRunProperties")]
@@ -1472,6 +1504,7 @@ pub struct CreateWorkflowResponse {
 
 /// <p>Specifies an XML classifier for <code>CreateClassifier</code> to create.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateXMLClassifierRequest {
     /// <p>An identifier of the data format that the classifier matches.</p>
     #[serde(rename = "Classification")]
@@ -1583,6 +1616,7 @@ pub struct Database {
 
 /// <p>The structure used to create or update a database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DatabaseInput {
     /// <p>Creates a set of default permissions on the table for principals. </p>
     #[serde(rename = "CreateTableDefaultPermissions")]
@@ -1606,6 +1640,7 @@ pub struct DatabaseInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClassifierRequest {
     /// <p>Name of the classifier to remove.</p>
     #[serde(rename = "Name")]
@@ -1617,6 +1652,7 @@ pub struct DeleteClassifierRequest {
 pub struct DeleteClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionRequest {
     /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -1632,6 +1668,7 @@ pub struct DeleteConnectionRequest {
 pub struct DeleteConnectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCrawlerRequest {
     /// <p>The name of the crawler to remove.</p>
     #[serde(rename = "Name")]
@@ -1643,6 +1680,7 @@ pub struct DeleteCrawlerRequest {
 pub struct DeleteCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatabaseRequest {
     /// <p>The ID of the Data Catalog in which the database resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -1658,6 +1696,7 @@ pub struct DeleteDatabaseRequest {
 pub struct DeleteDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDevEndpointRequest {
     /// <p>The name of the <code>DevEndpoint</code>.</p>
     #[serde(rename = "EndpointName")]
@@ -1669,6 +1708,7 @@ pub struct DeleteDevEndpointRequest {
 pub struct DeleteDevEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobRequest {
     /// <p>The name of the job definition to delete.</p>
     #[serde(rename = "JobName")]
@@ -1685,6 +1725,7 @@ pub struct DeleteJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMLTransformRequest {
     /// <p>The unique identifier of the transform to delete.</p>
     #[serde(rename = "TransformId")]
@@ -1701,6 +1742,7 @@ pub struct DeleteMLTransformResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePartitionRequest {
     /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -1722,6 +1764,7 @@ pub struct DeletePartitionRequest {
 pub struct DeletePartitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyRequest {
     /// <p>The hash value returned when this policy was set.</p>
     #[serde(rename = "PolicyHashCondition")]
@@ -1734,6 +1777,7 @@ pub struct DeleteResourcePolicyRequest {
 pub struct DeleteResourcePolicyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecurityConfigurationRequest {
     /// <p>The name of the security configuration to delete.</p>
     #[serde(rename = "Name")]
@@ -1745,6 +1789,7 @@ pub struct DeleteSecurityConfigurationRequest {
 pub struct DeleteSecurityConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTableRequest {
     /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -1763,6 +1808,7 @@ pub struct DeleteTableRequest {
 pub struct DeleteTableResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTableVersionRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -1784,6 +1830,7 @@ pub struct DeleteTableVersionRequest {
 pub struct DeleteTableVersionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTriggerRequest {
     /// <p>The name of the trigger to delete.</p>
     #[serde(rename = "Name")]
@@ -1800,6 +1847,7 @@ pub struct DeleteTriggerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserDefinedFunctionRequest {
     /// <p>The ID of the Data Catalog where the function to be deleted is located. If none is supplied, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -1818,6 +1866,7 @@ pub struct DeleteUserDefinedFunctionRequest {
 pub struct DeleteUserDefinedFunctionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkflowRequest {
     /// <p>Name of the workflow to be deleted.</p>
     #[serde(rename = "Name")]
@@ -1941,6 +1990,7 @@ pub struct DevEndpoint {
 
 /// <p>Custom libraries to be loaded into a development endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DevEndpointCustomLibraries {
     /// <p><p>The path to one or more Java <code>.jar</code> files in an S3 bucket that should be loaded in your <code>DevEndpoint</code>.</p> <note> <p>You can only use pure Java/Scala libraries with a <code>DevEndpoint</code>.</p> </note></p>
     #[serde(rename = "ExtraJarsS3Path")]
@@ -2116,6 +2166,7 @@ pub struct FindMatchesTaskRunProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCatalogImportStatusRequest {
     /// <p>The ID of the catalog to migrate. Currently, this should be the AWS account ID.</p>
     #[serde(rename = "CatalogId")]
@@ -2133,6 +2184,7 @@ pub struct GetCatalogImportStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClassifierRequest {
     /// <p>Name of the classifier to retrieve.</p>
     #[serde(rename = "Name")]
@@ -2149,6 +2201,7 @@ pub struct GetClassifierResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClassifiersRequest {
     /// <p>The size of the list to return (optional).</p>
     #[serde(rename = "MaxResults")]
@@ -2174,6 +2227,7 @@ pub struct GetClassifiersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionRequest {
     /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -2199,6 +2253,7 @@ pub struct GetConnectionResponse {
 
 /// <p>Filters the connection definitions that are returned by the <code>GetConnections</code> API operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionsFilter {
     /// <p>The type of connections to return. Currently, only JDBC is supported; SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
@@ -2211,6 +2266,7 @@ pub struct GetConnectionsFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionsRequest {
     /// <p>The ID of the Data Catalog in which the connections reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -2248,6 +2304,7 @@ pub struct GetConnectionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCrawlerMetricsRequest {
     /// <p>A list of the names of crawlers about which to retrieve metrics.</p>
     #[serde(rename = "CrawlerNameList")]
@@ -2277,6 +2334,7 @@ pub struct GetCrawlerMetricsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCrawlerRequest {
     /// <p>The name of the crawler to retrieve metadata for.</p>
     #[serde(rename = "Name")]
@@ -2293,6 +2351,7 @@ pub struct GetCrawlerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCrawlersRequest {
     /// <p>The number of crawlers to return on each call.</p>
     #[serde(rename = "MaxResults")]
@@ -2318,6 +2377,7 @@ pub struct GetCrawlersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataCatalogEncryptionSettingsRequest {
     /// <p>The ID of the Data Catalog to retrieve the security configuration for. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -2335,6 +2395,7 @@ pub struct GetDataCatalogEncryptionSettingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDatabaseRequest {
     /// <p>The ID of the Data Catalog in which the database resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -2355,6 +2416,7 @@ pub struct GetDatabaseResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDatabasesRequest {
     /// <p>The ID of the Data Catalog from which to retrieve <code>Databases</code>. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -2383,6 +2445,7 @@ pub struct GetDatabasesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataflowGraphRequest {
     /// <p>The Python script to transform.</p>
     #[serde(rename = "PythonScript")]
@@ -2404,6 +2467,7 @@ pub struct GetDataflowGraphResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevEndpointRequest {
     /// <p>Name of the <code>DevEndpoint</code> to retrieve information for.</p>
     #[serde(rename = "EndpointName")]
@@ -2420,6 +2484,7 @@ pub struct GetDevEndpointResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevEndpointsRequest {
     /// <p>The maximum size of information to return.</p>
     #[serde(rename = "MaxResults")]
@@ -2445,6 +2510,7 @@ pub struct GetDevEndpointsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobBookmarkRequest {
     /// <p>The name of the job in question.</p>
     #[serde(rename = "JobName")]
@@ -2465,6 +2531,7 @@ pub struct GetJobBookmarkResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
     /// <p>The name of the job definition to retrieve.</p>
     #[serde(rename = "JobName")]
@@ -2481,6 +2548,7 @@ pub struct GetJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRunRequest {
     /// <p>Name of the job definition being run.</p>
     #[serde(rename = "JobName")]
@@ -2504,6 +2572,7 @@ pub struct GetJobRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRunsRequest {
     /// <p>The name of the job definition for which to retrieve all job runs.</p>
     #[serde(rename = "JobName")]
@@ -2532,6 +2601,7 @@ pub struct GetJobRunsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobsRequest {
     /// <p>The maximum size of the response.</p>
     #[serde(rename = "MaxResults")]
@@ -2557,6 +2627,7 @@ pub struct GetJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTaskRunRequest {
     /// <p>The unique identifier of the task run.</p>
     #[serde(rename = "TaskRunId")]
@@ -2612,6 +2683,7 @@ pub struct GetMLTaskRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTaskRunsRequest {
     /// <p>The filter criteria, in the <code>TaskRunFilterCriteria</code> structure, for the task run.</p>
     #[serde(rename = "Filter")]
@@ -2648,6 +2720,7 @@ pub struct GetMLTaskRunsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTransformRequest {
     /// <p>The unique identifier of the transform, generated at the time that the transform was created.</p>
     #[serde(rename = "TransformId")]
@@ -2732,6 +2805,7 @@ pub struct GetMLTransformResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTransformsRequest {
     /// <p>The filter transformation criteria.</p>
     #[serde(rename = "Filter")]
@@ -2764,6 +2838,7 @@ pub struct GetMLTransformsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMappingRequest {
     /// <p>Parameters for the mapping.</p>
     #[serde(rename = "Location")]
@@ -2787,6 +2862,7 @@ pub struct GetMappingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPartitionRequest {
     /// <p>The ID of the Data Catalog where the partition in question resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -2813,6 +2889,7 @@ pub struct GetPartitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPartitionsRequest {
     /// <p>The ID of the Data Catalog where the partitions in question reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -2856,6 +2933,7 @@ pub struct GetPartitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPlanRequest {
     /// <p>The programming language of the code to perform the mapping.</p>
     #[serde(rename = "Language")]
@@ -2891,6 +2969,7 @@ pub struct GetPlanResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcePolicyRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2915,6 +2994,7 @@ pub struct GetResourcePolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSecurityConfigurationRequest {
     /// <p>The name of the security configuration to retrieve.</p>
     #[serde(rename = "Name")]
@@ -2931,6 +3011,7 @@ pub struct GetSecurityConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSecurityConfigurationsRequest {
     /// <p>The maximum number of results to return.</p>
     #[serde(rename = "MaxResults")]
@@ -2956,6 +3037,7 @@ pub struct GetSecurityConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTableRequest {
     /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -2979,6 +3061,7 @@ pub struct GetTableResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTableVersionRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -3006,6 +3089,7 @@ pub struct GetTableVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTableVersionsRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -3041,6 +3125,7 @@ pub struct GetTableVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTablesRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -3077,6 +3162,7 @@ pub struct GetTablesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource for which to retrieve tags.</p>
     #[serde(rename = "ResourceArn")]
@@ -3093,6 +3179,7 @@ pub struct GetTagsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTriggerRequest {
     /// <p>The name of the trigger to retrieve.</p>
     #[serde(rename = "Name")]
@@ -3109,6 +3196,7 @@ pub struct GetTriggerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTriggersRequest {
     /// <p>The name of the job to retrieve triggers for. The trigger that can start this job is returned, and if there is no such trigger, all triggers are returned.</p>
     #[serde(rename = "DependentJobName")]
@@ -3138,6 +3226,7 @@ pub struct GetTriggersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserDefinedFunctionRequest {
     /// <p>The ID of the Data Catalog where the function to be retrieved is located. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -3161,6 +3250,7 @@ pub struct GetUserDefinedFunctionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserDefinedFunctionsRequest {
     /// <p>The ID of the Data Catalog where the functions to be retrieved are located. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -3196,6 +3286,7 @@ pub struct GetUserDefinedFunctionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRequest {
     /// <p>Specifies whether to include a graph when returning the workflow resource metadata.</p>
     #[serde(rename = "IncludeGraph")]
@@ -3216,6 +3307,7 @@ pub struct GetWorkflowResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRunPropertiesRequest {
     /// <p>Name of the workflow which was run.</p>
     #[serde(rename = "Name")]
@@ -3235,6 +3327,7 @@ pub struct GetWorkflowRunPropertiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRunRequest {
     /// <p>Specifies whether to include the workflow graph in response or not.</p>
     #[serde(rename = "IncludeGraph")]
@@ -3258,6 +3351,7 @@ pub struct GetWorkflowRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRunsRequest {
     /// <p>Specifies whether to include the workflow graph in response or not.</p>
     #[serde(rename = "IncludeGraph")]
@@ -3340,6 +3434,7 @@ pub struct GrokClassifier {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportCatalogToGlueRequest {
     /// <p>The ID of the catalog to import. Currently, this should be the AWS account ID.</p>
     #[serde(rename = "CatalogId")]
@@ -3626,6 +3721,7 @@ pub struct JobRun {
 
 /// <p>Specifies information used to update an existing job definition. The previous job definition is completely overwritten by this information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JobUpdate {
     /// <p>The <code>JobCommand</code> that executes this job (required).</p>
     #[serde(rename = "Command")]
@@ -3754,6 +3850,7 @@ pub struct LastCrawlInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCrawlersRequest {
     /// <p>The maximum size of a list to return.</p>
     #[serde(rename = "MaxResults")]
@@ -3783,6 +3880,7 @@ pub struct ListCrawlersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevEndpointsRequest {
     /// <p>The maximum size of a list to return.</p>
     #[serde(rename = "MaxResults")]
@@ -3812,6 +3910,7 @@ pub struct ListDevEndpointsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>The maximum size of a list to return.</p>
     #[serde(rename = "MaxResults")]
@@ -3841,6 +3940,7 @@ pub struct ListJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTriggersRequest {
     /// <p> The name of the job for which to retrieve triggers. The trigger that can start this job is returned. If there is no such trigger, all triggers are returned.</p>
     #[serde(rename = "DependentJobName")]
@@ -3874,6 +3974,7 @@ pub struct ListTriggersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkflowsRequest {
     /// <p>The maximum size of a list to return.</p>
     #[serde(rename = "MaxResults")]
@@ -3900,6 +4001,7 @@ pub struct ListWorkflowsResponse {
 
 /// <p>The location of resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Location {
     /// <p>An Amazon DynamoDB table location.</p>
     #[serde(rename = "DynamoDB")]
@@ -4126,6 +4228,7 @@ pub struct PartitionError {
 
 /// <p>The structure used to create and update a partition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PartitionInput {
     /// <p>The last time at which the partition was accessed.</p>
     #[serde(rename = "LastAccessTime")]
@@ -4216,6 +4319,7 @@ pub struct PrincipalPermissions {
 
 /// <p>Defines a property predicate.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PropertyPredicate {
     /// <p>The comparator used to compare this property to others.</p>
     #[serde(rename = "Comparator")]
@@ -4232,6 +4336,7 @@ pub struct PropertyPredicate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDataCatalogEncryptionSettingsRequest {
     /// <p>The ID of the Data Catalog to set the security configuration for. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -4247,6 +4352,7 @@ pub struct PutDataCatalogEncryptionSettingsRequest {
 pub struct PutDataCatalogEncryptionSettingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourcePolicyRequest {
     /// <p>A value of <code>MUST_EXIST</code> is used to update a policy. A value of <code>NOT_EXIST</code> is used to create a new policy. If a value of <code>NONE</code> or a null value is used, the call will not depend on the existence of a policy.</p>
     #[serde(rename = "PolicyExistsCondition")]
@@ -4271,6 +4377,7 @@ pub struct PutResourcePolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutWorkflowRunPropertiesRequest {
     /// <p>Name of the workflow which was run.</p>
     #[serde(rename = "Name")]
@@ -4288,6 +4395,7 @@ pub struct PutWorkflowRunPropertiesRequest {
 pub struct PutWorkflowRunPropertiesResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetJobBookmarkRequest {
     /// <p>The name of the job in question.</p>
     #[serde(rename = "JobName")]
@@ -4387,6 +4495,7 @@ pub struct SchemaColumn {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchTablesRequest {
     /// <p>A unique identifier, consisting of <code> <i>account_id</i>/datalake</code>.</p>
     #[serde(rename = "CatalogId")]
@@ -4447,6 +4556,7 @@ pub struct SecurityConfiguration {
 
 /// <p>Defines a non-overlapping region of a table's partitions, allowing multiple requests to be executed in parallel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Segment {
     /// <p>The zero-based index number of the segment. For example, if the total number of segments is 4, <code>SegmentNumber</code> values range from 0 through 3.</p>
     #[serde(rename = "SegmentNumber")]
@@ -4492,6 +4602,7 @@ pub struct SkewedInfo {
 
 /// <p>Specifies a field to sort by and a sort order.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SortCriterion {
     /// <p>The name of the field on which to sort.</p>
     #[serde(rename = "FieldName")]
@@ -4504,6 +4615,7 @@ pub struct SortCriterion {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartCrawlerRequest {
     /// <p>Name of the crawler to start.</p>
     #[serde(rename = "Name")]
@@ -4515,6 +4627,7 @@ pub struct StartCrawlerRequest {
 pub struct StartCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartCrawlerScheduleRequest {
     /// <p>Name of the crawler to schedule.</p>
     #[serde(rename = "CrawlerName")]
@@ -4526,6 +4639,7 @@ pub struct StartCrawlerScheduleRequest {
 pub struct StartCrawlerScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartExportLabelsTaskRunRequest {
     /// <p>The Amazon S3 path where you export the labels.</p>
     #[serde(rename = "OutputS3Path")]
@@ -4545,6 +4659,7 @@ pub struct StartExportLabelsTaskRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImportLabelsTaskRunRequest {
     /// <p>The Amazon Simple Storage Service (Amazon S3) path from where you import the labels.</p>
     #[serde(rename = "InputS3Path")]
@@ -4568,6 +4683,7 @@ pub struct StartImportLabelsTaskRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartJobRunRequest {
     /// <p>The job arguments specifically for this run. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
@@ -4616,6 +4732,7 @@ pub struct StartJobRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMLEvaluationTaskRunRequest {
     /// <p>The unique identifier of the machine learning transform.</p>
     #[serde(rename = "TransformId")]
@@ -4632,6 +4749,7 @@ pub struct StartMLEvaluationTaskRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMLLabelingSetGenerationTaskRunRequest {
     /// <p>The Amazon Simple Storage Service (Amazon S3) path where you generate the labeling set.</p>
     #[serde(rename = "OutputS3Path")]
@@ -4651,6 +4769,7 @@ pub struct StartMLLabelingSetGenerationTaskRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTriggerRequest {
     /// <p>The name of the trigger to start.</p>
     #[serde(rename = "Name")]
@@ -4667,6 +4786,7 @@ pub struct StartTriggerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartWorkflowRunRequest {
     /// <p>The name of the workflow to start.</p>
     #[serde(rename = "Name")]
@@ -4683,6 +4803,7 @@ pub struct StartWorkflowRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopCrawlerRequest {
     /// <p>Name of the crawler to stop.</p>
     #[serde(rename = "Name")]
@@ -4694,6 +4815,7 @@ pub struct StopCrawlerRequest {
 pub struct StopCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopCrawlerScheduleRequest {
     /// <p>Name of the crawler whose schedule state to set.</p>
     #[serde(rename = "CrawlerName")]
@@ -4705,6 +4827,7 @@ pub struct StopCrawlerScheduleRequest {
 pub struct StopCrawlerScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTriggerRequest {
     /// <p>The name of the trigger to stop.</p>
     #[serde(rename = "Name")]
@@ -4862,6 +4985,7 @@ pub struct TableError {
 
 /// <p>A structure used to define a table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TableInput {
     /// <p>A description of the table.</p>
     #[serde(rename = "Description")]
@@ -4945,6 +5069,7 @@ pub struct TableVersionError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the AWS Glue resource to which to add the tags. For more information about AWS Glue resource ARNs, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-common.html#aws-glue-api-regex-aws-glue-arn-id">AWS Glue ARN string pattern</a>.</p>
     #[serde(rename = "ResourceArn")]
@@ -5006,6 +5131,7 @@ pub struct TaskRun {
 
 /// <p>The criteria that are used to filter the task runs for the machine learning transform.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TaskRunFilterCriteria {
     /// <p>Filter on task runs started after this date.</p>
     #[serde(rename = "StartedAfter")]
@@ -5053,6 +5179,7 @@ pub struct TaskRunProperties {
 
 /// <p>The sorting criteria that are used to sort the list of task runs for the machine learning transform.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TaskRunSortCriteria {
     /// <p>The column to be used to sort the list of task runs for the machine learning transform.</p>
     #[serde(rename = "Column")]
@@ -5064,6 +5191,7 @@ pub struct TaskRunSortCriteria {
 
 /// <p>The criteria used to filter the machine learning transforms.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransformFilterCriteria {
     /// <p>The time and date after which the transforms were created.</p>
     #[serde(rename = "CreatedAfter")]
@@ -5117,6 +5245,7 @@ pub struct TransformParameters {
 
 /// <p>The sorting criteria that are associated with the machine learning transform.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransformSortCriteria {
     /// <p>The column to be used in the sorting criteria that are associated with the machine learning transform.</p>
     #[serde(rename = "Column")]
@@ -5180,6 +5309,7 @@ pub struct TriggerNodeDetails {
 
 /// <p>A structure used to provide information used to update a trigger. This object updates the previous trigger definition by overwriting it completely.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TriggerUpdate {
     /// <p>The actions initiated by this trigger.</p>
     #[serde(rename = "Actions")]
@@ -5204,6 +5334,7 @@ pub struct TriggerUpdate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource from which to remove the tags.</p>
     #[serde(rename = "ResourceArn")]
@@ -5218,6 +5349,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClassifierRequest {
     /// <p>A <code>CsvClassifier</code> object with updated fields.</p>
     #[serde(rename = "CsvClassifier")]
@@ -5242,6 +5374,7 @@ pub struct UpdateClassifierRequest {
 pub struct UpdateClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectionRequest {
     /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -5260,6 +5393,7 @@ pub struct UpdateConnectionRequest {
 pub struct UpdateConnectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCrawlerRequest {
     /// <p>A list of custom classifiers that the user has registered. By default, all built-in classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
     #[serde(rename = "Classifiers")]
@@ -5311,6 +5445,7 @@ pub struct UpdateCrawlerRequest {
 pub struct UpdateCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCrawlerScheduleRequest {
     /// <p>The name of the crawler whose schedule to update.</p>
     #[serde(rename = "CrawlerName")]
@@ -5327,6 +5462,7 @@ pub struct UpdateCrawlerScheduleResponse {}
 
 /// <p>Specifies a custom CSV classifier to be updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCsvClassifierRequest {
     /// <p>Enables the processing of files that contain only one column.</p>
     #[serde(rename = "AllowSingleColumn")]
@@ -5358,6 +5494,7 @@ pub struct UpdateCsvClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatabaseRequest {
     /// <p>The ID of the Data Catalog in which the metadata database resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -5376,6 +5513,7 @@ pub struct UpdateDatabaseRequest {
 pub struct UpdateDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevEndpointRequest {
     /// <p>The map of arguments to add the map of arguments used to configure the <code>DevEndpoint</code>.</p> <p>Valid arguments are:</p> <ul> <li> <p> <code>"--enable-glue-datacatalog": ""</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "3"</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "2"</code> </p> </li> </ul> <p>You can specify a version of Python support for development endpoints by using the <code>Arguments</code> parameter in the <code>CreateDevEndpoint</code> or <code>UpdateDevEndpoint</code> APIs. If no arguments are provided, the version defaults to Python 2.</p>
     #[serde(rename = "AddArguments")]
@@ -5416,6 +5554,7 @@ pub struct UpdateDevEndpointResponse {}
 
 /// <p>Specifies a grok classifier to update when passed to <code>UpdateClassifier</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGrokClassifierRequest {
     /// <p>An identifier of the data format that the classifier matches, such as Twitter, JSON, Omniture logs, Amazon CloudWatch Logs, and so on.</p>
     #[serde(rename = "Classification")]
@@ -5435,6 +5574,7 @@ pub struct UpdateGrokClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobRequest {
     /// <p>The name of the job definition to update.</p>
     #[serde(rename = "JobName")]
@@ -5455,6 +5595,7 @@ pub struct UpdateJobResponse {
 
 /// <p>Specifies a JSON classifier to be updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJsonClassifierRequest {
     /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of <code>JsonPath</code>, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
     #[serde(rename = "JsonPath")]
@@ -5466,6 +5607,7 @@ pub struct UpdateJsonClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMLTransformRequest {
     /// <p>A description of the transform. The default is an empty string.</p>
     #[serde(rename = "Description")]
@@ -5522,6 +5664,7 @@ pub struct UpdateMLTransformResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePartitionRequest {
     /// <p>The ID of the Data Catalog where the partition to be updated resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -5546,6 +5689,7 @@ pub struct UpdatePartitionRequest {
 pub struct UpdatePartitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTableRequest {
     /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -5568,6 +5712,7 @@ pub struct UpdateTableRequest {
 pub struct UpdateTableResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTriggerRequest {
     /// <p>The name of the trigger to update.</p>
     #[serde(rename = "Name")]
@@ -5587,6 +5732,7 @@ pub struct UpdateTriggerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserDefinedFunctionRequest {
     /// <p>The ID of the Data Catalog where the function to be updated is located. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -5608,6 +5754,7 @@ pub struct UpdateUserDefinedFunctionRequest {
 pub struct UpdateUserDefinedFunctionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkflowRequest {
     /// <p>A collection of properties to be used as part of each execution of the workflow.</p>
     #[serde(rename = "DefaultRunProperties")]
@@ -5633,6 +5780,7 @@ pub struct UpdateWorkflowResponse {
 
 /// <p>Specifies an XML classifier to be updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateXMLClassifierRequest {
     /// <p>An identifier of the data format that the classifier matches.</p>
     #[serde(rename = "Classification")]
@@ -5679,6 +5827,7 @@ pub struct UserDefinedFunction {
 
 /// <p>A structure used to create or update a user-defined function.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UserDefinedFunctionInput {
     /// <p>The Java class that contains the function code.</p>
     #[serde(rename = "ClassName")]

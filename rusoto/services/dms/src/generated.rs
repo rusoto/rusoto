@@ -43,6 +43,7 @@ pub struct AccountQuota {
 
 /// <p>Associates a set of tags with an AWS DMS resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceMessage {
     /// <p>Identifies the AWS DMS resource to which tags should be added. The value for this parameter is an Amazon Resource Name (ARN).</p> <p>For AWS DMS, you can tag a replication instance, an endpoint, or a replication task.</p>
     #[serde(rename = "ResourceArn")]
@@ -59,6 +60,7 @@ pub struct AddTagsToResourceResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyPendingMaintenanceActionMessage {
     /// <p>The pending maintenance action to apply to this resource.</p>
     #[serde(rename = "ApplyAction")]
@@ -174,6 +176,7 @@ pub struct Connection {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointMessage {
     /// <p>The Amazon Resource Name (ARN) for the certificate.</p>
     #[serde(rename = "CertificateArn")]
@@ -273,6 +276,7 @@ pub struct CreateEndpointResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSubscriptionMessage {
     /// <p> A Boolean value; set to <code>true</code> to activate the subscription, or set to <code>false</code> to create the subscription but not activate it. </p>
     #[serde(rename = "Enabled")]
@@ -314,6 +318,7 @@ pub struct CreateEventSubscriptionResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationInstanceMessage {
     /// <p>The amount of storage (in gigabytes) to be initially allocated for the replication instance.</p>
     #[serde(rename = "AllocatedStorage")]
@@ -383,6 +388,7 @@ pub struct CreateReplicationInstanceResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationSubnetGroupMessage {
     /// <p>The description for the subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroupDescription")]
@@ -411,6 +417,7 @@ pub struct CreateReplicationSubnetGroupResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationTaskMessage {
     /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
     #[serde(rename = "CdcStartPosition")]
@@ -463,6 +470,7 @@ pub struct CreateReplicationTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCertificateMessage {
     /// <p>The Amazon Resource Name (ARN) of the deleted certificate.</p>
     #[serde(rename = "CertificateArn")]
@@ -480,6 +488,7 @@ pub struct DeleteCertificateResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -501,6 +510,7 @@ pub struct DeleteConnectionResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -519,6 +529,7 @@ pub struct DeleteEndpointResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSubscriptionMessage {
     /// <p>The name of the DMS event notification subscription to be deleted.</p>
     #[serde(rename = "SubscriptionName")]
@@ -537,6 +548,7 @@ pub struct DeleteEventSubscriptionResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationInstanceMessage {
     /// <p>The Amazon Resource Name (ARN) of the replication instance to be deleted.</p>
     #[serde(rename = "ReplicationInstanceArn")]
@@ -555,6 +567,7 @@ pub struct DeleteReplicationInstanceResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationSubnetGroupMessage {
     /// <p>The subnet group name of the replication instance.</p>
     #[serde(rename = "ReplicationSubnetGroupIdentifier")]
@@ -568,6 +581,7 @@ pub struct DeleteReplicationSubnetGroupResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationTaskMessage {
     /// <p>The Amazon Resource Name (ARN) of the replication task to be deleted.</p>
     #[serde(rename = "ReplicationTaskArn")]
@@ -586,6 +600,7 @@ pub struct DeleteReplicationTaskResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAttributesMessage {}
 
 /// <p><p/></p>
@@ -603,6 +618,7 @@ pub struct DescribeAccountAttributesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificatesMessage {
     /// <p>Filters applied to the certificate described in the form of key-value pairs.</p>
     #[serde(rename = "Filters")]
@@ -633,6 +649,7 @@ pub struct DescribeCertificatesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionsMessage {
     /// <p>The filters applied to the connection.</p> <p>Valid filter names: endpoint-arn | replication-instance-arn</p>
     #[serde(rename = "Filters")]
@@ -664,6 +681,7 @@ pub struct DescribeConnectionsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointTypesMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: engine-name | endpoint-type</p>
     #[serde(rename = "Filters")]
@@ -695,6 +713,7 @@ pub struct DescribeEndpointTypesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointsMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: endpoint-arn | endpoint-type | endpoint-id | engine-name</p>
     #[serde(rename = "Filters")]
@@ -726,6 +745,7 @@ pub struct DescribeEndpointsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventCategoriesMessage {
     /// <p>Filters applied to the action.</p>
     #[serde(rename = "Filters")]
@@ -749,6 +769,7 @@ pub struct DescribeEventCategoriesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventSubscriptionsMessage {
     /// <p>Filters applied to the action.</p>
     #[serde(rename = "Filters")]
@@ -784,6 +805,7 @@ pub struct DescribeEventSubscriptionsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
     /// <p>The duration of the events to be listed.</p>
     #[serde(rename = "Duration")]
@@ -839,6 +861,7 @@ pub struct DescribeEventsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrderableReplicationInstancesMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -866,6 +889,7 @@ pub struct DescribeOrderableReplicationInstancesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingMaintenanceActionsMessage {
     /// <p><p/></p>
     #[serde(rename = "Filters")]
@@ -901,6 +925,7 @@ pub struct DescribePendingMaintenanceActionsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRefreshSchemasStatusMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -918,6 +943,7 @@ pub struct DescribeRefreshSchemasStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationInstanceTaskLogsMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     #[serde(rename = "Marker")]
@@ -951,6 +977,7 @@ pub struct DescribeReplicationInstanceTaskLogsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationInstancesMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-instance-arn | replication-instance-id | replication-instance-class | engine-version</p>
     #[serde(rename = "Filters")]
@@ -982,6 +1009,7 @@ pub struct DescribeReplicationInstancesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationSubnetGroupsMessage {
     /// <p>Filters applied to the describe action.</p>
     #[serde(rename = "Filters")]
@@ -1013,6 +1041,7 @@ pub struct DescribeReplicationSubnetGroupsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationTaskAssessmentResultsMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -1048,6 +1077,7 @@ pub struct DescribeReplicationTaskAssessmentResultsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationTasksMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-task-arn | replication-task-id | migration-type | endpoint-arn | replication-instance-arn</p>
     #[serde(rename = "Filters")]
@@ -1083,6 +1113,7 @@ pub struct DescribeReplicationTasksResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSchemasMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -1113,6 +1144,7 @@ pub struct DescribeSchemasResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTableStatisticsMessage {
     /// <p>Filters applied to the describe table statistics action.</p> <p>Valid filter names: schema-name | table-name | table-state</p> <p>A combination of filters creates an AND condition where each record matches all specified filters.</p>
     #[serde(rename = "Filters")]
@@ -1375,6 +1407,7 @@ pub struct EventSubscription {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Name")]
@@ -1385,6 +1418,7 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportCertificateMessage {
     /// <p>A customer-assigned name for the certificate. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "CertificateIdentifier")]
@@ -1436,6 +1470,7 @@ pub struct KinesisSettings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the AWS DMS resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -1454,6 +1489,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEndpointMessage {
     /// <p>The Amazon Resource Name (ARN) of the certificate used for SSL connection.</p>
     #[serde(rename = "CertificateArn")]
@@ -1551,6 +1587,7 @@ pub struct ModifyEndpointResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEventSubscriptionMessage {
     /// <p> A Boolean value; set to <b>true</b> to activate the subscription. </p>
     #[serde(rename = "Enabled")]
@@ -1585,6 +1622,7 @@ pub struct ModifyEventSubscriptionResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationInstanceMessage {
     /// <p>The amount of storage (in gigabytes) to be allocated for the replication instance.</p>
     #[serde(rename = "AllocatedStorage")]
@@ -1643,6 +1681,7 @@ pub struct ModifyReplicationInstanceResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationSubnetGroupMessage {
     /// <p>A description for the replication instance subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroupDescription")]
@@ -1668,6 +1707,7 @@ pub struct ModifyReplicationSubnetGroupResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationTaskMessage {
     /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
     #[serde(rename = "CdcStartPosition")]
@@ -1838,6 +1878,7 @@ pub struct PendingMaintenanceAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootReplicationInstanceMessage {
     /// <p>If this parameter is <code>true</code>, the reboot is conducted through a Multi-AZ failover. (If the instance isn't configured for Multi-AZ, then you can't specify <code>true</code>.)</p>
     #[serde(rename = "ForceFailover")]
@@ -1964,6 +2005,7 @@ pub struct RedshiftSettings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RefreshSchemasMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -2010,6 +2052,7 @@ pub struct RefreshSchemasStatus {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReloadTablesMessage {
     /// <p>Options for reload. Specify <code>data-reload</code> to reload the data and re-validate it if validation is enabled. Specify <code>validate-only</code> to re-validate the table. This option applies only when validation is enabled for the task. </p> <p>Valid values: data-reload, validate-only</p> <p>Default value is data-reload.</p>
     #[serde(rename = "ReloadOption")]
@@ -2034,6 +2077,7 @@ pub struct ReloadTablesResponse {
 
 /// <p>Removes one or more tags from an AWS DMS resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceMessage {
     /// <p>An AWS DMS resource from which you want to remove tag(s). The value for this parameter is an Amazon Resource Name (ARN).</p>
     #[serde(rename = "ResourceArn")]
@@ -2463,6 +2507,7 @@ pub struct S3Settings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReplicationTaskAssessmentMessage {
     /// <p> The Amazon Resource Name (ARN) of the replication task. </p>
     #[serde(rename = "ReplicationTaskArn")]
@@ -2481,6 +2526,7 @@ pub struct StartReplicationTaskAssessmentResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReplicationTaskMessage {
     /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
     #[serde(rename = "CdcStartPosition")]
@@ -2514,6 +2560,7 @@ pub struct StartReplicationTaskResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopReplicationTaskMessage {
     /// <p>The Amazon Resource Name(ARN) of the replication task to be stopped.</p>
     #[serde(rename = "ReplicationTaskArn")]
@@ -2642,6 +2689,7 @@ pub struct TableStatistics {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TableToReload {
     /// <p>The schema name of the table to be reloaded.</p>
     #[serde(rename = "SchemaName")]
@@ -2668,6 +2716,7 @@ pub struct Tag {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestConnectionMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]

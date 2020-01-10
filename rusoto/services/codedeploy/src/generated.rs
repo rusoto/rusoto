@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Represents the input of, and adds tags to, an on-premises instance operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToOnPremisesInstancesInput {
     /// <p>The names of the on-premises instances to which to add tags.</p>
     #[serde(rename = "instanceNames")]
@@ -132,6 +133,7 @@ pub struct AutoScalingGroup {
 
 /// <p>Represents the input of a BatchGetApplicationRevisions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetApplicationRevisionsInput {
     /// <p>The name of an AWS CodeDeploy application about which to get revision information.</p>
     #[serde(rename = "applicationName")]
@@ -161,6 +163,7 @@ pub struct BatchGetApplicationRevisionsOutput {
 
 /// <p>Represents the input of a BatchGetApplications operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetApplicationsInput {
     /// <p>A list of application names separated by spaces. The maximum number of application names you can specify is 25.</p>
     #[serde(rename = "applicationNames")]
@@ -179,6 +182,7 @@ pub struct BatchGetApplicationsOutput {
 
 /// <p>Represents the input of a BatchGetDeploymentGroups operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentGroupsInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -204,6 +208,7 @@ pub struct BatchGetDeploymentGroupsOutput {
 
 /// <p> Represents the input of a BatchGetDeploymentInstances operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentInstancesInput {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -228,6 +233,7 @@ pub struct BatchGetDeploymentInstancesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentTargetsInput {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -250,6 +256,7 @@ pub struct BatchGetDeploymentTargetsOutput {
 
 /// <p> Represents the input of a BatchGetDeployments operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentsInput {
     /// <p> A list of deployment IDs, separated by spaces. The maximum number of deployment IDs you can specify is 25.</p>
     #[serde(rename = "deploymentIds")]
@@ -268,6 +275,7 @@ pub struct BatchGetDeploymentsOutput {
 
 /// <p>Represents the input of a BatchGetOnPremisesInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetOnPremisesInstancesInput {
     /// <p>The names of the on-premises instances about which to get information. The maximum number of instance names you can specify is 25.</p>
     #[serde(rename = "instanceNames")]
@@ -315,6 +323,7 @@ pub struct BlueInstanceTerminationOption {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContinueDeploymentInput {
     /// <p> The unique ID of a blue/green deployment for which you want to start rerouting traffic to the replacement environment. </p>
     #[serde(rename = "deploymentId")]
@@ -328,6 +337,7 @@ pub struct ContinueDeploymentInput {
 
 /// <p>Represents the input of a CreateApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationInput {
     /// <p>The name of the application. This name must be unique with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -354,6 +364,7 @@ pub struct CreateApplicationOutput {
 
 /// <p>Represents the input of a CreateDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentConfigInput {
     /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
@@ -384,6 +395,7 @@ pub struct CreateDeploymentConfigOutput {
 
 /// <p>Represents the input of a CreateDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentGroupInput {
     /// <p>Information to add about Amazon CloudWatch alarms when the deployment group is created.</p>
     #[serde(rename = "alarmConfiguration")]
@@ -464,6 +476,7 @@ pub struct CreateDeploymentGroupOutput {
 
 /// <p>Represents the input of a CreateDeployment operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -518,6 +531,7 @@ pub struct CreateDeploymentOutput {
 
 /// <p>Represents the input of a DeleteApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -526,6 +540,7 @@ pub struct DeleteApplicationInput {
 
 /// <p>Represents the input of a DeleteDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentConfigInput {
     /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p>
     #[serde(rename = "deploymentConfigName")]
@@ -534,6 +549,7 @@ pub struct DeleteDeploymentConfigInput {
 
 /// <p>Represents the input of a DeleteDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentGroupInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -555,6 +571,7 @@ pub struct DeleteDeploymentGroupOutput {
 
 /// <p>Represents the input of a DeleteGitHubAccount operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGitHubAccountTokenInput {
     /// <p>The name of the GitHub account connection to delete.</p>
     #[serde(rename = "tokenName")]
@@ -886,6 +903,7 @@ pub struct DeploymentTarget {
 
 /// <p>Represents the input of a DeregisterOnPremisesInstance operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterOnPremisesInstanceInput {
     /// <p>The name of the on-premises instance to deregister.</p>
     #[serde(rename = "instanceName")]
@@ -1076,6 +1094,7 @@ pub struct GenericRevisionInfo {
 
 /// <p>Represents the input of a GetApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -1094,6 +1113,7 @@ pub struct GetApplicationOutput {
 
 /// <p>Represents the input of a GetApplicationRevision operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationRevisionInput {
     /// <p>The name of the application that corresponds to the revision.</p>
     #[serde(rename = "applicationName")]
@@ -1123,6 +1143,7 @@ pub struct GetApplicationRevisionOutput {
 
 /// <p>Represents the input of a GetDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentConfigInput {
     /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p>
     #[serde(rename = "deploymentConfigName")]
@@ -1141,6 +1162,7 @@ pub struct GetDeploymentConfigOutput {
 
 /// <p>Represents the input of a GetDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentGroupInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -1162,6 +1184,7 @@ pub struct GetDeploymentGroupOutput {
 
 /// <p>Represents the input of a GetDeployment operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentInput {
     /// <p> The unique ID of a deployment associated with the IAM user or AWS account. </p>
     #[serde(rename = "deploymentId")]
@@ -1170,6 +1193,7 @@ pub struct GetDeploymentInput {
 
 /// <p> Represents the input of a GetDeploymentInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentInstanceInput {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -1200,6 +1224,7 @@ pub struct GetDeploymentOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentTargetInput {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -1222,6 +1247,7 @@ pub struct GetDeploymentTargetOutput {
 
 /// <p> Represents the input of a GetOnPremisesInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOnPremisesInstanceInput {
     /// <p> The name of the on-premises instance about which to get information. </p>
     #[serde(rename = "instanceName")]
@@ -1468,6 +1494,7 @@ pub struct LifecycleEvent {
 
 /// <p> Represents the input of a ListApplicationRevisions operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationRevisionsInput {
     /// <p> The name of an AWS CodeDeploy application associated with the IAM user or AWS account. </p>
     #[serde(rename = "applicationName")]
@@ -1514,6 +1541,7 @@ pub struct ListApplicationRevisionsOutput {
 
 /// <p>Represents the input of a ListApplications operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsInput {
     /// <p>An identifier returned from the previous list applications call. It can be used to return the next set of applications in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1537,6 +1565,7 @@ pub struct ListApplicationsOutput {
 
 /// <p>Represents the input of a ListDeploymentConfigs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentConfigsInput {
     /// <p>An identifier returned from the previous <code>ListDeploymentConfigs</code> call. It can be used to return the next set of deployment configurations in the list. </p>
     #[serde(rename = "nextToken")]
@@ -1560,6 +1589,7 @@ pub struct ListDeploymentConfigsOutput {
 
 /// <p>Represents the input of a ListDeploymentGroups operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentGroupsInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -1590,6 +1620,7 @@ pub struct ListDeploymentGroupsOutput {
 
 /// <p> Represents the input of a ListDeploymentInstances operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentInstancesInput {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -1623,6 +1654,7 @@ pub struct ListDeploymentInstancesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentTargetsInput {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -1653,6 +1685,7 @@ pub struct ListDeploymentTargetsOutput {
 
 /// <p>Represents the input of a ListDeployments operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentsInput {
     /// <p><p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p> <note> <p>If <code>applicationName</code> is specified, then <code>deploymentGroupName</code> must be specified. If it is not specified, then <code>deploymentGroupName</code> must not be specified. </p> </note></p>
     #[serde(rename = "applicationName")]
@@ -1692,6 +1725,7 @@ pub struct ListDeploymentsOutput {
 
 /// <p>Represents the input of a ListGitHubAccountTokenNames operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGitHubAccountTokenNamesInput {
     /// <p>An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list. </p>
     #[serde(rename = "nextToken")]
@@ -1715,6 +1749,7 @@ pub struct ListGitHubAccountTokenNamesOutput {
 
 /// <p>Represents the input of a ListOnPremisesInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOnPremisesInstancesInput {
     /// <p>An identifier returned from the previous list on-premises instances call. It can be used to return the next set of on-premises instances in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1745,6 +1780,7 @@ pub struct ListOnPremisesInstancesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>An identifier returned from the previous <code>ListTagsForResource</code> call. It can be used to return the next set of applications in the list.</p>
     #[serde(rename = "NextToken")]
@@ -1808,6 +1844,7 @@ pub struct OnPremisesTagSet {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecycleEventHookExecutionStatusInput {
     /// <p> The unique ID of a deployment. Pass this ID to a Lambda function that validates a deployment lifecycle event. </p>
     #[serde(rename = "deploymentId")]
@@ -1847,6 +1884,7 @@ pub struct RawString {
 
 /// <p>Represents the input of a RegisterApplicationRevision operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterApplicationRevisionInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -1862,6 +1900,7 @@ pub struct RegisterApplicationRevisionInput {
 
 /// <p>Represents the input of the register on-premises instance operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterOnPremisesInstanceInput {
     /// <p>The ARN of the IAM session to associate with the on-premises instance.</p>
     #[serde(rename = "iamSessionArn")]
@@ -1878,6 +1917,7 @@ pub struct RegisterOnPremisesInstanceInput {
 
 /// <p>Represents the input of a RemoveTagsFromOnPremisesInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromOnPremisesInstancesInput {
     /// <p>The names of the on-premises instances from which to remove tags.</p>
     #[serde(rename = "instanceNames")]
@@ -1970,6 +2010,7 @@ pub struct S3Location {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SkipWaitTimeForInstanceTerminationInput {
     /// <p> The unique ID of a blue/green deployment for which you want to skip the instance termination wait time. </p>
     #[serde(rename = "deploymentId")]
@@ -1979,6 +2020,7 @@ pub struct SkipWaitTimeForInstanceTerminationInput {
 
 /// <p> Represents the input of a StopDeployment operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDeploymentInput {
     /// <p> Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision. </p>
     #[serde(rename = "autoRollbackEnabled")]
@@ -2034,6 +2076,7 @@ pub struct TagFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p> The ARN of a resource, such as a CodeDeploy application or deployment group. </p>
     #[serde(rename = "ResourceArn")]
@@ -2118,6 +2161,7 @@ pub struct TimeBasedLinear {
 
 /// <p>Information about a time range.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TimeRange {
     /// <p><p>The end time of the time range.</p> <note> <p>Specify null to leave the end time open-ended.</p> </note></p>
     #[serde(rename = "end")]
@@ -2173,6 +2217,7 @@ pub struct TriggerConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p> The ARN that specifies from which resource to disassociate the tags with the keys in the <code>TagKeys</code> input paramter. </p>
     #[serde(rename = "ResourceArn")]
@@ -2188,6 +2233,7 @@ pub struct UntagResourceOutput {}
 
 /// <p>Represents the input of an UpdateApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationInput {
     /// <p>The current name of the application you want to change.</p>
     #[serde(rename = "applicationName")]
@@ -2201,6 +2247,7 @@ pub struct UpdateApplicationInput {
 
 /// <p>Represents the input of an UpdateDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentGroupInput {
     /// <p>Information to add or change about Amazon CloudWatch alarms when the deployment group is updated.</p>
     #[serde(rename = "alarmConfiguration")]

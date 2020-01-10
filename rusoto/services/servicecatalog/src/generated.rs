@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptPortfolioShareInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -44,6 +45,7 @@ pub struct AcceptPortfolioShareOutput {}
 
 /// <p>The access level to use to filter results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccessLevelFilter {
     /// <p><p>The access level.</p> <ul> <li> <p> <code>Account</code> - Filter results based on the account.</p> </li> <li> <p> <code>Role</code> - Filter results based on the federated role of the specified user.</p> </li> <li> <p> <code>User</code> - Filter results based on the specified user.</p> </li> </ul></p>
     #[serde(rename = "Key")]
@@ -56,6 +58,7 @@ pub struct AccessLevelFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateBudgetWithResourceInput {
     /// <p>The name of the budget you want to associate.</p>
     #[serde(rename = "BudgetName")]
@@ -70,6 +73,7 @@ pub struct AssociateBudgetWithResourceInput {
 pub struct AssociateBudgetWithResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePrincipalWithPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -91,6 +95,7 @@ pub struct AssociatePrincipalWithPortfolioInput {
 pub struct AssociatePrincipalWithPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateProductWithPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -113,6 +118,7 @@ pub struct AssociateProductWithPortfolioInput {
 pub struct AssociateProductWithPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateServiceActionWithProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -134,6 +140,7 @@ pub struct AssociateServiceActionWithProvisioningArtifactInput {
 pub struct AssociateServiceActionWithProvisioningArtifactOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTagOptionWithResourceInput {
     /// <p>The resource identifier.</p>
     #[serde(rename = "ResourceId")]
@@ -148,6 +155,7 @@ pub struct AssociateTagOptionWithResourceInput {
 pub struct AssociateTagOptionWithResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAssociateServiceActionWithProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -168,6 +176,7 @@ pub struct BatchAssociateServiceActionWithProvisioningArtifactOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDisassociateServiceActionFromProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -244,6 +253,7 @@ pub struct ConstraintSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -284,6 +294,7 @@ pub struct CopyProductOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConstraintInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -328,6 +339,7 @@ pub struct CreateConstraintOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -366,6 +378,7 @@ pub struct CreatePortfolioOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePortfolioShareInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -394,6 +407,7 @@ pub struct CreatePortfolioShareOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -458,6 +472,7 @@ pub struct CreateProductOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisionedProductPlanInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -525,6 +540,7 @@ pub struct CreateProvisionedProductPlanOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -559,6 +575,7 @@ pub struct CreateProvisioningArtifactOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceActionInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -592,6 +609,7 @@ pub struct CreateServiceActionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagOptionInput {
     /// <p>The TagOption key.</p>
     #[serde(rename = "Key")]
@@ -611,6 +629,7 @@ pub struct CreateTagOptionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConstraintInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -626,6 +645,7 @@ pub struct DeleteConstraintInput {
 pub struct DeleteConstraintOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -641,6 +661,7 @@ pub struct DeletePortfolioInput {
 pub struct DeletePortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePortfolioShareInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -669,6 +690,7 @@ pub struct DeletePortfolioShareOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -684,6 +706,7 @@ pub struct DeleteProductInput {
 pub struct DeleteProductOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisionedProductPlanInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -703,6 +726,7 @@ pub struct DeleteProvisionedProductPlanInput {
 pub struct DeleteProvisionedProductPlanOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -721,6 +745,7 @@ pub struct DeleteProvisioningArtifactInput {
 pub struct DeleteProvisioningArtifactOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceActionInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -736,6 +761,7 @@ pub struct DeleteServiceActionInput {
 pub struct DeleteServiceActionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagOptionInput {
     /// <p>The TagOption identifier.</p>
     #[serde(rename = "Id")]
@@ -747,6 +773,7 @@ pub struct DeleteTagOptionInput {
 pub struct DeleteTagOptionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConstraintInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -775,6 +802,7 @@ pub struct DescribeConstraintOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCopyProductStatusInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -803,6 +831,7 @@ pub struct DescribeCopyProductStatusOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -835,6 +864,7 @@ pub struct DescribePortfolioOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePortfolioShareStatusInput {
     /// <p>The token for the portfolio share operation. This token is returned either by CreatePortfolioShare or by DeletePortfolioShare.</p>
     #[serde(rename = "PortfolioShareToken")]
@@ -867,6 +897,7 @@ pub struct DescribePortfolioShareStatusOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProductAsAdminInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -903,6 +934,7 @@ pub struct DescribeProductAsAdminOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -931,6 +963,7 @@ pub struct DescribeProductOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProductViewInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -955,6 +988,7 @@ pub struct DescribeProductViewOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisionedProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -979,6 +1013,7 @@ pub struct DescribeProvisionedProductOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisionedProductPlanInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1015,6 +1050,7 @@ pub struct DescribeProvisionedProductPlanOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1050,6 +1086,7 @@ pub struct DescribeProvisioningArtifactOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisioningParametersInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1093,6 +1130,7 @@ pub struct DescribeProvisioningParametersOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRecordInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1129,6 +1167,7 @@ pub struct DescribeRecordOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServiceActionExecutionParametersInput {
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1148,6 +1187,7 @@ pub struct DescribeServiceActionExecutionParametersOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServiceActionInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1168,6 +1208,7 @@ pub struct DescribeServiceActionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagOptionInput {
     /// <p>The TagOption identifier.</p>
     #[serde(rename = "Id")]
@@ -1184,6 +1225,7 @@ pub struct DescribeTagOptionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableAWSOrganizationsAccessInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1191,6 +1233,7 @@ pub struct DisableAWSOrganizationsAccessInput {}
 pub struct DisableAWSOrganizationsAccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateBudgetFromResourceInput {
     /// <p>The name of the budget you want to disassociate.</p>
     #[serde(rename = "BudgetName")]
@@ -1205,6 +1248,7 @@ pub struct DisassociateBudgetFromResourceInput {
 pub struct DisassociateBudgetFromResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePrincipalFromPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1223,6 +1267,7 @@ pub struct DisassociatePrincipalFromPortfolioInput {
 pub struct DisassociatePrincipalFromPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateProductFromPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1241,6 +1286,7 @@ pub struct DisassociateProductFromPortfolioInput {
 pub struct DisassociateProductFromPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateServiceActionFromProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1262,6 +1308,7 @@ pub struct DisassociateServiceActionFromProvisioningArtifactInput {
 pub struct DisassociateServiceActionFromProvisioningArtifactOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateTagOptionFromResourceInput {
     /// <p>The resource identifier.</p>
     #[serde(rename = "ResourceId")]
@@ -1276,6 +1323,7 @@ pub struct DisassociateTagOptionFromResourceInput {
 pub struct DisassociateTagOptionFromResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableAWSOrganizationsAccessInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1283,6 +1331,7 @@ pub struct EnableAWSOrganizationsAccessInput {}
 pub struct EnableAWSOrganizationsAccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteProvisionedProductPlanInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1306,6 +1355,7 @@ pub struct ExecuteProvisionedProductPlanOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteProvisionedProductServiceActionInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1375,6 +1425,7 @@ pub struct FailedServiceActionAssociation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAWSOrganizationsAccessStatusInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1409,6 +1460,7 @@ pub struct LaunchPathSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAcceptedPortfolioSharesInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1442,6 +1494,7 @@ pub struct ListAcceptedPortfolioSharesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBudgetsForResourceInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1474,6 +1527,7 @@ pub struct ListBudgetsForResourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConstraintsForPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1510,6 +1564,7 @@ pub struct ListConstraintsForPortfolioOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLaunchPathsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1542,6 +1597,7 @@ pub struct ListLaunchPathsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOrganizationPortfolioAccessInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1577,6 +1633,7 @@ pub struct ListOrganizationPortfolioAccessOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPortfolioAccessInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1601,6 +1658,7 @@ pub struct ListPortfolioAccessOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPortfoliosForProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1633,6 +1691,7 @@ pub struct ListPortfoliosForProductOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPortfoliosInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1662,6 +1721,7 @@ pub struct ListPortfoliosOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalsForPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1694,6 +1754,7 @@ pub struct ListPrincipalsForPortfolioOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisionedProductPlansInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1731,6 +1792,7 @@ pub struct ListProvisionedProductPlansOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisioningArtifactsForServiceActionInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1763,6 +1825,7 @@ pub struct ListProvisioningArtifactsForServiceActionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisioningArtifactsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1787,6 +1850,7 @@ pub struct ListProvisioningArtifactsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecordHistoryInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1825,6 +1889,7 @@ pub struct ListRecordHistoryOutput {
 
 /// <p>The search filter to use when listing history records.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecordHistorySearchFilter {
     /// <p><p>The filter key.</p> <ul> <li> <p> <code>product</code> - Filter results based on the specified product identifier.</p> </li> <li> <p> <code>provisionedproduct</code> - Filter results based on the provisioned product identifier.</p> </li> </ul></p>
     #[serde(rename = "Key")]
@@ -1837,6 +1902,7 @@ pub struct ListRecordHistorySearchFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesForTagOptionInput {
     /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
@@ -1869,6 +1935,7 @@ pub struct ListResourcesForTagOptionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceActionsForProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1904,6 +1971,7 @@ pub struct ListServiceActionsForProvisioningArtifactOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceActionsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1933,6 +2001,7 @@ pub struct ListServiceActionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackInstancesForProvisionedProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1966,6 +2035,7 @@ pub struct ListStackInstancesForProvisionedProductOutput {
 
 /// <p>Filters to use when listing TagOptions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagOptionsFilters {
     /// <p>The active state.</p>
     #[serde(rename = "Active")]
@@ -1982,6 +2052,7 @@ pub struct ListTagOptionsFilters {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagOptionsInput {
     /// <p>The search filters. If no search filters are specified, the output includes all TagOptions.</p>
     #[serde(rename = "Filters")]
@@ -2164,6 +2235,7 @@ pub struct ProductViewSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProvisionProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2530,6 +2602,7 @@ pub struct ProvisioningArtifactPreferences {
 
 /// <p>Information about a provisioning artifact (also known as a version) for a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProvisioningArtifactProperties {
     /// <p>The description of the provisioning artifact, including how it differs from the previous provisioning artifact.</p>
     #[serde(rename = "Description")]
@@ -2594,6 +2667,7 @@ pub struct ProvisioningArtifactView {
 
 /// <p>Information about a parameter used to provision a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProvisioningParameter {
     /// <p>The parameter key.</p>
     #[serde(rename = "Key")]
@@ -2607,6 +2681,7 @@ pub struct ProvisioningParameter {
 
 /// <p>The user-defined preferences that will be applied when updating a provisioned product. Not all preferences are applicable to all provisioned product types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProvisioningPreferences {
     /// <p>One or more AWS accounts that will have access to the provisioned product.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>The AWS accounts specified should be within the list of accounts in the <code>STACKSET</code> constraint. To get the list of accounts in the <code>STACKSET</code> constraint, use the <code>DescribeProvisioningParameters</code> operation.</p> <p>If no values are specified, the default value is all accounts from the <code>STACKSET</code> constraint.</p>
     #[serde(rename = "StackSetAccounts")]
@@ -2739,6 +2814,7 @@ pub struct RecordTag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectPortfolioShareInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2854,6 +2930,7 @@ pub struct ResourceTargetDefinition {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScanProvisionedProductsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2887,6 +2964,7 @@ pub struct ScanProvisionedProductsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchProductsAsAdminInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2936,6 +3014,7 @@ pub struct SearchProductsAsAdminOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchProductsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2982,6 +3061,7 @@ pub struct SearchProductsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchProvisionedProductsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -3032,6 +3112,7 @@ pub struct SearchProvisionedProductsOutput {
 
 /// <p>A self-service action association consisting of the Action ID, the Product ID, and the Provisioning Artifact ID.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ServiceActionAssociation {
     /// <p>The product identifier. For example, <code>prod-abcdzk7xy33qa</code>.</p>
     #[serde(rename = "ProductId")]
@@ -3178,6 +3259,7 @@ pub struct TagOptionSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateProvisionedProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -3210,6 +3292,7 @@ pub struct TerminateProvisionedProductOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConstraintInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -3246,6 +3329,7 @@ pub struct UpdateConstraintOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -3290,6 +3374,7 @@ pub struct UpdatePortfolioOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -3350,6 +3435,7 @@ pub struct UpdateProductOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProvisionedProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -3402,6 +3488,7 @@ pub struct UpdateProvisionedProductOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProvisionedProductPropertiesInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -3440,6 +3527,7 @@ pub struct UpdateProvisionedProductPropertiesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -3505,6 +3593,7 @@ pub struct UpdateProvisioningParameter {
 
 /// <p>The user-defined preferences that will be applied when updating a provisioned product. Not all preferences are applicable to all provisioned product types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProvisioningPreferences {
     /// <p>One or more AWS accounts that will have access to the provisioned product.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>The AWS accounts specified should be within the list of accounts in the <code>STACKSET</code> constraint. To get the list of accounts in the <code>STACKSET</code> constraint, use the <code>DescribeProvisioningParameters</code> operation.</p> <p>If no values are specified, the default value is all accounts from the <code>STACKSET</code> constraint.</p>
     #[serde(rename = "StackSetAccounts")]
@@ -3537,6 +3626,7 @@ pub struct UpdateProvisioningPreferences {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceActionInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -3569,6 +3659,7 @@ pub struct UpdateServiceActionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTagOptionInput {
     /// <p>The updated active state.</p>
     #[serde(rename = "Active")]

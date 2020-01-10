@@ -63,6 +63,7 @@ pub struct Attribute {
 
 /// <p>Provides information for filtering a list of detection jobs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ComprehendMedicalAsyncJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -145,6 +146,7 @@ pub struct ComprehendMedicalAsyncJobProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntitiesDetectionV2JobRequest {
     /// <p>The identifier that Amazon Comprehend Medical generated for the job. The <code>StartEntitiesDetectionV2Job</code> operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -161,6 +163,7 @@ pub struct DescribeEntitiesDetectionV2JobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePHIDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend Medical generated for the job. The <code>StartPHIDetectionJob</code> operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -177,6 +180,7 @@ pub struct DescribePHIDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesRequest {
     /// <p> A UTF-8 text string containing the clinical content being examined for entities. Each string must contain fewer than 20,000 bytes of characters.</p>
     #[serde(rename = "Text")]
@@ -203,6 +207,7 @@ pub struct DetectEntitiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesV2Request {
     /// <p>A UTF-8 string containing the clinical content being examined for entities. Each string must contain fewer than 20,000 bytes of characters.</p>
     #[serde(rename = "Text")]
@@ -229,6 +234,7 @@ pub struct DetectEntitiesV2Response {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectPHIRequest {
     /// <p> A UTF-8 text string containing the clinical content being examined for PHI entities. Each string must contain fewer than 20,000 bytes of characters. </p>
     #[serde(rename = "Text")]
@@ -305,6 +311,7 @@ pub struct InputDataConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesDetectionV2JobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs based on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -335,6 +342,7 @@ pub struct ListEntitiesDetectionV2JobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPHIDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs based on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -377,6 +385,7 @@ pub struct OutputDataConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartEntitiesDetectionV2JobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend Medical generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -414,6 +423,7 @@ pub struct StartEntitiesDetectionV2JobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPHIDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend Medical generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -451,6 +461,7 @@ pub struct StartPHIDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopEntitiesDetectionV2JobRequest {
     /// <p>The identifier of the medical entities job to stop.</p>
     #[serde(rename = "JobId")]
@@ -467,6 +478,7 @@ pub struct StopEntitiesDetectionV2JobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopPHIDetectionJobRequest {
     /// <p>The identifier of the PHI detection job to stop.</p>
     #[serde(rename = "JobId")]

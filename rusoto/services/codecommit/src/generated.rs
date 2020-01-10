@@ -160,6 +160,7 @@ pub struct ApprovalStateChangedEventMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateApprovalRuleTemplateWithRepositoryInput {
     /// <p>The name for the approval rule template. </p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -188,6 +189,7 @@ pub struct CodeCommitBatchAssociateApprovalRuleTemplateWithRepositoriesError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAssociateApprovalRuleTemplateWithRepositoriesInput {
     /// <p>The name of the template you want to associate with one or more repositories.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -224,6 +226,7 @@ pub struct CodeCommitBatchDescribeMergeConflictsError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDescribeMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
@@ -308,6 +311,7 @@ pub struct CodeCommitBatchDisassociateApprovalRuleTemplateFromRepositoriesError 
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDisassociateApprovalRuleTemplateFromRepositoriesInput {
     /// <p>The name of the template that you want to disassociate from one or more repositories.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -347,6 +351,7 @@ pub struct CodeCommitBatchGetCommitsError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetCommitsInput {
     /// <p><p>The full commit IDs of the commits to get information about.</p> <note> <p>You must supply the full SHA IDs of each commit. You cannot use shortened SHA IDs.</p> </note></p>
     #[serde(rename = "commitIds")]
@@ -371,6 +376,7 @@ pub struct BatchGetCommitsOutput {
 
 /// <p>Represents the input of a batch get repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetRepositoriesInput {
     /// <p><p>The names of the repositories to get information about.</p> <note> <p>The length constraint limit is for each string in the array. The array itself can be empty.</p> </note></p>
     #[serde(rename = "repositoryNames")]
@@ -629,6 +635,7 @@ pub struct ConflictMetadata {
 
 /// <p>If AUTOMERGE is the conflict resolution strategy, a list of inputs to use when resolving conflicts during a merge.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConflictResolution {
     /// <p>Files to be deleted as part of the merge conflict resolution.</p>
     #[serde(rename = "deleteFiles")]
@@ -645,6 +652,7 @@ pub struct ConflictResolution {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApprovalRuleTemplateInput {
     /// <p><p>The content of the approval rule that is created on pull requests in associated repositories. If you specify one or more destination references (branches), approval rules are created in an associated repository only if their destination references (branches) match those specified in the template.</p> <note> <p>When you create the content of the approval rule template, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following are counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/iam/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
     #[serde(rename = "approvalRuleTemplateContent")]
@@ -668,6 +676,7 @@ pub struct CreateApprovalRuleTemplateOutput {
 
 /// <p>Represents the input of a create branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBranchInput {
     /// <p>The name of the new branch to create.</p>
     #[serde(rename = "branchName")]
@@ -681,6 +690,7 @@ pub struct CreateBranchInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCommitInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -748,6 +758,7 @@ pub struct CreateCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePullRequestApprovalRuleInput {
     /// <p><p>The content of the approval rule, including the number of approvals needed and the structure of an approval pool defined for approvals, if any. For more information about approval pools, see the AWS CodeCommit User Guide.</p> <note> <p>When you create the content of the approval rule, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following would be counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/iam/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
     #[serde(rename = "approvalRuleContent")]
@@ -769,6 +780,7 @@ pub struct CreatePullRequestApprovalRuleOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePullRequestInput {
     /// <p><p>A unique, client-generated idempotency token that, when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request returns information about the initial request that used that token.</p> <note> <p>The AWS SDKs prepopulate client request tokens. If you are using an AWS SDK, an idempotency token is created for you.</p> </note></p>
     #[serde(rename = "clientRequestToken")]
@@ -796,6 +808,7 @@ pub struct CreatePullRequestOutput {
 
 /// <p>Represents the input of a create repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRepositoryInput {
     /// <p><p>A comment or description about the new repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.</p> </note></p>
     #[serde(rename = "repositoryDescription")]
@@ -821,6 +834,7 @@ pub struct CreateRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUnreferencedMergeCommitInput {
     /// <p>The name of the author who created the unreferenced commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -878,6 +892,7 @@ pub struct CreateUnreferencedMergeCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApprovalRuleTemplateInput {
     /// <p>The name of the approval rule template to delete.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -894,6 +909,7 @@ pub struct DeleteApprovalRuleTemplateOutput {
 
 /// <p>Represents the input of a delete branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBranchInput {
     /// <p>The name of the branch to delete.</p>
     #[serde(rename = "branchName")]
@@ -914,6 +930,7 @@ pub struct DeleteBranchOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCommentContentInput {
     /// <p>The unique, system-generated ID of the comment. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
     #[serde(rename = "commentId")]
@@ -931,6 +948,7 @@ pub struct DeleteCommentContentOutput {
 
 /// <p>A file that is deleted as part of a commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileEntry {
     /// <p>The full path of the file to be deleted, including the name of the file.</p>
     #[serde(rename = "filePath")]
@@ -938,6 +956,7 @@ pub struct DeleteFileEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileInput {
     /// <p>The name of the branch where the commit that deletes the file is made.</p>
     #[serde(rename = "branchName")]
@@ -987,6 +1006,7 @@ pub struct DeleteFileOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePullRequestApprovalRuleInput {
     /// <p>The name of the approval rule you want to delete.</p>
     #[serde(rename = "approvalRuleName")]
@@ -1006,6 +1026,7 @@ pub struct DeletePullRequestApprovalRuleOutput {
 
 /// <p>Represents the input of a delete repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRepositoryInput {
     /// <p>The name of the repository to delete.</p>
     #[serde(rename = "repositoryName")]
@@ -1023,6 +1044,7 @@ pub struct DeleteRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
@@ -1083,6 +1105,7 @@ pub struct DescribeMergeConflictsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePullRequestEventsInput {
     /// <p>The Amazon Resource Name (ARN) of the user whose actions resulted in the event. Examples include updating the pull request with more commits or changing the status of a pull request.</p>
     #[serde(rename = "actorArn")]
@@ -1136,6 +1159,7 @@ pub struct Difference {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateApprovalRuleTemplateFromRepositoryInput {
     /// <p>The name of the approval rule template to disassociate from a specified repository.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -1146,6 +1170,7 @@ pub struct DisassociateApprovalRuleTemplateFromRepositoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EvaluatePullRequestApprovalRulesInput {
     /// <p>The system-generated ID of the pull request you want to evaluate.</p>
     #[serde(rename = "pullRequestId")]
@@ -1280,6 +1305,7 @@ pub struct Folder {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApprovalRuleTemplateInput {
     /// <p>The name of the approval rule template for which you want to get information.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -1296,6 +1322,7 @@ pub struct GetApprovalRuleTemplateOutput {
 
 /// <p>Represents the input of a get blob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlobInput {
     /// <p>The ID of the blob, which is its SHA-1 pointer.</p>
     #[serde(rename = "blobId")]
@@ -1321,6 +1348,7 @@ pub struct GetBlobOutput {
 
 /// <p>Represents the input of a get branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBranchInput {
     /// <p>The name of the branch for which you want to retrieve information.</p>
     #[serde(rename = "branchName")]
@@ -1343,6 +1371,7 @@ pub struct GetBranchOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentInput {
     /// <p>The unique, system-generated ID of the comment. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
     #[serde(rename = "commentId")]
@@ -1359,6 +1388,7 @@ pub struct GetCommentOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentsForComparedCommitInput {
     /// <p>To establish the directionality of the comparison, the full commit ID of the after commit.</p>
     #[serde(rename = "afterCommitId")]
@@ -1394,6 +1424,7 @@ pub struct GetCommentsForComparedCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentsForPullRequestInput {
     /// <p>The full commit ID of the commit in the source branch that was the tip of the branch at the time the comment was made.</p>
     #[serde(rename = "afterCommitId")]
@@ -1435,6 +1466,7 @@ pub struct GetCommentsForPullRequestOutput {
 
 /// <p>Represents the input of a get commit operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommitInput {
     /// <p>The commit ID. Commit IDs are the full SHA ID of the commit.</p>
     #[serde(rename = "commitId")]
@@ -1454,6 +1486,7 @@ pub struct GetCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDifferencesInput {
     /// <p>A non-zero, non-negative integer used to limit the number of returned results.</p>
     #[serde(rename = "MaxResults")]
@@ -1497,6 +1530,7 @@ pub struct GetDifferencesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFileInput {
     /// <p>The fully quaified reference that identifies the commit that contains the file. For example, you can specify a full commit ID, a tag, a branch name, or a reference such as refs/heads/master. If none is provided, the head commit is used.</p>
     #[serde(rename = "commitSpecifier")]
@@ -1539,6 +1573,7 @@ pub struct GetFileOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFolderInput {
     /// <p>A fully qualified reference used to identify a commit that contains the version of the folder's content to return. A fully qualified reference can be a commit ID, branch name, tag, or reference such as HEAD. If no specifier is provided, the folder content is returned as it exists in the HEAD commit.</p>
     #[serde(rename = "commitSpecifier")]
@@ -1584,6 +1619,7 @@ pub struct GetFolderOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeCommitInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
@@ -1626,6 +1662,7 @@ pub struct GetMergeCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
@@ -1683,6 +1720,7 @@ pub struct GetMergeConflictsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeOptionsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
@@ -1721,6 +1759,7 @@ pub struct GetMergeOptionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestApprovalStatesInput {
     /// <p>The system-generated ID for the pull request.</p>
     #[serde(rename = "pullRequestId")]
@@ -1740,6 +1779,7 @@ pub struct GetPullRequestApprovalStatesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
@@ -1755,6 +1795,7 @@ pub struct GetPullRequestOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestOverrideStateInput {
     /// <p>The ID of the pull request for which you want to get information about whether approval rules have been set aside (overridden).</p>
     #[serde(rename = "pullRequestId")]
@@ -1779,6 +1820,7 @@ pub struct GetPullRequestOverrideStateOutput {
 
 /// <p>Represents the input of a get repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryInput {
     /// <p>The name of the repository to get information about.</p>
     #[serde(rename = "repositoryName")]
@@ -1797,6 +1839,7 @@ pub struct GetRepositoryOutput {
 
 /// <p>Represents the input of a get repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryTriggersInput {
     /// <p>The name of the repository for which the trigger is configured.</p>
     #[serde(rename = "repositoryName")]
@@ -1836,6 +1879,7 @@ pub struct IsBinaryFile {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApprovalRuleTemplatesInput {
     /// <p>A non-zero, non-negative integer used to limit the number of returned results.</p>
     #[serde(rename = "maxResults")]
@@ -1861,6 +1905,7 @@ pub struct ListApprovalRuleTemplatesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociatedApprovalRuleTemplatesForRepositoryInput {
     /// <p>A non-zero, non-negative integer used to limit the number of returned results.</p>
     #[serde(rename = "maxResults")]
@@ -1890,6 +1935,7 @@ pub struct ListAssociatedApprovalRuleTemplatesForRepositoryOutput {
 
 /// <p>Represents the input of a list branches operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBranchesInput {
     /// <p>An enumeration token that allows the operation to batch the results.</p>
     #[serde(rename = "nextToken")]
@@ -1915,6 +1961,7 @@ pub struct ListBranchesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPullRequestsInput {
     /// <p>Optional. The Amazon Resource Name (ARN) of the user who created the pull request. If used, this filters the results to pull requests created by that user.</p>
     #[serde(rename = "authorArn")]
@@ -1950,6 +1997,7 @@ pub struct ListPullRequestsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRepositoriesForApprovalRuleTemplateInput {
     /// <p>The name of the approval rule template for which you want to list repositories that are associated with that template.</p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -1979,6 +2027,7 @@ pub struct ListRepositoriesForApprovalRuleTemplateOutput {
 
 /// <p>Represents the input of a list repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRepositoriesInput {
     /// <p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>
     #[serde(rename = "nextToken")]
@@ -2009,6 +2058,7 @@ pub struct ListRepositoriesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>An enumeration token that, when provided in a request, returns the next batch of the results.</p>
     #[serde(rename = "nextToken")]
@@ -2050,6 +2100,7 @@ pub struct Location {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesByFastForwardInput {
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
     #[serde(rename = "destinationCommitSpecifier")]
@@ -2080,6 +2131,7 @@ pub struct MergeBranchesByFastForwardOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesBySquashInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -2138,6 +2190,7 @@ pub struct MergeBranchesBySquashOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesByThreeWayInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -2272,6 +2325,7 @@ pub struct MergeOperations {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestByFastForwardInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
@@ -2295,6 +2349,7 @@ pub struct MergePullRequestByFastForwardOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestBySquashInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -2345,6 +2400,7 @@ pub struct MergePullRequestBySquashOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestByThreeWayInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
@@ -2427,6 +2483,7 @@ pub struct OriginApprovalRuleTemplate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OverridePullRequestApprovalRulesInput {
     /// <p>Whether you want to set aside approval rule requirements for the pull request (OVERRIDE) or revoke a previous override and apply approval rule requirements (REVOKE). REVOKE status is not stored.</p>
     #[serde(rename = "overrideStatus")]
@@ -2440,6 +2497,7 @@ pub struct OverridePullRequestApprovalRulesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentForComparedCommitInput {
     /// <p>To establish the directionality of the comparison, the full commit ID of the after commit.</p>
     #[serde(rename = "afterCommitId")]
@@ -2498,6 +2556,7 @@ pub struct PostCommentForComparedCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentForPullRequestInput {
     /// <p>The full commit ID of the commit in the source branch that is the current tip of the branch for the pull request when you post the comment.</p>
     #[serde(rename = "afterCommitId")]
@@ -2562,6 +2621,7 @@ pub struct PostCommentForPullRequestOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentReplyInput {
     /// <p>A unique, client-generated idempotency token that, when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request returns information about the initial request that used that token.</p>
     #[serde(rename = "clientRequestToken")]
@@ -2794,6 +2854,7 @@ pub struct PullRequestTarget {
 
 /// <p>Information about a file added or updated as part of a commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFileEntry {
     /// <p>The content of the file, if a source file is not specified.</p>
     #[serde(rename = "fileContent")]
@@ -2818,6 +2879,7 @@ pub struct PutFileEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFileInput {
     /// <p>The name of the branch where you want to add or update the file. If this is an empty repository, this branch is created.</p>
     #[serde(rename = "branchName")]
@@ -2874,6 +2936,7 @@ pub struct PutFileOutput {
 
 /// <p>Represents the input of a put repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRepositoryTriggersInput {
     /// <p>The name of the repository where you want to create or update the trigger.</p>
     #[serde(rename = "repositoryName")]
@@ -2895,6 +2958,7 @@ pub struct PutRepositoryTriggersOutput {
 
 /// <p>Information about a replacement content entry in the conflict of a merge or pull request operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceContentEntry {
     /// <p>The base-64 encoded content to use when the replacement type is USE_NEW_CONTENT.</p>
     #[serde(rename = "content")]
@@ -3015,6 +3079,7 @@ pub struct RepositoryTriggerExecutionFailure {
 
 /// <p>Information about the file mode changes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetFileModeEntry {
     /// <p>The file mode for the file.</p>
     #[serde(rename = "fileMode")]
@@ -3026,6 +3091,7 @@ pub struct SetFileModeEntry {
 
 /// <p>Information about a source file that is part of changes made in a commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SourceFileSpecifier {
     /// <p>The full path to the file, including the name of the file.</p>
     #[serde(rename = "filePath")]
@@ -3077,6 +3143,7 @@ pub struct SymbolicLink {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to which you want to add or update tags.</p>
     #[serde(rename = "resourceArn")]
@@ -3088,6 +3155,7 @@ pub struct TagResourceInput {
 
 /// <p>Returns information about a target for a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Target {
     /// <p>The branch of the repository where the pull request changes are merged. Also known as the destination branch.</p>
     #[serde(rename = "destinationReference")]
@@ -3103,6 +3171,7 @@ pub struct Target {
 
 /// <p>Represents the input of a test repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestRepositoryTriggersInput {
     /// <p>The name of the repository in which to test the triggers.</p>
     #[serde(rename = "repositoryName")]
@@ -3127,6 +3196,7 @@ pub struct TestRepositoryTriggersOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to which you want to remove tags.</p>
     #[serde(rename = "resourceArn")]
@@ -3137,6 +3207,7 @@ pub struct UntagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateContentInput {
     /// <p>The name of the approval rule template where you want to update the content of the rule. </p>
     #[serde(rename = "approvalRuleTemplateName")]
@@ -3158,6 +3229,7 @@ pub struct UpdateApprovalRuleTemplateContentOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateDescriptionInput {
     /// <p>The updated description of the approval rule template.</p>
     #[serde(rename = "approvalRuleTemplateDescription")]
@@ -3176,6 +3248,7 @@ pub struct UpdateApprovalRuleTemplateDescriptionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateNameInput {
     /// <p>The new name you want to apply to the approval rule template.</p>
     #[serde(rename = "newApprovalRuleTemplateName")]
@@ -3194,6 +3267,7 @@ pub struct UpdateApprovalRuleTemplateNameOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCommentInput {
     /// <p>The system-generated ID of the comment you want to update. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
     #[serde(rename = "commentId")]
@@ -3214,6 +3288,7 @@ pub struct UpdateCommentOutput {
 
 /// <p>Represents the input of an update default branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDefaultBranchInput {
     /// <p>The name of the branch to set as the default.</p>
     #[serde(rename = "defaultBranchName")]
@@ -3224,6 +3299,7 @@ pub struct UpdateDefaultBranchInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestApprovalRuleContentInput {
     /// <p>The name of the approval rule you want to update.</p>
     #[serde(rename = "approvalRuleName")]
@@ -3249,6 +3325,7 @@ pub struct UpdatePullRequestApprovalRuleContentOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestApprovalStateInput {
     /// <p>The approval state to associate with the user on the pull request.</p>
     #[serde(rename = "approvalState")]
@@ -3262,6 +3339,7 @@ pub struct UpdatePullRequestApprovalStateInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestDescriptionInput {
     /// <p>The updated content of the description for the pull request. This content replaces the existing description.</p>
     #[serde(rename = "description")]
@@ -3280,6 +3358,7 @@ pub struct UpdatePullRequestDescriptionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestStatusInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
@@ -3298,6 +3377,7 @@ pub struct UpdatePullRequestStatusOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestTitleInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
@@ -3317,6 +3397,7 @@ pub struct UpdatePullRequestTitleOutput {
 
 /// <p>Represents the input of an update repository description operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRepositoryDescriptionInput {
     /// <p>The new comment or description for the specified repository. Repository descriptions are limited to 1,000 characters.</p>
     #[serde(rename = "repositoryDescription")]
@@ -3329,6 +3410,7 @@ pub struct UpdateRepositoryDescriptionInput {
 
 /// <p>Represents the input of an update repository description operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRepositoryNameInput {
     /// <p>The new name for the repository.</p>
     #[serde(rename = "newName")]

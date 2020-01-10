@@ -50,6 +50,7 @@ pub struct ArrayValue {
 
 /// <p>The request parameters represent the input of a SQL statement over an array of data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchExecuteStatementRequest {
     /// <p>The name of the database.</p>
     #[serde(rename = "database")]
@@ -90,6 +91,7 @@ pub struct BatchExecuteStatementResponse {
 
 /// <p>The request parameters represent the input of a request to start a SQL transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BeginTransactionRequest {
     /// <p>The name of the database.</p>
     #[serde(rename = "database")]
@@ -181,6 +183,7 @@ pub struct ColumnMetadata {
 
 /// <p>The request parameters represent the input of a commit transaction request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CommitTransactionRequest {
     /// <p>The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.</p>
     #[serde(rename = "resourceArn")]
@@ -205,6 +208,7 @@ pub struct CommitTransactionResponse {
 
 /// <p>The request parameters represent the input of a request to run one or more SQL statements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteSqlRequest {
     /// <p>The Amazon Resource Name (ARN) of the secret that enables access to the DB cluster.</p>
     #[serde(rename = "awsSecretStoreArn")]
@@ -237,6 +241,7 @@ pub struct ExecuteSqlResponse {
 
 /// <p>The request parameters represent the input of a request to run a SQL statement against a database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteStatementRequest {
     /// <p><p>A value that indicates whether to continue running the statement after the call times out. By default, the statement stops running when the call times out.</p> <important> <p>For DDL statements, we recommend continuing to run the statement after the call times out. When a DDL statement terminates before it is finished running, it can result in errors and possibly corrupted data structures.</p> </important></p>
     #[serde(rename = "continueAfterTimeout")]
@@ -377,6 +382,7 @@ pub struct ResultSetMetadata {
 
 /// <p>Options that control how the result set is returned.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResultSetOptions {
     /// <p><p>A value that indicates how a field of <code>DECIMAL</code> type is represented in the response. The value of <code>STRING</code>, the default, specifies that it is converted to a String value. The value of <code>DOUBLE<em>OR</em>LONG</code> specifies that it is converted to a Long value if its scale is 0, or to a Double value otherwise.</p> <important> <p>Conversion to Double or Long can result in roundoff errors due to precision loss. We recommend converting to String, especially when working with currency values.</p> </important></p>
     #[serde(rename = "decimalReturnType")]
@@ -386,6 +392,7 @@ pub struct ResultSetOptions {
 
 /// <p>The request parameters represent the input of a request to perform a rollback of a transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackTransactionRequest {
     /// <p>The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.</p>
     #[serde(rename = "resourceArn")]
@@ -410,6 +417,7 @@ pub struct RollbackTransactionResponse {
 
 /// <p>A parameter used in a SQL statement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlParameter {
     /// <p>The name of the parameter.</p>
     #[serde(rename = "name")]

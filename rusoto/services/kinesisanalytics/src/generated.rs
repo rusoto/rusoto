@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationCloudWatchLoggingOptionRequest {
     /// <p>The Kinesis Analytics application name.</p>
     #[serde(rename = "ApplicationName")]
@@ -41,6 +42,7 @@ pub struct AddApplicationCloudWatchLoggingOptionRequest {
 pub struct AddApplicationCloudWatchLoggingOptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationInputProcessingConfigurationRequest {
     /// <p>Name of the application to which you want to add the input processing configuration.</p>
     #[serde(rename = "ApplicationName")]
@@ -62,6 +64,7 @@ pub struct AddApplicationInputProcessingConfigurationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationInputRequest {
     /// <p>Name of your existing Amazon Kinesis Analytics application to which you want to add the streaming source.</p>
     #[serde(rename = "ApplicationName")]
@@ -81,6 +84,7 @@ pub struct AddApplicationInputResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationOutputRequest {
     /// <p>Name of the application to which you want to add the output configuration.</p>
     #[serde(rename = "ApplicationName")]
@@ -100,6 +104,7 @@ pub struct AddApplicationOutputResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationReferenceDataSourceRequest {
     /// <p>Name of an existing application.</p>
     #[serde(rename = "ApplicationName")]
@@ -184,6 +189,7 @@ pub struct ApplicationSummary {
 
 /// <p>Describes updates to apply to an existing Amazon Kinesis Analytics application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationUpdate {
     /// <p>Describes application code updates.</p>
     #[serde(rename = "ApplicationCodeUpdate")]
@@ -220,6 +226,7 @@ pub struct CSVMappingParameters {
 
 /// <p>Provides a description of CloudWatch logging options, including the log stream Amazon Resource Name (ARN) and the role ARN.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudWatchLoggingOption {
     /// <p>ARN of the CloudWatch log to receive application messages.</p>
     #[serde(rename = "LogStreamARN")]
@@ -247,6 +254,7 @@ pub struct CloudWatchLoggingOptionDescription {
 
 /// <p>Describes CloudWatch logging option updates.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudWatchLoggingOptionUpdate {
     /// <p>ID of the CloudWatch logging option to update</p>
     #[serde(rename = "CloudWatchLoggingOptionId")]
@@ -263,6 +271,7 @@ pub struct CloudWatchLoggingOptionUpdate {
 
 /// <p>TBD</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
     /// <p>One or more SQL statements that read input data, transform it, and generate output. For example, you can write a SQL statement that reads data from one in-application stream, generates a running average of the number of advertisement clicks by vendor, and insert resulting rows in another in-application stream using pumps. For more information about the typical pattern, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-app-code.html">Application Code</a>. </p> <p>You can provide such series of SQL statements, where output of one statement can be used as the input for the next statement. You store intermediate results by creating in-application streams and pumps.</p> <p>Note that the application code must create the streams with names specified in the <code>Outputs</code>. For example, if your <code>Outputs</code> defines output streams named <code>ExampleOutputStream1</code> and <code>ExampleOutputStream2</code>, then your application code must create these streams. </p>
     #[serde(rename = "ApplicationCode")]
@@ -303,6 +312,7 @@ pub struct CreateApplicationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
     /// <p>The Kinesis Analytics application name.</p>
     #[serde(rename = "ApplicationName")]
@@ -320,6 +330,7 @@ pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
 pub struct DeleteApplicationCloudWatchLoggingOptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationInputProcessingConfigurationRequest {
     /// <p>The Kinesis Analytics application name.</p>
     #[serde(rename = "ApplicationName")]
@@ -338,6 +349,7 @@ pub struct DeleteApplicationInputProcessingConfigurationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationOutputRequest {
     /// <p>Amazon Kinesis Analytics application name.</p>
     #[serde(rename = "ApplicationName")]
@@ -356,6 +368,7 @@ pub struct DeleteApplicationOutputRequest {
 pub struct DeleteApplicationOutputResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationReferenceDataSourceRequest {
     /// <p>Name of an existing application.</p>
     #[serde(rename = "ApplicationName")]
@@ -374,6 +387,7 @@ pub struct DeleteApplicationReferenceDataSourceResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
     /// <p>Name of the Amazon Kinesis Analytics application to delete.</p>
     #[serde(rename = "ApplicationName")]
@@ -390,6 +404,7 @@ pub struct DeleteApplicationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationRequest {
     /// <p>Name of the application.</p>
     #[serde(rename = "ApplicationName")]
@@ -414,6 +429,7 @@ pub struct DestinationSchema {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiscoverInputSchemaRequest {
     /// <p>The <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputProcessingConfiguration.html">InputProcessingConfiguration</a> to use to preprocess the records before discovering the schema of the records.</p>
     #[serde(rename = "InputProcessingConfiguration")]
@@ -461,6 +477,7 @@ pub struct DiscoverInputSchemaResponse {
 
 /// <p>When you configure the application input, you specify the streaming source, the in-application stream name that is created, and the mapping between the two. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Input {
     /// <p>Describes the number of in-application streams to create. </p> <p>Data from your source is routed to these in-application input streams.</p> <p> (see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>.</p>
     #[serde(rename = "InputParallelism")]
@@ -488,6 +505,7 @@ pub struct Input {
 
 /// <p>When you start your application, you provide this configuration, which identifies the input source and the point in the input source at which you want the application to start processing records.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputConfiguration {
     /// <p>Input source ID. You can get this ID by calling the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_DescribeApplication.html">DescribeApplication</a> operation.</p>
     #[serde(rename = "Id")]
@@ -541,6 +559,7 @@ pub struct InputDescription {
 
 /// <p>An object that contains the Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a> function that is used to preprocess records in the stream, and the ARN of the IAM role that is used to access the AWS Lambda function. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputLambdaProcessor {
     /// <p><p>The ARN of the <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a> function that operates on records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARN")]
@@ -566,6 +585,7 @@ pub struct InputLambdaProcessorDescription {
 
 /// <p>Represents an update to the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputLambdaProcessor.html">InputLambdaProcessor</a> that is used to preprocess the records in the stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputLambdaProcessorUpdate {
     /// <p><p>The Amazon Resource Name (ARN) of the new <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a> function that is used to preprocess the records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -588,6 +608,7 @@ pub struct InputParallelism {
 
 /// <p>Provides updates to the parallelism count.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputParallelismUpdate {
     /// <p>Number of in-application streams to create for the specified streaming source.</p>
     #[serde(rename = "CountUpdate")]
@@ -597,6 +618,7 @@ pub struct InputParallelismUpdate {
 
 /// <p>Provides a description of a processor that is used to preprocess the records in the stream before being processed by your application code. Currently, the only input processor available is <a href="https://docs.aws.amazon.com/lambda/">AWS Lambda</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputProcessingConfiguration {
     /// <p>The <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputLambdaProcessor.html">InputLambdaProcessor</a> that is used to preprocess the records in the stream before being processed by your application code.</p>
     #[serde(rename = "InputLambdaProcessor")]
@@ -615,6 +637,7 @@ pub struct InputProcessingConfigurationDescription {
 
 /// <p>Describes updates to an <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputProcessingConfiguration.html">InputProcessingConfiguration</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputProcessingConfigurationUpdate {
     /// <p>Provides update information for an <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_InputLambdaProcessor.html">InputLambdaProcessor</a>.</p>
     #[serde(rename = "InputLambdaProcessorUpdate")]
@@ -623,6 +646,7 @@ pub struct InputProcessingConfigurationUpdate {
 
 /// <p>Describes updates for the application's input schema.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputSchemaUpdate {
     /// <p>A list of <code>RecordColumn</code> objects. Each object describes the mapping of the streaming source element to the corresponding column in the in-application stream. </p>
     #[serde(rename = "RecordColumnUpdates")]
@@ -649,6 +673,7 @@ pub struct InputStartingPositionConfiguration {
 
 /// <p>Describes updates to a specific input configuration (identified by the <code>InputId</code> of an application). </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputUpdate {
     /// <p>Input ID of the application input to be updated.</p>
     #[serde(rename = "InputId")]
@@ -689,6 +714,7 @@ pub struct JSONMappingParameters {
 
 /// <p> Identifies an Amazon Kinesis Firehose delivery stream as the streaming source. You provide the delivery stream's Amazon Resource Name (ARN) and an IAM role ARN that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseInput {
     /// <p>ARN of the input delivery stream.</p>
     #[serde(rename = "ResourceARN")]
@@ -714,6 +740,7 @@ pub struct KinesisFirehoseInputDescription {
 
 /// <p>When updating application input configuration, provides information about an Amazon Kinesis Firehose delivery stream as the streaming source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseInputUpdate {
     /// <p>Amazon Resource Name (ARN) of the input Amazon Kinesis Firehose delivery stream to read.</p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -727,6 +754,7 @@ pub struct KinesisFirehoseInputUpdate {
 
 /// <p>When configuring application output, identifies an Amazon Kinesis Firehose delivery stream as the destination. You provide the stream Amazon Resource Name (ARN) and an IAM role that enables Amazon Kinesis Analytics to write to the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseOutput {
     /// <p>ARN of the destination Amazon Kinesis Firehose delivery stream to write to.</p>
     #[serde(rename = "ResourceARN")]
@@ -752,6 +780,7 @@ pub struct KinesisFirehoseOutputDescription {
 
 /// <p> When updating an output configuration using the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_UpdateApplication.html">UpdateApplication</a> operation, provides information about an Amazon Kinesis Firehose delivery stream configured as the destination. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseOutputUpdate {
     /// <p>Amazon Resource Name (ARN) of the Amazon Kinesis Firehose delivery stream to write to.</p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -765,6 +794,7 @@ pub struct KinesisFirehoseOutputUpdate {
 
 /// <p> Identifies an Amazon Kinesis stream as the streaming source. You provide the stream's Amazon Resource Name (ARN) and an IAM role ARN that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsInput {
     /// <p>ARN of the input Amazon Kinesis stream to read.</p>
     #[serde(rename = "ResourceARN")]
@@ -790,6 +820,7 @@ pub struct KinesisStreamsInputDescription {
 
 /// <p>When updating application input configuration, provides information about an Amazon Kinesis stream as the streaming source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsInputUpdate {
     /// <p>Amazon Resource Name (ARN) of the input Amazon Kinesis stream to read.</p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -803,6 +834,7 @@ pub struct KinesisStreamsInputUpdate {
 
 /// <p>When configuring application output, identifies an Amazon Kinesis stream as the destination. You provide the stream Amazon Resource Name (ARN) and also an IAM role ARN that Amazon Kinesis Analytics can use to write to the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsOutput {
     /// <p>ARN of the destination Amazon Kinesis stream to write to.</p>
     #[serde(rename = "ResourceARN")]
@@ -828,6 +860,7 @@ pub struct KinesisStreamsOutputDescription {
 
 /// <p> When updating an output configuration using the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_UpdateApplication.html">UpdateApplication</a> operation, provides information about an Amazon Kinesis stream configured as the destination. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsOutputUpdate {
     /// <p>Amazon Resource Name (ARN) of the Amazon Kinesis stream where you want to write the output.</p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -841,6 +874,7 @@ pub struct KinesisStreamsOutputUpdate {
 
 /// <p>When configuring application output, identifies an AWS Lambda function as the destination. You provide the function Amazon Resource Name (ARN) and also an IAM role ARN that Amazon Kinesis Analytics can use to write to the function on your behalf. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaOutput {
     /// <p><p>Amazon Resource Name (ARN) of the destination Lambda function to write to.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARN")]
@@ -866,6 +900,7 @@ pub struct LambdaOutputDescription {
 
 /// <p>When updating an output configuration using the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_UpdateApplication.html">UpdateApplication</a> operation, provides information about an AWS Lambda function configured as the destination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaOutputUpdate {
     /// <p><p>Amazon Resource Name (ARN) of the destination Lambda function.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
     #[serde(rename = "ResourceARNUpdate")]
@@ -879,6 +914,7 @@ pub struct LambdaOutputUpdate {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
     /// <p>Name of the application to start the list with. When using pagination to retrieve the list, you don't need to specify this parameter in the first request. However, in subsequent requests, you add the last application name from the previous response to get the next page of applications.</p>
     #[serde(rename = "ExclusiveStartApplicationName")]
@@ -903,6 +939,7 @@ pub struct ListApplicationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the application for which to retrieve tags.</p>
     #[serde(rename = "ResourceARN")]
@@ -933,6 +970,7 @@ pub struct MappingParameters {
 
 /// <p> Describes application output configuration in which you identify an in-application stream and a destination where you want the in-application stream data to be written. The destination can be an Amazon Kinesis stream or an Amazon Kinesis Firehose delivery stream. </p> <p/> <p>For limits on how many destinations an application can write and other limitations, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Output {
     /// <p>Describes the data format when records are written to the destination. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Configuring Application Output</a>.</p>
     #[serde(rename = "DestinationSchema")]
@@ -986,6 +1024,7 @@ pub struct OutputDescription {
 
 /// <p> Describes updates to the output configuration identified by the <code>OutputId</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OutputUpdate {
     /// <p>Describes the data format when records are written to the destination. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Configuring Application Output</a>.</p>
     #[serde(rename = "DestinationSchemaUpdate")]
@@ -1041,6 +1080,7 @@ pub struct RecordFormat {
 
 /// <p>Describes the reference data source by providing the source information (S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReferenceDataSource {
     /// <p>Describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream.</p>
     #[serde(rename = "ReferenceSchema")]
@@ -1075,6 +1115,7 @@ pub struct ReferenceDataSourceDescription {
 
 /// <p>When you update a reference data source configuration for an application, this object provides all the updated values (such as the source bucket name and object key name), the in-application table name that is created, and updated mapping information that maps the data in the Amazon S3 object to the in-application reference table that is created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReferenceDataSourceUpdate {
     /// <p>ID of the reference data source being updated. You can use the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_DescribeApplication.html">DescribeApplication</a> operation to get this value.</p>
     #[serde(rename = "ReferenceId")]
@@ -1095,6 +1136,7 @@ pub struct ReferenceDataSourceUpdate {
 
 /// <p>Provides a description of an Amazon S3 data source, including the Amazon Resource Name (ARN) of the S3 bucket, the ARN of the IAM role that is used to access the bucket, and the name of the Amazon S3 object that contains the data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Configuration {
     /// <p>ARN of the S3 bucket that contains the data.</p>
     #[serde(rename = "BucketARN")]
@@ -1109,6 +1151,7 @@ pub struct S3Configuration {
 
 /// <p>Identifies the S3 bucket and object that contains the reference data. Also identifies the IAM role Amazon Kinesis Analytics can assume to read this object on your behalf.</p> <p>An Amazon Kinesis Analytics application loads reference data only once. If the data changes, you call the <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/dev/API_UpdateApplication.html">UpdateApplication</a> operation to trigger reloading of data into your application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ReferenceDataSource {
     /// <p>Amazon Resource Name (ARN) of the S3 bucket.</p>
     #[serde(rename = "BucketARN")]
@@ -1138,6 +1181,7 @@ pub struct S3ReferenceDataSourceDescription {
 
 /// <p>Describes the S3 bucket name, object key name, and IAM role that Amazon Kinesis Analytics can assume to read the Amazon S3 object on your behalf and populate the in-application reference table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ReferenceDataSourceUpdate {
     /// <p>Amazon Resource Name (ARN) of the S3 bucket.</p>
     #[serde(rename = "BucketARNUpdate")]
@@ -1170,6 +1214,7 @@ pub struct SourceSchema {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartApplicationRequest {
     /// <p>Name of the application.</p>
     #[serde(rename = "ApplicationName")]
@@ -1186,6 +1231,7 @@ pub struct StartApplicationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopApplicationRequest {
     /// <p>Name of the running application to stop.</p>
     #[serde(rename = "ApplicationName")]
@@ -1210,6 +1256,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the application to assign the tags.</p>
     #[serde(rename = "ResourceARN")]
@@ -1224,6 +1271,7 @@ pub struct TagResourceRequest {
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the Kinesis Analytics application from which to remove the tags.</p>
     #[serde(rename = "ResourceARN")]
@@ -1238,6 +1286,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
     /// <p>Name of the Amazon Kinesis Analytics application to update.</p>
     #[serde(rename = "ApplicationName")]

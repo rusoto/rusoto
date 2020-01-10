@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptMatchInput {
     /// <p>Player response to the proposed match.</p>
     #[serde(rename = "AcceptanceType")]
@@ -156,6 +157,7 @@ pub struct CertificateConfiguration {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasInput {
     /// <p>Human-readable description of an alias.</p>
     #[serde(rename = "Description")]
@@ -181,6 +183,7 @@ pub struct CreateAliasOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBuildInput {
     /// <p>Descriptive label that is associated with a build. Build names do not need to be unique. You can use <a>UpdateBuild</a> to change this value later. </p>
     #[serde(rename = "Name")]
@@ -220,6 +223,7 @@ pub struct CreateBuildOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFleetInput {
     /// <p>Unique identifier for a build to be deployed on the new fleet. The custom game server build must have been successfully uploaded to Amazon GameLift and be in a <code>READY</code> status. This fleet setting cannot be changed once the fleet is created.</p>
     #[serde(rename = "BuildId")]
@@ -304,6 +308,7 @@ pub struct CreateFleetOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGameSessionInput {
     /// <p>Unique identifier for an alias associated with the fleet to create a game session in. Each request must reference either a fleet ID or alias ID, but not both.</p>
     #[serde(rename = "AliasId")]
@@ -354,6 +359,7 @@ pub struct CreateGameSessionOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGameSessionQueueInput {
     /// <p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order.</p>
     #[serde(rename = "Destinations")]
@@ -384,6 +390,7 @@ pub struct CreateGameSessionQueueOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMatchmakingConfigurationInput {
     /// <p>Flag that determines whether a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>
     #[serde(rename = "AcceptanceRequired")]
@@ -446,6 +453,7 @@ pub struct CreateMatchmakingConfigurationOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMatchmakingRuleSetInput {
     /// <p>Unique identifier for a matchmaking rule set. A matchmaking configuration identifies the rule set it uses by this name value. (Note: The rule set name is different from the optional "name" field in the rule set body.) </p>
     #[serde(rename = "Name")]
@@ -466,6 +474,7 @@ pub struct CreateMatchmakingRuleSetOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlayerSessionInput {
     /// <p>Unique identifier for the game session to add a player to.</p>
     #[serde(rename = "GameSessionId")]
@@ -491,6 +500,7 @@ pub struct CreatePlayerSessionOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlayerSessionsInput {
     /// <p>Unique identifier for the game session to add players to.</p>
     #[serde(rename = "GameSessionId")]
@@ -515,6 +525,7 @@ pub struct CreatePlayerSessionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScriptInput {
     /// <p>Descriptive label that is associated with a script. Script names do not need to be unique. You can use <a>UpdateScript</a> to change this value later. </p>
     #[serde(rename = "Name")]
@@ -550,6 +561,7 @@ pub struct CreateScriptOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcPeeringAuthorizationInput {
     /// <p>Unique identifier for the AWS account that you use to manage your Amazon GameLift fleet. You can find your Account ID in the AWS Management Console under account settings.</p>
     #[serde(rename = "GameLiftAwsAccountId")]
@@ -571,6 +583,7 @@ pub struct CreateVpcPeeringAuthorizationOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcPeeringConnectionInput {
     /// <p>Unique identifier for a fleet. This tells Amazon GameLift which GameLift VPC to peer with. </p>
     #[serde(rename = "FleetId")]
@@ -589,6 +602,7 @@ pub struct CreateVpcPeeringConnectionOutput {}
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAliasInput {
     /// <p>Unique identifier for a fleet alias. Specify the alias you want to delete.</p>
     #[serde(rename = "AliasId")]
@@ -597,6 +611,7 @@ pub struct DeleteAliasInput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBuildInput {
     /// <p>Unique identifier for a build to delete.</p>
     #[serde(rename = "BuildId")]
@@ -605,6 +620,7 @@ pub struct DeleteBuildInput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFleetInput {
     /// <p>Unique identifier for a fleet to be deleted.</p>
     #[serde(rename = "FleetId")]
@@ -613,6 +629,7 @@ pub struct DeleteFleetInput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGameSessionQueueInput {
     /// <p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>
     #[serde(rename = "Name")]
@@ -625,6 +642,7 @@ pub struct DeleteGameSessionQueueOutput {}
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMatchmakingConfigurationInput {
     /// <p>Unique identifier for a matchmaking configuration</p>
     #[serde(rename = "Name")]
@@ -637,6 +655,7 @@ pub struct DeleteMatchmakingConfigurationOutput {}
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMatchmakingRuleSetInput {
     /// <p>Unique identifier for a matchmaking rule set to be deleted. (Note: The rule set name is different from the optional "name" field in the rule set body.) </p>
     #[serde(rename = "Name")]
@@ -650,6 +669,7 @@ pub struct DeleteMatchmakingRuleSetOutput {}
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScalingPolicyInput {
     /// <p>Unique identifier for a fleet to be deleted.</p>
     #[serde(rename = "FleetId")]
@@ -660,6 +680,7 @@ pub struct DeleteScalingPolicyInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScriptInput {
     /// <p>Unique identifier for a Realtime script to delete.</p>
     #[serde(rename = "ScriptId")]
@@ -668,6 +689,7 @@ pub struct DeleteScriptInput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcPeeringAuthorizationInput {
     /// <p>Unique identifier for the AWS account that you use to manage your Amazon GameLift fleet. You can find your Account ID in the AWS Management Console under account settings.</p>
     #[serde(rename = "GameLiftAwsAccountId")]
@@ -683,6 +705,7 @@ pub struct DeleteVpcPeeringAuthorizationOutput {}
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcPeeringConnectionInput {
     /// <p>Unique identifier for a fleet. This value must match the fleet ID referenced in the VPC peering connection record.</p>
     #[serde(rename = "FleetId")]
@@ -698,6 +721,7 @@ pub struct DeleteVpcPeeringConnectionOutput {}
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAliasInput {
     /// <p>Unique identifier for a fleet alias. Specify the alias you want to retrieve.</p>
     #[serde(rename = "AliasId")]
@@ -716,6 +740,7 @@ pub struct DescribeAliasOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBuildInput {
     /// <p>Unique identifier for a build to retrieve properties for.</p>
     #[serde(rename = "BuildId")]
@@ -734,6 +759,7 @@ pub struct DescribeBuildOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEC2InstanceLimitsInput {
     /// <p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions. Leave this parameter blank to retrieve limits for all types.</p>
     #[serde(rename = "EC2InstanceType")]
@@ -753,6 +779,7 @@ pub struct DescribeEC2InstanceLimitsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetAttributesInput {
     /// <p>Unique identifier for a fleet(s) to retrieve attributes for. To request attributes for all fleets, leave this parameter empty.</p>
     #[serde(rename = "FleetIds")]
@@ -784,6 +811,7 @@ pub struct DescribeFleetAttributesOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetCapacityInput {
     /// <p>Unique identifier for a fleet(s) to retrieve capacity information for. To request capacity information for all fleets, leave this parameter empty.</p>
     #[serde(rename = "FleetIds")]
@@ -815,6 +843,7 @@ pub struct DescribeFleetCapacityOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetEventsInput {
     /// <p>Most recent date to retrieve event logs for. If no end time is specified, this call returns entries from the specified start time up to the present. Format is a number expressed in Unix time as milliseconds (ex: "1469498468.057").</p>
     #[serde(rename = "EndTime")]
@@ -853,6 +882,7 @@ pub struct DescribeFleetEventsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetPortSettingsInput {
     /// <p>Unique identifier for a fleet to retrieve port settings for.</p>
     #[serde(rename = "FleetId")]
@@ -871,6 +901,7 @@ pub struct DescribeFleetPortSettingsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetUtilizationInput {
     /// <p>Unique identifier for a fleet(s) to retrieve utilization data for. To request utilization data for all fleets, leave this parameter empty.</p>
     #[serde(rename = "FleetIds")]
@@ -902,6 +933,7 @@ pub struct DescribeFleetUtilizationOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameSessionDetailsInput {
     /// <p>Unique identifier for an alias associated with the fleet to retrieve all game sessions for.</p>
     #[serde(rename = "AliasId")]
@@ -945,6 +977,7 @@ pub struct DescribeGameSessionDetailsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameSessionPlacementInput {
     /// <p>Unique identifier for a game session placement to retrieve.</p>
     #[serde(rename = "PlacementId")]
@@ -963,6 +996,7 @@ pub struct DescribeGameSessionPlacementOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameSessionQueuesInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
     #[serde(rename = "Limit")]
@@ -994,6 +1028,7 @@ pub struct DescribeGameSessionQueuesOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGameSessionsInput {
     /// <p>Unique identifier for an alias associated with the fleet to retrieve all game sessions for. </p>
     #[serde(rename = "AliasId")]
@@ -1037,6 +1072,7 @@ pub struct DescribeGameSessionsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancesInput {
     /// <p>Unique identifier for a fleet to retrieve instance information for.</p>
     #[serde(rename = "FleetId")]
@@ -1071,6 +1107,7 @@ pub struct DescribeInstancesOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMatchmakingConfigurationsInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is limited to 10.</p>
     #[serde(rename = "Limit")]
@@ -1106,6 +1143,7 @@ pub struct DescribeMatchmakingConfigurationsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMatchmakingInput {
     /// <p>Unique identifier for a matchmaking ticket. You can include up to 10 ID values. </p>
     #[serde(rename = "TicketIds")]
@@ -1124,6 +1162,7 @@ pub struct DescribeMatchmakingOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMatchmakingRuleSetsInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
     #[serde(rename = "Limit")]
@@ -1154,6 +1193,7 @@ pub struct DescribeMatchmakingRuleSetsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePlayerSessionsInput {
     /// <p>Unique identifier for the game session to retrieve player sessions for.</p>
     #[serde(rename = "GameSessionId")]
@@ -1197,6 +1237,7 @@ pub struct DescribePlayerSessionsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRuntimeConfigurationInput {
     /// <p>Unique identifier for a fleet to get the run-time configuration for.</p>
     #[serde(rename = "FleetId")]
@@ -1215,6 +1256,7 @@ pub struct DescribeRuntimeConfigurationOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingPoliciesInput {
     /// <p>Unique identifier for a fleet to retrieve scaling policies for.</p>
     #[serde(rename = "FleetId")]
@@ -1248,6 +1290,7 @@ pub struct DescribeScalingPoliciesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScriptInput {
     /// <p>Unique identifier for a Realtime script to retrieve properties for.</p>
     #[serde(rename = "ScriptId")]
@@ -1264,6 +1307,7 @@ pub struct DescribeScriptOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcPeeringAuthorizationsInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1277,6 +1321,7 @@ pub struct DescribeVpcPeeringAuthorizationsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcPeeringConnectionsInput {
     /// <p>Unique identifier for a fleet.</p>
     #[serde(rename = "FleetId")]
@@ -1296,6 +1341,7 @@ pub struct DescribeVpcPeeringConnectionsOutput {
 
 /// <p>Player information for use when creating player sessions using a game session placement request with <a>StartGameSessionPlacement</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DesiredPlayerSession {
     /// <p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game.</p>
     #[serde(rename = "PlayerData")]
@@ -1759,6 +1805,7 @@ pub struct GameSessionQueueDestination {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGameSessionLogUrlInput {
     /// <p>Unique identifier for the game session to get logs for.</p>
     #[serde(rename = "GameSessionId")]
@@ -1777,6 +1824,7 @@ pub struct GetGameSessionLogUrlOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceAccessInput {
     /// <p>Unique identifier for a fleet that contains the instance you want access to. The fleet can be in any of the following statuses: <code>ACTIVATING</code>, <code>ACTIVE</code>, or <code>ERROR</code>. Fleets with an <code>ERROR</code> status may be accessible for a short time before they are deleted.</p>
     #[serde(rename = "FleetId")]
@@ -1892,6 +1940,7 @@ pub struct IpPermission {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAliasesInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
     #[serde(rename = "Limit")]
@@ -1927,6 +1976,7 @@ pub struct ListAliasesOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBuildsInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
     #[serde(rename = "Limit")]
@@ -1958,6 +2008,7 @@ pub struct ListBuildsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFleetsInput {
     /// <p>Unique identifier for a build to return fleets for. Use this parameter to return only fleets using the specified build. To retrieve all fleets, leave this parameter empty.</p>
     #[serde(rename = "BuildId")]
@@ -1992,6 +2043,7 @@ pub struct ListFleetsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListScriptsInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
     #[serde(rename = "Limit")]
@@ -2271,6 +2323,7 @@ pub struct PlayerSession {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutScalingPolicyInput {
     /// <p>Comparison operator to use when measuring the metric against the threshold value.</p>
     #[serde(rename = "ComparisonOperator")]
@@ -2323,6 +2376,7 @@ pub struct PutScalingPolicyOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestUploadCredentialsInput {
     /// <p>Unique identifier for a build to get credentials for.</p>
     #[serde(rename = "BuildId")]
@@ -2345,6 +2399,7 @@ pub struct RequestUploadCredentialsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResolveAliasInput {
     /// <p>Unique identifier for the alias you want to resolve.</p>
     #[serde(rename = "AliasId")]
@@ -2510,6 +2565,7 @@ pub struct Script {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchGameSessionsInput {
     /// <p>Unique identifier for an alias associated with the fleet to search for active game sessions. Each request must reference either a fleet ID or alias ID, but not both.</p>
     #[serde(rename = "AliasId")]
@@ -2567,6 +2623,7 @@ pub struct ServerProcess {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartFleetActionsInput {
     /// <p>List of actions to restart on the fleet.</p>
     #[serde(rename = "Actions")]
@@ -2582,6 +2639,7 @@ pub struct StartFleetActionsOutput {}
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartGameSessionPlacementInput {
     /// <p>Set of information on each player to create a player session for.</p>
     #[serde(rename = "DesiredPlayerSessions")]
@@ -2626,6 +2684,7 @@ pub struct StartGameSessionPlacementOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMatchBackfillInput {
     /// <p>Name of the matchmaker to use for this request. The name of the matchmaker that was used with the original game session is listed in the <a>GameSession</a> object, <code>MatchmakerData</code> property. This property contains a matchmaking configuration ARN value, which includes the matchmaker name. (In the ARN value "arn:aws:gamelift:us-west-2:111122223333:matchmakingconfiguration/MM-4v4", the matchmaking configuration name is "MM-4v4".) Use only the name for this parameter.</p>
     #[serde(rename = "ConfigurationName")]
@@ -2654,6 +2713,7 @@ pub struct StartMatchBackfillOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMatchmakingInput {
     /// <p>Name of the matchmaking configuration to use for this request. Matchmaking configurations must exist in the same region as this request.</p>
     #[serde(rename = "ConfigurationName")]
@@ -2678,6 +2738,7 @@ pub struct StartMatchmakingOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopFleetActionsInput {
     /// <p>List of actions to suspend on the fleet. </p>
     #[serde(rename = "Actions")]
@@ -2693,6 +2754,7 @@ pub struct StopFleetActionsOutput {}
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopGameSessionPlacementInput {
     /// <p>Unique identifier for a game session placement to cancel.</p>
     #[serde(rename = "PlacementId")]
@@ -2711,6 +2773,7 @@ pub struct StopGameSessionPlacementOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMatchmakingInput {
     /// <p>Unique identifier for a matchmaking ticket.</p>
     #[serde(rename = "TicketId")]
@@ -2731,6 +2794,7 @@ pub struct TargetConfiguration {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAliasInput {
     /// <p>Unique identifier for a fleet alias. Specify the alias you want to update.</p>
     #[serde(rename = "AliasId")]
@@ -2761,6 +2825,7 @@ pub struct UpdateAliasOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBuildInput {
     /// <p>Unique identifier for a build to update.</p>
     #[serde(rename = "BuildId")]
@@ -2787,6 +2852,7 @@ pub struct UpdateBuildOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFleetAttributesInput {
     /// <p>Human-readable description of a fleet.</p>
     #[serde(rename = "Description")]
@@ -2825,6 +2891,7 @@ pub struct UpdateFleetAttributesOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFleetCapacityInput {
     /// <p>Number of EC2 instances you want this fleet to host.</p>
     #[serde(rename = "DesiredInstances")]
@@ -2855,6 +2922,7 @@ pub struct UpdateFleetCapacityOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFleetPortSettingsInput {
     /// <p>Unique identifier for a fleet to update port settings for.</p>
     #[serde(rename = "FleetId")]
@@ -2881,6 +2949,7 @@ pub struct UpdateFleetPortSettingsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGameSessionInput {
     /// <p>Unique identifier for the game session to update.</p>
     #[serde(rename = "GameSessionId")]
@@ -2915,6 +2984,7 @@ pub struct UpdateGameSessionOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGameSessionQueueInput {
     /// <p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order. When updating this list, provide a complete list of destinations.</p>
     #[serde(rename = "Destinations")]
@@ -2945,6 +3015,7 @@ pub struct UpdateGameSessionQueueOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMatchmakingConfigurationInput {
     /// <p>Flag that determines whether a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>
     #[serde(rename = "AcceptanceRequired")]
@@ -3011,6 +3082,7 @@ pub struct UpdateMatchmakingConfigurationOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuntimeConfigurationInput {
     /// <p>Unique identifier for a fleet to update run-time configuration for.</p>
     #[serde(rename = "FleetId")]
@@ -3031,6 +3103,7 @@ pub struct UpdateRuntimeConfigurationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScriptInput {
     /// <p>Descriptive label that is associated with a script. Script names do not need to be unique.</p>
     #[serde(rename = "Name")]
@@ -3069,6 +3142,7 @@ pub struct UpdateScriptOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateMatchmakingRuleSetInput {
     /// <p>Collection of matchmaking rules to validate, formatted as a JSON string.</p>
     #[serde(rename = "RuleSetBody")]

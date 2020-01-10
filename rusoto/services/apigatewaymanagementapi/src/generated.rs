@@ -23,12 +23,14 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionRequest {
     #[serde(rename = "ConnectionId")]
     pub connection_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionRequest {
     #[serde(rename = "ConnectionId")]
     pub connection_id: String,
@@ -62,6 +64,7 @@ pub struct Identity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostToConnectionRequest {
     /// <p>The identifier of the connection that a specific client is using.</p>
     #[serde(rename = "ConnectionId")]

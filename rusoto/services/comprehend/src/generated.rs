@@ -38,6 +38,7 @@ pub struct BatchDetectDominantLanguageItemResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectDominantLanguageRequest {
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document should contain at least 20 characters and must contain fewer than 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "TextList")]
@@ -70,6 +71,7 @@ pub struct BatchDetectEntitiesItemResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectEntitiesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -105,6 +107,7 @@ pub struct BatchDetectKeyPhrasesItemResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectKeyPhrasesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -144,6 +147,7 @@ pub struct BatchDetectSentimentItemResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectSentimentRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -179,6 +183,7 @@ pub struct BatchDetectSyntaxItemResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectSyntaxRequest {
     /// <p>The language of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -262,6 +267,7 @@ pub struct ClassifierMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClassifyDocumentRequest {
     /// <p>The Amazon Resource Number (ARN) of the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -281,6 +287,7 @@ pub struct ClassifyDocumentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentClassifierRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -326,6 +333,7 @@ pub struct CreateDocumentClassifierResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointRequest {
     /// <p>An idempotency token provided by the customer. If this token matches a previous endpoint creation request, Amazon Comprehend will not return a <code>ResourceInUseException</code>. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -356,6 +364,7 @@ pub struct CreateEndpointResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEntityRecognizerRequest {
     /// <p> A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -397,6 +406,7 @@ pub struct CreateEntityRecognizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentClassifierRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier. </p>
     #[serde(rename = "DocumentClassifierArn")]
@@ -408,6 +418,7 @@ pub struct DeleteDocumentClassifierRequest {
 pub struct DeleteDocumentClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointRequest {
     /// <p>The Amazon Resource Number (ARN) of the endpoint being deleted.</p>
     #[serde(rename = "EndpointArn")]
@@ -419,6 +430,7 @@ pub struct DeleteEndpointRequest {
 pub struct DeleteEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEntityRecognizerRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
     #[serde(rename = "EntityRecognizerArn")]
@@ -430,6 +442,7 @@ pub struct DeleteEntityRecognizerRequest {
 pub struct DeleteEntityRecognizerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentClassificationJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -446,6 +459,7 @@ pub struct DescribeDocumentClassificationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentClassifierRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier. The operation returns this identifier in its response.</p>
     #[serde(rename = "DocumentClassifierArn")]
@@ -462,6 +476,7 @@ pub struct DescribeDocumentClassifierResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDominantLanguageDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -478,6 +493,7 @@ pub struct DescribeDominantLanguageDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointRequest {
     /// <p>The Amazon Resource Number (ARN) of the endpoint being described.</p>
     #[serde(rename = "EndpointArn")]
@@ -494,6 +510,7 @@ pub struct DescribeEndpointResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntitiesDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -510,6 +527,7 @@ pub struct DescribeEntitiesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntityRecognizerRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
     #[serde(rename = "EntityRecognizerArn")]
@@ -526,6 +544,7 @@ pub struct DescribeEntityRecognizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeKeyPhrasesDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -542,6 +561,7 @@ pub struct DescribeKeyPhrasesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSentimentDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -558,6 +578,7 @@ pub struct DescribeSentimentDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTopicsDetectionJobRequest {
     /// <p>The identifier assigned by the user to the detection job.</p>
     #[serde(rename = "JobId")]
@@ -574,6 +595,7 @@ pub struct DescribeTopicsDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectDominantLanguageRequest {
     /// <p>A UTF-8 text string. Each string should contain at least 20 characters and must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "Text")]
@@ -590,6 +612,7 @@ pub struct DetectDominantLanguageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -609,6 +632,7 @@ pub struct DetectEntitiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectKeyPhrasesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -628,6 +652,7 @@ pub struct DetectKeyPhrasesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectSentimentRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
@@ -651,6 +676,7 @@ pub struct DetectSentimentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectSyntaxRequest {
     /// <p>The language code of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt").</p>
     #[serde(rename = "LanguageCode")]
@@ -685,6 +711,7 @@ pub struct DocumentClass {
 
 /// <p>Provides information for filtering a list of document classification jobs. For more information, see the operation. You can provide only one filter parameter in each request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentClassificationJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -760,6 +787,7 @@ pub struct DocumentClassificationJobProperties {
 
 /// <p>Provides information for filtering a list of document classifiers. You can only specify one filtering parameter in a request. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentClassifierFilter {
     /// <p>Filters the list of classifiers based on status. </p>
     #[serde(rename = "Status")]
@@ -874,6 +902,7 @@ pub struct DominantLanguage {
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DominantLanguageDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -945,6 +974,7 @@ pub struct DominantLanguageDetectionJobProperties {
 
 /// <p>The filter used to determine which endpoints are are returned. You can filter jobs on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EndpointFilter {
     /// <p>Specifies a date after which the returned endpoint or endpoints were created.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -1004,6 +1034,7 @@ pub struct EndpointProperties {
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EntitiesDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -1151,6 +1182,7 @@ pub struct EntityRecognizerEvaluationMetrics {
 
 /// <p>Provides information for filtering a list of entity recognizers. You can only specify one filtering parameter in a request. For more information, see the operation./&gt;</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EntityRecognizerFilter {
     /// <p>The status of an entity recognizer.</p>
     #[serde(rename = "Status")]
@@ -1345,6 +1377,7 @@ pub struct KeyPhrase {
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KeyPhrasesDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -1419,6 +1452,7 @@ pub struct KeyPhrasesDetectionJobProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentClassificationJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1449,6 +1483,7 @@ pub struct ListDocumentClassificationJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentClassifiersRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1478,6 +1513,7 @@ pub struct ListDocumentClassifiersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDominantLanguageDetectionJobsRequest {
     /// <p>Filters that jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1508,6 +1544,7 @@ pub struct ListDominantLanguageDetectionJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointsRequest {
     /// <p>Filters the endpoints that are returned. You can filter endpoints on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
     #[serde(rename = "Filter")]
@@ -1537,6 +1574,7 @@ pub struct ListEndpointsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1566,6 +1604,7 @@ pub struct ListEntitiesDetectionJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntityRecognizersRequest {
     /// <p>Filters the list of entities returned. You can filter on <code>Status</code>, <code>SubmitTimeBefore</code>, or <code>SubmitTimeAfter</code>. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1595,6 +1634,7 @@ pub struct ListEntityRecognizersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKeyPhrasesDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1624,6 +1664,7 @@ pub struct ListKeyPhrasesDetectionJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSentimentDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1653,6 +1694,7 @@ pub struct ListSentimentDetectionJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource you are querying. </p>
     #[serde(rename = "ResourceArn")]
@@ -1673,6 +1715,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicsDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. Jobs can be filtered on their name, status, or the date and time that they were submitted. You can set only one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1729,6 +1772,7 @@ pub struct PartOfSpeechTag {
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SentimentDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
     #[serde(rename = "JobName")]
@@ -1825,6 +1869,7 @@ pub struct SentimentScore {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDocumentClassificationJobRequest {
     /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -1870,6 +1915,7 @@ pub struct StartDocumentClassificationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDominantLanguageDetectionJobRequest {
     /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -1912,6 +1958,7 @@ pub struct StartDominantLanguageDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartEntitiesDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -1961,6 +2008,7 @@ pub struct StartEntitiesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartKeyPhrasesDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -2006,6 +2054,7 @@ pub struct StartKeyPhrasesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSentimentDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -2051,6 +2100,7 @@ pub struct StartSentimentDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTopicsDetectionJobRequest {
     /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -2097,6 +2147,7 @@ pub struct StartTopicsDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDominantLanguageDetectionJobRequest {
     /// <p>The identifier of the dominant language detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -2117,6 +2168,7 @@ pub struct StopDominantLanguageDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopEntitiesDetectionJobRequest {
     /// <p>The identifier of the entities detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -2137,6 +2189,7 @@ pub struct StopEntitiesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopKeyPhrasesDetectionJobRequest {
     /// <p>The identifier of the key phrases detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -2157,6 +2210,7 @@ pub struct StopKeyPhrasesDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopSentimentDetectionJobRequest {
     /// <p>The identifier of the sentiment detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -2177,6 +2231,7 @@ pub struct StopSentimentDetectionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingDocumentClassifierRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier currently being trained.</p>
     #[serde(rename = "DocumentClassifierArn")]
@@ -2188,6 +2243,7 @@ pub struct StopTrainingDocumentClassifierRequest {
 pub struct StopTrainingDocumentClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingEntityRecognizerRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer currently being trained.</p>
     #[serde(rename = "EntityRecognizerArn")]
@@ -2237,6 +2293,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource to which you want to associate the tags. </p>
     #[serde(rename = "ResourceArn")]
@@ -2252,6 +2309,7 @@ pub struct TagResourceResponse {}
 
 /// <p>Provides information for filtering topic detection jobs. For more information, see .</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicsDetectionJobFilter {
     /// <p><p/></p>
     #[serde(rename = "JobName")]
@@ -2326,6 +2384,7 @@ pub struct TopicsDetectionJobProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p> The Amazon Resource Name (ARN) of the given Amazon Comprehend resource from which you want to remove the tags. </p>
     #[serde(rename = "ResourceArn")]
@@ -2340,6 +2399,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointRequest {
     /// <p> The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
     #[serde(rename = "DesiredInferenceUnits")]

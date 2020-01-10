@@ -23,6 +23,7 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvokeEndpointInput {
     /// <p>The desired MIME type of the inference in the response.</p>
     #[serde(rename = "Accept")]

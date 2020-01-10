@@ -86,6 +86,7 @@ pub struct CmafPackage {
 
 /// <p>A Common Media Application Format (CMAF) packaging configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CmafPackageCreateOrUpdateParameters {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -110,6 +111,7 @@ pub struct CmafPackageCreateOrUpdateParameters {
 
 /// <p>A new Channel configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
     /// <p>A short text description of the Channel.</p>
     #[serde(rename = "Description")]
@@ -149,6 +151,7 @@ pub struct CreateChannelResponse {
 
 /// <p>Configuration parameters used to create a new HarvestJob.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHarvestJobRequest {
     /// <p>The end of the time-window which will be harvested</p>
     #[serde(rename = "EndTime")]
@@ -214,6 +217,7 @@ pub struct CreateHarvestJobResponse {
 
 /// <p>Configuration parameters used to create a new OriginEndpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOriginEndpointRequest {
     /// <p>The ID of the Channel that the OriginEndpoint will be associated with.
     /// This cannot be changed after the OriginEndpoint is created.</p>
@@ -401,6 +405,7 @@ pub struct DashPackage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelRequest {
     /// <p>The ID of the Channel to delete.</p>
     #[serde(rename = "Id")]
@@ -412,6 +417,7 @@ pub struct DeleteChannelRequest {
 pub struct DeleteChannelResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOriginEndpointRequest {
     /// <p>The ID of the OriginEndpoint to delete.</p>
     #[serde(rename = "Id")]
@@ -423,6 +429,7 @@ pub struct DeleteOriginEndpointRequest {
 pub struct DeleteOriginEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelRequest {
     /// <p>The ID of a Channel.</p>
     #[serde(rename = "Id")]
@@ -453,6 +460,7 @@ pub struct DescribeChannelResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHarvestJobRequest {
     /// <p>The ID of the HarvestJob.</p>
     #[serde(rename = "Id")]
@@ -504,6 +512,7 @@ pub struct DescribeHarvestJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOriginEndpointRequest {
     /// <p>The ID of the OriginEndpoint.</p>
     #[serde(rename = "Id")]
@@ -707,6 +716,7 @@ pub struct HlsManifest {
 
 /// <p>A HTTP Live Streaming (HLS) manifest configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HlsManifestCreateOrUpdateParameters {
     /// <p>This setting controls how ad markers are included in the packaged OriginEndpoint.
     /// &quot;NONE&quot; will omit all SCTE-35 ad markers from the output.
@@ -842,6 +852,7 @@ pub struct IngestEndpoint {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
     /// <p>Upper bound on number of records to return.</p>
     #[serde(rename = "MaxResults")]
@@ -867,6 +878,7 @@ pub struct ListChannelsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHarvestJobsRequest {
     /// <p>When specified, the request will return only HarvestJobs associated with the given Channel ID.</p>
     #[serde(rename = "IncludeChannelId")]
@@ -900,6 +912,7 @@ pub struct ListHarvestJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOriginEndpointsRequest {
     /// <p>When specified, the request will return only OriginEndpoints associated with the given Channel ID.</p>
     #[serde(rename = "ChannelId")]
@@ -929,6 +942,7 @@ pub struct ListOriginEndpointsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -1034,6 +1048,7 @@ pub struct OriginEndpoint {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RotateChannelCredentialsRequest {
     /// <p>The ID of the channel to update.</p>
     #[serde(rename = "Id")]
@@ -1064,6 +1079,7 @@ pub struct RotateChannelCredentialsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RotateIngestEndpointCredentialsRequest {
     /// <p>The ID of the channel the IngestEndpoint is on.</p>
     #[serde(rename = "Id")]
@@ -1152,6 +1168,7 @@ pub struct StreamSelection {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -1160,6 +1177,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -1170,6 +1188,7 @@ pub struct UntagResourceRequest {
 
 /// <p>Configuration parameters used to update the Channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
     /// <p>A short text description of the Channel.</p>
     #[serde(rename = "Description")]
@@ -1205,6 +1224,7 @@ pub struct UpdateChannelResponse {
 
 /// <p>Configuration parameters used to update an existing OriginEndpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOriginEndpointRequest {
     #[serde(rename = "CmafPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]

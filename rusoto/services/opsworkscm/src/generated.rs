@@ -42,6 +42,7 @@ pub struct AccountAttribute {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateNodeRequest {
     /// <p><p>Engine attributes used for associating the node. </p> <p class="title"> <b>Attributes accepted in a AssociateNode request for Chef</b> </p> <ul> <li> <p> <code>CHEF<em>ORGANIZATION</code>: The Chef organization with which the node is associated. By default only one organization named <code>default</code> can exist. </p> </li> <li> <p> <code>CHEF</em>NODE<em>PUBLIC</em>KEY</code>: A PEM-formatted public key. This key is required for the <code>chef-client</code> agent to access the Chef API. </p> </li> </ul> <p class="title"> <b>Attributes accepted in a AssociateNode request for Puppet</b> </p> <ul> <li> <p> <code>PUPPET<em>NODE</em>CSR</code>: A PEM-formatted certificate-signing request (CSR) that is created by the node. </p> </li> </ul></p>
     #[serde(rename = "EngineAttributes")]
@@ -158,6 +159,7 @@ pub struct Backup {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupRequest {
     /// <p> A user-defined description of the backup. </p>
     #[serde(rename = "Description")]
@@ -178,6 +180,7 @@ pub struct CreateBackupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServerRequest {
     /// <p> Associate a public IP address with a server that you are launching. Valid values are <code>true</code> or <code>false</code>. The default value is <code>true</code>. </p>
     #[serde(rename = "AssociatePublicIpAddress")]
@@ -267,6 +270,7 @@ pub struct CreateServerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupRequest {
     /// <p>The ID of the backup to delete. Run the DescribeBackups command to get a list of backup IDs. Backup IDs are in the format <code>ServerName-yyyyMMddHHmmssSSS</code>. </p>
     #[serde(rename = "BackupId")]
@@ -278,6 +282,7 @@ pub struct DeleteBackupRequest {
 pub struct DeleteBackupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServerRequest {
     /// <p>The ID of the server to delete.</p>
     #[serde(rename = "ServerName")]
@@ -289,6 +294,7 @@ pub struct DeleteServerRequest {
 pub struct DeleteServerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAttributesRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -301,6 +307,7 @@ pub struct DescribeAccountAttributesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupsRequest {
     /// <p>Describes a single backup. </p>
     #[serde(rename = "BackupId")]
@@ -334,6 +341,7 @@ pub struct DescribeBackupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsRequest {
     /// <p>To receive a paginated response, use this parameter to specify the maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results. </p>
     #[serde(rename = "MaxResults")]
@@ -362,6 +370,7 @@ pub struct DescribeEventsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNodeAssociationStatusRequest {
     /// <p>The token returned in either the AssociateNodeResponse or the DisassociateNodeResponse. </p>
     #[serde(rename = "NodeAssociationStatusToken")]
@@ -385,6 +394,7 @@ pub struct DescribeNodeAssociationStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServersRequest {
     /// <p>This is not currently implemented for <code>DescribeServers</code> requests. </p>
     #[serde(rename = "MaxResults")]
@@ -414,6 +424,7 @@ pub struct DescribeServersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateNodeRequest {
     /// <p><p>Engine attributes that are used for disassociating the node. No attributes are required for Puppet. </p> <p class="title"> <b>Attributes required in a DisassociateNode request for Chef</b> </p> <ul> <li> <p> <code>CHEF_ORGANIZATION</code>: The Chef organization with which the node was associated. By default only one organization named <code>default</code> can exist. </p> </li> </ul></p>
     #[serde(rename = "EngineAttributes")]
@@ -450,6 +461,7 @@ pub struct EngineAttribute {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportServerEngineAttributeRequest {
     /// <p>The name of the export attribute. Currently, the supported export attribute is <code>Userdata</code>. This exports a user data script that includes parameters and values provided in the <code>InputAttributes</code> list.</p>
     #[serde(rename = "ExportAttributeName")]
@@ -477,6 +489,7 @@ pub struct ExportServerEngineAttributeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreServerRequest {
     /// <p> The ID of the backup that you want to use to restore a server. </p>
     #[serde(rename = "BackupId")]
@@ -623,6 +636,7 @@ pub struct ServerEvent {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMaintenanceRequest {
     /// <p>Engine attributes that are specific to the server on which you want to run maintenance. </p>
     #[serde(rename = "EngineAttributes")]
@@ -643,6 +657,7 @@ pub struct StartMaintenanceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServerEngineAttributesRequest {
     /// <p>The name of the engine attribute to update. </p>
     #[serde(rename = "AttributeName")]
@@ -666,6 +681,7 @@ pub struct UpdateServerEngineAttributesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServerRequest {
     /// <p>Sets the number of automated backups that you want to keep. </p>
     #[serde(rename = "BackupRetentionCount")]

@@ -173,6 +173,7 @@ pub struct CostTypes {
 
 /// <p> Request of CreateBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget.</p>
     #[serde(rename = "AccountId")]
@@ -193,6 +194,7 @@ pub struct CreateBudgetResponse {}
 
 /// <p> Request of CreateNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to create a notification for.</p>
     #[serde(rename = "AccountId")]
@@ -215,6 +217,7 @@ pub struct CreateNotificationResponse {}
 
 /// <p> Request of CreateSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to create a subscriber for.</p>
     #[serde(rename = "AccountId")]
@@ -237,6 +240,7 @@ pub struct CreateSubscriberResponse {}
 
 /// <p> Request of DeleteBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to delete.</p>
     #[serde(rename = "AccountId")]
@@ -253,6 +257,7 @@ pub struct DeleteBudgetResponse {}
 
 /// <p> Request of DeleteNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notification you want to delete.</p>
     #[serde(rename = "AccountId")]
@@ -272,6 +277,7 @@ pub struct DeleteNotificationResponse {}
 
 /// <p> Request of DeleteSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscriber you want to delete.</p>
     #[serde(rename = "AccountId")]
@@ -293,6 +299,7 @@ pub struct DeleteSubscriberRequest {
 pub struct DeleteSubscriberResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetPerformanceHistoryRequest {
     #[serde(rename = "AccountId")]
     pub account_id: String,
@@ -324,6 +331,7 @@ pub struct DescribeBudgetPerformanceHistoryResponse {
 
 /// <p> Request of DescribeBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want a description of.</p>
     #[serde(rename = "AccountId")]
@@ -345,6 +353,7 @@ pub struct DescribeBudgetResponse {
 
 /// <p> Request of DescribeBudgets </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetsRequest {
     /// <p>The <code>accountId</code> that is associated with the budgets that you want descriptions of.</p>
     #[serde(rename = "AccountId")]
@@ -375,6 +384,7 @@ pub struct DescribeBudgetsResponse {
 
 /// <p> Request of DescribeNotificationsForBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotificationsForBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notifications you want descriptions of.</p>
     #[serde(rename = "AccountId")]
@@ -408,6 +418,7 @@ pub struct DescribeNotificationsForBudgetResponse {
 
 /// <p> Request of DescribeSubscribersForNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscribersForNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscribers you want descriptions of.</p>
     #[serde(rename = "AccountId")]
@@ -466,6 +477,7 @@ pub struct Notification {
 
 /// <p>A notification with subscribers. A notification can have one SNS subscriber and up to 10 email subscribers, for a total of 11 subscribers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationWithSubscribers {
     /// <p>The notification that is associated with a budget.</p>
     #[serde(rename = "Notification")]
@@ -512,6 +524,7 @@ pub struct TimePeriod {
 
 /// <p> Request of UpdateBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to update.</p>
     #[serde(rename = "AccountId")]
@@ -528,6 +541,7 @@ pub struct UpdateBudgetResponse {}
 
 /// <p> Request of UpdateNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notification you want to update.</p>
     #[serde(rename = "AccountId")]
@@ -550,6 +564,7 @@ pub struct UpdateNotificationResponse {}
 
 /// <p> Request of UpdateSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscriber you want to update.</p>
     #[serde(rename = "AccountId")]

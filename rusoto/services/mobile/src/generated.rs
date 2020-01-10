@@ -49,6 +49,7 @@ pub struct BundleDetails {
 
 /// <p> Request structure used to request a project be created. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectRequest {
     /// <p> ZIP or YAML file which contains configuration settings to be used when creating the project. This may be the contents of the file downloaded from the URL provided in an export project operation. </p>
     #[serde(rename = "contents")]
@@ -85,6 +86,7 @@ pub struct CreateProjectResult {
 
 /// <p> Request structure used to request a project be deleted. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectRequest {
     /// <p> Unique project identifier. </p>
     #[serde(rename = "projectId")]
@@ -107,6 +109,7 @@ pub struct DeleteProjectResult {
 
 /// <p> Request structure to request the details of a specific bundle. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBundleRequest {
     /// <p> Unique bundle identifier. </p>
     #[serde(rename = "bundleId")]
@@ -125,6 +128,7 @@ pub struct DescribeBundleResult {
 
 /// <p> Request structure used to request details about a project. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProjectRequest {
     /// <p> Unique project identifier. </p>
     #[serde(rename = "projectId")]
@@ -146,6 +150,7 @@ pub struct DescribeProjectResult {
 
 /// <p> Request structure used to request generation of custom SDK and tool packages required to integrate mobile web or app clients with backed AWS resources. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportBundleRequest {
     /// <p> Unique bundle identifier. </p>
     #[serde(rename = "bundleId")]
@@ -172,6 +177,7 @@ pub struct ExportBundleResult {
 
 /// <p> Request structure used in requests to export project configuration details. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportProjectRequest {
     /// <p> Unique project identifier. </p>
     #[serde(rename = "projectId")]
@@ -198,6 +204,7 @@ pub struct ExportProjectResult {
 
 /// <p> Request structure to request all available bundles. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBundlesRequest {
     /// <p> Maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
@@ -225,6 +232,7 @@ pub struct ListBundlesResult {
 
 /// <p> Request structure used to request projects list in AWS Mobile Hub. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsRequest {
     /// <p> Maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
@@ -318,6 +326,7 @@ pub struct Resource {
 
 /// <p> Request structure used for requests to update project configuration. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectRequest {
     /// <p> ZIP or YAML file which contains project configuration to be updated. This should be the contents of the file downloaded from the URL provided in an export project operation. </p>
     #[serde(rename = "contents")]

@@ -30,6 +30,7 @@ rusoto_waf_regional = "0.42.0"
 - `native-tls` - use platform-specific TLS implementation.
 - `rustls` - use rustls TLS implementation.
 - `serialize_structs` - output structs of most operations get `derive(Serialize)`.
+- `deserialize_structs` - input structs of most operations get `derive(Deserialize)`.
 
 Note: the crate will use the `native-tls` TLS implementation by default.
 

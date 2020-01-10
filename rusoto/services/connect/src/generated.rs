@@ -26,6 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>A chat message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChatMessage {
     /// <p>The content of the chat message.</p>
     #[serde(rename = "Content")]
@@ -58,6 +59,7 @@ pub struct ContactFlowSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>The identifier of the user account in the directory used for identity management. If Amazon Connect cannot access the directory, you can specify this identifier to authenticate users. If you include the identifier, we assume that Amazon Connect cannot access the directory. Otherwise, the identity information is used to authenticate users from your directory.</p> <p>This parameter is required if you are using an existing directory for identity management in Amazon Connect when Amazon Connect cannot access your directory to authenticate users. If you are using SAML for identity management and include this parameter, an error is returned.</p>
     #[serde(rename = "DirectoryUserId")]
@@ -173,6 +175,7 @@ pub struct CurrentMetricResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -183,6 +186,7 @@ pub struct DeleteUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserHierarchyGroupRequest {
     /// <p>The identifier of the hierarchy group.</p>
     #[serde(rename = "HierarchyGroupId")]
@@ -202,6 +206,7 @@ pub struct DescribeUserHierarchyGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserHierarchyStructureRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -218,6 +223,7 @@ pub struct DescribeUserHierarchyStructureResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -252,6 +258,7 @@ pub struct Dimensions {
 
 /// <p>Contains the filter to apply when retrieving metrics.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filters {
     /// <p>The channel to use to filter the metrics.</p>
     #[serde(rename = "Channels")]
@@ -264,6 +271,7 @@ pub struct Filters {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactAttributesRequest {
     /// <p>The identifier of the initial contact.</p>
     #[serde(rename = "InitialContactId")]
@@ -283,6 +291,7 @@ pub struct GetContactAttributesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCurrentMetricDataRequest {
     /// <p><p>The metrics to retrieve. Specify the name and unit for each metric. The following metrics are available:</p> <dl> <dt>AGENTS<em>AFTER</em>CONTACT<em>WORK</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>AVAILABLE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS<em>ERROR</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>NON<em>PRODUCTIVE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>ON<em>CALL</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>ON<em>CONTACT</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>ONLINE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS<em>STAFFED</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>CONTACTS</em>IN<em>QUEUE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>CONTACTS</em>SCHEDULED</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>OLDEST<em>CONTACT</em>AGE</dt> <dd> <p>Unit: SECONDS</p> </dd> <dt>SLOTS<em>ACTIVE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>SLOTS</em>AVAILABLE</dt> <dd> <p>Unit: COUNT</p> </dd> </dl></p>
     #[serde(rename = "CurrentMetrics")]
@@ -325,6 +334,7 @@ pub struct GetCurrentMetricDataResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFederationTokenRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -341,6 +351,7 @@ pub struct GetFederationTokenResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricDataRequest {
     /// <p>The timestamp, in UNIX Epoch time format, at which to end the reporting interval for the retrieval of historical metrics data. The time must be specified using an interval of 5 minutes, such as 11:00, 11:05, 11:10, and must be later than the start time timestamp.</p> <p>The time range between the start and end time must be less than 24 hours.</p>
     #[serde(rename = "EndTime")]
@@ -566,6 +577,7 @@ pub struct HoursOfOperationSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContactFlowsRequest {
     /// <p>The type of contact flow.</p>
     #[serde(rename = "ContactFlowTypes")]
@@ -598,6 +610,7 @@ pub struct ListContactFlowsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHoursOfOperationsRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -626,6 +639,7 @@ pub struct ListHoursOfOperationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumbersRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -662,6 +676,7 @@ pub struct ListPhoneNumbersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueuesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -694,6 +709,7 @@ pub struct ListQueuesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutingProfilesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -722,6 +738,7 @@ pub struct ListRoutingProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -750,6 +767,7 @@ pub struct ListSecurityProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
@@ -766,6 +784,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserHierarchyGroupsRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -794,6 +813,7 @@ pub struct ListUserHierarchyGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -823,6 +843,7 @@ pub struct ListUsersResponse {
 
 /// <p>The customer's details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParticipantDetails {
     /// <p>Display name of the participant.</p>
     #[serde(rename = "DisplayName")]
@@ -928,6 +949,7 @@ pub struct SecurityProfileSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChatContactRequest {
     /// <p>A custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes, and can be accessed in contact flows just like any other contact attributes. </p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
     #[serde(rename = "Attributes")]
@@ -970,6 +992,7 @@ pub struct StartChatContactResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOutboundVoiceContactRequest {
     /// <p>A custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes, and can be accessed in contact flows just like any other contact attributes.</p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
     #[serde(rename = "Attributes")]
@@ -1008,6 +1031,7 @@ pub struct StartOutboundVoiceContactResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopContactRequest {
     /// <p>The ID of the contact.</p>
     #[serde(rename = "ContactId")]
@@ -1022,6 +1046,7 @@ pub struct StopContactRequest {
 pub struct StopContactResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
@@ -1045,6 +1070,7 @@ pub struct Threshold {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
@@ -1055,6 +1081,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactAttributesRequest {
     /// <p>The Amazon Connect attributes. These attributes can be accessed in contact flows just like any other contact attributes.</p> <p>You can have up to 32,768 UTF-8 bytes across all attributes for a contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
     #[serde(rename = "Attributes")]
@@ -1072,6 +1099,7 @@ pub struct UpdateContactAttributesRequest {
 pub struct UpdateContactAttributesResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserHierarchyRequest {
     /// <p>The identifier of the hierarchy group.</p>
     #[serde(rename = "HierarchyGroupId")]
@@ -1086,6 +1114,7 @@ pub struct UpdateUserHierarchyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserIdentityInfoRequest {
     /// <p>The identity information for the user.</p>
     #[serde(rename = "IdentityInfo")]
@@ -1099,6 +1128,7 @@ pub struct UpdateUserIdentityInfoRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPhoneConfigRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -1112,6 +1142,7 @@ pub struct UpdateUserPhoneConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRoutingProfileRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -1125,6 +1156,7 @@ pub struct UpdateUserRoutingProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserSecurityProfilesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]

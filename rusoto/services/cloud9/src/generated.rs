@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentEC2Request {
     /// <p>The number of minutes until the running instance is shut down after the environment has last been used.</p>
     #[serde(rename = "automaticStopTimeMinutes")]
@@ -63,6 +64,7 @@ pub struct CreateEnvironmentEC2Result {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentMembershipRequest {
     /// <p>The ID of the environment that contains the environment member you want to add.</p>
     #[serde(rename = "environmentId")]
@@ -85,6 +87,7 @@ pub struct CreateEnvironmentMembershipResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEnvironmentMembershipRequest {
     /// <p>The ID of the environment to delete the environment member from.</p>
     #[serde(rename = "environmentId")]
@@ -99,6 +102,7 @@ pub struct DeleteEnvironmentMembershipRequest {
 pub struct DeleteEnvironmentMembershipResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEnvironmentRequest {
     /// <p>The ID of the environment to delete.</p>
     #[serde(rename = "environmentId")]
@@ -110,6 +114,7 @@ pub struct DeleteEnvironmentRequest {
 pub struct DeleteEnvironmentResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentMembershipsRequest {
     /// <p>The ID of the environment to get environment member information about.</p>
     #[serde(rename = "environmentId")]
@@ -147,6 +152,7 @@ pub struct DescribeEnvironmentMembershipsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentStatusRequest {
     /// <p>The ID of the environment to get status information about.</p>
     #[serde(rename = "environmentId")]
@@ -167,6 +173,7 @@ pub struct DescribeEnvironmentStatusResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentsRequest {
     /// <p>The IDs of individual environments to get information about.</p>
     #[serde(rename = "environmentIds")]
@@ -261,6 +268,7 @@ pub struct EnvironmentMember {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEnvironmentsRequest {
     /// <p>The maximum number of environments to get identifiers for.</p>
     #[serde(rename = "maxResults")]
@@ -286,6 +294,7 @@ pub struct ListEnvironmentsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnvironmentMembershipRequest {
     /// <p>The ID of the environment for the environment member whose settings you want to change.</p>
     #[serde(rename = "environmentId")]
@@ -308,6 +317,7 @@ pub struct UpdateEnvironmentMembershipResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnvironmentRequest {
     /// <p>Any new or replacement description for the environment.</p>
     #[serde(rename = "description")]

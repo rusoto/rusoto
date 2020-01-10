@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivateEventSourceRequest {
     /// <p>The name of the partner event source to activate.</p>
     #[serde(rename = "Name")]
@@ -85,6 +86,7 @@ pub struct BatchRetryStrategy {
 
 /// <p>A JSON string that you can use to limit the event bus permissions that you're granting to only accounts that fulfill the condition. Currently, the only supported condition is membership in a certain AWS organization. The string must contain <code>Type</code>, <code>Key</code>, and <code>Value</code> fields. The <code>Value</code> field specifies the ID of the AWS organization. The following is an example value for <code>Condition</code>:</p> <p> <code>'{"Type" : "StringEquals", "Key": "aws:PrincipalOrgID", "Value": "o-1234567890"}'</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Condition {
     /// <p>The key for the condition. Currently, the only supported key is <code>aws:PrincipalOrgID</code>.</p>
     #[serde(rename = "Key")]
@@ -98,6 +100,7 @@ pub struct Condition {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventBusRequest {
     /// <p>If you're creating a partner event bus, this specifies the partner event source that the new event bus will be matched with.</p>
     #[serde(rename = "EventSourceName")]
@@ -118,6 +121,7 @@ pub struct CreateEventBusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePartnerEventSourceRequest {
     /// <p>The AWS account ID of the customer who is permitted to create a matching partner event bus for this partner event source.</p>
     #[serde(rename = "Account")]
@@ -137,6 +141,7 @@ pub struct CreatePartnerEventSourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeactivateEventSourceRequest {
     /// <p>The name of the partner event source to deactivate.</p>
     #[serde(rename = "Name")]
@@ -144,6 +149,7 @@ pub struct DeactivateEventSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventBusRequest {
     /// <p>The name of the event bus to delete.</p>
     #[serde(rename = "Name")]
@@ -151,6 +157,7 @@ pub struct DeleteEventBusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePartnerEventSourceRequest {
     /// <p>The AWS account ID of the AWS customer that the event source was created for.</p>
     #[serde(rename = "Account")]
@@ -161,6 +168,7 @@ pub struct DeletePartnerEventSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleRequest {
     /// <p>The event bus associated with the rule. If you omit this, the default event bus is used.</p>
     #[serde(rename = "EventBusName")]
@@ -176,6 +184,7 @@ pub struct DeleteRuleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventBusRequest {
     /// <p>The name of the event bus to show details for. If you omit this, the default event bus is displayed.</p>
     #[serde(rename = "Name")]
@@ -201,6 +210,7 @@ pub struct DescribeEventBusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventSourceRequest {
     /// <p>The name of the partner event source to display the details of.</p>
     #[serde(rename = "Name")]
@@ -237,6 +247,7 @@ pub struct DescribeEventSourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePartnerEventSourceRequest {
     /// <p>The name of the event source to display.</p>
     #[serde(rename = "Name")]
@@ -257,6 +268,7 @@ pub struct DescribePartnerEventSourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRuleRequest {
     /// <p>The event bus associated with the rule. If you omit this, the default event bus is used.</p>
     #[serde(rename = "EventBusName")]
@@ -309,6 +321,7 @@ pub struct DescribeRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableRuleRequest {
     /// <p>The event bus associated with the rule. If you omit this, the default event bus is used.</p>
     #[serde(rename = "EventBusName")]
@@ -348,6 +361,7 @@ pub struct EcsParameters {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableRuleRequest {
     /// <p>The event bus associated with the rule. If you omit this, the default event bus is used.</p>
     #[serde(rename = "EventBusName")]
@@ -427,6 +441,7 @@ pub struct KinesisParameters {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventBusesRequest {
     /// <p>Specifying this limits the number of results returned by this operation. The operation also returns a <code>NextToken</code> that you can use in a subsequent operation to retrieve the next set of results.</p>
     #[serde(rename = "Limit")]
@@ -456,6 +471,7 @@ pub struct ListEventBusesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventSourcesRequest {
     /// <p>Specifying this limits the number of results returned by this operation. The operation also returns a <code>NextToken</code> that you can use in a subsequent operation to retrieve the next set of results.</p>
     #[serde(rename = "Limit")]
@@ -485,6 +501,7 @@ pub struct ListEventSourcesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPartnerEventSourceAccountsRequest {
     /// <p>The name of the partner event source to display account information about.</p>
     #[serde(rename = "EventSourceName")]
@@ -513,6 +530,7 @@ pub struct ListPartnerEventSourceAccountsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPartnerEventSourcesRequest {
     /// <p>pecifying this limits the number of results returned by this operation. The operation also returns a <code>NextToken</code> that you can use in a subsequent operation to retrieve the next set of results.</p>
     #[serde(rename = "Limit")]
@@ -541,6 +559,7 @@ pub struct ListPartnerEventSourcesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRuleNamesByTargetRequest {
     /// <p>Limits the results to show only the rules associated with the specified event bus.</p>
     #[serde(rename = "EventBusName")]
@@ -573,6 +592,7 @@ pub struct ListRuleNamesByTargetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRulesRequest {
     /// <p>Limits the results to show only the rules associated with the specified event bus.</p>
     #[serde(rename = "EventBusName")]
@@ -606,6 +626,7 @@ pub struct ListRulesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the rule for which you want to view tags.</p>
     #[serde(rename = "ResourceARN")]
@@ -622,6 +643,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTargetsByRuleRequest {
     /// <p>The event bus associated with the rule. If you omit this, the default event bus is used.</p>
     #[serde(rename = "EventBusName")]
@@ -699,6 +721,7 @@ pub struct PartnerEventSourceAccount {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsRequest {
     /// <p>The entry that defines an event in your system. You can specify several parameters for the entry such as the source and type of the event, resources associated with the event, and so on.</p>
     #[serde(rename = "Entries")]
@@ -707,6 +730,7 @@ pub struct PutEventsRequest {
 
 /// <p>Represents an event to be submitted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsRequestEntry {
     /// <p>A valid JSON object. There is no other schema imposed. The JSON object can contain fields and nested subobjects.</p> <p>This field is required.</p>
     #[serde(rename = "Detail")]
@@ -766,6 +790,7 @@ pub struct PutEventsResultEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPartnerEventsRequest {
     /// <p>The list of events to write to the event bus.</p>
     #[serde(rename = "Entries")]
@@ -774,6 +799,7 @@ pub struct PutPartnerEventsRequest {
 
 /// <p>The details about an event generated by an SaaS partner.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPartnerEventsRequestEntry {
     /// <p>A valid JSON object. There is no other schema imposed. The JSON object can contain fields and nested subobjects. This field is required.</p>
     #[serde(rename = "Detail")]
@@ -829,6 +855,7 @@ pub struct PutPartnerEventsResultEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPermissionRequest {
     /// <p>The action that you're enabling the other account to perform. Currently, this must be <code>events:PutEvents</code>.</p>
     #[serde(rename = "Action")]
@@ -850,6 +877,7 @@ pub struct PutPermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRuleRequest {
     /// <p>A description of the rule.</p>
     #[serde(rename = "Description")]
@@ -894,6 +922,7 @@ pub struct PutRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutTargetsRequest {
     /// <p>The name of the event bus associated with the rule. If you omit this, the default event bus is used.</p>
     #[serde(rename = "EventBusName")]
@@ -939,6 +968,7 @@ pub struct PutTargetsResultEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionRequest {
     /// <p>The name of the event bus to revoke permissions for. If you omit this, the default event bus is used.</p>
     #[serde(rename = "EventBusName")]
@@ -950,6 +980,7 @@ pub struct RemovePermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTargetsRequest {
     /// <p>The name of the event bus associated with the rule.</p>
     #[serde(rename = "EventBusName")]
@@ -1080,6 +1111,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the rule that you're adding tags to.</p>
     #[serde(rename = "ResourceARN")]
@@ -1141,6 +1173,7 @@ pub struct Target {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestEventPatternRequest {
     /// <p>The event, in JSON format, to test against the event pattern.</p>
     #[serde(rename = "Event")]
@@ -1160,6 +1193,7 @@ pub struct TestEventPatternResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the rule that you're removing tags from.</p>
     #[serde(rename = "ResourceARN")]

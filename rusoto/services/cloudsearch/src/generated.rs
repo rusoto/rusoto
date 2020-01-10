@@ -57,6 +57,7 @@ impl ARNDeserializer {
 }
 /// <p>The configured access rules for the domain's document and search endpoints, and the current status of those rules.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccessPoliciesStatus {
     pub options: String,
     pub status: OptionStatus,
@@ -96,6 +97,8 @@ impl AlgorithmicStemmingDeserializer {
 }
 /// <p>Synonyms, stopwords, and stemming options for an analysis scheme. Includes tokenization dictionary for Japanese.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalysisOptions {
     /// <p>The level of algorithmic stemming to perform: <code>none</code>, <code>minimal</code>, <code>light</code>, or <code>full</code>. The available levels vary depending on the language. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/text-processing.html#text-processing-settings" target="_blank">Language Specific Text Processing Settings</a> in the <i>Amazon CloudSearch Developer Guide</i> </p>
     pub algorithmic_stemming: Option<String>,
@@ -184,6 +187,8 @@ impl AnalysisOptionsSerializer {
 
 /// <p>Configuration information for an analysis scheme. Each analysis scheme has a unique name and specifies the language of the text to be processed. The following options can be configured for an analysis scheme: <code>Synonyms</code>, <code>Stopwords</code>, <code>StemmingDictionary</code>, <code>JapaneseTokenizationDictionary</code> and <code>AlgorithmicStemming</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalysisScheme {
     pub analysis_options: Option<AnalysisOptions>,
     pub analysis_scheme_language: String,
@@ -262,6 +267,7 @@ impl AnalysisSchemeLanguageDeserializer {
 }
 /// <p>The status and configuration of an <code>AnalysisScheme</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AnalysisSchemeStatus {
     pub options: AnalysisScheme,
     pub status: OptionStatus,
@@ -309,6 +315,7 @@ impl AnalysisSchemeStatusListDeserializer {
 }
 /// <p>The status and configuration of the domain's availability options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AvailabilityOptionsStatus {
     /// <p>The availability options configured for the domain.</p>
     pub options: bool,
@@ -353,6 +360,7 @@ impl BooleanDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>BuildSuggester</a></code> operation. Specifies the name of the domain you want to update.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BuildSuggestersRequest {
     pub domain_name: String,
 }
@@ -372,6 +380,7 @@ impl BuildSuggestersRequestSerializer {
 
 /// <p>The result of a <code>BuildSuggester</code> request. Contains a list of the fields used for suggestions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BuildSuggestersResponse {
     pub field_names: Option<Vec<String>>,
 }
@@ -402,6 +411,7 @@ impl BuildSuggestersResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>CreateDomain</a></code> operation. Specifies a name for the new search domain.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
     /// <p>A name for the domain you are creating. Allowed characters are a-z (lower-case letters), 0-9, and hyphen (-). Domain names must start with a letter or number and be at least 3 and no more than 28 characters long.</p>
     pub domain_name: String,
@@ -422,6 +432,7 @@ impl CreateDomainRequestSerializer {
 
 /// <p>The result of a <code>CreateDomainRequest</code>. Contains the status of a newly created domain.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDomainResponse {
     pub domain_status: Option<DomainStatus>,
 }
@@ -449,6 +460,8 @@ impl CreateDomainResponseDeserializer {
 }
 /// <p>Options for a field that contains an array of dates. Present if <code>IndexFieldType</code> specifies the field is of type <code>date-array</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DateArrayOptions {
     /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
@@ -529,6 +542,8 @@ impl DateArrayOptionsSerializer {
 
 /// <p>Options for a date field. Dates and times are specified in UTC (Coordinated Universal Time) according to IETF RFC3339: yyyy-mm-ddT00:00:00Z. Present if <code>IndexFieldType</code> specifies the field is of type <code>date</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DateOptions {
     /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
@@ -615,6 +630,7 @@ impl DateOptionsSerializer {
 
 /// <p>Container for the parameters to the <code><a>DefineAnalysisScheme</a></code> operation. Specifies the name of the domain you want to update and the analysis scheme configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefineAnalysisSchemeRequest {
     pub analysis_scheme: AnalysisScheme,
     pub domain_name: String,
@@ -640,6 +656,7 @@ impl DefineAnalysisSchemeRequestSerializer {
 
 /// <p>The result of a <code><a>DefineAnalysisScheme</a></code> request. Contains the status of the newly-configured analysis scheme.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DefineAnalysisSchemeResponse {
     pub analysis_scheme: AnalysisSchemeStatus,
 }
@@ -669,6 +686,7 @@ impl DefineAnalysisSchemeResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DefineExpression</a></code> operation. Specifies the name of the domain you want to update and the expression you want to configure.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefineExpressionRequest {
     pub domain_name: String,
     pub expression: Expression,
@@ -694,6 +712,7 @@ impl DefineExpressionRequestSerializer {
 
 /// <p>The result of a <code>DefineExpression</code> request. Contains the status of the newly-configured expression.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DefineExpressionResponse {
     pub expression: ExpressionStatus,
 }
@@ -723,6 +742,7 @@ impl DefineExpressionResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DefineIndexField</a></code> operation. Specifies the name of the domain you want to update and the index field configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefineIndexFieldRequest {
     pub domain_name: String,
     /// <p>The index field and field options you want to configure. </p>
@@ -749,6 +769,7 @@ impl DefineIndexFieldRequestSerializer {
 
 /// <p>The result of a <code><a>DefineIndexField</a></code> request. Contains the status of the newly-configured index field.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DefineIndexFieldResponse {
     pub index_field: IndexFieldStatus,
 }
@@ -778,6 +799,7 @@ impl DefineIndexFieldResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DefineSuggester</a></code> operation. Specifies the name of the domain you want to update and the suggester configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefineSuggesterRequest {
     pub domain_name: String,
     pub suggester: Suggester,
@@ -803,6 +825,7 @@ impl DefineSuggesterRequestSerializer {
 
 /// <p>The result of a <code>DefineSuggester</code> request. Contains the status of the newly-configured suggester.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DefineSuggesterResponse {
     pub suggester: SuggesterStatus,
 }
@@ -832,6 +855,7 @@ impl DefineSuggesterResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DeleteAnalysisScheme</a></code> operation. Specifies the name of the domain you want to update and the analysis scheme you want to delete. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAnalysisSchemeRequest {
     /// <p>The name of the analysis scheme you want to delete.</p>
     pub analysis_scheme_name: String,
@@ -857,6 +881,7 @@ impl DeleteAnalysisSchemeRequestSerializer {
 
 /// <p>The result of a <code>DeleteAnalysisScheme</code> request. Contains the status of the deleted analysis scheme.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteAnalysisSchemeResponse {
     /// <p>The status of the analysis scheme being deleted.</p>
     pub analysis_scheme: AnalysisSchemeStatus,
@@ -887,6 +912,7 @@ impl DeleteAnalysisSchemeResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DeleteDomain</a></code> operation. Specifies the name of the domain you want to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainRequest {
     /// <p>The name of the domain you want to permanently delete.</p>
     pub domain_name: String,
@@ -907,6 +933,7 @@ impl DeleteDomainRequestSerializer {
 
 /// <p>The result of a <code>DeleteDomain</code> request. Contains the status of a newly deleted domain, or no status if the domain has already been completely deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDomainResponse {
     pub domain_status: Option<DomainStatus>,
 }
@@ -934,6 +961,7 @@ impl DeleteDomainResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DeleteExpression</a></code> operation. Specifies the name of the domain you want to update and the name of the expression you want to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteExpressionRequest {
     pub domain_name: String,
     /// <p>The name of the <code><a>Expression</a></code> to delete.</p>
@@ -959,6 +987,7 @@ impl DeleteExpressionRequestSerializer {
 
 /// <p>The result of a <code><a>DeleteExpression</a></code> request. Specifies the expression being deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteExpressionResponse {
     /// <p>The status of the expression being deleted.</p>
     pub expression: ExpressionStatus,
@@ -989,6 +1018,7 @@ impl DeleteExpressionResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DeleteIndexField</a></code> operation. Specifies the name of the domain you want to update and the name of the index field you want to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIndexFieldRequest {
     pub domain_name: String,
     /// <p>The name of the index field your want to remove from the domain's indexing options.</p>
@@ -1014,6 +1044,7 @@ impl DeleteIndexFieldRequestSerializer {
 
 /// <p>The result of a <code><a>DeleteIndexField</a></code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteIndexFieldResponse {
     /// <p>The status of the index field being deleted.</p>
     pub index_field: IndexFieldStatus,
@@ -1044,6 +1075,7 @@ impl DeleteIndexFieldResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DeleteSuggester</a></code> operation. Specifies the name of the domain you want to update and name of the suggester you want to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSuggesterRequest {
     pub domain_name: String,
     /// <p>Specifies the name of the suggester you want to delete.</p>
@@ -1069,6 +1101,7 @@ impl DeleteSuggesterRequestSerializer {
 
 /// <p>The result of a <code>DeleteSuggester</code> request. Contains the status of the deleted suggester.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteSuggesterResponse {
     /// <p>The status of the suggester being deleted.</p>
     pub suggester: SuggesterStatus,
@@ -1099,6 +1132,7 @@ impl DeleteSuggesterResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DescribeAnalysisSchemes</a></code> operation. Specifies the name of the domain you want to describe. To limit the response to particular analysis schemes, specify the names of the analysis schemes you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAnalysisSchemesRequest {
     /// <p>The analysis schemes you want to describe.</p>
     pub analysis_scheme_names: Option<Vec<String>>,
@@ -1133,6 +1167,7 @@ impl DescribeAnalysisSchemesRequestSerializer {
 
 /// <p>The result of a <code>DescribeAnalysisSchemes</code> request. Contains the analysis schemes configured for the domain specified in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAnalysisSchemesResponse {
     /// <p>The analysis scheme descriptions.</p>
     pub analysis_schemes: Vec<AnalysisSchemeStatus>,
@@ -1167,6 +1202,7 @@ impl DescribeAnalysisSchemesResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DescribeAvailabilityOptions</a></code> operation. Specifies the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the Deployed option to <code>true</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAvailabilityOptionsRequest {
     /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
@@ -1192,6 +1228,7 @@ impl DescribeAvailabilityOptionsRequestSerializer {
 
 /// <p>The result of a <code>DescribeAvailabilityOptions</code> request. Indicates whether or not the Multi-AZ option is enabled for the domain specified in the request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAvailabilityOptionsResponse {
     /// <p>The availability options configured for the domain. Indicates whether Multi-AZ is enabled for the domain. </p>
     pub availability_options: Option<AvailabilityOptionsStatus>,
@@ -1225,6 +1262,7 @@ impl DescribeAvailabilityOptionsResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DescribeDomainEndpointOptions</a></code> operation. Specify the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the Deployed option to <code>true</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainEndpointOptionsRequest {
     /// <p>Whether to retrieve the latest configuration (which might be in a Processing state) or the current, active configuration. Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
@@ -1250,6 +1288,7 @@ impl DescribeDomainEndpointOptionsRequestSerializer {
 
 /// <p>The result of a <code>DescribeDomainEndpointOptions</code> request. Contains the status and configuration of a search domain's endpoint options. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDomainEndpointOptionsResponse {
     /// <p>The status and configuration of a search domain's endpoint options.</p>
     pub domain_endpoint_options: Option<DomainEndpointOptionsStatus>,
@@ -1283,6 +1322,7 @@ impl DescribeDomainEndpointOptionsResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DescribeDomains</a></code> operation. By default shows the status of all domains. To restrict the response to particular domains, specify the names of the domains you want to describe.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainsRequest {
     /// <p>The names of the domains you want to include in the response.</p>
     pub domain_names: Option<Vec<String>>,
@@ -1309,6 +1349,7 @@ impl DescribeDomainsRequestSerializer {
 
 /// <p>The result of a <code>DescribeDomains</code> request. Contains the status of the domains specified in the request or all domains owned by the account.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDomainsResponse {
     pub domain_status_list: Vec<DomainStatus>,
 }
@@ -1341,6 +1382,7 @@ impl DescribeDomainsResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DescribeDomains</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular expressions, specify the names of the expressions you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExpressionsRequest {
     /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
@@ -1375,6 +1417,7 @@ impl DescribeExpressionsRequestSerializer {
 
 /// <p>The result of a <code>DescribeExpressions</code> request. Contains the expressions configured for the domain specified in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeExpressionsResponse {
     /// <p>The expressions configured for the domain.</p>
     pub expressions: Vec<ExpressionStatus>,
@@ -1408,6 +1451,7 @@ impl DescribeExpressionsResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DescribeIndexFields</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular index fields, specify the names of the index fields you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIndexFieldsRequest {
     /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
@@ -1442,6 +1486,7 @@ impl DescribeIndexFieldsRequestSerializer {
 
 /// <p>The result of a <code>DescribeIndexFields</code> request. Contains the index fields configured for the domain specified in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeIndexFieldsResponse {
     /// <p>The index fields configured for the domain.</p>
     pub index_fields: Vec<IndexFieldStatus>,
@@ -1475,6 +1520,7 @@ impl DescribeIndexFieldsResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DescribeScalingParameters</a></code> operation. Specifies the name of the domain you want to describe. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingParametersRequest {
     pub domain_name: String,
 }
@@ -1494,6 +1540,7 @@ impl DescribeScalingParametersRequestSerializer {
 
 /// <p>The result of a <code>DescribeScalingParameters</code> request. Contains the scaling parameters configured for the domain specified in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeScalingParametersResponse {
     pub scaling_parameters: ScalingParametersStatus,
 }
@@ -1525,6 +1572,7 @@ impl DescribeScalingParametersResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DescribeServiceAccessPolicies</a></code> operation. Specifies the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServiceAccessPoliciesRequest {
     /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
@@ -1550,6 +1598,7 @@ impl DescribeServiceAccessPoliciesRequestSerializer {
 
 /// <p>The result of a <code>DescribeServiceAccessPolicies</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeServiceAccessPoliciesResponse {
     /// <p>The access rules configured for the domain specified in the request.</p>
     pub access_policies: AccessPoliciesStatus,
@@ -1580,6 +1629,7 @@ impl DescribeServiceAccessPoliciesResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>DescribeSuggester</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular suggesters, specify the names of the suggesters you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSuggestersRequest {
     /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
@@ -1614,6 +1664,7 @@ impl DescribeSuggestersRequestSerializer {
 
 /// <p>The result of a <code>DescribeSuggesters</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSuggestersResponse {
     /// <p>The suggesters configured for the domain specified in the request.</p>
     pub suggesters: Vec<SuggesterStatus>,
@@ -1647,6 +1698,8 @@ impl DescribeSuggestersResponseDeserializer {
 }
 /// <p>Options for a search suggester.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentSuggesterOptions {
     /// <p>The level of fuzziness allowed when suggesting matches for a string: <code>none</code>, <code>low</code>, or <code>high</code>. With none, the specified string is treated as an exact prefix. With low, suggestions must differ from the specified string by no more than one character. With high, suggestions can differ by up to two characters. The default is none. </p>
     pub fuzzy_matching: Option<String>,
@@ -1711,6 +1764,8 @@ impl DocumentSuggesterOptionsSerializer {
 
 /// <p>The domain's endpoint options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DomainEndpointOptions {
     /// <p>Whether the domain is HTTPS only enabled.</p>
     pub enforce_https: Option<bool>,
@@ -1764,6 +1819,7 @@ impl DomainEndpointOptionsSerializer {
 
 /// <p>The configuration and status of the domain's endpoint options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DomainEndpointOptionsStatus {
     /// <p>The domain endpoint options configured for the domain.</p>
     pub options: DomainEndpointOptions,
@@ -1856,6 +1912,7 @@ impl DomainNameMapDeserializer {
 }
 /// <p>The current status of the search domain.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DomainStatus {
     pub arn: Option<String>,
     /// <p>True if the search domain is created. It can take several minutes to initialize a domain when <a>CreateDomain</a> is called. Newly created search domains are returned from <a>DescribeDomains</a> with a false value for Created until domain creation is complete.</p>
@@ -1981,6 +2038,8 @@ impl DoubleDeserializer {
 }
 /// <p>Options for a field that contains an array of double-precision 64-bit floating point values. Present if <code>IndexFieldType</code> specifies the field is of type <code>double-array</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DoubleArrayOptions {
     /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<f64>,
@@ -2061,6 +2120,8 @@ impl DoubleArrayOptionsSerializer {
 
 /// <p>Options for a double-precision 64-bit floating point field. Present if <code>IndexFieldType</code> specifies the field is of type <code>double</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DoubleOptions {
     /// <p>A value to use for the field if the field isn't specified for a document. This can be important if you are using the field in an expression and that field is not present in every document.</p>
     pub default_value: Option<f64>,
@@ -2171,6 +2232,8 @@ impl DynamicFieldNameListSerializer {
 
 /// <p>A named expression that can be evaluated at search time. Can be used to sort the search results, define other expressions, or return computed information in the search results. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Expression {
     pub expression_name: String,
     pub expression_value: String,
@@ -2222,6 +2285,7 @@ impl ExpressionSerializer {
 
 /// <p>The value of an <code>Expression</code> and its current status.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExpressionStatus {
     /// <p>The expression that is evaluated for sorting while processing a search request.</p>
     pub options: Expression,
@@ -2329,6 +2393,7 @@ impl FieldValueDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>IndexDocuments</a></code> operation. Specifies the name of the domain you want to re-index.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IndexDocumentsRequest {
     pub domain_name: String,
 }
@@ -2348,6 +2413,7 @@ impl IndexDocumentsRequestSerializer {
 
 /// <p>The result of an <code>IndexDocuments</code> request. Contains the status of the indexing operation, including the fields being indexed.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IndexDocumentsResponse {
     /// <p>The names of the fields that are currently being indexed.</p>
     pub field_names: Option<Vec<String>>,
@@ -2375,6 +2441,8 @@ impl IndexDocumentsResponseDeserializer {
 }
 /// <p>Configuration information for a field in the index, including its name, type, and options. The supported options depend on the <code><a>IndexFieldType</a></code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IndexField {
     pub date_array_options: Option<DateArrayOptions>,
     pub date_options: Option<DateOptions>,
@@ -2575,6 +2643,7 @@ impl IndexFieldSerializer {
 
 /// <p>The value of an <code>IndexField</code> and its current status.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IndexFieldStatus {
     pub options: IndexField,
     pub status: OptionStatus,
@@ -2642,6 +2711,8 @@ impl InstanceCountDeserializer {
 }
 /// <p>Options for a field that contains an array of 64-bit signed integers. Present if <code>IndexFieldType</code> specifies the field is of type <code>int-array</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IntArrayOptions {
     /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<i64>,
@@ -2721,6 +2792,8 @@ impl IntArrayOptionsSerializer {
 
 /// <p>Options for a 64-bit signed integer field. Present if <code>IndexFieldType</code> specifies the field is of type <code>int</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IntOptions {
     /// <p>A value to use for the field if the field isn&#39;t specified for a document. This can be important if you are using the field in an expression and that field is not present in every document.</p>
     pub default_value: Option<i64>,
@@ -2807,6 +2880,8 @@ impl IntOptionsSerializer {
 
 /// <p>Options for a latlon field. A latlon field contains a location stored as a latitude and longitude value pair. Present if <code>IndexFieldType</code> specifies the field is of type <code>latlon</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LatLonOptions {
     /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
@@ -2892,6 +2967,7 @@ impl LatLonOptionsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Limits {
     pub maximum_partition_count: i64,
     pub maximum_replication_count: i64,
@@ -2924,6 +3000,7 @@ impl LimitsDeserializer {
 }
 /// <p>The result of a <code>ListDomainNames</code> request. Contains a list of the domains owned by an account.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDomainNamesResponse {
     /// <p>The names of the search domains owned by an account.</p>
     pub domain_names: Option<::std::collections::HashMap<String, String>>,
@@ -2956,6 +3033,8 @@ impl ListDomainNamesResponseDeserializer {
 }
 /// <p>Options for a field that contains an array of literal strings. Present if <code>IndexFieldType</code> specifies the field is of type <code>literal-array</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LiteralArrayOptions {
     /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
@@ -3036,6 +3115,8 @@ impl LiteralArrayOptionsSerializer {
 
 /// <p>Options for literal field. Present if <code>IndexFieldType</code> specifies the field is of type <code>literal</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LiteralOptions {
     /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
@@ -3177,6 +3258,7 @@ impl OptionStateDeserializer {
 }
 /// <p>The status of domain configuration option.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OptionStatus {
     /// <p>A timestamp for when this option was created.</p>
     pub creation_date: String,
@@ -3259,6 +3341,8 @@ impl PolicyDocumentDeserializer {
 }
 /// <p>The desired instance type and desired number of replicas of each index partition.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScalingParameters {
     /// <p>The instance type that you want to preconfigure for your domain. For example, <code>search.m1.small</code>.</p>
     pub desired_instance_type: Option<String>,
@@ -3335,6 +3419,7 @@ impl ScalingParametersSerializer {
 
 /// <p>The status and configuration of a search domain's scaling parameters. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ScalingParametersStatus {
     pub options: ScalingParameters,
     pub status: OptionStatus,
@@ -3378,6 +3463,7 @@ impl SearchInstanceTypeDeserializer {
 }
 /// <p>The endpoint to which service requests can be submitted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ServiceEndpoint {
     pub endpoint: Option<String>,
 }
@@ -3447,6 +3533,8 @@ impl StringDeserializer {
 }
 /// <p>Configuration information for a search suggester. Each suggester has a unique name and specifies the text field you want to use for suggestions. The following options can be configured for a suggester: <code>FuzzyMatching</code>, <code>SortExpression</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Suggester {
     pub document_suggester_options: DocumentSuggesterOptions,
     pub suggester_name: String,
@@ -3513,6 +3601,7 @@ impl SuggesterFuzzyMatchingDeserializer {
 }
 /// <p>The value of a <code>Suggester</code> and its current status.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SuggesterStatus {
     pub options: Suggester,
     pub status: OptionStatus,
@@ -3569,6 +3658,8 @@ impl TLSSecurityPolicyDeserializer {
 }
 /// <p>Options for a field that contains an array of text strings. Present if <code>IndexFieldType</code> specifies the field is of type <code>text-array</code>. A <code>text-array</code> field is always searchable. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TextArrayOptions {
     /// <p>The name of an analysis scheme for a <code>text-array</code> field.</p>
     pub analysis_scheme: Option<String>,
@@ -3649,6 +3740,8 @@ impl TextArrayOptionsSerializer {
 
 /// <p>Options for text field. Present if <code>IndexFieldType</code> specifies the field is of type <code>text</code>. A <code>text</code> field is always searchable. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TextOptions {
     /// <p>The name of an analysis scheme for a <code>text</code> field.</p>
     pub analysis_scheme: Option<String>,
@@ -3746,6 +3839,7 @@ impl UIntValueDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>UpdateAvailabilityOptions</a></code> operation. Specifies the name of the domain you want to update and the Multi-AZ availability option.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAvailabilityOptionsRequest {
     pub domain_name: String,
     /// <p>You expand an existing search domain to a second Availability Zone by setting the Multi-AZ option to true. Similarly, you can turn off the Multi-AZ option to downgrade the domain to a single Availability Zone by setting the Multi-AZ option to <code>false</code>. </p>
@@ -3768,6 +3862,7 @@ impl UpdateAvailabilityOptionsRequestSerializer {
 
 /// <p>The result of a <code>UpdateAvailabilityOptions</code> request. Contains the status of the domain's availability options. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateAvailabilityOptionsResponse {
     /// <p>The newly-configured availability options. Indicates whether Multi-AZ is enabled for the domain. </p>
     pub availability_options: Option<AvailabilityOptionsStatus>,
@@ -3801,6 +3896,7 @@ impl UpdateAvailabilityOptionsResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>UpdateDomainEndpointOptions</a></code> operation. Specifies the name of the domain you want to update and the domain endpoint options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainEndpointOptionsRequest {
     /// <p>Whether to require that all requests to the domain arrive over HTTPS. We recommend Policy-Min-TLS-1-2-2019-07 for TLSSecurityPolicy. For compatibility with older clients, the default is Policy-Min-TLS-1-0-2019-07. </p>
     pub domain_endpoint_options: DomainEndpointOptions,
@@ -3828,6 +3924,7 @@ impl UpdateDomainEndpointOptionsRequestSerializer {
 
 /// <p>The result of a <code>UpdateDomainEndpointOptions</code> request. Contains the configuration and status of the domain's endpoint options. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateDomainEndpointOptionsResponse {
     /// <p>The newly-configured domain endpoint options.</p>
     pub domain_endpoint_options: Option<DomainEndpointOptionsStatus>,
@@ -3861,6 +3958,7 @@ impl UpdateDomainEndpointOptionsResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>UpdateScalingParameters</a></code> operation. Specifies the name of the domain you want to update and the scaling parameters you want to configure.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScalingParametersRequest {
     pub domain_name: String,
     pub scaling_parameters: ScalingParameters,
@@ -3886,6 +3984,7 @@ impl UpdateScalingParametersRequestSerializer {
 
 /// <p>The result of a <code>UpdateScalingParameters</code> request. Contains the status of the newly-configured scaling parameters.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateScalingParametersResponse {
     pub scaling_parameters: ScalingParametersStatus,
 }
@@ -3917,6 +4016,7 @@ impl UpdateScalingParametersResponseDeserializer {
 }
 /// <p>Container for the parameters to the <code><a>UpdateServiceAccessPolicies</a></code> operation. Specifies the name of the domain you want to update and the access rules you want to configure.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceAccessPoliciesRequest {
     /// <p>The access rules you want to configure. These rules replace any existing rules. </p>
     pub access_policies: String,
@@ -3942,6 +4042,7 @@ impl UpdateServiceAccessPoliciesRequestSerializer {
 
 /// <p>The result of an <code>UpdateServiceAccessPolicies</code> request. Contains the new access policies.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateServiceAccessPoliciesResponse {
     /// <p>The access rules configured for the domain.</p>
     pub access_policies: AccessPoliciesStatus,

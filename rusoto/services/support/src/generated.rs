@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAttachmentsToSetRequest {
     /// <p>The ID of the attachment set. If an <code>attachmentSetId</code> is not specified, a new attachment set is created, and the ID of the set is returned in the response. If an <code>attachmentSetId</code> is specified, the attachments are added to the specified set, if it exists.</p>
     #[serde(rename = "attachmentSetId")]
@@ -51,6 +52,7 @@ pub struct AddAttachmentsToSetResponse {
 
 /// <p>To be written.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddCommunicationToCaseRequest {
     /// <p>The ID of a set of one or more attachments for the communication to add to the case. Create the set by calling <a>AddAttachmentsToSet</a> </p>
     #[serde(rename = "attachmentSetId")]
@@ -206,6 +208,7 @@ pub struct Communication {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCaseRequest {
     /// <p>The ID of a set of one or more attachments for the case. Create the set by using <a>AddAttachmentsToSet</a>.</p>
     #[serde(rename = "attachmentSetId")]
@@ -254,6 +257,7 @@ pub struct CreateCaseResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAttachmentRequest {
     /// <p>The ID of the attachment to return. Attachment IDs are returned by the <a>DescribeCommunications</a> operation.</p>
     #[serde(rename = "attachmentId")]
@@ -271,6 +275,7 @@ pub struct DescribeAttachmentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCasesRequest {
     /// <p>The start date for a filtered date search on support case communications. Case communications are available for 12 months after creation.</p>
     #[serde(rename = "afterTime")]
@@ -325,6 +330,7 @@ pub struct DescribeCasesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCommunicationsRequest {
     /// <p>The start date for a filtered date search on support case communications. Case communications are available for 12 months after creation.</p>
     #[serde(rename = "afterTime")]
@@ -362,6 +368,7 @@ pub struct DescribeCommunicationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServicesRequest {
     /// <p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English ("en") and Japanese ("ja"). Language parameters must be passed explicitly for operations that take them.</p>
     #[serde(rename = "language")]
@@ -384,6 +391,7 @@ pub struct DescribeServicesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSeverityLevelsRequest {
     /// <p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English ("en") and Japanese ("ja"). Language parameters must be passed explicitly for operations that take them.</p>
     #[serde(rename = "language")]
@@ -403,6 +411,7 @@ pub struct DescribeSeverityLevelsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrustedAdvisorCheckRefreshStatusesRequest {
     /// <p>The IDs of the Trusted Advisor checks to get the status of. <b>Note:</b> Specifying the check ID of a check that is automatically refreshed causes an <code>InvalidParameterValue</code> error.</p>
     #[serde(rename = "checkIds")]
@@ -420,6 +429,7 @@ pub struct DescribeTrustedAdvisorCheckRefreshStatusesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrustedAdvisorCheckResultRequest {
     /// <p>The unique identifier for the Trusted Advisor check.</p>
     #[serde(rename = "checkId")]
@@ -441,6 +451,7 @@ pub struct DescribeTrustedAdvisorCheckResultResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrustedAdvisorCheckSummariesRequest {
     /// <p>The IDs of the Trusted Advisor checks.</p>
     #[serde(rename = "checkIds")]
@@ -458,6 +469,7 @@ pub struct DescribeTrustedAdvisorCheckSummariesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrustedAdvisorChecksRequest {
     /// <p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English ("en") and Japanese ("ja"). Language parameters must be passed explicitly for operations that take them.</p>
     #[serde(rename = "language")]
@@ -489,6 +501,7 @@ pub struct RecentCaseCommunications {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RefreshTrustedAdvisorCheckRequest {
     /// <p>The unique identifier for the Trusted Advisor check to refresh. <b>Note:</b> Specifying the check ID of a check that is automatically refreshed causes an <code>InvalidParameterValue</code> error.</p>
     #[serde(rename = "checkId")]
@@ -505,6 +518,7 @@ pub struct RefreshTrustedAdvisorCheckResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResolveCaseRequest {
     /// <p>The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i> </p>
     #[serde(rename = "caseId")]

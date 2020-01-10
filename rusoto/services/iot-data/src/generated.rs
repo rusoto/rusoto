@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 /// <p>The input for the DeleteThingShadow operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingShadowRequest {
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
@@ -40,6 +41,7 @@ pub struct DeleteThingShadowResponse {
 
 /// <p>The input for the GetThingShadow operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThingShadowRequest {
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
@@ -55,6 +57,7 @@ pub struct GetThingShadowResponse {
 
 /// <p>The input for the Publish operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishRequest {
     /// <p>The state information, in JSON format.</p>
     #[serde(rename = "payload")]
@@ -76,6 +79,7 @@ pub struct PublishRequest {
 
 /// <p>The input for the UpdateThingShadow operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingShadowRequest {
     /// <p>The state information, in JSON format.</p>
     #[serde(rename = "payload")]

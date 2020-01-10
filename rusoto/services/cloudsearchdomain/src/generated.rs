@@ -141,6 +141,7 @@ pub struct Hits {
 
 /// <p>Container for the parameters to the <code>Search</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchRequest {
     /// <p>Retrieves a cursor value you can use to page through large result sets. Use the <code>size</code> parameter to control the number of hits to include in each response. You can specify either the <code>cursor</code> or <code>start</code> parameter in a request; they are mutually exclusive. To get the first cursor, set the cursor value to <code>initial</code>. In subsequent requests, specify the cursor value returned in the hits section of the response. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/paginating-results.html">Paginating Results</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     #[serde(rename = "cursor")]
@@ -255,6 +256,7 @@ pub struct SuggestModel {
 
 /// <p>Container for the parameters to the <code>Suggest</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SuggestRequest {
     /// <p>Specifies the string for which you want to get suggestions.</p>
     #[serde(rename = "query")]
@@ -316,6 +318,7 @@ pub struct SuggestionMatch {
 
 /// <p>Container for the parameters to the <code>UploadDocuments</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadDocumentsRequest {
     /// <p><p>The format of the batch you are uploading. Amazon CloudSearch supports two document batch formats:</p> <ul> <li>application/json</li> <li>application/xml</li> </ul></p>
     #[serde(rename = "contentType")]

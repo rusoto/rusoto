@@ -73,6 +73,7 @@ pub struct EntitlementValue {
 
 /// <p>The GetEntitlementsRequest contains parameters for the GetEntitlements operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEntitlementsRequest {
     /// <p>Filter is used to return entitlements for a specific customer or for a specific dimension. Filters are described as keys mapped to a lists of values. Filtered requests are <i>unioned</i> for each value in the value list, and then <i>intersected</i> for each filter key.</p>
     #[serde(rename = "Filter")]

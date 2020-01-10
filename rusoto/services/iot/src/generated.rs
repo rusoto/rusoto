@@ -51,6 +51,7 @@ pub struct AbortCriteria {
 
 /// <p>The input for the AcceptCertificateTransfer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptCertificateTransferRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
@@ -173,6 +174,7 @@ pub struct ActiveViolation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddThingToBillingGroupRequest {
     /// <p>The ARN of the billing group.</p>
     #[serde(rename = "billingGroupArn")]
@@ -197,6 +199,7 @@ pub struct AddThingToBillingGroupRequest {
 pub struct AddThingToBillingGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddThingToThingGroupRequest {
     /// <p>Override dynamic thing groups with static thing groups when 10-group limit is reached. If a thing belongs to 10 thing groups, and one or more of those groups are dynamic thing groups, adding a thing to a static group removes the thing from the last dynamic group.</p>
     #[serde(rename = "overrideDynamicGroups")]
@@ -306,6 +309,7 @@ pub struct AssetPropertyVariant {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTargetsWithJobRequest {
     /// <p>An optional comment string describing why the job was associated with the targets.</p>
     #[serde(rename = "comment")]
@@ -337,6 +341,7 @@ pub struct AssociateTargetsWithJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachPolicyRequest {
     /// <p>The name of the policy to attach.</p>
     #[serde(rename = "policyName")]
@@ -348,6 +353,7 @@ pub struct AttachPolicyRequest {
 
 /// <p>The input for the AttachPrincipalPolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachPrincipalPolicyRequest {
     /// <p>The policy name.</p>
     #[serde(rename = "policyName")]
@@ -358,6 +364,7 @@ pub struct AttachPrincipalPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachSecurityProfileRequest {
     /// <p>The security profile that is attached.</p>
     #[serde(rename = "securityProfileName")]
@@ -373,6 +380,7 @@ pub struct AttachSecurityProfileResponse {}
 
 /// <p>The input for the AttachThingPrincipal operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachThingPrincipalRequest {
     /// <p>The principal, which can be a certificate ARN (as returned from the CreateCertificate operation) or an Amazon Cognito ID.</p>
     #[serde(rename = "principal")]
@@ -851,6 +859,7 @@ pub struct CACertificateDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelAuditMitigationActionsTaskRequest {
     /// <p>The unique identifier for the task that you want to cancel. </p>
     #[serde(rename = "taskId")]
@@ -862,6 +871,7 @@ pub struct CancelAuditMitigationActionsTaskRequest {
 pub struct CancelAuditMitigationActionsTaskResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelAuditTaskRequest {
     /// <p>The ID of the audit you want to cancel. You can only cancel an audit that is "IN_PROGRESS".</p>
     #[serde(rename = "taskId")]
@@ -874,6 +884,7 @@ pub struct CancelAuditTaskResponse {}
 
 /// <p>The input for the CancelCertificateTransfer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelCertificateTransferRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
@@ -881,6 +892,7 @@ pub struct CancelCertificateTransferRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobExecutionRequest {
     /// <p>(Optional) The expected current version of the job execution. Each time you update the job execution, its version is incremented. If the version of the job execution stored in Jobs does not match, the update is rejected with a VersionMismatch error, and an ErrorResponse that contains the current job execution status data is returned. (This makes it unnecessary to perform a separate DescribeJobExecution request in order to obtain the job execution status data.)</p>
     #[serde(rename = "expectedVersion")]
@@ -903,6 +915,7 @@ pub struct CancelJobExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
     /// <p>An optional comment string describing why the job was canceled.</p>
     #[serde(rename = "comment")]
@@ -1033,6 +1046,7 @@ pub struct CertificateValidity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClearDefaultAuthorizerRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1134,6 +1148,7 @@ pub struct Configuration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmTopicRuleDestinationRequest {
     /// <p>The token used to confirm ownership or access to the topic rule confirmation URL.</p>
     #[serde(rename = "confirmationToken")]
@@ -1145,6 +1160,7 @@ pub struct ConfirmTopicRuleDestinationRequest {
 pub struct ConfirmTopicRuleDestinationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
     /// <p>The ARN of the authorizer's Lambda function.</p>
     #[serde(rename = "authorizerFunctionArn")]
@@ -1184,6 +1200,7 @@ pub struct CreateAuthorizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBillingGroupRequest {
     /// <p>The name you wish to give to the billing group.</p>
     #[serde(rename = "billingGroupName")]
@@ -1217,6 +1234,7 @@ pub struct CreateBillingGroupResponse {
 
 /// <p>The input for the CreateCertificateFromCsr operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCertificateFromCsrRequest {
     /// <p>The certificate signing request (CSR).</p>
     #[serde(rename = "certificateSigningRequest")]
@@ -1246,6 +1264,7 @@ pub struct CreateCertificateFromCsrResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainConfigurationRequest {
     /// <p>An object that specifies the authorization service for a domain.</p>
     #[serde(rename = "authorizerConfig")]
@@ -1286,6 +1305,7 @@ pub struct CreateDomainConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDynamicThingGroupRequest {
     /// <p><p>The dynamic thing group index name.</p> <note> <p>Currently one index is supported: &quot;AWS_Things&quot;.</p> </note></p>
     #[serde(rename = "indexName")]
@@ -1341,6 +1361,7 @@ pub struct CreateDynamicThingGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
     /// <p>Allows you to create criteria to abort a job.</p>
     #[serde(rename = "abortConfig")]
@@ -1405,6 +1426,7 @@ pub struct CreateJobResponse {
 
 /// <p>The input for the CreateKeysAndCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeysAndCertificateRequest {
     /// <p>Specifies whether the certificate is active.</p>
     #[serde(rename = "setAsActive")]
@@ -1435,6 +1457,7 @@ pub struct CreateKeysAndCertificateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMitigationActionRequest {
     /// <p>A friendly name for the action. Choose a friendly name that accurately describes the action (for example, <code>EnableLoggingAction</code>).</p>
     #[serde(rename = "actionName")]
@@ -1465,6 +1488,7 @@ pub struct CreateMitigationActionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOTAUpdateRequest {
     /// <p>A list of additional OTA update parameters which are name-value pairs.</p>
     #[serde(rename = "additionalParameters")]
@@ -1527,6 +1551,7 @@ pub struct CreateOTAUpdateResponse {
 
 /// <p>The input for the CreatePolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyRequest {
     /// <p>The JSON document that describes the policy. <b>policyDocument</b> must have a minimum length of 1, with a maximum length of 2048, excluding whitespace.</p>
     #[serde(rename = "policyDocument")]
@@ -1560,6 +1585,7 @@ pub struct CreatePolicyResponse {
 
 /// <p>The input for the CreatePolicyVersion operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyVersionRequest {
     /// <p>The JSON document that describes the policy. Minimum length of 1. Maximum length of 2048, excluding whitespace.</p>
     #[serde(rename = "policyDocument")]
@@ -1596,6 +1622,7 @@ pub struct CreatePolicyVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningClaimRequest {
     /// <p>The name of the provisioning template to use.</p>
     #[serde(rename = "templateName")]
@@ -1624,6 +1651,7 @@ pub struct CreateProvisioningClaimResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningTemplateRequest {
     /// <p>The description of the fleet provisioning template.</p>
     #[serde(rename = "description")]
@@ -1666,6 +1694,7 @@ pub struct CreateProvisioningTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningTemplateVersionRequest {
     /// <p>Sets a fleet provision template version as the default version.</p>
     #[serde(rename = "setAsDefault")]
@@ -1701,6 +1730,7 @@ pub struct CreateProvisioningTemplateVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoleAliasRequest {
     /// <p>How long (in seconds) the credentials will be valid.</p>
     #[serde(rename = "credentialDurationSeconds")]
@@ -1728,6 +1758,7 @@ pub struct CreateRoleAliasResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScheduledAuditRequest {
     /// <p>The day of the month on which the scheduled audit takes place. Can be "1" through "31" or "LAST". This field is required if the "frequency" parameter is set to "MONTHLY". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
     #[serde(rename = "dayOfMonth")]
@@ -1762,6 +1793,7 @@ pub struct CreateScheduledAuditResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityProfileRequest {
     /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
     #[serde(rename = "additionalMetricsToRetain")]
@@ -1802,6 +1834,7 @@ pub struct CreateSecurityProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamRequest {
     /// <p>A description of the stream.</p>
     #[serde(rename = "description")]
@@ -1844,6 +1877,7 @@ pub struct CreateStreamResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThingGroupRequest {
     /// <p>The name of the parent thing group.</p>
     #[serde(rename = "parentGroupName")]
@@ -1881,6 +1915,7 @@ pub struct CreateThingGroupResponse {
 
 /// <p>The input for the CreateThing operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThingRequest {
     /// <p>The attribute payload, which consists of up to three name/value pairs in a JSON document. For example:</p> <p> <code>{\"attributes\":{\"string1\":\"string2\"}}</code> </p>
     #[serde(rename = "attributePayload")]
@@ -1919,6 +1954,7 @@ pub struct CreateThingResponse {
 
 /// <p>The input for the CreateThingType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThingTypeRequest {
     /// <p>Metadata which can be used to manage the thing type.</p>
     #[serde(rename = "tags")]
@@ -1952,6 +1988,7 @@ pub struct CreateThingTypeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTopicRuleDestinationRequest {
     /// <p>The topic rule destination configuration.</p>
     #[serde(rename = "destinationConfiguration")]
@@ -1969,6 +2006,7 @@ pub struct CreateTopicRuleDestinationResponse {
 
 /// <p>The input for the CreateTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTopicRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "ruleName")]
@@ -2004,6 +2042,7 @@ pub struct CustomCodeSigning {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountAuditConfigurationRequest {
     /// <p>If true, all scheduled audits are deleted.</p>
     #[serde(rename = "deleteScheduledAudits")]
@@ -2016,6 +2055,7 @@ pub struct DeleteAccountAuditConfigurationRequest {
 pub struct DeleteAccountAuditConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
     /// <p>The name of the authorizer to delete.</p>
     #[serde(rename = "authorizerName")]
@@ -2027,6 +2067,7 @@ pub struct DeleteAuthorizerRequest {
 pub struct DeleteAuthorizerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBillingGroupRequest {
     /// <p>The name of the billing group.</p>
     #[serde(rename = "billingGroupName")]
@@ -2043,6 +2084,7 @@ pub struct DeleteBillingGroupResponse {}
 
 /// <p>Input for the DeleteCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCACertificateRequest {
     /// <p>The ID of the certificate to delete. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
@@ -2056,6 +2098,7 @@ pub struct DeleteCACertificateResponse {}
 
 /// <p>The input for the DeleteCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
@@ -2067,6 +2110,7 @@ pub struct DeleteCertificateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainConfigurationRequest {
     /// <p>The name of the domain configuration to be deleted.</p>
     #[serde(rename = "domainConfigurationName")]
@@ -2078,6 +2122,7 @@ pub struct DeleteDomainConfigurationRequest {
 pub struct DeleteDomainConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDynamicThingGroupRequest {
     /// <p>The expected version of the dynamic thing group to delete.</p>
     #[serde(rename = "expectedVersion")]
@@ -2093,6 +2138,7 @@ pub struct DeleteDynamicThingGroupRequest {
 pub struct DeleteDynamicThingGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobExecutionRequest {
     /// <p>The ID of the job execution to be deleted. The <code>executionNumber</code> refers to the execution of a particular job on a particular device.</p> <p>Note that once a job execution is deleted, the <code>executionNumber</code> may be reused by IoT, so be sure you get and use the correct value here.</p>
     #[serde(rename = "executionNumber")]
@@ -2110,6 +2156,7 @@ pub struct DeleteJobExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobRequest {
     /// <p><p>(Optional) When true, you can delete a job which is &quot;IN<em>PROGRESS&quot;. Otherwise, you can only delete a job which is in a terminal state (&quot;COMPLETED&quot; or &quot;CANCELED&quot;) or an exception will occur. The default is false.</p> <note> <p>Deleting a job which is &quot;IN</em>PROGRESS&quot;, will cause a device which is executing the job to be unable to access job information or update the job execution status. Use caution and ensure that each device executing a job which is deleted is able to recover to a valid state.</p> </note></p>
     #[serde(rename = "force")]
@@ -2121,6 +2168,7 @@ pub struct DeleteJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMitigationActionRequest {
     /// <p>The name of the mitigation action that you want to delete.</p>
     #[serde(rename = "actionName")]
@@ -2132,6 +2180,7 @@ pub struct DeleteMitigationActionRequest {
 pub struct DeleteMitigationActionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOTAUpdateRequest {
     /// <p>Specifies if the stream associated with an OTA update should be deleted when the OTA update is deleted.</p>
     #[serde(rename = "deleteStream")]
@@ -2152,6 +2201,7 @@ pub struct DeleteOTAUpdateResponse {}
 
 /// <p>The input for the DeletePolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyRequest {
     /// <p>The name of the policy to delete.</p>
     #[serde(rename = "policyName")]
@@ -2160,6 +2210,7 @@ pub struct DeletePolicyRequest {
 
 /// <p>The input for the DeletePolicyVersion operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyVersionRequest {
     /// <p>The name of the policy.</p>
     #[serde(rename = "policyName")]
@@ -2170,6 +2221,7 @@ pub struct DeletePolicyVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisioningTemplateRequest {
     /// <p>The name of the fleet provision template to delete.</p>
     #[serde(rename = "templateName")]
@@ -2181,6 +2233,7 @@ pub struct DeleteProvisioningTemplateRequest {
 pub struct DeleteProvisioningTemplateResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisioningTemplateVersionRequest {
     /// <p>The name of the fleet provisioning template version to delete.</p>
     #[serde(rename = "templateName")]
@@ -2196,6 +2249,7 @@ pub struct DeleteProvisioningTemplateVersionResponse {}
 
 /// <p>The input for the DeleteRegistrationCode operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegistrationCodeRequest {}
 
 /// <p>The output for the DeleteRegistrationCode operation.</p>
@@ -2204,6 +2258,7 @@ pub struct DeleteRegistrationCodeRequest {}
 pub struct DeleteRegistrationCodeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoleAliasRequest {
     /// <p>The role alias to delete.</p>
     #[serde(rename = "roleAlias")]
@@ -2215,6 +2270,7 @@ pub struct DeleteRoleAliasRequest {
 pub struct DeleteRoleAliasResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScheduledAuditRequest {
     /// <p>The name of the scheduled audit you want to delete.</p>
     #[serde(rename = "scheduledAuditName")]
@@ -2226,6 +2282,7 @@ pub struct DeleteScheduledAuditRequest {
 pub struct DeleteScheduledAuditResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecurityProfileRequest {
     /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different from the actual version, a <code>VersionConflictException</code> is thrown.</p>
     #[serde(rename = "expectedVersion")]
@@ -2241,6 +2298,7 @@ pub struct DeleteSecurityProfileRequest {
 pub struct DeleteSecurityProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamRequest {
     /// <p>The stream ID.</p>
     #[serde(rename = "streamId")]
@@ -2252,6 +2310,7 @@ pub struct DeleteStreamRequest {
 pub struct DeleteStreamResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingGroupRequest {
     /// <p>The expected version of the thing group to delete.</p>
     #[serde(rename = "expectedVersion")]
@@ -2268,6 +2327,7 @@ pub struct DeleteThingGroupResponse {}
 
 /// <p>The input for the DeleteThing operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingRequest {
     /// <p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>DeleteThing</code> request is rejected with a <code>VersionConflictException</code>.</p>
     #[serde(rename = "expectedVersion")]
@@ -2285,6 +2345,7 @@ pub struct DeleteThingResponse {}
 
 /// <p>The input for the DeleteThingType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingTypeRequest {
     /// <p>The name of the thing type.</p>
     #[serde(rename = "thingTypeName")]
@@ -2297,6 +2358,7 @@ pub struct DeleteThingTypeRequest {
 pub struct DeleteThingTypeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTopicRuleDestinationRequest {
     /// <p>The ARN of the topic rule destination to delete.</p>
     #[serde(rename = "arn")]
@@ -2309,6 +2371,7 @@ pub struct DeleteTopicRuleDestinationResponse {}
 
 /// <p>The input for the DeleteTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTopicRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "ruleName")]
@@ -2316,6 +2379,7 @@ pub struct DeleteTopicRuleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteV2LoggingLevelRequest {
     /// <p>The name of the resource for which you are configuring logging.</p>
     #[serde(rename = "targetName")]
@@ -2341,6 +2405,7 @@ pub struct Denied {
 
 /// <p>The input for the DeprecateThingType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateThingTypeRequest {
     /// <p>The name of the thing type to deprecate.</p>
     #[serde(rename = "thingTypeName")]
@@ -2357,6 +2422,7 @@ pub struct DeprecateThingTypeRequest {
 pub struct DeprecateThingTypeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAuditConfigurationRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2379,6 +2445,7 @@ pub struct DescribeAccountAuditConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditFindingRequest {
     /// <p>A unique identifier for a single audit finding. You can use this identifier to apply mitigation actions to the finding.</p>
     #[serde(rename = "findingId")]
@@ -2394,6 +2461,7 @@ pub struct DescribeAuditFindingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditMitigationActionsTaskRequest {
     /// <p>The unique identifier for the audit mitigation task.</p>
     #[serde(rename = "taskId")]
@@ -2434,6 +2502,7 @@ pub struct DescribeAuditMitigationActionsTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditTaskRequest {
     /// <p>The ID of the audit whose information you want to get.</p>
     #[serde(rename = "taskId")]
@@ -2470,6 +2539,7 @@ pub struct DescribeAuditTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuthorizerRequest {
     /// <p>The name of the authorizer to describe.</p>
     #[serde(rename = "authorizerName")]
@@ -2486,6 +2556,7 @@ pub struct DescribeAuthorizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBillingGroupRequest {
     /// <p>The name of the billing group.</p>
     #[serde(rename = "billingGroupName")]
@@ -2523,6 +2594,7 @@ pub struct DescribeBillingGroupResponse {
 
 /// <p>The input for the DescribeCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCACertificateRequest {
     /// <p>The CA certificate identifier.</p>
     #[serde(rename = "certificateId")]
@@ -2545,6 +2617,7 @@ pub struct DescribeCACertificateResponse {
 
 /// <p>The input for the DescribeCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
@@ -2562,6 +2635,7 @@ pub struct DescribeCertificateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDefaultAuthorizerRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2574,6 +2648,7 @@ pub struct DescribeDefaultAuthorizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainConfigurationRequest {
     /// <p>The name of the domain configuration.</p>
     #[serde(rename = "domainConfigurationName")]
@@ -2619,6 +2694,7 @@ pub struct DescribeDomainConfigurationResponse {
 
 /// <p>The input for the DescribeEndpoint operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointRequest {
     /// <p><p>The endpoint type. Valid endpoint types include:</p> <ul> <li> <p> <code>iot:Data</code> - Returns a VeriSign signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Data-ATS</code> - Returns an ATS signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:CredentialProvider</code> - Returns an AWS IoT credentials provider API endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Jobs</code> - Returns an AWS IoT device management Jobs API endpoint.</p> </li> </ul></p>
     #[serde(rename = "endpointType")]
@@ -2637,6 +2713,7 @@ pub struct DescribeEndpointResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventConfigurationsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2657,6 +2734,7 @@ pub struct DescribeEventConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIndexRequest {
     /// <p>The index name.</p>
     #[serde(rename = "indexName")]
@@ -2681,6 +2759,7 @@ pub struct DescribeIndexResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobExecutionRequest {
     /// <p>A string (consisting of the digits "0" through "9" which is used to specify a particular job execution on a particular device.</p>
     #[serde(rename = "executionNumber")]
@@ -2704,6 +2783,7 @@ pub struct DescribeJobExecutionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
     #[serde(rename = "jobId")]
@@ -2724,6 +2804,7 @@ pub struct DescribeJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMitigationActionRequest {
     /// <p>The friendly name that uniquely identifies the mitigation action.</p>
     #[serde(rename = "actionName")]
@@ -2768,6 +2849,7 @@ pub struct DescribeMitigationActionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisioningTemplateRequest {
     /// <p>The name of the fleet provisioning template.</p>
     #[serde(rename = "templateName")]
@@ -2816,6 +2898,7 @@ pub struct DescribeProvisioningTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisioningTemplateVersionRequest {
     /// <p>The template name.</p>
     #[serde(rename = "templateName")]
@@ -2847,6 +2930,7 @@ pub struct DescribeProvisioningTemplateVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRoleAliasRequest {
     /// <p>The role alias to describe.</p>
     #[serde(rename = "roleAlias")]
@@ -2863,6 +2947,7 @@ pub struct DescribeRoleAliasResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduledAuditRequest {
     /// <p>The name of the scheduled audit whose information you want to get.</p>
     #[serde(rename = "scheduledAuditName")]
@@ -2899,6 +2984,7 @@ pub struct DescribeScheduledAuditResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecurityProfileRequest {
     /// <p>The name of the security profile whose information you want to get.</p>
     #[serde(rename = "securityProfileName")]
@@ -2947,6 +3033,7 @@ pub struct DescribeSecurityProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamRequest {
     /// <p>The stream ID.</p>
     #[serde(rename = "streamId")]
@@ -2963,6 +3050,7 @@ pub struct DescribeStreamResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingGroupRequest {
     /// <p>The name of the thing group.</p>
     #[serde(rename = "thingGroupName")]
@@ -3015,6 +3103,7 @@ pub struct DescribeThingGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingRegistrationTaskRequest {
     /// <p>The task ID.</p>
     #[serde(rename = "taskId")]
@@ -3076,6 +3165,7 @@ pub struct DescribeThingRegistrationTaskResponse {
 
 /// <p>The input for the DescribeThing operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingRequest {
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
@@ -3122,6 +3212,7 @@ pub struct DescribeThingResponse {
 
 /// <p>The input for the DescribeThingType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingTypeRequest {
     /// <p>The name of the thing type.</p>
     #[serde(rename = "thingTypeName")]
@@ -3164,6 +3255,7 @@ pub struct Destination {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachPolicyRequest {
     /// <p>The policy to detach.</p>
     #[serde(rename = "policyName")]
@@ -3175,6 +3267,7 @@ pub struct DetachPolicyRequest {
 
 /// <p>The input for the DetachPrincipalPolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachPrincipalPolicyRequest {
     /// <p>The name of the policy to detach.</p>
     #[serde(rename = "policyName")]
@@ -3185,6 +3278,7 @@ pub struct DetachPrincipalPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachSecurityProfileRequest {
     /// <p>The security profile that is detached.</p>
     #[serde(rename = "securityProfileName")]
@@ -3200,6 +3294,7 @@ pub struct DetachSecurityProfileResponse {}
 
 /// <p>The input for the DetachThingPrincipal operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachThingPrincipalRequest {
     /// <p>If the principal is a certificate, this value must be ARN of the certificate. If the principal is an Amazon Cognito identity, this value must be the ID of the Amazon Cognito identity.</p>
     #[serde(rename = "principal")]
@@ -3216,6 +3311,7 @@ pub struct DetachThingPrincipalResponse {}
 
 /// <p>The input for the DisableTopicRuleRequest operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableTopicRuleRequest {
     /// <p>The name of the rule to disable.</p>
     #[serde(rename = "ruleName")]
@@ -3343,6 +3439,7 @@ pub struct EnableIoTLoggingParams {
 
 /// <p>The input for the EnableTopicRuleRequest operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableTopicRuleRequest {
     /// <p>The name of the topic rule to enable.</p>
     #[serde(rename = "ruleName")]
@@ -3429,6 +3526,7 @@ pub struct FirehoseAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCardinalityRequest {
     /// <p>The field to aggregate.</p>
     #[serde(rename = "aggregationField")]
@@ -3457,6 +3555,7 @@ pub struct GetCardinalityResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEffectivePoliciesRequest {
     /// <p>The Cognito identity pool ID.</p>
     #[serde(rename = "cognitoIdentityPoolId")]
@@ -3482,6 +3581,7 @@ pub struct GetEffectivePoliciesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIndexingConfigurationRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3498,6 +3598,7 @@ pub struct GetIndexingConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobDocumentRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
     #[serde(rename = "jobId")]
@@ -3515,6 +3616,7 @@ pub struct GetJobDocumentResponse {
 
 /// <p>The input for the GetLoggingOptions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggingOptionsRequest {}
 
 /// <p>The output from the GetLoggingOptions operation.</p>
@@ -3532,6 +3634,7 @@ pub struct GetLoggingOptionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOTAUpdateRequest {
     /// <p>The OTA update ID.</p>
     #[serde(rename = "otaUpdateId")]
@@ -3548,6 +3651,7 @@ pub struct GetOTAUpdateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPercentilesRequest {
     /// <p>The field to aggregate.</p>
     #[serde(rename = "aggregationField")]
@@ -3581,6 +3685,7 @@ pub struct GetPercentilesResponse {
 
 /// <p>The input for the GetPolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
     /// <p>The name of the policy.</p>
     #[serde(rename = "policyName")]
@@ -3623,6 +3728,7 @@ pub struct GetPolicyResponse {
 
 /// <p>The input for the GetPolicyVersion operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyVersionRequest {
     /// <p>The name of the policy.</p>
     #[serde(rename = "policyName")]
@@ -3672,6 +3778,7 @@ pub struct GetPolicyVersionResponse {
 
 /// <p>The input to the GetRegistrationCode operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegistrationCodeRequest {}
 
 /// <p>The output from the GetRegistrationCode operation.</p>
@@ -3685,6 +3792,7 @@ pub struct GetRegistrationCodeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStatisticsRequest {
     /// <p>The aggregation field name.</p>
     #[serde(rename = "aggregationField")]
@@ -3713,6 +3821,7 @@ pub struct GetStatisticsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTopicRuleDestinationRequest {
     /// <p>The ARN of the topic rule destination.</p>
     #[serde(rename = "arn")]
@@ -3730,6 +3839,7 @@ pub struct GetTopicRuleDestinationResponse {
 
 /// <p>The input for the GetTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTopicRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "ruleName")]
@@ -3751,6 +3861,7 @@ pub struct GetTopicRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetV2LoggingOptionsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3826,6 +3937,7 @@ pub struct HttpAuthorization {
 
 /// <p>Specifies the HTTP context to use for the test authorizer request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HttpContext {
     /// <p>The header keys and values in an HTTP authorization request.</p>
     #[serde(rename = "headers")]
@@ -3839,6 +3951,7 @@ pub struct HttpContext {
 
 /// <p>HTTP URL destination configuration used by the topic rule's HTTP action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HttpUrlDestinationConfiguration {
     /// <p>The URL AWS IoT uses to confirm ownership of or access to the topic rule destination URL.</p>
     #[serde(rename = "confirmationUrl")]
@@ -4237,6 +4350,7 @@ pub struct LambdaAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActiveViolationsRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -4270,6 +4384,7 @@ pub struct ListActiveViolationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedPoliciesRequest {
     /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "marker")]
@@ -4302,6 +4417,7 @@ pub struct ListAttachedPoliciesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditFindingsRequest {
     /// <p>A filter to limit results to the findings for the specified audit check.</p>
     #[serde(rename = "checkName")]
@@ -4347,6 +4463,7 @@ pub struct ListAuditFindingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditMitigationActionsExecutionsRequest {
     /// <p>Specify this filter to limit results to those with a specific status.</p>
     #[serde(rename = "actionStatus")]
@@ -4382,6 +4499,7 @@ pub struct ListAuditMitigationActionsExecutionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditMitigationActionsTasksRequest {
     /// <p>Specify this filter to limit results to tasks that were applied to results for a specific audit.</p>
     #[serde(rename = "auditTaskId")]
@@ -4425,6 +4543,7 @@ pub struct ListAuditMitigationActionsTasksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditTasksRequest {
     /// <p>The end of the time period.</p>
     #[serde(rename = "endTime")]
@@ -4464,6 +4583,7 @@ pub struct ListAuditTasksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuthorizersRequest {
     /// <p>Return the list of authorizers in ascending alphabetical order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -4497,6 +4617,7 @@ pub struct ListAuthorizersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBillingGroupsRequest {
     /// <p>The maximum number of results to return per request.</p>
     #[serde(rename = "maxResults")]
@@ -4527,6 +4648,7 @@ pub struct ListBillingGroupsResponse {
 
 /// <p>Input for the ListCACertificates operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCACertificatesRequest {
     /// <p>Determines the order of the results.</p>
     #[serde(rename = "ascendingOrder")]
@@ -4558,6 +4680,7 @@ pub struct ListCACertificatesResponse {
 
 /// <p>The input to the ListCertificatesByCA operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCertificatesByCARequest {
     /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
     #[serde(rename = "ascendingOrder")]
@@ -4592,6 +4715,7 @@ pub struct ListCertificatesByCAResponse {
 
 /// <p>The input for the ListCertificates operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCertificatesRequest {
     /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
     #[serde(rename = "ascendingOrder")]
@@ -4622,6 +4746,7 @@ pub struct ListCertificatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainConfigurationsRequest {
     /// <p>The marker for the next set of results.</p>
     #[serde(rename = "marker")]
@@ -4651,6 +4776,7 @@ pub struct ListDomainConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIndicesRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -4676,6 +4802,7 @@ pub struct ListIndicesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobExecutionsForJobRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
     #[serde(rename = "jobId")]
@@ -4708,6 +4835,7 @@ pub struct ListJobExecutionsForJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobExecutionsForThingRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "maxResults")]
@@ -4740,6 +4868,7 @@ pub struct ListJobExecutionsForThingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>The maximum number of results to return per request.</p>
     #[serde(rename = "maxResults")]
@@ -4781,6 +4910,7 @@ pub struct ListJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMitigationActionsRequest {
     /// <p>Specify a value to limit the result to mitigation actions with a specific action type.</p>
     #[serde(rename = "actionType")]
@@ -4810,6 +4940,7 @@ pub struct ListMitigationActionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOTAUpdatesRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -4840,6 +4971,7 @@ pub struct ListOTAUpdatesResponse {
 
 /// <p>The input to the ListOutgoingCertificates operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOutgoingCertificatesRequest {
     /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
     #[serde(rename = "ascendingOrder")]
@@ -4871,6 +5003,7 @@ pub struct ListOutgoingCertificatesResponse {
 
 /// <p>The input for the ListPolicies operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPoliciesRequest {
     /// <p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -4902,6 +5035,7 @@ pub struct ListPoliciesResponse {
 
 /// <p>The input for the ListPolicyPrincipals operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPolicyPrincipalsRequest {
     /// <p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -4936,6 +5070,7 @@ pub struct ListPolicyPrincipalsResponse {
 
 /// <p>The input for the ListPolicyVersions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPolicyVersionsRequest {
     /// <p>The policy name.</p>
     #[serde(rename = "policyName")]
@@ -4954,6 +5089,7 @@ pub struct ListPolicyVersionsResponse {
 
 /// <p>The input for the ListPrincipalPolicies operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalPoliciesRequest {
     /// <p>Specifies the order for results. If true, results are returned in ascending creation order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -4988,6 +5124,7 @@ pub struct ListPrincipalPoliciesResponse {
 
 /// <p>The input for the ListPrincipalThings operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalThingsRequest {
     /// <p>The maximum number of results to return in this operation.</p>
     #[serde(rename = "maxResults")]
@@ -5017,6 +5154,7 @@ pub struct ListPrincipalThingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisioningTemplateVersionsRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5045,6 +5183,7 @@ pub struct ListProvisioningTemplateVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisioningTemplatesRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5070,6 +5209,7 @@ pub struct ListProvisioningTemplatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoleAliasesRequest {
     /// <p>Return the list of role aliases in ascending alphabetical order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -5099,6 +5239,7 @@ pub struct ListRoleAliasesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListScheduledAuditsRequest {
     /// <p>The maximum number of results to return at one time. The default is 25.</p>
     #[serde(rename = "maxResults")]
@@ -5124,6 +5265,7 @@ pub struct ListScheduledAuditsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesForTargetRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5156,6 +5298,7 @@ pub struct ListSecurityProfilesForTargetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5181,6 +5324,7 @@ pub struct ListSecurityProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsRequest {
     /// <p>Set to true to return the list of streams in ascending order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -5210,6 +5354,7 @@ pub struct ListStreamsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
@@ -5234,6 +5379,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTargetsForPolicyRequest {
     /// <p>A marker used to get the next set of results.</p>
     #[serde(rename = "marker")]
@@ -5262,6 +5408,7 @@ pub struct ListTargetsForPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTargetsForSecurityProfileRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5290,6 +5437,7 @@ pub struct ListTargetsForSecurityProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingGroupsForThingRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5318,6 +5466,7 @@ pub struct ListThingGroupsForThingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingGroupsRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5356,6 +5505,7 @@ pub struct ListThingGroupsResponse {
 
 /// <p>The input for the ListThingPrincipal operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingPrincipalsRequest {
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
@@ -5373,6 +5523,7 @@ pub struct ListThingPrincipalsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingRegistrationTaskReportsRequest {
     /// <p>The maximum number of results to return per request.</p>
     #[serde(rename = "maxResults")]
@@ -5408,6 +5559,7 @@ pub struct ListThingRegistrationTaskReportsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingRegistrationTasksRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5438,6 +5590,7 @@ pub struct ListThingRegistrationTasksResponse {
 
 /// <p>The input for the ListThingTypes operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingTypesRequest {
     /// <p>The maximum number of results to return in this operation.</p>
     #[serde(rename = "maxResults")]
@@ -5468,6 +5621,7 @@ pub struct ListThingTypesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingsInBillingGroupRequest {
     /// <p>The name of the billing group.</p>
     #[serde(rename = "billingGroupName")]
@@ -5496,6 +5650,7 @@ pub struct ListThingsInBillingGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingsInThingGroupRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5529,6 +5684,7 @@ pub struct ListThingsInThingGroupResponse {
 
 /// <p>The input for the ListThings operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingsRequest {
     /// <p>The attribute name used to search for things.</p>
     #[serde(rename = "attributeName")]
@@ -5567,6 +5723,7 @@ pub struct ListThingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicRuleDestinationsRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5593,6 +5750,7 @@ pub struct ListTopicRuleDestinationsResponse {
 
 /// <p>The input for the ListTopicRules operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicRulesRequest {
     /// <p>The maximum number of results to return.</p>
     #[serde(rename = "maxResults")]
@@ -5627,6 +5785,7 @@ pub struct ListTopicRulesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListV2LoggingLevelsRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -5656,6 +5815,7 @@ pub struct ListV2LoggingLevelsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListViolationEventsRequest {
     /// <p>The end time for the alerts to be listed.</p>
     #[serde(rename = "endTime")]
@@ -5722,6 +5882,7 @@ pub struct LogTargetConfiguration {
 
 /// <p>Describes the logging options payload.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoggingOptionsPayload {
     /// <p>The log level.</p>
     #[serde(rename = "logLevel")]
@@ -5820,6 +5981,7 @@ pub struct MitigationActionParams {
 
 /// <p>Specifies the MQTT context to use for the test authorizer request</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MqttContext {
     /// <p>The value of the <code>clientId</code> key in an MQTT authorization request.</p>
     #[serde(rename = "clientId")]
@@ -6168,6 +6330,7 @@ pub struct RateIncreaseCriteria {
 
 /// <p>The input to the RegisterCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCACertificateRequest {
     /// <p>Allows this CA certificate to be used for auto registration of device certificates.</p>
     #[serde(rename = "allowAutoRegistration")]
@@ -6205,6 +6368,7 @@ pub struct RegisterCACertificateResponse {
 
 /// <p>The input to the RegisterCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCertificateRequest {
     /// <p>The CA certificate used to sign the device certificate being registered.</p>
     #[serde(rename = "caCertificatePem")]
@@ -6234,6 +6398,7 @@ pub struct RegisterCertificateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterThingRequest {
     /// <p>The parameters for provisioning a thing. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html">Programmatic Provisioning</a> for more information.</p>
     #[serde(rename = "parameters")]
@@ -6272,6 +6437,7 @@ pub struct RegistrationConfig {
 
 /// <p>The input for the RejectCertificateTransfer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectCertificateTransferRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
@@ -6301,6 +6467,7 @@ pub struct RelatedResource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveThingFromBillingGroupRequest {
     /// <p>The ARN of the billing group.</p>
     #[serde(rename = "billingGroupArn")]
@@ -6325,6 +6492,7 @@ pub struct RemoveThingFromBillingGroupRequest {
 pub struct RemoveThingFromBillingGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveThingFromThingGroupRequest {
     /// <p>The ARN of the thing to remove from the group.</p>
     #[serde(rename = "thingArn")]
@@ -6358,6 +6526,7 @@ pub struct ReplaceDefaultPolicyVersionParams {
 
 /// <p>The input for the ReplaceTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceTopicRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "ruleName")]
@@ -6539,6 +6708,7 @@ pub struct ScheduledAuditMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchIndexRequest {
     /// <p>The search index name.</p>
     #[serde(rename = "indexName")]
@@ -6632,6 +6802,7 @@ pub struct ServerCertificateSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetDefaultAuthorizerRequest {
     /// <p>The authorizer name.</p>
     #[serde(rename = "authorizerName")]
@@ -6653,6 +6824,7 @@ pub struct SetDefaultAuthorizerResponse {
 
 /// <p>The input for the SetDefaultPolicyVersion operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetDefaultPolicyVersionRequest {
     /// <p>The policy name.</p>
     #[serde(rename = "policyName")]
@@ -6664,6 +6836,7 @@ pub struct SetDefaultPolicyVersionRequest {
 
 /// <p>The input for the SetLoggingOptions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoggingOptionsRequest {
     /// <p>The logging options payload.</p>
     #[serde(rename = "loggingOptionsPayload")]
@@ -6671,6 +6844,7 @@ pub struct SetLoggingOptionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetV2LoggingLevelRequest {
     /// <p>The log level.</p>
     #[serde(rename = "logLevel")]
@@ -6681,6 +6855,7 @@ pub struct SetV2LoggingLevelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetV2LoggingOptionsRequest {
     /// <p>The default logging level.</p>
     #[serde(rename = "defaultLogLevel")]
@@ -6758,6 +6933,7 @@ pub struct SqsAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAuditMitigationActionsTaskRequest {
     /// <p>For an audit check, specifies which mitigation actions to apply. Those actions must be defined in your AWS account.</p>
     #[serde(rename = "auditCheckToActionsMapping")]
@@ -6783,6 +6959,7 @@ pub struct StartAuditMitigationActionsTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOnDemandAuditTaskRequest {
     /// <p>Which checks are performed during the audit. The checks you specify must be enabled for your account or an exception occurs. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.</p>
     #[serde(rename = "targetCheckNames")]
@@ -6816,6 +6993,7 @@ pub struct StartSigningJobParameter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartThingRegistrationTaskRequest {
     /// <p>The S3 bucket that contains the input file.</p>
     #[serde(rename = "inputFileBucket")]
@@ -6903,6 +7081,7 @@ pub struct StepFunctionsAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopThingRegistrationTaskRequest {
     /// <p>The bulk thing provisioning task ID.</p>
     #[serde(rename = "taskId")]
@@ -7013,6 +7192,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource.</p>
     #[serde(rename = "resourceArn")]
@@ -7087,6 +7267,7 @@ pub struct TaskStatisticsForAuditCheck {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestAuthorizationRequest {
     /// <p>A list of authorization info objects. Simulating authorization will create a response for each <code>authInfo</code> object in the list.</p>
     #[serde(rename = "authInfos")]
@@ -7123,6 +7304,7 @@ pub struct TestAuthorizationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestInvokeAuthorizerRequest {
     /// <p>The custom authorizer name.</p>
     #[serde(rename = "authorizerName")]
@@ -7405,6 +7587,7 @@ pub struct TimeoutConfig {
 
 /// <p>Specifies the TLS context to use for the test authorizer request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TlsContext {
     /// <p>The value of the <code>serverName</code> key in a TLS authorization request.</p>
     #[serde(rename = "serverName")]
@@ -7474,6 +7657,7 @@ pub struct TopicRuleDestination {
 
 /// <p>Configuration of the topic rule destination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicRuleDestinationConfiguration {
     /// <p>Configuration of the HTTP URL.</p>
     #[serde(rename = "httpUrlConfiguration")]
@@ -7531,6 +7715,7 @@ pub struct TopicRuleListItem {
 
 /// <p>Describes a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicRulePayload {
     /// <p>The actions associated with the rule.</p>
     #[serde(rename = "actions")]
@@ -7558,6 +7743,7 @@ pub struct TopicRulePayload {
 
 /// <p>The input for the TransferCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransferCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
@@ -7608,6 +7794,7 @@ pub struct TransferData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource.</p>
     #[serde(rename = "resourceArn")]
@@ -7622,6 +7809,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountAuditConfigurationRequest {
     /// <p>Specifies which audit checks are enabled and disabled for this account. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are currently enabled.</p> <p>Some data collection might start immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted.</p> <p>You cannot disable a check if it is used by any scheduled audit. You must first delete the check from the scheduled audit or delete the scheduled audit itself.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code>, this parameter is required and must specify at least one enabled check.</p>
     #[serde(rename = "auditCheckConfigurations")]
@@ -7644,6 +7832,7 @@ pub struct UpdateAccountAuditConfigurationRequest {
 pub struct UpdateAccountAuditConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthorizerRequest {
     /// <p>The ARN of the authorizer's Lambda function.</p>
     #[serde(rename = "authorizerFunctionArn")]
@@ -7680,6 +7869,7 @@ pub struct UpdateAuthorizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBillingGroupRequest {
     /// <p>The name of the billing group.</p>
     #[serde(rename = "billingGroupName")]
@@ -7712,6 +7902,7 @@ pub struct UpdateCACertificateParams {
 
 /// <p>The input to the UpdateCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCACertificateRequest {
     /// <p>The CA certificate identifier.</p>
     #[serde(rename = "certificateId")]
@@ -7736,6 +7927,7 @@ pub struct UpdateCACertificateRequest {
 
 /// <p>The input for the UpdateCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
@@ -7754,6 +7946,7 @@ pub struct UpdateDeviceCertificateParams {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainConfigurationRequest {
     /// <p>An object that specifies the authorization service for a domain.</p>
     #[serde(rename = "authorizerConfig")]
@@ -7786,6 +7979,7 @@ pub struct UpdateDomainConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDynamicThingGroupRequest {
     /// <p>The expected version of the dynamic thing group to update.</p>
     #[serde(rename = "expectedVersion")]
@@ -7821,6 +8015,7 @@ pub struct UpdateDynamicThingGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEventConfigurationsRequest {
     /// <p>The new event configuration values.</p>
     #[serde(rename = "eventConfigurations")]
@@ -7833,6 +8028,7 @@ pub struct UpdateEventConfigurationsRequest {
 pub struct UpdateEventConfigurationsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIndexingConfigurationRequest {
     /// <p>Thing group indexing configuration.</p>
     #[serde(rename = "thingGroupIndexingConfiguration")]
@@ -7849,6 +8045,7 @@ pub struct UpdateIndexingConfigurationRequest {
 pub struct UpdateIndexingConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobRequest {
     /// <p>Allows you to create criteria to abort a job.</p>
     #[serde(rename = "abortConfig")]
@@ -7876,6 +8073,7 @@ pub struct UpdateJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMitigationActionRequest {
     /// <p>The friendly name for the mitigation action. You can't change the name by using <code>UpdateMitigationAction</code>. Instead, you must delete and re-create the mitigation action with the new name.</p>
     #[serde(rename = "actionName")]
@@ -7904,6 +8102,7 @@ pub struct UpdateMitigationActionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProvisioningTemplateRequest {
     /// <p>The ID of the default provisioning template version.</p>
     #[serde(rename = "defaultVersionId")]
@@ -7931,6 +8130,7 @@ pub struct UpdateProvisioningTemplateRequest {
 pub struct UpdateProvisioningTemplateResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoleAliasRequest {
     /// <p>The number of seconds the credential will be valid.</p>
     #[serde(rename = "credentialDurationSeconds")]
@@ -7959,6 +8159,7 @@ pub struct UpdateRoleAliasResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScheduledAuditRequest {
     /// <p>The day of the month on which the scheduled audit takes place. Can be "1" through "31" or "LAST". This field is required if the "frequency" parameter is set to "MONTHLY". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
     #[serde(rename = "dayOfMonth")]
@@ -7991,6 +8192,7 @@ pub struct UpdateScheduledAuditResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSecurityProfileRequest {
     /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
     #[serde(rename = "additionalMetricsToRetain")]
@@ -8071,6 +8273,7 @@ pub struct UpdateSecurityProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStreamRequest {
     /// <p>The description of the stream.</p>
     #[serde(rename = "description")]
@@ -8111,6 +8314,7 @@ pub struct UpdateStreamResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingGroupRequest {
     /// <p>The expected version of the thing group. If this does not match the version of the thing group being updated, the update will fail.</p>
     #[serde(rename = "expectedVersion")]
@@ -8134,6 +8338,7 @@ pub struct UpdateThingGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingGroupsForThingRequest {
     /// <p>Override dynamic thing groups with static thing groups when 10-group limit is reached. If a thing belongs to 10 thing groups, and one or more of those groups are dynamic thing groups, adding a thing to a static group removes the thing from the last dynamic group.</p>
     #[serde(rename = "overrideDynamicGroups")]
@@ -8159,6 +8364,7 @@ pub struct UpdateThingGroupsForThingResponse {}
 
 /// <p>The input for the UpdateThing operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingRequest {
     /// <p>A list of thing attributes, a JSON string containing name-value pairs. For example:</p> <p> <code>{\"attributes\":{\"name1\":\"value2\"}}</code> </p> <p>This data is used to add new attributes or update existing attributes.</p>
     #[serde(rename = "attributePayload")]
@@ -8187,6 +8393,7 @@ pub struct UpdateThingRequest {
 pub struct UpdateThingResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTopicRuleDestinationRequest {
     /// <p>The ARN of the topic rule destination.</p>
     #[serde(rename = "arn")]
@@ -8201,6 +8408,7 @@ pub struct UpdateTopicRuleDestinationRequest {
 pub struct UpdateTopicRuleDestinationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateSecurityProfileBehaviorsRequest {
     /// <p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>
     #[serde(rename = "behaviors")]

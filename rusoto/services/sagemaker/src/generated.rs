@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to tag.</p>
     #[serde(rename = "ResourceArn")]
@@ -199,6 +200,7 @@ pub struct AppSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTrialComponentRequest {
     /// <p>The name of the component to associated with the trial.</p>
     #[serde(rename = "TrialComponentName")]
@@ -688,6 +690,7 @@ pub struct ContinuousParameterRangeSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAlgorithmInput {
     /// <p>A description of the algorithm.</p>
     #[serde(rename = "AlgorithmDescription")]
@@ -722,6 +725,7 @@ pub struct CreateAlgorithmOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
     /// <p>The name of the app.</p>
     #[serde(rename = "AppName")]
@@ -755,6 +759,7 @@ pub struct CreateAppResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAutoMLJobRequest {
     /// <p>Contains CompletionCriteria and SecurityConfig.</p>
     #[serde(rename = "AutoMLJobConfig")]
@@ -799,6 +804,7 @@ pub struct CreateAutoMLJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCodeRepositoryInput {
     /// <p>The name of the Git repository. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
     #[serde(rename = "CodeRepositoryName")]
@@ -817,6 +823,7 @@ pub struct CreateCodeRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCompilationJobRequest {
     /// <p>A name for the model compilation job. The name must be unique within the AWS Region and within your AWS account. </p>
     #[serde(rename = "CompilationJobName")]
@@ -844,6 +851,7 @@ pub struct CreateCompilationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
     /// <p>The mode of authentication that member use to access the domain.</p>
     #[serde(rename = "AuthMode")]
@@ -884,6 +892,7 @@ pub struct CreateDomainResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointConfigInput {
     #[serde(rename = "DataCaptureConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -913,6 +922,7 @@ pub struct CreateEndpointConfigOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointInput {
     /// <p>The name of an endpoint configuration. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a>. </p>
     #[serde(rename = "EndpointConfigName")]
@@ -935,6 +945,7 @@ pub struct CreateEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateExperimentRequest {
     /// <p>The description of the experiment.</p>
     #[serde(rename = "Description")]
@@ -963,6 +974,7 @@ pub struct CreateExperimentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFlowDefinitionRequest {
     /// <p>The name of your flow definition.</p>
     #[serde(rename = "FlowDefinitionName")]
@@ -995,6 +1007,7 @@ pub struct CreateFlowDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHumanTaskUiRequest {
     /// <p>The name of the user interface you are creating.</p>
     #[serde(rename = "HumanTaskUiName")]
@@ -1016,6 +1029,7 @@ pub struct CreateHumanTaskUiResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHyperParameterTuningJobRequest {
     /// <p>The <a>HyperParameterTuningJobConfig</a> object that describes the tuning job, including the search strategy, the objective metric used to evaluate training jobs, ranges of parameters to search, and resource limits for the tuning job. For more information, see <a>automatic-model-tuning</a> </p>
     #[serde(rename = "HyperParameterTuningJobConfig")]
@@ -1050,6 +1064,7 @@ pub struct CreateHyperParameterTuningJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLabelingJobRequest {
     /// <p>Configures the labeling task and how it is presented to workers; including, but not limited to price, keywords, and batch size (task count).</p>
     #[serde(rename = "HumanTaskConfig")]
@@ -1096,6 +1111,7 @@ pub struct CreateLabelingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelInput {
     /// <p>Specifies the containers in the inference pipeline.</p>
     #[serde(rename = "Containers")]
@@ -1134,6 +1150,7 @@ pub struct CreateModelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelPackageInput {
     /// <p>Whether to certify the model package for listing on AWS Marketplace.</p>
     #[serde(rename = "CertifyForMarketplace")]
@@ -1169,6 +1186,7 @@ pub struct CreateModelPackageOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMonitoringScheduleRequest {
     /// <p>The configuration object that specifies the monitoring schedule and defines the monitoring job.</p>
     #[serde(rename = "MonitoringScheduleConfig")]
@@ -1191,6 +1209,7 @@ pub struct CreateMonitoringScheduleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotebookInstanceInput {
     /// <p>A list of Elastic Inference (EI) instance types to associate with this notebook instance. Currently, only one instance type can be associated with a notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
@@ -1248,6 +1267,7 @@ pub struct CreateNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotebookInstanceLifecycleConfigInput {
     /// <p>The name of the lifecycle configuration.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
@@ -1281,6 +1301,7 @@ pub struct CreateNotebookInstanceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePresignedDomainUrlRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -1304,6 +1325,7 @@ pub struct CreatePresignedDomainUrlResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePresignedNotebookInstanceUrlInput {
     /// <p>The name of the notebook instance.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -1324,6 +1346,7 @@ pub struct CreatePresignedNotebookInstanceUrlOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProcessingJobRequest {
     /// <p>Configures the processing job to run a specified Docker container image.</p>
     #[serde(rename = "AppSpecification")]
@@ -1375,6 +1398,7 @@ pub struct CreateProcessingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrainingJobRequest {
     /// <p>The registry path of the Docker image that contains the training algorithm and algorithm-specific metadata, including the input mode. For more information about algorithms provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. For information about providing your own algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Using Your Own Algorithms with Amazon SageMaker</a>. </p>
     #[serde(rename = "AlgorithmSpecification")]
@@ -1450,6 +1474,7 @@ pub struct CreateTrainingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTransformJobRequest {
     /// <p>Specifies the number of records to include in a mini-batch for an HTTP inference request. A <i>record</i> <i/> is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record. </p> <p>To enable the batch strategy, you must set the <code>SplitType</code> property of the <a>DataProcessing</a> object to <code>Line</code>, <code>RecordIO</code>, or <code>TFRecord</code>.</p> <p>To use only one record when making an HTTP invocation request to a container, set <code>BatchStrategy</code> to <code>SingleRecord</code> and <code>SplitType</code> to <code>Line</code>.</p> <p>To fit as many records in a mini-batch as can fit within the <code>MaxPayloadInMB</code> limit, set <code>BatchStrategy</code> to <code>MultiRecord</code> and <code>SplitType</code> to <code>Line</code>.</p>
     #[serde(rename = "BatchStrategy")]
@@ -1504,6 +1529,7 @@ pub struct CreateTransformJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrialComponentRequest {
     /// <p>The name of the component as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialComponentName</code> is displayed.</p>
     #[serde(rename = "DisplayName")]
@@ -1552,6 +1578,7 @@ pub struct CreateTrialComponentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrialRequest {
     /// <p>The name of the trial as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialName</code> is displayed.</p>
     #[serde(rename = "DisplayName")]
@@ -1579,6 +1606,7 @@ pub struct CreateTrialResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserProfileRequest {
     /// <p>The ID of the associated Domain.</p>
     #[serde(rename = "DomainId")]
@@ -1614,6 +1642,7 @@ pub struct CreateUserProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkteamRequest {
     /// <p>A description of the work team.</p>
     #[serde(rename = "Description")]
@@ -1798,6 +1827,7 @@ pub struct DebugRuleEvaluationStatus {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAlgorithmInput {
     /// <p>The name of the algorithm to delete.</p>
     #[serde(rename = "AlgorithmName")]
@@ -1805,6 +1835,7 @@ pub struct DeleteAlgorithmInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
     /// <p>The name of the app.</p>
     #[serde(rename = "AppName")]
@@ -1821,6 +1852,7 @@ pub struct DeleteAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCodeRepositoryInput {
     /// <p>The name of the Git repository to delete.</p>
     #[serde(rename = "CodeRepositoryName")]
@@ -1828,6 +1860,7 @@ pub struct DeleteCodeRepositoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -1839,6 +1872,7 @@ pub struct DeleteDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointConfigInput {
     /// <p>The name of the endpoint configuration that you want to delete.</p>
     #[serde(rename = "EndpointConfigName")]
@@ -1846,6 +1880,7 @@ pub struct DeleteEndpointConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointInput {
     /// <p>The name of the endpoint that you want to delete.</p>
     #[serde(rename = "EndpointName")]
@@ -1853,6 +1888,7 @@ pub struct DeleteEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteExperimentRequest {
     /// <p>The name of the experiment to delete.</p>
     #[serde(rename = "ExperimentName")]
@@ -1869,6 +1905,7 @@ pub struct DeleteExperimentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFlowDefinitionRequest {
     /// <p>The name of the flow definition you are deleting.</p>
     #[serde(rename = "FlowDefinitionName")]
@@ -1880,6 +1917,7 @@ pub struct DeleteFlowDefinitionRequest {
 pub struct DeleteFlowDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelInput {
     /// <p>The name of the model to delete.</p>
     #[serde(rename = "ModelName")]
@@ -1887,6 +1925,7 @@ pub struct DeleteModelInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelPackageInput {
     /// <p>The name of the model package. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
     #[serde(rename = "ModelPackageName")]
@@ -1894,6 +1933,7 @@ pub struct DeleteModelPackageInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMonitoringScheduleRequest {
     /// <p>The name of the monitoring schedule to delete.</p>
     #[serde(rename = "MonitoringScheduleName")]
@@ -1901,6 +1941,7 @@ pub struct DeleteMonitoringScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotebookInstanceInput {
     /// <p>The name of the Amazon SageMaker notebook instance to delete.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -1908,6 +1949,7 @@ pub struct DeleteNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotebookInstanceLifecycleConfigInput {
     /// <p>The name of the lifecycle configuration to delete.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
@@ -1915,6 +1957,7 @@ pub struct DeleteNotebookInstanceLifecycleConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsInput {
     /// <p>The Amazon Resource Name (ARN) of the resource whose tags you want to delete.</p>
     #[serde(rename = "ResourceArn")]
@@ -1929,6 +1972,7 @@ pub struct DeleteTagsInput {
 pub struct DeleteTagsOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrialComponentRequest {
     /// <p>The name of the component to delete.</p>
     #[serde(rename = "TrialComponentName")]
@@ -1945,6 +1989,7 @@ pub struct DeleteTrialComponentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrialRequest {
     /// <p>The name of the trial to delete.</p>
     #[serde(rename = "TrialName")]
@@ -1961,6 +2006,7 @@ pub struct DeleteTrialResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserProfileRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -1971,6 +2017,7 @@ pub struct DeleteUserProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkteamRequest {
     /// <p>The name of the work team to delete.</p>
     #[serde(rename = "WorkteamName")]
@@ -2004,6 +2051,7 @@ pub struct DeployedImage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlgorithmInput {
     /// <p>The name of the algorithm to describe.</p>
     #[serde(rename = "AlgorithmName")]
@@ -2054,6 +2102,7 @@ pub struct DescribeAlgorithmOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppRequest {
     /// <p>The name of the app.</p>
     #[serde(rename = "AppName")]
@@ -2119,6 +2168,7 @@ pub struct DescribeAppResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAutoMLJobRequest {
     /// <p>Request information about a job using that job's unique name.</p>
     #[serde(rename = "AutoMLJobName")]
@@ -2194,6 +2244,7 @@ pub struct DescribeAutoMLJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCodeRepositoryInput {
     /// <p>The name of the Git repository to describe.</p>
     #[serde(rename = "CodeRepositoryName")]
@@ -2222,6 +2273,7 @@ pub struct DescribeCodeRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCompilationJobRequest {
     /// <p>The name of the model compilation job that you want information about.</p>
     #[serde(rename = "CompilationJobName")]
@@ -2275,6 +2327,7 @@ pub struct DescribeCompilationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -2347,6 +2400,7 @@ pub struct DescribeDomainResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointConfigInput {
     /// <p>The name of the endpoint configuration.</p>
     #[serde(rename = "EndpointConfigName")]
@@ -2378,6 +2432,7 @@ pub struct DescribeEndpointConfigOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointInput {
     /// <p>The name of the endpoint.</p>
     #[serde(rename = "EndpointName")]
@@ -2419,6 +2474,7 @@ pub struct DescribeEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExperimentRequest {
     /// <p>The name of the experiment to describe.</p>
     #[serde(rename = "ExperimentName")]
@@ -2467,6 +2523,7 @@ pub struct DescribeExperimentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFlowDefinitionRequest {
     /// <p>The name of the flow definition.</p>
     #[serde(rename = "FlowDefinitionName")]
@@ -2508,6 +2565,7 @@ pub struct DescribeFlowDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHumanTaskUiRequest {
     /// <p>The name of the human task user interface you want information about.</p>
     #[serde(rename = "HumanTaskUiName")]
@@ -2531,6 +2589,7 @@ pub struct DescribeHumanTaskUiResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHyperParameterTuningJobRequest {
     /// <p>The name of the tuning job to describe.</p>
     #[serde(rename = "HyperParameterTuningJobName")]
@@ -2596,6 +2655,7 @@ pub struct DescribeHyperParameterTuningJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLabelingJobRequest {
     /// <p>The name of the labeling job to return information for.</p>
     #[serde(rename = "LabelingJobName")]
@@ -2669,6 +2729,7 @@ pub struct DescribeLabelingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelInput {
     /// <p>The name of the model.</p>
     #[serde(rename = "ModelName")]
@@ -2709,6 +2770,7 @@ pub struct DescribeModelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelPackageInput {
     /// <p>The name of the model package to describe.</p>
     #[serde(rename = "ModelPackageName")]
@@ -2756,6 +2818,7 @@ pub struct DescribeModelPackageOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMonitoringScheduleRequest {
     /// <p>Name of a previously created monitoring schedule.</p>
     #[serde(rename = "MonitoringScheduleName")]
@@ -2798,6 +2861,7 @@ pub struct DescribeMonitoringScheduleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotebookInstanceInput {
     /// <p>The name of the notebook instance that you want information about.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -2805,6 +2869,7 @@ pub struct DescribeNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotebookInstanceLifecycleConfigInput {
     /// <p>The name of the lifecycle configuration to describe.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
@@ -2926,6 +2991,7 @@ pub struct DescribeNotebookInstanceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProcessingJobRequest {
     /// <p>The name of the processing job. The name must be unique within an AWS Region in the AWS account.</p>
     #[serde(rename = "ProcessingJobName")]
@@ -3016,6 +3082,7 @@ pub struct DescribeProcessingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscribedWorkteamRequest {
     /// <p>The Amazon Resource Name (ARN) of the subscribed work team to describe.</p>
     #[serde(rename = "WorkteamArn")]
@@ -3031,6 +3098,7 @@ pub struct DescribeSubscribedWorkteamResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrainingJobRequest {
     /// <p>The name of the training job.</p>
     #[serde(rename = "TrainingJobName")]
@@ -3166,6 +3234,7 @@ pub struct DescribeTrainingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTransformJobRequest {
     /// <p>The name of the transform job that you want to view details of.</p>
     #[serde(rename = "TransformJobName")]
@@ -3245,6 +3314,7 @@ pub struct DescribeTransformJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrialComponentRequest {
     /// <p>The name of the trial component to describe.</p>
     #[serde(rename = "TrialComponentName")]
@@ -3317,6 +3387,7 @@ pub struct DescribeTrialComponentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrialRequest {
     /// <p>The name of the trial to describe.</p>
     #[serde(rename = "TrialName")]
@@ -3365,6 +3436,7 @@ pub struct DescribeTrialResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserProfileRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -3424,6 +3496,7 @@ pub struct DescribeUserProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkteamRequest {
     /// <p>The name of the work team to return a description of.</p>
     #[serde(rename = "WorkteamName")]
@@ -3440,6 +3513,7 @@ pub struct DescribeWorkteamResponse {
 
 /// <p>Specifies weight and capacity values for a production variant.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DesiredWeightAndCapacity {
     /// <p>The variant's capacity.</p>
     #[serde(rename = "DesiredInstanceCount")]
@@ -3455,6 +3529,7 @@ pub struct DesiredWeightAndCapacity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateTrialComponentRequest {
     /// <p>The name of the component to disassociate from the trial.</p>
     #[serde(rename = "TrialComponentName")]
@@ -3687,6 +3762,7 @@ pub struct FileSystemDataSource {
 
 /// <p><p>A conditional statement for a search expression that includes a resource property, a Boolean operator, and a value.</p> <p>If you don&#39;t specify an <code>Operator</code> and a <code>Value</code>, the filter searches for only the specified property. For example, defining a <code>Filter</code> for the <code>FailureReason</code> for the <code>TrainingJob</code> <code>Resource</code> searches for training job objects that have a value in the <code>FailureReason</code> field.</p> <p>If you specify a <code>Value</code>, but not an <code>Operator</code>, Amazon SageMaker uses the equals operator as the default.</p> <p>In search, there are several property types:</p> <dl> <dt>Metrics</dt> <dd> <p>To define a metric filter, enter a value using the form <code>&quot;Metrics.&lt;name&gt;&quot;</code>, where <code>&lt;name&gt;</code> is a metric name. For example, the following filter searches for training jobs with an <code>&quot;accuracy&quot;</code> metric greater than <code>&quot;0.9&quot;</code>:</p> <p> <code>{</code> </p> <p> <code>&quot;Name&quot;: &quot;Metrics.accuracy&quot;,</code> </p> <p> <code>&quot;Operator&quot;: &quot;GREATER<em>THAN&quot;,</code> </p> <p> <code>&quot;Value&quot;: &quot;0.9&quot;</code> </p> <p> <code>}</code> </p> </dd> <dt>HyperParameters</dt> <dd> <p>To define a hyperparameter filter, enter a value with the form <code>&quot;HyperParameters.&lt;name&gt;&quot;</code>. Decimal hyperparameter values are treated as a decimal in a comparison if the specified <code>Value</code> is also a decimal value. If the specified <code>Value</code> is an integer, the decimal hyperparameter values are treated as integers. For example, the following filter is satisfied by training jobs with a <code>&quot;learning</em>rate&quot;</code> hyperparameter that is less than <code>&quot;0.5&quot;</code>:</p> <p> <code> {</code> </p> <p> <code> &quot;Name&quot;: &quot;HyperParameters.learning<em>rate&quot;,</code> </p> <p> <code> &quot;Operator&quot;: &quot;LESS</em>THAN&quot;,</code> </p> <p> <code> &quot;Value&quot;: &quot;0.5&quot;</code> </p> <p> <code> }</code> </p> </dd> <dt>Tags</dt> <dd> <p>To define a tag filter, enter a value with the form <code>&quot;Tags.&lt;key&gt;&quot;</code>.</p> </dd> </dl></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>A property name. For example, <code>TrainingJobName</code>. For the list of valid property names returned in a search result for each supported resource, see <a>TrainingJob</a> properties. You must specify a valid property name for the resource.</p>
     #[serde(rename = "Name")]
@@ -3768,6 +3844,7 @@ pub struct FlowDefinitionSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSearchSuggestionsRequest {
     /// <p>The name of the Amazon SageMaker resource to Search for. The only valid <code>Resource</code> value is <code>TrainingJob</code>.</p>
     #[serde(rename = "Resource")]
@@ -3805,6 +3882,7 @@ pub struct GitConfig {
 
 /// <p>Specifies configuration details for a Git repository when the repository is updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GitConfigForUpdate {
     /// <p>The Amazon Resource Name (ARN) of the AWS Secrets Manager secret that contains the credentials used to access the git repository. The secret must have a staging label of <code>AWSCURRENT</code> and must be in the following format:</p> <p> <code>{"username": <i>UserName</i>, "password": <i>Password</i>}</code> </p>
     #[serde(rename = "SecretArn")]
@@ -4479,6 +4557,7 @@ pub struct LabelingJobSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAlgorithmsInput {
     /// <p>A filter that returns only algorithms created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4523,6 +4602,7 @@ pub struct ListAlgorithmsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
     /// <p>A parameter to search for the domain ID.</p>
     #[serde(rename = "DomainIdEquals")]
@@ -4564,6 +4644,7 @@ pub struct ListAppsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAutoMLJobsRequest {
     /// <p>Request a list of jobs, using a filter for time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4620,6 +4701,7 @@ pub struct ListAutoMLJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCandidatesForAutoMLJobRequest {
     /// <p>List the Candidates created for the job by providing the job's name.</p>
     #[serde(rename = "AutoMLJobName")]
@@ -4663,6 +4745,7 @@ pub struct ListCandidatesForAutoMLJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCodeRepositoriesInput {
     /// <p>A filter that returns only Git repositories that were created after the specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4715,6 +4798,7 @@ pub struct ListCodeRepositoriesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCompilationJobsRequest {
     /// <p>A filter that returns the model compilation jobs that were created after a specified time. </p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4771,6 +4855,7 @@ pub struct ListCompilationJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
     /// <p>Returns a list up to a specified limit.</p>
     #[serde(rename = "MaxResults")]
@@ -4796,6 +4881,7 @@ pub struct ListDomainsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointConfigsInput {
     /// <p>A filter that returns only endpoint configurations with a creation time greater than or equal to the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4840,6 +4926,7 @@ pub struct ListEndpointConfigsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointsInput {
     /// <p>A filter that returns only endpoints with a creation time greater than or equal to the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4896,6 +4983,7 @@ pub struct ListEndpointsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExperimentsRequest {
     /// <p>A filter that returns only experiments created after the specified time.</p>
     #[serde(rename = "CreatedAfter")]
@@ -4937,6 +5025,7 @@ pub struct ListExperimentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFlowDefinitionsRequest {
     /// <p>A filter that returns only flow definitions with a creation time greater than or equal to the specified timestamp.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -4973,6 +5062,7 @@ pub struct ListFlowDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHumanTaskUisRequest {
     /// <p>A filter that returns only human task user interfaces with a creation time greater than or equal to the specified timestamp.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5009,6 +5099,7 @@ pub struct ListHumanTaskUisResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHyperParameterTuningJobsRequest {
     /// <p>A filter that returns only tuning jobs that were created after the specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5065,6 +5156,7 @@ pub struct ListHyperParameterTuningJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLabelingJobsForWorkteamRequest {
     /// <p>A filter that returns only labeling jobs created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5112,6 +5204,7 @@ pub struct ListLabelingJobsForWorkteamResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLabelingJobsRequest {
     /// <p>A filter that returns only labeling jobs created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5169,6 +5262,7 @@ pub struct ListLabelingJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelPackagesInput {
     /// <p>A filter that returns only model packages created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5213,6 +5307,7 @@ pub struct ListModelPackagesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelsInput {
     /// <p>A filter that returns only models with a creation time greater than or equal to the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5257,6 +5352,7 @@ pub struct ListModelsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMonitoringExecutionsRequest {
     /// <p>A filter that returns only jobs created after a specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5325,6 +5421,7 @@ pub struct ListMonitoringExecutionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMonitoringSchedulesRequest {
     /// <p>A filter that returns only monitoring schedules created after a specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5385,6 +5482,7 @@ pub struct ListMonitoringSchedulesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNotebookInstanceLifecycleConfigsInput {
     /// <p>A filter that returns only lifecycle configurations that were created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5438,6 +5536,7 @@ pub struct ListNotebookInstanceLifecycleConfigsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNotebookInstancesInput {
     /// <p>A filter that returns only notebook instances with associated with the specified git repository.</p>
     #[serde(rename = "AdditionalCodeRepositoryEquals")]
@@ -5507,6 +5606,7 @@ pub struct ListNotebookInstancesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProcessingJobsRequest {
     /// <p>A filter that returns only processing jobs created after the specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5563,6 +5663,7 @@ pub struct ListProcessingJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscribedWorkteamsRequest {
     /// <p>The maximum number of work teams to return in each page of the response.</p>
     #[serde(rename = "MaxResults")]
@@ -5591,6 +5692,7 @@ pub struct ListSubscribedWorkteamsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsInput {
     /// <p>Maximum number of tags to return.</p>
     #[serde(rename = "MaxResults")]
@@ -5619,6 +5721,7 @@ pub struct ListTagsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrainingJobsForHyperParameterTuningJobRequest {
     /// <p>The name of the tuning job whose training jobs you want to list.</p>
     #[serde(rename = "HyperParameterTuningJobName")]
@@ -5658,6 +5761,7 @@ pub struct ListTrainingJobsForHyperParameterTuningJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrainingJobsRequest {
     /// <p>A filter that returns only training jobs created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5714,6 +5818,7 @@ pub struct ListTrainingJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTransformJobsRequest {
     /// <p>A filter that returns only transform jobs created after the specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -5770,6 +5875,7 @@ pub struct ListTransformJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrialComponentsRequest {
     /// <p>A filter that returns only components created after the specified time.</p>
     #[serde(rename = "CreatedAfter")]
@@ -5815,6 +5921,7 @@ pub struct ListTrialComponentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrialsRequest {
     /// <p>A filter that returns only trials created after the specified time.</p>
     #[serde(rename = "CreatedAfter")]
@@ -5860,6 +5967,7 @@ pub struct ListTrialsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserProfilesRequest {
     /// <p>A parameter by which to filter the results.</p>
     #[serde(rename = "DomainIdEquals")]
@@ -5901,6 +6009,7 @@ pub struct ListUserProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkteamsRequest {
     /// <p>The maximum number of work teams to return in each page of the response.</p>
     #[serde(rename = "MaxResults")]
@@ -6335,6 +6444,7 @@ pub struct MonitoringStoppingCondition {
 
 /// <p><p>Defines a list of <code>NestedFilters</code> objects. To satisfy the conditions specified in the <code>NestedFilters</code> call, a resource must satisfy the conditions of all of the filters.</p> <p>For example, you could define a <code>NestedFilters</code> using the training job&#39;s <code>InputDataConfig</code> property to filter on <code>Channel</code> objects. </p> <p>A <code>NestedFilters</code> object contains multiple filters. For example, to find all training jobs whose name contains <code>train</code> and that have <code>cat/data</code> in their <code>S3Uri</code> (specified in <code>InputDataConfig</code>), you need to create a <code>NestedFilters</code> object that specifies the <code>InputDataConfig</code> property with the following <code>Filter</code> objects:</p> <ul> <li> <p> <code>&#39;{Name:&quot;InputDataConfig.ChannelName&quot;, &quot;Operator&quot;:&quot;EQUALS&quot;, &quot;Value&quot;:&quot;train&quot;}&#39;,</code> </p> </li> <li> <p> <code>&#39;{Name:&quot;InputDataConfig.DataSource.S3DataSource.S3Uri&quot;, &quot;Operator&quot;:&quot;CONTAINS&quot;, &quot;Value&quot;:&quot;cat/data&quot;}&#39;</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NestedFilters {
     /// <p>A list of filters. Each filter acts on a property. Filters must contain at least one <code>Filters</code> value. For example, a <code>NestedFilters</code> call might include a filter on the <code>PropertyName</code> parameter of the <code>InputDataConfig</code> property: <code>InputDataConfig.DataSource.S3DataSource.S3Uri</code>.</p>
     #[serde(rename = "Filters")]
@@ -6733,6 +6843,7 @@ pub struct ProductionVariantSummary {
 
 /// <p>A type of <code>SuggestionQuery</code>. A suggestion query for retrieving property names that match the specified hint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PropertyNameQuery {
     /// <p>Text that is part of a property's name. The property names of hyperparameter, metric, and tag key names that begin with the specified text in the <code>PropertyNameHint</code>.</p>
     #[serde(rename = "PropertyNameHint")]
@@ -6759,6 +6870,7 @@ pub struct PublicWorkforceTaskPrice {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenderUiTemplateRequest {
     /// <p>The Amazon Resource Name (ARN) that has access to the S3 objects that are used by the template.</p>
     #[serde(rename = "RoleArn")]
@@ -6784,6 +6896,7 @@ pub struct RenderUiTemplateResponse {
 
 /// <p>Contains input values for a task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenderableTask {
     /// <p>A JSON object that contains values for the variables defined in the template. It is made available to the template under the substitution variable <code>task.input</code>. For example, if you define a variable <code>task.input.text</code> in your template, you can supply the variable in the JSON object as <code>"text": "sample text"</code>.</p>
     #[serde(rename = "Input")]
@@ -6862,6 +6975,7 @@ pub struct ResourceSpec {
 
 /// <p>The retention policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetentionPolicy {
     /// <p>The home Amazon Elastic File System (EFS).</p>
     #[serde(rename = "HomeEfsFileSystem")]
@@ -6898,6 +7012,7 @@ pub struct ScheduleConfig {
 
 /// <p><p>A multi-expression that searches for the specified resource or resources in a search. All resource objects that satisfy the expression&#39;s condition are included in the search results. You must specify at least one subexpression, filter, or nested filter. A <code>SearchExpression</code> can contain up to twenty elements.</p> <p>A <code>SearchExpression</code> contains the following components:</p> <ul> <li> <p>A list of <code>Filter</code> objects. Each filter defines a simple Boolean expression comprised of a resource property name, Boolean operator, and value. A <code>SearchExpression</code> can include only one <code>Contains</code> operator.</p> </li> <li> <p>A list of <code>NestedFilter</code> objects. Each nested filter defines a list of Boolean expressions using a list of resource properties. A nested filter is satisfied if a single object in the list satisfies all Boolean expressions.</p> </li> <li> <p>A list of <code>SearchExpression</code> objects. A search expression object can be nested in a list of search expression objects.</p> </li> <li> <p>A Boolean operator: <code>And</code> or <code>Or</code>.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchExpression {
     /// <p>A list of filter objects.</p>
     #[serde(rename = "Filters")]
@@ -6940,6 +7055,7 @@ pub struct SearchRecord {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchRequest {
     /// <p>The maximum number of results to return in a <code>SearchResponse</code>.</p>
     #[serde(rename = "MaxResults")]
@@ -7045,6 +7161,7 @@ pub struct SourceAlgorithmSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMonitoringScheduleRequest {
     /// <p>The name of the schedule to start.</p>
     #[serde(rename = "MonitoringScheduleName")]
@@ -7052,6 +7169,7 @@ pub struct StartMonitoringScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartNotebookInstanceInput {
     /// <p>The name of the notebook instance to start.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -7059,6 +7177,7 @@ pub struct StartNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAutoMLJobRequest {
     /// <p>The name of the object you are requesting.</p>
     #[serde(rename = "AutoMLJobName")]
@@ -7066,6 +7185,7 @@ pub struct StopAutoMLJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopCompilationJobRequest {
     /// <p>The name of the model compilation job to stop.</p>
     #[serde(rename = "CompilationJobName")]
@@ -7073,6 +7193,7 @@ pub struct StopCompilationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopHyperParameterTuningJobRequest {
     /// <p>The name of the tuning job to stop.</p>
     #[serde(rename = "HyperParameterTuningJobName")]
@@ -7080,6 +7201,7 @@ pub struct StopHyperParameterTuningJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopLabelingJobRequest {
     /// <p>The name of the labeling job to stop.</p>
     #[serde(rename = "LabelingJobName")]
@@ -7087,6 +7209,7 @@ pub struct StopLabelingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMonitoringScheduleRequest {
     /// <p>The name of the schedule to stop.</p>
     #[serde(rename = "MonitoringScheduleName")]
@@ -7094,6 +7217,7 @@ pub struct StopMonitoringScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopNotebookInstanceInput {
     /// <p>The name of the notebook instance to terminate.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -7101,6 +7225,7 @@ pub struct StopNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopProcessingJobRequest {
     /// <p>The name of the processing job to stop.</p>
     #[serde(rename = "ProcessingJobName")]
@@ -7108,6 +7233,7 @@ pub struct StopProcessingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingJobRequest {
     /// <p>The name of the training job to stop.</p>
     #[serde(rename = "TrainingJobName")]
@@ -7115,6 +7241,7 @@ pub struct StopTrainingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTransformJobRequest {
     /// <p>The name of the transform job to stop.</p>
     #[serde(rename = "TransformJobName")]
@@ -7161,6 +7288,7 @@ pub struct SubscribedWorkteam {
 
 /// <p>Limits the property names that are included in the response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SuggestionQuery {
     /// <p>A type of <code>SuggestionQuery</code>. Defines a property name hint. Only property names that match the specified hint are included in the response.</p>
     #[serde(rename = "PropertyNameQuery")]
@@ -7963,6 +8091,7 @@ pub struct UiConfig {
 
 /// <p>The Liquid template for the worker user interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UiTemplate {
     /// <p>The content of the Liquid template for the worker user interface.</p>
     #[serde(rename = "Content")]
@@ -7984,6 +8113,7 @@ pub struct UiTemplateInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCodeRepositoryInput {
     /// <p>The name of the Git repository to update.</p>
     #[serde(rename = "CodeRepositoryName")]
@@ -8003,6 +8133,7 @@ pub struct UpdateCodeRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainRequest {
     /// <p>A collection of settings.</p>
     #[serde(rename = "DefaultUserSettings")]
@@ -8023,6 +8154,7 @@ pub struct UpdateDomainResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointInput {
     /// <p>The name of the new endpoint configuration.</p>
     #[serde(rename = "EndpointConfigName")]
@@ -8041,6 +8173,7 @@ pub struct UpdateEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointWeightsAndCapacitiesInput {
     /// <p>An object that provides new capacity and weight values for a variant.</p>
     #[serde(rename = "DesiredWeightsAndCapacities")]
@@ -8059,6 +8192,7 @@ pub struct UpdateEndpointWeightsAndCapacitiesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateExperimentRequest {
     /// <p>The description of the experiment.</p>
     #[serde(rename = "Description")]
@@ -8083,6 +8217,7 @@ pub struct UpdateExperimentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMonitoringScheduleRequest {
     /// <p>The configuration object that specifies the monitoring schedule and defines the monitoring job.</p>
     #[serde(rename = "MonitoringScheduleConfig")]
@@ -8101,6 +8236,7 @@ pub struct UpdateMonitoringScheduleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotebookInstanceInput {
     /// <p>A list of the Elastic Inference (EI) instance types to associate with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
@@ -8156,6 +8292,7 @@ pub struct UpdateNotebookInstanceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotebookInstanceLifecycleConfigInput {
     /// <p>The name of the lifecycle configuration.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
@@ -8179,6 +8316,7 @@ pub struct UpdateNotebookInstanceLifecycleConfigOutput {}
 pub struct UpdateNotebookInstanceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrialComponentRequest {
     /// <p>The name of the component as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialComponentName</code> is displayed.</p>
     #[serde(rename = "DisplayName")]
@@ -8235,6 +8373,7 @@ pub struct UpdateTrialComponentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrialRequest {
     /// <p>The name of the trial as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialName</code> is displayed.</p>
     #[serde(rename = "DisplayName")]
@@ -8255,6 +8394,7 @@ pub struct UpdateTrialResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserProfileRequest {
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
@@ -8278,6 +8418,7 @@ pub struct UpdateUserProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkteamRequest {
     /// <p>An updated description for the work team.</p>
     #[serde(rename = "Description")]

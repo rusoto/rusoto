@@ -141,6 +141,7 @@ pub struct Counters {
 
 /// <p>Represents a request to the create device pool operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDevicePoolRequest {
     /// <p>The device pool's description.</p>
     #[serde(rename = "description")]
@@ -172,6 +173,7 @@ pub struct CreateDevicePoolResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceProfileRequest {
     /// <p>The description of your instance profile.</p>
     #[serde(rename = "description")]
@@ -204,6 +206,7 @@ pub struct CreateInstanceProfileResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkProfileRequest {
     /// <p>The description of the network profile.</p>
     #[serde(rename = "description")]
@@ -264,6 +267,7 @@ pub struct CreateNetworkProfileResult {
 
 /// <p>Represents a request to the create project operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectRequest {
     /// <p>Sets the execution timeout value (in minutes) for a project. All test runs in this project will use the specified execution timeout value unless overridden when scheduling a run.</p>
     #[serde(rename = "defaultJobTimeoutMinutes")]
@@ -286,6 +290,7 @@ pub struct CreateProjectResult {
 
 /// <p>Configuration settings for a remote access session, including billing method.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRemoteAccessSessionConfiguration {
     /// <p>The billing method for the remote access session.</p>
     #[serde(rename = "billingMethod")]
@@ -299,6 +304,7 @@ pub struct CreateRemoteAccessSessionConfiguration {
 
 /// <p>Creates and submits a request to start a remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRemoteAccessSessionRequest {
     /// <p>Unique identifier for the client. If you want access to multiple devices on the same client, you should pass the same <code>clientId</code> value in each call to <code>CreateRemoteAccessSession</code>. This is required only if <code>remoteDebugEnabled</code> is set to <code>true</code>.</p> <p> <i>Remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>.</i> </p>
     #[serde(rename = "clientId")]
@@ -360,6 +366,7 @@ pub struct CreateRemoteAccessSessionResult {
 
 /// <p>Represents a request to the create upload operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUploadRequest {
     /// <p>The upload's content type (for example, "application/octet-stream").</p>
     #[serde(rename = "contentType")]
@@ -387,6 +394,7 @@ pub struct CreateUploadResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVPCEConfigurationRequest {
     /// <p>The DNS name of the service running in your VPC that you want Device Farm to test.</p>
     #[serde(rename = "serviceDnsName")]
@@ -431,6 +439,7 @@ pub struct CustomerArtifactPaths {
 
 /// <p>Represents a request to the delete device pool operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDevicePoolRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm device pool you wish to delete.</p>
     #[serde(rename = "arn")]
@@ -443,6 +452,7 @@ pub struct DeleteDevicePoolRequest {
 pub struct DeleteDevicePoolResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance profile you are requesting to delete.</p>
     #[serde(rename = "arn")]
@@ -454,6 +464,7 @@ pub struct DeleteInstanceProfileRequest {
 pub struct DeleteInstanceProfileResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the network profile you want to delete.</p>
     #[serde(rename = "arn")]
@@ -466,6 +477,7 @@ pub struct DeleteNetworkProfileResult {}
 
 /// <p>Represents a request to the delete project operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm project you wish to delete.</p>
     #[serde(rename = "arn")]
@@ -479,6 +491,7 @@ pub struct DeleteProjectResult {}
 
 /// <p>Represents the request to delete the specified remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the session for which you want to delete remote access.</p>
     #[serde(rename = "arn")]
@@ -492,6 +505,7 @@ pub struct DeleteRemoteAccessSessionResult {}
 
 /// <p>Represents a request to the delete run operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRunRequest {
     /// <p>The Amazon Resource Name (ARN) for the run you wish to delete.</p>
     #[serde(rename = "arn")]
@@ -505,6 +519,7 @@ pub struct DeleteRunResult {}
 
 /// <p>Represents a request to the delete upload operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUploadRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm upload you wish to delete.</p>
     #[serde(rename = "arn")]
@@ -517,6 +532,7 @@ pub struct DeleteUploadRequest {
 pub struct DeleteUploadResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVPCEConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to delete.</p>
     #[serde(rename = "arn")]
@@ -732,6 +748,7 @@ pub struct DevicePoolCompatibilityResult {
 
 /// <p>Represents the device filters used in a test run as well as the maximum number of devices to be included in the run. It is passed in as the <code>deviceSelectionConfiguration</code> request parameter in <a>ScheduleRun</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeviceSelectionConfiguration {
     /// <p><p>Used to dynamically select a set of devices for a test run. A filter is made up of an attribute, an operator, and one or more values.</p> <ul> <li> <p> <b>Attribute</b> </p> <p>The aspect of a device such as platform or model used as the selection criteria in a device filter.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The Amazon Resource Name (ARN) of the device. For example, &quot;arn:aws:devicefarm:us-west-2::device:12345Example&quot;.</p> </li> <li> <p>PLATFORM: The device platform. Valid values are &quot;ANDROID&quot; or &quot;IOS&quot;.</p> </li> <li> <p>OS<em>VERSION: The operating system version. For example, &quot;10.3.2&quot;.</p> </li> <li> <p>MODEL: The device model. For example, &quot;iPad 5th Gen&quot;.</p> </li> <li> <p>AVAILABILITY: The current availability of the device. Valid values are &quot;AVAILABLE&quot;, &quot;HIGHLY</em>AVAILABLE&quot;, &quot;BUSY&quot;, or &quot;TEMPORARY<em>NOT</em>AVAILABLE&quot;.</p> </li> <li> <p>FORM<em>FACTOR: The device form factor. Valid values are &quot;PHONE&quot; or &quot;TABLET&quot;.</p> </li> <li> <p>MANUFACTURER: The device manufacturer. For example, &quot;Apple&quot;.</p> </li> <li> <p>REMOTE</em>ACCESS<em>ENABLED: Whether the device is enabled for remote access. Valid values are &quot;TRUE&quot; or &quot;FALSE&quot;.</p> </li> <li> <p>REMOTE</em>DEBUG<em>ENABLED: Whether the device is enabled for remote debugging. Valid values are &quot;TRUE&quot; or &quot;FALSE&quot;. <i>This filter will be ignored, as remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>.</i> </p> </li> <li> <p>INSTANCE</em>ARN: The Amazon Resource Name (ARN) of the device instance.</p> </li> <li> <p>INSTANCE<em>LABELS: The label of the device instance.</p> </li> <li> <p>FLEET</em>TYPE: The fleet type. Valid values are &quot;PUBLIC&quot; or &quot;PRIVATE&quot;.</p> </li> </ul> </li> <li> <p> <b>Operator</b> </p> <p>The filter operator.</p> <ul> <li> <p>The EQUALS operator is available for every attribute except INSTANCE<em>LABELS.</p> </li> <li> <p>The CONTAINS operator is available for the INSTANCE</em>LABELS and MODEL attributes.</p> </li> <li> <p>The IN and NOT<em>IN operators are available for the ARN, OS</em>VERSION, MODEL, MANUFACTURER, and INSTANCE<em>ARN attributes.</p> </li> <li> <p>The LESS</em>THAN, GREATER<em>THAN, LESS</em>THAN<em>OR</em>EQUALS, and GREATER<em>THAN</em>OR<em>EQUALS operators are also available for the OS</em>VERSION attribute.</p> </li> </ul> </li> <li> <p> <b>Values</b> </p> <p>An array of one or more filter values.</p> <p class="title"> <b>Operator Values</b> </p> <ul> <li> <p>The IN and NOT<em>IN operators can take a values array that has more than one element.</p> </li> <li> <p>The other operators require an array with a single element.</p> </li> </ul> <p class="title"> <b>Attribute Values</b> </p> <ul> <li> <p>The PLATFORM attribute can be set to &quot;ANDROID&quot; or &quot;IOS&quot;.</p> </li> <li> <p>The AVAILABILITY attribute can be set to &quot;AVAILABLE&quot;, &quot;HIGHLY</em>AVAILABLE&quot;, &quot;BUSY&quot;, or &quot;TEMPORARY<em>NOT</em>AVAILABLE&quot;.</p> </li> <li> <p>The FORM<em>FACTOR attribute can be set to &quot;PHONE&quot; or &quot;TABLET&quot;.</p> </li> <li> <p>The FLEET</em>TYPE attribute can be set to &quot;PUBLIC&quot; or &quot;PRIVATE&quot;.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "filters")]
@@ -761,6 +778,7 @@ pub struct DeviceSelectionResult {
 
 /// <p>Represents configuration information about a test run, such as the execution timeout (in minutes).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecutionConfiguration {
     /// <p>True if account cleanup is enabled at the beginning of the test; otherwise, false.</p>
     #[serde(rename = "accountsCleanup")]
@@ -786,6 +804,7 @@ pub struct ExecutionConfiguration {
 
 /// <p>Represents the request sent to retrieve the account settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountSettingsRequest {}
 
 /// <p>Represents the account settings return values from the <code>GetAccountSettings</code> request.</p>
@@ -799,6 +818,7 @@ pub struct GetAccountSettingsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceInstanceRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance you're requesting information about.</p>
     #[serde(rename = "arn")]
@@ -816,6 +836,7 @@ pub struct GetDeviceInstanceResult {
 
 /// <p>Represents a request to the get device pool compatibility operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicePoolCompatibilityRequest {
     /// <p>The ARN of the app that is associated with the specified device pool.</p>
     #[serde(rename = "appArn")]
@@ -854,6 +875,7 @@ pub struct GetDevicePoolCompatibilityResult {
 
 /// <p>Represents a request to the get device pool operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicePoolRequest {
     /// <p>The device pool's ARN.</p>
     #[serde(rename = "arn")]
@@ -872,6 +894,7 @@ pub struct GetDevicePoolResult {
 
 /// <p>Represents a request to the get device request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceRequest {
     /// <p>The device type's ARN.</p>
     #[serde(rename = "arn")]
@@ -889,6 +912,7 @@ pub struct GetDeviceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of your instance profile.</p>
     #[serde(rename = "arn")]
@@ -906,6 +930,7 @@ pub struct GetInstanceProfileResult {
 
 /// <p>Represents a request to the get job operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
     /// <p>The job's ARN.</p>
     #[serde(rename = "arn")]
@@ -923,6 +948,7 @@ pub struct GetJobResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNetworkProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the network profile you want to return information about.</p>
     #[serde(rename = "arn")]
@@ -940,6 +966,7 @@ pub struct GetNetworkProfileResult {
 
 /// <p>Represents the request to retrieve the offering status for the specified customer or account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOfferingStatusRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -967,6 +994,7 @@ pub struct GetOfferingStatusResult {
 
 /// <p>Represents a request to the get project operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProjectRequest {
     /// <p>The project's ARN.</p>
     #[serde(rename = "arn")]
@@ -985,6 +1013,7 @@ pub struct GetProjectResult {
 
 /// <p>Represents the request to get information about the specified remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the remote access session about which you want to get session information.</p>
     #[serde(rename = "arn")]
@@ -1003,6 +1032,7 @@ pub struct GetRemoteAccessSessionResult {
 
 /// <p>Represents a request to the get run operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRunRequest {
     /// <p>The run's ARN.</p>
     #[serde(rename = "arn")]
@@ -1021,6 +1051,7 @@ pub struct GetRunResult {
 
 /// <p>Represents a request to the get suite operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSuiteRequest {
     /// <p>The suite's ARN.</p>
     #[serde(rename = "arn")]
@@ -1039,6 +1070,7 @@ pub struct GetSuiteResult {
 
 /// <p>Represents a request to the get test operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTestRequest {
     /// <p>The test's ARN.</p>
     #[serde(rename = "arn")]
@@ -1057,6 +1089,7 @@ pub struct GetTestResult {
 
 /// <p>Represents a request to the get upload operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUploadRequest {
     /// <p>The upload's ARN.</p>
     #[serde(rename = "arn")]
@@ -1074,6 +1107,7 @@ pub struct GetUploadResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVPCEConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to describe.</p>
     #[serde(rename = "arn")]
@@ -1105,6 +1139,7 @@ pub struct IncompatibilityMessage {
 
 /// <p>Represents the request to install an Android application (in .apk format) or an iOS application (in .ipa format) as part of a remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstallToRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the app about which you are requesting information.</p>
     #[serde(rename = "appArn")]
@@ -1222,6 +1257,7 @@ pub struct Job {
 
 /// <p>Represents a request to the list artifacts operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArtifactsRequest {
     /// <p>The Run, Job, Suite, or Test ARN.</p>
     #[serde(rename = "arn")]
@@ -1250,6 +1286,7 @@ pub struct ListArtifactsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceInstancesRequest {
     /// <p>An integer specifying the maximum number of items you want to return in the API response.</p>
     #[serde(rename = "maxResults")]
@@ -1276,6 +1313,7 @@ pub struct ListDeviceInstancesResult {
 
 /// <p>Represents the result of a list device pools request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicePoolsRequest {
     /// <p>The project ARN.</p>
     #[serde(rename = "arn")]
@@ -1306,6 +1344,7 @@ pub struct ListDevicePoolsResult {
 
 /// <p>Represents the result of a list devices request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
     /// <p>The Amazon Resource Name (ARN) of the project.</p>
     #[serde(rename = "arn")]
@@ -1336,6 +1375,7 @@ pub struct ListDevicesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceProfilesRequest {
     /// <p>An integer specifying the maximum number of items you want to return in the API response.</p>
     #[serde(rename = "maxResults")]
@@ -1362,6 +1402,7 @@ pub struct ListInstanceProfilesResult {
 
 /// <p>Represents a request to the list jobs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>The run's Amazon Resource Name (ARN).</p>
     #[serde(rename = "arn")]
@@ -1387,6 +1428,7 @@ pub struct ListJobsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNetworkProfilesRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to list network profiles.</p>
     #[serde(rename = "arn")]
@@ -1415,6 +1457,7 @@ pub struct ListNetworkProfilesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingPromotionsRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1437,6 +1480,7 @@ pub struct ListOfferingPromotionsResult {
 
 /// <p>Represents the request to list the offering transaction history.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingTransactionsRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1460,6 +1504,7 @@ pub struct ListOfferingTransactionsResult {
 
 /// <p>Represents the request to list all offerings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingsRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1483,6 +1528,7 @@ pub struct ListOfferingsResult {
 
 /// <p>Represents a request to the list projects operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsRequest {
     /// <p>Optional. If no Amazon Resource Name (ARN) is specified, then AWS Device Farm returns a list of all projects for the AWS account. You can also specify a project ARN.</p>
     #[serde(rename = "arn")]
@@ -1510,6 +1556,7 @@ pub struct ListProjectsResult {
 
 /// <p>Represents the request to return information about the remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRemoteAccessSessionsRequest {
     /// <p>The Amazon Resource Name (ARN) of the project about which you are requesting information.</p>
     #[serde(rename = "arn")]
@@ -1536,6 +1583,7 @@ pub struct ListRemoteAccessSessionsResult {
 
 /// <p>Represents a request to the list runs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRunsRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to list runs.</p>
     #[serde(rename = "arn")]
@@ -1562,6 +1610,7 @@ pub struct ListRunsResult {
 
 /// <p>Represents a request to the list samples operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSamplesRequest {
     /// <p>The Amazon Resource Name (ARN) of the job used to list samples.</p>
     #[serde(rename = "arn")]
@@ -1588,6 +1637,7 @@ pub struct ListSamplesResult {
 
 /// <p>Represents a request to the list suites operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSuitesRequest {
     /// <p>The job's Amazon Resource Name (ARN).</p>
     #[serde(rename = "arn")]
@@ -1613,6 +1663,7 @@ pub struct ListSuitesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource(s) for which to list tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
     #[serde(rename = "ResourceARN")]
@@ -1630,6 +1681,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p>Represents a request to the list tests operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestsRequest {
     /// <p>The test suite's Amazon Resource Name (ARN).</p>
     #[serde(rename = "arn")]
@@ -1656,6 +1708,7 @@ pub struct ListTestsResult {
 
 /// <p>Represents a request to the list unique problems operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUniqueProblemsRequest {
     /// <p>The unique problems' ARNs.</p>
     #[serde(rename = "arn")]
@@ -1682,6 +1735,7 @@ pub struct ListUniqueProblemsResult {
 
 /// <p>Represents a request to the list uploads operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUploadsRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to list uploads.</p>
     #[serde(rename = "arn")]
@@ -1711,6 +1765,7 @@ pub struct ListUploadsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVPCEConfigurationsRequest {
     /// <p>An integer specifying the maximum number of items you want to return in the API response.</p>
     #[serde(rename = "maxResults")]
@@ -1974,6 +2029,7 @@ pub struct Project {
 
 /// <p>Represents a request for a purchase offering.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseOfferingRequest {
     /// <p>The ID of the offering.</p>
     #[serde(rename = "offeringId")]
@@ -2126,6 +2182,7 @@ pub struct RemoteAccessSession {
 
 /// <p>A request representing an offering renewal.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenewOfferingRequest {
     /// <p>The ID of a request to renew an offering.</p>
     #[serde(rename = "offeringId")]
@@ -2328,6 +2385,7 @@ pub struct Sample {
 
 /// <p>Represents the settings for a run. Includes things like location, radio states, auxiliary apps, and network profiles.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleRunConfiguration {
     /// <p>A list of Upload ARNs for app packages that will be installed alongside your app.</p>
     #[serde(rename = "auxiliaryApps")]
@@ -2369,6 +2427,7 @@ pub struct ScheduleRunConfiguration {
 
 /// <p>Represents a request to the schedule run operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleRunRequest {
     /// <p>The ARN of the app to schedule a run.</p>
     #[serde(rename = "appArn")]
@@ -2414,6 +2473,7 @@ pub struct ScheduleRunResult {
 
 /// <p>Represents test settings. This data structure is passed in as the "test" parameter to ScheduleRun. For an example of the JSON request syntax, see <a>ScheduleRun</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleRunTest {
     /// <p>The test's filter.</p>
     #[serde(rename = "filter")]
@@ -2437,6 +2497,7 @@ pub struct ScheduleRunTest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopJobRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm job you wish to stop.</p>
     #[serde(rename = "arn")]
@@ -2454,6 +2515,7 @@ pub struct StopJobResult {
 
 /// <p>Represents the request to stop the remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the remote access session you wish to stop.</p>
     #[serde(rename = "arn")]
@@ -2472,6 +2534,7 @@ pub struct StopRemoteAccessSessionResult {
 
 /// <p>Represents the request to stop a specific run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRunRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm run you wish to stop.</p>
     #[serde(rename = "arn")]
@@ -2550,6 +2613,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource(s) to which to add tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
     #[serde(rename = "ResourceARN")]
@@ -2642,6 +2706,7 @@ pub struct UniqueProblem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource(s) from which to delete tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
     #[serde(rename = "ResourceARN")]
@@ -2656,6 +2721,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceInstanceRequest {
     /// <p>The Amazon Resource Name (ARN) of the device instance.</p>
     #[serde(rename = "arn")]
@@ -2681,6 +2747,7 @@ pub struct UpdateDeviceInstanceResult {
 
 /// <p>Represents a request to the update device pool operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevicePoolRequest {
     /// <p>The Amazon Resource Name (ARN) of the Device Farm device pool you wish to update.</p>
     #[serde(rename = "arn")]
@@ -2718,6 +2785,7 @@ pub struct UpdateDevicePoolResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
     #[serde(rename = "arn")]
@@ -2754,6 +2822,7 @@ pub struct UpdateInstanceProfileResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNetworkProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to update network profile settings.</p>
     #[serde(rename = "arn")]
@@ -2815,6 +2884,7 @@ pub struct UpdateNetworkProfileResult {
 
 /// <p>Represents a request to the update project operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectRequest {
     /// <p>The Amazon Resource Name (ARN) of the project whose name you wish to update.</p>
     #[serde(rename = "arn")]
@@ -2840,6 +2910,7 @@ pub struct UpdateProjectResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUploadRequest {
     /// <p>The Amazon Resource Name (ARN) of the uploaded test spec.</p>
     #[serde(rename = "arn")]
@@ -2868,6 +2939,7 @@ pub struct UpdateUploadResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVPCEConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to update.</p>
     #[serde(rename = "arn")]

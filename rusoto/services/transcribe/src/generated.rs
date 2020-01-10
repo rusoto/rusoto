@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVocabularyRequest {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
@@ -67,6 +68,7 @@ pub struct CreateVocabularyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTranscriptionJobRequest {
     /// <p>The name of the transcription job to be deleted.</p>
     #[serde(rename = "TranscriptionJobName")]
@@ -74,6 +76,7 @@ pub struct DeleteTranscriptionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVocabularyRequest {
     /// <p>The name of the vocabulary to delete. </p>
     #[serde(rename = "VocabularyName")]
@@ -81,6 +84,7 @@ pub struct DeleteVocabularyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTranscriptionJobRequest {
     /// <p>The name of the job.</p>
     #[serde(rename = "TranscriptionJobName")]
@@ -97,6 +101,7 @@ pub struct GetTranscriptionJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVocabularyRequest {
     /// <p>The name of the vocabulary to return information about. The name is case-sensitive.</p>
     #[serde(rename = "VocabularyName")]
@@ -133,6 +138,7 @@ pub struct GetVocabularyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTranscriptionJobsRequest {
     /// <p>When specified, the jobs returned in the list are limited to jobs whose name contains the specified string.</p>
     #[serde(rename = "JobNameContains")]
@@ -170,6 +176,7 @@ pub struct ListTranscriptionJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVocabulariesRequest {
     /// <p>The maximum number of vocabularies to return in the response. If there are fewer results in the list, this response contains only the actual results.</p>
     #[serde(rename = "MaxResults")]
@@ -245,6 +252,7 @@ pub struct Settings {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTranscriptionJobRequest {
     /// <p>The language code for the language used in the input media file.</p>
     #[serde(rename = "LanguageCode")]
@@ -381,6 +389,7 @@ pub struct TranscriptionJobSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVocabularyRequest {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]

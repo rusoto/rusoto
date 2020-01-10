@@ -87,6 +87,7 @@ pub struct ApplicationSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
     /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
@@ -210,6 +211,7 @@ pub struct CreateApplicationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -302,6 +304,7 @@ pub struct CreateApplicationVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationChangeSetRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -411,6 +414,7 @@ pub struct CreateCloudFormationChangeSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationTemplateRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -462,6 +466,7 @@ pub struct CreateCloudFormationTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -469,6 +474,7 @@ pub struct DeleteApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -485,6 +491,7 @@ pub struct GetApplicationPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -553,6 +560,7 @@ pub struct GetApplicationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFormationTemplateRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -601,6 +609,7 @@ pub struct GetCloudFormationTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationDependenciesRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -633,6 +642,7 @@ pub struct ListApplicationDependenciesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationVersionsRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -661,6 +671,7 @@ pub struct ListApplicationVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
     /// <p>The total number of items to return.</p>
     #[serde(rename = "MaxItems")]
@@ -760,6 +771,7 @@ pub struct ParameterDefinition {
 
 /// <p>Parameter value of the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParameterValue {
     /// <p>The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation
     /// uses the default value that is specified in your template.</p>
@@ -771,6 +783,7 @@ pub struct ParameterValue {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutApplicationPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
@@ -792,6 +805,7 @@ pub struct PutApplicationPolicyResponse {
 /// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a>
 /// </i> Data Type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackConfiguration {
     /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a>
     /// </i> Data Type.</p>
@@ -808,6 +822,7 @@ pub struct RollbackConfiguration {
 /// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a>
 /// </i> Data Type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackTrigger {
     /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a>
     /// </i> Data Type.</p>
@@ -822,6 +837,7 @@ pub struct RollbackTrigger {
 /// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a>
 /// </i> Data Type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a>
     /// </i> Data Type.</p>
@@ -836,6 +852,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]

@@ -80,6 +80,7 @@ pub struct ByteMatchSetSummary {
 
 /// <p>In an <a>UpdateByteMatchSet</a> request, <code>ByteMatchSetUpdate</code> specifies whether to insert or delete a <a>ByteMatchTuple</a> and includes the settings for the <code>ByteMatchTuple</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ByteMatchSetUpdate {
     /// <p>Specifies whether to insert or delete a <a>ByteMatchTuple</a>.</p>
     #[serde(rename = "Action")]
@@ -112,6 +113,7 @@ pub struct ByteMatchTuple {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateByteMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -135,6 +137,7 @@ pub struct CreateByteMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGeoMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -158,6 +161,7 @@ pub struct CreateGeoMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIPSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -181,6 +185,7 @@ pub struct CreateIPSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRateBasedRuleRequest {
     /// <p>The <code>ChangeToken</code> that you used to submit the <code>CreateRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -216,6 +221,7 @@ pub struct CreateRateBasedRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRegexMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -239,6 +245,7 @@ pub struct CreateRegexMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRegexPatternSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -262,6 +269,7 @@ pub struct CreateRegexPatternSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleGroupRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -291,6 +299,7 @@ pub struct CreateRuleGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -320,6 +329,7 @@ pub struct CreateRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSizeConstraintSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -344,6 +354,7 @@ pub struct CreateSizeConstraintSetResponse {
 
 /// <p>A request to create a <a>SqlInjectionMatchSet</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSqlInjectionMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -368,6 +379,7 @@ pub struct CreateSqlInjectionMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebACLRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -401,6 +413,7 @@ pub struct CreateWebACLResponse {
 
 /// <p>A request to create an <a>XssMatchSet</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateXssMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -425,6 +438,7 @@ pub struct CreateXssMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteByteMatchSetRequest {
     /// <p>The <code>ByteMatchSetId</code> of the <a>ByteMatchSet</a> that you want to delete. <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>
     #[serde(rename = "ByteMatchSetId")]
@@ -444,6 +458,7 @@ pub struct DeleteByteMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGeoMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -463,6 +478,7 @@ pub struct DeleteGeoMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIPSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -482,6 +498,7 @@ pub struct DeleteIPSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoggingConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the web ACL from which you want to delete the <a>LoggingConfiguration</a>.</p>
     #[serde(rename = "ResourceArn")]
@@ -493,6 +510,7 @@ pub struct DeleteLoggingConfigurationRequest {
 pub struct DeleteLoggingConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePermissionPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the RuleGroup from which you want to delete the policy.</p> <p>The user making the request must be the owner of the RuleGroup.</p>
     #[serde(rename = "ResourceArn")]
@@ -504,6 +522,7 @@ pub struct DeletePermissionPolicyRequest {
 pub struct DeletePermissionPolicyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRateBasedRuleRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -523,6 +542,7 @@ pub struct DeleteRateBasedRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegexMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -542,6 +562,7 @@ pub struct DeleteRegexMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegexPatternSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -561,6 +582,7 @@ pub struct DeleteRegexPatternSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleGroupRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -580,6 +602,7 @@ pub struct DeleteRuleGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -599,6 +622,7 @@ pub struct DeleteRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSizeConstraintSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -619,6 +643,7 @@ pub struct DeleteSizeConstraintSetResponse {
 
 /// <p>A request to delete a <a>SqlInjectionMatchSet</a> from AWS WAF.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSqlInjectionMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -639,6 +664,7 @@ pub struct DeleteSqlInjectionMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebACLRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -659,6 +685,7 @@ pub struct DeleteWebACLResponse {
 
 /// <p>A request to delete an <a>XssMatchSet</a> from AWS WAF.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteXssMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -739,6 +766,7 @@ pub struct GeoMatchSetSummary {
 
 /// <p>Specifies the type of update to perform to an <a>GeoMatchSet</a> with <a>UpdateGeoMatchSet</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GeoMatchSetUpdate {
     /// <p>Specifies whether to insert or delete a country with <a>UpdateGeoMatchSet</a>.</p>
     #[serde(rename = "Action")]
@@ -749,6 +777,7 @@ pub struct GeoMatchSetUpdate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetByteMatchSetRequest {
     /// <p>The <code>ByteMatchSetId</code> of the <a>ByteMatchSet</a> that you want to get. <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>
     #[serde(rename = "ByteMatchSetId")]
@@ -765,6 +794,7 @@ pub struct GetByteMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetChangeTokenRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -777,6 +807,7 @@ pub struct GetChangeTokenResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetChangeTokenStatusRequest {
     /// <p>The change token for which you want to get the status. This change token was previously returned in the <code>GetChangeToken</code> response.</p>
     #[serde(rename = "ChangeToken")]
@@ -793,6 +824,7 @@ pub struct GetChangeTokenStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGeoMatchSetRequest {
     /// <p>The <code>GeoMatchSetId</code> of the <a>GeoMatchSet</a> that you want to get. <code>GeoMatchSetId</code> is returned by <a>CreateGeoMatchSet</a> and by <a>ListGeoMatchSets</a>.</p>
     #[serde(rename = "GeoMatchSetId")]
@@ -809,6 +841,7 @@ pub struct GetGeoMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIPSetRequest {
     /// <p>The <code>IPSetId</code> of the <a>IPSet</a> that you want to get. <code>IPSetId</code> is returned by <a>CreateIPSet</a> and by <a>ListIPSets</a>.</p>
     #[serde(rename = "IPSetId")]
@@ -825,6 +858,7 @@ pub struct GetIPSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggingConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the web ACL for which you want to get the <a>LoggingConfiguration</a>.</p>
     #[serde(rename = "ResourceArn")]
@@ -841,6 +875,7 @@ pub struct GetLoggingConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPermissionPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the RuleGroup for which you want to get the policy.</p>
     #[serde(rename = "ResourceArn")]
@@ -857,6 +892,7 @@ pub struct GetPermissionPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRateBasedRuleManagedKeysRequest {
     /// <p>A null value and not currently used. Do not include this in your request.</p>
     #[serde(rename = "NextMarker")]
@@ -881,6 +917,7 @@ pub struct GetRateBasedRuleManagedKeysResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRateBasedRuleRequest {
     /// <p>The <code>RuleId</code> of the <a>RateBasedRule</a> that you want to get. <code>RuleId</code> is returned by <a>CreateRateBasedRule</a> and by <a>ListRateBasedRules</a>.</p>
     #[serde(rename = "RuleId")]
@@ -897,6 +934,7 @@ pub struct GetRateBasedRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegexMatchSetRequest {
     /// <p>The <code>RegexMatchSetId</code> of the <a>RegexMatchSet</a> that you want to get. <code>RegexMatchSetId</code> is returned by <a>CreateRegexMatchSet</a> and by <a>ListRegexMatchSets</a>.</p>
     #[serde(rename = "RegexMatchSetId")]
@@ -913,6 +951,7 @@ pub struct GetRegexMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegexPatternSetRequest {
     /// <p>The <code>RegexPatternSetId</code> of the <a>RegexPatternSet</a> that you want to get. <code>RegexPatternSetId</code> is returned by <a>CreateRegexPatternSet</a> and by <a>ListRegexPatternSets</a>.</p>
     #[serde(rename = "RegexPatternSetId")]
@@ -929,6 +968,7 @@ pub struct GetRegexPatternSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRuleGroupRequest {
     /// <p>The <code>RuleGroupId</code> of the <a>RuleGroup</a> that you want to get. <code>RuleGroupId</code> is returned by <a>CreateRuleGroup</a> and by <a>ListRuleGroups</a>.</p>
     #[serde(rename = "RuleGroupId")]
@@ -945,6 +985,7 @@ pub struct GetRuleGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRuleRequest {
     /// <p>The <code>RuleId</code> of the <a>Rule</a> that you want to get. <code>RuleId</code> is returned by <a>CreateRule</a> and by <a>ListRules</a>.</p>
     #[serde(rename = "RuleId")]
@@ -961,6 +1002,7 @@ pub struct GetRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSampledRequestsRequest {
     /// <p>The number of requests that you want AWS WAF to return from among the first 5,000 requests that your AWS resource received during the time range. If your resource received fewer requests than the value of <code>MaxItems</code>, <code>GetSampledRequests</code> returns information about all of them. </p>
     #[serde(rename = "MaxItems")]
@@ -994,6 +1036,7 @@ pub struct GetSampledRequestsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSizeConstraintSetRequest {
     /// <p>The <code>SizeConstraintSetId</code> of the <a>SizeConstraintSet</a> that you want to get. <code>SizeConstraintSetId</code> is returned by <a>CreateSizeConstraintSet</a> and by <a>ListSizeConstraintSets</a>.</p>
     #[serde(rename = "SizeConstraintSetId")]
@@ -1011,6 +1054,7 @@ pub struct GetSizeConstraintSetResponse {
 
 /// <p>A request to get a <a>SqlInjectionMatchSet</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSqlInjectionMatchSetRequest {
     /// <p>The <code>SqlInjectionMatchSetId</code> of the <a>SqlInjectionMatchSet</a> that you want to get. <code>SqlInjectionMatchSetId</code> is returned by <a>CreateSqlInjectionMatchSet</a> and by <a>ListSqlInjectionMatchSets</a>.</p>
     #[serde(rename = "SqlInjectionMatchSetId")]
@@ -1028,6 +1072,7 @@ pub struct GetSqlInjectionMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWebACLRequest {
     /// <p>The <code>WebACLId</code> of the <a>WebACL</a> that you want to get. <code>WebACLId</code> is returned by <a>CreateWebACL</a> and by <a>ListWebACLs</a>.</p>
     #[serde(rename = "WebACLId")]
@@ -1045,6 +1090,7 @@ pub struct GetWebACLResponse {
 
 /// <p>A request to get an <a>XssMatchSet</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetXssMatchSetRequest {
     /// <p>The <code>XssMatchSetId</code> of the <a>XssMatchSet</a> that you want to get. <code>XssMatchSetId</code> is returned by <a>CreateXssMatchSet</a> and by <a>ListXssMatchSets</a>.</p>
     #[serde(rename = "XssMatchSetId")]
@@ -1146,6 +1192,7 @@ pub struct IPSetSummary {
 
 /// <p>Specifies the type of update to perform to an <a>IPSet</a> with <a>UpdateIPSet</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IPSetUpdate {
     /// <p>Specifies whether to insert or delete an IP address with <a>UpdateIPSet</a>.</p>
     #[serde(rename = "Action")]
@@ -1156,6 +1203,7 @@ pub struct IPSetUpdate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActivatedRulesInRuleGroupRequest {
     /// <p>Specifies the number of <code>ActivatedRules</code> that you want AWS WAF to return for this request. If you have more <code>ActivatedRules</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>ActivatedRules</code>.</p>
     #[serde(rename = "Limit")]
@@ -1185,6 +1233,7 @@ pub struct ListActivatedRulesInRuleGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListByteMatchSetsRequest {
     /// <p>Specifies the number of <code>ByteMatchSet</code> objects that you want AWS WAF to return for this request. If you have more <code>ByteMatchSets</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>ByteMatchSet</code> objects.</p>
     #[serde(rename = "Limit")]
@@ -1210,6 +1259,7 @@ pub struct ListByteMatchSetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGeoMatchSetsRequest {
     /// <p>Specifies the number of <code>GeoMatchSet</code> objects that you want AWS WAF to return for this request. If you have more <code>GeoMatchSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>GeoMatchSet</code> objects.</p>
     #[serde(rename = "Limit")]
@@ -1235,6 +1285,7 @@ pub struct ListGeoMatchSetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIPSetsRequest {
     /// <p>Specifies the number of <code>IPSet</code> objects that you want AWS WAF to return for this request. If you have more <code>IPSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>IPSet</code> objects.</p>
     #[serde(rename = "Limit")]
@@ -1260,6 +1311,7 @@ pub struct ListIPSetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLoggingConfigurationsRequest {
     /// <p>Specifies the number of <code>LoggingConfigurations</code> that you want AWS WAF to return for this request. If you have more <code>LoggingConfigurations</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>LoggingConfigurations</code>.</p>
     #[serde(rename = "Limit")]
@@ -1285,6 +1337,7 @@ pub struct ListLoggingConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRateBasedRulesRequest {
     /// <p>Specifies the number of <code>Rules</code> that you want AWS WAF to return for this request. If you have more <code>Rules</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>
     #[serde(rename = "Limit")]
@@ -1310,6 +1363,7 @@ pub struct ListRateBasedRulesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRegexMatchSetsRequest {
     /// <p>Specifies the number of <code>RegexMatchSet</code> objects that you want AWS WAF to return for this request. If you have more <code>RegexMatchSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>RegexMatchSet</code> objects.</p>
     #[serde(rename = "Limit")]
@@ -1335,6 +1389,7 @@ pub struct ListRegexMatchSetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRegexPatternSetsRequest {
     /// <p>Specifies the number of <code>RegexPatternSet</code> objects that you want AWS WAF to return for this request. If you have more <code>RegexPatternSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>RegexPatternSet</code> objects.</p>
     #[serde(rename = "Limit")]
@@ -1360,6 +1415,7 @@ pub struct ListRegexPatternSetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRuleGroupsRequest {
     /// <p>Specifies the number of <code>RuleGroups</code> that you want AWS WAF to return for this request. If you have more <code>RuleGroups</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>RuleGroups</code>.</p>
     #[serde(rename = "Limit")]
@@ -1385,6 +1441,7 @@ pub struct ListRuleGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRulesRequest {
     /// <p>Specifies the number of <code>Rules</code> that you want AWS WAF to return for this request. If you have more <code>Rules</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>
     #[serde(rename = "Limit")]
@@ -1410,6 +1467,7 @@ pub struct ListRulesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSizeConstraintSetsRequest {
     /// <p>Specifies the number of <code>SizeConstraintSet</code> objects that you want AWS WAF to return for this request. If you have more <code>SizeConstraintSets</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>SizeConstraintSet</code> objects.</p>
     #[serde(rename = "Limit")]
@@ -1436,6 +1494,7 @@ pub struct ListSizeConstraintSetsResponse {
 
 /// <p>A request to list the <a>SqlInjectionMatchSet</a> objects created by the current AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSqlInjectionMatchSetsRequest {
     /// <p>Specifies the number of <a>SqlInjectionMatchSet</a> objects that you want AWS WAF to return for this request. If you have more <code>SqlInjectionMatchSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>
     #[serde(rename = "Limit")]
@@ -1462,6 +1521,7 @@ pub struct ListSqlInjectionMatchSetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscribedRuleGroupsRequest {
     /// <p>Specifies the number of subscribed rule groups that you want AWS WAF to return for this request. If you have more objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of objects.</p>
     #[serde(rename = "Limit")]
@@ -1487,6 +1547,7 @@ pub struct ListSubscribedRuleGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1510,6 +1571,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebACLsRequest {
     /// <p>Specifies the number of <code>WebACL</code> objects that you want AWS WAF to return for this request. If you have more <code>WebACL</code> objects than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>WebACL</code> objects.</p>
     #[serde(rename = "Limit")]
@@ -1536,6 +1598,7 @@ pub struct ListWebACLsResponse {
 
 /// <p>A request to list the <a>XssMatchSet</a> objects created by the current AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListXssMatchSetsRequest {
     /// <p>Specifies the number of <a>XssMatchSet</a> objects that you want AWS WAF to return for this request. If you have more <code>XssMatchSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>
     #[serde(rename = "Limit")]
@@ -1591,6 +1654,7 @@ pub struct Predicate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLoggingConfigurationRequest {
     /// <p><p>The Amazon Kinesis Data Firehose that contains the inspected traffic information, the redacted fields details, and the Amazon Resource Name (ARN) of the web ACL to monitor.</p> <note> <p>When specifying <code>Type</code> in <code>RedactedFields</code>, you must use one of the following values: <code>URI</code>, <code>QUERY_STRING</code>, <code>HEADER</code>, or <code>METHOD</code>.</p> </note></p>
     #[serde(rename = "LoggingConfiguration")]
@@ -1607,6 +1671,7 @@ pub struct PutLoggingConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPermissionPolicyRequest {
     /// <p>The policy to attach to the specified RuleGroup.</p>
     #[serde(rename = "Policy")]
@@ -1678,6 +1743,7 @@ pub struct RegexMatchSetSummary {
 
 /// <p>In an <a>UpdateRegexMatchSet</a> request, <code>RegexMatchSetUpdate</code> specifies whether to insert or delete a <a>RegexMatchTuple</a> and includes the settings for the <code>RegexMatchTuple</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegexMatchSetUpdate {
     /// <p>Specifies whether to insert or delete a <a>RegexMatchTuple</a>.</p>
     #[serde(rename = "Action")]
@@ -1731,6 +1797,7 @@ pub struct RegexPatternSetSummary {
 
 /// <p>In an <a>UpdateRegexPatternSet</a> request, <code>RegexPatternSetUpdate</code> specifies whether to insert or delete a <code>RegexPatternString</code> and includes the settings for the <code>RegexPatternString</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegexPatternSetUpdate {
     /// <p>Specifies whether to insert or delete a <code>RegexPatternString</code>.</p>
     #[serde(rename = "Action")]
@@ -1791,6 +1858,7 @@ pub struct RuleGroupSummary {
 
 /// <p>Specifies an <code>ActivatedRule</code> and indicates whether you want to add it to a <code>RuleGroup</code> or delete it from a <code>RuleGroup</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RuleGroupUpdate {
     /// <p>Specify <code>INSERT</code> to add an <code>ActivatedRule</code> to a <code>RuleGroup</code>. Use <code>DELETE</code> to remove an <code>ActivatedRule</code> from a <code>RuleGroup</code>.</p>
     #[serde(rename = "Action")]
@@ -1814,6 +1882,7 @@ pub struct RuleSummary {
 
 /// <p>Specifies a <code>Predicate</code> (such as an <code>IPSet</code>) and indicates whether you want to add it to a <code>Rule</code> or delete it from a <code>Rule</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RuleUpdate {
     /// <p>Specify <code>INSERT</code> to add a <code>Predicate</code> to a <code>Rule</code>. Use <code>DELETE</code> to remove a <code>Predicate</code> from a <code>Rule</code>.</p>
     #[serde(rename = "Action")]
@@ -1894,6 +1963,7 @@ pub struct SizeConstraintSetSummary {
 
 /// <p>Specifies the part of a web request that you want to inspect the size of and indicates whether you want to add the specification to a <a>SizeConstraintSet</a> or delete it from a <code>SizeConstraintSet</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SizeConstraintSetUpdate {
     /// <p>Specify <code>INSERT</code> to add a <a>SizeConstraintSetUpdate</a> to a <a>SizeConstraintSet</a>. Use <code>DELETE</code> to remove a <code>SizeConstraintSetUpdate</code> from a <code>SizeConstraintSet</code>.</p>
     #[serde(rename = "Action")]
@@ -1933,6 +2003,7 @@ pub struct SqlInjectionMatchSetSummary {
 
 /// <p>Specifies the part of a web request that you want to inspect for snippets of malicious SQL code and indicates whether you want to add the specification to a <a>SqlInjectionMatchSet</a> or delete it from a <code>SqlInjectionMatchSet</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlInjectionMatchSetUpdate {
     /// <p>Specify <code>INSERT</code> to add a <a>SqlInjectionMatchSetUpdate</a> to a <a>SqlInjectionMatchSet</a>. Use <code>DELETE</code> to remove a <code>SqlInjectionMatchSetUpdate</code> from a <code>SqlInjectionMatchSet</code>.</p>
     #[serde(rename = "Action")]
@@ -1990,6 +2061,7 @@ pub struct TagInfoForResource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
@@ -2013,6 +2085,7 @@ pub struct TimeWindow {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
@@ -2025,6 +2098,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateByteMatchSetRequest {
     /// <p>The <code>ByteMatchSetId</code> of the <a>ByteMatchSet</a> that you want to update. <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>
     #[serde(rename = "ByteMatchSetId")]
@@ -2047,6 +2121,7 @@ pub struct UpdateByteMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGeoMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2069,6 +2144,7 @@ pub struct UpdateGeoMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIPSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2091,6 +2167,7 @@ pub struct UpdateIPSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRateBasedRuleRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2116,6 +2193,7 @@ pub struct UpdateRateBasedRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegexMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2138,6 +2216,7 @@ pub struct UpdateRegexMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegexPatternSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2160,6 +2239,7 @@ pub struct UpdateRegexPatternSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleGroupRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2182,6 +2262,7 @@ pub struct UpdateRuleGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2204,6 +2285,7 @@ pub struct UpdateRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSizeConstraintSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2227,6 +2309,7 @@ pub struct UpdateSizeConstraintSetResponse {
 
 /// <p>A request to update a <a>SqlInjectionMatchSet</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSqlInjectionMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2250,6 +2333,7 @@ pub struct UpdateSqlInjectionMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWebACLRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2278,6 +2362,7 @@ pub struct UpdateWebACLResponse {
 
 /// <p>A request to update an <a>XssMatchSet</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateXssMatchSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -2357,6 +2442,7 @@ pub struct WebACLSummary {
 
 /// <p>Specifies whether to insert a <code>Rule</code> into or delete a <code>Rule</code> from a <code>WebACL</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct WebACLUpdate {
     /// <p>Specifies whether to insert a <code>Rule</code> into or delete a <code>Rule</code> from a <code>WebACL</code>.</p>
     #[serde(rename = "Action")]
@@ -2396,6 +2482,7 @@ pub struct XssMatchSetSummary {
 
 /// <p>Specifies the part of a web request that you want to inspect for cross-site scripting attacks and indicates whether you want to add the specification to an <a>XssMatchSet</a> or delete it from an <code>XssMatchSet</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct XssMatchSetUpdate {
     /// <p>Specify <code>INSERT</code> to add an <a>XssMatchSetUpdate</a> to an <a>XssMatchSet</a>. Use <code>DELETE</code> to remove an <code>XssMatchSetUpdate</code> from an <code>XssMatchSet</code>.</p>
     #[serde(rename = "Action")]

@@ -34,6 +34,7 @@ use xml::reader::ParserConfig;
 use xml::EventReader;
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddRoleToDBClusterMessage {
     /// <p>The name of the DB cluster to associate the IAM role with.</p>
     pub db_cluster_identifier: String,
@@ -59,6 +60,7 @@ impl AddRoleToDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddSourceIdentifierToSubscriptionMessage {
     /// <p><p>The identifier of the event source to be added.</p> <p>Constraints:</p> <ul> <li> <p>If the source type is a DB instance, then a <code>DBInstanceIdentifier</code> must be supplied.</p> </li> <li> <p>If the source type is a DB security group, a <code>DBSecurityGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> must be supplied.</p> </li> </ul></p>
     pub source_identifier: String,
@@ -87,6 +89,7 @@ impl AddSourceIdentifierToSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddSourceIdentifierToSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
 }
@@ -117,6 +120,7 @@ impl AddSourceIdentifierToSubscriptionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceMessage {
     /// <p>The Amazon Neptune resource that the tags are added to. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p>
     pub resource_name: String,
@@ -150,6 +154,7 @@ impl ApplyMethodDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyPendingMaintenanceActionMessage {
     /// <p>The pending maintenance action to apply to this resource.</p> <p>Valid values: <code>system-update</code>, <code>db-upgrade</code> </p>
     pub apply_action: String,
@@ -178,6 +183,7 @@ impl ApplyPendingMaintenanceActionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplyPendingMaintenanceActionResult {
     pub resource_pending_maintenance_actions: Option<ResourcePendingMaintenanceActions>,
 }
@@ -239,6 +245,7 @@ impl AttributeValueListSerializer {
 
 /// <p>Specifies an Availability Zone.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AvailabilityZone {
     /// <p>The name of the availability zone.</p>
     pub name: Option<String>,
@@ -335,6 +342,7 @@ impl BooleanOptionalDeserializer {
 }
 /// <p>Specifies a character set.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CharacterSet {
     /// <p>The description of the character set.</p>
     pub character_set_description: Option<String>,
@@ -369,6 +377,7 @@ impl CharacterSetDeserializer {
 }
 /// <p>The configuration setting for the log types to be enabled for export to CloudWatch Logs for a specific DB instance or DB cluster.</p> <p>The <code>EnableLogTypes</code> and <code>DisableLogTypes</code> arrays determine which logs will be exported (or not exported) to CloudWatch Logs.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudwatchLogsExportConfiguration {
     /// <p>The list of log types to disable.</p>
     pub disable_log_types: Option<Vec<String>>,
@@ -403,6 +412,7 @@ impl CloudwatchLogsExportConfigurationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterParameterGroupMessage {
     /// <p><p>The identifier or Amazon Resource Name (ARN) for the source DB cluster parameter group. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB cluster parameter group.</p> </li> <li> <p>If the source DB cluster parameter group is in the same AWS Region as the copy, specify a valid DB parameter group identifier, for example <code>my-db-cluster-param-group</code>, or a valid ARN.</p> </li> <li> <p>If the source DB parameter group is in a different AWS Region than the copy, specify a valid DB cluster parameter group ARN, for example <code>arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1</code>.</p> </li> </ul></p>
     pub source_db_cluster_parameter_group_identifier: String,
@@ -442,6 +452,7 @@ impl CopyDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBClusterParameterGroupResult {
     pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
 }
@@ -473,6 +484,7 @@ impl CopyDBClusterParameterGroupResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterSnapshotMessage {
     /// <p>True to copy all tags from the source DB cluster snapshot to the target DB cluster snapshot, and otherwise false. The default is false.</p>
     pub copy_tags: Option<bool>,
@@ -521,6 +533,7 @@ impl CopyDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
@@ -551,6 +564,7 @@ impl CopyDBClusterSnapshotResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBParameterGroupMessage {
     /// <p><p>The identifier or ARN for the source DB parameter group. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB parameter group.</p> </li> <li> <p>Must specify a valid DB parameter group identifier, for example <code>my-db-param-group</code>, or a valid ARN.</p> </li> </ul></p>
     pub source_db_parameter_group_identifier: String,
@@ -590,6 +604,7 @@ impl CopyDBParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBParameterGroupResult {
     pub db_parameter_group: Option<DBParameterGroup>,
 }
@@ -620,6 +635,7 @@ impl CopyDBParameterGroupResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterMessage {
     /// <p>A list of EC2 Availability Zones that instances in the DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -780,6 +796,7 @@ impl CreateDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterParameterGroupMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DBClusterParameterGroup.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
     pub db_cluster_parameter_group_name: String,
@@ -816,6 +833,7 @@ impl CreateDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterParameterGroupResult {
     pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
 }
@@ -847,6 +865,7 @@ impl CreateDBClusterParameterGroupResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -870,6 +889,7 @@ impl CreateDBClusterResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterSnapshotMessage {
     /// <p>The identifier of the DB cluster to create a snapshot for. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>
     pub db_cluster_identifier: String,
@@ -903,6 +923,7 @@ impl CreateDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
@@ -933,6 +954,7 @@ impl CreateDBClusterSnapshotResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBInstanceMessage {
     /// <p>The amount of storage (in gibibytes) to allocate for the DB instance.</p> <p>Type: Integer</p> <p>Not applicable. Neptune cluster volumes automatically grow as the amount of data in your database increases, though you are only charged for the space that you use in a Neptune cluster volume.</p>
     pub allocated_storage: Option<i64>,
@@ -1197,6 +1219,7 @@ impl CreateDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -1221,6 +1244,7 @@ impl CreateDBInstanceResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBParameterGroupMessage {
     /// <p>The DB parameter group family name. A DB parameter group can be associated with one and only one DB parameter group family, and can be applied only to a DB instance running a database engine and engine version compatible with that DB parameter group family.</p>
     pub db_parameter_group_family: String,
@@ -1257,6 +1281,7 @@ impl CreateDBParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBParameterGroupResult {
     pub db_parameter_group: Option<DBParameterGroup>,
 }
@@ -1287,6 +1312,7 @@ impl CreateDBParameterGroupResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBSubnetGroupMessage {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: String,
@@ -1327,6 +1353,7 @@ impl CreateDBSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBSubnetGroupResult {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
@@ -1357,6 +1384,7 @@ impl CreateDBSubnetGroupResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSubscriptionMessage {
     /// <p> A Boolean value; set to <b>true</b> to activate the subscription, set to <b>false</b> to create the subscription but not active it.</p>
     pub enabled: Option<bool>,
@@ -1415,6 +1443,7 @@ impl CreateEventSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateEventSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
 }
@@ -1446,6 +1475,7 @@ impl CreateEventSubscriptionResultDeserializer {
 }
 /// <p>Contains the details of an Amazon Neptune DB cluster.</p> <p>This data type is used as a response element in the <a>DescribeDBClusters</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBCluster {
     /// <p> <code>AllocatedStorage</code> always returns 1, because Neptune DB cluster storage size is not fixed, but instead automatically adjusts as needed.</p>
     pub allocated_storage: Option<i64>,
@@ -1735,6 +1765,7 @@ impl DBClusterListDeserializer {
 }
 /// <p>Contains information about an instance that is part of a DB cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterMember {
     /// <p>Specifies the status of the DB cluster parameter group for this member of the DB cluster.</p>
     pub db_cluster_parameter_group_status: Option<String>,
@@ -1804,6 +1835,7 @@ impl DBClusterMemberListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterMessage {
     /// <p>Contains a list of DB clusters for the user.</p>
     pub db_clusters: Option<Vec<DBCluster>>,
@@ -1856,6 +1888,7 @@ impl DBClusterOptionGroupMembershipsDeserializer {
 }
 /// <p>Contains status information for a DB cluster option group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterOptionGroupStatus {
     /// <p>Specifies the name of the DB cluster option group.</p>
     pub db_cluster_option_group_name: Option<String>,
@@ -1893,6 +1926,7 @@ impl DBClusterOptionGroupStatusDeserializer {
 }
 /// <p>Contains the details of an Amazon Neptune DB cluster parameter group.</p> <p>This data type is used as a response element in the <a>DescribeDBClusterParameterGroups</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB cluster parameter group.</p>
     pub db_cluster_parameter_group_arn: Option<String>,
@@ -1945,6 +1979,7 @@ impl DBClusterParameterGroupDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupDetails {
     /// <p> An optional pagination token provided by a previous DescribeDBClusterParameters request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
@@ -2000,6 +2035,7 @@ impl DBClusterParameterGroupListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupNameMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters or numbers.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
     pub db_cluster_parameter_group_name: Option<String>,
@@ -2030,6 +2066,7 @@ impl DBClusterParameterGroupNameMessageDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupsMessage {
     /// <p>A list of DB cluster parameter groups.</p>
     pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
@@ -2069,6 +2106,7 @@ impl DBClusterParameterGroupsMessageDeserializer {
 }
 /// <p>Describes an AWS Identity and Access Management (IAM) role that is associated with a DB cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterRole {
     /// <p>The Amazon Resource Name (ARN) of the IAM role that is associated with the DB cluster.</p>
     pub role_arn: Option<String>,
@@ -2119,6 +2157,7 @@ impl DBClusterRolesDeserializer {
 }
 /// <p>Contains the details for an Amazon Neptune DB cluster snapshot</p> <p>This data type is used as a response element in the <a>DescribeDBClusterSnapshots</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshot {
     /// <p>Specifies the allocated storage size in gibibytes (GiB).</p>
     pub allocated_storage: Option<i64>,
@@ -2268,6 +2307,7 @@ impl DBClusterSnapshotDeserializer {
 }
 /// <p>Contains the name and values of a manual DB cluster snapshot attribute.</p> <p>Manual DB cluster snapshot attributes are used to authorize other AWS accounts to restore a manual DB cluster snapshot. For more information, see the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshotAttribute {
     /// <p>The name of the manual DB cluster snapshot attribute.</p> <p>The attribute named <code>restore</code> refers to the list of AWS accounts that have permission to copy or restore the manual DB cluster snapshot. For more information, see the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>
     pub attribute_name: Option<String>,
@@ -2325,6 +2365,7 @@ impl DBClusterSnapshotAttributeListDeserializer {
 }
 /// <p>Contains the results of a successful call to the <a>DescribeDBClusterSnapshotAttributes</a> API action.</p> <p>Manual DB cluster snapshot attributes are used to authorize other AWS accounts to copy or restore a manual DB cluster snapshot. For more information, see the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshotAttributesResult {
     /// <p>The list of attributes and values for the manual DB cluster snapshot.</p>
     pub db_cluster_snapshot_attributes: Option<Vec<DBClusterSnapshotAttribute>>,
@@ -2386,6 +2427,7 @@ impl DBClusterSnapshotListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshotMessage {
     /// <p>Provides a list of DB cluster snapshots for the user.</p>
     pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
@@ -2425,6 +2467,7 @@ impl DBClusterSnapshotMessageDeserializer {
 }
 /// <p> This data type is used as a response element in the action <a>DescribeDBEngineVersions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBEngineVersion {
     /// <p>The description of the database engine.</p>
     pub db_engine_description: Option<String>,
@@ -2561,6 +2604,7 @@ impl DBEngineVersionListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBEngineVersionMessage {
     /// <p> A list of <code>DBEngineVersion</code> elements.</p>
     pub db_engine_versions: Option<Vec<DBEngineVersion>>,
@@ -2593,6 +2637,7 @@ impl DBEngineVersionMessageDeserializer {
 }
 /// <p>Contains the details of an Amazon Neptune DB instance.</p> <p>This data type is used as a response element in the <a>DescribeDBInstances</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstance {
     /// <p>Specifies the allocated storage size specified in gibibytes.</p>
     pub allocated_storage: Option<i64>,
@@ -3003,6 +3048,7 @@ impl DBInstanceListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstanceMessage {
     /// <p> A list of <a>DBInstance</a> instances.</p>
     pub db_instances: Option<Vec<DBInstance>>,
@@ -3035,6 +3081,7 @@ impl DBInstanceMessageDeserializer {
 }
 /// <p>Provides a list of status information for a DB instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstanceStatusInfo {
     /// <p>Details of the error if there is an error for the instance. If the instance is not in an error state, this value is blank.</p>
     pub message: Option<String>,
@@ -3095,6 +3142,7 @@ impl DBInstanceStatusInfoListDeserializer {
 }
 /// <p>Contains the details of an Amazon Neptune DB parameter group.</p> <p>This data type is used as a response element in the <a>DescribeDBParameterGroups</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB parameter group.</p>
     pub db_parameter_group_arn: Option<String>,
@@ -3143,6 +3191,7 @@ impl DBParameterGroupDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupDetails {
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
@@ -3198,6 +3247,7 @@ impl DBParameterGroupListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupNameMessage {
     /// <p>Provides the name of the DB parameter group.</p>
     pub db_parameter_group_name: Option<String>,
@@ -3230,6 +3280,7 @@ impl DBParameterGroupNameMessageDeserializer {
 }
 /// <p><p>The status of the DB parameter group.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateDBInstance</a> </p> </li> <li> <p> <a>DeleteDBInstance</a> </p> </li> <li> <p> <a>ModifyDBInstance</a> </p> </li> <li> <p> <a>RebootDBInstance</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupStatus {
     /// <p>The name of the DP parameter group.</p>
     pub db_parameter_group_name: Option<String>,
@@ -3285,6 +3336,7 @@ impl DBParameterGroupStatusListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupsMessage {
     /// <p>A list of <a>DBParameterGroup</a> instances.</p>
     pub db_parameter_groups: Option<Vec<DBParameterGroup>>,
@@ -3324,6 +3376,7 @@ impl DBParameterGroupsMessageDeserializer {
 }
 /// <p>Specifies membership in a designated DB security group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSecurityGroupMembership {
     /// <p>The name of the DB security group.</p>
     pub db_security_group_name: Option<String>,
@@ -3393,6 +3446,7 @@ impl DBSecurityGroupNameListSerializer {
 
 /// <p>Contains the details of an Amazon Neptune DB subnet group.</p> <p>This data type is used as a response element in the <a>DescribeDBSubnetGroups</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSubnetGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB subnet group.</p>
     pub db_subnet_group_arn: Option<String>,
@@ -3450,6 +3504,7 @@ impl DBSubnetGroupDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSubnetGroupMessage {
     /// <p> A list of <a>DBSubnetGroup</a> instances.</p>
     pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
@@ -3501,6 +3556,7 @@ impl DBSubnetGroupsDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterMessage {
     /// <p><p>The DB cluster identifier for the DB cluster to be deleted. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match an existing DBClusterIdentifier.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
@@ -3536,6 +3592,7 @@ impl DeleteDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterParameterGroupMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB cluster parameter group.</p> </li> <li> <p>You can&#39;t delete a default DB cluster parameter group.</p> </li> <li> <p>Cannot be associated with any DB clusters.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: String,
@@ -3558,6 +3615,7 @@ impl DeleteDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -3581,6 +3639,7 @@ impl DeleteDBClusterResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterSnapshotMessage {
     /// <p>The identifier of the DB cluster snapshot to delete.</p> <p>Constraints: Must be the name of an existing DB cluster snapshot in the <code>available</code> state.</p>
     pub db_cluster_snapshot_identifier: String,
@@ -3603,6 +3662,7 @@ impl DeleteDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
@@ -3633,6 +3693,7 @@ impl DeleteDBClusterSnapshotResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBInstanceMessage {
     /// <p><p>The DB instance identifier for the DB instance to be deleted. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DB instance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -3668,6 +3729,7 @@ impl DeleteDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -3692,6 +3754,7 @@ impl DeleteDBInstanceResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBParameterGroupMessage {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB parameter group</p> </li> <li> <p>You can&#39;t delete a default DB parameter group</p> </li> <li> <p>Cannot be associated with any DB instances</p> </li> </ul></p>
     pub db_parameter_group_name: String,
@@ -3714,6 +3777,7 @@ impl DeleteDBParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBSubnetGroupMessage {
     /// <p>The name of the database subnet group to delete.</p> <note> <p>You can't delete the default subnet group.</p> </note> <p>Constraints:</p> <p>Constraints: Must match the name of an existing DBSubnetGroup. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: String,
@@ -3736,6 +3800,7 @@ impl DeleteDBSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSubscriptionMessage {
     /// <p>The name of the event notification subscription you want to delete.</p>
     pub subscription_name: String,
@@ -3758,6 +3823,7 @@ impl DeleteEventSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteEventSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
 }
@@ -3788,6 +3854,7 @@ impl DeleteEventSubscriptionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParameterGroupsMessage {
     /// <p><p>The name of a specific DB cluster parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: Option<String>,
@@ -3831,6 +3898,7 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParametersMessage {
     /// <p><p>The name of a specific DB cluster parameter group to return parameter details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: String,
@@ -3877,6 +3945,7 @@ impl DescribeDBClusterParametersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterSnapshotAttributesMessage {
     /// <p>The identifier for the DB cluster snapshot to describe the attributes for.</p>
     pub db_cluster_snapshot_identifier: String,
@@ -3903,6 +3972,7 @@ impl DescribeDBClusterSnapshotAttributesMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDBClusterSnapshotAttributesResult {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
@@ -3934,6 +4004,7 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterSnapshotsMessage {
     /// <p><p>The ID of the DB cluster to retrieve the list of DB cluster snapshots for. This parameter can&#39;t be used in conjunction with the <code>DBClusterSnapshotIdentifier</code> parameter. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBCluster.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
@@ -4000,6 +4071,7 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClustersMessage {
     /// <p><p>The user-supplied DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match an existing DBClusterIdentifier.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
@@ -4043,6 +4115,7 @@ impl DescribeDBClustersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBEngineVersionsMessage {
     /// <p><p>The name of a specific DB parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match an existing DBParameterGroupFamily.</p> </li> </ul></p>
     pub db_parameter_group_family: Option<String>,
@@ -4117,6 +4190,7 @@ impl DescribeDBEngineVersionsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBInstancesMessage {
     /// <p><p>The user-supplied instance identifier. If this parameter is specified, information from only the specific DB instance is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: Option<String>,
@@ -4160,6 +4234,7 @@ impl DescribeDBInstancesMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBParameterGroupsMessage {
     /// <p><p>The name of a specific DB parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: Option<String>,
@@ -4203,6 +4278,7 @@ impl DescribeDBParameterGroupsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBParametersMessage {
     /// <p><p>The name of a specific DB parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: String,
@@ -4249,6 +4325,7 @@ impl DescribeDBParametersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBSubnetGroupsMessage {
     /// <p>The name of the DB subnet group to return details for.</p>
     pub db_subnet_group_name: Option<String>,
@@ -4289,6 +4366,7 @@ impl DescribeDBSubnetGroupsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEngineDefaultClusterParametersMessage {
     /// <p>The name of the DB cluster parameter group family to return engine parameter information for.</p>
     pub db_parameter_group_family: String,
@@ -4334,6 +4412,7 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEngineDefaultClusterParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
 }
@@ -4364,6 +4443,7 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEngineDefaultParametersMessage {
     /// <p>The name of the DB parameter group family.</p>
     pub db_parameter_group_family: String,
@@ -4405,6 +4485,7 @@ impl DescribeEngineDefaultParametersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEngineDefaultParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
 }
@@ -4435,6 +4516,7 @@ impl DescribeEngineDefaultParametersResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventCategoriesMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
@@ -4465,6 +4547,7 @@ impl DescribeEventCategoriesMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventSubscriptionsMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
@@ -4505,6 +4588,7 @@ impl DescribeEventSubscriptionsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
     /// <p>The number of minutes to retrieve events for.</p> <p>Default: 60</p>
     pub duration: Option<i64>,
@@ -4574,6 +4658,7 @@ impl DescribeEventsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrderableDBInstanceOptionsMessage {
     /// <p>The DB instance class filter value. Specify this parameter to show only the available offerings matching the specified DB instance class.</p>
     pub db_instance_class: Option<String>,
@@ -4632,6 +4717,7 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingMaintenanceActionsMessage {
     /// <p><p>A filter that specifies one or more resources to return pending maintenance actions for.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include pending maintenance actions for the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance ARNs. The results list will only include pending maintenance actions for the DB instances identified by these ARNs.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
@@ -4672,6 +4758,7 @@ impl DescribePendingMaintenanceActionsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeValidDBInstanceModificationsMessage {
     /// <p>The customer identifier or the ARN of your DB instance.</p>
     pub db_instance_identifier: String,
@@ -4698,6 +4785,7 @@ impl DescribeValidDBInstanceModificationsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeValidDBInstanceModificationsResult {
     pub valid_db_instance_modifications_message: Option<ValidDBInstanceModificationsMessage>,
 }
@@ -4731,6 +4819,7 @@ impl DescribeValidDBInstanceModificationsResultDeserializer {
 }
 /// <p>An Active Directory Domain membership record associated with a DB instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DomainMembership {
     /// <p>The identifier of the Active Directory Domain.</p>
     pub domain: Option<String>,
@@ -4814,6 +4903,7 @@ impl DoubleOptionalDeserializer {
 }
 /// <p>A range of double values.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DoubleRange {
     /// <p>The minimum value in the range.</p>
     pub from: Option<f64>,
@@ -4861,6 +4951,7 @@ impl DoubleRangeListDeserializer {
 }
 /// <p>Specifies a connection endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Endpoint {
     /// <p>Specifies the DNS address of the DB instance.</p>
     pub address: Option<String>,
@@ -4897,6 +4988,7 @@ impl EndpointDeserializer {
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeEngineDefaultParameters</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EngineDefaults {
     /// <p>Specifies the name of the DB parameter group family that the engine default parameters apply to.</p>
     pub db_parameter_group_family: Option<String>,
@@ -4937,6 +5029,7 @@ impl EngineDefaultsDeserializer {
 }
 /// <p> This data type is used as a response element in the <a>DescribeEvents</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Event {
     /// <p>Specifies the date and time of the event.</p>
     pub date: Option<String>,
@@ -5017,6 +5110,7 @@ impl EventCategoriesListSerializer {
 
 /// <p>Contains the results of a successful invocation of the <a>DescribeEventCategories</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMap {
     /// <p>The event categories for the specified source type</p>
     pub event_categories: Option<Vec<String>>,
@@ -5068,6 +5162,7 @@ impl EventCategoriesMapListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMessage {
     /// <p>A list of EventCategoriesMap data types.</p>
     pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
@@ -5115,6 +5210,7 @@ impl EventListDeserializer {
 }
 /// <p>Contains the results of a successful invocation of the <a>DescribeEventSubscriptions</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventSubscription {
     /// <p>The event notification subscription Id.</p>
     pub cust_subscription_id: Option<String>,
@@ -5219,6 +5315,7 @@ impl EventSubscriptionsListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventSubscriptionsMessage {
     /// <p>A list of EventSubscriptions data types.</p>
     pub event_subscriptions_list: Option<Vec<EventSubscription>>,
@@ -5257,6 +5354,7 @@ impl EventSubscriptionsMessageDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventsMessage {
     /// <p> A list of <a>Event</a> instances.</p>
     pub events: Option<Vec<Event>>,
@@ -5288,6 +5386,7 @@ impl EventsMessageDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FailoverDBClusterMessage {
     /// <p><p>A DB cluster identifier to force a failover for. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
@@ -5320,6 +5419,7 @@ impl FailoverDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FailoverDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -5349,6 +5449,7 @@ impl FailoverDBClusterResultDeserializer {
 }
 /// <p>This type is not currently supported.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>This parameter is not currently supported.</p>
     pub name: String,
@@ -5431,6 +5532,7 @@ impl KeyListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
@@ -5488,6 +5590,7 @@ impl LogTypeListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterMessage {
     /// <p>A value that specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB cluster. If this parameter is set to <code>false</code>, changes to the DB cluster are applied during the next maintenance window.</p> <p>The <code>ApplyImmediately</code> parameter only affects the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values. If you set the <code>ApplyImmediately</code> parameter value to false, then changes to the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values are applied during the next maintenance window. All other changes are applied immediately, regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
@@ -5601,6 +5704,7 @@ impl ModifyDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterParameterGroupMessage {
     /// <p>The name of the DB cluster parameter group to modify.</p>
     pub db_cluster_parameter_group_name: String,
@@ -5630,6 +5734,7 @@ impl ModifyDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -5653,6 +5758,7 @@ impl ModifyDBClusterResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterSnapshotAttributeMessage {
     /// <p>The name of the DB cluster snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB cluster snapshot, set this value to <code>restore</code>.</p>
     pub attribute_name: String,
@@ -5699,6 +5805,7 @@ impl ModifyDBClusterSnapshotAttributeMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterSnapshotAttributeResult {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
@@ -5730,6 +5837,7 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBInstanceMessage {
     /// <p>The new amount of storage (in gibibytes) to allocate for the DB instance.</p> <p>Not applicable. Storage is managed by the DB Cluster.</p>
     pub allocated_storage: Option<i64>,
@@ -5971,6 +6079,7 @@ impl ModifyDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -5995,6 +6104,7 @@ impl ModifyDBInstanceResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBParameterGroupMessage {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: String,
@@ -6024,6 +6134,7 @@ impl ModifyDBParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBSubnetGroupMessage {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: Option<String>,
@@ -6061,6 +6172,7 @@ impl ModifyDBSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBSubnetGroupResult {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
@@ -6091,6 +6203,7 @@ impl ModifyDBSubnetGroupResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEventSubscriptionMessage {
     /// <p> A Boolean value; set to <b>true</b> to activate the subscription.</p>
     pub enabled: Option<bool>,
@@ -6137,6 +6250,7 @@ impl ModifyEventSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyEventSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
 }
@@ -6168,6 +6282,7 @@ impl ModifyEventSubscriptionResultDeserializer {
 }
 /// <p>Provides information on the option groups the DB instance is a member of.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OptionGroupMembership {
     /// <p>The name of the option group that the instance belongs to.</p>
     pub option_group_name: Option<String>,
@@ -6219,6 +6334,7 @@ impl OptionGroupMembershipListDeserializer {
 }
 /// <p>Contains a list of available options for a DB instance.</p> <p> This data type is used as a response element in the <a>DescribeOrderableDBInstanceOptions</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrderableDBInstanceOption {
     /// <p>A list of Availability Zones for a DB instance.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
@@ -6409,6 +6525,7 @@ impl OrderableDBInstanceOptionsListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrderableDBInstanceOptionsMessage {
     /// <p> An optional pagination token provided by a previous OrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
@@ -6448,6 +6565,8 @@ impl OrderableDBInstanceOptionsMessageDeserializer {
 }
 /// <p>Specifies a parameter.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Parameter {
     /// <p>Specifies the valid range of values for the parameter.</p>
     pub allowed_values: Option<String>,
@@ -6601,6 +6720,7 @@ impl ParametersListSerializer {
 
 /// <p>A list of the log types whose configuration is still pending. In other words, these log types are in the process of being activated or deactivated.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingCloudwatchLogsExports {
     /// <p>Log types that are in the process of being enabled. After they are enabled, these log types are exported to CloudWatch Logs.</p>
     pub log_types_to_disable: Option<Vec<String>>,
@@ -6639,6 +6759,7 @@ impl PendingCloudwatchLogsExportsDeserializer {
 }
 /// <p>Provides information about a pending maintenance action for a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingMaintenanceAction {
     /// <p>The type of pending maintenance action that is available for the resource.</p>
     pub action: Option<String>,
@@ -6739,6 +6860,7 @@ impl PendingMaintenanceActionsDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingMaintenanceActionsMessage {
     /// <p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
@@ -6778,6 +6900,7 @@ impl PendingMaintenanceActionsMessageDeserializer {
 }
 /// <p> This data type is used as a response element in the <a>ModifyDBInstance</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingModifiedValues {
     /// <p> Contains the new <code>AllocatedStorage</code> size for the DB instance that will be applied or is currently being applied.</p>
     pub allocated_storage: Option<i64>,
@@ -6891,6 +7014,7 @@ impl PendingModifiedValuesDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PromoteReadReplicaDBClusterMessage {
     /// <p>Not supported.</p>
     pub db_cluster_identifier: String,
@@ -6913,6 +7037,7 @@ impl PromoteReadReplicaDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PromoteReadReplicaDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -6942,6 +7067,7 @@ impl PromoteReadReplicaDBClusterResultDeserializer {
 }
 /// <p>A range of integer values.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Range {
     /// <p>The minimum value in the range.</p>
     pub from: Option<i64>,
@@ -7050,6 +7176,7 @@ impl ReadReplicaIdentifierListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootDBInstanceMessage {
     /// <p><p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -7077,6 +7204,7 @@ impl RebootDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RebootDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -7101,6 +7229,7 @@ impl RebootDBInstanceResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveRoleFromDBClusterMessage {
     /// <p>The name of the DB cluster to disassociate the IAM role from.</p>
     pub db_cluster_identifier: String,
@@ -7126,6 +7255,7 @@ impl RemoveRoleFromDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveSourceIdentifierFromSubscriptionMessage {
     /// <p> The source identifier to be removed from the subscription, such as the <b>DB instance identifier</b> for a DB instance or the name of a security group.</p>
     pub source_identifier: String,
@@ -7158,6 +7288,7 @@ impl RemoveSourceIdentifierFromSubscriptionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveSourceIdentifierFromSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
 }
@@ -7188,6 +7319,7 @@ impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceMessage {
     /// <p>The Amazon Neptune resource that the tags are removed from. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p>
     pub resource_name: String,
@@ -7210,6 +7342,7 @@ impl RemoveTagsFromResourceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDBClusterParameterGroupMessage {
     /// <p>The name of the DB cluster parameter group to reset.</p>
     pub db_cluster_parameter_group_name: String,
@@ -7246,6 +7379,7 @@ impl ResetDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDBParameterGroupMessage {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: String,
@@ -7283,6 +7417,7 @@ impl ResetDBParameterGroupMessageSerializer {
 
 /// <p>Describes the pending maintenance actions for a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourcePendingMaintenanceActions {
     /// <p>A list that provides details about the pending maintenance actions for the resource.</p>
     pub pending_maintenance_action_details: Option<Vec<PendingMaintenanceAction>>,
@@ -7324,6 +7459,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterFromSnapshotMessage {
     /// <p>Provides the list of EC2 Availability Zones that instances in the restored DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -7433,6 +7569,7 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterFromSnapshotResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -7461,6 +7598,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterToPointInTimeMessage {
     /// <p><p>The name of the new DB cluster to be created.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub db_cluster_identifier: String,
@@ -7566,6 +7704,7 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterToPointInTimeResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -7646,6 +7785,7 @@ impl StringDeserializer {
 }
 /// <p>Specifies a subnet.</p> <p> This data type is used as a response element in the <a>DescribeDBSubnetGroups</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Subnet {
     /// <p>Specifies the EC2 Availability Zone that the subnet is in.</p>
     pub subnet_availability_zone: Option<AvailabilityZone>,
@@ -7760,6 +7900,8 @@ impl TStampDeserializer {
 }
 /// <p>Metadata assigned to an Amazon Neptune resource consisting of a key-value pair.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>A key is the required name of the tag. The string value can be from 1 to 128 Unicode characters in length and can't be prefixed with "aws:" or "rds:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
     pub key: Option<String>,
@@ -7834,6 +7976,7 @@ impl TagListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagListMessage {
     /// <p>List of tags returned by the ListTagsForResource operation.</p>
     pub tag_list: Option<Vec<Tag>>,
@@ -7861,6 +8004,7 @@ impl TagListMessageDeserializer {
 }
 /// <p>A time zone associated with a <a>DBInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Timezone {
     /// <p>The name of the time zone.</p>
     pub timezone_name: Option<String>,
@@ -7887,6 +8031,7 @@ impl TimezoneDeserializer {
 }
 /// <p>The version of the database engine that a DB instance can be upgraded to.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpgradeTarget {
     /// <p>A value that indicates whether the target version is applied to any source DB instances that have AutoMinorVersionUpgrade set to true.</p>
     pub auto_upgrade: Option<bool>,
@@ -7937,6 +8082,7 @@ impl UpgradeTargetDeserializer {
 }
 /// <p>Information about valid modifications that you can make to your DB instance. Contains the result of a successful call to the <a>DescribeValidDBInstanceModifications</a> action. You can use this information when you call <a>ModifyDBInstance</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ValidDBInstanceModificationsMessage {
     /// <p>Valid storage options for your DB instance.</p>
     pub storage: Option<Vec<ValidStorageOptions>>,
@@ -7968,6 +8114,7 @@ impl ValidDBInstanceModificationsMessageDeserializer {
 }
 /// <p>Information about valid modifications that you can make to your DB instance.</p> <p>Contains the result of a successful call to the <a>DescribeValidDBInstanceModifications</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ValidStorageOptions {
     /// <p>The valid range of Provisioned IOPS to gibibytes of storage multiplier. For example, 3-10, which means that provisioned IOPS can be between 3 and 10 times storage.</p>
     pub iops_to_storage_ratio: Option<Vec<DoubleRange>>,
@@ -8066,6 +8213,7 @@ impl VpcSecurityGroupIdListSerializer {
 
 /// <p>This data type is used as a response element for queries on VPC security group membership.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcSecurityGroupMembership {
     /// <p>The status of the VPC security group.</p>
     pub status: Option<String>,

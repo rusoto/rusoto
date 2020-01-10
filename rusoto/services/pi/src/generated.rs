@@ -36,6 +36,7 @@ pub struct DataPoint {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDimensionKeysRequest {
     /// <p>The date and time specifying the end of the requested time series data. The value specified is <i>exclusive</i> - data points less than (but not equal to) <code>EndTime</code> will be returned.</p> <p>The value for <code>EndTime</code> must be later than the value for <code>StartTime</code>.</p>
     #[serde(rename = "EndTime")]
@@ -104,6 +105,7 @@ pub struct DescribeDimensionKeysResponse {
 
 /// <p>A logical grouping of Performance Insights metrics for a related subject area. For example, the <code>db.sql</code> dimension group consists of the following dimensions: <code>db.sql.id</code>, <code>db.sql.db_id</code>, <code>db.sql.statement</code>, and <code>db.sql.tokenized_id</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DimensionGroup {
     /// <p><p>A list of specific dimensions from a dimension group. If this parameter is not present, then it signifies that all of the dimensions in the group were requested, or are present in the response.</p> <p>Valid values for elements in the <code>Dimensions</code> array are:</p> <ul> <li> <p>db.user.id</p> </li> <li> <p>db.user.name</p> </li> <li> <p>db.host.id</p> </li> <li> <p>db.host.name</p> </li> <li> <p>db.sql.id</p> </li> <li> <p>db.sql.db<em>id</p> </li> <li> <p>db.sql.statement</p> </li> <li> <p>db.sql.tokenized</em>id</p> </li> <li> <p>db.sql<em>tokenized.id</p> </li> <li> <p>db.sql</em>tokenized.db<em>id</p> </li> <li> <p>db.sql</em>tokenized.statement</p> </li> <li> <p>db.wait<em>event.name</p> </li> <li> <p>db.wait</em>event.type</p> </li> <li> <p>db.wait<em>event</em>type.name</p> </li> </ul></p>
     #[serde(rename = "Dimensions")]
@@ -137,6 +139,7 @@ pub struct DimensionKeyDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceMetricsRequest {
     /// <p>The date and time specifiying the end of the requested time series data. The value specified is <i>exclusive</i> - data points less than (but not equal to) <code>EndTime</code> will be returned.</p> <p>The value for <code>EndTime</code> must be later than the value for <code>StartTime</code>.</p>
     #[serde(rename = "EndTime")]
@@ -208,6 +211,7 @@ pub struct MetricKeyDataPoints {
 
 /// <p>A single query to be processed. You must provide the metric to query. If no other parameters are specified, Performance Insights returns all of the data points for that metric. You can optionally request that the data points be aggregated by dimension group ( <code>GroupBy</code>), and return only those data points that match your criteria (<code>Filter</code>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetricQuery {
     /// <p><p>One or more filters to apply in the request. Restrictions:</p> <ul> <li> <p>Any number of filters by the same dimension, as specified in the <code>GroupBy</code> parameter.</p> </li> <li> <p>A single filter for any other dimension in this dimension group.</p> </li> </ul></p>
     #[serde(rename = "Filter")]

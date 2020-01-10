@@ -58,6 +58,7 @@ pub struct BatchPutMessageErrorEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutMessageRequest {
     /// <p>The name of the channel where the messages are sent.</p>
     #[serde(rename = "channelName")]
@@ -77,6 +78,7 @@ pub struct BatchPutMessageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelPipelineReprocessingRequest {
     /// <p>The name of pipeline for which data reprocessing is canceled.</p>
     #[serde(rename = "pipelineName")]
@@ -221,6 +223,7 @@ pub struct ContainerDatasetAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
     /// <p>The name of the channel.</p>
     #[serde(rename = "channelName")]
@@ -257,6 +260,7 @@ pub struct CreateChannelResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetContentRequest {
     /// <p>The name of the data set.</p>
     #[serde(rename = "datasetName")]
@@ -273,6 +277,7 @@ pub struct CreateDatasetContentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetRequest {
     /// <p>A list of actions that create the data set contents.</p>
     #[serde(rename = "actions")]
@@ -320,6 +325,7 @@ pub struct CreateDatasetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatastoreRequest {
     /// <p>The name of the data store.</p>
     #[serde(rename = "datastoreName")]
@@ -356,6 +362,7 @@ pub struct CreateDatastoreResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineRequest {
     /// <p>A list of "PipelineActivity" objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <b>PipelineActivity</b> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity, for example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
     #[serde(rename = "pipelineActivities")]
@@ -764,6 +771,7 @@ pub struct DatastoreSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelRequest {
     /// <p>The name of the channel to delete.</p>
     #[serde(rename = "channelName")]
@@ -771,6 +779,7 @@ pub struct DeleteChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetContentRequest {
     /// <p>The name of the data set whose content is deleted.</p>
     #[serde(rename = "datasetName")]
@@ -782,6 +791,7 @@ pub struct DeleteDatasetContentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetRequest {
     /// <p>The name of the data set to delete.</p>
     #[serde(rename = "datasetName")]
@@ -789,6 +799,7 @@ pub struct DeleteDatasetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatastoreRequest {
     /// <p>The name of the data store to delete.</p>
     #[serde(rename = "datastoreName")]
@@ -796,6 +807,7 @@ pub struct DeleteDatastoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineRequest {
     /// <p>The name of the pipeline to delete.</p>
     #[serde(rename = "pipelineName")]
@@ -814,6 +826,7 @@ pub struct DeltaTime {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelRequest {
     /// <p>The name of the channel whose information is retrieved.</p>
     #[serde(rename = "channelName")]
@@ -838,6 +851,7 @@ pub struct DescribeChannelResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetRequest {
     /// <p>The name of the data set whose information is retrieved.</p>
     #[serde(rename = "datasetName")]
@@ -854,6 +868,7 @@ pub struct DescribeDatasetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatastoreRequest {
     /// <p>The name of the data store</p>
     #[serde(rename = "datastoreName")]
@@ -878,6 +893,7 @@ pub struct DescribeDatastoreResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoggingOptionsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -890,6 +906,7 @@ pub struct DescribeLoggingOptionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePipelineRequest {
     /// <p>The name of the pipeline whose information is retrieved.</p>
     #[serde(rename = "pipelineName")]
@@ -977,6 +994,7 @@ pub struct FilterActivity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDatasetContentRequest {
     /// <p>The name of the data set whose contents are retrieved.</p>
     #[serde(rename = "datasetName")]
@@ -1045,6 +1063,7 @@ pub struct LambdaActivity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
     /// <p>The maximum number of results to return in this request.</p> <p>The default value is 100.</p>
     #[serde(rename = "maxResults")]
@@ -1070,6 +1089,7 @@ pub struct ListChannelsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetContentsRequest {
     /// <p>The name of the data set whose contents information you want to list.</p>
     #[serde(rename = "datasetName")]
@@ -1106,6 +1126,7 @@ pub struct ListDatasetContentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetsRequest {
     /// <p>The maximum number of results to return in this request.</p> <p>The default value is 100.</p>
     #[serde(rename = "maxResults")]
@@ -1131,6 +1152,7 @@ pub struct ListDatasetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatastoresRequest {
     /// <p>The maximum number of results to return in this request.</p> <p>The default value is 100.</p>
     #[serde(rename = "maxResults")]
@@ -1156,6 +1178,7 @@ pub struct ListDatastoresResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesRequest {
     /// <p>The maximum number of results to return in this request.</p> <p>The default value is 100.</p>
     #[serde(rename = "maxResults")]
@@ -1181,6 +1204,7 @@ pub struct ListPipelinesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the resource whose tags you want to list.</p>
     #[serde(rename = "resourceArn")]
@@ -1230,6 +1254,7 @@ pub struct MathActivity {
 
 /// <p>Information about a message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Message {
     /// <p>The ID you wish to assign to the message. Each "messageId" must be unique within each batch sent.</p>
     #[serde(rename = "messageId")]
@@ -1350,6 +1375,7 @@ pub struct PipelineSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLoggingOptionsRequest {
     /// <p>The new values of the AWS IoT Analytics logging options.</p>
     #[serde(rename = "loggingOptions")]
@@ -1423,6 +1449,7 @@ pub struct RetentionPeriod {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunPipelineActivityRequest {
     /// <p>The sample message payloads on which the pipeline activity is run.</p>
     #[serde(rename = "payloads")]
@@ -1474,6 +1501,7 @@ pub struct S3DestinationConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SampleChannelDataRequest {
     /// <p>The name of the channel whose message samples are retrieved.</p>
     #[serde(rename = "channelName")]
@@ -1561,6 +1589,7 @@ pub struct SqlQueryDatasetAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPipelineReprocessingRequest {
     /// <p>The end time (exclusive) of raw message data that is reprocessed.</p>
     #[serde(rename = "endTime")]
@@ -1596,6 +1625,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource whose tags you want to modify.</p>
     #[serde(rename = "resourceArn")]
@@ -1618,6 +1648,7 @@ pub struct TriggeringDataset {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource whose tags you want to remove.</p>
     #[serde(rename = "resourceArn")]
@@ -1632,6 +1663,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
     /// <p>The name of the channel to be updated.</p>
     #[serde(rename = "channelName")]
@@ -1647,6 +1679,7 @@ pub struct UpdateChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatasetRequest {
     /// <p>A list of "DatasetAction" objects.</p>
     #[serde(rename = "actions")]
@@ -1673,6 +1706,7 @@ pub struct UpdateDatasetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatastoreRequest {
     /// <p>The name of the data store to be updated.</p>
     #[serde(rename = "datastoreName")]
@@ -1688,6 +1722,7 @@ pub struct UpdateDatastoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineRequest {
     /// <p>A list of "PipelineActivity" objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <b>PipelineActivity</b> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity, for example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
     #[serde(rename = "pipelineActivities")]

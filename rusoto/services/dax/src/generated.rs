@@ -98,6 +98,7 @@ pub struct Cluster {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
     /// <p>The Availability Zones (AZs) in which the cluster nodes will reside after the cluster has been created or updated. If provided, the length of this list must equal the <code>ReplicationFactor</code> parameter. If you omit this parameter, DAX will spread the nodes across Availability Zones for the highest availability.</p>
     #[serde(rename = "AvailabilityZones")]
@@ -159,6 +160,7 @@ pub struct CreateClusterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateParameterGroupRequest {
     /// <p>A description of the parameter group.</p>
     #[serde(rename = "Description")]
@@ -179,6 +181,7 @@ pub struct CreateParameterGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubnetGroupRequest {
     /// <p>A description for the subnet group</p>
     #[serde(rename = "Description")]
@@ -202,6 +205,7 @@ pub struct CreateSubnetGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecreaseReplicationFactorRequest {
     /// <p>The Availability Zone(s) from which to remove nodes.</p>
     #[serde(rename = "AvailabilityZones")]
@@ -229,6 +233,7 @@ pub struct DecreaseReplicationFactorResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterRequest {
     /// <p>The name of the cluster to be deleted.</p>
     #[serde(rename = "ClusterName")]
@@ -245,6 +250,7 @@ pub struct DeleteClusterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteParameterGroupRequest {
     /// <p>The name of the parameter group to delete.</p>
     #[serde(rename = "ParameterGroupName")]
@@ -261,6 +267,7 @@ pub struct DeleteParameterGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubnetGroupRequest {
     /// <p>The name of the subnet group to delete.</p>
     #[serde(rename = "SubnetGroupName")]
@@ -277,6 +284,7 @@ pub struct DeleteSubnetGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClustersRequest {
     /// <p>The names of the DAX clusters being described.</p>
     #[serde(rename = "ClusterNames")]
@@ -306,6 +314,7 @@ pub struct DescribeClustersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDefaultParametersRequest {
     /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>
     #[serde(rename = "MaxResults")]
@@ -331,6 +340,7 @@ pub struct DescribeDefaultParametersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsRequest {
     /// <p>The number of minutes' worth of events to retrieve.</p>
     #[serde(rename = "Duration")]
@@ -376,6 +386,7 @@ pub struct DescribeEventsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeParameterGroupsRequest {
     /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>
     #[serde(rename = "MaxResults")]
@@ -405,6 +416,7 @@ pub struct DescribeParameterGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeParametersRequest {
     /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>
     #[serde(rename = "MaxResults")]
@@ -437,6 +449,7 @@ pub struct DescribeParametersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubnetGroupsRequest {
     /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>
     #[serde(rename = "MaxResults")]
@@ -502,6 +515,7 @@ pub struct Event {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IncreaseReplicationFactorRequest {
     /// <p>The Availability Zones (AZs) in which the cluster nodes will be created. All nodes belonging to the cluster are placed in these Availability Zones. Use this parameter if you want to distribute the nodes across multiple AZs.</p>
     #[serde(rename = "AvailabilityZones")]
@@ -525,6 +539,7 @@ pub struct IncreaseReplicationFactorResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
     /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token.</p>
     #[serde(rename = "NextToken")]
@@ -686,6 +701,7 @@ pub struct ParameterGroupStatus {
 
 /// <p>An individual DAX parameter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParameterNameValue {
     /// <p>The name of the parameter.</p>
     #[serde(rename = "ParameterName")]
@@ -698,6 +714,7 @@ pub struct ParameterNameValue {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootNodeRequest {
     /// <p>The name of the DAX cluster containing the node to be rebooted.</p>
     #[serde(rename = "ClusterName")]
@@ -728,6 +745,7 @@ pub struct SSEDescription {
 
 /// <p>Represents the settings used to enable server-side encryption.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SSESpecification {
     /// <p>Indicates whether server-side encryption is enabled (true) or disabled (false) on the cluster.</p>
     #[serde(rename = "Enabled")]
@@ -798,6 +816,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The name of the DAX resource to which tags should be added.</p>
     #[serde(rename = "ResourceName")]
@@ -817,6 +836,7 @@ pub struct TagResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The name of the DAX resource from which the tags should be removed.</p>
     #[serde(rename = "ResourceName")]
@@ -836,6 +856,7 @@ pub struct UntagResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterRequest {
     /// <p>The name of the DAX cluster to be modified.</p>
     #[serde(rename = "ClusterName")]
@@ -876,6 +897,7 @@ pub struct UpdateClusterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateParameterGroupRequest {
     /// <p>The name of the parameter group.</p>
     #[serde(rename = "ParameterGroupName")]
@@ -895,6 +917,7 @@ pub struct UpdateParameterGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubnetGroupRequest {
     /// <p>A description of the subnet group.</p>
     #[serde(rename = "Description")]

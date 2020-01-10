@@ -48,6 +48,7 @@ pub struct ConsumedLicenseSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLicenseConfigurationRequest {
     /// <p>Description of the license configuration.</p>
     #[serde(rename = "Description")]
@@ -91,6 +92,7 @@ pub struct CreateLicenseConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLicenseConfigurationRequest {
     /// <p>ID of the license configuration.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -103,6 +105,7 @@ pub struct DeleteLicenseConfigurationResponse {}
 
 /// <p>A filter name and value pair that is used to return more specific results from a describe operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>Name of the filter. Filter names are case-sensitive.</p>
     #[serde(rename = "Name")]
@@ -115,6 +118,7 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLicenseConfigurationRequest {
     /// <p>Amazon Resource Name (ARN) of the license configuration.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -191,6 +195,7 @@ pub struct GetLicenseConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceSettingsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -220,6 +225,7 @@ pub struct GetServiceSettingsResponse {
 
 /// <p>An inventory filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryFilter {
     /// <p>Condition of the filter.</p>
     #[serde(rename = "Condition")]
@@ -398,6 +404,7 @@ pub struct LicenseSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociationsForLicenseConfigurationRequest {
     /// <p>Amazon Resource Name (ARN) of a license configuration.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -426,6 +433,7 @@ pub struct ListAssociationsForLicenseConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFailuresForLicenseConfigurationOperationsRequest {
     /// <p>Amazon Resource Name of the license configuration.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -454,6 +462,7 @@ pub struct ListFailuresForLicenseConfigurationOperationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicenseConfigurationsRequest {
     /// <p><p>Filters to scope the results. The following filters and logical operators are supported:</p> <ul> <li> <p> <code>licenseCountingType</code> - The dimension on which licenses are counted (vCPU). Logical operators are <code>EQUALS</code> | <code>NOT<em>EQUALS</code>.</p> </li> <li> <p> <code>enforceLicenseCount</code> - A Boolean value that indicates whether hard license enforcement is used. Logical operators are <code>EQUALS</code> | <code>NOT</em>EQUALS</code>.</p> </li> <li> <p> <code>usagelimitExceeded</code> - A Boolean value that indicates whether the available licenses have been exceeded. Logical operators are <code>EQUALS</code> | <code>NOT_EQUALS</code>.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
@@ -487,6 +496,7 @@ pub struct ListLicenseConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicenseSpecificationsForResourceRequest {
     /// <p>Maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -515,6 +525,7 @@ pub struct ListLicenseSpecificationsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceInventoryRequest {
     /// <p><p>Filters to scope the results. The following filters and logical operators are supported:</p> <ul> <li> <p> <code>account<em>id</code> - The ID of the AWS account that owns the resource. Logical operators are <code>EQUALS</code> | <code>NOT</em>EQUALS</code>.</p> </li> <li> <p> <code>application<em>name</code> - The name of the application. Logical operators are <code>EQUALS</code> | <code>BEGINS</em>WITH</code>.</p> </li> <li> <p> <code>license<em>included</code> - The type of license included. Logical operators are <code>EQUALS</code> | <code>NOT</em>EQUALS</code>. Possible values are <code>sql-server-enterprise</code> | <code>sql-server-standard</code> | <code>sql-server-web</code> | <code>windows-server-datacenter</code>.</p> </li> <li> <p> <code>platform</code> - The platform of the resource. Logical operators are <code>EQUALS</code> | <code>BEGINS<em>WITH</code>.</p> </li> <li> <p> <code>resource</em>id</code> - The ID of the resource. Logical operators are <code>EQUALS</code> | <code>NOT_EQUALS</code>.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
@@ -544,6 +555,7 @@ pub struct ListResourceInventoryResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>Amazon Resource Name (ARN) of the license configuration.</p>
     #[serde(rename = "ResourceArn")]
@@ -560,6 +572,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsageForLicenseConfigurationRequest {
     /// <p><p>Filters to scope the results. The following filters and logical operators are supported:</p> <ul> <li> <p> <code>resourceArn</code> - The ARN of the license configuration resource. Logical operators are <code>EQUALS</code> | <code>NOT<em>EQUALS</code>.</p> </li> <li> <p> <code>resourceType</code> - The resource type (EC2</em>INSTANCE | EC2<em>HOST | EC2</em>AMI | SYSTEMS<em>MANAGER</em>MANAGED<em>INSTANCE). Logical operators are <code>EQUALS</code> | <code>NOT</em>EQUALS</code>.</p> </li> <li> <p> <code>resourceAccount</code> - The ID of the account that owns the resource. Logical operators are <code>EQUALS</code> | <code>NOT_EQUALS</code>.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
@@ -696,6 +709,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>Amazon Resource Name (ARN) of the license configuration.</p>
     #[serde(rename = "ResourceArn")]
@@ -710,6 +724,7 @@ pub struct TagResourceRequest {
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>Amazon Resource Name (ARN) of the license configuration.</p>
     #[serde(rename = "ResourceArn")]
@@ -724,6 +739,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLicenseConfigurationRequest {
     /// <p>New description of the license configuration.</p>
     #[serde(rename = "Description")]
@@ -763,6 +779,7 @@ pub struct UpdateLicenseConfigurationRequest {
 pub struct UpdateLicenseConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLicenseSpecificationsForResourceRequest {
     /// <p>ARNs of the license configurations to add.</p>
     #[serde(rename = "AddLicenseSpecifications")]
@@ -782,6 +799,7 @@ pub struct UpdateLicenseSpecificationsForResourceRequest {
 pub struct UpdateLicenseSpecificationsForResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceSettingsRequest {
     /// <p>Activates cross-account discovery.</p>
     #[serde(rename = "EnableCrossAccountsDiscovery")]

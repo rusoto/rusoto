@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetNamedQueryInput {
     /// <p>An array of query IDs.</p>
     #[serde(rename = "NamedQueryIds")]
@@ -44,6 +45,7 @@ pub struct BatchGetNamedQueryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetQueryExecutionInput {
     /// <p>An array of query execution IDs.</p>
     #[serde(rename = "QueryExecutionIds")]
@@ -108,6 +110,7 @@ pub struct ColumnInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNamedQueryInput {
     /// <p><p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>CreateNamedQuery</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important></p>
     #[serde(rename = "ClientRequestToken")]
@@ -142,6 +145,7 @@ pub struct CreateNamedQueryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkGroupInput {
     /// <p>The configuration for the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption configuration, if any, used for encrypting query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, the limit for the amount of bytes scanned (cutoff) per query, if it is specified, and whether workgroup's settings (specified with EnforceWorkGroupConfiguration) in the WorkGroupConfiguration override client-side settings. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
     #[serde(rename = "Configuration")]
@@ -175,6 +179,7 @@ pub struct Datum {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNamedQueryInput {
     /// <p>The unique ID of the query to delete.</p>
     #[serde(rename = "NamedQueryId")]
@@ -186,6 +191,7 @@ pub struct DeleteNamedQueryInput {
 pub struct DeleteNamedQueryOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkGroupInput {
     /// <p>The option to delete the workgroup and its contents even if the workgroup contains any named queries.</p>
     #[serde(rename = "RecursiveDeleteOption")]
@@ -213,6 +219,7 @@ pub struct EncryptionConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNamedQueryInput {
     /// <p>The unique ID of the query. Use <a>ListNamedQueries</a> to get query IDs.</p>
     #[serde(rename = "NamedQueryId")]
@@ -229,6 +236,7 @@ pub struct GetNamedQueryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueryExecutionInput {
     /// <p>The unique ID of the query execution.</p>
     #[serde(rename = "QueryExecutionId")]
@@ -245,6 +253,7 @@ pub struct GetQueryExecutionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueryResultsInput {
     /// <p>The maximum number of results (rows) to return in this request.</p>
     #[serde(rename = "MaxResults")]
@@ -277,6 +286,7 @@ pub struct GetQueryResultsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkGroupInput {
     /// <p>The name of the workgroup.</p>
     #[serde(rename = "WorkGroup")]
@@ -293,6 +303,7 @@ pub struct GetWorkGroupOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNamedQueriesInput {
     /// <p>The maximum number of queries to return in this request.</p>
     #[serde(rename = "MaxResults")]
@@ -322,6 +333,7 @@ pub struct ListNamedQueriesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueryExecutionsInput {
     /// <p>The maximum number of query executions to return in this request.</p>
     #[serde(rename = "MaxResults")]
@@ -351,6 +363,7 @@ pub struct ListQueryExecutionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The maximum number of results to be returned per request that lists the tags for the workgroup resource.</p>
     #[serde(rename = "MaxResults")]
@@ -379,6 +392,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkGroupsInput {
     /// <p>The maximum number of workgroups to return in this request.</p>
     #[serde(rename = "MaxResults")]
@@ -548,6 +562,7 @@ pub struct ResultConfiguration {
 
 /// <p>The information about the updates in the query results, such as output location and encryption configuration for the query results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResultConfigurationUpdates {
     /// <p>The encryption configuration for the query results.</p>
     #[serde(rename = "EncryptionConfiguration")]
@@ -602,6 +617,7 @@ pub struct Row {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartQueryExecutionInput {
     /// <p><p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>StartQueryExecution</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important></p>
     #[serde(rename = "ClientRequestToken")]
@@ -634,6 +650,7 @@ pub struct StartQueryExecutionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopQueryExecutionInput {
     /// <p>The unique ID of the query execution to stop.</p>
     #[serde(rename = "QueryExecutionId")]
@@ -658,6 +675,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>Requests that one or more tags are added to the resource (such as a workgroup) for the specified ARN.</p>
     #[serde(rename = "ResourceARN")]
@@ -708,6 +726,7 @@ pub struct UnprocessedQueryExecutionId {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>Removes one or more tags from the workgroup resource for the specified ARN.</p>
     #[serde(rename = "ResourceARN")]
@@ -722,6 +741,7 @@ pub struct UntagResourceInput {
 pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkGroupInput {
     /// <p>The workgroup configuration that will be updated for the given workgroup.</p>
     #[serde(rename = "ConfigurationUpdates")]
@@ -796,6 +816,7 @@ pub struct WorkGroupConfiguration {
 
 /// <p>The configuration information that will be updated for this workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, whether the workgroup settings override the client-side settings, and the data usage limit for the amount of bytes scanned per query, if it is specified.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct WorkGroupConfigurationUpdates {
     /// <p>The upper limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan.</p>
     #[serde(rename = "BytesScannedCutoffPerQuery")]

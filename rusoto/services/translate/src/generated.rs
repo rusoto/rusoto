@@ -38,6 +38,7 @@ pub struct AppliedTerminology {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTerminologyRequest {
     /// <p>The name of the custom terminology being deleted. </p>
     #[serde(rename = "Name")]
@@ -56,6 +57,7 @@ pub struct EncryptionKey {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTerminologyRequest {
     /// <p>The name of the custom terminology being retrieved.</p>
     #[serde(rename = "Name")]
@@ -79,6 +81,7 @@ pub struct GetTerminologyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportTerminologyRequest {
     /// <p>The description of the custom terminology being imported.</p>
     #[serde(rename = "Description")]
@@ -109,6 +112,7 @@ pub struct ImportTerminologyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTerminologiesRequest {
     /// <p>The maximum number of custom terminologies returned per list request.</p>
     #[serde(rename = "MaxResults")]
@@ -149,6 +153,7 @@ pub struct Term {
 
 /// <p>The data associated with the custom terminology.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminologyData {
     /// <p>The file containing the custom terminology data.</p>
     #[serde(rename = "File")]
@@ -222,6 +227,7 @@ pub struct TerminologyProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TranslateTextRequest {
     /// <p>The language code for the language of the source text. The language must be a language supported by Amazon Translate. </p> <p>To have Amazon Translate determine the source language of your text, you can specify <code>auto</code> in the <code>SourceLanguageCode</code> field. If you specify <code>auto</code>, Amazon Translate will call Amazon Comprehend to determine the source language.</p>
     #[serde(rename = "SourceLanguageCode")]

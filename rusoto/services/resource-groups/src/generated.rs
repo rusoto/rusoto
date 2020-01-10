@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupInput {
     /// <p>The description of the resource group. Descriptions can have a maximum of 511 characters, including letters, numbers, hyphens, underscores, punctuation, and spaces.</p>
     #[serde(rename = "Description")]
@@ -60,6 +61,7 @@ pub struct CreateGroupOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupInput {
     /// <p>The name of the resource group to delete.</p>
     #[serde(rename = "GroupName")]
@@ -76,6 +78,7 @@ pub struct DeleteGroupOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupInput {
     /// <p>The name of the resource group.</p>
     #[serde(rename = "GroupName")]
@@ -92,6 +95,7 @@ pub struct GetGroupOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupQueryInput {
     /// <p>The name of the resource group.</p>
     #[serde(rename = "GroupName")]
@@ -108,6 +112,7 @@ pub struct GetGroupQueryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsInput {
     /// <p>The ARN of the resource group for which you want a list of tags. The resource must exist within the account you are using.</p>
     #[serde(rename = "Arn")]
@@ -145,6 +150,7 @@ pub struct Group {
 
 /// <p>A filter name and value pair that is used to obtain more specific results from a list of groups.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GroupFilter {
     /// <p>The name of the filter. Filter names are case-sensitive.</p>
     #[serde(rename = "Name")]
@@ -181,6 +187,7 @@ pub struct GroupQuery {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupResourcesInput {
     /// <p><p>Filters, formatted as ResourceFilter objects, that you want to apply to a ListGroupResources operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter resources by their type. Specify up to five resource types in the format AWS::ServiceCode::ResourceType. For example, AWS::EC2::Instance, or AWS::S3::Bucket.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
@@ -217,6 +224,7 @@ pub struct ListGroupResourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsInput {
     /// <p><p>Filters, formatted as GroupFilter objects, that you want to apply to a ListGroups operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter groups by resource type. Specify up to five resource types in the format AWS::ServiceCode::ResourceType. For example, AWS::EC2::Instance, or AWS::S3::Bucket.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
@@ -261,6 +269,7 @@ pub struct QueryError {
 
 /// <p>A filter name and value pair that is used to obtain more specific results from a list of resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResourceFilter {
     /// <p>The name of the filter. Filter names are case-sensitive.</p>
     #[serde(rename = "Name")]
@@ -296,6 +305,7 @@ pub struct ResourceQuery {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchResourcesInput {
     /// <p>The maximum number of group member ARNs returned by <code>SearchResources</code> in paginated output. By default, this number is 50.</p>
     #[serde(rename = "MaxResults")]
@@ -328,6 +338,7 @@ pub struct SearchResourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagInput {
     /// <p>The ARN of the resource to which to add tags.</p>
     #[serde(rename = "Arn")]
@@ -351,6 +362,7 @@ pub struct TagOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagInput {
     /// <p>The ARN of the resource from which to remove tags.</p>
     #[serde(rename = "Arn")]
@@ -374,6 +386,7 @@ pub struct UntagOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupInput {
     /// <p>The description of the resource group. Descriptions can have a maximum of 511 characters, including letters, numbers, hyphens, underscores, punctuation, and spaces.</p>
     #[serde(rename = "Description")]
@@ -394,6 +407,7 @@ pub struct UpdateGroupOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupQueryInput {
     /// <p>The name of the resource group for which you want to edit the query.</p>
     #[serde(rename = "GroupName")]

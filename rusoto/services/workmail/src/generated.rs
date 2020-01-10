@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDelegateToResourceRequest {
     /// <p>The member (user or group) to associate to the resource.</p>
     #[serde(rename = "EntityId")]
@@ -41,6 +42,7 @@ pub struct AssociateDelegateToResourceRequest {
 pub struct AssociateDelegateToResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateMemberToGroupRequest {
     /// <p>The group to which the member (user or group) is associated.</p>
     #[serde(rename = "GroupId")]
@@ -75,6 +77,7 @@ pub struct BookingOptions {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasRequest {
     /// <p>The alias to add to the member set.</p>
     #[serde(rename = "Alias")]
@@ -92,6 +95,7 @@ pub struct CreateAliasRequest {
 pub struct CreateAliasResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
     /// <p>The name of the group.</p>
     #[serde(rename = "Name")]
@@ -111,6 +115,7 @@ pub struct CreateGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceRequest {
     /// <p>The name of the new resource.</p>
     #[serde(rename = "Name")]
@@ -133,6 +138,7 @@ pub struct CreateResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>The display name for the new user.</p>
     #[serde(rename = "DisplayName")]
@@ -170,6 +176,7 @@ pub struct Delegate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAliasRequest {
     /// <p>The aliases to be removed from the user's set of aliases. Duplicate entries in the list are collapsed into single entries (the list is transformed into a set).</p>
     #[serde(rename = "Alias")]
@@ -187,6 +194,7 @@ pub struct DeleteAliasRequest {
 pub struct DeleteAliasResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
     /// <p>The identifier of the group to be deleted.</p>
     #[serde(rename = "GroupId")]
@@ -201,6 +209,7 @@ pub struct DeleteGroupRequest {
 pub struct DeleteGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMailboxPermissionsRequest {
     /// <p>The identifier of the member (user or group)that owns the mailbox.</p>
     #[serde(rename = "EntityId")]
@@ -218,6 +227,7 @@ pub struct DeleteMailboxPermissionsRequest {
 pub struct DeleteMailboxPermissionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceRequest {
     /// <p>The identifier associated with the organization from which the resource is deleted.</p>
     #[serde(rename = "OrganizationId")]
@@ -232,6 +242,7 @@ pub struct DeleteResourceRequest {
 pub struct DeleteResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The organization that contains the user to be deleted.</p>
     #[serde(rename = "OrganizationId")]
@@ -246,6 +257,7 @@ pub struct DeleteUserRequest {
 pub struct DeleteUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterFromWorkMailRequest {
     /// <p>The identifier for the member (user or group) to be updated.</p>
     #[serde(rename = "EntityId")]
@@ -260,6 +272,7 @@ pub struct DeregisterFromWorkMailRequest {
 pub struct DeregisterFromWorkMailResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGroupRequest {
     /// <p>The identifier for the group to be described.</p>
     #[serde(rename = "GroupId")]
@@ -299,6 +312,7 @@ pub struct DescribeGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationRequest {
     /// <p>The identifier for the organization to be described.</p>
     #[serde(rename = "OrganizationId")]
@@ -343,6 +357,7 @@ pub struct DescribeOrganizationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceRequest {
     /// <p>The identifier associated with the organization for which the resource is described.</p>
     #[serde(rename = "OrganizationId")]
@@ -390,6 +405,7 @@ pub struct DescribeResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
     /// <p>The identifier for the organization under which the user exists.</p>
     #[serde(rename = "OrganizationId")]
@@ -437,6 +453,7 @@ pub struct DescribeUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDelegateFromResourceRequest {
     /// <p>The identifier for the member (user, group) to be removed from the resource's delegates.</p>
     #[serde(rename = "EntityId")]
@@ -454,6 +471,7 @@ pub struct DisassociateDelegateFromResourceRequest {
 pub struct DisassociateDelegateFromResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMemberFromGroupRequest {
     /// <p>The identifier for the group from which members are removed.</p>
     #[serde(rename = "GroupId")]
@@ -471,6 +489,7 @@ pub struct DisassociateMemberFromGroupRequest {
 pub struct DisassociateMemberFromGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMailboxDetailsRequest {
     /// <p>The identifier for the organization that contains the user whose mailbox details are being requested.</p>
     #[serde(rename = "OrganizationId")]
@@ -524,6 +543,7 @@ pub struct Group {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAliasesRequest {
     /// <p>The identifier for the entity for which to list the aliases.</p>
     #[serde(rename = "EntityId")]
@@ -555,6 +575,7 @@ pub struct ListAliasesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupMembersRequest {
     /// <p>The identifier for the group to which the members (users or groups) are associated.</p>
     #[serde(rename = "GroupId")]
@@ -586,6 +607,7 @@ pub struct ListGroupMembersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -614,6 +636,7 @@ pub struct ListGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMailboxPermissionsRequest {
     /// <p>The identifier of the user, group, or resource for which to list mailbox permissions.</p>
     #[serde(rename = "EntityId")]
@@ -645,6 +668,7 @@ pub struct ListMailboxPermissionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOrganizationsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -670,6 +694,7 @@ pub struct ListOrganizationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDelegatesRequest {
     /// <p>The number of maximum results in a page.</p>
     #[serde(rename = "MaxResults")]
@@ -701,6 +726,7 @@ pub struct ListResourceDelegatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -729,6 +755,7 @@ pub struct ListResourcesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -824,6 +851,7 @@ pub struct Permission {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMailboxPermissionsRequest {
     /// <p>The identifier of the user, group, or resource for which to update mailbox permissions.</p>
     #[serde(rename = "EntityId")]
@@ -844,6 +872,7 @@ pub struct PutMailboxPermissionsRequest {
 pub struct PutMailboxPermissionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterToWorkMailRequest {
     /// <p>The email for the user, group, or resource to be updated.</p>
     #[serde(rename = "Email")]
@@ -861,6 +890,7 @@ pub struct RegisterToWorkMailRequest {
 pub struct RegisterToWorkMailResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetPasswordRequest {
     /// <p>The identifier of the organization that contains the user for which the password is reset.</p>
     #[serde(rename = "OrganizationId")]
@@ -912,6 +942,7 @@ pub struct Resource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMailboxQuotaRequest {
     /// <p>The updated mailbox quota, in MB, for the specified user.</p>
     #[serde(rename = "MailboxQuota")]
@@ -929,6 +960,7 @@ pub struct UpdateMailboxQuotaRequest {
 pub struct UpdateMailboxQuotaResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePrimaryEmailAddressRequest {
     /// <p>The value of the email to be updated as primary.</p>
     #[serde(rename = "Email")]
@@ -946,6 +978,7 @@ pub struct UpdatePrimaryEmailAddressRequest {
 pub struct UpdatePrimaryEmailAddressResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceRequest {
     /// <p>The resource's booking options to be updated.</p>
     #[serde(rename = "BookingOptions")]

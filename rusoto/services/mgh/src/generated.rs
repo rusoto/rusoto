@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateCreatedArtifactRequest {
     /// <p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.) </p>
     #[serde(rename = "CreatedArtifact")]
@@ -45,6 +46,7 @@ pub struct AssociateCreatedArtifactRequest {
 pub struct AssociateCreatedArtifactResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDiscoveredResourceRequest {
     /// <p>Object representing a Resource.</p>
     #[serde(rename = "DiscoveredResource")]
@@ -66,6 +68,7 @@ pub struct AssociateDiscoveredResourceRequest {
 pub struct AssociateDiscoveredResourceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProgressUpdateStreamRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
@@ -93,6 +96,7 @@ pub struct CreatedArtifact {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProgressUpdateStreamRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
@@ -108,6 +112,7 @@ pub struct DeleteProgressUpdateStreamRequest {
 pub struct DeleteProgressUpdateStreamResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationStateRequest {
     /// <p>The configurationId in Application Discovery Service that uniquely identifies the grouped application.</p>
     #[serde(rename = "ApplicationId")]
@@ -128,6 +133,7 @@ pub struct DescribeApplicationStateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMigrationTaskRequest {
     /// <p>The identifier given to the MigrationTask. <i>Do not store personal data in this field.</i> </p>
     #[serde(rename = "MigrationTaskName")]
@@ -147,6 +153,7 @@ pub struct DescribeMigrationTaskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateCreatedArtifactRequest {
     /// <p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.)</p>
     #[serde(rename = "CreatedArtifactName")]
@@ -168,6 +175,7 @@ pub struct DisassociateCreatedArtifactRequest {
 pub struct DisassociateCreatedArtifactResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDiscoveredResourceRequest {
     /// <p>ConfigurationId of the Application Discovery Service resource to be disassociated.</p>
     #[serde(rename = "ConfigurationId")]
@@ -201,6 +209,7 @@ pub struct DiscoveredResource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportMigrationTaskRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
@@ -219,6 +228,7 @@ pub struct ImportMigrationTaskRequest {
 pub struct ImportMigrationTaskResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCreatedArtifactsRequest {
     /// <p>Maximum number of results to be returned per page.</p>
     #[serde(rename = "MaxResults")]
@@ -250,6 +260,7 @@ pub struct ListCreatedArtifactsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDiscoveredResourcesRequest {
     /// <p>The maximum number of results returned per page.</p>
     #[serde(rename = "MaxResults")]
@@ -281,6 +292,7 @@ pub struct ListDiscoveredResourcesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMigrationTasksRequest {
     /// <p>Value to specify how many results are returned per page.</p>
     #[serde(rename = "MaxResults")]
@@ -310,6 +322,7 @@ pub struct ListMigrationTasksResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProgressUpdateStreamsRequest {
     /// <p>Filter to limit the maximum number of results to list per page.</p>
     #[serde(rename = "MaxResults")]
@@ -391,6 +404,7 @@ pub struct MigrationTaskSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyApplicationStateRequest {
     /// <p>The configurationId in Application Discovery Service that uniquely identifies the grouped application.</p>
     #[serde(rename = "ApplicationId")]
@@ -413,6 +427,7 @@ pub struct NotifyApplicationStateRequest {
 pub struct NotifyApplicationStateResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyMigrationTaskStateRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
@@ -450,6 +465,7 @@ pub struct ProgressUpdateStreamSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourceAttributesRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]

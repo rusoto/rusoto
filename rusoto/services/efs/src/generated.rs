@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemRequest {
     /// <p>A string of up to 64 ASCII characters. Amazon EFS uses this to ensure idempotent creation.</p>
     #[serde(rename = "CreationToken")]
@@ -57,6 +58,7 @@ pub struct CreateFileSystemRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMountTargetRequest {
     /// <p>The ID of the file system for which to create the mount target.</p>
     #[serde(rename = "FileSystemId")]
@@ -76,6 +78,7 @@ pub struct CreateMountTargetRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
     /// <p>The ID of the file system whose tags you want to modify (String). This operation modifies the tags only, not the file system.</p>
     #[serde(rename = "FileSystemId")]
@@ -87,6 +90,7 @@ pub struct CreateTagsRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileSystemRequest {
     /// <p>The ID of the file system you want to delete.</p>
     #[serde(rename = "FileSystemId")]
@@ -95,6 +99,7 @@ pub struct DeleteFileSystemRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMountTargetRequest {
     /// <p>The ID of the mount target to delete (String).</p>
     #[serde(rename = "MountTargetId")]
@@ -103,6 +108,7 @@ pub struct DeleteMountTargetRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
     /// <p>The ID of the file system whose tags you want to delete (String).</p>
     #[serde(rename = "FileSystemId")]
@@ -114,6 +120,7 @@ pub struct DeleteTagsRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFileSystemsRequest {
     /// <p>(Optional) Restricts the list to the file system with this creation token (String). You specify a creation token when you create an Amazon EFS file system.</p>
     #[serde(rename = "CreationToken")]
@@ -151,6 +158,7 @@ pub struct DescribeFileSystemsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLifecycleConfigurationRequest {
     /// <p>The ID of the file system whose <code>LifecycleConfiguration</code> object you want to retrieve (String).</p>
     #[serde(rename = "FileSystemId")]
@@ -159,6 +167,7 @@ pub struct DescribeLifecycleConfigurationRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMountTargetSecurityGroupsRequest {
     /// <p>The ID of the mount target whose security groups you want to retrieve.</p>
     #[serde(rename = "MountTargetId")]
@@ -175,6 +184,7 @@ pub struct DescribeMountTargetSecurityGroupsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMountTargetsRequest {
     /// <p>(Optional) ID of the file system whose mount targets you want to list (String). It must be included in your request if <code>MountTargetId</code> is not included.</p>
     #[serde(rename = "FileSystemId")]
@@ -214,6 +224,7 @@ pub struct DescribeMountTargetsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
     /// <p>The ID of the file system whose tag set you want to retrieve.</p>
     #[serde(rename = "FileSystemId")]
@@ -339,6 +350,7 @@ pub struct LifecyclePolicy {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyMountTargetSecurityGroupsRequest {
     /// <p>The ID of the mount target whose security groups you want to modify.</p>
     #[serde(rename = "MountTargetId")]
@@ -380,6 +392,7 @@ pub struct MountTargetDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecycleConfigurationRequest {
     /// <p>The ID of the file system for which you are creating the <code>LifecycleConfiguration</code> object (String).</p>
     #[serde(rename = "FileSystemId")]
@@ -401,6 +414,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFileSystemRequest {
     /// <p>The ID of the file system that you want to update.</p>
     #[serde(rename = "FileSystemId")]

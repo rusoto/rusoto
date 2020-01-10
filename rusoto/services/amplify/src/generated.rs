@@ -276,6 +276,7 @@ pub struct Branch {
 
 /// <p> Request structure used to create Apps in Amplify. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
     /// <p> Personal Access token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. Token is not stored. </p>
     #[serde(rename = "accessToken")]
@@ -355,6 +356,7 @@ pub struct CreateAppResult {
 
 /// <p> Request structure for a backend environment create request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackendEnvironmentRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -383,6 +385,7 @@ pub struct CreateBackendEnvironmentResult {
 
 /// <p> Request structure for a branch create request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -463,6 +466,7 @@ pub struct CreateBranchResult {
 
 /// <p> Request structure for create a new deployment. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -494,6 +498,7 @@ pub struct CreateDeploymentResult {
 
 /// <p> Request structure for create Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainAssociationRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -521,6 +526,7 @@ pub struct CreateDomainAssociationResult {
 
 /// <p> Request structure for create webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebhookRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -564,6 +570,7 @@ pub struct CustomRule {
 
 /// <p> Request structure for an Amplify App delete request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -580,6 +587,7 @@ pub struct DeleteAppResult {
 
 /// <p> Request structure for delete backend environment request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackendEnvironmentRequest {
     /// <p> Unique Id of an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -600,6 +608,7 @@ pub struct DeleteBackendEnvironmentResult {
 
 /// <p> Request structure for delete branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -620,6 +629,7 @@ pub struct DeleteBranchResult {
 
 /// <p> Request structure for the delete Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainAssociationRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -638,6 +648,7 @@ pub struct DeleteDomainAssociationResult {
 
 /// <p> Request structure for delete job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -660,6 +671,7 @@ pub struct DeleteJobResult {
 
 /// <p> Request structure for the delete webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebhookRequest {
     /// <p> Unique Id for a webhook. </p>
     #[serde(rename = "webhookId")]
@@ -705,6 +717,7 @@ pub struct DomainAssociation {
 
 /// <p> Request structure for the generate access logs request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateAccessLogsRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -734,6 +747,7 @@ pub struct GenerateAccessLogsResult {
 
 /// <p> Request structure for get App request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -749,6 +763,7 @@ pub struct GetAppResult {
 
 /// <p> Request structure for the get artifact request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetArtifactUrlRequest {
     /// <p> Unique Id for a artifact. </p>
     #[serde(rename = "artifactId")]
@@ -769,6 +784,7 @@ pub struct GetArtifactUrlResult {
 
 /// <p> Request structure for get backend environment request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackendEnvironmentRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -789,6 +805,7 @@ pub struct GetBackendEnvironmentResult {
 
 /// <p> Request structure for get branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -807,6 +824,7 @@ pub struct GetBranchResult {
 
 /// <p> Request structure for the get Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainAssociationRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -827,6 +845,7 @@ pub struct GetDomainAssociationResult {
 
 /// <p> Request structure for get job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -848,6 +867,7 @@ pub struct GetJobResult {
 
 /// <p> Request structure for the get webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWebhookRequest {
     /// <p> Unique Id for a webhook. </p>
     #[serde(rename = "webhookId")]
@@ -911,6 +931,7 @@ pub struct JobSummary {
 
 /// <p> Request structure for an Amplify App list request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
     /// <p> Maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
@@ -937,6 +958,7 @@ pub struct ListAppsResult {
 
 /// <p> Request structure for the list artifacts request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArtifactsRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -972,6 +994,7 @@ pub struct ListArtifactsResult {
 
 /// <p> Request structure for list backend environments request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackendEnvironmentsRequest {
     /// <p> Unique Id for an amplify App. </p>
     #[serde(rename = "appId")]
@@ -1005,6 +1028,7 @@ pub struct ListBackendEnvironmentsResult {
 
 /// <p> Request structure for list branches request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBranchesRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1034,6 +1058,7 @@ pub struct ListBranchesResult {
 
 /// <p> Request structure for the list Domain Associations request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainAssociationsRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1063,6 +1088,7 @@ pub struct ListDomainAssociationsResult {
 
 /// <p> Request structure for list job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1095,6 +1121,7 @@ pub struct ListJobsResult {
 
 /// <p> Request structure used to list tags for resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p> Resource arn used to list tags. </p>
     #[serde(rename = "resourceArn")]
@@ -1113,6 +1140,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p> Request structure for the list webhooks request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebhooksRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1164,6 +1192,7 @@ pub struct ProductionBranch {
 
 /// <p> Request structure for start a deployment. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeploymentRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1192,6 +1221,7 @@ pub struct StartDeploymentResult {
 
 /// <p> Request structure for Start job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartJobRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1281,6 +1311,7 @@ pub struct Step {
 
 /// <p> Request structure for stop job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopJobRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1330,6 +1361,7 @@ pub struct SubDomainSetting {
 
 /// <p> Request structure used to tag resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p> Resource arn used to tag resource. </p>
     #[serde(rename = "resourceArn")]
@@ -1346,6 +1378,7 @@ pub struct TagResourceResponse {}
 
 /// <p> Request structure used to untag resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p> Resource arn used to untag resource. </p>
     #[serde(rename = "resourceArn")]
@@ -1362,6 +1395,7 @@ pub struct UntagResourceResponse {}
 
 /// <p> Request structure for update App request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
     /// <p> Personal Access token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. Token is not stored. </p>
     #[serde(rename = "accessToken")]
@@ -1443,6 +1477,7 @@ pub struct UpdateAppResult {
 
 /// <p> Request structure for update branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1519,6 +1554,7 @@ pub struct UpdateBranchResult {
 
 /// <p> Request structure for update Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainAssociationRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
@@ -1546,6 +1582,7 @@ pub struct UpdateDomainAssociationResult {
 
 /// <p> Request structure for update webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWebhookRequest {
     /// <p> Name for a branch, part of an Amplify App. </p>
     #[serde(rename = "branchName")]

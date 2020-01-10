@@ -140,6 +140,7 @@ pub struct Connector {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
     /// <p>A unique, case-sensitive identifier you provide to ensure idempotency of application creation.</p>
     #[serde(rename = "clientToken")]
@@ -185,6 +186,7 @@ pub struct CreateAppResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationJobRequest {
     /// <p>The description of the replication job.</p>
     #[serde(rename = "description")]
@@ -236,6 +238,7 @@ pub struct CreateReplicationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppLaunchConfigurationRequest {
     /// <p>ID of the application associated with the launch configuration.</p>
     #[serde(rename = "appId")]
@@ -248,6 +251,7 @@ pub struct DeleteAppLaunchConfigurationRequest {
 pub struct DeleteAppLaunchConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppReplicationConfigurationRequest {
     /// <p>ID of the application associated with the replication configuration.</p>
     #[serde(rename = "appId")]
@@ -260,6 +264,7 @@ pub struct DeleteAppReplicationConfigurationRequest {
 pub struct DeleteAppReplicationConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
     /// <p>ID of the application to delete.</p>
     #[serde(rename = "appId")]
@@ -280,6 +285,7 @@ pub struct DeleteAppRequest {
 pub struct DeleteAppResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationJobRequest {
     /// <p>The identifier of the replication job.</p>
     #[serde(rename = "replicationJobId")]
@@ -291,6 +297,7 @@ pub struct DeleteReplicationJobRequest {
 pub struct DeleteReplicationJobResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServerCatalogRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -298,6 +305,7 @@ pub struct DeleteServerCatalogRequest {}
 pub struct DeleteServerCatalogResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateConnectorRequest {
     /// <p>The identifier of the connector.</p>
     #[serde(rename = "connectorId")]
@@ -309,6 +317,7 @@ pub struct DisassociateConnectorRequest {
 pub struct DisassociateConnectorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateChangeSetRequest {
     /// <p>ID of the application associated with the change set.</p>
     #[serde(rename = "appId")]
@@ -330,6 +339,7 @@ pub struct GenerateChangeSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateTemplateRequest {
     /// <p>ID of the application associated with the Amazon CloudFormation template.</p>
     #[serde(rename = "appId")]
@@ -351,6 +361,7 @@ pub struct GenerateTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppLaunchConfigurationRequest {
     /// <p>ID of the application launch configuration.</p>
     #[serde(rename = "appId")]
@@ -376,6 +387,7 @@ pub struct GetAppLaunchConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppReplicationConfigurationRequest {
     /// <p>ID of the application associated with the replication configuration.</p>
     #[serde(rename = "appId")]
@@ -393,6 +405,7 @@ pub struct GetAppReplicationConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppRequest {
     /// <p>ID of the application whose information is being retrieved.</p>
     #[serde(rename = "appId")]
@@ -418,6 +431,7 @@ pub struct GetAppResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectorsRequest {
     /// <p>The maximum number of results to return in a single call. The default value is 50. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -443,6 +457,7 @@ pub struct GetConnectorsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReplicationJobsRequest {
     /// <p>The maximum number of results to return in a single call. The default value is 50. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -472,6 +487,7 @@ pub struct GetReplicationJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReplicationRunsRequest {
     /// <p>The maximum number of results to return in a single call. The default value is 50. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -504,6 +520,7 @@ pub struct GetReplicationRunsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServersRequest {
     /// <p>The maximum number of results to return in a single call. The default value is 50. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -541,6 +558,7 @@ pub struct GetServersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportServerCatalogRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -548,6 +566,7 @@ pub struct ImportServerCatalogRequest {}
 pub struct ImportServerCatalogResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchAppRequest {
     /// <p>ID of the application to launch.</p>
     #[serde(rename = "appId")]
@@ -578,6 +597,7 @@ pub struct LaunchDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
     /// <p><p/></p>
     #[serde(rename = "appIds")]
@@ -607,6 +627,7 @@ pub struct ListAppsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppLaunchConfigurationRequest {
     /// <p>ID of the application associated with the launch configuration.</p>
     #[serde(rename = "appId")]
@@ -627,6 +648,7 @@ pub struct PutAppLaunchConfigurationRequest {
 pub struct PutAppLaunchConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppReplicationConfigurationRequest {
     /// <p>ID of the application tassociated with the replication configuration.</p>
     #[serde(rename = "appId")]
@@ -957,6 +979,7 @@ pub struct ServerReplicationParameters {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAppReplicationRequest {
     /// <p>ID of the application to replicate.</p>
     #[serde(rename = "appId")]
@@ -969,6 +992,7 @@ pub struct StartAppReplicationRequest {
 pub struct StartAppReplicationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOnDemandReplicationRunRequest {
     /// <p>The description of the replication run.</p>
     #[serde(rename = "description")]
@@ -989,6 +1013,7 @@ pub struct StartOnDemandReplicationRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAppReplicationRequest {
     /// <p>ID of the application to stop replicating.</p>
     #[serde(rename = "appId")]
@@ -1014,6 +1039,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateAppRequest {
     /// <p>ID of the application to terminate.</p>
     #[serde(rename = "appId")]
@@ -1026,6 +1052,7 @@ pub struct TerminateAppRequest {
 pub struct TerminateAppResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
     /// <p>ID of the application to update.</p>
     #[serde(rename = "appId")]
@@ -1071,6 +1098,7 @@ pub struct UpdateAppResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateReplicationJobRequest {
     /// <p>The description of the replication job.</p>
     #[serde(rename = "description")]

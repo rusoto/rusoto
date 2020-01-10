@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>A BatchMeterUsageRequest contains UsageRecords, which indicate quantities of usage within your application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchMeterUsageRequest {
     /// <p>Product code is used to uniquely identify a product in AWS Marketplace. The product code should be the same as the one used during the publishing of a new product.</p>
     #[serde(rename = "ProductCode")]
@@ -49,6 +50,7 @@ pub struct BatchMeterUsageResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MeterUsageRequest {
     /// <p>Checks whether you have the permissions required for the action, but does not make the request. If you have the permissions, the request returns DryRunOperation; otherwise, it returns UnauthorizedException. Defaults to <code>false</code> if not specified.</p>
     #[serde(rename = "DryRun")]
@@ -79,6 +81,7 @@ pub struct MeterUsageResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterUsageRequest {
     /// <p>(Optional) To scope down the registration to a specific running software instance and guard against replay attacks.</p>
     #[serde(rename = "Nonce")]
@@ -107,6 +110,7 @@ pub struct RegisterUsageResult {
 
 /// <p>Contains input to the ResolveCustomer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResolveCustomerRequest {
     /// <p>When a buyer visits your website during the registration process, the buyer submits a registration token through the browser. The registration token is resolved to obtain a CustomerIdentifier and product code.</p>
     #[serde(rename = "RegistrationToken")]

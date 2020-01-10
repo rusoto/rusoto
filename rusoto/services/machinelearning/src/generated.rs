@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
     /// <p>The ID of the ML object to tag. For example, <code>exampleModelId</code>.</p>
     #[serde(rename = "ResourceId")]
@@ -116,6 +117,7 @@ pub struct BatchPrediction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBatchPredictionInput {
     /// <p>The ID of the <code>DataSource</code> that points to the group of observations to predict.</p>
     #[serde(rename = "BatchPredictionDataSourceId")]
@@ -146,6 +148,7 @@ pub struct CreateBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceFromRDSInput {
     /// <p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code></code>DataSource<code></code> needs to be used for <code>MLModel</code> training. </p>
     #[serde(rename = "ComputeStatistics")]
@@ -177,6 +180,7 @@ pub struct CreateDataSourceFromRDSOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceFromRedshiftInput {
     /// <p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code>DataSource</code> needs to be used for <code>MLModel</code> training.</p>
     #[serde(rename = "ComputeStatistics")]
@@ -208,6 +212,7 @@ pub struct CreateDataSourceFromRedshiftOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceFromS3Input {
     /// <p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code></code>DataSource<code></code> needs to be used for <code>MLModel</code> training.</p>
     #[serde(rename = "ComputeStatistics")]
@@ -236,6 +241,7 @@ pub struct CreateDataSourceFromS3Output {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEvaluationInput {
     /// <p>The ID of the <code>DataSource</code> for the evaluation. The schema of the <code>DataSource</code> must match the schema used to create the <code>MLModel</code>.</p>
     #[serde(rename = "EvaluationDataSourceId")]
@@ -263,6 +269,7 @@ pub struct CreateEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMLModelInput {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
@@ -302,6 +309,7 @@ pub struct CreateMLModelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRealtimeEndpointInput {
     /// <p>The ID assigned to the <code>MLModel</code> during creation.</p>
     #[serde(rename = "MLModelId")]
@@ -395,6 +403,7 @@ pub struct DataSource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBatchPredictionInput {
     /// <p>A user-supplied ID that uniquely identifies the <code>BatchPrediction</code>.</p>
     #[serde(rename = "BatchPredictionId")]
@@ -412,6 +421,7 @@ pub struct DeleteBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSourceInput {
     /// <p>A user-supplied ID that uniquely identifies the <code>DataSource</code>.</p>
     #[serde(rename = "DataSourceId")]
@@ -429,6 +439,7 @@ pub struct DeleteDataSourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEvaluationInput {
     /// <p>A user-supplied ID that uniquely identifies the <code>Evaluation</code> to delete.</p>
     #[serde(rename = "EvaluationId")]
@@ -446,6 +457,7 @@ pub struct DeleteEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMLModelInput {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
@@ -463,6 +475,7 @@ pub struct DeleteMLModelOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRealtimeEndpointInput {
     /// <p>The ID assigned to the <code>MLModel</code> during creation.</p>
     #[serde(rename = "MLModelId")]
@@ -484,6 +497,7 @@ pub struct DeleteRealtimeEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsInput {
     /// <p>The ID of the tagged ML object. For example, <code>exampleModelId</code>.</p>
     #[serde(rename = "ResourceId")]
@@ -511,6 +525,7 @@ pub struct DeleteTagsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBatchPredictionsInput {
     /// <p>The equal to operator. The <code>BatchPrediction</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
@@ -573,6 +588,7 @@ pub struct DescribeBatchPredictionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSourcesInput {
     /// <p>The equal to operator. The <code>DataSource</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
@@ -635,6 +651,7 @@ pub struct DescribeDataSourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEvaluationsInput {
     /// <p>The equal to operator. The <code>Evaluation</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
@@ -697,6 +714,7 @@ pub struct DescribeEvaluationsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMLModelsInput {
     /// <p>The equal to operator. The <code>MLModel</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>
     #[serde(rename = "EQ")]
@@ -759,6 +777,7 @@ pub struct DescribeMLModelsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsInput {
     /// <p>The ID of the ML object. For example, <code>exampleModelId</code>. </p>
     #[serde(rename = "ResourceId")]
@@ -846,6 +865,7 @@ pub struct Evaluation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBatchPredictionInput {
     /// <p>An ID assigned to the <code>BatchPrediction</code> at creation.</p>
     #[serde(rename = "BatchPredictionId")]
@@ -927,6 +947,7 @@ pub struct GetBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataSourceInput {
     /// <p>The ID assigned to the <code>DataSource</code> at creation.</p>
     #[serde(rename = "DataSourceId")]
@@ -1021,6 +1042,7 @@ pub struct GetDataSourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEvaluationInput {
     /// <p>The ID of the <code>Evaluation</code> to retrieve. The evaluation of each <code>MLModel</code> is recorded and cataloged. The ID provides the means to access the information. </p>
     #[serde(rename = "EvaluationId")]
@@ -1094,6 +1116,7 @@ pub struct GetEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLModelInput {
     /// <p>The ID assigned to the <code>MLModel</code> at creation.</p>
     #[serde(rename = "MLModelId")]
@@ -1280,6 +1303,7 @@ pub struct PerformanceMetrics {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PredictInput {
     /// <p>A unique identifier of the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
@@ -1320,6 +1344,7 @@ pub struct Prediction {
 
 /// <p>The data specification of an Amazon Relational Database Service (Amazon RDS) <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RDSDataSpec {
     /// <p><p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> </ul></p>
     #[serde(rename = "DataRearrangement")]
@@ -1371,6 +1396,7 @@ pub struct RDSDatabase {
 
 /// <p>The database credentials to connect to a database on an RDS DB instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RDSDatabaseCredentials {
     #[serde(rename = "Password")]
     pub password: String,
@@ -1431,6 +1457,7 @@ pub struct RealtimeEndpointInfo {
 
 /// <p>Describes the data specification of an Amazon Redshift <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedshiftDataSpec {
     /// <p><p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> </ul></p>
     #[serde(rename = "DataRearrangement")]
@@ -1469,6 +1496,7 @@ pub struct RedshiftDatabase {
 
 /// <p> Describes the database credentials for connecting to a database on an Amazon Redshift cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedshiftDatabaseCredentials {
     #[serde(rename = "Password")]
     pub password: String,
@@ -1494,6 +1522,7 @@ pub struct RedshiftMetadata {
 
 /// <p> Describes the data specification of a <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3DataSpec {
     /// <p>The location of the data file(s) used by a <code>DataSource</code>. The URI specifies a data file or an Amazon Simple Storage Service (Amazon S3) directory or bucket containing data files.</p>
     #[serde(rename = "DataLocationS3")]
@@ -1526,6 +1555,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBatchPredictionInput {
     /// <p>The ID assigned to the <code>BatchPrediction</code> during creation.</p>
     #[serde(rename = "BatchPredictionId")]
@@ -1546,6 +1576,7 @@ pub struct UpdateBatchPredictionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourceInput {
     /// <p>The ID assigned to the <code>DataSource</code> during creation.</p>
     #[serde(rename = "DataSourceId")]
@@ -1566,6 +1597,7 @@ pub struct UpdateDataSourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEvaluationInput {
     /// <p>The ID assigned to the <code>Evaluation</code> during creation.</p>
     #[serde(rename = "EvaluationId")]
@@ -1586,6 +1618,7 @@ pub struct UpdateEvaluationOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMLModelInput {
     /// <p>The ID assigned to the <code>MLModel</code> during creation.</p>
     #[serde(rename = "MLModelId")]

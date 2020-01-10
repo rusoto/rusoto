@@ -85,6 +85,7 @@ pub struct Address {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelClusterRequest {
     /// <p>The 39-character ID for the cluster that you want to cancel, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "ClusterId")]
@@ -96,6 +97,7 @@ pub struct CancelClusterRequest {
 pub struct CancelClusterResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
     /// <p>The 39-character job ID for the job that you want to cancel, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
@@ -201,6 +203,7 @@ pub struct CompatibleImage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAddressRequest {
     /// <p>The address that you want the Snowball shipped to.</p>
     #[serde(rename = "Address")]
@@ -217,6 +220,7 @@ pub struct CreateAddressResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
     /// <p>The ID for the address that you want the cluster shipped to.</p>
     #[serde(rename = "AddressId")]
@@ -265,6 +269,7 @@ pub struct CreateClusterResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
     /// <p>The ID for the address that you want the Snowball shipped to.</p>
     #[serde(rename = "AddressId")]
@@ -348,6 +353,7 @@ pub struct DataTransfer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAddressRequest {
     /// <p>The automatically generated ID for a specific address.</p>
     #[serde(rename = "AddressId")]
@@ -364,6 +370,7 @@ pub struct DescribeAddressResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAddressesRequest {
     /// <p>The number of <code>ADDRESS</code> objects to return.</p>
     #[serde(rename = "MaxResults")]
@@ -389,6 +396,7 @@ pub struct DescribeAddressesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterRequest {
     /// <p>The automatically generated ID for a cluster.</p>
     #[serde(rename = "ClusterId")]
@@ -405,6 +413,7 @@ pub struct DescribeClusterResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobRequest {
     /// <p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
@@ -446,6 +455,7 @@ pub struct EventTriggerDefinition {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobManifestRequest {
     /// <p>The ID for a job that you want to get the manifest file for, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
@@ -462,6 +472,7 @@ pub struct GetJobManifestResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobUnlockCodeRequest {
     /// <p>The ID for the job that you want to get the <code>UnlockCode</code> value for, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
@@ -478,6 +489,7 @@ pub struct GetJobUnlockCodeResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSnowballUsageRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -494,6 +506,7 @@ pub struct GetSnowballUsageResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSoftwareUpdatesRequest {
     /// <p>The ID for a job that you want to get the software update file for, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
@@ -679,6 +692,7 @@ pub struct LambdaResource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClusterJobsRequest {
     /// <p>The 39-character ID for the cluster that you want to list, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "ClusterId")]
@@ -707,6 +721,7 @@ pub struct ListClusterJobsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClustersRequest {
     /// <p>The number of <code>ClusterListEntry</code> objects to return.</p>
     #[serde(rename = "MaxResults")]
@@ -732,6 +747,7 @@ pub struct ListClustersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCompatibleImagesRequest {
     /// <p>The maximum number of results for the list of compatible images. Currently, a Snowball Edge device can store 10 AMIs.</p>
     #[serde(rename = "MaxResults")]
@@ -757,6 +773,7 @@ pub struct ListCompatibleImagesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>The number of <code>JobListEntry</code> objects to return.</p>
     #[serde(rename = "MaxResults")]
@@ -844,6 +861,7 @@ pub struct ShippingDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterRequest {
     /// <p>The ID of the updated <a>Address</a> object.</p>
     #[serde(rename = "AddressId")]
@@ -883,6 +901,7 @@ pub struct UpdateClusterRequest {
 pub struct UpdateClusterResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobRequest {
     /// <p>The ID of the updated <a>Address</a> object.</p>
     #[serde(rename = "AddressId")]
