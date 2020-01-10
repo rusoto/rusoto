@@ -336,6 +336,10 @@ path = "../rusoto/services/iot-data"
 optional = true
 path = "../rusoto/services/iot-jobs-data"
 
+[dependencies.rusoto_iotsecuretunneling]
+ optional = true
+ path = "../rusoto/services/iotsecuretunneling"
+
 [dependencies.rusoto_kafka]
 optional = true
 path = "../rusoto/services/kafka"
@@ -732,6 +736,7 @@ all = [
 	"iot",
 	"iotanalytics",
 	"iotdata",
+	"iotsecuretunneling",
 	"iot1clickdevices",
 	"iot1clickprojects",
 	"kafka",
@@ -888,6 +893,7 @@ inspector = ["rusoto_inspector"]
 iot = ["rusoto_iot"]
 iotanalytics = ["rusoto_iotanalytics"]
 iotdata = ["rusoto_iot_data"]
+iotsecuretunneling = ["rusoto_iot_secure_tunneling"]
 iotjobsdata = ["rusoto_iot_jobs_data"]
 iot1clickdevices = ["rusoto_iot1click_devices"]
 iot1clickprojects = ["rusoto_iot1click_projects"]
