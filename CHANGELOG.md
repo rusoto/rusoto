@@ -18,6 +18,7 @@
 - Improve `InstanceMetadataProvider` to avoid cloning unnecessarily
 - Remove deprecated `Error::description` implementations
 - Add features `serialize_structs` and `deserialize_structs`
+- Add IoT Secure Tunneling service
 
 ## [0.42.0] - 2019-11-18
 
