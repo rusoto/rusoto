@@ -19,6 +19,7 @@
 - Improve `InstanceMetadataProvider` to avoid cloning unnecessarily
 - Remove deprecated `Error::description` implementations
 - Add features `serialize_structs` and `deserialize_structs`
+- Implement Clone on various Credential structs.
 
 ## [0.42.0] - 2019-11-18
 
